@@ -5,6 +5,7 @@ import com.pazukdev.bearingsinfo.dbo.Bearing;
 import com.pazukdev.bearingsinfo.dto.BearingDto;
 import com.pazukdev.bearingsinfo.repository.BearingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 /**
  * @author Siarhei Sviarkaltsau
  */
+@Service
 public class BearingService {
 
     private final BearingRepository repository;
