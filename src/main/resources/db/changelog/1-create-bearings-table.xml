@@ -5,17 +5,17 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet author="sviarkaltsau" id="1.0">
-        <createTable tableName="BEARINGS">
+    <changeSet author="sviarkaltsau" id="1.2">
+        <createTable tableName="BEARINGS_INFO">
             <column autoIncrement="true" name="ID" type="BIGINT">
                 <constraints primaryKey="true"/>
             </column>
             <column name="NAME" type="VARCHAR(255)"/>
-            <column name="UNIT" type="VARCHAR(255)"/>
+            <column name="" type="VARCHAR(255)"/>
             <column name="QUANTITY" type="INT"/>
         </createTable>
         <rollback>
-            <dropTable tableName="BEARINGS" />
+            <dropTable tableName="BEARINGS_INFO" />
         </rollback>
     </changeSet>
 
