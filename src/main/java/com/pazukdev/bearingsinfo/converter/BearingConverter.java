@@ -3,10 +3,12 @@ package com.pazukdev.bearingsinfo.converter;
 import com.pazukdev.bearingsinfo.dbo.Bearing;
 import com.pazukdev.bearingsinfo.dto.BearingDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
+@Service
 public class BearingConverter implements DboDtoConverter<Bearing, BearingDto> {
 
     private static final ModelMapper modelMapper = new ModelMapper();
@@ -20,4 +22,5 @@ public class BearingConverter implements DboDtoConverter<Bearing, BearingDto> {
     public Bearing convertToDbo(final BearingDto bearingDto) {
         return modelMapper.map(bearingDto, Bearing.class);
     }
+
 }
