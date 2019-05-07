@@ -11,7 +11,7 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="NAME" type="VARCHAR(255)"/>
-            <column name="" type="VARCHAR(255)"/>
+            <column name="UNIT" type="VARCHAR(255)"/>
             <column name="QUANTITY" type="INT"/>
         </createTable>
         <rollback>
