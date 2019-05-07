@@ -15,8 +15,6 @@ import javax.validation.constraints.NotNull;
  * @author Siarhei Sviarkaltsau
  */
 @Data
-@Entity
-@Table(name = "BEARINGS_INFO")
 @MappedSuperclass
 public class AbstractEntity {
 
