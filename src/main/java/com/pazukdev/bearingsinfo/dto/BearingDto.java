@@ -14,7 +14,7 @@ public class BearingDto implements Serializable {
 
     private Long id;
     private String name;
-    private String majorLocation;
+    private String unit;
     private Integer quantity;
 
 }

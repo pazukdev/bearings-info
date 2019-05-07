@@ -60,7 +60,7 @@ public class BearingServiceTest {
         assertEquals(findAllResult.size(), bearingsList.size());
         for (final BearingDto bearingDto : bearingsList) {
             assertEquals(bearing.getName(), bearingDto.getName());
-            assertEquals(bearing.getMajorLocation(), bearingDto.getMajorLocation());
+            assertEquals(bearing.getUnit(), bearingDto.getUnit());
             assertEquals(bearing.getQuantity(), bearingDto.getQuantity());
         }
 

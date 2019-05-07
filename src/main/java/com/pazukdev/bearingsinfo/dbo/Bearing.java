@@ -19,7 +19,7 @@ import javax.persistence.Table;
 public class Bearing extends AbstractEntity {
 
     @Column(name = "UNIT")
-    private String majorLocation;
+    private String unit;
     @Column(name = "QUANTITY")
     private Integer quantity;
 }

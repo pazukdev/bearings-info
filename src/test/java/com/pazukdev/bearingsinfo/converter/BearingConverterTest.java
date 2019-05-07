@@ -20,7 +20,7 @@ public class BearingConverterTest {
         final BearingDto bearingDto = converter.convertToDto(bearing);
 
         assertEquals(bearing.getName(), bearingDto.getName());
-        assertEquals(bearing.getMajorLocation(), bearingDto.getMajorLocation());
+        assertEquals(bearing.getUnit(), bearingDto.getUnit());
         assertEquals(bearing.getQuantity(), bearing.getQuantity());
     }
 
@@ -30,7 +30,7 @@ public class BearingConverterTest {
         final Bearing bearing = converter.convertToDbo(bearingDto);
 
         assertEquals(bearingDto.getName(), bearing.getName());
-        assertEquals(bearingDto.getMajorLocation(), bearing.getMajorLocation());
+        assertEquals(bearingDto.getUnit(), bearing.getUnit());
         assertEquals(bearingDto.getQuantity(), bearing.getQuantity());
     }
 

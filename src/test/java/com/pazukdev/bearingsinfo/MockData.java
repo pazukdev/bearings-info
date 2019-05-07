@@ -11,7 +11,7 @@ public class MockData {
     public static Bearing bearing() {
         final Bearing bearing = new Bearing();
         bearing.setName("bearing name");
-        bearing.setMajorLocation("bearing major location");
+        bearing.setUnit("bearing unit");
         bearing.setQuantity(1);
         return bearing;
     }
@@ -19,7 +19,7 @@ public class MockData {
     public static BearingDto bearingDto() {
         final BearingDto bearingDto = new BearingDto();
         bearingDto.setName("bearingDto name");
-        bearingDto.setMajorLocation("bearingDto major location");
+        bearingDto.setUnit("bearingDto unit");
         bearingDto.setQuantity(2);
         return bearingDto;
     }
