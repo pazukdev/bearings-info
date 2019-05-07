@@ -31,7 +31,28 @@ public class BearingService {
     }
 
     public List<BearingDto> getBearingsList() {
+        if (repository.findAll().isEmpty()) {
+            saveDefaultBearings();
+        }
         return repository.findAll().stream().map(converter::convertToDto).collect(Collectors.toList());
+    }
+
+    private void saveDefaultBearings() {
+        final String[] bearingsData = new String[] {
+                "207;Engine;2",
+                "205;Engine;1"
+        };
+
+        for (String bearingSourceString : bearingsData) {
+            final String[] splittedString = bearingSourceString.split(";");
+
+            final BearingDto bearingDto = new BearingDto();
+            bearingDto.setName(splittedString[0]);
+            bearingDto.setUnit(splittedString[1]);
+            bearingDto.setQuantity(Integer.valueOf(splittedString[2]));
+
+            createBearing(bearingDto);
+        }
     }
     
 }
