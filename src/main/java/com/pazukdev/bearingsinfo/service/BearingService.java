@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,18 +39,22 @@ public class BearingService {
 
     public List<BearingDto> getBearingsList() {
         if (repository.findAll().isEmpty()) {
-            saveDefaultBearings();
+            createDefaultBearings();
         }
         return repository.findAll().stream().map(converter::convertToDto).collect(Collectors.toList());
     }
 
-    private void saveDefaultBearings() {
+    private void createDefaultBearings() {
         final List<String> dataList = getDataListFromTxtFile();
         final List<String> bearingsData = dataList.subList(1, dataList.size());
         final String characteristicNamesSource = dataList.get(0);
-
         logData(characteristicNamesSource, bearingsData);
 
+        createBearings(characteristicNamesSource, bearingsData);
+    }
+
+    private void createBearings(@NotNull final String characteristicNamesSource,
+                                @NotNull final List<String> bearingsData) {
         for (String characteristicDataSource : bearingsData) {
             final BearingDto bearingDto = factory.create(characteristicNamesSource, characteristicDataSource);
             createBearing(bearingDto);
