@@ -2,7 +2,7 @@ package com.pazukdev.bearingsinfo.controller;
 
 import com.pazukdev.bearingsinfo.dto.BearingDto;
 import com.pazukdev.bearingsinfo.service.BearingService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,14 +16,10 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/bearing")
+@RequiredArgsConstructor
 public class BearingController {
 
     private final BearingService service;
-
-    @Autowired
-    public BearingController(final BearingService service) {
-        this.service = service;
-    }
 
     @PostMapping("/create")
     public String createPerson(@RequestBody final BearingDto bearingDto) {
