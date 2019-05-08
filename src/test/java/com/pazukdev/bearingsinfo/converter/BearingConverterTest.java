@@ -20,8 +20,9 @@ public class BearingConverterTest {
         final BearingDto bearingDto = converter.convertToDto(bearing);
 
         assertEquals(bearing.getName(), bearingDto.getName());
-        assertEquals(bearing.getUnit(), bearingDto.getUnit());
-        assertEquals(bearing.getQuantity(), bearing.getQuantity());
+        assertEquals(bearing.getType(), bearingDto.getType());
+        assertEquals(bearing.getRollingElement(), bearing.getRollingElement());
+        assertEquals(bearing.getRollingElementsQuantity(), bearing.getRollingElementsQuantity());
     }
 
     @Test
@@ -30,8 +31,9 @@ public class BearingConverterTest {
         final Bearing bearing = converter.convertToDbo(bearingDto);
 
         assertEquals(bearingDto.getName(), bearing.getName());
-        assertEquals(bearingDto.getUnit(), bearing.getUnit());
-        assertEquals(bearingDto.getQuantity(), bearing.getQuantity());
+        assertEquals(bearingDto.getType(), bearing.getType());
+        assertEquals(bearingDto.getRollingElement(), bearing.getRollingElement());
+        assertEquals(bearingDto.getRollingElementsQuantity(), bearing.getRollingElementsQuantity());
     }
 
 }

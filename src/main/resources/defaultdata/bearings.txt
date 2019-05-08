@@ -1,0 +1,3 @@
+| NAME | TYPE       | ROLLING_ELEMENT | ENCLOSURE | ROLLING_ROWS | CAGE        | SIZE     | ROLLING_ELEMENTS_QUANTITY | WEIGHT | DYNAMIC | REPLACER_1 |
+| 207  | DEEPGROOVE | BALL            | OPEN      | SINGLE_ROW   | SHEET_METAL | 35x72x17 | 9                         | null   | null    | 6207       |
+| 205  | DEEPGROOVE | BALL            | OPEN      | SINGLE_ROW   | SHEET_METAL | 25x52x15 | 9                         | null   | null    | 6205       |

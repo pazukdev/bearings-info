@@ -5,16 +5,18 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
-                <th scope="col">Unit</th>
-                <th scope="col">Quantity</th>
+                <th scope="col">Type</th>
+                <th scope="col">Rolling element</th>
+                <th scope="col">Rolling elements quantity</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="(bearing, index) in bearings" :key="index">
                 <td>{{bearing.id}}</td>
                 <td>{{bearing.name}}</td>
-                <td>{{bearing.unit}}</td>
-                <td>{{bearing.quantity}}</td>
+                <td>{{bearing.type}}</td>
+                <td>{{bearing.rollingElement}}</td>
+                <td>{{bearing.rollingElementsQuantity}}</td>
             </tr>
             </tbody>
         </table>

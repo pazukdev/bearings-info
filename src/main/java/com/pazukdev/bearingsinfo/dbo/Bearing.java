@@ -18,8 +18,11 @@ import javax.persistence.Table;
 @ToString(callSuper = true)
 public class Bearing extends AbstractEntity {
 
-    @Column(name = "UNIT")
-    private String unit;
-    @Column(name = "QUANTITY")
-    private Integer quantity;
+    @Column(name = "TYPE")
+    private String type;
+    @Column(name = "ROLLING_ELEMENT")
+    private String rollingElement;
+    @Column(name = "ROLLING_ELEMENTS_QUANTITY")
+    private Integer rollingElementsQuantity;
+
 }
