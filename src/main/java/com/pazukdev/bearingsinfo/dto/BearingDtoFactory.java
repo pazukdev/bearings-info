@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.pazukdev.bearingsinfo.util.SpecificStringUtils.getIntegerBetweenParentheses;
+import static com.pazukdev.bearingsinfo.util.SpecificStringUtils.getStringBeforeParentheses;
+import static com.pazukdev.bearingsinfo.util.SpecificStringUtils.isEmpty;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -79,38 +83,51 @@ public class BearingDtoFactory {
     private void applyName(@NotNull final BearingDto bearingDto,
                            @NotNull final Map<BearingCharacteristic, String> characteristics) {
         final String data= characteristics.get(BearingCharacteristic.NAME);
-        if (isNull(data)) return;
 
+        if (isEmpty(data)) return;
         bearingDto.setName(data);
     }
 
     private void applyType(@NotNull final BearingDto bearingDto,
                            @NotNull final Map<BearingCharacteristic, String> characteristics) {
         final String data= characteristics.get(BearingCharacteristic.TYPE);
-        if (isNull(data)) return;
 
+        if (isEmpty(data)) return;
         bearingDto.setType(data);
     }
 
     private void applyRollingElement(@NotNull final BearingDto bearingDto,
                                      @NotNull final Map<BearingCharacteristic, String> characteristics) {
         final String data= characteristics.get(BearingCharacteristic.ROLLING_ELEMENT);
-        if (isNull(data)) return;
+        final String rollingElementData = getStringBeforeParentheses(data);
 
-        bearingDto.setRollingElement(data);
+        if (isEmpty(rollingElementData)) return;
+        bearingDto.setRollingElement(rollingElementData);
     }
 
     private void applyRollingElementsQuantity(@NotNull final BearingDto bearingDto,
                                               @NotNull final Map<BearingCharacteristic, String> characteristics) {
-        final String data= characteristics.get(BearingCharacteristic.ROLLING_ELEMENTS_QUANTITY);
-        System.out.println(data);
-        if (isNull(data)) return;
+        final String data= characteristics.get(BearingCharacteristic.ROLLING_ELEMENT);
+        final Integer rollingElementsQuantity = getIntegerBetweenParentheses(data);
 
-        bearingDto.setRollingElementsQuantity(Integer.valueOf(data));
-    }
-
-    private boolean isNull(final String data) {
-        return data.equals("null");
+        if (rollingElementsQuantity == null) return;
+        bearingDto.setRollingElementsQuantity(rollingElementsQuantity);
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

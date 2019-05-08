@@ -1,3 +1,23 @@
-| NAME | TYPE       | ROLLING_ELEMENT | ENCLOSURE | ROLLING_ROWS | CAGE        | SIZE     | ROLLING_ELEMENTS_QUANTITY | WEIGHT | DYNAMIC | REPLACER_1 |
-| 207  | DEEPGROOVE | BALL            | OPEN      | SINGLE_ROW   | SHEET_METAL | 35x72x17 | 9                         | null   | null    | 6207       |
-| 205  | DEEPGROOVE | BALL            | OPEN      | SINGLE_ROW   | SHEET_METAL | 25x52x15 | 9                         | null   | null    | 6205       |
+
+#BEARINGS
+| NAME   | TYPE               | ROLLING_ELEMENT     | ENCLOSURE | ROLLING_ROWS | CAGE        | SIZE       | WEIGHT | DYNAMIC | REPLACER |
+
+#DEEPGROOVE
+| 209    | DEEPGROOVE         | BALL (9)            | OPEN      | SINGLE_ROW   | SHEET_METAL | 45x85x19   | null   | null    | 6209     |
+| 207    | DEEPGROOVE         | BALL (9)            | OPEN      | SINGLE_ROW   | SHEET_METAL | 35x72x17   | null   | null    | 6207     |
+| 205    | DEEPGROOVE         | BALL (9)            | OPEN      | SINGLE_ROW   | SHEET_METAL | 25x52x15   | null   | null    | 6205     |
+| 204    | DEEPGROOVE         | BALL (8)            | OPEN      | SINGLE_ROW   | SHEET_METAL | 20x47x14   | null   | null    | 6204     |
+| 201    | DEEPGROOVE         | BALL (7)            | OPEN      | SINGLE_ROW   | SHEET_METAL | 12x32x10   | null   | null    | 6201     |
+| 200    | DEEPGROOVE         | BALL (6)            | OPEN      | SINGLE_ROW   | SHEET_METAL | 10x30x9    | null   | null    | 6200     |
+| 18     | DEEPGROOVE         | BALL (7)            | OPEN      | SINGLE_ROW   | SHEET_METAL | 8x22x7     | null   | null    | 608      |
+
+#CYLINDRICAL_ROLLER
+| 42209Л | CYLINDRICAL_ROLLER | ROLLER (16)         | OPEN      | SINGLE_ROW   | BRASS       | 45x85x19   | null   | null    | NJ209    |
+| 12204  | CYLINDRICAL_ROLLER | ROLLER (11)         | OPEN      | SINGLE_ROW   | BRASS       | 20x47x14   | null   | null    | NF204    |
+
+#TAPERED_ROLLER
+| 7204   | TAPERED_ROLLER     | TAPERED_ROLLER (12) | OPEN      | SINGLE_ROW   | SHEET_METAL | 20x47x15.3 | null   | null    | 30204    |
+
+
+
+

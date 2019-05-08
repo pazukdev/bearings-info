@@ -1,5 +1,6 @@
 package com.pazukdev.bearingsinfo.service;
 
+import com.pazukdev.bearingsinfo.DataFileUtil;
 import com.pazukdev.bearingsinfo.Main;
 import com.pazukdev.bearingsinfo.converter.BearingConverter;
 import com.pazukdev.bearingsinfo.dbo.Bearing;
@@ -12,10 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,9 +43,9 @@ public class BearingService {
 
     private void createDefaultBearings() {
         final List<String> dataList = getDataListFromTxtFile();
-        final List<String> bearingsData = dataList.subList(1, dataList.size());
-        final String characteristicNamesSource = dataList.get(0);
-        logData(characteristicNamesSource, bearingsData);
+        final List<String> bearingsData = DataFileUtil.getBearingsData(dataList);
+        final String characteristicNamesSource = DataFileUtil.getCharacteristicNamesSource(dataList);
+        DataFileUtil.logData(logger, characteristicNamesSource, bearingsData);
 
         createBearings(characteristicNamesSource, bearingsData);
     }
@@ -62,25 +59,8 @@ public class BearingService {
     }
 
     private List<String> getDataListFromTxtFile() {
-
         final String path = "./src/main/resources/defaultdata/bearings.txt";
-
-        List<String> lines = null;
-
-        try (final BufferedReader reader = Files.newBufferedReader(Paths.get(path))) {
-            lines = reader.lines().collect(Collectors.toList());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return lines;
-    }
-
-    private void logData(final String characteristicNamesSource, final List<String> bearingsData) {
-        logger.info("characteristicNames:");
-        logger.info(characteristicNamesSource);
-        logger.info("bearingsData:");
-        bearingsData.forEach(logger::info);
+        return DataFileUtil.getDataListFromTxtFile(path);
     }
 
 }
