@@ -1,6 +1,6 @@
 package com.pazukdev.bearingsinfo.service;
 
-import com.pazukdev.bearingsinfo.DataFileUtil;
+import com.pazukdev.bearingsinfo.util.DataFileUtil;
 import com.pazukdev.bearingsinfo.Main;
 import com.pazukdev.bearingsinfo.converter.BearingConverter;
 import com.pazukdev.bearingsinfo.dbo.Bearing;
@@ -35,10 +35,16 @@ public class BearingService {
     }
 
     public List<BearingDto> getBearingsList() {
-        if (repository.findAll().isEmpty()) {
+        List<Bearing> bearingList = repository.findAll();
+        if (bearingList.isEmpty()) {
             createDefaultBearings();
+            bearingList = repository.findAll();
         }
-        return repository.findAll().stream().map(converter::convertToDto).collect(Collectors.toList());
+        return convertToDtoList(bearingList);
+    }
+
+    private List<BearingDto> convertToDtoList(final List<Bearing> bearingList) {
+        return bearingList.stream().map(converter::convertToDto).collect(Collectors.toList());
     }
 
     private void createDefaultBearings() {

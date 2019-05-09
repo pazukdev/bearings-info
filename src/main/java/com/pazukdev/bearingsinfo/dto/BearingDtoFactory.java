@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.pazukdev.bearingsinfo.util.SpecificStringUtils.getIntegerBetweenParentheses;
-import static com.pazukdev.bearingsinfo.util.SpecificStringUtils.getStringBeforeParentheses;
-import static com.pazukdev.bearingsinfo.util.SpecificStringUtils.isEmpty;
+import static com.pazukdev.bearingsinfo.util.SpecificStringUtil.getIntegerBetweenParentheses;
+import static com.pazukdev.bearingsinfo.util.SpecificStringUtil.getStringBeforeParentheses;
+import static com.pazukdev.bearingsinfo.util.SpecificStringUtil.isEmpty;
 
 /**
  * @author Siarhei Sviarkaltsau

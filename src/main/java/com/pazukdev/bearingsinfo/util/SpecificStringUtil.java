@@ -6,7 +6,7 @@ import org.springframework.lang.Nullable;
 /**
  * @author Siarhei Sviarkaltsau
  */
-public class SpecificStringUtils {
+public class SpecificStringUtil {
 
     public static Integer getIntegerBetweenParentheses(@Nullable final String source) {
         return getCheckedInteger(getStringBetweenParentheses(source));

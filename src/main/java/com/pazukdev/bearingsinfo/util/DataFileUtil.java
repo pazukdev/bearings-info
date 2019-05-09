@@ -1,6 +1,5 @@
-package com.pazukdev.bearingsinfo;
+package com.pazukdev.bearingsinfo.util;
 
-import com.pazukdev.bearingsinfo.util.SpecificStringUtils;
 import org.slf4j.Logger;
 
 import java.io.BufferedReader;
@@ -47,7 +46,7 @@ public class DataFileUtil {
     }
 
     private static List<String> removeNonDataElements(final List<String> dataList) {
-        dataList.removeIf(SpecificStringUtils::hasNoData);
+        dataList.removeIf(SpecificStringUtil::hasNoData);
         return dataList;
     }
 

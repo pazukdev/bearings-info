@@ -22,13 +22,13 @@ public class BearingController {
     private final BearingService service;
 
     @PostMapping("/create")
-    public String createPerson(@RequestBody final BearingDto bearingDto) {
+    public String createBearing(@RequestBody final BearingDto bearingDto) {
         service.createBearing(bearingDto);
         return "Bearing created";
     }
 
     @GetMapping("/list")
-    public List<BearingDto> getAllPersons() {
+    public List<BearingDto> getAllBearings() {
         return service.getBearingsList();
     }
 
