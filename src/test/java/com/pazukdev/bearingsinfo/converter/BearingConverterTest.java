@@ -1,8 +1,8 @@
 package com.pazukdev.bearingsinfo.converter;
 
 import com.pazukdev.bearingsinfo.MockData;
-import com.pazukdev.bearingsinfo.dbo.Bearing;
-import com.pazukdev.bearingsinfo.dto.BearingDto;
+import com.pazukdev.bearingsinfo.entity.Bearing;
+import com.pazukdev.bearingsinfo.dto.bearing.BearingDto;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -17,23 +17,23 @@ public class BearingConverterTest {
     @Test
     public void convertToDto() {
         final Bearing bearing = MockData.bearing();
-        final BearingDto bearingDto = converter.convertToDto(bearing);
+        final BearingDto dto = converter.convertToDto(bearing);
 
-        assertEquals(bearing.getName(), bearingDto.getName());
-        assertEquals(bearing.getType(), bearingDto.getType());
+        assertEquals(bearing.getName(), dto.getName());
+        assertEquals(bearing.getType(), dto.getType());
         assertEquals(bearing.getRollingElement(), bearing.getRollingElement());
         assertEquals(bearing.getRollingElementsQuantity(), bearing.getRollingElementsQuantity());
     }
 
     @Test
     public void convertToDbo() {
-        final BearingDto bearingDto = MockData.bearingDto();
-        final Bearing bearing = converter.convertToDbo(bearingDto);
+        final BearingDto dto = MockData.bearingDto();
+        final Bearing bearing = converter.convertToDbo(dto);
 
-        assertEquals(bearingDto.getName(), bearing.getName());
-        assertEquals(bearingDto.getType(), bearing.getType());
-        assertEquals(bearingDto.getRollingElement(), bearing.getRollingElement());
-        assertEquals(bearingDto.getRollingElementsQuantity(), bearing.getRollingElementsQuantity());
+        assertEquals(dto.getName(), bearing.getName());
+        assertEquals(dto.getType(), bearing.getType());
+        assertEquals(dto.getRollingElement(), bearing.getRollingElement());
+        assertEquals(dto.getRollingElementsQuantity(), bearing.getRollingElementsQuantity());
     }
 
 }

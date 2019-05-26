@@ -1,7 +1,8 @@
 package com.pazukdev.bearingsinfo.converter;
 
-import com.pazukdev.bearingsinfo.dbo.Bearing;
-import com.pazukdev.bearingsinfo.dto.BearingDto;
+import com.pazukdev.bearingsinfo.converter.abstraction.EntityDtoConverter;
+import com.pazukdev.bearingsinfo.entity.Bearing;
+import com.pazukdev.bearingsinfo.dto.bearing.BearingDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
  * @author Siarhei Sviarkaltsau
  */
 @Service
-public class BearingConverter implements DboDtoConverter<Bearing, BearingDto> {
+public class BearingConverter implements EntityDtoConverter<Bearing, BearingDto> {
 
     private static final ModelMapper modelMapper = new ModelMapper();
 

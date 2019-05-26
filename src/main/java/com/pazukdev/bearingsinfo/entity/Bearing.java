@@ -1,4 +1,4 @@
-package com.pazukdev.bearingsinfo.dbo;
+package com.pazukdev.bearingsinfo.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,16 +13,16 @@ import javax.persistence.Table;
  */
 @Data
 @Entity
-@Table(name = "BEARINGS_INFO")
+@Table(name = "bearing")
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Bearing extends AbstractEntity {
 
-    @Column(name = "TYPE")
+    @Column(name = "type")
     private String type;
-    @Column(name = "ROLLING_ELEMENT")
+    @Column(name = "rolling_element")
     private String rollingElement;
-    @Column(name = "ROLLING_ELEMENTS_QUANTITY")
+    @Column(name = "rolling_elements_quantity")
     private Integer rollingElementsQuantity;
 
 }

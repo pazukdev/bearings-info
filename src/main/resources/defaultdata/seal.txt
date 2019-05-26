@@ -1,0 +1,6 @@
+
+#seal
+| name    | size        | rotation | material | replacer          |
+| 7201191 | 50x70x9     | left     | rubber   | Corteco_12011238b |
+| 7201122 | 15x30x7     | left     | rubber   | Corteco_12011109b |
+| 7204152 | 31.4x45.1x8 | right    | rubber   | Payen_NJ416       |

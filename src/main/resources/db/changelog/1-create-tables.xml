@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="create_bearing_table" author="sviarkaltsau">
+        <createTable tableName="bearing">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="type" type="varchar(255)"/>
+            <column name="rolling_element" type="varchar(255)"/>
+            <column name="rolling_elements_quantity" type="int"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="bearing"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_seal_table" author="sviarkaltsau">
+        <createTable tableName="seal">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="rotation" type="varchar(255)"/>
+            <column name="material" type="varchar(255)"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="seal"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_motorcycle_table" author="sviarkaltsau">
+        <createTable tableName="motorcycle">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="manufacturer" type="varchar(255)"/>
+            <column name="weight_g" type="int"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="motorcycle"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

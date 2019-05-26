@@ -1,19 +1,25 @@
 <template id="app">
     <div>
         <Header/>
+        <MotorcycleList/>
         <BearingList/>
+        <SealList/>
     </div>
 </template>
 
 <script>
-    import BearingList from "./components/BearingList";
     import Header from "./components/Header";
+    import MotorcycleList from "./components/MotorcycleList";
+    import BearingList from "./components/BearingList";
+    import SealList from "./components/SealList";
 
     export default {
         name: 'app',
         components: {
             Header,
-            BearingList
+            MotorcycleList,
+            BearingList,
+            SealList
         }
     }
 </script>

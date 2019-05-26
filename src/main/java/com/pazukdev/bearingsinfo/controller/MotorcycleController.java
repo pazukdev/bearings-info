@@ -1,7 +1,7 @@
 package com.pazukdev.bearingsinfo.controller;
 
-import com.pazukdev.bearingsinfo.dto.bearing.BearingDto;
-import com.pazukdev.bearingsinfo.service.BearingService;
+import com.pazukdev.bearingsinfo.dto.motorcycle.MotorcycleDto;
+import com.pazukdev.bearingsinfo.service.MotorcycleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,20 +15,20 @@ import java.util.List;
  * @author Siarhei Sviarkaltsau
  */
 @RestController
-@RequestMapping("/bearing")
+@RequestMapping("/motorcycle")
 @RequiredArgsConstructor
-public class BearingController {
+public class MotorcycleController {
 
-    private final BearingService service;
+    private final MotorcycleService service;
 
     @PostMapping("/create")
-    public String createBearing(@RequestBody final BearingDto dto) {
+    public String createMotorcycle(@RequestBody final MotorcycleDto dto) {
         service.createProduct(dto);
-        return "Bearing created";
+        return "Motorcycle created";
     }
 
     @GetMapping("/list")
-    public List<BearingDto> getAllBearings() {
+    public List<MotorcycleDto> getAllMotorcycles() {
         return service.getProductsList();
     }
 

@@ -8,6 +8,10 @@ import org.springframework.lang.Nullable;
  */
 public class SpecificStringUtil {
 
+    public static String removeSpaces(final String source) {
+        return source.replaceAll(" ", "");
+    }
+
     public static Integer getIntegerBetweenParentheses(@Nullable final String source) {
         return getCheckedInteger(getStringBetweenParentheses(source));
 

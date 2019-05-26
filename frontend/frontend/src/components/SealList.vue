@@ -4,17 +4,15 @@
             <thead>
             <tr>
                 <th scope="col">Name</th>
-                <th scope="col">Type</th>
-                <th scope="col">Rolling element</th>
-                <th scope="col">Rolling elements quantity</th>
+                <th scope="col">Rotation</th>
+                <th scope="col">Material</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(bearing, index) in bearings" :key="index">
+            <tr v-for="(bearing, index) in seals" :key="index">
                 <td>{{bearing.name}}</td>
-                <td>{{bearing.type}}</td>
-                <td>{{bearing.rollingElement}}</td>
-                <td>{{bearing.rollingElementsQuantity}}</td>
+                <td>{{bearing.rotation}}</td>
+                <td>{{bearing.material}}</td>
             </tr>
             </tbody>
         </table>
@@ -27,15 +25,15 @@
     export default {
         data() {
             return {
-                bearings: []
+                seals: []
             }
         },
 
         created() {
             axios
-                .get(`/backend/bearing/list`)
+                .get(`/backend/seal/list`)
                 .then(response => {
-                    this.bearings = response.data;
+                    this.seals = response.data;
                 });
         }
     }
