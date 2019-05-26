@@ -3,6 +3,7 @@ package com.pazukdev.bearingsinfo.controller;
 import com.pazukdev.bearingsinfo.dto.seal.SealDto;
 import com.pazukdev.bearingsinfo.exception.ProductNotExistException;
 import com.pazukdev.bearingsinfo.service.SealService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/seal")
+@Api(tags = "Seal Controller", value = "API methods for seals")
 @RequiredArgsConstructor
 public class SealController {
 
