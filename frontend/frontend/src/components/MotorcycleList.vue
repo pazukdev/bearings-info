@@ -1,5 +1,8 @@
 <template>
     <div>
+        <br/>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;<b>Motorcycles</b></p>
+
         <table class="table">
             <thead>
             <tr>

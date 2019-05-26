@@ -1,8 +1,11 @@
 <template id="app">
     <div>
         <Header/>
+        <p/>
         <MotorcycleList/>
+        <p/>
         <BearingList/>
+        <p/>
         <SealList/>
     </div>
 </template>

@@ -1,5 +1,8 @@
 <template>
     <div>
+        <br/>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;<b>Bearings</b></p>
+
         <table class="table">
             <thead>
             <tr>
