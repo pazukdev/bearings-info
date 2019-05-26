@@ -5,6 +5,9 @@ import com.pazukdev.bearingsinfo.entity.Bearing;
 import com.pazukdev.bearingsinfo.dto.bearing.BearingDto;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -36,4 +39,31 @@ public class BearingConverterTest {
         assertEquals(dto.getRollingElementsQuantity(), bearing.getRollingElementsQuantity());
     }
 
+    @Test
+    public void convertToDtoList() {
+        final List<Bearing> bearings = new ArrayList<>();
+        bearings.add(MockData.bearing());
+        bearings.add(MockData.bearing());
+
+        final List<BearingDto> dtos = converter.convertToDtoList(bearings);
+
+        for (int i = 0; i < bearings.size(); i++) {
+            assertEquals(dtos.get(i).getName(), bearings.get(i).getName());
+            assertEquals(dtos.get(i).getType(), bearings.get(i).getType());
+            assertEquals(dtos.get(i).getRollingElement(), bearings.get(i).getRollingElement());
+            assertEquals(dtos.get(i).getRollingElementsQuantity(), bearings.get(i).getRollingElementsQuantity());
+        }
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
