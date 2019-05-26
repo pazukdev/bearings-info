@@ -4,13 +4,12 @@ import com.pazukdev.bearingsinfo.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.bearingsinfo.dto.abstraction.AbstractDto;
 import com.pazukdev.bearingsinfo.dto.abstraction.AbstractDtoFactory;
 import com.pazukdev.bearingsinfo.entity.AbstractEntity;
+import com.pazukdev.bearingsinfo.exception.ProductNotExistException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -18,16 +17,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public abstract class AbstractService<Entity extends AbstractEntity, Dto extends AbstractDto> {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractService.class);
-
     private final JpaRepository<Entity, Long> repository;
     private final EntityDtoConverter<Entity, Dto> converter;
     private final AbstractDtoFactory<Dto> factory;
 
-    public void createProduct(final Dto dto) {
-        repository.save(converter.convertToDbo(dto));
-    }
-
+    @Transactional
     public List<Dto> getProductsList() {
         List<Entity> productsList = repository.findAll();
         if (productsList.isEmpty()) {
@@ -35,16 +29,35 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
             productsList = repository.findAll();
         }
 
-        return convertToDtoList(productsList);
+        return converter.convertToDtoList(productsList);
     }
 
-    private List<Dto> convertToDtoList(final List<Entity> bearingList) {
-        return bearingList.stream().map(converter::convertToDto).collect(Collectors.toList());
+    @Transactional
+    public Dto get(final Long id) throws ProductNotExistException {
+        checkProductExists(id);
+        return converter.convertToDto(repository.getOne(id));
+    }
+
+    @Transactional
+    public Entity create(final Dto dto) {
+        return repository.save(converter.convertToDbo(dto));
+    }
+
+    @Transactional
+    public void delete(final Long id) throws ProductNotExistException {
+        checkProductExists(id);
+        repository.deleteById(id);
+    }
+
+    private void checkProductExists(final Long id) throws ProductNotExistException {
+        if (!repository.existsById(id)) {
+            throw new ProductNotExistException(id);
+        }
     }
 
     private void createDefaultProducts() {
         for (final Dto dto : factory.createFromDataFile()) {
-            createProduct(dto);
+            create(dto);
         }
     }
 

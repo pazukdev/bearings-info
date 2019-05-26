@@ -1,14 +1,21 @@
 package com.pazukdev.bearingsinfo.controller;
 
 import com.pazukdev.bearingsinfo.dto.motorcycle.MotorcycleDto;
+import com.pazukdev.bearingsinfo.exception.ProductNotExistException;
 import com.pazukdev.bearingsinfo.service.MotorcycleService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.EntityExistsException;
 import java.util.List;
 
 /**
@@ -21,15 +28,28 @@ public class MotorcycleController {
 
     private final MotorcycleService service;
 
-    @PostMapping("/create")
-    public String createMotorcycle(@RequestBody final MotorcycleDto dto) {
-        service.createProduct(dto);
-        return "Motorcycle created";
+    @GetMapping("/list")
+    @ApiOperation(value = "Get info about all motorcycles")
+    public List<MotorcycleDto> getAll() {
+        return service.getProductsList();
     }
 
-    @GetMapping("/list")
-    public List<MotorcycleDto> getAllMotorcycles() {
-        return service.getProductsList();
+    @GetMapping("/{id}")
+    @ApiOperation(value = "Get info about motorcycle")
+    public MotorcycleDto get(@PathVariable("id") Long id) throws ProductNotExistException {
+        return service.get(id);
+    }
+
+    @PostMapping("/create")
+    @ApiOperation(value = "Create a new motorcycle")
+    public String create(@RequestBody final MotorcycleDto dto) throws EntityExistsException, JSONException {
+        return new JSONObject().put("id", service.create(dto)).toString();
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "Delete motorcycle")
+    public void delete(@PathVariable("id") Long id) throws ProductNotExistException {
+        service.delete(id);
     }
 
 }

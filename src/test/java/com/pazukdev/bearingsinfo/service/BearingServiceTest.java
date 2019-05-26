@@ -39,7 +39,7 @@ public class BearingServiceTest {
         final Bearing bearing = MockData.bearing();
 
         doReturn(bearing).when(repository).save(any(Bearing.class));
-        service.createProduct(new BearingDto());
+        service.create(new BearingDto());
 
         verify(repository, times(1)).save(any(Bearing.class));
 
