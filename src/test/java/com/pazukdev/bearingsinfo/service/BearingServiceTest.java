@@ -2,8 +2,8 @@ package com.pazukdev.bearingsinfo.service;
 
 import com.pazukdev.bearingsinfo.MockData;
 import com.pazukdev.bearingsinfo.converter.BearingConverter;
-import com.pazukdev.bearingsinfo.entity.Bearing;
 import com.pazukdev.bearingsinfo.dto.bearing.BearingDto;
+import com.pazukdev.bearingsinfo.entity.Bearing;
 import com.pazukdev.bearingsinfo.repository.BearingRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,17 +54,16 @@ public class BearingServiceTest {
         findAllResult.add(bearing);
 
         doReturn(findAllResult).when(repository).findAll();
-        final List<BearingDto> bearingsList = service.getProductsList();
+        final List<BearingDto> dtos = service.getProductsList();
 
         verify(repository, times(1)).findAll();
-        assertEquals(findAllResult.size(), bearingsList.size());
-        for (final BearingDto bearingDto : bearingsList) {
-            assertEquals(bearing.getName(), bearingDto.getName());
-            assertEquals(bearing.getType(), bearingDto.getType());
-            assertEquals(bearing.getRollingElement(), bearingDto.getRollingElement());
-            assertEquals(bearing.getRollingElementsQuantity(), bearingDto.getRollingElementsQuantity());
+        assertEquals(findAllResult.size(), dtos.size());
+        for (final BearingDto dto : dtos) {
+            assertEquals(bearing.getName(), dto.getName());
+            assertEquals(bearing.getType(), dto.getType());
+            assertEquals(bearing.getRollingElement(), dto.getRollingElement());
+            assertEquals(bearing.getRollingElementsQuantity(), dto.getRollingElementsQuantity());
         }
-
     }
 
 }
