@@ -5,7 +5,6 @@ import com.pazukdev.bearingsinfo.dto.abstraction.AbstractDtoFactory;
 import com.pazukdev.bearingsinfo.dto.motorcycle.MotorcycleDto;
 import com.pazukdev.bearingsinfo.entity.Motorcycle;
 import com.pazukdev.bearingsinfo.repository.MotorcycleRepository;
-import com.pazukdev.bearingsinfo.util.DataFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

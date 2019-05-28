@@ -1,15 +1,11 @@
 package com.pazukdev.bearingsinfo.dto.motorcycle;
 
-import com.pazukdev.bearingsinfo.DataFileContent;
 import com.pazukdev.bearingsinfo.characteristic.Characteristic;
 import com.pazukdev.bearingsinfo.dto.abstraction.AbstractDtoFactory;
-import com.pazukdev.bearingsinfo.util.DataFileUtil;
-import com.pazukdev.bearingsinfo.util.SpecificStringUtil;
+import com.pazukdev.bearingsinfo.tablemodel.TableRow;
+import com.pazukdev.bearingsinfo.util.CSVFileUtil;
 import com.pazukdev.bearingsinfo.util.WeightUtil;
 import org.springframework.stereotype.Component;
-
-import javax.validation.constraints.NotNull;
-import java.util.Map;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -18,8 +14,8 @@ import java.util.Map;
 public class MotorcycleDtoFactory extends AbstractDtoFactory<MotorcycleDto> {
 
     @Override
-    protected DataFileContent obtainContent() {
-        return parse(DataFileUtil.motorcycleDataFilePath());
+    protected String getCSVFilePath() {
+        return CSVFileUtil.motorcycleDataFilePath();
     }
 
     @Override
@@ -28,28 +24,19 @@ public class MotorcycleDtoFactory extends AbstractDtoFactory<MotorcycleDto> {
     }
 
     @Override
-    protected void applyCharacteristics(final @NotNull MotorcycleDto dto,
-                                        final @NotNull Map<Characteristic, String> characteristics) {
-
-        applyName(dto, characteristics);
-        applyManufacturer(dto, characteristics);
-        applyWeight(dto, characteristics);
+    protected void applyCharacteristics(MotorcycleDto dto, TableRow tableRow) {
+        applyName(dto, tableRow);
+        applyManufacturer(dto, tableRow);
+        applyWeight(dto, tableRow);
     }
 
-    private void applyManufacturer(@NotNull final MotorcycleDto dto,
-                                   @NotNull final Map<Characteristic, String> characteristics) {
-        final String data= characteristics.get(Characteristic.MANUFACTURER);
-
-        if (SpecificStringUtil.isEmpty(data)) return;
-        dto.setManufacturer(data);
+    private void applyManufacturer(final MotorcycleDto dto, final TableRow tableRow) {
+        final String manufacturer = tableRow.getStringValue(Characteristic.MANUFACTURER);
+        dto.setManufacturer(manufacturer);
     }
 
-    private void applyWeight(@NotNull final MotorcycleDto dto,
-                             @NotNull final Map<Characteristic, String> characteristics) {
-        final String data= characteristics.get(Characteristic.WEIGHT_KG);
-
-        if (data == null) return;
-        final Integer weight_kg = Integer.parseInt(data);
+    private void applyWeight(final MotorcycleDto dto, final TableRow tableRow) {
+        final Integer weight_kg = tableRow.getIntegerValue(Characteristic.WEIGHT_KG);
         dto.setWeightG(WeightUtil.toG(weight_kg));
     }
 

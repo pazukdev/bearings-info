@@ -1,14 +1,10 @@
 package com.pazukdev.bearingsinfo.dto.seal;
 
-import com.pazukdev.bearingsinfo.DataFileContent;
 import com.pazukdev.bearingsinfo.characteristic.Characteristic;
 import com.pazukdev.bearingsinfo.dto.abstraction.AbstractDtoFactory;
-import com.pazukdev.bearingsinfo.util.DataFileUtil;
-import com.pazukdev.bearingsinfo.util.SpecificStringUtil;
+import com.pazukdev.bearingsinfo.tablemodel.TableRow;
+import com.pazukdev.bearingsinfo.util.CSVFileUtil;
 import org.springframework.stereotype.Component;
-
-import javax.validation.constraints.NotNull;
-import java.util.Map;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -17,8 +13,8 @@ import java.util.Map;
 public class SealDtoFactory extends AbstractDtoFactory<SealDto> {
 
     @Override
-    protected DataFileContent obtainContent() {
-        return parse(DataFileUtil.sealDataFilePath());
+    protected String getCSVFilePath() {
+        return CSVFileUtil.sealDataFilePath();
     }
 
     @Override
@@ -27,28 +23,20 @@ public class SealDtoFactory extends AbstractDtoFactory<SealDto> {
     }
 
     @Override
-    protected void applyCharacteristics(final @NotNull SealDto dto,
-                                        final @NotNull Map<Characteristic, String> characteristics) {
-
-        applyName(dto, characteristics);
-        applyRotation(dto, characteristics);
-        applyMaterial(dto, characteristics);
+    protected void applyCharacteristics(SealDto dto, TableRow tableRow) {
+        applyName(dto, tableRow);
+        applyRotation(dto, tableRow);
+        applyMaterial(dto, tableRow);
     }
 
-    private void applyRotation(@NotNull final SealDto dto,
-                           @NotNull final Map<Characteristic, String> characteristics) {
-        final String data= characteristics.get(Characteristic.ROTATION);
-
-        if (SpecificStringUtil.isEmpty(data)) return;
-        dto.setRotation(data);
+    private void applyRotation(final SealDto dto, TableRow tableRow) {
+        final String rotation = tableRow.getStringValue(Characteristic.ROTATION);
+        dto.setRotation(rotation);
     }
 
-    private void applyMaterial(@NotNull final SealDto dto,
-                               @NotNull final Map<Characteristic, String> characteristics) {
-        final String data= characteristics.get(Characteristic.MATERIAL);
-
-        if (SpecificStringUtil.isEmpty(data)) return;
-        dto.setMaterial(data);
+    private void applyMaterial(final SealDto dto, final TableRow tableRow) {
+        final String material = tableRow.getStringValue(Characteristic.MATERIAL);
+        dto.setMaterial(material);
     }
 
 }

@@ -56,7 +56,7 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     }
 
     private void createDefaultProducts() {
-        for (final Dto dto : factory.createFromDataFile()) {
+        for (final Dto dto : factory.createDtosFromCSVFile()) {
             create(dto);
         }
     }

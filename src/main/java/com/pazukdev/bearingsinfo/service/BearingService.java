@@ -5,7 +5,6 @@ import com.pazukdev.bearingsinfo.dto.abstraction.AbstractDtoFactory;
 import com.pazukdev.bearingsinfo.dto.bearing.BearingDto;
 import com.pazukdev.bearingsinfo.entity.Bearing;
 import com.pazukdev.bearingsinfo.repository.BearingRepository;
-import com.pazukdev.bearingsinfo.util.DataFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -9,6 +9,9 @@ import org.springframework.lang.Nullable;
 public class SpecificStringUtil {
 
     public static String removeSpaces(final String source) {
+        if (isEmpty(source)) {
+            return source;
+        }
         return source.replaceAll(" ", "");
     }
 
@@ -22,8 +25,10 @@ public class SpecificStringUtil {
     }
 
     public static String getStringBeforeParentheses(@Nullable final String source) {
-        return getCheckedString(source.split("\\(")[0]);
-
+        if (isEmpty(source)) {
+            return source;
+        }
+        return removeSpaces(source.split("\\(")[0]);
     }
 
     public static boolean hasNoData(@Nullable final String source) {
@@ -39,15 +44,29 @@ public class SpecificStringUtil {
     }
 
     public static boolean isEmpty(@Nullable final String data) {
-        return StringUtils.isEmpty(data) || data.equals("null") || data.equals("-");
+        return StringUtils.isBlank(data) || data.equals("null") || data.equals("-");
     }
 
-    private static String getCheckedString(@Nullable final String data) {
+    public static String getCheckedString(@Nullable final String data) {
         return isNotEmpty(data) ? data : null;
     }
 
-    private static Integer getCheckedInteger(@Nullable final String data) {
+    public static Integer getCheckedInteger(@Nullable final String data) {
         return isNotEmpty(data) ? Integer.valueOf(data) : null;
+    }
+
+    public static Integer extractIntegerAutomatically(final String source) {
+        if (containsParentheses(source)) {
+            return getIntegerBetweenParentheses(source);
+        }
+        return getCheckedInteger(source);
+    }
+
+    public static Boolean containsParentheses(final String source) {
+        if(isEmpty(source)) {
+            return false;
+        }
+        return source.contains("(") && source.contains(")");
     }
 
 }

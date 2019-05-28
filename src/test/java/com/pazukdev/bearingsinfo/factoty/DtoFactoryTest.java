@@ -46,7 +46,7 @@ public class DtoFactoryTest {
     }
 
     private <Dto extends AbstractDto> Dto getFirstDtoFromDataFile(final AbstractDtoFactory<Dto> factory) {
-        return factory.createFromDataFile().get(0);
+        return factory.createDtosFromCSVFile().get(0);
     }
 
 }

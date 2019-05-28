@@ -1,21 +1,10 @@
 package com.pazukdev.bearingsinfo.dto.bearing;
 
-import com.pazukdev.bearingsinfo.DataFileContent;
 import com.pazukdev.bearingsinfo.characteristic.Characteristic;
 import com.pazukdev.bearingsinfo.dto.abstraction.AbstractDtoFactory;
-import com.pazukdev.bearingsinfo.util.DataFileUtil;
+import com.pazukdev.bearingsinfo.tablemodel.TableRow;
+import com.pazukdev.bearingsinfo.util.CSVFileUtil;
 import org.springframework.stereotype.Component;
-
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.pazukdev.bearingsinfo.util.SpecificStringUtil.getIntegerBetweenParentheses;
-import static com.pazukdev.bearingsinfo.util.SpecificStringUtil.getStringBeforeParentheses;
-import static com.pazukdev.bearingsinfo.util.SpecificStringUtil.isEmpty;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -24,8 +13,8 @@ import static com.pazukdev.bearingsinfo.util.SpecificStringUtil.isEmpty;
 public class BearingDtoFactory extends AbstractDtoFactory<BearingDto> {
 
     @Override
-    protected DataFileContent obtainContent() {
-        return parse(DataFileUtil.bearingDataFilePath());
+    protected String getCSVFilePath() {
+        return CSVFileUtil.bearingDataFilePath();
     }
 
     @Override
@@ -34,39 +23,28 @@ public class BearingDtoFactory extends AbstractDtoFactory<BearingDto> {
     }
 
     @Override
-    protected void applyCharacteristics(final @NotNull BearingDto dto,
-                                        final @NotNull Map<Characteristic, String> characteristics) {
-        applyName(dto, characteristics);
-        applyType(dto, characteristics);
-        applyRollingElement(dto, characteristics);
-        applyRollingElementsQuantity(dto, characteristics);
+    protected void applyCharacteristics(BearingDto dto, TableRow tableRow) {
+        applyName(dto, tableRow);
+        applyType(dto, tableRow);
+        applyRollingElement(dto, tableRow);
+        applyRollingElementsQuantity(dto, tableRow);
     }
 
-    private void applyType(@NotNull final BearingDto dto,
-                             @NotNull final Map<Characteristic, String> characteristics) {
-        final String data= characteristics.get(Characteristic.TYPE);
-
-        if (isEmpty(data)) return;
-        dto.setType(data);
+    private void applyType(final BearingDto dto, final TableRow tableRow) {
+        final String type = tableRow.getStringValue(Characteristic.TYPE);
+        dto.setType(type);
     }
 
-    private void applyRollingElement(@NotNull final BearingDto bearingDto,
-                                     @NotNull final Map<Characteristic, String> characteristics) {
-        final String data= characteristics.get(Characteristic.ROLLING_ELEMENT);
-        final String rollingElementData = getStringBeforeParentheses(data);
-
-        if (isEmpty(rollingElementData)) return;
+    private void applyRollingElement(final BearingDto bearingDto, final TableRow tableRow) {
+        final String rollingElementData = tableRow.getStringValueBeforeParenthesises(Characteristic.ROLLING_ELEMENT);
         bearingDto.setRollingElement(rollingElementData);
     }
 
-    private void applyRollingElementsQuantity(@NotNull final BearingDto dto,
-                                              @NotNull final Map<Characteristic, String> characteristics) {
-        final String data= characteristics.get(Characteristic.ROLLING_ELEMENT);
-        final Integer rollingElementsQuantity = getIntegerBetweenParentheses(data);
-
-        if (rollingElementsQuantity == null) return;
+    private void applyRollingElementsQuantity(final BearingDto dto, final TableRow tableRow) {
+        final Integer rollingElementsQuantity = tableRow.getIntegerValue(Characteristic.ROLLING_ELEMENT);
         dto.setRollingElementsQuantity(rollingElementsQuantity);
     }
+
 }
 
 
