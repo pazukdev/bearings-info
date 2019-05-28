@@ -2,8 +2,8 @@ package com.pazukdev.bearingsinfo.dto.abstraction;
 
 import com.pazukdev.bearingsinfo.characteristic.Characteristic;
 import com.pazukdev.bearingsinfo.tablemodel.TableModel;
+import com.pazukdev.bearingsinfo.tablemodel.TableModelFactory;
 import com.pazukdev.bearingsinfo.tablemodel.TableRow;
-import com.pazukdev.bearingsinfo.util.CSVFileUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +17,15 @@ public abstract class AbstractDtoFactory<Dto extends AbstractDto> {
         return createDtosFromTableModel(getTableModelFromCSVFile());
     }
 
-    protected abstract String getCSVFilePath();
+    public abstract Dto createDto();
 
-    protected abstract Dto createDto();
+    protected abstract String getCSVFilePath();
 
     protected abstract void applyCharacteristics(final Dto dto, final TableRow tableRow);
 
-    protected TableModel getTableModelFromCSVFile() {
-        return CSVFileUtil.parse(getCSVFilePath());
+    private TableModel getTableModelFromCSVFile() {
+        final TableModelFactory factory = TableModelFactory.create();
+        return factory.createTableModel(getCSVFilePath());
     }
 
     private List<Dto> createDtosFromTableModel(final TableModel tableModel) {

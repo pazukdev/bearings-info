@@ -19,7 +19,7 @@ public class MotorcycleDtoFactory extends AbstractDtoFactory<MotorcycleDto> {
     }
 
     @Override
-    protected MotorcycleDto createDto() {
+    public MotorcycleDto createDto() {
         return new MotorcycleDto();
     }
 

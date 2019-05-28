@@ -3,6 +3,7 @@ package com.pazukdev.bearingsinfo.service;
 import com.pazukdev.bearingsinfo.MockData;
 import com.pazukdev.bearingsinfo.converter.SealConverter;
 import com.pazukdev.bearingsinfo.dto.seal.SealDto;
+import com.pazukdev.bearingsinfo.dto.seal.SealDtoFactory;
 import com.pazukdev.bearingsinfo.entity.Seal;
 import com.pazukdev.bearingsinfo.repository.SealRepository;
 import org.junit.Test;
@@ -27,6 +28,8 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class SealServiceTest {
 
+    private final MockData mockData = new MockData();
+    private final SealDtoFactory dtoFactory = new SealDtoFactory();
     @InjectMocks
     private SealService service;
     @Mock
@@ -36,10 +39,10 @@ public class SealServiceTest {
 
     @Test
     public void createSeal() {
-        final Seal seal = MockData.seal();
+        final Seal seal = mockData.seal();
 
         doReturn(seal).when(repository).save(any(Seal.class));
-        service.create(new SealDto());
+        service.create(dtoFactory.createDto());
 
         verify(repository, times(1)).save(any(Seal.class));
 
@@ -47,7 +50,7 @@ public class SealServiceTest {
 
     @Test
     public void getSealsList() {
-        final Seal seal = MockData.seal();
+        final Seal seal = mockData.seal();
 
         final List<Seal> findAllResult = new ArrayList<>();
         findAllResult.add(seal);

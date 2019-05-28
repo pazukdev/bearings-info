@@ -3,6 +3,7 @@ package com.pazukdev.bearingsinfo.service;
 import com.pazukdev.bearingsinfo.MockData;
 import com.pazukdev.bearingsinfo.converter.MotorcycleConverter;
 import com.pazukdev.bearingsinfo.dto.motorcycle.MotorcycleDto;
+import com.pazukdev.bearingsinfo.dto.motorcycle.MotorcycleDtoFactory;
 import com.pazukdev.bearingsinfo.entity.Motorcycle;
 import com.pazukdev.bearingsinfo.repository.MotorcycleRepository;
 import org.junit.Test;
@@ -27,6 +28,8 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class MotorcycleServiceTest {
 
+    private final MockData mockData = new MockData();
+    private final MotorcycleDtoFactory dtoFactory = new MotorcycleDtoFactory();
     @InjectMocks
     private MotorcycleService service;
     @Mock
@@ -36,10 +39,10 @@ public class MotorcycleServiceTest {
 
     @Test
     public void createMotorcycle() {
-        final Motorcycle motorcycle = MockData.motorcycle();
+        final Motorcycle motorcycle = mockData.motorcycle();
 
         doReturn(motorcycle).when(repository).save(any(Motorcycle.class));
-        service.create(new MotorcycleDto());
+        service.create(dtoFactory.createDto());
 
         verify(repository, times(1)).save(any(Motorcycle.class));
 
@@ -47,7 +50,7 @@ public class MotorcycleServiceTest {
 
     @Test
     public void getMotorcyclesList() {
-        final Motorcycle motorcycle = MockData.motorcycle();
+        final Motorcycle motorcycle = mockData.motorcycle();
 
         final List<Motorcycle> findAllResult = new ArrayList<>();
         findAllResult.add(motorcycle);

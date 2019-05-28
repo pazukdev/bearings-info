@@ -12,11 +12,12 @@ import static org.junit.Assert.assertEquals;
  */
 public class MotorcycleConverterTest {
 
+    private final MockData mockData = new MockData();
     private final MotorcycleConverter converter = new MotorcycleConverter();
 
     @Test
     public void convertToDto() {
-        final Motorcycle motorcycle = MockData.motorcycle();
+        final Motorcycle motorcycle = mockData.motorcycle();
         final MotorcycleDto dto= converter.convertToDto(motorcycle);
 
         assertEquals(motorcycle.getName(), dto.getName());
@@ -26,7 +27,7 @@ public class MotorcycleConverterTest {
 
     @Test
     public void convertToDbo() {
-        final MotorcycleDto dto = MockData.motorcycleDto();
+        final MotorcycleDto dto = mockData.motorcycleDto();
         final Motorcycle motorcycle = converter.convertToDbo(dto);
 
         assertEquals(dto.getName(), motorcycle.getName());

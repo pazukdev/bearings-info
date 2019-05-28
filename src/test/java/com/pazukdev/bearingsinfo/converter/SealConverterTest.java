@@ -12,11 +12,12 @@ import static org.junit.Assert.assertEquals;
  */
 public class SealConverterTest {
 
+    private MockData mockData = new MockData();
     private final SealConverter converter = new SealConverter();
 
     @Test
     public void convertToDto() {
-        final Seal seal = MockData.seal();
+        final Seal seal = mockData.seal();
         final SealDto dto= converter.convertToDto(seal);
 
         assertEquals(seal.getName(), dto.getName());
@@ -26,7 +27,7 @@ public class SealConverterTest {
 
     @Test
     public void convertToDbo() {
-        final SealDto dto = MockData.sealDto();
+        final SealDto dto = mockData.sealDto();
         final Seal seal = converter.convertToDbo(dto);
 
         assertEquals(dto.getName(), seal.getName());

@@ -18,7 +18,7 @@ public class SealDtoFactory extends AbstractDtoFactory<SealDto> {
     }
 
     @Override
-    protected SealDto createDto() {
+    public SealDto createDto() {
         return new SealDto();
     }
 

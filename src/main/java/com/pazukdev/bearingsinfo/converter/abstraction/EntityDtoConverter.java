@@ -1,7 +1,7 @@
 package com.pazukdev.bearingsinfo.converter.abstraction;
 
-import com.pazukdev.bearingsinfo.entity.AbstractEntity;
 import com.pazukdev.bearingsinfo.dto.abstraction.AbstractDto;
+import com.pazukdev.bearingsinfo.entity.AbstractEntity;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

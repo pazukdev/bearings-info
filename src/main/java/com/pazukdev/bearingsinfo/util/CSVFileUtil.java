@@ -1,8 +1,5 @@
 package com.pazukdev.bearingsinfo.util;
 
-import com.pazukdev.bearingsinfo.tablemodel.TableModel;
-import com.pazukdev.bearingsinfo.tablemodel.TableModelImpl;
-
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -13,10 +10,6 @@ public class CSVFileUtil {
     private static final String MOTORCYCLE_DATA_FILE_NAME = "motorcycle";
     private static final String BEARING_DATA_FILE_NAME = "bearing";
     private static final String SEAL_DATA_FILE_NAME = "seal";
-
-    public static TableModel parse(final String filePath) {
-        return TableModelImpl.create(filePath);
-    }
 
     public static String motorcycleDataFilePath() {
         return dataFilePath(MOTORCYCLE_DATA_FILE_NAME);

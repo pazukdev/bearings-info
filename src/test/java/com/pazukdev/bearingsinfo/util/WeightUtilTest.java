@@ -1,7 +1,5 @@
 package com.pazukdev.bearingsinfo.util;
 
-import com.pazukdev.bearingsinfo.util.WeightUtil;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -17,14 +15,13 @@ public class WeightUtilTest {
     public void kgToG() {
         final Integer kg = 1;
         final Integer g = WeightUtil.toG(kg);
-        Assert.assertTrue(g == 1000);
+        assertEquals(1000, (int) g);
     }
 
     @Test
     public void gToKg() {
         Integer g;
         BigDecimal actualKg;
-        BigDecimal expectedKg;
 
         g = 5;
         actualKg = WeightUtil.toKg(g);

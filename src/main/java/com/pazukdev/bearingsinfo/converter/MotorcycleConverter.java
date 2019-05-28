@@ -1,8 +1,8 @@
 package com.pazukdev.bearingsinfo.converter;
 
 import com.pazukdev.bearingsinfo.converter.abstraction.EntityDtoConverter;
-import com.pazukdev.bearingsinfo.entity.Motorcycle;
 import com.pazukdev.bearingsinfo.dto.motorcycle.MotorcycleDto;
+import com.pazukdev.bearingsinfo.entity.Motorcycle;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

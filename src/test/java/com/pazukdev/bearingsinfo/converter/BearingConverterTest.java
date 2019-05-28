@@ -1,8 +1,8 @@
 package com.pazukdev.bearingsinfo.converter;
 
 import com.pazukdev.bearingsinfo.MockData;
-import com.pazukdev.bearingsinfo.entity.Bearing;
 import com.pazukdev.bearingsinfo.dto.bearing.BearingDto;
+import com.pazukdev.bearingsinfo.entity.Bearing;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -15,11 +15,12 @@ import static org.junit.Assert.assertEquals;
  */
 public class BearingConverterTest {
 
+    private final MockData mockData = new MockData();
     private final BearingConverter converter = new BearingConverter();
 
     @Test
     public void convertToDto() {
-        final Bearing bearing = MockData.bearing();
+        final Bearing bearing = mockData.bearing();
         final BearingDto dto = converter.convertToDto(bearing);
 
         assertEquals(bearing.getName(), dto.getName());
@@ -30,7 +31,7 @@ public class BearingConverterTest {
 
     @Test
     public void convertToDbo() {
-        final BearingDto dto = MockData.bearingDto();
+        final BearingDto dto = mockData.bearingDto();
         final Bearing bearing = converter.convertToDbo(dto);
 
         assertEquals(dto.getName(), bearing.getName());
@@ -42,8 +43,8 @@ public class BearingConverterTest {
     @Test
     public void convertToDtoList() {
         final List<Bearing> bearings = new ArrayList<>();
-        bearings.add(MockData.bearing());
-        bearings.add(MockData.bearing());
+        bearings.add(mockData.bearing());
+        bearings.add(mockData.bearing());
 
         final List<BearingDto> dtos = converter.convertToDtoList(bearings);
 

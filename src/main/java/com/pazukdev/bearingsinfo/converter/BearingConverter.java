@@ -1,8 +1,8 @@
 package com.pazukdev.bearingsinfo.converter;
 
 import com.pazukdev.bearingsinfo.converter.abstraction.EntityDtoConverter;
-import com.pazukdev.bearingsinfo.entity.Bearing;
 import com.pazukdev.bearingsinfo.dto.bearing.BearingDto;
+import com.pazukdev.bearingsinfo.entity.Bearing;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

@@ -18,7 +18,7 @@ public class BearingDtoFactory extends AbstractDtoFactory<BearingDto> {
     }
 
     @Override
-    protected BearingDto createDto() {
+    public BearingDto createDto() {
         return new BearingDto();
     }
 
