@@ -2,7 +2,6 @@ package com.pazukdev.bearingsinfo.service;
 
 import com.pazukdev.bearingsinfo.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.bearingsinfo.dto.abstraction.AbstractDto;
-import com.pazukdev.bearingsinfo.dto.abstraction.AbstractDtoFactory;
 import com.pazukdev.bearingsinfo.entity.AbstractEntity;
 import com.pazukdev.bearingsinfo.exception.ProductNotExistException;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +18,10 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
 
     private final JpaRepository<Entity, Long> repository;
     private final EntityDtoConverter<Entity, Dto> converter;
-    private final AbstractDtoFactory<Dto> factory;
 
     @Transactional
     public List<Dto> getProductsList() {
-        List<Entity> productsList = repository.findAll();
-        if (productsList.isEmpty()) {
-            createDefaultProducts();
-            productsList = repository.findAll();
-        }
-
-        return converter.convertToDtoList(productsList);
+        return converter.convertToDtoList(repository.findAll());
     }
 
     @Transactional
@@ -52,12 +44,6 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     private void checkProductExists(final Long id) throws ProductNotExistException {
         if (!repository.existsById(id)) {
             throw new ProductNotExistException(id);
-        }
-    }
-
-    private void createDefaultProducts() {
-        for (final Dto dto : factory.createDtosFromCSVFile()) {
-            create(dto);
         }
     }
 

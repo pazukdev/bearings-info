@@ -1,7 +1,6 @@
 package com.pazukdev.bearingsinfo.service;
 
 import com.pazukdev.bearingsinfo.converter.MotorcycleConverter;
-import com.pazukdev.bearingsinfo.dto.abstraction.AbstractDtoFactory;
 import com.pazukdev.bearingsinfo.dto.motorcycle.MotorcycleDto;
 import com.pazukdev.bearingsinfo.entity.Motorcycle;
 import com.pazukdev.bearingsinfo.repository.MotorcycleRepository;
@@ -16,8 +15,7 @@ public class MotorcycleService extends AbstractService<Motorcycle, MotorcycleDto
 
     @Autowired
     public MotorcycleService(final MotorcycleRepository repository,
-                             final MotorcycleConverter converter,
-                             final AbstractDtoFactory<MotorcycleDto> factory) {
-        super(repository, converter, factory);
+                             final MotorcycleConverter converter) {
+        super(repository, converter);
     }
 }
