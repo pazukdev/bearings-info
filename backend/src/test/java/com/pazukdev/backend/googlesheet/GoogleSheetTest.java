@@ -21,7 +21,7 @@ public class GoogleSheetTest {
     public void getSheetsTest() throws IOException, ServiceException {
         SpreadsheetService service = new SpreadsheetService("MySpreadsheetIntegration-v1");
 
-        // TODO: Authorize the service object for a specific user (see other sections)
+        // T0D0: Authorize the service object for a specific user (see other sections)
 
         SpreadsheetFeed feed = service.getFeed(new URL(SPREADSHEET_URL), SpreadsheetFeed.class);
         List<SpreadsheetEntry> spreadsheets = feed.getEntries();
