@@ -1,9 +1,9 @@
 package com.pazukdev.backend.dto.abstraction;
 
 import com.pazukdev.backend.characteristic.Characteristic;
-import com.pazukdev.backend.tablemodel.TableModel;
-import com.pazukdev.backend.tablemodel.TableModelFactory;
-import com.pazukdev.backend.tablemodel.TableRow;
+import com.pazukdev.backend.defaultdata.tablemodel.TableModel;
+import com.pazukdev.backend.defaultdata.tablemodel.TableModelFactory;
+import com.pazukdev.backend.defaultdata.tablemodel.TableRow;
 
 import java.util.ArrayList;
 import java.util.List;

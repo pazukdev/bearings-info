@@ -40,9 +40,9 @@ public class DataLoader implements ApplicationRunner {
         // TODO: fix:
         //  java.io.FileNotFoundException: .\src\main\resources\defaultdata\motorcycle.csv
         //  (The system cannot find the path specified)
-        loadMotorcycles(motorcycleService.getProductsList().isEmpty());
-        loadBearings(bearingService.getProductsList().isEmpty());
-        loadSeals(sealService.getProductsList().isEmpty());
+//        loadMotorcycles(motorcycleService.getProductsList().isEmpty());
+//        loadBearings(bearingService.getProductsList().isEmpty());
+//        loadSeals(sealService.getProductsList().isEmpty());
     }
 
     private void loadMotorcycles(final Boolean tableIsEmpty) {

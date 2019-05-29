@@ -1,4 +1,4 @@
-package com.pazukdev.backend.tablemodel;
+package com.pazukdev.backend.defaultdata.tablemodel;
 
 import java.util.List;
 

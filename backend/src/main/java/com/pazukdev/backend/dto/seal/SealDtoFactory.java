@@ -1,8 +1,8 @@
 package com.pazukdev.backend.dto.seal;
 
 import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.defaultdata.tablemodel.TableRow;
 import com.pazukdev.backend.dto.abstraction.AbstractDtoFactory;
-import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import org.springframework.stereotype.Component;
 

@@ -5,7 +5,7 @@ package com.pazukdev.backend.util;
  */
 public class CSVFileUtil {
 
-    private static final String DEFAULT_DATA_PATH = "./src/main/resources/defaultdata/";
+    private static final String DEFAULT_DATA_PATH = "./src/main/resources/static/";
     private static final String FILE_FORMAT = "csv";
     private static final String MOTORCYCLE_DATA_FILE_NAME = "motorcycle";
     private static final String BEARING_DATA_FILE_NAME = "bearing";

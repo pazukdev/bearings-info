@@ -1,4 +1,4 @@
-package com.pazukdev.backend.tablemodel;
+package com.pazukdev.backend.defaultdata.tablemodel;
 
 import com.opencsv.CSVReader;
 import com.pazukdev.backend.util.AppCollectionUtil;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author Siarhei Sviarkaltsau
  */
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TableModelFactory {
 
     public static TableModelFactory create() {
