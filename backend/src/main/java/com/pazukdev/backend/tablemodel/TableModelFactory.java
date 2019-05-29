@@ -5,7 +5,6 @@ import com.pazukdev.backend.util.AppCollectionUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class TableModelFactory {
     private List<String[]> readFile(final String filePath) {
         List<String[]> lines = null;
 
-        try (CSVReader reader = new CSVReader(new FileReader(File.createTempFile("motorcycle", "csv")))) {
+        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
             lines = reader.readAll();
         } catch (IOException e) {
             e.printStackTrace();

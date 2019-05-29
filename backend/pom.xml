@@ -7,7 +7,6 @@
         <artifactId>bearings-info</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.pazukdev</groupId>
     <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>backend</name>
