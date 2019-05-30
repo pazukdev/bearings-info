@@ -32,7 +32,7 @@ public class DataLoader implements ApplicationRunner {
     private final SealDtoFactory sealDtoFactory;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         populateEmptyTables();
     }
 
