@@ -45,7 +45,7 @@ public class MotorcycleController {
     @PostMapping("/create")
     @ApiOperation(value = "Create a new motorcycle")
     public String create(@RequestBody final MotorcycleDto dto) throws EntityExistsException, JSONException {
-        return new JSONObject().put("id", service.create(dto)).toString();
+        return new JSONObject().put("id", service.create(dto).getId()).toString();
     }
 
     @DeleteMapping("/{id}")

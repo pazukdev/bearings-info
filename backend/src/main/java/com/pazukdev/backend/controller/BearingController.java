@@ -45,7 +45,7 @@ public class BearingController {
     @PostMapping("/create")
     @ApiOperation(value = "Create a new bearing")
     public String create(@RequestBody final BearingDto dto) throws EntityExistsException, JSONException {
-        return new JSONObject().put("id", service.create(dto)).toString();
+        return new JSONObject().put("id", service.create(dto).getId()).toString();
     }
 
     @DeleteMapping("/{id}")

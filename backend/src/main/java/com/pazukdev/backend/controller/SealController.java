@@ -45,7 +45,7 @@ public class SealController {
     @PostMapping("/create")
     @ApiOperation(value = "Create a new seal")
     public String create(@RequestBody final SealDto dto) throws EntityExistsException, JSONException {
-        return new JSONObject().put("id", service.create(dto)).toString();
+        return new JSONObject().put("id", service.create(dto).getId()).toString();
     }
 
     @DeleteMapping("/{id}")
