@@ -1,10 +1,11 @@
 package com.pazukdev.backend.dto.abstraction;
 
 import com.pazukdev.backend.characteristic.Characteristic;
-import com.pazukdev.backend.defaultdata.tablemodel.TableModel;
-import com.pazukdev.backend.defaultdata.tablemodel.TableModelFactory;
-import com.pazukdev.backend.defaultdata.tablemodel.TableRow;
+import com.pazukdev.backend.tablemodel.TableModel;
+import com.pazukdev.backend.tablemodel.TableModelFactory;
+import com.pazukdev.backend.tablemodel.TableRow;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,13 +20,13 @@ public abstract class AbstractDtoFactory<Dto extends AbstractDto> {
 
     public abstract Dto createDto();
 
-    protected abstract String getCSVFilePath();
+    protected abstract File getCSVFile();
 
     protected abstract void applyCharacteristics(final Dto dto, final TableRow tableRow);
 
     private TableModel getTableModelFromCSVFile() {
         final TableModelFactory factory = TableModelFactory.create();
-        return factory.createTableModel(getCSVFilePath());
+        return factory.createTableModel(getCSVFile());
     }
 
     private List<Dto> createDtosFromTableModel(final TableModel tableModel) {

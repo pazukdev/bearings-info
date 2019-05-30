@@ -1,12 +1,10 @@
-package com.pazukdev.backend.defaultdata.tablemodel;
+package com.pazukdev.backend.tablemodel;
 
-import com.opencsv.CSVReader;
-import com.pazukdev.backend.util.AppCollectionUtil;
+import com.pazukdev.backend.util.CSVFileUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +18,8 @@ public class TableModelFactory {
         return new TableModelFactory();
     }
 
-    public TableModel createTableModel(final String filePath) {
-        final List<TableRow> tableRows = getTableRows(readFile(filePath));
+    public TableModel createTableModel(final File file) {
+        final List<TableRow> tableRows = getTableRows(CSVFileUtil.readFile(file));
         return new TableModelImpl(tableRows);
     }
 
@@ -39,22 +37,6 @@ public class TableModelFactory {
         }
 
         return rows;
-    }
-
-    private List<String[]> readFile(final String filePath) {
-        List<String[]> lines = null;
-
-        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
-            lines = reader.readAll();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return format(lines);
-    }
-
-    private List<String[]> format(final List<String[]> list) {
-        return AppCollectionUtil.toLowerCase(AppCollectionUtil.removeSpaces(list));
     }
 
     private String[] getHeader(final List<String[]> fileLines) {

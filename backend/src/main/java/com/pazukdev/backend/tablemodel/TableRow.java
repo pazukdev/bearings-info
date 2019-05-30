@@ -1,4 +1,4 @@
-package com.pazukdev.backend.defaultdata.tablemodel;
+package com.pazukdev.backend.tablemodel;
 
 import com.pazukdev.backend.characteristic.Characteristic;
 import lombok.AccessLevel;

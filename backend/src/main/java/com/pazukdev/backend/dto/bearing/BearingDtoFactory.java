@@ -1,10 +1,12 @@
 package com.pazukdev.backend.dto.bearing;
 
 import com.pazukdev.backend.characteristic.Characteristic;
-import com.pazukdev.backend.defaultdata.tablemodel.TableRow;
 import com.pazukdev.backend.dto.abstraction.AbstractDtoFactory;
+import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -13,8 +15,8 @@ import org.springframework.stereotype.Component;
 public class BearingDtoFactory extends AbstractDtoFactory<BearingDto> {
 
     @Override
-    protected String getCSVFilePath() {
-        return CSVFileUtil.bearingDataFilePath();
+    protected File getCSVFile() {
+        return CSVFileUtil.bearingFile();
     }
 
     @Override
