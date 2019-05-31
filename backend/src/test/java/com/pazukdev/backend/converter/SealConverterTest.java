@@ -28,7 +28,7 @@ public class SealConverterTest {
     @Test
     public void convertToDbo() {
         final SealDto dto = mockData.sealDto();
-        final Seal seal = converter.convertToDbo(dto);
+        final Seal seal = converter.convertToEntity(dto);
 
         assertEquals(dto.getName(), seal.getName());
         assertEquals(dto.getRotation(), seal.getRotation());

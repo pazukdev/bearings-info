@@ -15,13 +15,13 @@ public class BearingConverter implements EntityDtoConverter<Bearing, BearingDto>
     private static final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public BearingDto convertToDto(final Bearing bearing) {
-        return modelMapper.map(bearing, BearingDto.class);
+    public BearingDto convertToDto(final Bearing entity) {
+        return modelMapper.map(entity, BearingDto.class);
     }
 
     @Override
-    public Bearing convertToDbo(final BearingDto bearingDto) {
-        return modelMapper.map(bearingDto, Bearing.class);
+    public Bearing convertToEntity(final BearingDto dto) {
+        return modelMapper.map(dto, Bearing.class);
     }
 
 }

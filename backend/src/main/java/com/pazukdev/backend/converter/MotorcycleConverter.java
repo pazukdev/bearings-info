@@ -15,13 +15,13 @@ public class MotorcycleConverter implements EntityDtoConverter<Motorcycle, Motor
     private static final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public MotorcycleDto convertToDto(final Motorcycle motorcycle) {
-        return modelMapper.map(motorcycle, MotorcycleDto.class);
+    public MotorcycleDto convertToDto(final Motorcycle entity) {
+        return modelMapper.map(entity, MotorcycleDto.class);
     }
 
     @Override
-    public Motorcycle convertToDbo(final MotorcycleDto motorcycleDto) {
-        return modelMapper.map(motorcycleDto, Motorcycle.class);
+    public Motorcycle convertToEntity(final MotorcycleDto dto) {
+        return modelMapper.map(dto, Motorcycle.class);
     }
 
 }

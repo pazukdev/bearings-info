@@ -32,7 +32,7 @@ public class BearingConverterTest {
     @Test
     public void convertToDbo() {
         final BearingDto dto = mockData.bearingDto();
-        final Bearing bearing = converter.convertToDbo(dto);
+        final Bearing bearing = converter.convertToEntity(dto);
 
         assertEquals(dto.getName(), bearing.getName());
         assertEquals(dto.getType(), bearing.getType());

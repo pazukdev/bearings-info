@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
  */
 public interface EntityDtoConverter<Entity extends AbstractEntity, Dto extends AbstractDto> {
 
-    Dto convertToDto(@NotNull final Entity dbo);
-    Entity convertToDbo(@NotNull final Dto dto);
+    Dto convertToDto(@NotNull final Entity entity);
+    Entity convertToEntity(@NotNull final Dto dto);
 
     default List<Dto> convertToDtoList(final List<Entity> entities) {
         return entities.stream().map(this::convertToDto).collect(Collectors.toList());

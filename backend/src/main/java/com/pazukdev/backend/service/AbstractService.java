@@ -32,13 +32,21 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
 
     @Transactional
     public Entity create(final Dto dto) {
-        return repository.save(converter.convertToDbo(dto));
+        return repository.save(converter.convertToEntity(dto));
     }
 
     @Transactional
-    public void delete(final Long id) throws ProductNotFoundException {
-        checkProductExists(id);
-        repository.deleteById(id);
+    public Entity delete(final Long id) throws ProductNotFoundException {
+        final Entity entity = converter.convertToEntity(get(id));
+        repository.deleteById(entity.getId());
+        return entity;
+    }
+
+    public Boolean productExists(final Long id) throws ProductNotFoundException {
+        if (!repository.existsById(id)) {
+            throw new ProductNotFoundException(id);
+        }
+        return true;
     }
 
     private void checkProductExists(final Long id) throws ProductNotFoundException {

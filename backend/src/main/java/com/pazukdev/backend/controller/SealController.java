@@ -1,6 +1,7 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.dto.seal.SealDto;
+import com.pazukdev.backend.entity.Seal;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.SealService;
 import io.swagger.annotations.Api;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityExistsException;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -50,8 +52,13 @@ public class SealController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete seal")
-    public void delete(@PathVariable("id") Long id) throws ProductNotFoundException {
-        service.delete(id);
+    public Response delete(@PathVariable("id") Long id) {
+        try {
+            final Seal seal = service.delete(id);
+            return Response.ok().entity(seal.getId().toString()).build();
+        } catch (ProductNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
 }

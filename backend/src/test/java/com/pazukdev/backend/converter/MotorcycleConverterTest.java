@@ -28,7 +28,7 @@ public class MotorcycleConverterTest {
     @Test
     public void convertToDbo() {
         final MotorcycleDto dto = mockData.motorcycleDto();
-        final Motorcycle motorcycle = converter.convertToDbo(dto);
+        final Motorcycle motorcycle = converter.convertToEntity(dto);
 
         assertEquals(dto.getName(), motorcycle.getName());
         assertEquals(dto.getManufacturer(), motorcycle.getManufacturer());

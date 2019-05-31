@@ -15,13 +15,13 @@ public class SealConverter implements EntityDtoConverter<Seal, SealDto> {
     private static final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public SealDto convertToDto(final Seal seal) {
-        return modelMapper.map(seal, SealDto.class);
+    public SealDto convertToDto(final Seal entity) {
+        return modelMapper.map(entity, SealDto.class);
     }
 
     @Override
-    public Seal convertToDbo(final SealDto sealDto) {
-        return modelMapper.map(sealDto, Seal.class);
+    public Seal convertToEntity(final SealDto dto) {
+        return modelMapper.map(dto, Seal.class);
     }
 
 }
