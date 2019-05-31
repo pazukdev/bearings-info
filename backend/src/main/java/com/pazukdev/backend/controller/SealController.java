@@ -1,7 +1,7 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.dto.seal.SealDto;
-import com.pazukdev.backend.exception.ProductNotExistException;
+import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.SealService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +38,7 @@ public class SealController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Get info about seal")
-    public SealDto get(@PathVariable("id") Long id) throws ProductNotExistException {
+    public SealDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
         return service.get(id);
     }
 
@@ -50,7 +50,7 @@ public class SealController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete seal")
-    public void delete(@PathVariable("id") Long id) throws ProductNotExistException {
+    public void delete(@PathVariable("id") Long id) throws ProductNotFoundException {
         service.delete(id);
     }
 

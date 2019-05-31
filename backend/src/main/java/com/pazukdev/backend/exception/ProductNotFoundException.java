@@ -11,12 +11,12 @@ import org.springframework.http.HttpStatus;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductNotExistException extends Exception {
+public class ProductNotFoundException extends Exception {
 
     private HttpStatus status;
     private String message;
 
-    public ProductNotExistException(final Long id) {
+    public ProductNotFoundException(final Long id) {
         status = HttpStatus.NOT_FOUND;
         message = "product under id == " + id + " is not exist";
     }

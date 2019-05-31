@@ -1,7 +1,7 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.dto.bearing.BearingDto;
-import com.pazukdev.backend.exception.ProductNotExistException;
+import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.BearingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +38,7 @@ public class BearingController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Get info about bearing")
-    public BearingDto get(@PathVariable("id") Long id) throws ProductNotExistException {
+    public BearingDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
         return service.get(id);
     }
 
@@ -50,7 +50,7 @@ public class BearingController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete bearing")
-    public void delete(@PathVariable("id") Long id) throws ProductNotExistException {
+    public void delete(@PathVariable("id") Long id) throws ProductNotFoundException {
         service.delete(id);
     }
 
