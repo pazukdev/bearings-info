@@ -3,6 +3,11 @@
         <br/>
         <p>&nbsp;&nbsp;&nbsp;&nbsp;<b>Motorcycles</b></p>
 
+        <button type="button" v-on:click="submit">Add Motorcycle</button>
+        <input v-model="name" type="text" placeholder="name"/>
+        <input v-model="manufacturer" type="text" placeholder="manufacturer"/>
+        <input v-model="weightG" type="text" placeholder="weight, g"/>
+
         <table class="table">
             <thead>
             <tr>
@@ -28,7 +33,10 @@
     export default {
         data() {
             return {
-                motorcycles: []
+                motorcycles: [],
+                name: "",
+                manufacturer: "",
+                weightG: ""
             }
         },
 
@@ -38,8 +46,23 @@
                 .then(response => {
                     this.motorcycles = response.data;
                 });
+        },
+
+        methods: {
+            submit() {
+                let newMotorcycle = {
+                    name: this.name,
+                    manufacturer: this.manufacturer,
+                    weightG: this.weightG
+                };
+
+                axios.post(`/backend/motorcycle/create`, newMotorcycle);
+                this.motorcycles.push(newMotorcycle);
+
+            }
         }
     }
+
 </script>
 <style scoped>
 

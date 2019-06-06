@@ -1,12 +1,13 @@
 <template id="app">
     <div>
         <Header/>
-        <p/>
+        <br/>
         <MotorcycleList/>
-        <p/>
+        <br/>
         <BearingList/>
-        <p/>
+        <br/>
         <SealList/>
+        <br/>
     </div>
 </template>
 
@@ -25,6 +26,7 @@
             SealList
         }
     }
+
 </script>
 
 <style>

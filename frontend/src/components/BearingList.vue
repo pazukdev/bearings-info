@@ -3,6 +3,12 @@
         <br/>
         <p>&nbsp;&nbsp;&nbsp;&nbsp;<b>Bearings</b></p>
 
+        <button type="button" v-on:click="submit">Add Bearing</button>
+        <input v-model="name" type="text" placeholder="name"/>
+        <input v-model="type" type="text" placeholder="type"/>
+        <input v-model="rollingElement" type="text" placeholder="rollingElement"/>
+        <input v-model="rollingElementsQuantity" type="text" placeholder="rollingElementsQuantity"/>
+
         <table class="table">
             <thead>
             <tr>
@@ -30,7 +36,11 @@
     export default {
         data() {
             return {
-                bearings: []
+                bearings: [],
+                name: "",
+                type: "",
+                rollingElement: "",
+                rollingElementsQuantity: ""
             }
         },
 
@@ -40,6 +50,21 @@
                 .then(response => {
                     this.bearings = response.data;
                 });
+        },
+
+        methods: {
+            submit() {
+                let newBearing = {
+                    name: this.name,
+                    type: this.type,
+                    rollingElement: this.rollingElement,
+                    rollingElementsQuantity: this.rollingElementsQuantity
+                };
+
+                axios.post(`/backend/bearing/create`, newBearing);
+                this.bearings.push(newBearing);
+
+            }
         }
     }
 </script>
