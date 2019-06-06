@@ -61,9 +61,7 @@
         created() {
             axios
                 .get(`/backend/bearing/list`)
-                .then(response => {
-                    this.bearings = response.data;
-                });
+                .then(response => this.bearings = response.data);
         },
 
         methods: {

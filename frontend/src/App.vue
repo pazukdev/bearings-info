@@ -2,11 +2,18 @@
     <div>
         <Header/>
         <br/>
-        <MotorcycleList/>
+        &nbsp;&nbsp;&nbsp;
+        <button @click="swapComponent(componentsArray[0])">Motorcycles</button>
+        &nbsp;&nbsp;&nbsp;
+        <button @click="swapComponent(componentsArray[1])">Bearings</button>
+        &nbsp;&nbsp;&nbsp;
+        <button @click="swapComponent(componentsArray[2])">Seals</button>
         <br/>
-        <BearingList/>
         <br/>
-        <SealList/>
+        <div :is="currentComponent"></div>
+        <br/>
+        <br/>
+        <br/>
         <br/>
     </div>
 </template>
@@ -19,11 +26,26 @@
 
     export default {
         name: 'app',
+
+        data() {
+            return {
+                currentComponent: MotorcycleList,
+                componentsArray: ['MotorcycleList', 'BearingList', 'SealList']
+            }
+        },
+
         components: {
             Header,
             MotorcycleList,
             BearingList,
             SealList
+        },
+
+        methods: {
+            swapComponent: function(component)
+            {
+                this.currentComponent = component;
+            }
         }
     }
 
