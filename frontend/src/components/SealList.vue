@@ -3,6 +3,23 @@
         <br/>
         <p>&nbsp;&nbsp;&nbsp;&nbsp;<b>Seals</b></p>
 
+        &nbsp;
+        <input v-model="name" type="text" placeholder="name"/>
+        &nbsp;
+        <select v-model="rotation">
+            <option v-for="rotation in rotations">
+                {{rotation}}
+            </option>
+        </select>
+        &nbsp;
+        <select v-model="material">
+            <option v-for="material in materials">
+                {{material}}
+            </option>
+        </select>
+        &nbsp;
+        <button type="button" v-on:click="submit">Add Seal</button>
+
         <table class="table">
             <thead>
             <tr>
@@ -28,7 +45,12 @@
     export default {
         data() {
             return {
-                seals: []
+                seals: [],
+                name: "",
+                rotation: "",
+                material: "",
+                rotations: ["left", "right"],
+                materials: ["rubber"]
             }
         },
 
@@ -38,6 +60,20 @@
                 .then(response => {
                     this.seals = response.data;
                 });
+        },
+
+        methods: {
+            submit() {
+                let newSeal = {
+                    name: this.name,
+                    rotation: this.rotation,
+                    material: this.material
+                };
+
+                axios.post(`/backend/seal/create`, newSeal);
+                this.motorcycles.push(newSeal);
+
+            }
         }
     }
 </script>

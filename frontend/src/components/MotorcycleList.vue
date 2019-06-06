@@ -3,10 +3,18 @@
         <br/>
         <p>&nbsp;&nbsp;&nbsp;&nbsp;<b>Motorcycles</b></p>
 
-        <button type="button" v-on:click="submit">Add Motorcycle</button>
+        &nbsp;
         <input v-model="name" type="text" placeholder="name"/>
-        <input v-model="manufacturer" type="text" placeholder="manufacturer"/>
+        &nbsp;
+        <select v-model="manufacturer">
+            <option v-for="manufacturer in manufacturers">
+                {{manufacturer}}
+            </option>
+        </select>
+        &nbsp;
         <input v-model="weightG" type="text" placeholder="weight, g"/>
+        &nbsp;
+        <button type="button" v-on:click="submit">Add Motorcycle</button>
 
         <table class="table">
             <thead>
@@ -36,7 +44,8 @@
                 motorcycles: [],
                 name: "",
                 manufacturer: "",
-                weightG: ""
+                weightG: "",
+                manufacturers: ["imz", "kmz"],
             }
         },
 

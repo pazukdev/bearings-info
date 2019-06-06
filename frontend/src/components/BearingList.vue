@@ -2,12 +2,24 @@
     <div>
         <br/>
         <p>&nbsp;&nbsp;&nbsp;&nbsp;<b>Bearings</b></p>
-
-        <button type="button" v-on:click="submit">Add Bearing</button>
+        &nbsp;
         <input v-model="name" type="text" placeholder="name"/>
-        <input v-model="type" type="text" placeholder="type"/>
-        <input v-model="rollingElement" type="text" placeholder="rollingElement"/>
+        &nbsp;
+        <select v-model="type">
+            <option v-for="type in types">
+                {{type}}
+            </option>
+        </select>
+        &nbsp;
+        <select v-model="rollingElement">
+            <option v-for="rollingElement in rollingElements">
+                {{rollingElement}}
+            </option>
+        </select>
+        &nbsp;
         <input v-model="rollingElementsQuantity" type="text" placeholder="rollingElementsQuantity"/>
+        &nbsp;
+        <button type="button" v-on:click="submit">Add Bearing</button>
 
         <table class="table">
             <thead>
@@ -40,7 +52,9 @@
                 name: "",
                 type: "",
                 rollingElement: "",
-                rollingElementsQuantity: ""
+                rollingElementsQuantity: "",
+                types: ["deepgroove", "cylindrical roller", "tapered roller"],
+                rollingElements: ["ball", "roller", "tapered roller"]
             }
         },
 
