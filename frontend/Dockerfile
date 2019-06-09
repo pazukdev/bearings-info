@@ -1,8 +1,7 @@
-# build stage
 FROM node:lts-alpine
+RUN mkdir /app
 WORKDIR /app
-COPY package*.json ./
+COPY package*.json /app/
 RUN npm install
-COPY . .
+COPY . /app/
 EXPOSE 8091
-RUN npm run serve -- --port 8091

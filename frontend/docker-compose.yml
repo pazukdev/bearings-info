@@ -3,48 +3,23 @@ services:
 
   nodejs:
     container_name: nodejs
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: nodejs:latest
+    build: .
+    volumes:
+      - .:/usr/app/
+      - .:/usr/app/node_modules/
     ports:
-      - 8091:8091
+      - "8091:8091"
+    restart: always
     depends_on:
       - nginx
+    command: npm run serve -- --port 8091
 
   nginx:
     container_name: nginx
     image: nginx:latest
-    restart: always
     ports:
-      - 8080:8080
-      - 8090:8090
-      - 443:443
+      - "10080:80"
+      - "10443:443"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
-#    depends_on:
-#      - app
-
-#    mysql:
-#      container_name: some-mysql
-#      image: mysql/mysql-server:5.7
-#      environment:
-#        MYSQL_DATABASE: test
-#        MYSQL_ROOT_PASSWORD: hellokoding
-#        MYSQL_ROOT_HOST: '%'
-#      ports:
-#        - "3306:3306"
-#      restart: always
-#
-#    app:
-#      restart: always
-#      build: ./app
-#      working_dir: /app
-#      volumes:
-#        - ./app:/app
-#        - ~/.m2:/root/.m2
-#      expose:
-#        - "8080"
-#      command: mvn clean spring-boot:run
-#      depends_on:
-#        - mysql
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    restart: always
