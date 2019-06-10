@@ -1,4 +1,4 @@
-package com.pazukdev.backend.service;
+package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.BearingConverter;
@@ -6,6 +6,7 @@ import com.pazukdev.backend.dto.bearing.BearingDto;
 import com.pazukdev.backend.dto.bearing.BearingDtoFactory;
 import com.pazukdev.backend.entity.Bearing;
 import com.pazukdev.backend.repository.BearingRepository;
+import com.pazukdev.backend.service.BearingService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

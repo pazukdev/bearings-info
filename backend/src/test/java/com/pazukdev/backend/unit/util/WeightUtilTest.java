@@ -1,5 +1,6 @@
-package com.pazukdev.backend.util;
+package com.pazukdev.backend.unit.util;
 
+import com.pazukdev.backend.util.WeightUtil;
 import org.junit.Test;
 
 import java.math.BigDecimal;

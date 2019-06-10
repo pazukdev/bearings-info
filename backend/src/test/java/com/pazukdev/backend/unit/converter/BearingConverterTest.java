@@ -1,6 +1,7 @@
-package com.pazukdev.backend.converter;
+package com.pazukdev.backend.unit.converter;
 
 import com.pazukdev.backend.MockData;
+import com.pazukdev.backend.converter.BearingConverter;
 import com.pazukdev.backend.dto.bearing.BearingDto;
 import com.pazukdev.backend.entity.Bearing;
 import org.junit.Test;

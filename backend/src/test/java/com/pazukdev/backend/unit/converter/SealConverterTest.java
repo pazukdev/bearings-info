@@ -1,6 +1,7 @@
-package com.pazukdev.backend.converter;
+package com.pazukdev.backend.unit.converter;
 
 import com.pazukdev.backend.MockData;
+import com.pazukdev.backend.converter.SealConverter;
 import com.pazukdev.backend.dto.seal.SealDto;
 import com.pazukdev.backend.entity.Seal;
 import org.junit.Test;

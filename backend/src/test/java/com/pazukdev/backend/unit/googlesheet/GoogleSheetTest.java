@@ -1,4 +1,4 @@
-package com.pazukdev.backend.googlesheet;
+package com.pazukdev.backend.unit.googlesheet;
 
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.SpreadsheetEntry;

@@ -1,6 +1,7 @@
-package com.pazukdev.backend.converter;
+package com.pazukdev.backend.unit.converter;
 
 import com.pazukdev.backend.MockData;
+import com.pazukdev.backend.converter.MotorcycleConverter;
 import com.pazukdev.backend.dto.motorcycle.MotorcycleDto;
 import com.pazukdev.backend.entity.Motorcycle;
 import org.junit.Test;

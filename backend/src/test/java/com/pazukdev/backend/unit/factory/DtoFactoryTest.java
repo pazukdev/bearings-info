@@ -1,4 +1,4 @@
-package com.pazukdev.backend.factoty;
+package com.pazukdev.backend.unit.factory;
 
 import com.pazukdev.backend.dto.abstraction.AbstractDto;
 import com.pazukdev.backend.dto.abstraction.AbstractDtoFactory;

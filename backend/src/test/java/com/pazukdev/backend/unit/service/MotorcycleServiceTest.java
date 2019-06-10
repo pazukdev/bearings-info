@@ -1,4 +1,4 @@
-package com.pazukdev.backend.service;
+package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.MotorcycleConverter;
@@ -6,6 +6,7 @@ import com.pazukdev.backend.dto.motorcycle.MotorcycleDto;
 import com.pazukdev.backend.dto.motorcycle.MotorcycleDtoFactory;
 import com.pazukdev.backend.entity.Motorcycle;
 import com.pazukdev.backend.repository.MotorcycleRepository;
+import com.pazukdev.backend.service.MotorcycleService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

@@ -1,4 +1,4 @@
-package com.pazukdev.backend.service;
+package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.SealConverter;
@@ -6,6 +6,7 @@ import com.pazukdev.backend.dto.seal.SealDto;
 import com.pazukdev.backend.dto.seal.SealDtoFactory;
 import com.pazukdev.backend.entity.Seal;
 import com.pazukdev.backend.repository.SealRepository;
+import com.pazukdev.backend.service.SealService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
