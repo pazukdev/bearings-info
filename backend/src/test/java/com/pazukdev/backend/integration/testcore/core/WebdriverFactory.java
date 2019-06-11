@@ -16,7 +16,7 @@ public class WebdriverFactory {
     public WebDriver createRemoteDriver() {
         System.setProperty("webdriver.chrome.driver", "/opt/chromedriver/chromedriver");
         final ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--headless");
+        chromeOptions.addArguments("--headless", "disable-gpu", "--no-sandbox", "disable-dev-tools", "window-size=1024,768");
         return new ChromeDriver(chromeOptions);
     }
 
