@@ -11,8 +11,10 @@ services:
       MYSQL_ROOT_HOST: '%'
     ports:
       - 13306:3306
+    expose:
+      - 3306
     restart: always
-#
+
   backend-spring-boot-app:
     container_name: backend-spring-boot-app
     build:
@@ -22,12 +24,41 @@ services:
     depends_on:
       - mysql-server
     restart: always
+    ports:
+      - 8090:8090
     expose:
-      - "8080"
+      - 8090
     environment:
-      - DATABASE_HOST=mysql-server
+      - DATABASE_HOS
       - DATABASE_USER=demo
       - DATABASE_PASSWORD=demo
       - DATABASE_NAME=motorcycle_info
       - DATABASE_PORT=3306
+
+  nodejs:
+    container_name: nodejs
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: nodejs:latest
+    volumes:
+      - .:/app/
+      - .:/app/node_modules/
+    ports:
+      - 8091:8091
+    restart: always
+    depends_on:
+      - nginx
+      - backend-spring-boot-app
+    command: npm run serve -- --port 8091
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    ports:
+      - 10080:80
+      - 10443:443
+    volumes:
+      - ./frontend/nginx/conf.d:/etc/nginx/conf.d
+    restart: always
 

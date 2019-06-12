@@ -6,7 +6,6 @@
         <groupId>com.pazukdev</groupId>
         <artifactId>bearings-info</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -221,10 +220,6 @@
                             <includes>
                                 <include>*SequentialIT</include>
                             </includes>
-                            <excludes>
-                                <exclude>*IT</exclude>
-                                <exclude>Abstract*</exclude>
-                            </excludes>
                             <trimStackTrace>false</trimStackTrace>
                         </configuration>
                     </execution>
