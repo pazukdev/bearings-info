@@ -5,16 +5,7 @@ pipeline {
     }
     stages {
 
-        stage ('Initialize') {
-            steps {
-                sh '''
-                    echo "PATH = ${PATH}"
-                    echo "M2_HOME = ${M2_HOME}"
-                '''
-            }
-        }
-
-        stage ('Build') {
+        stage ('build backend') {
             steps {
                 sh 'mvn clean -Dmaven.test.failure.ignore=true install'
             }
@@ -22,6 +13,13 @@ pipeline {
                 success {
                     junit 'backend/target/surefire-reports/**/*.xml'
                 }
+            }
+        }
+
+        stage ('build frontend') {
+            steps {
+                sh 'cd frontend'
+                sh 'npm install'
             }
         }
     }
