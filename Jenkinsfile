@@ -1,27 +1,6 @@
-pipeline {
-    agent any
-    tools {
-        maven 'Maven 3.6.1'
-    }
-    stages {
+node('docker') {
 
-        stage ('build backend') {
-            steps {
-                sh 'mvn clean -Dmaven.test.failure.ignore=true install'
-            }
-            post {
-                success {
-                    junit 'backend/target/surefire-reports/**/*.xml'
-                }
-            }
-        }
-
-        stage ('build frontend') {
-            steps {
-                dir("/frontend") {
-                    sh "npm install"
-                }
-            }
-        }
-    }
+    stage 'Build'
+    sh "sudo docker-compose up"
+    sh "sudo docker-compose down"
 }
