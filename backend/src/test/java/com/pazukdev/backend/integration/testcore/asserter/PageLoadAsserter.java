@@ -26,7 +26,7 @@ public class PageLoadAsserter implements Asserter {
     private void assertPageLoaded(final Page page) {
         final WebElement controlElement = page.getControlElement();
 
-        //Assert.assertNotNull(controlElement);
-        //Assert.assertTrue(controlElement.isDisplayed());
+        Assert.assertNotNull(controlElement);
+        Assert.assertTrue(controlElement.isDisplayed());
     }
 }
