@@ -215,13 +215,16 @@
                         <id>sequential</id>
                         <goals>
                             <goal>integration-test</goal>
-                            <goal>verify</goal>
                         </goals>
                         <configuration>
                             <perCoreThreadCount>false</perCoreThreadCount>
                             <includes>
                                 <include>*SequentialIT</include>
                             </includes>
+                            <excludes>
+                                <exclude>*IT</exclude>
+                                <exclude>Abstract*</exclude>
+                            </excludes>
                             <trimStackTrace>false</trimStackTrace>
                         </configuration>
                     </execution>
