@@ -1,6 +1,15 @@
-node('docker') {
+pipeline {
+    agent any
+    tools {
+        maven 'Maven 3.6.1'
+    }
+    stages {
 
-    stage 'Build'
-    sh "sudo docker-compose up"
-    sh "sudo docker-compose down"
+        stage ('up docker containers') {
+            steps {
+                sh 'sudo docker-compose up'
+            }
+        }
+
+    }
 }
