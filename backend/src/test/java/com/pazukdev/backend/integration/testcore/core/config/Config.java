@@ -7,6 +7,6 @@ public interface Config {
 
     String getRemoteNodeUrl();
 
-    int getWaitTimeout(); // default timeout for WebDriverWait stored into context in seconds
+    Integer getWaitTimeout(); // default timeout for WebDriverWait stored into context in seconds
 
 }

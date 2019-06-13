@@ -2,6 +2,7 @@ package com.pazukdev.backend.unit.it;
 
 import com.pazukdev.backend.integration.testcore.asserter.Asserter;
 import com.pazukdev.backend.integration.testcore.asserter.PageLoadAsserter;
+import com.pazukdev.backend.integration.testcore.core.TestContext;
 import com.pazukdev.backend.integration.testcore.core.TestContextImpl;
 import com.pazukdev.backend.integration.testcore.page.Page;
 import org.junit.Assert;
@@ -58,6 +59,11 @@ public class IntegrationTestTest {
         @Override
         public WebElement getControlElement() {
             return null;
+        }
+
+        @Override
+        public void initElements(TestContext context) {
+            // no need to implement
         }
     }
 

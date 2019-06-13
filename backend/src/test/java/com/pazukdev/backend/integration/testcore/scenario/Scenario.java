@@ -5,5 +5,5 @@ import com.pazukdev.backend.integration.testcore.action.Action;
 /**
  * @author Siarhei Sviarkaltsau
  */
-public interface Scenario extends Action {
+public interface Scenario<T> extends Action<T> {
 }

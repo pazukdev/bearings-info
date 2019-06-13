@@ -22,15 +22,11 @@ import java.util.function.Supplier;
  * @author Siarhei Sviarkaltsau
  */
 @Data
-public abstract class AbstractAction<T> implements Action {
+public abstract class AbstractAction<T> implements Action<T> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AbstractAction.class);
 
     protected final TestContext context;
-
-    public interface VoidAction {
-        void perform();
-    }
 
     protected WebElement waitForElement(final Supplier<WebElement> supp) {
         return context.getWaitForElement().ignoring(NoSuchElementException.class).until(x -> supp.get());
@@ -100,18 +96,6 @@ public abstract class AbstractAction<T> implements Action {
     protected void clickAndWaitForLoading(final WebElement element) {
         element.click();
         waitForDynamicChanges();
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    protected boolean optionalAction(final Object object, final VoidAction action) {
-        final AtomicBoolean isPerformed = new AtomicBoolean(false);
-
-        Optional.ofNullable(object).ifPresent(x -> {
-            action.perform();
-            isPerformed.set(true);
-        });
-
-        return isPerformed.get();
     }
 
     protected void fillInputOptionally(final Supplier<WebElement> element, final String text) {

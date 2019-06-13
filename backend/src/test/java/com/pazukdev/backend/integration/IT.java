@@ -25,8 +25,7 @@ public class IT {
 
     @Test
     public void basicWebdriverAndBrowserTest() {
-        final Scenario scenario = new NavigateToPageScenario(context, new GooglePage());
-        scenario.perform();
+        new NavigateToPageScenario<>(context, GooglePage.class).perform();
     }
 
 }

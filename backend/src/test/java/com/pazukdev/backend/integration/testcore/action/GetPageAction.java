@@ -3,26 +3,38 @@ package com.pazukdev.backend.integration.testcore.action;
 import com.pazukdev.backend.integration.testcore.core.TestContext;
 import com.pazukdev.backend.integration.testcore.page.Page;
 
+import java.util.Objects;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
-public class GetPageAction extends AbstractAction {
+public class GetPageAction<T extends Page> extends AbstractAction<T> {
 
-    private final Page page;
+    private final Class<T> destination;
 
-    public GetPageAction(final TestContext context, final Page page) {
+    public GetPageAction(final TestContext context, Class<T> destination) {
         super(context);
-        this.page = page;
+        this.destination = destination;
     }
 
     @Override
-    public void perform() {
-        getPage(context, page);
+    public T perform() {
+        return getPage(context, destination);
     }
 
-    private void getPage(final TestContext context, final Page page) {
-        final String url = page.getURL();
+    private T getPage(final TestContext context, final Class<T> destination) {
+        T page = null;
+
+        try {
+            page = destination.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        final String url = Objects.requireNonNull(page).getURL();
         context.getDriver().get(url);
+
+        return page;
     }
 
 }

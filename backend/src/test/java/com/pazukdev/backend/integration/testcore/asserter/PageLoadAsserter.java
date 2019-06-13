@@ -16,9 +16,11 @@ public class PageLoadAsserter extends AbstractAsserter {
     }
 
     @Override
-    public void perform() {
+    public Boolean perform() {
         page.initElements(context);
         assertPageLoaded(page);
+
+        return true;
     }
 
     private void assertPageLoaded(final Page page) {

@@ -1,8 +1,6 @@
 package com.pazukdev.backend.integration.testcore.scenario;
 
-import com.pazukdev.backend.integration.testcore.action.Action;
 import com.pazukdev.backend.integration.testcore.action.GetPageAction;
-import com.pazukdev.backend.integration.testcore.asserter.Asserter;
 import com.pazukdev.backend.integration.testcore.asserter.PageLoadAsserter;
 import com.pazukdev.backend.integration.testcore.core.TestContext;
 import com.pazukdev.backend.integration.testcore.page.Page;
@@ -12,18 +10,16 @@ import lombok.Data;
  * @author Siarhei Sviarkaltsau
  */
 @Data
-public class NavigateToPageScenario implements Scenario {
+public class NavigateToPageScenario<T extends Page> implements Scenario<T> {
 
     private final TestContext context;
-    private final Page page;
+    private final Class<T> destination;
 
     @Override
-    public void perform() {
-        final Action navigateToPage = new GetPageAction(context, page);
-        final Asserter pageLoadAsserter = new PageLoadAsserter(context, page);
-
-        navigateToPage.perform();
-        pageLoadAsserter.perform();
+    public T perform() {
+        final T page = new GetPageAction<>(context, destination).perform();
+        new PageLoadAsserter(context, page).perform();
+        return page;
     }
 
 }
