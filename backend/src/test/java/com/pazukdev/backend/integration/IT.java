@@ -3,7 +3,6 @@ package com.pazukdev.backend.integration;
 import com.pazukdev.backend.integration.testcore.core.TestContext;
 import com.pazukdev.backend.integration.testcore.page.GooglePage;
 import com.pazukdev.backend.integration.testcore.scenario.NavigateToPageScenario;
-import com.pazukdev.backend.integration.testcore.scenario.Scenario;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

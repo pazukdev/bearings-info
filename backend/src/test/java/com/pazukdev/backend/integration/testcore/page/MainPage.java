@@ -1,16 +1,16 @@
 package com.pazukdev.backend.integration.testcore.page;
 
-import com.pazukdev.backend.integration.testcore.core.TestContext;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class AppMainPage implements Page {
+public class MainPage extends AbstractPage {
 
     private final static String URL = "https://www.google.com/";
 
@@ -31,11 +31,6 @@ public class AppMainPage implements Page {
     @Override
     public WebElement getControlElement() {
         return pageHeader;
-    }
-
-    @Override
-    public void initElements(final TestContext context) {
-        PageFactory.initElements(context.getDriver(), this);
     }
 
 }
