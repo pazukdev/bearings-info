@@ -10,21 +10,27 @@ import org.openqa.selenium.support.PageFactory;
  * @author Siarhei Sviarkaltsau
  */
 @Data
-public class GooglePage implements Page {
+public class AppMainPage implements Page {
 
     private final static String URL = "https://www.google.com/";
 
-    @FindBy(id = "hplogo")
-    private WebElement googleLogo;
+    @FindBy(xpath = "")
+    private WebElement pageHeader;
+    @FindBy(xpath = "")
+    private WebElement motorcycleButton;
+    @FindBy(xpath = "")
+    private WebElement bearingButton;
+    @FindBy(xpath = "")
+    private WebElement sealButton;
 
     @Override
     public String getURL() {
-        return URL;
+        return null;
     }
 
     @Override
     public WebElement getControlElement() {
-        return googleLogo;
+        return pageHeader;
     }
 
     @Override

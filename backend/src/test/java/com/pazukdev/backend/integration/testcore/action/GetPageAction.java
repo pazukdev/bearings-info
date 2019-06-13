@@ -2,17 +2,18 @@ package com.pazukdev.backend.integration.testcore.action;
 
 import com.pazukdev.backend.integration.testcore.core.TestContext;
 import com.pazukdev.backend.integration.testcore.page.Page;
-import lombok.Data;
-import org.openqa.selenium.support.PageFactory;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
-@Data
-public class NavigateToPageAction<PageClass> implements Action {
+public class GetPageAction extends AbstractAction {
 
-    private final TestContext context;
     private final Page page;
+
+    public GetPageAction(final TestContext context, final Page page) {
+        super(context);
+        this.page = page;
+    }
 
     @Override
     public void perform() {
@@ -20,7 +21,8 @@ public class NavigateToPageAction<PageClass> implements Action {
     }
 
     private void getPage(final TestContext context, final Page page) {
-        context.getDriver().get(page.getURL());
+        final String url = page.getURL();
+        context.getDriver().get(url);
     }
 
 }

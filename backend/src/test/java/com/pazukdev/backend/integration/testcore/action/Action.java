@@ -3,8 +3,8 @@ package com.pazukdev.backend.integration.testcore.action;
 /**
  * @author Siarhei Sviarkaltsau
  */
-public interface Action {
+public interface Action<T> {
 
-    void perform();
+    T perform();
 
 }

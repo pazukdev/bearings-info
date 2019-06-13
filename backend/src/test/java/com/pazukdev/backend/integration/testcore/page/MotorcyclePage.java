@@ -1,7 +1,6 @@
 package com.pazukdev.backend.integration.testcore.page;
 
 import com.pazukdev.backend.integration.testcore.core.TestContext;
-import lombok.Data;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -9,22 +8,28 @@ import org.openqa.selenium.support.PageFactory;
 /**
  * @author Siarhei Sviarkaltsau
  */
-@Data
-public class GooglePage implements Page {
+public class MotorcyclePage implements Page {
 
-    private final static String URL = "https://www.google.com/";
+    private final static String URL = "";
 
-    @FindBy(id = "hplogo")
-    private WebElement googleLogo;
+    @FindBy(xpath = "")
+    private WebElement tableTitle;
+    @FindBy(xpath = "")
+    private WebElement table;
 
     @Override
     public String getURL() {
-        return URL;
+        return null;
     }
 
     @Override
     public WebElement getControlElement() {
-        return googleLogo;
+        return tableTitle;
+    }
+
+    public void getRoute() {
+        AppMainPage page = new AppMainPage();
+        page.getMotorcycleButton();
     }
 
     @Override
@@ -33,3 +38,24 @@ public class GooglePage implements Page {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

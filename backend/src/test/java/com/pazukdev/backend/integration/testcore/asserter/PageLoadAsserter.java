@@ -2,24 +2,22 @@ package com.pazukdev.backend.integration.testcore.asserter;
 
 import com.pazukdev.backend.integration.testcore.core.TestContext;
 import com.pazukdev.backend.integration.testcore.page.Page;
-import lombok.Data;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
-@Data
-public class PageLoadAsserter implements Asserter {
+public class PageLoadAsserter extends AbstractAsserter {
 
-    private final TestContext context;
-    private final Page page;
+    public PageLoadAsserter(final TestContext context, final Page page) {
+        super(context);
+        this.page = page;
+    }
 
     @Override
     public void perform() {
-        PageFactory.initElements(context.getDriver(), page.getClass());
-
+        page.initElements(context);
         assertPageLoaded(page);
     }
 
@@ -29,4 +27,5 @@ public class PageLoadAsserter implements Asserter {
         Assert.assertNotNull(controlElement);
         Assert.assertTrue(controlElement.isDisplayed());
     }
+
 }
