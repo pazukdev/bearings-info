@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
  * @author Siarhei Sviarkaltsau
  */
 @Component
-public class WebdriverFactory {
+public class WebDriverFactory {
 
     @Bean
-    public WebDriver createRemoteDriver() {
+    public WebDriver createDriver() {
         System.setProperty("webdriver.chrome.driver", "/opt/chromedriver/chromedriver");
         final ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--headless", "disable-gpu", "--no-sandbox", "disable-dev-tools", "window-size=1024,768");
