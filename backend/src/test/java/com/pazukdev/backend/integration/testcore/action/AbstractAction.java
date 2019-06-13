@@ -1,7 +1,10 @@
 package com.pazukdev.backend.integration.testcore.action;
 
 import com.pazukdev.backend.integration.testcore.core.TestContext;
+import com.pazukdev.backend.integration.testcore.page.Page;
+import com.pazukdev.backend.integration.testcore.util.PageUtil;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -13,8 +16,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -22,7 +23,7 @@ import java.util.function.Supplier;
  * @author Siarhei Sviarkaltsau
  */
 @Data
-public abstract class AbstractAction<T> implements Action<T> {
+public abstract class AbstractAction<T extends Page> implements Action<T> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AbstractAction.class);
 
@@ -109,6 +110,10 @@ public abstract class AbstractAction<T> implements Action<T> {
             selectDropDownByText(select.get(), text);
         }
         return text != null;
+    }
+
+    protected T instantiatePage(final Class<T> pageClass) {
+        return PageUtil.instantiatePage(pageClass);
     }
 
 }
