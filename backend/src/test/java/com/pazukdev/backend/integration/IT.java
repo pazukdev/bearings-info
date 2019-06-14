@@ -6,26 +6,24 @@ import com.pazukdev.backend.integration.testcore.page.MainPage;
 import com.pazukdev.backend.integration.testcore.route.Route;
 import com.pazukdev.backend.integration.testcore.route.RouteNode;
 import com.pazukdev.backend.integration.testcore.scenario.GetPageScenario;
-import com.pazukdev.backend.integration.testcore.util.PageUtil;
+import com.pazukdev.backend.integration.testcore.util.TestContextUtil;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.WebElement;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.transaction.Transactional;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@Transactional
 public class IT {
 
-    @Autowired
     private TestContext context;
+
+    @Before
+    public void createContext() {
+        this.context = TestContextUtil.createTestContext();
+    }
 
     @Test
     public void basicWebdriverAndBrowserTest() {
@@ -38,13 +36,19 @@ public class IT {
     }
 
     @Test
-    public void getMotorcyclesPageTest() {
+    public void getMotorcyclePageTest() {
         final RouteNode<MainPage> mainPage = new RouteNode<>(MainPage.class, "motorcyclesButton");
         new GetPageScenario<>(context, new Route<>(mainPage)).perform();
     }
 
     @Test
-    public void getSealsPageTest() {
+    public void getBearingPageTest() {
+        final RouteNode<MainPage> mainPage = new RouteNode<>(MainPage.class, "bearingsButton");
+        new GetPageScenario<>(context, new Route<>(mainPage)).perform();
+    }
+
+    @Test
+    public void getSealPageTest() {
         final RouteNode<MainPage> mainPage = new RouteNode<>(MainPage.class, "sealsButton");
         new GetPageScenario<>(context, new Route<>(mainPage)).perform();
     }

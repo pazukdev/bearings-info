@@ -1,7 +1,7 @@
 <template>
     <div>
         <br/>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;<b id="pageName">Seals</b></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;<b id="title">Seals</b></p>
 
         &nbsp;
         <input v-model="name" type="text" placeholder="name"/>
@@ -20,7 +20,7 @@
         &nbsp;
         <button id="addButton" type="button" v-on:click="submit">Add Seal</button>
 
-        <table class="table">
+        <table id="productsTable" class="table">
             <thead>
             <tr>
                 <th scope="col">Name</th>

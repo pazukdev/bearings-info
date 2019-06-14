@@ -12,8 +12,6 @@ import org.openqa.selenium.support.FindBy;
 @Data
 public class MainPage extends AbstractPage {
 
-    private final static String URL = "http://localhost:8091/bearings-info/api/";
-
     @FindBy(id = "appName")
     private WebElement appName;
     @FindBy(id = "motorcyclesButton")

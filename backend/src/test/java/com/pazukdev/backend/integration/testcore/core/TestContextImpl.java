@@ -27,8 +27,9 @@ public class TestContextImpl implements TestContext {
     private final Waiting waiting;
     private final Map<String, Object> storedData;
 
-    private TestContextImpl(final WebDriver driver) {
-        this.driver = driver;
+    public TestContextImpl() {
+        final WebDriverFactory driverFactory = new WebDriverFactory();
+        this.driver = driverFactory.createDriver();
         this.config = new DefaultConfig();
         this.waitForElement = new WebDriverWait(driver, this.config.getWaitTimeout());
         this.javascriptExecutor = (JavascriptExecutor) driver;

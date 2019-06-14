@@ -10,8 +10,13 @@ import org.openqa.selenium.support.PageFactory;
  */
 public abstract class AbstractPage implements Page {
 
-    @FindBy(id = "pageName")
-    protected WebElement pageName;
+    protected final static String URL = "http://localhost/";
+
+    @FindBy(id = "title")
+    protected WebElement title;
+
+    @FindBy(xpath = "productsTable")
+    protected WebElement productsTable;
 
     public void initElements(final TestContext context) {
         PageFactory.initElements(context.getDriver(), this);
