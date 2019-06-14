@@ -16,13 +16,18 @@ public class Route<Destination extends Page> {
 
     private final List<RouteNode> nodes;
 
+    public Route(final RouteNode... nodes) {
+        this(Arrays.asList(nodes));
+    }
+
     @SuppressWarnings("unchecked")
     public Class<Destination> getDestination() {
         return nodes.get(nodes.size() - 1).getPageClass();
     }
 
-    public Route(final RouteNode... nodes) {
-        this(Arrays.asList(nodes));
+    @SuppressWarnings("unchecked")
+    public Class<Destination> getStart() {
+        return nodes.get(0).getPageClass();
     }
 
 }

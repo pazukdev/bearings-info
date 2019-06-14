@@ -20,7 +20,7 @@ public class A4JWaiting implements Waiting {
 
     @Override
     public void doWait() {
-        webDriverWait.until(x -> (jsExecutor).executeScript(
+        webDriverWait.until(x -> jsExecutor.executeScript(
                 "var sum = 0;"
                         + "for (const [key, value] of Object.entries(A4J.AJAX._requestsCounts)) { sum = sum + value; };"
                         + "return sum == 0;")

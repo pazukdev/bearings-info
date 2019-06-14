@@ -5,6 +5,7 @@ import com.pazukdev.backend.integration.testcore.page.Page;
 import com.pazukdev.backend.integration.testcore.util.PageUtil;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -114,6 +115,10 @@ public abstract class AbstractAction<T extends Page> implements Action<T> {
 
     protected T instantiatePage(final Class<T> pageClass) {
         return PageUtil.instantiatePage(pageClass);
+    }
+
+    protected void click(final String elementId) {
+        context.getDriver().findElement(By.id(elementId)).click();
     }
 
 }

@@ -3,11 +3,11 @@
         <Header/>
         <br/>
         &nbsp;&nbsp;&nbsp;
-        <button @click="swapComponent(componentsArray[0])">Motorcycles</button>
+        <button id="motorcyclesButton" @click="swapComponent(componentsArray[0])">Motorcycles</button>
         &nbsp;&nbsp;&nbsp;
-        <button @click="swapComponent(componentsArray[1])">Bearings</button>
+        <button id="bearingsButton" @click="swapComponent(componentsArray[1])">Bearings</button>
         &nbsp;&nbsp;&nbsp;
-        <button @click="swapComponent(componentsArray[2])">Seals</button>
+        <button id="sealsButton" @click="swapComponent(componentsArray[2])">Seals</button>
         <br/>
         <br/>
         <div :is="currentComponent"></div>

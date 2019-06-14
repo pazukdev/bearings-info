@@ -1,7 +1,7 @@
 <template>
     <div>
         <br/>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;<b>Seals</b></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;<b id="pageName">Seals</b></p>
 
         &nbsp;
         <input v-model="name" type="text" placeholder="name"/>
@@ -18,7 +18,7 @@
             </option>
         </select>
         &nbsp;
-        <button type="button" v-on:click="submit">Add Seal</button>
+        <button id="addButton" type="button" v-on:click="submit">Add Seal</button>
 
         <table class="table">
             <thead>

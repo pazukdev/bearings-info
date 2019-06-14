@@ -5,7 +5,6 @@ import com.pazukdev.backend.integration.testcore.page.Page;
 import com.pazukdev.backend.integration.testcore.route.Route;
 import com.pazukdev.backend.integration.testcore.route.RouteNode;
 import lombok.Data;
-import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Objects;
@@ -42,6 +41,7 @@ public class GetPageAction<Destination extends Page> extends AbstractAction<Dest
         }
 
         if (route != null) {
+            getPage(context, route.getStart());
             clickAll();
             return instantiatePage(route.getDestination());
         }
@@ -52,10 +52,7 @@ public class GetPageAction<Destination extends Page> extends AbstractAction<Dest
     @SuppressWarnings("unchecked")
     private void clickAll() {
         for (final RouteNode routeNode : route.getNodes()) {
-            instantiatePage(routeNode.getPageClass()).initElements(context);
-            for (final WebElement element : (List<WebElement>) routeNode.getElementsToClick()) {
-                clickAndWaitForLoading(element);
-            }
+            ((List<String>) routeNode.getIdsOfElementsToClick()).forEach(this::click);
         }
     }
 

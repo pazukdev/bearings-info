@@ -12,25 +12,25 @@ import org.openqa.selenium.support.FindBy;
 @Data
 public class MainPage extends AbstractPage {
 
-    private final static String URL = "https://www.google.com/";
+    private final static String URL = "http://localhost:8091/bearings-info/api/";
 
-    @FindBy(xpath = "")
-    private WebElement pageHeader;
-    @FindBy(xpath = "")
-    private WebElement motorcycleButton;
-    @FindBy(xpath = "")
-    private WebElement bearingButton;
-    @FindBy(xpath = "")
-    private WebElement sealButton;
+    @FindBy(id = "appName")
+    private WebElement appName;
+    @FindBy(id = "motorcyclesButton")
+    private WebElement motorcyclesButton;
+    @FindBy(id = "bearingsButton")
+    private WebElement bearingsButton;
+    @FindBy(id = "sealsButton")
+    private WebElement sealsButton;
 
     @Override
     public String getURL() {
-        return null;
+        return URL;
     }
 
     @Override
     public WebElement getControlElement() {
-        return pageHeader;
+        return appName;
     }
 
 }
