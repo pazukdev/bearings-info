@@ -13,6 +13,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <cucumberVersion>4.2.3</cucumberVersion>
     </properties>
 
     <dependencies>
@@ -121,6 +122,26 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.9</version>
+        </dependency>
+
+        <!--cucumber-->
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java8</artifactId>
+            <version>${cucumberVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>${cucumberVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>${cucumberVersion}</version>
         </dependency>
 
         <!-- other -->
