@@ -9,8 +9,8 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        features = "src/test/feature",
-        glue = "src/test/java/com/pazukdev/backend/integration/cucumber/step"
+        features = "src/test/resources/feature/",
+        glue = "src/test/java/"
 )
 public class CucumberIT {
 }

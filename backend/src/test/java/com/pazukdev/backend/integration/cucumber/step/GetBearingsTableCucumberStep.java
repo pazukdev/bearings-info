@@ -8,19 +8,18 @@ import com.pazukdev.backend.integration.testcore.route.Route;
 import com.pazukdev.backend.integration.testcore.route.RouteNode;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import lombok.Data;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
-public class GetBearingsTableCucumberStep extends AbstractCucumberStep {
+@Data
+public class GetBearingsTableCucumberStep {
 
+    private final TestContext context;
     private AbstractPage bearingPage;
-
-    public GetBearingsTableCucumberStep(TestContext context) {
-        super(context);
-    }
 
     @When("user opens bearings info")
     public void openBearingsTable() {

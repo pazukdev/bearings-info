@@ -1,7 +1,7 @@
 Feature: add a new bearing
 
   Scenario Template: user opens bearings table and adds a new bearing
-    Given: app main page is opened
+    Given app main page is opened
     When user opens bearings info
     And adds a new bearing with data: <Name>, <Type>, <Rolling element>, <Rolling elements quantity>
     Then user sees that the bearing added to table

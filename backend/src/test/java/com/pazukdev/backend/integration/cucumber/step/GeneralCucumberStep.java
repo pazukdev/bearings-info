@@ -10,9 +10,9 @@ import lombok.Data;
  * @author Siarhei Sviarkaltsau
  */
 @Data
-public class AbstractCucumberStep {
+public class GeneralCucumberStep {
 
-    protected final TestContext context;
+    private final TestContext context;
 
     @Given("app main page is opened")
     public void openMainPage() {
