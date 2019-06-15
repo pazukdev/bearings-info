@@ -1,25 +1,29 @@
 <template id="app">
-    <div>
-        <Header/>
-        <br/>
-        &nbsp;&nbsp;&nbsp;
-        <button id="motorcyclesButton" @click="swapComponent(componentsArray[0])">Motorcycles</button>
-        &nbsp;&nbsp;&nbsp;
-        <button id="bearingsButton" @click="swapComponent(componentsArray[1])">Bearings</button>
-        &nbsp;&nbsp;&nbsp;
-        <button id="sealsButton" @click="swapComponent(componentsArray[2])">Seals</button>
-        <br/>
-        <br/>
-        <div :is="currentComponent"></div>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+    <div id="background">
+        <div id = "screen">
+
+            <br/>
+            <p id="appName"><b>Bearings info</b></p>
+            <br/>
+            <div id="navigationButtons">
+                <button id="motorcyclesButton" @click="swapComponent(componentsArray[0])">Motorcycles</button>
+                &nbsp;&nbsp;&nbsp;
+                <button id="bearingsButton" @click="swapComponent(componentsArray[1])">Bearings</button>
+                &nbsp;&nbsp;&nbsp;
+                <button id="sealsButton" @click="swapComponent(componentsArray[2])">Seals</button>
+            </div>
+            <br/>
+            <br/>
+            <div :is="currentComponent"></div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+        </div>
     </div>
 </template>
 
 <script>
-    import Header from "./components/Header";
     import MotorcycleList from "./components/MotorcycleList";
     import BearingList from "./components/BearingList";
     import SealList from "./components/SealList";
@@ -35,7 +39,6 @@
         },
 
         components: {
-            Header,
             MotorcycleList,
             BearingList,
             SealList
@@ -59,5 +62,26 @@
         text-align: center;
         color: #2c3e50;
         margin-top: 60px;
+    }
+
+    #background {
+        background-color: black;
+        height: 1024px;
+        padding-top: 50px;
+    }
+
+    #screen {
+        background-color: aliceblue;
+        margin: auto;
+        width: 35%;
+    }
+
+    #appName {
+        text-align: center;
+    }
+
+    #navigationButtons {
+        margin: auto;
+        width: 60%;
     }
 </style>
