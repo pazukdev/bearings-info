@@ -13,6 +13,8 @@ public enum Characteristic {
     ROLLING_ELEMENTS_QUANTITY,
     ROTATION,
     WEIGHT_G,
-    WEIGHT_KG
+    WEIGHT_KG,
+    FOUNDED,
+    DEFUNCT
 
 }

@@ -23,9 +23,14 @@ public class CSVFileUtil {
 
     private static final String PACKAGE = "static/";
     private static final String FILE_FORMAT = "csv";
+    private static final String MANUFACTURER_FILE_NAME = "manufacturer";
     private static final String MOTORCYCLE_FILE_NAME = "motorcycle";
     private static final String BEARING_FILE_NAME = "bearing";
     private static final String SEAL_FILE_NAME = "seal";
+
+    public static File manufacturerFile() {
+        return file(MANUFACTURER_FILE_NAME);
+    }
 
     public static File motorcycleFile() {
         return file(MOTORCYCLE_FILE_NAME);

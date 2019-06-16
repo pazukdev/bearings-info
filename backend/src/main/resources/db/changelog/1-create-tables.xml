@@ -5,6 +5,20 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+    <changeSet id="create_manufacturer_table" author="sviarkaltsau">
+        <createTable tableName="manufacturer">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="founded" type="varchar(255)"/>
+            <column name="defunct" type="varchar(255)"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="manufacturer"/>
+        </rollback>
+    </changeSet>
+
     <changeSet id="create_bearing_table" author="sviarkaltsau">
         <createTable tableName="bearing">
             <column autoIncrement="true" name="id" type="bigint">
@@ -40,7 +54,7 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
-            <column name="manufacturer" type="varchar(255)"/>
+            <column name="manufacturer_id" type="bigint"/>
             <column name="weight_g" type="int"/>
         </createTable>
         <rollback>

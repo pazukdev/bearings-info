@@ -18,22 +18,22 @@ public class MotorcycleConverterTest {
 
     @Test
     public void convertToDto() {
-        final Motorcycle motorcycle = mockData.motorcycle();
-        final MotorcycleDto dto= converter.convertToDto(motorcycle);
+        final Motorcycle entity = mockData.motorcycle();
+        final MotorcycleDto dto= converter.convertToDto(entity);
 
-        assertEquals(motorcycle.getName(), dto.getName());
-        assertEquals(motorcycle.getManufacturer(), dto.getManufacturer());
-        assertEquals(motorcycle.getWeightG(), dto.getWeightG());
+        assertEquals(entity.getName(), dto.getName());
+        assertEquals(entity.getManufacturer().getId(), dto.getManufacturerId());
+        assertEquals(entity.getWeightG(), dto.getWeightG());
     }
 
     @Test
-    public void convertToDbo() {
+    public void convertToEntity() {
         final MotorcycleDto dto = mockData.motorcycleDto();
-        final Motorcycle motorcycle = converter.convertToEntity(dto);
+        final Motorcycle entity = converter.convertToEntity(dto);
 
-        assertEquals(dto.getName(), motorcycle.getName());
-        assertEquals(dto.getManufacturer(), motorcycle.getManufacturer());
-        assertEquals(dto.getWeightG(), motorcycle.getWeightG());
+        assertEquals(dto.getName(), entity.getName());
+        assertEquals(dto.getManufacturerId(), entity.getManufacturer().getId());
+        assertEquals(dto.getWeightG(), entity.getWeightG());
     }
 
 }

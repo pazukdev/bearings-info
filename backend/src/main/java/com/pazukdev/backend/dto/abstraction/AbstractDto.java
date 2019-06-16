@@ -16,5 +16,6 @@ public class AbstractDto implements Serializable {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     private String name;
+    private Long manufacturerId;
 
 }

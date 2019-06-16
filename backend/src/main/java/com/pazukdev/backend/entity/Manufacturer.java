@@ -13,12 +13,14 @@ import javax.persistence.Table;
  */
 @Data
 @Entity
-@Table(name = "motorcycle")
+@Table(name = "manufacturer")
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Motorcycle extends AbstractEntity {
+public class Manufacturer extends AbstractEntity {
 
-    @Column(name = "weight_g")
-    private Integer weightG;
+    @Column(name = "founded")
+    private String founded;
+    @Column(name = "defunct")
+    private String defunct;
 
 }

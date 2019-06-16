@@ -1,8 +1,9 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dto.motorcycle.MotorcycleDto;
+import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
 import com.pazukdev.backend.exception.ProductNotFoundException;
-import com.pazukdev.backend.service.MotorcycleService;
+import com.pazukdev.backend.search.DefaultSearchRequest;
+import com.pazukdev.backend.service.ManufacturerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,35 +24,49 @@ import java.util.List;
  * @author Siarhei Sviarkaltsau
  */
 @RestController
-@RequestMapping("/motorcycle")
-@Api(tags = "Motorcycle Controller", value = "API methods for motorcycles")
+@RequestMapping("/manufacturer")
+@Api(tags = "Manufacturer Controller", value = "API methods for manufacturers")
 @RequiredArgsConstructor
-public class MotorcycleController {
+public class ManufacturerController {
 
-    private final MotorcycleService service;
+    private final ManufacturerService service;
 
     @GetMapping("/list")
-    @ApiOperation(value = "Get info about all motorcycles")
-    public List<MotorcycleDto> getAll() {
+    @ApiOperation(value = "Get info about all manufacturers")
+    public List<ManufacturerDto> getAll() {
         return service.getProductsList();
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get info about motorcycle")
-    public MotorcycleDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
+    @ApiOperation(value = "Get info about manufacturer")
+    public ManufacturerDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
         return service.get(id);
     }
 
     @PostMapping("/create")
-    @ApiOperation(value = "Create a new motorcycle")
-    public String create(@RequestBody final MotorcycleDto dto) throws EntityExistsException, JSONException {
+    @ApiOperation(value = "Create a new manufacturer")
+    public String create(@RequestBody final ManufacturerDto dto) throws EntityExistsException, JSONException {
         return new JSONObject().put("id", service.create(dto).getId()).toString();
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "Delete motorcycle")
+    @ApiOperation(value = "Delete manufacturer")
     public void delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
         service.delete(id);
     }
 
+    @PostMapping(value = "/doctor/search")
+    @ApiOperation(value = "Search doctors")
+    public ManufacturerDto searchManufacturer(@RequestBody final DefaultSearchRequest request) {
+        return service.search(request);
+    }
+
 }
+
+
+
+
+
+
+
+

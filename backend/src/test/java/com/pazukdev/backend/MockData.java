@@ -1,23 +1,62 @@
 package com.pazukdev.backend;
 
+import com.pazukdev.backend.converter.ManufacturerConverter;
 import com.pazukdev.backend.dto.bearing.BearingDto;
 import com.pazukdev.backend.dto.bearing.BearingDtoFactory;
+import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
+import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
 import com.pazukdev.backend.dto.motorcycle.MotorcycleDto;
 import com.pazukdev.backend.dto.motorcycle.MotorcycleDtoFactory;
 import com.pazukdev.backend.dto.seal.SealDto;
 import com.pazukdev.backend.dto.seal.SealDtoFactory;
 import com.pazukdev.backend.entity.Bearing;
+import com.pazukdev.backend.entity.Manufacturer;
 import com.pazukdev.backend.entity.Motorcycle;
 import com.pazukdev.backend.entity.Seal;
+import com.pazukdev.backend.repository.ManufacturerRepository;
+import com.pazukdev.backend.service.ManufacturerService;
+import lombok.Data;
+import lombok.Getter;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
+@Getter
+@RunWith(MockitoJUnitRunner.class)
 public class MockData {
 
+    @InjectMocks
+    private ManufacturerService service;
+    @Mock
+    private ManufacturerRepository repository;
+    @Spy
+    private ManufacturerConverter converter;
+
+    private final ManufacturerDtoFactory manufacturerDtoFactory = new ManufacturerDtoFactory();
     private final BearingDtoFactory bearingDtoFactory = new BearingDtoFactory();
-    private final MotorcycleDtoFactory motorcycleDtoFactory = new MotorcycleDtoFactory();
+    private final MotorcycleDtoFactory motorcycleDtoFactory = new MotorcycleDtoFactory(service);
     private final SealDtoFactory sealDtoFactory = new SealDtoFactory();
+
+    public Manufacturer manufacturer() {
+        final Manufacturer manufacturer = new Manufacturer();
+        manufacturer.setId(1L);
+        manufacturer.setFounded("1917");
+        manufacturer.setDefunct("1993");
+        return manufacturer;
+    }
+
+    public ManufacturerDto manufacturerDto() {
+        final ManufacturerDto dto = manufacturerDtoFactory.createDto();
+        dto.setId(101L);
+        dto.setFounded("1914");
+        dto.setDefunct("1918");
+        return dto;
+    }
 
     public Bearing bearing() {
         final Bearing bearing = new Bearing();
@@ -38,9 +77,10 @@ public class MockData {
     }
 
     public Motorcycle motorcycle() {
+
         final Motorcycle motorcycle = new Motorcycle();
         motorcycle.setName("motorcycle name");
-        motorcycle.setManufacturer("motorcycle manufacturer");
+        motorcycle.setManufacturer(manufacturer());
         motorcycle.setWeightG(350);
         return motorcycle;
     }
@@ -48,7 +88,7 @@ public class MockData {
     public MotorcycleDto motorcycleDto() {
         final MotorcycleDto motorcycleDto = motorcycleDtoFactory.createDto();
         motorcycleDto.setName("motorcycleDto name");
-        motorcycleDto.setManufacturer("motorcycleDto manufacturer");
+        motorcycleDto.setManufacturerId(manufacturerDto().getId());
         motorcycleDto.setWeightG(300);
         return motorcycleDto;
     }

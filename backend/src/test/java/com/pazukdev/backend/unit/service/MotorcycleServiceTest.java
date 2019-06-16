@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 public class MotorcycleServiceTest {
 
     private final MockData mockData = new MockData();
-    private final MotorcycleDtoFactory dtoFactory = new MotorcycleDtoFactory();
+    private MotorcycleDtoFactory dtoFactory;
     @InjectMocks
     private MotorcycleService service;
     @Mock
@@ -43,7 +43,7 @@ public class MotorcycleServiceTest {
         final Motorcycle motorcycle = mockData.motorcycle();
 
         doReturn(motorcycle).when(repository).save(any(Motorcycle.class));
-        service.create(dtoFactory.createDto());
+        service.create(new MotorcycleDtoFactory(mockData.getService()).createDto());
 
         verify(repository, times(1)).save(any(Motorcycle.class));
 
@@ -64,7 +64,7 @@ public class MotorcycleServiceTest {
         assertEquals(findAllResult.size(), dtos.size());
         for (final MotorcycleDto dto : dtos) {
             assertEquals(motorcycle.getName(), dto.getName());
-            assertEquals(motorcycle.getManufacturer(), dto.getManufacturer());
+            assertEquals(motorcycle.getManufacturer().getId(), dto.getManufacturerId());
             assertEquals(motorcycle.getWeightG(), dto.getWeightG());
         }
     }

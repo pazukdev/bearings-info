@@ -16,8 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public abstract class AbstractService<Entity extends AbstractEntity, Dto extends AbstractDto> {
 
-    private final JpaRepository<Entity, Long> repository;
-    private final EntityDtoConverter<Entity, Dto> converter;
+    protected final JpaRepository<Entity, Long> repository;
+    protected final EntityDtoConverter<Entity, Dto> converter;
 
     @Transactional
     public List<Dto> getProductsList() {

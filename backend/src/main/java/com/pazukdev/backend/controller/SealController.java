@@ -52,7 +52,7 @@ public class SealController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete seal")
-    public Response delete(@PathVariable("id") Long id) {
+    public Response delete(@PathVariable("id") final Long id) {
         try {
             final Seal seal = service.delete(id);
             return Response.ok().entity(seal.getId().toString()).build();

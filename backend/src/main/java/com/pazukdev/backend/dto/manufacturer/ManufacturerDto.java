@@ -1,4 +1,4 @@
-package com.pazukdev.backend.dto.motorcycle;
+package com.pazukdev.backend.dto.manufacturer;
 
 import com.pazukdev.backend.dto.abstraction.AbstractDto;
 import lombok.AccessLevel;
@@ -11,13 +11,14 @@ import lombok.ToString;
  * @author Siarhei Sviarkaltsau
  */
 @Data
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class MotorcycleDto extends AbstractDto {
+public class ManufacturerDto extends AbstractDto {
 
     private final static long serialVersionUID = 12343L;
 
-    private Integer weightG;
+    private String founded;
+    private String defunct;
 
 }

@@ -50,7 +50,7 @@ public class BearingController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete bearing")
-    public void delete(@PathVariable("id") Long id) throws ProductNotFoundException {
+    public void delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
         service.delete(id);
     }
 
