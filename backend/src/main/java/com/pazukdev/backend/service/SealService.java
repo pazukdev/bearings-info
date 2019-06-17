@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class SealService extends AbstractService<Seal, SealDto>{
 
-    @Autowired
     public SealService(final SealRepository repository,
                        final SealConverter converter) {
         super(repository, converter);

@@ -19,5 +19,6 @@ public class MotorcycleDto extends AbstractDto {
     private final static long serialVersionUID = 12343L;
 
     private Integer weightG;
+    private Long manufacturerId;
 
 }

@@ -24,6 +24,10 @@ public abstract class AbstractDtoFactory<Dto extends AbstractDto> {
 
     protected abstract void applyCharacteristics(final Dto dto, final TableRow tableRow);
 
+    public Dto searchByName(final String name) {
+        return createDtosFromCSVFile().stream().filter(dto -> dto.getName().equals(name)).findFirst().orElse(null);
+    }
+
     private TableModel getTableModelFromCSVFile() {
         final TableModelFactory factory = TableModelFactory.create();
         return factory.createTableModel(getCSVFile());

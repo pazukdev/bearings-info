@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class BearingService extends AbstractService<Bearing, BearingDto>{
 
-    @Autowired
     public BearingService(final BearingRepository repository,
                           final BearingConverter converter) {
         super(repository, converter);

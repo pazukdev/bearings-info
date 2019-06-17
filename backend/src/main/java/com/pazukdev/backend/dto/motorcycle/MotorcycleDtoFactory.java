@@ -2,6 +2,9 @@ package com.pazukdev.backend.dto.motorcycle;
 
 import com.pazukdev.backend.characteristic.Characteristic;
 import com.pazukdev.backend.dto.abstraction.AbstractDtoFactory;
+import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
+import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
+import com.pazukdev.backend.entity.Manufacturer;
 import com.pazukdev.backend.search.DefaultSearchRequest;
 import com.pazukdev.backend.service.ManufacturerService;
 import com.pazukdev.backend.tablemodel.TableRow;
@@ -42,10 +45,17 @@ public class MotorcycleDtoFactory extends AbstractDtoFactory<MotorcycleDto> {
 
     private void applyManufacturer(final MotorcycleDto dto, final TableRow tableRow) {
         final String manufacturerName = tableRow.getStringValue(Characteristic.MANUFACTURER);
-        final DefaultSearchRequest request = new DefaultSearchRequest();
-        request.setName(manufacturerName);
-        System.out.println(service.search(request));
-        dto.setManufacturerId(service.search(request).getId());
+
+        final ManufacturerDto manufacturerDto;
+        if (service != null) {
+            final DefaultSearchRequest request = new DefaultSearchRequest();
+            request.setName(manufacturerName);
+            manufacturerDto = service.search(request);
+        } else {
+            manufacturerDto = new ManufacturerDtoFactory().searchByName(manufacturerName);
+        }
+
+        dto.setManufacturerId(manufacturerDto.getId());
     }
 
     private void applyWeight(final MotorcycleDto dto, final TableRow tableRow) {

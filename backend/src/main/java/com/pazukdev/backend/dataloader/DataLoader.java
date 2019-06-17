@@ -3,11 +3,13 @@ package com.pazukdev.backend.dataloader;
 import com.pazukdev.backend.dto.abstraction.AbstractDto;
 import com.pazukdev.backend.dto.abstraction.AbstractDtoFactory;
 import com.pazukdev.backend.dto.bearing.BearingDtoFactory;
+import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
 import com.pazukdev.backend.dto.motorcycle.MotorcycleDtoFactory;
 import com.pazukdev.backend.dto.seal.SealDtoFactory;
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.service.AbstractService;
 import com.pazukdev.backend.service.BearingService;
+import com.pazukdev.backend.service.ManufacturerService;
 import com.pazukdev.backend.service.MotorcycleService;
 import com.pazukdev.backend.service.SealService;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +26,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DataLoader implements ApplicationRunner {
 
+    private final ManufacturerService manufacturerService;
     private final MotorcycleService motorcycleService;
     private final BearingService bearingService;
     private final SealService sealService;
+    private final ManufacturerDtoFactory manufacturerDtoFactory;
     private final MotorcycleDtoFactory motorcycleDtoFactory;
     private final BearingDtoFactory bearingDtoFactory;
     private final SealDtoFactory sealDtoFactory;
@@ -37,9 +41,16 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void populateEmptyTables() {
-        loadMotorcycles(motorcycleService.getProductsList().isEmpty());
+        loadManufacturers(manufacturerService.getProductsList().isEmpty());
         loadBearings(bearingService.getProductsList().isEmpty());
         loadSeals(sealService.getProductsList().isEmpty());
+        loadMotorcycles(motorcycleService.getProductsList().isEmpty());
+    }
+
+    private void loadManufacturers(final Boolean tableIsEmpty) {
+        if (tableIsEmpty) {
+            createAll(manufacturerDtoFactory, manufacturerService);
+        }
     }
 
     private void loadMotorcycles(final Boolean tableIsEmpty) {

@@ -6,6 +6,7 @@ import com.pazukdev.backend.integration.testcore.core.TestContext;
 import com.pazukdev.backend.integration.testcore.core.TestContextImpl;
 import com.pazukdev.backend.integration.testcore.page.Page;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -25,6 +26,7 @@ public class IntegrationTestTest {
     @Mock
     private WebDriver driverCreatedByFactory;
 
+    @Ignore
     @Test
     public void testContextTest() {
         final WebDriver driver1 = context.getDriver();
@@ -34,6 +36,7 @@ public class IntegrationTestTest {
         Assert.assertSame(driver1, driver2);
     }
 
+    @Ignore
     @Test
     public void pageLoadAsserterTest() {
         final Page badPage = new TestPage();

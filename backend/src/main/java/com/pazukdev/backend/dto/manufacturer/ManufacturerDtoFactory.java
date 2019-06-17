@@ -4,12 +4,18 @@ import com.pazukdev.backend.characteristic.Characteristic;
 import com.pazukdev.backend.dto.abstraction.AbstractDtoFactory;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Component
 public class ManufacturerDtoFactory extends AbstractDtoFactory<ManufacturerDto> {
 
     @Override
