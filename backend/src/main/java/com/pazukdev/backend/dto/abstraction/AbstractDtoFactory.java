@@ -4,6 +4,7 @@ import com.pazukdev.backend.characteristic.Characteristic;
 import com.pazukdev.backend.tablemodel.TableModel;
 import com.pazukdev.backend.tablemodel.TableModelFactory;
 import com.pazukdev.backend.tablemodel.TableRow;
+import lombok.Data;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 /**
  * @author Siarhei Sviarkaltsau
  */
+@Data
 public abstract class AbstractDtoFactory<Dto extends AbstractDto> {
 
     public List<Dto> createDtosFromCSVFile() {

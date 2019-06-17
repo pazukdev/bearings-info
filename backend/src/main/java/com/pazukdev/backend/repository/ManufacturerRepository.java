@@ -1,6 +1,6 @@
 package com.pazukdev.backend.repository;
 
-import com.pazukdev.backend.entity.Seal;
+import com.pazukdev.backend.entity.Manufacturer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
  * @author Siarhei Sviarkaltsau
  */
 @Repository
-public interface SealRepository extends JpaRepository<Seal, Long> {
+public interface ManufacturerRepository extends JpaRepository<Manufacturer, Long> {
 
-    Seal findByName(String name);
+    Manufacturer findByName(String name);
 
 }

@@ -11,17 +11,13 @@ import com.pazukdev.backend.dto.motorcycle.MotorcycleDtoFactory;
 import com.pazukdev.backend.dto.seal.SealDto;
 import com.pazukdev.backend.dto.seal.SealDtoFactory;
 import com.pazukdev.backend.search.DefaultSearchRequest;
-import com.pazukdev.backend.service.DefaultService;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
-@RunWith(MockitoJUnitRunner.class)
 public class DtoFactoryTest {
 
     @Test
@@ -35,8 +31,7 @@ public class DtoFactoryTest {
 
     @Test
     public void motorcycleDtoFactoryTest() {
-        final DefaultService service = null;
-        final MotorcycleDto dto = getFirstDtoFromDataFile(new MotorcycleDtoFactory(service));
+        final MotorcycleDto dto = getFirstDtoFromDataFile(new MotorcycleDtoFactory(null, new ManufacturerDtoFactory()));
 
         final DefaultSearchRequest request = new DefaultSearchRequest();
         request.setName("imz");

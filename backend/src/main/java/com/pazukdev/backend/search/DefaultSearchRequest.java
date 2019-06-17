@@ -1,7 +1,9 @@
 package com.pazukdev.backend.search;
 
+import com.pazukdev.backend.dto.abstraction.AbstractDtoFactory;
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**

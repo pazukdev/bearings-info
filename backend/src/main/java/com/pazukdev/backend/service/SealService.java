@@ -4,7 +4,7 @@ import com.pazukdev.backend.converter.SealConverter;
 import com.pazukdev.backend.dto.seal.SealDto;
 import com.pazukdev.backend.entity.Seal;
 import com.pazukdev.backend.repository.SealRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.pazukdev.backend.search.DefaultSearchRequest;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,6 +16,11 @@ public class SealService extends AbstractService<Seal, SealDto>{
     public SealService(final SealRepository repository,
                        final SealConverter converter) {
         super(repository, converter);
+    }
+
+    @Override
+    protected Seal findByName(DefaultSearchRequest request) {
+        return ((SealRepository) repository).findByName(request.getName());
     }
 
 }

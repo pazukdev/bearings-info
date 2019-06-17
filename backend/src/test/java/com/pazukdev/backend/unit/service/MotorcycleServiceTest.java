@@ -30,7 +30,6 @@ import static org.mockito.Mockito.verify;
 public class MotorcycleServiceTest {
 
     private final MockData mockData = new MockData();
-    private MotorcycleDtoFactory dtoFactory;
     @InjectMocks
     private MotorcycleService service;
     @Mock
@@ -43,7 +42,7 @@ public class MotorcycleServiceTest {
         final Motorcycle motorcycle = mockData.motorcycle();
 
         doReturn(motorcycle).when(repository).save(any(Motorcycle.class));
-        service.create(new MotorcycleDtoFactory(mockData.getService()).createDto());
+        service.create(mockData.getMotorcycleDtoFactory().createDto());
 
         verify(repository, times(1)).save(any(Motorcycle.class));
 

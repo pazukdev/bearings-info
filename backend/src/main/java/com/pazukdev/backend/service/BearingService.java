@@ -4,7 +4,7 @@ import com.pazukdev.backend.converter.BearingConverter;
 import com.pazukdev.backend.dto.bearing.BearingDto;
 import com.pazukdev.backend.entity.Bearing;
 import com.pazukdev.backend.repository.BearingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.pazukdev.backend.search.DefaultSearchRequest;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,4 +17,10 @@ public class BearingService extends AbstractService<Bearing, BearingDto>{
                           final BearingConverter converter) {
         super(repository, converter);
     }
+
+    @Override
+    protected Bearing findByName(DefaultSearchRequest request) {
+        return ((BearingRepository) repository).findByName(request.getName());
+    }
+
 }

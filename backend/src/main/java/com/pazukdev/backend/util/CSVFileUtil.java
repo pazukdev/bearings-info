@@ -1,6 +1,9 @@
 package com.pazukdev.backend.util;
 
 import com.opencsv.CSVReader;
+import com.pazukdev.backend.dto.abstraction.AbstractDto;
+import com.pazukdev.backend.dto.abstraction.AbstractDtoFactory;
+import com.pazukdev.backend.search.DefaultSearchRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +57,11 @@ public class CSVFileUtil {
         return format(lines);
     }
 
+    public static <Dto extends AbstractDto> Dto searchByName(final DefaultSearchRequest request,
+                                                             final AbstractDtoFactory<Dto> factory) {
+        return factory.searchByName(request.getName());
+    }
+
     private static List<String[]> format(final List<String[]> list) {
         return AppCollectionUtil.toLowerCase(AppCollectionUtil.removeSpaces(list));
     }
@@ -80,3 +88,22 @@ public class CSVFileUtil {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

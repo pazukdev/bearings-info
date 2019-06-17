@@ -1,10 +1,9 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
-import com.pazukdev.backend.entity.Manufacturer;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.search.DefaultSearchRequest;
-import com.pazukdev.backend.service.DefaultService;
+import com.pazukdev.backend.service.ManufacturerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ManufacturerController {
 
-    private final DefaultService<Manufacturer, ManufacturerDto> service;
+    private final ManufacturerService service;
 
     @GetMapping("/list")
     @ApiOperation(value = "Get info about all manufacturers")

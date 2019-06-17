@@ -1,6 +1,6 @@
 package com.pazukdev.backend;
 
-import com.pazukdev.backend.converter.DefaultConverter;
+import com.pazukdev.backend.converter.ManufacturerConverter;
 import com.pazukdev.backend.dto.bearing.BearingDto;
 import com.pazukdev.backend.dto.bearing.BearingDtoFactory;
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
@@ -13,8 +13,8 @@ import com.pazukdev.backend.entity.Bearing;
 import com.pazukdev.backend.entity.Manufacturer;
 import com.pazukdev.backend.entity.Motorcycle;
 import com.pazukdev.backend.entity.Seal;
-import com.pazukdev.backend.repository.DefaultRepository;
-import com.pazukdev.backend.service.DefaultService;
+import com.pazukdev.backend.repository.ManufacturerRepository;
+import com.pazukdev.backend.service.ManufacturerService;
 import lombok.Getter;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -30,15 +30,15 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class MockData {
 
     @InjectMocks
-    private DefaultService service;
+    private ManufacturerService manufacturerService;
     @Mock
-    private DefaultRepository repository;
+    private ManufacturerRepository manufacturerRepository;
     @Spy
-    private DefaultConverter converter;
+    private ManufacturerConverter manufacturerConverter;
 
     private final ManufacturerDtoFactory manufacturerDtoFactory = new ManufacturerDtoFactory();
     private final BearingDtoFactory bearingDtoFactory = new BearingDtoFactory();
-    private final MotorcycleDtoFactory motorcycleDtoFactory = new MotorcycleDtoFactory(service);
+    private final MotorcycleDtoFactory motorcycleDtoFactory = new MotorcycleDtoFactory(manufacturerService, manufacturerDtoFactory);
     private final SealDtoFactory sealDtoFactory = new SealDtoFactory();
 
     public Manufacturer manufacturer() {

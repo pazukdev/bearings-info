@@ -4,6 +4,7 @@ import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.abstraction.AbstractDto;
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
+import com.pazukdev.backend.search.DefaultSearchRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,5 +55,13 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
             throw new ProductNotFoundException(id);
         }
     }
+
+    @Transactional
+    public Dto search(final DefaultSearchRequest request) {
+        final Entity entity = findByName(request);
+        return converter.convertToDto(entity);
+    }
+
+    protected abstract Entity findByName(final DefaultSearchRequest request);
 
 }
