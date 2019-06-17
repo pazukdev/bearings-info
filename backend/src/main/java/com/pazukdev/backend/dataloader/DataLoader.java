@@ -9,7 +9,7 @@ import com.pazukdev.backend.dto.seal.SealDtoFactory;
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.service.AbstractService;
 import com.pazukdev.backend.service.BearingService;
-import com.pazukdev.backend.service.ManufacturerService;
+import com.pazukdev.backend.service.DefaultService;
 import com.pazukdev.backend.service.MotorcycleService;
 import com.pazukdev.backend.service.SealService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DataLoader implements ApplicationRunner {
 
-    private final ManufacturerService manufacturerService;
+    private final DefaultService defaultService;
     private final MotorcycleService motorcycleService;
     private final BearingService bearingService;
     private final SealService sealService;
@@ -41,7 +41,7 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void populateEmptyTables() {
-        loadManufacturers(manufacturerService.getProductsList().isEmpty());
+        loadManufacturers(defaultService.getProductsList().isEmpty());
         loadBearings(bearingService.getProductsList().isEmpty());
         loadSeals(sealService.getProductsList().isEmpty());
         loadMotorcycles(motorcycleService.getProductsList().isEmpty());
@@ -49,7 +49,7 @@ public class DataLoader implements ApplicationRunner {
 
     private void loadManufacturers(final Boolean tableIsEmpty) {
         if (tableIsEmpty) {
-            createAll(manufacturerDtoFactory, manufacturerService);
+            createAll(manufacturerDtoFactory, defaultService);
         }
     }
 

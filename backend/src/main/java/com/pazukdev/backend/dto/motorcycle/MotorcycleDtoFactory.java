@@ -6,7 +6,7 @@ import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
 import com.pazukdev.backend.entity.Manufacturer;
 import com.pazukdev.backend.search.DefaultSearchRequest;
-import com.pazukdev.backend.service.ManufacturerService;
+import com.pazukdev.backend.service.DefaultService;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import com.pazukdev.backend.util.WeightUtil;
@@ -24,7 +24,7 @@ import java.io.File;
 @Component
 public class MotorcycleDtoFactory extends AbstractDtoFactory<MotorcycleDto> {
 
-    private final ManufacturerService service;
+    private final DefaultService<Manufacturer, ManufacturerDto> service;
 
     @Override
     protected File getCSVFile() {

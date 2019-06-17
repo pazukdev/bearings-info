@@ -11,7 +11,7 @@ import com.pazukdev.backend.dto.motorcycle.MotorcycleDtoFactory;
 import com.pazukdev.backend.dto.seal.SealDto;
 import com.pazukdev.backend.dto.seal.SealDtoFactory;
 import com.pazukdev.backend.search.DefaultSearchRequest;
-import com.pazukdev.backend.service.ManufacturerService;
+import com.pazukdev.backend.service.DefaultService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -35,7 +35,7 @@ public class DtoFactoryTest {
 
     @Test
     public void motorcycleDtoFactoryTest() {
-        final ManufacturerService service = null;
+        final DefaultService service = null;
         final MotorcycleDto dto = getFirstDtoFromDataFile(new MotorcycleDtoFactory(service));
 
         final DefaultSearchRequest request = new DefaultSearchRequest();
