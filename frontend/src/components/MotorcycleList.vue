@@ -5,19 +5,19 @@
         <div>
             <div>
                 &nbsp;&nbsp;&nbsp;&nbsp;Name:
-                <input v-model="name" type="text" placeholder="name"/>
+                <input v-model="motorcycleName" type="text" placeholder="name"/>
                 <br/>
                 <br/>
                 &nbsp;&nbsp;&nbsp;&nbsp;Manufacturer:
-                <select v-model="manufacturer">
+                <select v-model="motorcycleManufacturerId">
                     <option v-for="manufacturer in manufacturers">
-                        {{manufacturer}}
+                        {{manufacturer.id}}
                     </option>
                 </select>
                 <br/>
                 <br/>
                 &nbsp;&nbsp;&nbsp;&nbsp;Weight:
-                <input v-model="weightG" type="text" placeholder="weight, g"/>
+                <input v-model="motorcycleWeightG" type="text" placeholder="weight, g"/>
                 <br/>
                 <br/>
                 &nbsp;&nbsp;&nbsp;&nbsp;<button type="button" v-on:click="submit">Create motorcycle</button>
@@ -36,7 +36,6 @@
                 <th>
                     <label class="form-checkbox">
                         <input type="checkbox" v-model="selectAll" @click="select">
-                        <i class="form-icon"></i>
                     </label>
                 </th>
                 <th>Name</th>
@@ -45,16 +44,15 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="i in motorcycles">
+            <tr v-for="motorcycle in motorcycles" :key="motorcycle.id">
                 <td>
                     <label class="form-checkbox">
-                        <input type="checkbox" :value="i.id" v-model="selected">
-                        <i class="form-icon"></i>
+                        <input type="checkbox" :value="motorcycle.id" v-model="selected">
                     </label>
                 </td>
-                <td>{{i.name}}</td>
-                <td>{{i.manufacturer}}</td>
-                <td>{{i.weightG}}</td>
+                <td>{{motorcycle.name}}</td>
+                <td>{{getManufacturerName(motorcycle.manufacturerId)}}</td>
+                <td>{{motorcycle.weightG}}</td>
             </tr>
             </tbody>
         </table>
@@ -63,19 +61,16 @@
 
 <script>
     import axios from 'axios';
-
     export default {
         data() {
             return {
                 motorcycles: [],
-                id: "",
-                name: "",
-                manufacturer: "",
-                weightG: "",
-                manufacturers: ["imz", "kmz"],
+                motorcycleName: "",
+                motorcycleManufacturerId: "",
+                motorcycleWeightG: "",
+                manufacturers: [],
                 selected: [],
-                selectAll: false,
-                i: ""
+                selectAll: false
             }
         },
 
@@ -85,6 +80,11 @@
                 .then(response => {
                     this.motorcycles = response.data;
                 });
+            axios
+                .get(`/backend/manufacturer/list`)
+                .then(response => {
+                    this.manufacturers = response.data;
+                });
         },
 
         methods: {
@@ -93,18 +93,16 @@
                 this.selected = [];
                 if (!this.selectAll) {
                     for (let i in this.motorcycles) {
-                        this.i = i;
-                        this.id = this.motorcycles[this.i].id;
-                        this.selected.push(this.id);
+                        this.selected.push(this.motorcycles[i].id);
                     }
                 }
             },
 
             submit() {
                 let newMotorcycle = {
-                    name: this.name,
-                    manufacturer: this.manufacturer,
-                    weightG: this.weightG
+                    name: this.motorcycleName,
+                    manufacturerId: this.motorcycleManufacturerId,
+                    weightG: this.motorcycleWeightG
                 };
 
                 axios.post(`/backend/motorcycle/create`, newMotorcycle);
@@ -112,9 +110,13 @@
             },
 
             remove() {
-                console.log("Removing", this.id);
-                axios.delete('/backend/motorcycle/{id}', this.id);
-                //this.motorcycles.splice(this.i, 1);
+                axios.delete('/backend/motorcycle/{id}', this.selected[0]);
+            },
+
+            getManufacturerName(manufacturerId)  {
+                return this.manufacturers.filter(function(manufacturer){
+                    return (manufacturer.id === manufacturerId)
+                })[0].name;
             }
 
         }

@@ -32,31 +32,31 @@ public class ManufacturerController {
     private final ManufacturerService service;
 
     @GetMapping("/list")
-    @ApiOperation(value = "Get info about all manufacturers")
+    @ApiOperation(value = "get info about all manufacturers")
     public List<ManufacturerDto> getAll() {
         return service.getProductsList();
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get info about manufacturer")
-    public ManufacturerDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
+    @ApiOperation(value = "get info about manufacturer")
+    public ManufacturerDto get(@PathVariable("id") final Long id) throws ProductNotFoundException {
         return service.get(id);
     }
 
     @PostMapping("/create")
-    @ApiOperation(value = "Create a new manufacturer")
+    @ApiOperation(value = "create a new manufacturer")
     public String create(@RequestBody final ManufacturerDto dto) throws EntityExistsException, JSONException {
         return new JSONObject().put("id", service.create(dto).getId()).toString();
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "Delete manufacturer")
+    @ApiOperation(value = "delete manufacturer")
     public void delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
         service.delete(id);
     }
 
-    @PostMapping(value = "/doctor/search")
-    @ApiOperation(value = "Search doctors")
+    @PostMapping(value = "/search")
+    @ApiOperation(value = "search for manufacturer")
     public ManufacturerDto searchManufacturer(@RequestBody final DefaultSearchRequest request) {
         return service.search(request);
     }
