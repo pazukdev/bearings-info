@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,10 +38,20 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     }
 
     @Transactional
-    public Entity delete(final Long id) throws ProductNotFoundException {
+    public Dto delete(final Long id) throws ProductNotFoundException {
         final Entity entity = converter.convertToEntity(get(id));
         repository.deleteById(entity.getId());
-        return entity;
+        return converter.convertToDto(entity);
+    }
+
+    @Transactional
+    public List<Dto> deleteAll(final List<Long> ids) throws ProductNotFoundException {
+        final List<Dto> dtos = new ArrayList<>();
+        for (final Long id : ids) {
+            dtos.add(get(id));
+            repository.deleteById(id);
+        }
+        return dtos;
     }
 
     public Boolean productExists(final Long id) throws ProductNotFoundException {

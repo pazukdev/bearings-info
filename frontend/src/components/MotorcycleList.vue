@@ -9,9 +9,10 @@
                 <br/>
                 <br/>
                 &nbsp;&nbsp;&nbsp;&nbsp;Manufacturer:
-                <select v-model="motorcycleManufacturerId">
-                    <option v-for="manufacturer in manufacturers">
-                        {{manufacturer.id}}
+                <select v-model ="motorcycleManufacturerId">
+<!--                    <option v-for="o in obj" v-bind:value="o">{{o.text}}</option>-->
+                    <option v-for="manufacturer in manufacturers" v-bind:value="manufacturer.id">
+                        {{manufacturer.name}}
                     </option>
                 </select>
                 <br/>
@@ -61,6 +62,7 @@
 
 <script>
     import axios from 'axios';
+
     export default {
         data() {
             return {
@@ -76,15 +78,14 @@
 
         created() {
             axios
-                .get(`/backend/motorcycle/list`)
-                .then(response => {
-                    this.motorcycles = response.data;
-                });
-            axios
-                .get(`/backend/manufacturer/list`)
-                .then(response => {
-                    this.manufacturers = response.data;
-                });
+                .all([
+                    this.getAllManufacturers(),
+                    this.getAllMotorcycles()
+                ])
+                .then(axios.spread((firstResponse, secondResponse) => {
+                    this.manufacturers = firstResponse.data;
+                    this.motorcycles = secondResponse.data;
+                }));
         },
 
         methods: {
@@ -99,24 +100,59 @@
             },
 
             submit() {
-                let newMotorcycle = {
-                    name: this.motorcycleName,
-                    manufacturerId: this.motorcycleManufacturerId,
-                    weightG: this.motorcycleWeightG
-                };
-
-                axios.post(`/backend/motorcycle/create`, newMotorcycle);
-                this.motorcycles.push(newMotorcycle);
+                axios
+                    .all([
+                    this.createMotorcycle(),
+                    this.getAllMotorcycles()
+                    ])
+                    .then(axios.spread((firstResponse, secondResponse) => {
+                        this.motorcycles = secondResponse.data
+                    }));
+                this.reload(); // TODO find the way how to update the table without page reload
             },
 
             remove() {
-                axios.delete('/backend/motorcycle/{id}', this.selected[0]);
+                axios
+                    .all([
+                        this.deleteSelectedMotorcycles(),
+                        this.getAllMotorcycles()
+                    ])
+                    .then(axios.spread((firstResponse, secondResponse) => {
+                        this.motorcycles = secondResponse.data
+                    }));
+                this.reload(); // TODO find the way how to update the table without page reload
             },
 
             getManufacturerName(manufacturerId)  {
                 return this.manufacturers.filter(function(manufacturer){
                     return (manufacturer.id === manufacturerId)
                 })[0].name;
+            },
+
+            reload() {
+                window.location.reload();
+            },
+
+            createMotorcycle() {
+                let newMotorcycle = {
+                    name: this.motorcycleName,
+                    manufacturerId: this.motorcycleManufacturerId,
+                    weightG: this.motorcycleWeightG
+                };
+
+                return axios.post(`/backend/motorcycle/create`, newMotorcycle);
+            },
+
+            deleteSelectedMotorcycles() {
+                return axios.post('/backend/motorcycle/delete-all', this.selected);
+            },
+
+            getAllMotorcycles() {
+                return axios.get(`/backend/motorcycle/list`)
+            },
+
+            getAllManufacturers() {
+                return axios.get(`/backend/manufacturer/list`)
             }
 
         }
