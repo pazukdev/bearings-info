@@ -1,26 +1,7 @@
 <template>
     <div>
-        <br/>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;<b id="title">Bearings</b></p>
-        &nbsp;
-        <input v-model="name" type="text" placeholder="name"/>
-        &nbsp;
-        <select v-model="type">
-            <option v-for="type in types">
-                {{type}}
-            </option>
-        </select>
-        &nbsp;
-        <select v-model="rollingElement">
-            <option v-for="rollingElement in rollingElements">
-                {{rollingElement}}
-            </option>
-        </select>
-        &nbsp;
-        <input v-model="rollingElementsQuantity" type="text" placeholder="rollingElementsQuantity"/>
-        &nbsp;
-        <button type="button" v-on:click="submit">Add Bearing</button>
-
+        <p><b id="title">Bearings</b></p>
+        <div>{{motorcycleId}}</div>
         <table id="productsTable" class="table">
             <thead>
             <tr>
@@ -46,6 +27,9 @@
     import axios from 'axios';
 
     export default {
+        name: "ModelBearingList.vue",
+
+        props: ['motorcycleId'],
 
         data() {
             return {
@@ -61,25 +45,21 @@
 
         created() {
             axios
-                .get(`/backend/bearing/list`)
-                .then(response => this.bearings = response.data);
+                .all([
+                    this.getAllBearings()
+                ])
+                .then(axios.spread((bearingsResponse) => {
+                    this.bearings = bearingsResponse.data;
+                }));
         },
 
         methods: {
-            submit() {
-                let newBearing = {
-                    name: this.name,
-                    type: this.type,
-                    rollingElement: this.rollingElement,
-                    rollingElementsQuantity: this.rollingElementsQuantity
-                };
-
-                axios.post(`/backend/bearing/create`, newBearing);
-                this.bearings.push(newBearing);
-
+            getAllBearings() {
+                return axios.get(`/backend/bearing/list`)
             }
         }
     }
+
 </script>
 <style scoped>
 

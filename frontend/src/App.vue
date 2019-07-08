@@ -1,53 +1,71 @@
 <template id="app">
     <div id="background">
         <div id = "screen">
-
             <br/>
-            <p id="appName"><b>Bearings info</b></p>
+            &nbsp;&nbsp;&nbsp;&nbsp;<button id="back" v-show="modelIsSelected()" @click="unselectModel">Back</button>
+                <div id="appName"><b>Bearings info</b></div>
             <br/>
-            <div id="navigationButtons">
-                <button id="motorcyclesButton" @click="swapComponent(componentsArray[0])">Motorcycles</button>
-                &nbsp;&nbsp;&nbsp;
-                <button id="bearingsButton" @click="swapComponent(componentsArray[1])">Bearings</button>
-                &nbsp;&nbsp;&nbsp;
-                <button id="sealsButton" @click="swapComponent(componentsArray[2])">Seals</button>
+            <div id="navigationButtons" v-show="false">
+                <button class="navigationButton" id="motorcyclesButton" @click="swapComponent(componentsArray[0])">
+                    Motorcycles
+                </button>
+                <button class="navigationButton" id="bearingsButton" @click="swapComponent(componentsArray[1])">
+                    Bearings
+                </button>
+                <button class="navigationButton" id="sealsButton" @click="swapComponent(componentsArray[2])">
+                    Seals
+                </button>
             </div>
-            <br/>
-            <br/>
-            <div :is="currentComponent"></div>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
+
+            <MotorcycleMenu v-show="!modelIsSelected()" @select-motorcycle="selectMotorcycle"/>
+            <ModelPartsList v-show="motorcycleId !== 0" :motorcycleId="motorcycleId"/>
+
         </div>
     </div>
 </template>
 
 <script>
+    import MotorcycleMenu from "./components/MotorcycleMenu";
     import MotorcycleList from "./components/MotorcycleList";
     import BearingList from "./components/BearingList";
     import SealList from "./components/SealList";
+    import ModelPartsList from "./components/ModelPartsList"
 
     export default {
         name: 'app',
 
         data() {
             return {
-                currentComponent: MotorcycleList,
-                componentsArray: ['MotorcycleList', 'BearingList', 'SealList']
+                //currentComponent: MotorcycleMenu,
+                componentsArray: ['MotorcycleList', 'BearingList', 'SealList', 'ModelPartsList'],
+                motorcycleId: 0
             }
         },
 
         components: {
+            MotorcycleMenu,
             MotorcycleList,
             BearingList,
-            SealList
+            SealList,
+            ModelPartsList
         },
 
         methods: {
-            swapComponent: function(component)
-            {
+            selectMotorcycle(motorcycleId) {
+                this.motorcycleId = motorcycleId;
+            },
+
+            swapComponent: function(component) {
                 this.currentComponent = component;
+                this.componentDisplayed = true;
+            },
+
+            modelIsSelected() {
+                return this.motorcycleId !== 0;
+            },
+
+            unselectModel() {
+                this.motorcycleId = 0;
             }
         }
     }
@@ -81,7 +99,10 @@
     }
 
     #navigationButtons {
-        margin: auto;
-        width: 60%;
+        width: 200px;
+    }
+
+    .navigationButton {
+        width: 100%;
     }
 </style>

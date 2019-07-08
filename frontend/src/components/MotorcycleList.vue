@@ -20,7 +20,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;Weight:
                 <input v-model="motorcycleWeightG" type="text" placeholder="weight, g"/>
                 <br/>
-                <br/>
+                <br/>ght
                 &nbsp;&nbsp;&nbsp;&nbsp;<button type="button" v-on:click="submit">Create motorcycle</button>
                 <br/>
                 <br/>
