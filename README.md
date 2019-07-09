@@ -9,5 +9,7 @@ App run:
 - run back: mvn spring-boot:run
 - run front: 1. npm install 2. npm run serve -- --port 8091
 
+DB: mysql -udemo -pdemo
+
 API documentation: 
 http://localhost:8090/bearings-info/api/swagger-ui.html 
