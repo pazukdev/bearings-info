@@ -12,7 +12,28 @@ public class SpecificStringUtilTest {
 
     @Test
     public void test() {
-        String testString = " 1939 - 1946";
+        String testString = "";
+
+        assertNull(getString(testString));
+        assertNull(getInteger(testString));
+
+        testString = "-";
+
+        assertNull(getString(testString));
+        assertNull(getInteger(testString));
+
+        testString = "null";
+
+        assertNull(getString(testString));
+        assertNull(getInteger(testString));
+
+        testString = "?";
+
+        assertNull(getString(testString));
+        assertNull(getInteger(testString));
+
+
+        testString = " 1939 - 1946";
 
         assertEquals("1939", getStringBeforeDash(testString));
         assertEquals("1946", getStringAfterDash(testString));
@@ -32,7 +53,7 @@ public class SpecificStringUtilTest {
         assertEquals("1946", getStringBetweenParentheses(testString));
         assertTrue(1946 == getIntegerBetweenParentheses(testString));
 
-        testString = "? ( - )";
+        testString = " ? ( - )";
 
         assertNull(getStringBeforeParentheses(testString));
         assertNull(getStringBetweenParentheses(testString));

@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.Nullable;
 
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class SpecificStringUtil {
     @Getter
     enum Position {
 
-        BEFORE(0), AFTER(1), BETWEEN(-1);
+        BEFORE(0), AFTER(1), BETWEEN(-1), NOT_SPECIFIED(-2);
 
         private final int index;
 
@@ -28,7 +29,7 @@ public class SpecificStringUtil {
     @Getter
     enum Separator {
 
-        DASH("-"), OPEN_PAREN("\\("), CLOSE_PAREN(")");
+        DASH("-"), OPEN_PAREN("\\("), CLOSE_PAREN(")"), NOT_SPECIFIED("");
 
         private final String separator;
 
@@ -76,20 +77,38 @@ public class SpecificStringUtil {
         return getString(source, Position.AFTER, Separator.DASH);
     }
 
-    private static Integer getInteger(final String source, final Position position, final Separator separator) {
-        return getCheckedInteger(getString(source, position, separator));
+    public static Integer getInteger(final String data) {
+        if (isEmpty(data) || !StringUtils.isNumeric(data)) {
+            return null;
+        }
+        return  Integer.valueOf(data);
     }
 
-    private static String getString(final String source, final Position position, final Separator separator) {
+    public static String getString(final String source) {
+        return getString(source, Position.NOT_SPECIFIED, Separator.NOT_SPECIFIED);
+    }
+
+    private static Integer getInteger(final String source, final Position position, final Separator separator) {
+        return getInteger(getString(source, position, separator));
+    }
+
+    private static String getString(@NotNull final String source,
+                                    @NotNull final Position position,
+                                    @Nullable final Separator separator) {
         if (isEmpty(source)) {
             return null;
         }
 
         String result;
 
-        if (position == Position.BETWEEN) {
+        if (position == Position.NOT_SPECIFIED) {
+            result = source;
+        } else if (position == Position.BETWEEN) {
             result = StringUtils.substringBetween(source, "(", ")");
         } else {
+            if (separator == null || separator == Separator.NOT_SPECIFIED) {
+                throw new IllegalArgumentException("Separator is not specified");
+            }
             result = source.split(separator.getSeparator())[position.getIndex()];
         }
 
@@ -122,19 +141,11 @@ public class SpecificStringUtil {
         return nullKeys.contains(source);
     }
 
-    public static String getCheckedString(@Nullable final String data) {
-        return isNotEmpty(data) ? data : null;
-    }
-
-    public static Integer getCheckedInteger(@Nullable final String data) {
-        return isNotEmpty(data) && StringUtils.isNumeric(data) ? Integer.valueOf(data) : null;
-    }
-
     public static Integer extractIntegerAutomatically(final String source) {
         if (containsParentheses(source)) {
             return getIntegerBetweenParentheses(source);
         }
-        return getCheckedInteger(source);
+        return getInteger(source);
     }
 
     public static Boolean containsParentheses(final String source) {

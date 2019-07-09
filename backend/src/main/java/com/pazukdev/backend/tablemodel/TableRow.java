@@ -8,8 +8,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.pazukdev.backend.util.SpecificStringUtil.extractIntegerAutomatically;
-import static com.pazukdev.backend.util.SpecificStringUtil.getStringBeforeParentheses;
+import static com.pazukdev.backend.util.SpecificStringUtil.*;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -29,7 +28,7 @@ public class TableRow {
     }
 
     public String getStringValue(final Characteristic characteristic) {
-        return data.get(characteristic.toString().toLowerCase());
+        return getString(data.get(transformToKey(characteristic)));
     }
 
     public String getStringValueBeforeParenthesises(final Characteristic characteristic) {
@@ -40,4 +39,34 @@ public class TableRow {
         return extractIntegerAutomatically(getStringValue(characteristic));
     }
 
+    public Integer getProductionStartYear(final Characteristic characteristic) {
+        return getIntegerBeforeDash(getStringValue(characteristic));
+    }
+
+    public Integer getProductionStopYear(final Characteristic characteristic) {
+        return getIntegerAfterDash(getStringValue(characteristic));
+    }
+
+    private String transformToKey(final Characteristic characteristic) {
+        return characteristic.toString().toLowerCase();
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
