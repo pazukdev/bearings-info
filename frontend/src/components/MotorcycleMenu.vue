@@ -11,8 +11,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="motorcycle in motorcycles" :key="motorcycle.id">
-                <td>1941 - 1972</td>
+            <tr v-for="motorcycle in sortedMotorcycles" :key="motorcycle.id">
+                <td>{{motorcycle.productionStartYear}} - {{motorcycle.productionStopYear}}</td>
                 <td style="width: 160px">
                     <button class="motorcycleButton" @click="$emit('select-motorcycle', motorcycle.id)">
                         {{motorcycle.name}}
@@ -57,6 +57,20 @@
                     this.manufacturers = firstResponse.data;
                     this.motorcycles = secondResponse.data;
                 }));
+        },
+
+        computed: {
+            sortedMotorcycles() {
+                function compare(a, b) {
+                    if (a.productionStartYear < b.productionStartYear)
+                        return -1;
+                    if (a.productionStartYear > b.productionStartYear)
+                        return 1;
+                    return 0;
+                }
+
+                return this.motorcycles.sort(compare);
+            }
         },
 
         methods: {
