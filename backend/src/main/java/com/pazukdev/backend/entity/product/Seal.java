@@ -1,4 +1,4 @@
-package com.pazukdev.backend.entity;
+package com.pazukdev.backend.entity.product;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Table(name = "seal")
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Seal extends AbstractEntity {
+public class Seal extends AbstractProduct {
 
     @Column(name = "rotation")
     private String rotation;

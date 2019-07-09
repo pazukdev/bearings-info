@@ -1,6 +1,6 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dto.seal.SealDto;
+import com.pazukdev.backend.dto.product.seal.SealDto;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.SealService;
 import io.swagger.annotations.Api;

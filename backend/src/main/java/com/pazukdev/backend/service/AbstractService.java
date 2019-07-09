@@ -1,7 +1,7 @@
 package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
-import com.pazukdev.backend.dto.abstraction.AbstractDto;
+import com.pazukdev.backend.dto.AbstractDto;
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.search.DefaultSearchRequest;

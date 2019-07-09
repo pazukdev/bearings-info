@@ -1,7 +1,7 @@
-package com.pazukdev.backend.dto.bearing;
+package com.pazukdev.backend.dto.product.bearing;
 
 import com.pazukdev.backend.characteristic.Characteristic;
-import com.pazukdev.backend.dto.abstraction.AbstractDtoFactory;
+import com.pazukdev.backend.dto.product.AbstractProductDtoFactory;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import java.io.File;
  * @author Siarhei Sviarkaltsau
  */
 @Component
-public class BearingDtoFactory extends AbstractDtoFactory<BearingDto> {
+public class BearingDtoFactory extends AbstractProductDtoFactory<BearingDto> {
 
     @Override
     protected File getCSVFile() {
@@ -27,6 +27,8 @@ public class BearingDtoFactory extends AbstractDtoFactory<BearingDto> {
     @Override
     protected void applyCharacteristics(BearingDto dto, TableRow tableRow) {
         applyName(dto, tableRow);
+        applyProductionStartYear(dto, tableRow);
+        applyProductionStopYear(dto, tableRow);
         applyType(dto, tableRow);
         applyRollingElement(dto, tableRow);
         applyRollingElementsQuantity(dto, tableRow);

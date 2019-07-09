@@ -25,6 +25,9 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
+            <column name="production_start_year" type="int"/>
+            <column name="production_stop_year" type="int"/>
+            <column name="manufacturer_id" type="bigint"/>
             <column name="type" type="varchar(255)"/>
             <column name="rolling_element" type="varchar(255)"/>
             <column name="rolling_elements_quantity" type="int"/>
@@ -40,6 +43,9 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
+            <column name="production_start_year" type="int"/>
+            <column name="production_stop_year" type="int"/>
+            <column name="manufacturer_id" type="bigint"/>
             <column name="rotation" type="varchar(255)"/>
             <column name="material" type="varchar(255)"/>
         </createTable>
@@ -54,6 +60,8 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
+            <column name="production_start_year" type="int"/>
+            <column name="production_stop_year" type="int"/>
             <column name="manufacturer_id" type="bigint"/>
             <column name="weight_g" type="int"/>
         </createTable>

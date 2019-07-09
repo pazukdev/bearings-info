@@ -2,8 +2,8 @@ package com.pazukdev.backend.unit.converter;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.SealConverter;
-import com.pazukdev.backend.dto.seal.SealDto;
-import com.pazukdev.backend.entity.Seal;
+import com.pazukdev.backend.dto.product.seal.SealDto;
+import com.pazukdev.backend.entity.product.Seal;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

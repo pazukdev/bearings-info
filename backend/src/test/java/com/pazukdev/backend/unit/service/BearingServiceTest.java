@@ -2,9 +2,9 @@ package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.BearingConverter;
-import com.pazukdev.backend.dto.bearing.BearingDto;
-import com.pazukdev.backend.dto.bearing.BearingDtoFactory;
-import com.pazukdev.backend.entity.Bearing;
+import com.pazukdev.backend.dto.product.bearing.BearingDto;
+import com.pazukdev.backend.dto.product.bearing.BearingDtoFactory;
+import com.pazukdev.backend.entity.product.Bearing;
 import com.pazukdev.backend.repository.BearingRepository;
 import com.pazukdev.backend.service.BearingService;
 import org.junit.Test;
@@ -19,9 +19,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Siarhei Sviarkaltsau

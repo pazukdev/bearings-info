@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @MappedSuperclass
-public class AbstractEntity {
+public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

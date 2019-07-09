@@ -1,10 +1,11 @@
-package com.pazukdev.backend.dto.motorcycle;
+package com.pazukdev.backend.dto.product.motorcycle;
 
 import com.pazukdev.backend.characteristic.Characteristic;
-import com.pazukdev.backend.dto.abstraction.AbstractDto;
-import com.pazukdev.backend.dto.abstraction.AbstractDtoFactory;
+import com.pazukdev.backend.dto.AbstractDto;
+import com.pazukdev.backend.dto.AbstractDtoFactory;
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
+import com.pazukdev.backend.dto.product.AbstractProductDtoFactory;
 import com.pazukdev.backend.search.DefaultSearchRequest;
 import com.pazukdev.backend.service.AbstractService;
 import com.pazukdev.backend.service.ManufacturerService;
@@ -23,7 +24,7 @@ import java.io.File;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Component
-public class MotorcycleDtoFactory extends AbstractDtoFactory<MotorcycleDto> {
+public class MotorcycleDtoFactory extends AbstractProductDtoFactory<MotorcycleDto> {
 
     private final ManufacturerService manufacturerService;
     private final ManufacturerDtoFactory manufacturerDtoFactory;
@@ -42,6 +43,8 @@ public class MotorcycleDtoFactory extends AbstractDtoFactory<MotorcycleDto> {
     protected void applyCharacteristics(MotorcycleDto dto, TableRow tableRow) {
         applyName(dto, tableRow);
         applyManufacturer(dto, tableRow);
+        applyProductionStartYear(dto, tableRow);
+        applyProductionStopYear(dto, tableRow);
         applyWeight(dto, tableRow);
     }
 

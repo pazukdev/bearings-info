@@ -1,4 +1,4 @@
-package com.pazukdev.backend.entity;
+package com.pazukdev.backend.entity.product;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Table(name = "bearing")
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Bearing extends AbstractEntity {
+public class Bearing extends AbstractProduct {
 
     @Column(name = "type")
     private String type;

@@ -1,4 +1,4 @@
-package com.pazukdev.backend.dto.abstraction;
+package com.pazukdev.backend.dto;
 
 import com.pazukdev.backend.characteristic.Characteristic;
 import com.pazukdev.backend.tablemodel.TableModel;

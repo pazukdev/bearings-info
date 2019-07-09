@@ -15,6 +15,7 @@ public enum Characteristic {
     WEIGHT_G,
     WEIGHT_KG,
     FOUNDED,
-    DEFUNCT
+    DEFUNCT,
+    PRODUCTION
 
 }

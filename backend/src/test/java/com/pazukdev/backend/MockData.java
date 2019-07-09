@@ -1,18 +1,18 @@
 package com.pazukdev.backend;
 
 import com.pazukdev.backend.converter.ManufacturerConverter;
-import com.pazukdev.backend.dto.bearing.BearingDto;
-import com.pazukdev.backend.dto.bearing.BearingDtoFactory;
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
-import com.pazukdev.backend.dto.motorcycle.MotorcycleDto;
-import com.pazukdev.backend.dto.motorcycle.MotorcycleDtoFactory;
-import com.pazukdev.backend.dto.seal.SealDto;
-import com.pazukdev.backend.dto.seal.SealDtoFactory;
-import com.pazukdev.backend.entity.Bearing;
+import com.pazukdev.backend.dto.product.bearing.BearingDto;
+import com.pazukdev.backend.dto.product.bearing.BearingDtoFactory;
+import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDto;
+import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDtoFactory;
+import com.pazukdev.backend.dto.product.seal.SealDto;
+import com.pazukdev.backend.dto.product.seal.SealDtoFactory;
 import com.pazukdev.backend.entity.Manufacturer;
-import com.pazukdev.backend.entity.Motorcycle;
-import com.pazukdev.backend.entity.Seal;
+import com.pazukdev.backend.entity.product.Bearing;
+import com.pazukdev.backend.entity.product.Motorcycle;
+import com.pazukdev.backend.entity.product.Seal;
 import com.pazukdev.backend.repository.ManufacturerRepository;
 import com.pazukdev.backend.service.ManufacturerService;
 import lombok.Getter;
@@ -79,6 +79,8 @@ public class MockData {
 
         final Motorcycle motorcycle = new Motorcycle();
         motorcycle.setName("motorcycle name");
+        motorcycle.setProductionStartYear(1917);
+        motorcycle.setProductionStopYear(1993);
         motorcycle.setManufacturer(manufacturer());
         motorcycle.setWeightG(350);
         return motorcycle;
@@ -87,6 +89,8 @@ public class MockData {
     public MotorcycleDto motorcycleDto() {
         final MotorcycleDto motorcycleDto = motorcycleDtoFactory.createDto();
         motorcycleDto.setName("motorcycleDto name");
+        motorcycleDto.setProductionStartYear(1939);
+        motorcycleDto.setProductionStopYear(1946);
         motorcycleDto.setManufacturerId(manufacturerDto().getId());
         motorcycleDto.setWeightG(300);
         return motorcycleDto;

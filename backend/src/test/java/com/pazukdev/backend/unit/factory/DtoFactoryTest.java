@@ -1,19 +1,20 @@
 package com.pazukdev.backend.unit.factory;
 
-import com.pazukdev.backend.dto.abstraction.AbstractDto;
-import com.pazukdev.backend.dto.abstraction.AbstractDtoFactory;
-import com.pazukdev.backend.dto.bearing.BearingDto;
-import com.pazukdev.backend.dto.bearing.BearingDtoFactory;
+import com.pazukdev.backend.dto.AbstractDto;
+import com.pazukdev.backend.dto.AbstractDtoFactory;
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
-import com.pazukdev.backend.dto.motorcycle.MotorcycleDto;
-import com.pazukdev.backend.dto.motorcycle.MotorcycleDtoFactory;
-import com.pazukdev.backend.dto.seal.SealDto;
-import com.pazukdev.backend.dto.seal.SealDtoFactory;
+import com.pazukdev.backend.dto.product.bearing.BearingDto;
+import com.pazukdev.backend.dto.product.bearing.BearingDtoFactory;
+import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDto;
+import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDtoFactory;
+import com.pazukdev.backend.dto.product.seal.SealDto;
+import com.pazukdev.backend.dto.product.seal.SealDtoFactory;
 import com.pazukdev.backend.search.DefaultSearchRequest;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -26,7 +27,7 @@ public class DtoFactoryTest {
 
         assertEquals("imz", dto.getName());
         assertEquals("1941", dto.getFounded());
-        assertEquals("?", dto.getDefunct());
+        assertNull(dto.getDefunct());
     }
 
     @Test
@@ -37,6 +38,8 @@ public class DtoFactoryTest {
         request.setName("imz");
 
         assertEquals("m-72", dto.getName());
+        assertEquals("1941", dto.getProductionStartYear().toString());
+        assertEquals("1957", dto.getProductionStopYear().toString());
         assertEquals("300000", dto.getWeightG().toString());
     }
 
@@ -45,6 +48,8 @@ public class DtoFactoryTest {
         final BearingDto dto = getFirstDtoFromDataFile(new BearingDtoFactory());
 
         assertEquals("209", dto.getName());
+        assertNull(dto.getProductionStartYear());
+        assertNull(dto.getProductionStopYear());
         assertEquals("deepgroove", dto.getType());
         assertEquals("ball", dto.getRollingElement());
         assertEquals("9", dto.getRollingElementsQuantity().toString());
@@ -55,6 +60,8 @@ public class DtoFactoryTest {
         final SealDto dto = getFirstDtoFromDataFile(new SealDtoFactory());
 
         assertEquals("7201191", dto.getName());
+        assertNull(dto.getProductionStartYear());
+        assertNull(dto.getProductionStopYear());
         assertEquals("left", dto.getRotation());
         assertEquals("rubber", dto.getMaterial());
     }

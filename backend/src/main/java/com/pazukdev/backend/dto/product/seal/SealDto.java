@@ -1,6 +1,6 @@
-package com.pazukdev.backend.dto.motorcycle;
+package com.pazukdev.backend.dto.product.seal;
 
-import com.pazukdev.backend.dto.abstraction.AbstractDto;
+import com.pazukdev.backend.dto.product.AbstractProductDto;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,14 +11,14 @@ import lombok.ToString;
  * @author Siarhei Sviarkaltsau
  */
 @Data
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class MotorcycleDto extends AbstractDto {
+public class SealDto extends AbstractProductDto {
 
     private final static long serialVersionUID = 12343L;
 
-    private Integer weightG;
-    private Long manufacturerId;
+    private String rotation;
+    private String material;
 
 }

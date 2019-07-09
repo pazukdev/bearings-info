@@ -1,24 +1,22 @@
-package com.pazukdev.backend.dto.manufacturer;
+package com.pazukdev.backend.dto.product;
 
 import com.pazukdev.backend.dto.AbstractDto;
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
 @Data
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ManufacturerDto extends AbstractDto {
+public class AbstractProductDto extends AbstractDto {
 
     private final static long serialVersionUID = 12343L;
 
-    private String founded;
-    private String defunct;
+    private Long manufacturerId;
+    private Integer productionStartYear;
+    private Integer productionStopYear;
 
 }

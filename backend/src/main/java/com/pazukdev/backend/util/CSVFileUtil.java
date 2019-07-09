@@ -1,8 +1,8 @@
 package com.pazukdev.backend.util;
 
 import com.opencsv.CSVReader;
-import com.pazukdev.backend.dto.abstraction.AbstractDto;
-import com.pazukdev.backend.dto.abstraction.AbstractDtoFactory;
+import com.pazukdev.backend.dto.AbstractDto;
+import com.pazukdev.backend.dto.AbstractDtoFactory;
 import com.pazukdev.backend.search.DefaultSearchRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

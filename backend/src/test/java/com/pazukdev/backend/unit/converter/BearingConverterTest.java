@@ -2,8 +2,8 @@ package com.pazukdev.backend.unit.converter;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.BearingConverter;
-import com.pazukdev.backend.dto.bearing.BearingDto;
-import com.pazukdev.backend.entity.Bearing;
+import com.pazukdev.backend.dto.product.bearing.BearingDto;
+import com.pazukdev.backend.entity.product.Bearing;
 import org.junit.Test;
 
 import java.util.ArrayList;

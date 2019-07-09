@@ -1,6 +1,6 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dto.bearing.BearingDto;
+import com.pazukdev.backend.dto.product.bearing.BearingDto;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.BearingService;
 import io.swagger.annotations.Api;

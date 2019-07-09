@@ -1,6 +1,6 @@
-package com.pazukdev.backend.dto.bearing;
+package com.pazukdev.backend.dto.product.bearing;
 
-import com.pazukdev.backend.dto.abstraction.AbstractDto;
+import com.pazukdev.backend.dto.product.AbstractProductDto;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class BearingDto extends AbstractDto {
+public class BearingDto extends AbstractProductDto {
 
     private final static long serialVersionUID = 12343L;
 

@@ -2,9 +2,8 @@ package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.MotorcycleConverter;
-import com.pazukdev.backend.dto.motorcycle.MotorcycleDto;
-import com.pazukdev.backend.dto.motorcycle.MotorcycleDtoFactory;
-import com.pazukdev.backend.entity.Motorcycle;
+import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDto;
+import com.pazukdev.backend.entity.product.Motorcycle;
 import com.pazukdev.backend.repository.MotorcycleRepository;
 import com.pazukdev.backend.service.MotorcycleService;
 import org.junit.Test;
@@ -19,9 +18,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -63,6 +60,8 @@ public class MotorcycleServiceTest {
         assertEquals(findAllResult.size(), dtos.size());
         for (final MotorcycleDto dto : dtos) {
             assertEquals(motorcycle.getName(), dto.getName());
+            assertEquals(motorcycle.getProductionStartYear(), dto.getProductionStartYear());
+            assertEquals(motorcycle.getProductionStopYear(), dto.getProductionStopYear());
             assertEquals(motorcycle.getManufacturer().getId(), dto.getManufacturerId());
             assertEquals(motorcycle.getWeightG(), dto.getWeightG());
         }

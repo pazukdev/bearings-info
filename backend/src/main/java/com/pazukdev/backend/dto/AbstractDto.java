@@ -1,4 +1,4 @@
-package com.pazukdev.backend.dto.abstraction;
+package com.pazukdev.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

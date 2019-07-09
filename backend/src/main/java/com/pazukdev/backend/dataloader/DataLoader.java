@@ -1,11 +1,11 @@
 package com.pazukdev.backend.dataloader;
 
-import com.pazukdev.backend.dto.abstraction.AbstractDto;
-import com.pazukdev.backend.dto.abstraction.AbstractDtoFactory;
-import com.pazukdev.backend.dto.bearing.BearingDtoFactory;
+import com.pazukdev.backend.dto.AbstractDto;
+import com.pazukdev.backend.dto.AbstractDtoFactory;
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
-import com.pazukdev.backend.dto.motorcycle.MotorcycleDtoFactory;
-import com.pazukdev.backend.dto.seal.SealDtoFactory;
+import com.pazukdev.backend.dto.product.bearing.BearingDtoFactory;
+import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDtoFactory;
+import com.pazukdev.backend.dto.product.seal.SealDtoFactory;
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.service.AbstractService;
 import com.pazukdev.backend.service.BearingService;

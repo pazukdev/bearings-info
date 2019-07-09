@@ -2,9 +2,9 @@ package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.SealConverter;
-import com.pazukdev.backend.dto.seal.SealDto;
-import com.pazukdev.backend.dto.seal.SealDtoFactory;
-import com.pazukdev.backend.entity.Seal;
+import com.pazukdev.backend.dto.product.seal.SealDto;
+import com.pazukdev.backend.dto.product.seal.SealDtoFactory;
+import com.pazukdev.backend.entity.product.Seal;
 import com.pazukdev.backend.repository.SealRepository;
 import com.pazukdev.backend.service.SealService;
 import org.junit.Test;
@@ -19,9 +19,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Siarhei Sviarkaltsau

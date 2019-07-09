@@ -1,6 +1,6 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dto.motorcycle.MotorcycleDto;
+import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDto;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.MotorcycleService;
 import io.swagger.annotations.Api;
