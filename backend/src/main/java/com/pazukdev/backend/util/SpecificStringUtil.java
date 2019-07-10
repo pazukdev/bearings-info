@@ -29,7 +29,7 @@ public class SpecificStringUtil {
     @Getter
     enum Separator {
 
-        DASH("-"), OPEN_PAREN("\\("), CLOSE_PAREN(")"), NOT_SPECIFIED("");
+        DASH("-"), OPEN_PAREN("\\("), CLOSE_PAREN(")"), SEMICOLON(";"), NOT_SPECIFIED("");
 
         private final String separator;
 
@@ -40,6 +40,10 @@ public class SpecificStringUtil {
     }
 
     private static final List<String> nullKeys = Arrays.asList("?", "-", "null");
+
+    public static List<String> getList(String source) {
+        return Arrays.asList(removeSpaces(source).split(Separator.SEMICOLON.getSeparator()));
+    }
 
     public static String removeSpaces(final String source) {
         if (isEmpty(source)) {

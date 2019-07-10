@@ -5,6 +5,7 @@ import com.pazukdev.backend.entity.AbstractEntity;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -17,6 +18,10 @@ public interface EntityDtoConverter<Entity extends AbstractEntity, Dto extends A
 
     default List<Dto> convertToDtoList(final List<Entity> entities) {
         return entities.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    default Set<Dto> convertToDtoSet(final Set<Entity> entities) {
+        return entities.stream().map(this::convertToDto).collect(Collectors.toSet());
     }
 
 }

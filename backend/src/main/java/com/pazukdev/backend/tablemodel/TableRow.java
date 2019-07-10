@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
@@ -25,6 +26,10 @@ public class TableRow {
 
     public void put(final String key, final String value) {
         data.put(key, value);
+    }
+
+    public List<String> getStringValues(final Characteristic characteristic) {
+        return getList(getStringValue(characteristic));
     }
 
     public String getStringValue(final Characteristic characteristic) {

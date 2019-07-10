@@ -1,33 +1,38 @@
 package com.pazukdev.backend.dto.product.motorcycle;
 
 import com.pazukdev.backend.characteristic.Characteristic;
-import com.pazukdev.backend.dto.AbstractDto;
-import com.pazukdev.backend.dto.AbstractDtoFactory;
-import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
+import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
 import com.pazukdev.backend.dto.product.AbstractProductDtoFactory;
-import com.pazukdev.backend.search.DefaultSearchRequest;
-import com.pazukdev.backend.service.AbstractService;
-import com.pazukdev.backend.service.ManufacturerService;
+import com.pazukdev.backend.dto.product.bearing.BearingDto;
+import com.pazukdev.backend.dto.product.bearing.BearingDtoFactory;
+import com.pazukdev.backend.service.BearingService;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import com.pazukdev.backend.util.WeightUtil;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
 @EqualsAndHashCode(callSuper = true)
-@Data
 @Component
 public class MotorcycleDtoFactory extends AbstractProductDtoFactory<MotorcycleDto> {
 
-    private final ManufacturerService manufacturerService;
-    private final ManufacturerDtoFactory manufacturerDtoFactory;
+    private final BearingDtoFactory bearingDtoFactory;
+
+    public MotorcycleDtoFactory(ServiceContext context,
+                                ManufacturerDtoFactory manufacturerDtoFactory,
+                                BearingDtoFactory bearingDtoFactory) {
+        super(context, manufacturerDtoFactory);
+        this.bearingDtoFactory = bearingDtoFactory;
+    }
 
     @Override
     protected File getCSVFile() {
@@ -46,13 +51,7 @@ public class MotorcycleDtoFactory extends AbstractProductDtoFactory<MotorcycleDt
         applyProductionStartYear(dto, tableRow);
         applyProductionStopYear(dto, tableRow);
         applyWeight(dto, tableRow);
-    }
-
-    private void applyManufacturer(final MotorcycleDto dto, final TableRow tableRow) {
-        final String manufacturerName = tableRow.getStringValue(Characteristic.MANUFACTURER);
-        final ManufacturerDto manufacturerDto = getDto(manufacturerName, manufacturerService, manufacturerDtoFactory);
-
-        dto.setManufacturerId(manufacturerDto.getId());
+        applyBearings(dto, tableRow);
     }
 
     private void applyWeight(final MotorcycleDto dto, final TableRow tableRow) {
@@ -60,20 +59,22 @@ public class MotorcycleDtoFactory extends AbstractProductDtoFactory<MotorcycleDt
         dto.setWeightG(WeightUtil.toG(weight_kg));
     }
 
-    @SuppressWarnings("unchecked")
-    private <Dto extends AbstractDto> Dto getDto(final String name,
-                                                 final AbstractService service,
-                                                 final AbstractDtoFactory<Dto> dtoFactory) {
-        final DefaultSearchRequest request = new DefaultSearchRequest();
-        request.setName(name);
-
-        final Dto dto;
-        if (service != null) {
-            dto = (Dto) service.search(request);
-        } else {
-            dto = CSVFileUtil.searchByName(request, dtoFactory);
+    protected void applyBearings(final MotorcycleDto dto, final TableRow tableRow) {
+        final List<String> bearingNames = tableRow.getStringValues(Characteristic.BEARING);
+        final Set<BearingDto> bearingDtos = new HashSet<>();
+        final BearingService bearingService = context != null ? context.getBearingService() : null;
+        for (final String bearingName : bearingNames) {
+            bearingDtos.add(getDto(bearingName, bearingService, bearingDtoFactory));
         }
-        return dto;
+        dto.setBearingDtos(bearingDtos);
     }
 
 }
+
+
+
+
+
+
+
+

@@ -1,6 +1,8 @@
 package com.pazukdev.backend.dto.product.seal;
 
 import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.config.ServiceContext;
+import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
 import com.pazukdev.backend.dto.product.AbstractProductDtoFactory;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
@@ -13,6 +15,10 @@ import java.io.File;
  */
 @Component
 public class SealDtoFactory extends AbstractProductDtoFactory<SealDto> {
+
+    public SealDtoFactory(ServiceContext context, ManufacturerDtoFactory manufacturerDtoFactory) {
+        super(context, manufacturerDtoFactory);
+    }
 
     @Override
     protected File getCSVFile() {

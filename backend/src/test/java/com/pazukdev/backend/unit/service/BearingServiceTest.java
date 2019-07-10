@@ -3,7 +3,6 @@ package com.pazukdev.backend.unit.service;
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.BearingConverter;
 import com.pazukdev.backend.dto.product.bearing.BearingDto;
-import com.pazukdev.backend.dto.product.bearing.BearingDtoFactory;
 import com.pazukdev.backend.entity.product.Bearing;
 import com.pazukdev.backend.repository.BearingRepository;
 import com.pazukdev.backend.service.BearingService;
@@ -27,8 +26,7 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class BearingServiceTest {
 
-    private final MockData mockData = new MockData();
-    private final BearingDtoFactory dtoFactory = new BearingDtoFactory();
+    private MockData mockData = new MockData();
     @InjectMocks
     private BearingService service;
     @Mock
@@ -41,7 +39,7 @@ public class BearingServiceTest {
         final Bearing bearing = mockData.bearing();
 
         doReturn(bearing).when(repository).save(any(Bearing.class));
-        service.create(dtoFactory.createDto());
+        service.create(mockData.bearingDto());
 
         verify(repository, times(1)).save(any(Bearing.class));
     }

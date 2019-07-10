@@ -3,7 +3,6 @@ package com.pazukdev.backend.unit.service;
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.SealConverter;
 import com.pazukdev.backend.dto.product.seal.SealDto;
-import com.pazukdev.backend.dto.product.seal.SealDtoFactory;
 import com.pazukdev.backend.entity.product.Seal;
 import com.pazukdev.backend.repository.SealRepository;
 import com.pazukdev.backend.service.SealService;
@@ -27,8 +26,8 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class SealServiceTest {
 
-    private final MockData mockData = new MockData();
-    private final SealDtoFactory dtoFactory = new SealDtoFactory();
+    private MockData mockData = new MockData();
+
     @InjectMocks
     private SealService service;
     @Mock
@@ -41,7 +40,7 @@ public class SealServiceTest {
         final Seal seal = mockData.seal();
 
         doReturn(seal).when(repository).save(any(Seal.class));
-        service.create(dtoFactory.createDto());
+        service.create(mockData.sealDto());
 
         verify(repository, times(1)).save(any(Seal.class));
 

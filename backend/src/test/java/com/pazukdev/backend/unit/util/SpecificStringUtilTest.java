@@ -58,6 +58,9 @@ public class SpecificStringUtilTest {
         assertNull(getStringBeforeParentheses(testString));
         assertNull(getStringBetweenParentheses(testString));
         assertNull(getIntegerBetweenParentheses(testString));
+
+        testString = "207; 205; 204";
+        assertEquals("[207, 205, 204]", getList(testString).toString());
     }
 
 }

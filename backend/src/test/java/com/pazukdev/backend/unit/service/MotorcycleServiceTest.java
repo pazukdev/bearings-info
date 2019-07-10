@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,19 +28,20 @@ import static org.mockito.Mockito.*;
 public class MotorcycleServiceTest {
 
     private final MockData mockData = new MockData();
+
     @InjectMocks
     private MotorcycleService service;
     @Mock
     private MotorcycleRepository repository;
     @Spy
-    private MotorcycleConverter converter;
+    private MotorcycleConverter converter = new MotorcycleConverter(new ModelMapper());
 
     @Test
     public void createMotorcycle() {
         final Motorcycle motorcycle = mockData.motorcycle();
 
         doReturn(motorcycle).when(repository).save(any(Motorcycle.class));
-        service.create(mockData.getMotorcycleDtoFactory().createDto());
+        service.create(mockData.motorcycleDto());
 
         verify(repository, times(1)).save(any(Motorcycle.class));
 

@@ -1,6 +1,8 @@
 package com.pazukdev.backend.dto.product.bearing;
 
 import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.config.ServiceContext;
+import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
 import com.pazukdev.backend.dto.product.AbstractProductDtoFactory;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
@@ -13,6 +15,10 @@ import java.io.File;
  */
 @Component
 public class BearingDtoFactory extends AbstractProductDtoFactory<BearingDto> {
+
+    public BearingDtoFactory(ServiceContext context, ManufacturerDtoFactory manufacturerDtoFactory) {
+        super(context, manufacturerDtoFactory);
+    }
 
     @Override
     protected File getCSVFile() {
@@ -27,8 +33,6 @@ public class BearingDtoFactory extends AbstractProductDtoFactory<BearingDto> {
     @Override
     protected void applyCharacteristics(BearingDto dto, TableRow tableRow) {
         applyName(dto, tableRow);
-        applyProductionStartYear(dto, tableRow);
-        applyProductionStopYear(dto, tableRow);
         applyType(dto, tableRow);
         applyRollingElement(dto, tableRow);
         applyRollingElementsQuantity(dto, tableRow);
