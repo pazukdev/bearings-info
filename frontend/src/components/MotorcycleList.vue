@@ -1,36 +1,7 @@
 <template>
     <div>
         <p id="title">&nbsp;&nbsp;&nbsp;&nbsp;<b>Motorcycles</b></p>
-
-        <div>
-            <div>
-                &nbsp;&nbsp;&nbsp;&nbsp;Name:
-                <input v-model="motorcycleName" type="text" placeholder="name"/>
-                <br/>
-                <br/>
-                &nbsp;&nbsp;&nbsp;&nbsp;Manufacturer:
-                <select v-model ="motorcycleManufacturerId">
-<!--                    <option v-for="o in obj" v-bind:value="o">{{o.text}}</option>-->
-                    <option v-for="manufacturer in manufacturers" v-bind:value="manufacturer.id">
-                        {{manufacturer.name}}
-                    </option>
-                </select>
-                <br/>
-                <br/>
-                &nbsp;&nbsp;&nbsp;&nbsp;Weight:
-                <input v-model="motorcycleWeightG" type="text" placeholder="weight, g"/>
-                <br/>
-                <br/>ght
-                &nbsp;&nbsp;&nbsp;&nbsp;<button type="button" v-on:click="submit">Create motorcycle</button>
-                <br/>
-                <br/>
-                &nbsp;&nbsp;&nbsp;&nbsp;<button type="button" v-on:click="remove">Remove motorcycle</button>
-                <br/>
-            </div>
-        </div>
-
         <br/>
-
         <table id="productsTable" class="table table-striped table-hover">
             <thead>
             <tr>
@@ -64,6 +35,9 @@
     import axios from 'axios';
 
     export default {
+
+        name: 'MotorcycleList.vue',
+
         data() {
             return {
                 motorcycles: [],

@@ -20,6 +20,9 @@
                 </td>
                 <td>{{getManufacturerName(motorcycle.manufacturerId)}}</td>
             </tr>
+            <tr><td></td>
+                <td></td>
+                <td><button style="width: 100%" @click="$emit('add-motorcycle', 1)">Add</button></td></tr>
             </tbody>
         </table>
         <br/>
@@ -32,6 +35,7 @@
     import axios from 'axios';
 
     export default {
+
         name: "MotorcycleMenu.vue",
 
         data() {

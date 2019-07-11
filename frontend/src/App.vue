@@ -1,9 +1,22 @@
 <template id="app">
     <div id="background">
         <div id = "screen">
+            <table id="productsTable" class="table">
+                <tbody>
+                <tr>
+                    <td style="width: 80px">
+                        <button id="back" style="width: 100%" v-show="modelIsSelected() || add" @click="unselectModel">
+                            Back
+                        </button>
+                    </td>
+                    <td><div id="appName" style="text-align: center"><b>Bearings info</b></div></td>
+                    <td style="width: 80px"></td>
+                </tr>
+                </tbody>
+            </table>
             <br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;<button id="back" v-show="modelIsSelected()" @click="unselectModel">Back</button>
-                <div id="appName"><b>Bearings info</b></div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+
             <br/>
             <div id="navigationButtons" v-show="false">
                 <button class="navigationButton" id="motorcyclesButton" @click="swapComponent(componentsArray[0])">
@@ -17,8 +30,9 @@
                 </button>
             </div>
 
-            <MotorcycleMenu v-show="!modelIsSelected()" @select-motorcycle="selectMotorcycle"/>
+            <MotorcycleMenu v-show="!modelIsSelected() && add === false" @select-motorcycle="selectMotorcycle" @add-motorcycle="addMotorcycle"/>
             <ModelPartsList v-show="motorcycleId !== 0" :motorcycleId="motorcycleId"/>
+            <AddMotorcycle v-show="add"/>
 
         </div>
     </div>
@@ -30,14 +44,15 @@
     import BearingList from "./components/BearingList";
     import SealList from "./components/SealList";
     import ModelPartsList from "./components/ModelPartsList"
+    import AddMotorcycle from "./components/AddMotorcycle"
 
     export default {
         name: 'app',
 
         data() {
             return {
-                //currentComponent: MotorcycleMenu,
-                componentsArray: ['MotorcycleList', 'BearingList', 'SealList', 'ModelPartsList'],
+                add: false,
+                componentsArray: ['MotorcycleList', 'BearingList', 'SealList', 'ModelPartsList, AddMotorcycle'],
                 motorcycleId: 0
             }
         },
@@ -47,12 +62,17 @@
             MotorcycleList,
             BearingList,
             SealList,
-            ModelPartsList
+            ModelPartsList,
+            AddMotorcycle
         },
 
         methods: {
             selectMotorcycle(motorcycleId) {
                 this.motorcycleId = motorcycleId;
+            },
+
+            addMotorcycle(val) {
+                this.add = true;
             },
 
             swapComponent: function(component) {
@@ -66,7 +86,13 @@
 
             unselectModel() {
                 this.motorcycleId = 0;
-            }
+                this.add = false;
+                this.reload();
+            },
+
+            reload() {
+                window.location.reload();
+            },
         }
     }
 
@@ -104,5 +130,19 @@
 
     .navigationButton {
         width: 100%;
+    }
+
+    table {
+        text-align: center;
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    th {
+        font-weight: normal;
+    }
+
+    .centredText {
+        text-align: center;
     }
 </style>
