@@ -3,6 +3,7 @@ package com.pazukdev.backend.converter;
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.product.bearing.BearingDto;
 import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDto;
+import com.pazukdev.backend.entity.product.Bearing;
 import com.pazukdev.backend.entity.product.Motorcycle;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -34,7 +35,11 @@ public class MotorcycleConverter implements EntityDtoConverter<Motorcycle, Motor
 
     @Override
     public Motorcycle convertToEntity(final MotorcycleDto dto) {
-        return modelMapper.map(dto, Motorcycle.class);
+        final Motorcycle entity = modelMapper.map(dto, Motorcycle.class);
+        final Type targetSetType = new TypeToken<Set<Bearing>>() {}.getType();
+        final Set<Bearing> bearings = modelMapper.map(dto.getBearingDtos(), targetSetType);
+        entity.setBearings(bearings);
+        return entity;
     }
 
 }

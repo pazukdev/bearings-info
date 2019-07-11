@@ -19,6 +19,7 @@ public class ConverterTestUtil {
     public static void validateBearingSetConversion(final Set<Bearing> entities, final Set<BearingDto> dtos) {
         assertNotNull(entities);
         assertNotNull(dtos);
+        assertTrue(entities.size() > 0);
         assertTrue(entities.size() == dtos.size());
 
         for (final Bearing entity : entities) {
@@ -33,9 +34,12 @@ public class ConverterTestUtil {
         assertEquals(entity.getType(), dto.getType());
         assertEquals(entity.getRollingElement(), dto.getRollingElement());
         assertEquals(entity.getRollingElementsQuantity(), dto.getRollingElementsQuantity());
+        assertNotNull(dto.getMotorcycles());
+        assertNotNull(entity.getMotorcycles());
+        assertTrue(entity.getMotorcycles().size() == dto.getMotorcycles().size());
     }
 
-    private static void validateAbstractProductConversion(final AbstractProduct entity, final AbstractProductDto dto) {
+    public static void validateAbstractProductConversion(final AbstractProduct entity, final AbstractProductDto dto) {
         validateAbstractEntityConversion(entity, dto);
         assertEquals(entity.getProductionStartYear(), dto.getProductionStartYear());
         assertEquals(entity.getProductionStopYear(), dto.getProductionStopYear());
@@ -46,7 +50,7 @@ public class ConverterTestUtil {
         }
     }
 
-    private static void validateAbstractEntityConversion(final AbstractEntity entity, final AbstractDto dto) {
+    public static void validateAbstractEntityConversion(final AbstractEntity entity, final AbstractDto dto) {
         assertEquals(entity.getId(), dto.getId());
         assertEquals(entity.getName(), dto.getName());
     }

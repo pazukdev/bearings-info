@@ -70,4 +70,18 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="create_motorcycle_bearing_table" author="sviarkaltsau">
+        <createTable tableName="motorcycle_bearing">
+            <column name="motorcycle_id" type="bigint">
+                <constraints foreignKeyName="motorcycle_id" references="motorcycle (id)"/>
+            </column>
+            <column name="bearing_id" type="bigint">
+                <constraints foreignKeyName="bearing_id" references="bearing (id)"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="motorcycle_bearing"/>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

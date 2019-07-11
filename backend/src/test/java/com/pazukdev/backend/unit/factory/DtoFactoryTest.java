@@ -18,8 +18,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import java.util.Set;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -59,6 +60,10 @@ public class DtoFactoryTest {
         assertEquals("1941", dto.getProductionStartYear().toString());
         assertEquals("1957", dto.getProductionStopYear().toString());
         assertEquals("300000", dto.getWeightG().toString());
+
+        final Set<BearingDto> bearingDtos = dto.getBearingDtos();
+        assertNotNull(bearingDtos);
+        assertTrue(bearingDtos.size() == 3);
     }
 
     @Test
@@ -71,6 +76,9 @@ public class DtoFactoryTest {
         assertEquals("deepgroove", dto.getType());
         assertEquals("ball", dto.getRollingElement());
         assertEquals("9", dto.getRollingElementsQuantity().toString());
+
+        assertNotNull(dto.getMotorcycles());
+        assertTrue(dto.getMotorcycles().size() == 0);
     }
 
     @Test

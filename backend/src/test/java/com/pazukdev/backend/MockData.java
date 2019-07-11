@@ -10,6 +10,7 @@ import com.pazukdev.backend.entity.product.Motorcycle;
 import com.pazukdev.backend.entity.product.Seal;
 import lombok.Getter;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,6 +47,7 @@ public class MockData {
         bearing.setType("bearing type");
         bearing.setRollingElement("bearing rolling element");
         bearing.setRollingElementsQuantity(1);
+        bearing.setMotorcycles(new HashSet<>(Arrays.asList(new Motorcycle(), new Motorcycle())));
         return bearing;
     }
 
@@ -68,6 +70,7 @@ public class MockData {
         bearingDto.setType("bearingDto type");
         bearingDto.setRollingElement("bearingDto rolling element");
         bearingDto.setRollingElementsQuantity(2);
+        bearingDto.getMotorcycles().add(new MotorcycleDto());
         return bearingDto;
     }
 
@@ -80,7 +83,6 @@ public class MockData {
     }
 
     public Motorcycle motorcycle() {
-
         final Motorcycle motorcycle = new Motorcycle();
         motorcycle.setName("motorcycle name");
         motorcycle.setProductionStartYear(1917);

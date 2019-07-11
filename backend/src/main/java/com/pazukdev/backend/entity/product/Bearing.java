@@ -6,16 +6,18 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.Set;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
 @Data
-@Entity
-@Table(name = "bearing")
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@Entity
+@Table(name = "bearing")
 public class Bearing extends AbstractProduct {
 
     @Column(name = "type")
@@ -24,5 +26,9 @@ public class Bearing extends AbstractProduct {
     private String rollingElement;
     @Column(name = "rolling_elements_quantity")
     private Integer rollingElementsQuantity;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "bearings")
+    private Set<Motorcycle> motorcycles;
 
 }

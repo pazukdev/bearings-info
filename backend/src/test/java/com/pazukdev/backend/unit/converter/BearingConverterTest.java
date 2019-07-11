@@ -30,6 +30,7 @@ public class BearingConverterTest {
         final Bearing entity = converter.convertToEntity(dto);
 
         validateBearingConversion(entity, dto);
+
     }
 
     @Test
