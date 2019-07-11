@@ -1,7 +1,6 @@
 <template>
     <div>
         <p><b id="title">Bearings</b></p>
-        <div>{{motorcycleId}}</div>
         <table id="productsTable" class="table">
             <thead>
             <tr>
@@ -12,7 +11,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(bearing, index) in bearings" :key="index">
+            <tr v-for="(bearing, index) in motorcycle.bearingDtos" :key="index">
                 <td>{{bearing.name}}</td>
                 <td>{{bearing.type}}</td>
                 <td>{{bearing.rollingElement}}</td>
@@ -33,29 +32,22 @@
 
         data() {
             return {
-                bearings: [],
-                name: "",
-                type: "",
-                rollingElement: "",
-                rollingElementsQuantity: "",
-                types: ["deepgroove", "cylindrical roller", "tapered roller"],
-                rollingElements: ["ball", "roller", "tapered roller"]
+                motorcycle: ""
             }
         },
 
-        created() {
-            axios
-                .all([
-                    this.getAllBearings()
-                ])
-                .then(axios.spread((bearingsResponse) => {
-                    this.bearings = bearingsResponse.data;
-                }));
+        watch: {
+            motorcycleId(newVal) {
+                this.motorcycle = this.getMotorcycle(newVal)
+            }
         },
 
         methods: {
-            getAllBearings() {
-                return axios.get(`/backend/bearing/list`)
+            getMotorcycle(id) {
+                axios
+                    .get('backend/motorcycle/' + id)
+                    .then(response => this.motorcycle = response.data);
+
             }
         }
     }
