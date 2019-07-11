@@ -1,7 +1,6 @@
 <template>
     <div>
-        <p><b id="title">Seals</b></p>
-        <div>{{motorcycleId}}</div>
+        <p id="title" class="centredText"><b>Seals</b></p>
         <table class="table">
             <thead>
             <tr>
@@ -63,5 +62,19 @@
 
 </script>
 <style scoped>
+
+    table {
+        text-align: center;
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    th {
+        font-weight: normal;
+    }
+
+    .centredText {
+        text-align: center;
+    }
 
 </style>

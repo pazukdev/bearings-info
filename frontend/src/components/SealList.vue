@@ -1,7 +1,7 @@
 <template>
     <div>
         <br/>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;<b id="title">Seals</b></p>
+        <p id="title" class="centredText"><b>Seals</b></p>
 
         &nbsp;
         <input v-model="name" type="text" placeholder="name"/>
@@ -79,5 +79,19 @@
     }
 </script>
 <style scoped>
+
+    table {
+        text-align: center;
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    th {
+        font-weight: normal;
+    }
+
+    .centredText {
+        text-align: center;
+    }
 
 </style>
