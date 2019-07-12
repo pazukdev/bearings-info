@@ -13,3 +13,6 @@ DB: mysql -udemo -pdemo
 
 API documentation: 
 http://localhost:8090/bearings-info/api/swagger-ui.html 
+
+Project protection:
+https://docs.google.com/document/d/16tis1_LvQdWmRWXWd_qR710tbKsTSLjuKyg3dECgEzY/edit?usp=sharing
