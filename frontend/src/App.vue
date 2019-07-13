@@ -9,7 +9,7 @@
                             <button
                                     v-show="modelIsSelected() || add" @click="unselectModel"
                                     id="back"
-                                    style="width: 100%; height: 100%; background: none; font-size: larger">
+                                    style="width: 100%; height: 100%; background: none; font-size: larger; color: #252525">
                                     <b>Back</b>
                             </button>
                         </td>

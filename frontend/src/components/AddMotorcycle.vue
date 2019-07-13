@@ -10,7 +10,7 @@
                         Name:
                     </td>
                     <td class="right">
-                        <input class="content" v-model="motorcycleName" type="text" placeholder="name"/>
+                        <input class="content" v-model="motorcycleName" type="text"/>
                     </td>
                 </tr>
                 <tr>
@@ -27,19 +27,63 @@
                 </tr>
                 <tr>
                     <td>
-                        Weight:
+                        Production started, year:
                     </td>
                     <td class="right">
-                        <input class="content" v-model="motorcycleWeightG" type="text" placeholder="weight, g"/>
+                        <input class="content" v-model="motorcycleProductionStartYear" type="text"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Production stopped, year:
+                    </td>
+                    <td class="right">
+                        <input class="content" v-model="motorcycleProductionStopYear" type="text"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Weight, g:
+                    </td>
+                    <td class="right">
+                        <input class="content" v-model="motorcycleWeightG" type="text"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Bearings:
+                    </td>
+                    <td>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>
+                                    <label class="form-checkbox">
+                                        <input type="checkbox" v-model="selectAll" @click="select">
+                                    </label>
+                                </th>
+                                <th>all</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(bearing, index) in bearings" :key="index">
+                                <td>
+                                    <label class="form-checkbox">
+                                        <input type="checkbox" :value="bearing.id" v-model="selected">
+                                    </label>
+                                </td>
+                                <td>{{bearing.name}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td class="right">
-                        <button class="content" type="button" v-on:click="submit">Create motorcycle</button>
+                        <button class="content" type="button" v-on:click="submit">Create</button>
                     </td>
                 </tr>
-                <tr style="height: 400px"></tr>
                 </tbody>
             </table>
         </div>
@@ -58,19 +102,36 @@
                 motorcycleName: "",
                 motorcycleManufacturerId: "",
                 motorcycleWeightG: "",
-                manufacturers: []
+                motorcycleProductionStartYear: "",
+                motorcycleProductionStopYear: "",
+                manufacturers: [],
+                bearings: [],
+                selected: [],
+                selectAll: false
             }
         },
 
         created() {
             axios
                 .get(`/backend/manufacturer/list`)
-                .then(response => this.manufacturers = response.data)
+                .then(response => this.manufacturers = response.data);
+            axios
+                .get(`/backend/bearing/list`)
+                .then(response => this.bearings = response.data)
         },
 
         methods: {
             submit() {
                 this.createMotorcycle();
+            },
+
+            select() {
+                this.selected = [];
+                if (!this.selectAll) {
+                    for (let i in this.bearings) {
+                        this.selected.push(this.bearings[i].id);
+                    }
+                }
             },
 
             getManufacturerName(manufacturerId)  {
@@ -84,9 +145,9 @@
                     name: this.motorcycleName,
                     manufacturerId: this.motorcycleManufacturerId,
                     weightG: this.motorcycleWeightG,
-                    bearingDtos: [],
-                    productionStartYear: 1917,
-                    productionStopYear: 1993
+                    productionStartYear: this.motorcycleProductionStartYear,
+                    productionStopYear: this.motorcycleProductionStopYear,
+                    bearingDtos: this.bearings,
                 };
 
                 return axios.post(`/backend/motorcycle/create`, newMotorcycle);
@@ -110,7 +171,7 @@
     }
 
     .right {
-        width: 600px;
+        width: 40%;
     }
 
 </style>
