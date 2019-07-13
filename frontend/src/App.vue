@@ -1,39 +1,43 @@
 <template id="app">
     <div id="background">
-        <div id = "screen">
-            <table id="productsTable" class="table">
-                <tbody>
-                <tr>
-                    <td style="width: 80px">
-                        <button id="back" style="width: 100%" v-show="modelIsSelected() || add" @click="unselectModel">
-                            Back
-                        </button>
-                    </td>
-                    <td><div id="appName" style="text-align: center"><b>Bearings info</b></div></td>
-                    <td style="width: 80px"></td>
-                </tr>
-                </tbody>
-            </table>
-            <br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-
-            <br/>
-            <div id="navigationButtons" v-show="false">
-                <button class="navigationButton" id="motorcyclesButton" @click="swapComponent(componentsArray[0])">
-                    Motorcycles
-                </button>
-                <button class="navigationButton" id="bearingsButton" @click="swapComponent(componentsArray[1])">
-                    Bearings
-                </button>
-                <button class="navigationButton" id="sealsButton" @click="swapComponent(componentsArray[2])">
-                    Seals
-                </button>
+        <div id="screen" style>
+            <div id="app_bar" style="background-color: #617D89; height: 70px; padding: 10px">
+                <table style="text-align: center; width: 100%; height: 100%">
+                    <tbody>
+                    <tr>
+                        <td style="width: 80px">
+                            <button
+                                    v-show="modelIsSelected() || add" @click="unselectModel"
+                                    id="back"
+                                    style="width: 100%; height: 100%; background: none; font-size: larger">
+                                    <b>Back</b>
+                            </button>
+                        </td>
+                        <td id="appName" style="text-align: center; font-size: x-large">
+                            <b>Bearings info</b>
+                        </td>
+                        <td style="width: 80px"></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
+            <div id="app_area" style="padding: 10px">
+                <div id="navigationButtons" v-show="false">
+                    <button class="navigationButton" id="motorcyclesButton" @click="swapComponent(componentsArray[0])">
+                        Motorcycles
+                    </button>
+                    <button class="navigationButton" id="bearingsButton" @click="swapComponent(componentsArray[1])">
+                        Bearings
+                    </button>
+                    <button class="navigationButton" id="sealsButton" @click="swapComponent(componentsArray[2])">
+                        Seals
+                    </button>
+                </div>
 
-            <MotorcycleMenu v-show="!modelIsSelected() && add === false" @select-motorcycle="selectMotorcycle" @add-motorcycle="addMotorcycle"/>
-            <ModelPartsList v-show="motorcycleId !== 0" :motorcycleId="motorcycleId"/>
-            <AddMotorcycle v-show="add"/>
-
+                <MotorcycleMenu v-show="!modelIsSelected() && add === false" @select-motorcycle="selectMotorcycle" @add-motorcycle="addMotorcycle"/>
+                <ModelPartsList v-show="motorcycleId !== 0" :motorcycleId="motorcycleId"/>
+                <AddMotorcycle v-show="add"/>
+            </div>
         </div>
     </div>
 </template>
@@ -117,7 +121,14 @@
     #screen {
         background-color: aliceblue;
         margin: auto;
-        width: 35%;
+        width: 480px;
+        height: 700px;
+        overflow-y: auto;
+        border-radius: 10px;
+    }
+
+    #screen::-webkit-scrollbar {
+        display: none;
     }
 
     #appName {
@@ -132,6 +143,12 @@
         width: 100%;
     }
 
+    button {
+        border-radius: 4px;
+        border: none;
+        background: #929292;
+    }
+
     table {
         text-align: center;
         margin-left:auto;
@@ -142,7 +159,13 @@
         font-weight: normal;
     }
 
-    .centredText {
-        text-align: center;
+    #triangle-left {
+        width: 0;
+        height: 0;
+        border-top: 50px solid transparent;
+        border-right: 100px solid red;
+        border-bottom: 50px solid transparent;
     }
+
+
 </style>
