@@ -48,7 +48,7 @@ public class MotorcycleConverterTest {
 
         assertEquals(entity.getWeightG(), dto.getWeightG());
 
-        validateBearingSetConversion(entity.getBearings(), dto.getBearingDtos());
+        validateBearingSetConversion(entity.getBearings(), dto.getBearingIds());
     }
 
 }

@@ -73,6 +73,28 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
         return converter.convertToDto(entity);
     }
 
+    @Transactional
+    public List<Dto> search(final List<Long> ids) {
+        List<Entity> entities = repository.findAllById(ids);
+        return converter.convertToDtoList(entities);
+    }
+
     protected abstract Entity findByName(final DefaultSearchRequest request);
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

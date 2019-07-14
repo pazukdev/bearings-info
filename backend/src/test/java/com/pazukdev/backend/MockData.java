@@ -47,7 +47,6 @@ public class MockData {
         bearing.setType("bearing type");
         bearing.setRollingElement("bearing rolling element");
         bearing.setRollingElementsQuantity(1);
-        bearing.setMotorcycles(new HashSet<>(Arrays.asList(new Motorcycle(), new Motorcycle())));
         return bearing;
     }
 
@@ -70,7 +69,6 @@ public class MockData {
         bearingDto.setType("bearingDto type");
         bearingDto.setRollingElement("bearingDto rolling element");
         bearingDto.setRollingElementsQuantity(2);
-        bearingDto.getMotorcycles().add(new MotorcycleDto());
         return bearingDto;
     }
 
@@ -100,7 +98,7 @@ public class MockData {
         motorcycleDto.setProductionStopYear(1946);
         motorcycleDto.setManufacturerId(manufacturerDto().getId());
         motorcycleDto.setWeightG(300);
-        motorcycleDto.setBearingDtos(bearingDtos());
+        motorcycleDto.setBearingIds(new HashSet<>(Arrays.asList(11L, 12L, 13L)));
         return motorcycleDto;
     }
 

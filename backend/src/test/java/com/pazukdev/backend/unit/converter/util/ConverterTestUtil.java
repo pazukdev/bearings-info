@@ -8,6 +8,7 @@ import com.pazukdev.backend.entity.product.AbstractProduct;
 import com.pazukdev.backend.entity.product.Bearing;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -16,16 +17,16 @@ import static org.junit.Assert.*;
  */
 public class ConverterTestUtil {
 
-    public static void validateBearingSetConversion(final Set<Bearing> entities, final Set<BearingDto> dtos) {
+    public static void validateBearingSetConversion(final Set<Bearing> entities, final Set<Long> bearingIds) {
         assertNotNull(entities);
-        assertNotNull(dtos);
-        assertTrue(entities.size() > 0);
-        assertTrue(entities.size() == dtos.size());
+        assertNotNull(bearingIds);
 
-        for (final Bearing entity : entities) {
-            final BearingDto dto = dtos.stream().filter(x -> x.getId().equals(entity.getId())).findFirst().orElse(null);
-            assertNotNull(dto);
-            validateBearingConversion(entity, dto);
+        final Set<Long> entitiesBearingIds= entities.stream().map(Bearing::getId).collect(Collectors.toSet());
+        assertTrue(entitiesBearingIds.size() > 0);
+        assertTrue(entitiesBearingIds.size() == bearingIds.size());
+
+        for (final Long bearingId : bearingIds) {
+            assertTrue(entitiesBearingIds.contains(bearingId));
         }
     }
 
@@ -34,9 +35,6 @@ public class ConverterTestUtil {
         assertEquals(entity.getType(), dto.getType());
         assertEquals(entity.getRollingElement(), dto.getRollingElement());
         assertEquals(entity.getRollingElementsQuantity(), dto.getRollingElementsQuantity());
-        assertNotNull(dto.getMotorcycles());
-        assertNotNull(entity.getMotorcycles());
-        assertTrue(entity.getMotorcycles().size() == dto.getMotorcycles().size());
     }
 
     public static void validateAbstractProductConversion(final AbstractProduct entity, final AbstractProductDto dto) {

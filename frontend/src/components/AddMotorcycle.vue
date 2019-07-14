@@ -134,12 +134,6 @@
                 }
             },
 
-            getManufacturerName(manufacturerId)  {
-                return this.manufacturers.filter(function(manufacturer){
-                    return (manufacturer.id === manufacturerId)
-                })[0].name;
-            },
-
             createMotorcycle() {
                 let newMotorcycle = {
                     name: this.motorcycleName,
@@ -147,7 +141,7 @@
                     weightG: this.motorcycleWeightG,
                     productionStartYear: this.motorcycleProductionStartYear,
                     productionStopYear: this.motorcycleProductionStopYear,
-                    bearingDtos: this.bearings,
+                    bearingIds: this.selected
                 };
 
                 return axios.post(`/backend/motorcycle/create`, newMotorcycle);

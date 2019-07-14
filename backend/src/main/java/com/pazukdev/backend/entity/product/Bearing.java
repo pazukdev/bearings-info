@@ -4,12 +4,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.Set;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -27,9 +24,5 @@ public class Bearing extends AbstractProduct {
     private String rollingElement;
     @Column(name = "rolling_elements_quantity")
     private Integer rollingElementsQuantity;
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @ManyToMany(mappedBy = "bearings", cascade= CascadeType.ALL)
-    private Set<Motorcycle> motorcycles;
 
 }

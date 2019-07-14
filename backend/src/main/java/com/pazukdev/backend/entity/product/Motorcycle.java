@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -32,6 +33,6 @@ public class Motorcycle extends AbstractProduct {
             joinColumns = @JoinColumn(name = "motorcycle_id"),
             inverseJoinColumns = @JoinColumn(name = "bearing_id")
     )
-    private Set<Bearing> bearings;
+    private Set<Bearing> bearings = new HashSet<>();
 
 }

@@ -1,6 +1,7 @@
 <template>
     <div>
         <p id="title" class="centredText"><b>Bearings</b></p>
+        <p>{{motorcycleId}}</p>
         <table id="productsTable" class="table">
             <thead>
             <tr>
@@ -11,7 +12,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(bearing, index) in motorcycle.bearingDtos" :key="index">
+            <tr v-for="(bearing, index) in bearings" :key="index">
                 <td>{{bearing.name}}</td>
                 <td>{{bearing.type}}</td>
                 <td>{{bearing.rollingElement}}</td>
@@ -28,27 +29,27 @@
     export default {
         name: "ModelBearingList.vue",
 
-        props: ['motorcycleId'],
+        props: ['bearingsIds'],
 
         data() {
             return {
-                motorcycle: ""
+                bearings: []
             }
         },
 
         watch: {
-            motorcycleId(newVal) {
-                this.motorcycle = this.getMotorcycle(newVal)
+            bearingsIds(ids) {
+                this.bearings = this.getBearings(ids);
             }
         },
 
         methods: {
-            getMotorcycle(id) {
+            getBearings(ids) {
                 axios
-                    .get('backend/motorcycle/' + id)
-                    .then(response => this.motorcycle = response.data);
+                    .get('backend/motorcycle/' + ids)
+                    .then(response => this.bearings = response.data);
 
-            }
+            },
         }
     }
 

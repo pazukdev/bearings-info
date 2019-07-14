@@ -61,9 +61,8 @@ public class DtoFactoryTest {
         assertEquals("1957", dto.getProductionStopYear().toString());
         assertEquals("300000", dto.getWeightG().toString());
 
-        final Set<BearingDto> bearingDtos = dto.getBearingDtos();
-        assertNotNull(bearingDtos);
-        assertTrue(bearingDtos.size() == 3);
+        final Set<Long> bearingIds = dto.getBearingIds();
+        assertNotNull(bearingIds);
     }
 
     @Test
@@ -76,9 +75,6 @@ public class DtoFactoryTest {
         assertEquals("deepgroove", dto.getType());
         assertEquals("ball", dto.getRollingElement());
         assertEquals("9", dto.getRollingElementsQuantity().toString());
-
-        assertNotNull(dto.getMotorcycles());
-        assertTrue(dto.getMotorcycles().size() == 0);
     }
 
     @Test
