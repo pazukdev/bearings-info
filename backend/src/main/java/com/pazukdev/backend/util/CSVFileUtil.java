@@ -24,27 +24,30 @@ public class CSVFileUtil {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(CSVFileUtil.class);
 
-    private static final String PACKAGE = "static/";
-    private static final String FILE_FORMAT = "csv";
-    private static final String MANUFACTURER_FILE_NAME = "manufacturer";
-    private static final String MOTORCYCLE_FILE_NAME = "motorcycle";
-    private static final String BEARING_FILE_NAME = "bearing";
-    private static final String SEAL_FILE_NAME = "seal";
+    public static final String PACKAGE = "static/";
+    public static final String FILE_FORMAT = "csv";
+    public static final String MANUFACTURER_FILE_NAME = "manufacturer";
+    public static final String MOTORCYCLE_FILE_NAME = "motorcycle";
+    public static final String BEARING_FILE_NAME = "bearing";
+    public static final String SEAL_FILE_NAME = "seal";
+    public static final String VALVE_FILE_NAME = "valve";
+    public static final String VALVE_GUIDE_FILE_NAME = "valve_guide";
+    public static final String OIL_FILE_NAME = "oil";
+    public static final String BOLT_NUT_FILE_NAME = "bolt_nut";
+    public static final String CARBURETOR_FILE_NAME = "carburetor";
+    public static final String GEARBOX_FILE_NAME = "gearbox";
+    public static final String ENGINE_FILE_NAME = "engine";
+    public static final String GENERATOR_FILE_NAME = "generator";
+    public static final String FINAL_DRIVE_FILE_NAME = "final_drive";
+    public static final String SIDECAR_REDUCTION_DRIVE_FILE_NAME = "sidecar_reduction_drive";
+    public static final String PISTON_FILE_NAME = "piston";
+    public static final String SPARK_PLUG_FILE_NAME = "spark_plug";
+    public static final String WHEEL_FILE_NAME = "wheel";
+    public static final String FRAME_FILE_NAME = "frame";
+    public static final String CYLINDER_HEAD_FILE_NAME = "cylinder_head";
 
-    public static File manufacturerFile() {
-        return file(MANUFACTURER_FILE_NAME);
-    }
-
-    public static File motorcycleFile() {
-        return file(MOTORCYCLE_FILE_NAME);
-    }
-
-    public static File bearingFile() {
-        return file(BEARING_FILE_NAME);
-    }
-
-    public static File sealFile() {
-        return file(SEAL_FILE_NAME);
+    public static File file(final String fileName) {
+        return Objects.requireNonNull(path(dataFilePathInResources(fileName))).toFile();
     }
 
     public static List<String[]> readFile(final File file) {
@@ -77,10 +80,6 @@ public class CSVFileUtil {
             LOGGER.error("Error getting path from: " + filePathInResources, e);
         }
         return path;
-    }
-
-    private static File file(final String fileName) {
-        return Objects.requireNonNull(path(dataFilePathInResources(fileName))).toFile();
     }
 
     private static String dataFilePathInResources(final String fileName) {

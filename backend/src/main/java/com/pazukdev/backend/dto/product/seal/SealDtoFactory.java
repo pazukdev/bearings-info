@@ -3,7 +3,7 @@ package com.pazukdev.backend.dto.product.seal;
 import com.pazukdev.backend.characteristic.Characteristic;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
-import com.pazukdev.backend.dto.product.AbstractProductDtoFactory;
+import com.pazukdev.backend.dto.product.ProductDtoFactory;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import java.io.File;
  * @author Siarhei Sviarkaltsau
  */
 @Component
-public class SealDtoFactory extends AbstractProductDtoFactory<SealDto> {
+public class SealDtoFactory extends ProductDtoFactory<SealDto> {
 
     public SealDtoFactory(ServiceContext context, ManufacturerDtoFactory manufacturerDtoFactory) {
         super(context, manufacturerDtoFactory);
@@ -22,7 +22,7 @@ public class SealDtoFactory extends AbstractProductDtoFactory<SealDto> {
 
     @Override
     protected File getCSVFile() {
-        return CSVFileUtil.sealFile();
+        return CSVFileUtil.file(CSVFileUtil.SEAL_FILE_NAME);
     }
 
     @Override

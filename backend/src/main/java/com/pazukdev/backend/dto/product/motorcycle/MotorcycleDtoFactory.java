@@ -3,7 +3,7 @@ package com.pazukdev.backend.dto.product.motorcycle;
 import com.pazukdev.backend.characteristic.Characteristic;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
-import com.pazukdev.backend.dto.product.AbstractProductDtoFactory;
+import com.pazukdev.backend.dto.product.ProductDtoFactory;
 import com.pazukdev.backend.dto.product.bearing.BearingDtoFactory;
 import com.pazukdev.backend.service.BearingService;
 import com.pazukdev.backend.tablemodel.TableRow;
@@ -22,7 +22,7 @@ import java.util.Set;
  */
 @EqualsAndHashCode(callSuper = true)
 @Component
-public class MotorcycleDtoFactory extends AbstractProductDtoFactory<MotorcycleDto> {
+public class MotorcycleDtoFactory extends ProductDtoFactory<MotorcycleDto> {
 
     private final BearingDtoFactory bearingDtoFactory;
 
@@ -35,7 +35,7 @@ public class MotorcycleDtoFactory extends AbstractProductDtoFactory<MotorcycleDt
 
     @Override
     protected File getCSVFile() {
-        return CSVFileUtil.motorcycleFile();
+        return CSVFileUtil.file(CSVFileUtil.MOTORCYCLE_FILE_NAME);
     }
 
     @Override

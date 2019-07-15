@@ -1,11 +1,11 @@
 package com.pazukdev.backend.unit.converter.util;
 
 import com.pazukdev.backend.dto.AbstractDto;
-import com.pazukdev.backend.dto.product.AbstractProductDto;
+import com.pazukdev.backend.dto.product.ProductDto;
 import com.pazukdev.backend.dto.product.bearing.BearingDto;
 import com.pazukdev.backend.entity.AbstractEntity;
-import com.pazukdev.backend.entity.product.AbstractProduct;
 import com.pazukdev.backend.entity.product.Bearing;
+import com.pazukdev.backend.entity.product.Product;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,7 +37,7 @@ public class ConverterTestUtil {
         assertEquals(entity.getRollingElementsQuantity(), dto.getRollingElementsQuantity());
     }
 
-    public static void validateAbstractProductConversion(final AbstractProduct entity, final AbstractProductDto dto) {
+    public static void validateAbstractProductConversion(final Product entity, final ProductDto dto) {
         validateAbstractEntityConversion(entity, dto);
         assertEquals(entity.getProductionStartYear(), dto.getProductionStartYear());
         assertEquals(entity.getProductionStopYear(), dto.getProductionStopYear());

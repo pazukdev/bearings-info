@@ -6,6 +6,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -19,5 +22,6 @@ public class ManufacturerDto extends AbstractDto {
 
     private String founded;
     private String defunct;
+    private Set<Long> productsIds = new HashSet<>();
 
 }

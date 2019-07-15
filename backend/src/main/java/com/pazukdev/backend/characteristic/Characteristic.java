@@ -17,6 +17,9 @@ public enum Characteristic {
     FOUNDED,
     DEFUNCT,
     PRODUCTION,
-    BEARING
+    BEARING,
+    VISCOSITY,
+    BASE,
+    SEASONALITY
 
 }

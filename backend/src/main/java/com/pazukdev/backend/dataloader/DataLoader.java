@@ -5,12 +5,14 @@ import com.pazukdev.backend.dto.AbstractDtoFactory;
 import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
 import com.pazukdev.backend.dto.product.bearing.BearingDtoFactory;
 import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDtoFactory;
+import com.pazukdev.backend.dto.product.oil.OilDtoFactory;
 import com.pazukdev.backend.dto.product.seal.SealDtoFactory;
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.service.AbstractService;
 import com.pazukdev.backend.service.BearingService;
 import com.pazukdev.backend.service.ManufacturerService;
 import com.pazukdev.backend.service.MotorcycleService;
+import com.pazukdev.backend.service.OilServise;
 import com.pazukdev.backend.service.SealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -30,10 +32,12 @@ public class DataLoader implements ApplicationRunner {
     private final MotorcycleService motorcycleService;
     private final BearingService bearingService;
     private final SealService sealService;
+    private final OilServise oilServise;
     private final ManufacturerDtoFactory manufacturerDtoFactory;
     private final MotorcycleDtoFactory motorcycleDtoFactory;
     private final BearingDtoFactory bearingDtoFactory;
     private final SealDtoFactory sealDtoFactory;
+    private final OilDtoFactory oilDtoFactory;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -42,6 +46,7 @@ public class DataLoader implements ApplicationRunner {
 
     private void populateEmptyTables() {
         loadManufacturers(manufacturerService.getProductsList().isEmpty());
+        loadOils(oilServise.getProductsList().isEmpty());
         loadBearings(bearingService.getProductsList().isEmpty());
         loadSeals(sealService.getProductsList().isEmpty());
         loadMotorcycles(motorcycleService.getProductsList().isEmpty());
@@ -71,9 +76,31 @@ public class DataLoader implements ApplicationRunner {
         }
     }
 
+    private void loadOils(final Boolean tableIsEmpty) {
+        if (tableIsEmpty) {
+            createAll(oilDtoFactory, oilServise);
+        }
+    }
+
     private <D extends AbstractDto, E extends AbstractEntity> void createAll(final AbstractDtoFactory<D> factory,
                                                                              final AbstractService<E, D> service) {
         factory.createDtosFromCSVFile().forEach(service::create);
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

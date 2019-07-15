@@ -1,6 +1,6 @@
 package com.pazukdev.backend.dto.product.motorcycle;
 
-import com.pazukdev.backend.dto.product.AbstractProductDto;
+import com.pazukdev.backend.dto.product.ProductDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -14,7 +14,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class MotorcycleDto extends AbstractProductDto {
+public class MotorcycleDto extends ProductDto {
 
     private final static long serialVersionUID = 12343L;
 

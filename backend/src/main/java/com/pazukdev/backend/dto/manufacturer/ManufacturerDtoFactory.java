@@ -22,7 +22,7 @@ public class ManufacturerDtoFactory extends AbstractDtoFactory<ManufacturerDto> 
 
     @Override
     protected File getCSVFile() {
-        return CSVFileUtil.manufacturerFile();
+        return CSVFileUtil.file(CSVFileUtil.MANUFACTURER_FILE_NAME);
     }
 
     @Override

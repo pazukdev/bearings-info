@@ -1,4 +1,4 @@
-package com.pazukdev.backend.dto.product.bearing;
+package com.pazukdev.backend.dto.product.valve;
 
 import com.pazukdev.backend.dto.product.ProductDto;
 import lombok.Data;
@@ -11,12 +11,9 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class BearingDto extends ProductDto {
-
-    private final static long serialVersionUID = 12343L;
+public class ValveDto extends ProductDto {
 
     private String type;
-    private String rollingElement;
-    private Integer rollingElementsQuantity;
+    private String diameter;
 
 }

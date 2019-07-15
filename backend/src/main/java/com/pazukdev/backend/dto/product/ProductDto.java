@@ -11,7 +11,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class AbstractProductDto extends AbstractDto {
+public class ProductDto extends AbstractDto {
 
     private final static long serialVersionUID = 12343L;
 

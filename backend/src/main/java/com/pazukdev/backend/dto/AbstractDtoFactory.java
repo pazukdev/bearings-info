@@ -1,9 +1,12 @@
 package com.pazukdev.backend.dto;
 
 import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.search.DefaultSearchRequest;
+import com.pazukdev.backend.service.AbstractService;
 import com.pazukdev.backend.tablemodel.TableModel;
 import com.pazukdev.backend.tablemodel.TableModelFactory;
 import com.pazukdev.backend.tablemodel.TableRow;
+import com.pazukdev.backend.util.CSVFileUtil;
 import lombok.Data;
 
 import java.io.File;
@@ -59,6 +62,22 @@ public abstract class AbstractDtoFactory<Dto extends AbstractDto> {
     protected void applyName(final AbstractDto dto, final TableRow tableRow) {
         final String name = tableRow.getStringValue(Characteristic.NAME);
         dto.setName(name);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <Dto extends AbstractDto> Dto getDto(final String name,
+                                                   final AbstractService service,
+                                                   final AbstractDtoFactory<Dto> dtoFactory) {
+        final DefaultSearchRequest request = new DefaultSearchRequest();
+        request.setName(name);
+
+        final Dto dto;
+        if (service != null) {
+            dto = (Dto) service.search(request);
+        } else {
+            dto = CSVFileUtil.searchByName(request, dtoFactory);
+        }
+        return dto;
     }
 
 }

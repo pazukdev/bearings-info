@@ -21,7 +21,7 @@ import java.util.Set;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "motorcycle")
-public class Motorcycle extends AbstractProduct {
+public class Motorcycle extends Product {
 
     @Column(name = "weight_g")
     private Integer weightG;

@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "bearing")
-public class Bearing extends AbstractProduct {
+public class Bearing extends Product {
 
     @Column(name = "type")
     private String type;

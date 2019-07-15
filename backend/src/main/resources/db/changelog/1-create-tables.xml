@@ -19,6 +19,24 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="create_oil_table" author="sviarkaltsau">
+        <createTable tableName="oil">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="production_start_year" type="int"/>
+            <column name="production_stop_year" type="int"/>
+            <column name="manufacturer_id" type="bigint"/>
+            <column name="base" type="varchar(255)"/>
+            <column name="viscosity" type="varchar(255)"/>
+            <column name="seasonality" type="varchar(255)"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="bearing"/>
+        </rollback>
+    </changeSet>
+
     <changeSet id="create_bearing_table" author="sviarkaltsau">
         <createTable tableName="bearing">
             <column autoIncrement="true" name="id" type="bigint">

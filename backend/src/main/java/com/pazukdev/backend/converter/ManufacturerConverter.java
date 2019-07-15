@@ -16,12 +16,14 @@ public class ManufacturerConverter implements EntityDtoConverter<Manufacturer, M
 
     @Override
     public ManufacturerDto convertToDto(final Manufacturer entity) {
-        return modelMapper.map(entity, ManufacturerDto.class);
+        final ManufacturerDto dto = modelMapper.map(entity, ManufacturerDto.class);
+        return dto;
     }
 
     @Override
     public Manufacturer convertToEntity(final ManufacturerDto dto) {
-        return modelMapper.map(dto, Manufacturer.class);
+        final Manufacturer entity = modelMapper.map(dto, Manufacturer.class);
+        return entity;
     }
 
 }

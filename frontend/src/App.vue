@@ -23,17 +23,6 @@
                 </table>
             </div>
             <div id="app_area" style="padding: 10px">
-                <div id="navigationButtons" v-show="false">
-                    <button class="navigationButton" id="motorcyclesButton" @click="swapComponent(componentsArray[0])">
-                        Motorcycles
-                    </button>
-                    <button class="navigationButton" id="bearingsButton" @click="swapComponent(componentsArray[1])">
-                        Bearings
-                    </button>
-                    <button class="navigationButton" id="sealsButton" @click="swapComponent(componentsArray[2])">
-                        Seals
-                    </button>
-                </div>
                 <MotorcycleMenu
                         v-show="component === 'MotorcycleMenu'"
                         @select-motorcycle="selectMotorcycle"
@@ -44,6 +33,19 @@
                         v-show="component === 'AddMotorcycle'"
                         @refresh-motorcycles="refresh()"/>
             </div>
+            <table>
+                <tbody>
+                <tr>
+                    <td>
+                        <button
+                                v-show="false"
+                                style="width: 100%">
+                            <b>AAA</b>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
@@ -64,12 +66,16 @@
             return {
                 component: "",
                 motorcycle: "",
-                motorcycles: ""
+                motorcycles: "",
+                manufacturers: ""
             }
         },
 
         created() {
             this.refresh();
+            this.manufacturers = axios
+                .get("backend/manufacturer/list")
+                .then(response => this.manufacturers = response.data);
         },
 
         components: {

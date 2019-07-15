@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BearingRepository extends JpaRepository<Bearing, Long> {
 
-    Bearing findByName(String name);
+    Bearing findByName(final String name);
 
 }

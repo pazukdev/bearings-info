@@ -12,15 +12,17 @@ import javax.persistence.Table;
  * @author Siarhei Sviarkaltsau
  */
 @Data
-@Entity
-@Table(name = "seal")
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Seal extends Product {
+@Entity
+@Table(name = "oil")
+public class Oil extends Product {
 
-    @Column(name = "rotation")
-    private String rotation;
-    @Column(name = "material")
-    private String material;
+    @Column(name = "base")
+    private String base;
+    @Column(name = "viscosity")
+    private String viscosity;
+    @Column(name = "seasonality")
+    private String seasonality;
 
 }

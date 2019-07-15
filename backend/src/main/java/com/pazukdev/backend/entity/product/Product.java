@@ -16,10 +16,10 @@ import javax.persistence.MappedSuperclass;
  * @author Siarhei Sviarkaltsau
  */
 @Data
-@MappedSuperclass
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class AbstractProduct extends AbstractEntity {
+@MappedSuperclass
+public class Product extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manufacturer_id")

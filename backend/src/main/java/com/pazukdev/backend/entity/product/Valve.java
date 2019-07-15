@@ -5,22 +5,20 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
 @Data
-@Entity
-@Table(name = "seal")
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Seal extends Product {
+//@Entity
+//@Table(name = "valve")
+public class Valve extends Product {
 
-    @Column(name = "rotation")
-    private String rotation;
-    @Column(name = "material")
-    private String material;
+    @Column(name = "type")
+    private String type;
+    @Column(name = "diameter")
+    private String diameter;
 
 }
