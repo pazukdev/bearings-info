@@ -37,7 +37,8 @@
                 rotation: "",
                 material: "",
                 rotations: ["left", "right"],
-                materials: ["rubber"]
+                materials: ["rubber"],
+                motorcycle: ""
             }
         },
 

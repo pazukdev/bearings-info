@@ -14,7 +14,7 @@
             <tr v-for="motorcycle in sortedMotorcycles" :key="motorcycle.id">
                 <td>{{motorcycle.productionStartYear}} - {{motorcycle.productionStopYear}}</td>
                 <td style="width: 160px">
-                    <button class="motorcycleButton" @click="$emit('select-motorcycle', motorcycle.id)">
+                    <button class="motorcycleButton" @click="$emit('select-motorcycle', motorcycle)">
                         {{motorcycle.name}}
                     </button>
                 </td>
@@ -22,7 +22,7 @@
             </tr>
             <tr><td></td>
                 <td></td>
-                <td><button style="width: 100%" @click="$emit('add-motorcycle', 1)">Add</button></td></tr>
+                <td><button style="width: 100%" @click="$emit('add-motorcycle')">Add</button></td></tr>
             </tbody>
         </table>
         <br/>
@@ -83,10 +83,6 @@
                 return this.manufacturers.filter(function(manufacturer){
                     return (manufacturer.id === manufacturerId)
                 })[0].name;
-            },
-
-            deleteSelectedMotorcycles() {
-                return axios.post('/backend/motorcycle/delete-all', this.selected);
             },
 
             getAllMotorcycles() {

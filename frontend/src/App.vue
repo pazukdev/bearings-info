@@ -7,7 +7,8 @@
                     <tr>
                         <td style="width: 80px">
                             <button
-                                    v-show="modelIsSelected() || add" @click="unselectModel"
+                                    v-show="component !== 'MotorcycleMenu'"
+                                    @click="back()"
                                     id="back"
                                     style="width: 100%; height: 100%; background: none; font-size: larger; color: #252525">
                                     <b>Back</b>
@@ -34,9 +35,9 @@
                     </button>
                 </div>
 
-                <MotorcycleMenu v-show="!modelIsSelected() && add === false" @select-motorcycle="selectMotorcycle" @add-motorcycle="addMotorcycle"/>
-                <ModelPartsList v-show="motorcycleId !== 0" :motorcycleId="motorcycleId"/>
-                <AddMotorcycle v-show="add"/>
+                <MotorcycleMenu v-show="component === 'MotorcycleMenu'" @select-motorcycle="selectMotorcycle" @add-motorcycle="addMotorcycle"/>
+                <ModelPartsList v-show="component === 'ModelPartsList'" :motorcycle="motorcycle"/>
+                <AddMotorcycle v-show="component === 'AddMotorcycle'"/>
             </div>
         </div>
     </div>
@@ -55,9 +56,8 @@
 
         data() {
             return {
-                add: false,
-                componentsArray: ['MotorcycleList', 'BearingList', 'SealList', 'ModelPartsList, AddMotorcycle'],
-                motorcycleId: 0
+                component: 'MotorcycleMenu',
+                motorcycle: ""
             }
         },
 
@@ -71,26 +71,17 @@
         },
 
         methods: {
-            selectMotorcycle(motorcycleId) {
-                this.motorcycleId = motorcycleId;
+            selectMotorcycle(motorcycle) {
+                this.motorcycle = motorcycle;
+                this.component = 'ModelPartsList';
             },
 
-            addMotorcycle(val) {
-                this.add = true;
+            addMotorcycle() {
+                this.component = 'AddMotorcycle';
             },
 
-            swapComponent: function(component) {
-                this.currentComponent = component;
-                this.componentDisplayed = true;
-            },
-
-            modelIsSelected() {
-                return this.motorcycleId !== 0;
-            },
-
-            unselectModel() {
-                this.motorcycleId = 0;
-                this.add = false;
+            back() {
+                this.component = 'MotorcycleMenu';
                 this.reload();
             },
 

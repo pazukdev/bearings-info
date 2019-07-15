@@ -1,7 +1,6 @@
 <template>
     <div>
         <p id="title" class="centredText"><b>Bearings</b></p>
-        <p>{{motorcycleId}}</p>
         <table id="productsTable" class="table">
             <thead>
             <tr>
@@ -29,7 +28,7 @@
     export default {
         name: "ModelBearingList.vue",
 
-        props: ['bearingsIds'],
+        props: ['motorcycle'],
 
         data() {
             return {
@@ -38,15 +37,15 @@
         },
 
         watch: {
-            bearingsIds(ids) {
-                this.bearings = this.getBearings(ids);
+            motorcycle(newVal) {
+                this.bearings = this.getBearings(newVal.bearingIds);
             }
         },
 
         methods: {
             getBearings(ids) {
                 axios
-                    .get('backend/motorcycle/' + ids)
+                    .post('backend/bearing/search', ids)
                     .then(response => this.bearings = response.data);
 
             },
