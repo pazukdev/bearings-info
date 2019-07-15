@@ -1,7 +1,6 @@
 <template>
     <div>
         <p id="title" class="centredText"><b>Motorcycles</b></p>
-
         <table id="motorcycleMenu">
             <thead>
             <tr>
@@ -11,7 +10,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="motorcycle in sortedMotorcycles" :key="motorcycle.id">
+            <tr v-for="motorcycle in motorcycles" :key="motorcycle.id">
                 <td>{{motorcycle.productionStartYear}} - {{motorcycle.productionStopYear}}</td>
                 <td style="width: 160px">
                     <button class="motorcycleButton" @click="$emit('select-motorcycle', motorcycle)">
@@ -38,10 +37,10 @@
 
         name: "MotorcycleMenu.vue",
 
+        props: ['motorcyclesList'],
+
         data() {
             return {
-                componentsArray: ['MotorcycleList', 'BearingList', 'SealList'],
-                componentDisplayed: false,
                 motorcycles: [],
                 manufacturers: [],
                 motorcycleId: "",
@@ -52,15 +51,14 @@
         },
 
         created() {
-            axios
-                .all([
-                    this.getAllManufacturers(),
-                    this.getAllMotorcycles()
-                ])
-                .then(axios.spread((firstResponse, secondResponse) => {
-                    this.manufacturers = firstResponse.data;
-                    this.motorcycles = secondResponse.data;
-                }));
+            this.manufacturers = axios.get(`/backend/manufacturer/list`).then(response => this.manufacturers = response.data)
+        },
+
+        watch: {
+            motorcyclesList(newVal) {
+                this.motorcycles = newVal;
+                this.motorcycles = this.sortedMotorcycles();
+            }
         },
 
         computed: {
@@ -83,14 +81,6 @@
                 return this.manufacturers.filter(function(manufacturer){
                     return (manufacturer.id === manufacturerId)
                 })[0].name;
-            },
-
-            getAllMotorcycles() {
-                return axios.get(`/backend/motorcycle/list`)
-            },
-
-            getAllManufacturers() {
-                return axios.get(`/backend/manufacturer/list`)
             }
 
         }

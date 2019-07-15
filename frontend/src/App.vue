@@ -8,7 +8,7 @@
                         <td style="width: 80px">
                             <button
                                     v-show="component !== 'MotorcycleMenu'"
-                                    @click="back()"
+                                    @click="refresh()"
                                     id="back"
                                     style="width: 100%; height: 100%; background: none; font-size: larger; color: #252525">
                                     <b>Back</b>
@@ -34,16 +34,22 @@
                         Seals
                     </button>
                 </div>
-
-                <MotorcycleMenu v-show="component === 'MotorcycleMenu'" @select-motorcycle="selectMotorcycle" @add-motorcycle="addMotorcycle"/>
+                <MotorcycleMenu
+                        v-show="component === 'MotorcycleMenu'"
+                        @select-motorcycle="selectMotorcycle"
+                        @add-motorcycle="addMotorcycle"
+                        :motorcyclesList="motorcycles"/>
                 <ModelPartsList v-show="component === 'ModelPartsList'" :motorcycle="motorcycle"/>
-                <AddMotorcycle v-show="component === 'AddMotorcycle'"/>
+                <AddMotorcycle
+                        v-show="component === 'AddMotorcycle'"
+                        @refresh-motorcycles="refresh()"/>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import axios from 'axios';
     import MotorcycleMenu from "./components/MotorcycleMenu";
     import MotorcycleList from "./components/MotorcycleList";
     import BearingList from "./components/BearingList";
@@ -56,9 +62,14 @@
 
         data() {
             return {
-                component: 'MotorcycleMenu',
-                motorcycle: ""
+                component: "",
+                motorcycle: "",
+                motorcycles: ""
             }
+        },
+
+        created() {
+            this.refresh();
         },
 
         components: {
@@ -80,14 +91,22 @@
                 this.component = 'AddMotorcycle';
             },
 
-            back() {
-                this.component = 'MotorcycleMenu';
-                this.reload();
-            },
-
             reload() {
                 window.location.reload();
             },
+
+            refresh() {
+                this.showMotorcycleMenu();
+            },
+
+            showMotorcycleMenu() {
+                this.component = 'MotorcycleMenu';
+                this.getMotorcycles();
+            },
+
+            getMotorcycles() {
+                this.motorcycles = axios.get(`/backend/motorcycle/list`).then(response => this.motorcycles = response.data);
+            }
         }
     }
 

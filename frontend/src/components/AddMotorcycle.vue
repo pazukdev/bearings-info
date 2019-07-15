@@ -123,6 +123,7 @@
         methods: {
             submit() {
                 this.createMotorcycle();
+                this.$emit('refresh-motorcycles');
             },
 
             select() {
