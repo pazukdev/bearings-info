@@ -1,0 +1,3 @@
+name,manufacturer,power_hp,torque_nm,speed_rpm,spark_plug,bearing
+MT-8,kmz,32,40,5900,A11,209;205
+M67-36,imz,36,34,6100,A14,207;205

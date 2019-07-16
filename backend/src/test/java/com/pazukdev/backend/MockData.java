@@ -10,7 +10,6 @@ import com.pazukdev.backend.entity.product.Motorcycle;
 import com.pazukdev.backend.entity.product.Seal;
 import lombok.Getter;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -87,7 +86,6 @@ public class MockData {
         motorcycle.setProductionStopYear(1993);
         motorcycle.setManufacturer(manufacturer());
         motorcycle.setWeightG(350);
-        motorcycle.setBearings(bearings());
         return motorcycle;
     }
 
@@ -98,7 +96,6 @@ public class MockData {
         motorcycleDto.setProductionStopYear(1946);
         motorcycleDto.setManufacturerId(manufacturerDto().getId());
         motorcycleDto.setWeightG(300);
-        motorcycleDto.setBearingIds(new HashSet<>(Arrays.asList(11L, 12L, 13L)));
         return motorcycleDto;
     }
 

@@ -1,4 +1,4 @@
-package com.pazukdev.backend.dto.product.motorcycle;
+package com.pazukdev.backend.dto.product.sparkplug;
 
 import com.pazukdev.backend.dto.product.ProductDto;
 import lombok.Data;
@@ -11,11 +11,8 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class MotorcycleDto extends ProductDto {
+public class SparkPlugDto extends ProductDto {
 
-    private final static long serialVersionUID = 12343L;
-
-    private Long engineId;
-    private Integer weightG;
+    private Integer heatRange;
 
 }

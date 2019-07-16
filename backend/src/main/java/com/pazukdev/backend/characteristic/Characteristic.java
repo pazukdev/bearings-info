@@ -20,6 +20,12 @@ public enum Characteristic {
     BEARING,
     VISCOSITY,
     BASE,
-    SEASONALITY
+    SEASONALITY,
+    HEAT_RANGE,
+    POWER_HP,
+    TORQUE_NM,
+    SPEED_RPM,
+    SPARK_PLUG,
+    ENGINE
 
 }

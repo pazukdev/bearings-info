@@ -19,6 +19,22 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="create_spark_plug_table" author="sviarkaltsau">
+        <createTable tableName="spark_plug">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="production_start_year" type="int"/>
+            <column name="production_stop_year" type="int"/>
+            <column name="manufacturer_id" type="bigint"/>
+            <column name="heat_range" type="int"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="spark_plug"/>
+        </rollback>
+    </changeSet>
+
     <changeSet id="create_oil_table" author="sviarkaltsau">
         <createTable tableName="oil">
             <column autoIncrement="true" name="id" type="bigint">
@@ -33,7 +49,7 @@
             <column name="seasonality" type="varchar(255)"/>
         </createTable>
         <rollback>
-            <dropTable tableName="bearing"/>
+            <dropTable tableName="oil"/>
         </rollback>
     </changeSet>
 
@@ -72,6 +88,25 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="create_engine_table" author="sviarkaltsau">
+        <createTable tableName="engine">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="production_start_year" type="int"/>
+            <column name="production_stop_year" type="int"/>
+            <column name="manufacturer_id" type="bigint"/>
+            <column name="spark_plug_id" type="bigint"/>
+            <column name="power_hp" type="int"/>
+            <column name="torque_nm" type="int"/>
+            <column name="speed_rpm" type="int"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="engine"/>
+        </rollback>
+    </changeSet>
+
     <changeSet id="create_motorcycle_table" author="sviarkaltsau">
         <createTable tableName="motorcycle">
             <column autoIncrement="true" name="id" type="bigint">
@@ -81,6 +116,7 @@
             <column name="production_start_year" type="int"/>
             <column name="production_stop_year" type="int"/>
             <column name="manufacturer_id" type="bigint"/>
+            <column name="engine_id" type="bigint"/>
             <column name="weight_g" type="int"/>
         </createTable>
         <rollback>
@@ -88,17 +124,31 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="create_motorcycle_bearing_table" author="sviarkaltsau">
-        <createTable tableName="motorcycle_bearing">
-            <column name="motorcycle_id" type="bigint">
-                <constraints foreignKeyName="motorcycle_id" references="motorcycle (id)"/>
+    <changeSet id="create_engine_oil_table" author="sviarkaltsau">
+        <createTable tableName="engine_oil">
+            <column name="engine_id" type="bigint">
+                <constraints foreignKeyName="fk_engine_oil_engine_id" references="engine (id)"/>
             </column>
-            <column name="bearing_id" type="bigint">
-                <constraints foreignKeyName="bearing_id" references="bearing (id)"/>
+            <column name="oil_id" type="bigint">
+                <constraints foreignKeyName="fk_engine_oil_oil_id" references="oil (id)"/>
             </column>
         </createTable>
         <rollback>
-            <dropTable tableName="motorcycle_bearing"/>
+            <dropTable tableName="engine_oil"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_engine_bearing_table" author="sviarkaltsau">
+        <createTable tableName="engine_bearing">
+            <column name="engine_id" type="bigint">
+                <constraints foreignKeyName="fk_engine_bearing_engine_id" references="engine (id)"/>
+            </column>
+            <column name="bearing_id" type="bigint">
+                <constraints foreignKeyName="fk_engine_bearing_bearing_id" references="bearing (id)"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="engine_bearing"/>
         </rollback>
     </changeSet>
 

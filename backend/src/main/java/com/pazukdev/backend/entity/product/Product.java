@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Column;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
@@ -21,7 +20,7 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class Product extends AbstractEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
     @Column(name = "production_start_year")

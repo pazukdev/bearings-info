@@ -5,13 +5,15 @@ import com.pazukdev.backend.dto.product.oil.OilDto;
 import com.pazukdev.backend.entity.product.Oil;
 import com.pazukdev.backend.repository.OilRepository;
 import com.pazukdev.backend.search.DefaultSearchRequest;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
-public class OilServise extends AbstractService<Oil, OilDto> {
+@Service
+public class OilService extends AbstractService<Oil, OilDto> {
 
-    public OilServise(final OilRepository repository, final OilConverter converter) {
+    public OilService(final OilRepository repository, final OilConverter converter) {
         super(repository, converter);
     }
 

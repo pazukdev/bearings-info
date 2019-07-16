@@ -1,5 +1,6 @@
 package com.pazukdev.backend.entity.product;
 
+import com.pazukdev.backend.entity.product.unit.Engine;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -7,11 +8,8 @@ import lombok.ToString;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -23,16 +21,10 @@ import java.util.Set;
 @Table(name = "motorcycle")
 public class Motorcycle extends Product {
 
+    @ManyToOne
+    @JoinColumn(name = "engine_id")
+    private Engine engine;
     @Column(name = "weight_g")
     private Integer weightG;
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @ManyToMany
-    @JoinTable(
-            name = "motorcycle_bearing",
-            joinColumns = @JoinColumn(name = "motorcycle_id"),
-            inverseJoinColumns = @JoinColumn(name = "bearing_id")
-    )
-    private Set<Bearing> bearings = new HashSet<>();
 
 }

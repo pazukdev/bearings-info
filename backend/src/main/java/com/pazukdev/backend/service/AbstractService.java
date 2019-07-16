@@ -75,7 +75,12 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
 
     @Transactional
     public List<Dto> search(final List<Long> ids) {
-        List<Entity> entities = repository.findAllById(ids);
+        final List<Entity> entities;
+        if (ids == null || ids.isEmpty()) {
+            entities = repository.findAll();
+        } else {
+            entities = repository.findAllById(ids);
+        }
         return converter.convertToDtoList(entities);
     }
 

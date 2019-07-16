@@ -30,7 +30,7 @@ public class TableModelFactory {
 
         for (final String[] line : body) {
             final TableRow row = TableRow.create();
-            for (int i = 0; i < line.length - 1; i++) {
+            for (int i = 0; i < line.length; i++) {
                 row.put(header[i], line[i]);
             }
             rows.add(row);

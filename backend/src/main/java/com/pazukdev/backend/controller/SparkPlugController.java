@@ -1,8 +1,8 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDto;
+import com.pazukdev.backend.dto.product.sparkplug.SparkPlugDto;
 import com.pazukdev.backend.exception.ProductNotFoundException;
-import com.pazukdev.backend.service.MotorcycleService;
+import com.pazukdev.backend.service.SparkPlugService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,44 +25,44 @@ import java.util.List;
  * @author Siarhei Sviarkaltsau
  */
 @RestController
-@RequestMapping("/motorcycle")
-@Api(tags = "Motorcycle Controller", value = "API methods for motorcycles")
+@RequestMapping("/spark-plug")
+@Api(tags = "Spark Plug Controller", value = "API methods for spark plugs")
 @RequiredArgsConstructor
-public class MotorcycleController {
+public class SparkPlugController {
 
-    private final MotorcycleService service;
+    private final SparkPlugService service;
 
     @GetMapping("/list")
-    @ApiOperation(value = "Get info about all motorcycles")
-    public List<MotorcycleDto> getAll() {
+    @ApiOperation(value = "Get info about all spark plugs")
+    public List<SparkPlugDto> getAll() {
         return service.getProductsList();
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get info about motorcycle")
-    public MotorcycleDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
+    @ApiOperation(value = "Get info about spark plug")
+    public SparkPlugDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
         return service.get(id);
     }
 
     @PostMapping("/create")
-    @ApiOperation(value = "Create a new motorcycle")
+    @ApiOperation(value = "Create a new spark plug")
     @ResponseStatus(HttpStatus.CREATED)
-    public boolean create(@RequestBody final MotorcycleDto dto) throws EntityExistsException, JSONException {
+    public boolean create(@RequestBody final SparkPlugDto dto) throws EntityExistsException, JSONException {
         service.create(dto);
         return true;
     }
 
     @DeleteMapping("/delete/{id}")
-    @ApiOperation(value = "Delete motorcycle by id")
+    @ApiOperation(value = "Delete spark plug by id")
     @ResponseStatus(HttpStatus.OK)
-    public MotorcycleDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
+    public SparkPlugDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
         return service.delete(id);
     }
 
     @PostMapping("/delete-all")
-    @ApiOperation(value = "Delete motorcycles by ids")
+    @ApiOperation(value = "Delete spark plugs by ids")
     @ResponseStatus(HttpStatus.OK)
-    public List<MotorcycleDto> deleteAll(@RequestBody final Long[] ids) throws ProductNotFoundException {
+    public List<SparkPlugDto> deleteAll(@RequestBody final Long[] ids) throws ProductNotFoundException {
         return service.deleteAll(Arrays.asList(ids));
     }
 

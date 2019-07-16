@@ -1,8 +1,8 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDto;
+import com.pazukdev.backend.dto.product.unit.engine.EngineDto;
 import com.pazukdev.backend.exception.ProductNotFoundException;
-import com.pazukdev.backend.service.MotorcycleService;
+import com.pazukdev.backend.service.EngineService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,45 +25,45 @@ import java.util.List;
  * @author Siarhei Sviarkaltsau
  */
 @RestController
-@RequestMapping("/motorcycle")
-@Api(tags = "Motorcycle Controller", value = "API methods for motorcycles")
+@RequestMapping("/engine")
+@Api(tags = "Engine Controller", value = "API methods for Engines")
 @RequiredArgsConstructor
-public class MotorcycleController {
+public class EngineController {
 
-    private final MotorcycleService service;
+    private final EngineService service;
 
     @GetMapping("/list")
-    @ApiOperation(value = "Get info about all motorcycles")
-    public List<MotorcycleDto> getAll() {
+    @ApiOperation(value = "Get info about all Engines")
+    public List<EngineDto> getAll() {
         return service.getProductsList();
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get info about motorcycle")
-    public MotorcycleDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
+    @ApiOperation(value = "Get info about Engine")
+    public EngineDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
         return service.get(id);
     }
 
     @PostMapping("/create")
-    @ApiOperation(value = "Create a new motorcycle")
+    @ApiOperation(value = "Create a new Engine")
     @ResponseStatus(HttpStatus.CREATED)
-    public boolean create(@RequestBody final MotorcycleDto dto) throws EntityExistsException, JSONException {
+    public boolean create(@RequestBody final EngineDto dto) throws EntityExistsException, JSONException {
         service.create(dto);
         return true;
     }
 
     @DeleteMapping("/delete/{id}")
-    @ApiOperation(value = "Delete motorcycle by id")
+    @ApiOperation(value = "Delete Engine by id")
     @ResponseStatus(HttpStatus.OK)
-    public MotorcycleDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
+    public EngineDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
         return service.delete(id);
     }
 
     @PostMapping("/delete-all")
-    @ApiOperation(value = "Delete motorcycles by ids")
+    @ApiOperation(value = "Delete Engines by ids")
     @ResponseStatus(HttpStatus.OK)
-    public List<MotorcycleDto> deleteAll(@RequestBody final Long[] ids) throws ProductNotFoundException {
+    public List<EngineDto> deleteAll(@RequestBody final Long[] ids) throws ProductNotFoundException {
         return service.deleteAll(Arrays.asList(ids));
     }
-
+    
 }

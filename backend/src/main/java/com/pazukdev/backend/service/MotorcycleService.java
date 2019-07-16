@@ -13,8 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MotorcycleService extends AbstractService<Motorcycle, MotorcycleDto>{
 
-    public MotorcycleService(final MotorcycleRepository repository,
-                             final MotorcycleConverter converter) {
+    public MotorcycleService(final MotorcycleRepository repository, final MotorcycleConverter converter) {
         super(repository, converter);
     }
 

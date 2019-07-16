@@ -11,7 +11,8 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 
-import static com.pazukdev.backend.unit.converter.util.ConverterTestUtil.*;
+import static com.pazukdev.backend.unit.converter.util.ConverterTestUtil.validateAbstractEntityConversion;
+import static com.pazukdev.backend.unit.converter.util.ConverterTestUtil.validateAbstractProductConversion;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -47,8 +48,6 @@ public class MotorcycleConverterTest {
         validateAbstractProductConversion(entity, dto);
 
         assertEquals(entity.getWeightG(), dto.getWeightG());
-
-        validateBearingSetConversion(entity.getBearings(), dto.getBearingIds());
     }
 
 }
