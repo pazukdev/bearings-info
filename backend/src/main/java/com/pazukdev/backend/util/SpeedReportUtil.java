@@ -7,7 +7,7 @@ import lombok.Getter;
 /**
  * @author Siarhei Sviarkaltsau
  */
-public class SpeedCalculatorUtil {
+public class SpeedReportUtil {
 
     public static MotorcycleSpeedReportRS createSpeedReport(final Motorcycle motorcycle) {
         final MotorcycleSpeedReportRS report = new MotorcycleSpeedReportRS();
@@ -15,14 +15,14 @@ public class SpeedCalculatorUtil {
         return report;
     }
 
-    public static int calculateSpeed(final int engineRpm) {
+    private static int calculateSpeed(final int engineRpm) {
         final double tireRadiusM = 484D / 2 / 1000;
         final double gearboxRatio = GearRatio.STANDARD_GEARBOX.getValue();
         final double finalDriveRatio = GearRatio.EIGHT_TEETH_MAIN_GEAR.getValue();
         return calculateSpeed(engineRpm, gearboxRatio, finalDriveRatio, tireRadiusM);
     }
 
-    public static int calculateSpeed(final int engineRpm,
+    private static int calculateSpeed(final int engineRpm,
                                      final double gearboxRatio,
                                      final double finalDriveRatio,
                                      final int wheelRadiusInch,
@@ -31,7 +31,7 @@ public class SpeedCalculatorUtil {
         return calculateSpeed(engineRpm, gearboxRatio, finalDriveRatio, tireRadiusM);
     }
 
-    public static Integer calculateSpeed(final int engineRpm,
+    private static Integer calculateSpeed(final int engineRpm,
                                      final double gearboxRatio,
                                      final double finalDriveRatio,
                                      final double tireRadiusM) {
