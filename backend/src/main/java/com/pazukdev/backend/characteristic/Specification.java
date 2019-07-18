@@ -3,7 +3,7 @@ package com.pazukdev.backend.characteristic;
 /**
  * @author Siarhei Sviarkaltsau
  */
-public enum Characteristic {
+public enum Specification {
 
     MANUFACTURER,
     MATERIAL,
@@ -26,6 +26,7 @@ public enum Characteristic {
     TORQUE_NM,
     SPEED_RPM,
     SPARK_PLUG,
-    ENGINE
+    ENGINE,
+    FUEL_CAPACITY_L
 
 }

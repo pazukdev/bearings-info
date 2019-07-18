@@ -1,21 +1,13 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.dto.MotorcycleSpeedReportRS;
-import com.pazukdev.backend.entity.product.motorcycle.Motorcycle;
 import lombok.Getter;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
-public class SpeedReportUtil {
+public class SpeedUtil {
 
-    public static MotorcycleSpeedReportRS createSpeedReport(final Motorcycle motorcycle) {
-        final MotorcycleSpeedReportRS report = new MotorcycleSpeedReportRS();
-        report.setMaxSpeedKmh(calculateSpeed(motorcycle.getEngine().getSpeedRpm()));
-        return report;
-    }
-
-    private static int calculateSpeed(final int engineRpm) {
+    public static Integer calculateSpeed(final int engineRpm) {
         final double tireRadiusM = 484D / 2 / 1000;
         final double gearboxRatio = GearRatio.STANDARD_GEARBOX.getValue();
         final double finalDriveRatio = GearRatio.EIGHT_TEETH_MAIN_GEAR.getValue();

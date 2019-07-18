@@ -2,8 +2,6 @@ package com.pazukdev.backend.unit.factory;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.config.ServiceContext;
-import com.pazukdev.backend.entity.AbstractEntity;
-import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.entity.manufacturer.Manufacturer;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.Bearing;
@@ -24,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static com.pazukdev.backend.util.CSVFileUtil.getFirstEntity;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -34,7 +33,7 @@ import static org.junit.Assert.assertNull;
 public class EntityFactoryTest {
 
     private final MockData mockData = new MockData();
-    
+
     private final ServiceContext serviceContext = null;
 
     @Spy
@@ -56,7 +55,7 @@ public class EntityFactoryTest {
 
     @Test
     public void manufacturerFactoryTest() {
-        final Manufacturer manufacturer = getFirstEntityFromDataFile(new ManufacturerFactory());
+        final Manufacturer manufacturer = getFirstEntity(new ManufacturerFactory());
 
         assertEquals("imz", manufacturer.getName());
         assertEquals("1941", manufacturer.getFounded());
@@ -65,7 +64,7 @@ public class EntityFactoryTest {
 
     @Test
     public void sparkPlugFactoryTest() {
-        final SparkPlug sparkPlug = getFirstEntityFromDataFile(sparkPlugFactory);
+        final SparkPlug sparkPlug = getFirstEntity(sparkPlugFactory);
 
         assertEquals("a8u", sparkPlug.getName());
         assertEquals("10", sparkPlug.getHeatRange().toString());
@@ -73,7 +72,7 @@ public class EntityFactoryTest {
 
     @Test
     public void oilFactoryTest() {
-        final Oil oil = getFirstEntityFromDataFile(oilFactory);
+        final Oil oil = getFirstEntity(oilFactory);
 
         assertEquals("10w-60", oil.getName());
         assertEquals("10w-60", oil.getViscosity());
@@ -83,7 +82,7 @@ public class EntityFactoryTest {
 
     @Test
     public void engineFactoryTest() {
-        final Engine engine = getFirstEntityFromDataFile(engineFactory);
+        final Engine engine = getFirstEntity(engineFactory);
 
         assertEquals("mt-8", engine.getName());
         assertEquals("32", engine.getPowerHp().toString());
@@ -93,17 +92,18 @@ public class EntityFactoryTest {
 
     @Test
     public void motorcycleFactoryTest() {
-        final Motorcycle motorcycle = getFirstEntityFromDataFile(motorcycleFactory);
+        final Motorcycle motorcycle = getFirstEntity(motorcycleFactory);
 
         assertEquals("m-72", motorcycle.getName());
         assertEquals("1941", motorcycle.getProductionStartYear().toString());
         assertEquals("1957", motorcycle.getProductionStopYear().toString());
         assertEquals("300000", motorcycle.getWeightG().toString());
+        assertEquals("19.0", motorcycle.getFuelCapacityL().toString());
     }
 
     @Test
     public void bearingFactoryTest() {
-        final Bearing bearing = getFirstEntityFromDataFile(bearingFactory);
+        final Bearing bearing = getFirstEntity(bearingFactory);
 
         assertEquals("209", bearing.getName());
         assertNull(bearing.getProductionStartYear());
@@ -115,17 +115,13 @@ public class EntityFactoryTest {
 
     @Test
     public void sealFactoryTest() {
-        final Seal seal = getFirstEntityFromDataFile(sealFactory);
+        final Seal seal = getFirstEntity(sealFactory);
 
         assertEquals("7201191", seal.getName());
         assertNull(seal.getProductionStartYear());
         assertNull(seal.getProductionStopYear());
         assertEquals("left", seal.getRotation());
         assertEquals("rubber", seal.getMaterial());
-    }
-
-    private <E extends AbstractEntity> E getFirstEntityFromDataFile(final AbstractEntityFactory<E> factory) {
-        return factory.createEntitiesFromCSVFile().get(0);
     }
 
 }

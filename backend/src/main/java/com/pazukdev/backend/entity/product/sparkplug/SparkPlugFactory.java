@@ -1,6 +1,6 @@
 package com.pazukdev.backend.entity.product.sparkplug;
 
-import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.ProductFactory;
@@ -37,7 +37,7 @@ public class SparkPlugFactory extends ProductFactory<SparkPlug> {
     }
 
     private void applyHeatRange(final SparkPlug sparkPlug, final TableRow tableRow) {
-        sparkPlug.setHeatRange(tableRow.getIntegerValue(Characteristic.HEAT_RANGE));
+        sparkPlug.setHeatRange(tableRow.getIntegerValue(Specification.HEAT_RANGE));
     }
 }
 

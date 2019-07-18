@@ -1,6 +1,6 @@
 package com.pazukdev.backend.entity.manufacturer;
 
-import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
@@ -39,12 +39,12 @@ public class ManufacturerFactory extends AbstractEntityFactory<Manufacturer> {
     }
 
     private void applyFounded(final Manufacturer manufacturer, final TableRow tableRow) {
-        final String year = tableRow.getStringValue(Characteristic.FOUNDED);
+        final String year = tableRow.getStringValue(Specification.FOUNDED);
         manufacturer.setFounded(year);
     }
 
     private void applyDefunct(final Manufacturer manufacturer, final TableRow tableRow) {
-        final String year = tableRow.getStringValue(Characteristic.DEFUNCT);
+        final String year = tableRow.getStringValue(Specification.DEFUNCT);
         manufacturer.setDefunct(year);
     }
 

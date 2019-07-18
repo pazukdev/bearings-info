@@ -60,9 +60,13 @@ public class CSVFileUtil {
         return format(lines);
     }
 
-    public static <Entity extends AbstractEntity> Entity searchByName(final DefaultSearchRequest request,
-                                                                      final AbstractEntityFactory<Entity> factory) {
+    public static <E extends AbstractEntity> E searchByName(final DefaultSearchRequest request,
+                                                            final AbstractEntityFactory<E> factory) {
         return factory.searchByName(request.getName());
+    }
+
+    public static <E extends AbstractEntity> E getFirstEntity(final AbstractEntityFactory<E> factory) {
+        return factory.createEntitiesFromCSVFile().get(0);
     }
 
     private static List<String[]> format(final List<String[]> list) {

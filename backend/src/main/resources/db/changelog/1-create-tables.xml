@@ -118,6 +118,7 @@
             <column name="manufacturer_id" type="bigint"/>
             <column name="engine_id" type="bigint"/>
             <column name="weight_g" type="int"/>
+            <column name="fuel_capacity_l" type="double"/>
         </createTable>
         <rollback>
             <dropTable tableName="motorcycle"/>

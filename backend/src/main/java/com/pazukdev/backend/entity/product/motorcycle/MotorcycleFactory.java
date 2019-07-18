@@ -1,6 +1,6 @@
 package com.pazukdev.backend.entity.product.motorcycle;
 
-import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.ProductFactory;
@@ -45,10 +45,11 @@ public class MotorcycleFactory extends ProductFactory<Motorcycle> {
 
         applyWeight(motorcycle, tableRow);
         applyEngine(motorcycle, tableRow);
+        applyFuelCapacity(motorcycle, tableRow);
     }
 
     private void applyEngine(final Motorcycle motorcycle, final TableRow tableRow) {
-        final String engineName = tableRow.getStringValue(Characteristic.ENGINE);
+        final String engineName = tableRow.getStringValue(Specification.ENGINE);
         final EngineService engineService = context != null ? context.getEngineService() : null;
         final Engine engine = getEntity(engineName, engineService, engineFactory);
 
@@ -56,8 +57,13 @@ public class MotorcycleFactory extends ProductFactory<Motorcycle> {
     }
 
     private void applyWeight(final Motorcycle motorcycle, final TableRow tableRow) {
-        final Integer weight_kg = tableRow.getIntegerValue(Characteristic.WEIGHT_KG);
+        final Integer weight_kg = tableRow.getIntegerValue(Specification.WEIGHT_KG);
         motorcycle.setWeightG(WeightUtil.toG(weight_kg));
+    }
+
+    private void applyFuelCapacity(final Motorcycle motorcycle, final TableRow tableRow) {
+        final double capacity = tableRow.getIntegerValue(Specification.FUEL_CAPACITY_L);
+        motorcycle.setFuelCapacityL(capacity);
     }
 
 }

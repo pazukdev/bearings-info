@@ -1,6 +1,6 @@
 package com.pazukdev.backend.entity.product.bearing;
 
-import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.ProductFactory;
@@ -40,17 +40,17 @@ public class BearingFactory extends ProductFactory<Bearing> {
     }
 
     private void applyType(final Bearing bearing, final TableRow tableRow) {
-        final String type = tableRow.getStringValue(Characteristic.TYPE);
+        final String type = tableRow.getStringValue(Specification.TYPE);
         bearing.setType(type);
     }
 
     private void applyRollingElement(final Bearing bearing, final TableRow tableRow) {
-        final String rollingElementData = tableRow.getStringValueBeforeParenthesises(Characteristic.ROLLING_ELEMENT);
+        final String rollingElementData = tableRow.getStringValueBeforeParenthesises(Specification.ROLLING_ELEMENT);
         bearing.setRollingElement(rollingElementData);
     }
 
     private void applyRollingElementsQuantity(final Bearing bearing, final TableRow tableRow) {
-        final Integer rollingElementsQuantity = tableRow.getIntegerValue(Characteristic.ROLLING_ELEMENT);
+        final Integer rollingElementsQuantity = tableRow.getIntegerValue(Specification.ROLLING_ELEMENT);
         bearing.setRollingElementsQuantity(rollingElementsQuantity);
     }
 

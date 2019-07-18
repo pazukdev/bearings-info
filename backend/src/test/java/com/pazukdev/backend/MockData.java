@@ -13,11 +13,15 @@ import lombok.Getter;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.pazukdev.backend.util.CSVFileUtil.getFirstEntity;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
 @Getter
 public class MockData {
+
+    private final TestContext testContext = TestContext.create();
 
     public Manufacturer manufacturer() {
         final Manufacturer manufacturer = new Manufacturer();
@@ -80,13 +84,7 @@ public class MockData {
     }
 
     public Motorcycle motorcycle() {
-        final Motorcycle motorcycle = new Motorcycle();
-        motorcycle.setName("motorcycle name");
-        motorcycle.setProductionStartYear(1917);
-        motorcycle.setProductionStopYear(1993);
-        motorcycle.setManufacturer(manufacturer());
-        motorcycle.setWeightG(350);
-        return motorcycle;
+        return getFirstEntity(testContext.getMotorcycleFactory());
     }
 
     public MotorcycleDto motorcycleDto() {
@@ -96,6 +94,7 @@ public class MockData {
         motorcycleDto.setProductionStopYear(1946);
         motorcycleDto.setManufacturerId(manufacturerDto().getId());
         motorcycleDto.setWeightG(300);
+        motorcycleDto.setFuelCapacityL(20D);
         return motorcycleDto;
     }
 

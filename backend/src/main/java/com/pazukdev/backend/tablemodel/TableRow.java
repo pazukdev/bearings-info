@@ -1,6 +1,6 @@
 package com.pazukdev.backend.tablemodel;
 
-import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.characteristic.Specification;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -28,31 +28,31 @@ public class TableRow {
         data.put(key, value);
     }
 
-    public List<String> getStringValues(final Characteristic characteristic) {
+    public List<String> getStringValues(final Specification characteristic) {
         return getList(getStringValue(characteristic));
     }
 
-    public String getStringValue(final Characteristic characteristic) {
+    public String getStringValue(final Specification characteristic) {
         return getString(data.get(transformToKey(characteristic)));
     }
 
-    public String getStringValueBeforeParenthesises(final Characteristic characteristic) {
+    public String getStringValueBeforeParenthesises(final Specification characteristic) {
         return getStringBeforeParentheses(getStringValue(characteristic));
     }
 
-    public Integer getIntegerValue(final Characteristic characteristic) {
+    public Integer getIntegerValue(final Specification characteristic) {
         return extractIntegerAutomatically(getStringValue(characteristic));
     }
 
-    public Integer getProductionStartYear(final Characteristic characteristic) {
+    public Integer getProductionStartYear(final Specification characteristic) {
         return getIntegerBeforeDash(getStringValue(characteristic));
     }
 
-    public Integer getProductionStopYear(final Characteristic characteristic) {
+    public Integer getProductionStopYear(final Specification characteristic) {
         return getIntegerAfterDash(getStringValue(characteristic));
     }
 
-    private String transformToKey(final Characteristic characteristic) {
+    private String transformToKey(final Specification characteristic) {
         return characteristic.toString().toLowerCase();
     }
 

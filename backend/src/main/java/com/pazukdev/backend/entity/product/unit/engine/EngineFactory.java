@@ -1,6 +1,6 @@
 package com.pazukdev.backend.entity.product.unit.engine;
 
-import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingFactory;
@@ -62,19 +62,19 @@ public class EngineFactory extends UnitFactory<Engine> {
     }
 
     private void applyPower(final Engine engine, final TableRow tableRow) {
-        engine.setPowerHp(tableRow.getIntegerValue(Characteristic.POWER_HP));
+        engine.setPowerHp(tableRow.getIntegerValue(Specification.POWER_HP));
     }
 
     private void applyTorque(final Engine engine, final TableRow tableRow) {
-        engine.setTorqueNm(tableRow.getIntegerValue(Characteristic.TORQUE_NM));
+        engine.setTorqueNm(tableRow.getIntegerValue(Specification.TORQUE_NM));
     }
 
     private void applySpeed(final Engine engine, final TableRow tableRow) {
-        engine.setSpeedRpm(tableRow.getIntegerValue(Characteristic.SPEED_RPM));
+        engine.setSpeedRpm(tableRow.getIntegerValue(Specification.SPEED_RPM));
     }
 
     private void applySparkPlug(final Engine engine, final TableRow tableRow) {
-        final String sparkPlugName = tableRow.getStringValue(Characteristic.SPARK_PLUG);
+        final String sparkPlugName = tableRow.getStringValue(Specification.SPARK_PLUG);
         final SparkPlugService sparkPlugService = context != null ? context.getSparkPlugService() : null;
         final SparkPlug sparkPlug = getEntity(sparkPlugName, sparkPlugService, sparkPlugFactory);
 
@@ -82,7 +82,7 @@ public class EngineFactory extends UnitFactory<Engine> {
     }
 
     private void applyBearings(final Engine engine, final TableRow tableRow) {
-        final List<String> bearingNames = tableRow.getStringValues(Characteristic.BEARING);
+        final List<String> bearingNames = tableRow.getStringValues(Specification.BEARING);
         final BearingService bearingService = context != null ? context.getBearingService() : null;
         for (final String bearingName : bearingNames) {
             engine.getBearings().add(getEntity(bearingName, bearingService, bearingFactory));

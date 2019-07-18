@@ -27,5 +27,7 @@ public class Motorcycle extends Product {
     private Engine engine;
     @Column(name = "weight_g")
     private Integer weightG;
+    @Column(name = "fuel_capacity_l")
+    private Double fuelCapacityL;
 
 }

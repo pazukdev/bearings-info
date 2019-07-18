@@ -16,5 +16,6 @@ public class MotorcycleDto extends ProductDto {
 
     private Long engineId;
     private Integer weightG;
+    private Double fuelCapacityL;
 
 }

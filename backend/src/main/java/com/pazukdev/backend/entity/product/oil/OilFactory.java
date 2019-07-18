@@ -1,6 +1,6 @@
 package com.pazukdev.backend.entity.product.oil;
 
-import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.ProductFactory;
@@ -40,15 +40,15 @@ public class OilFactory extends ProductFactory<Oil> {
     }
 
     private void applyViscosity(final Oil oil, final TableRow tableRow) {
-        oil.setViscosity(tableRow.getStringValue(Characteristic.VISCOSITY));
+        oil.setViscosity(tableRow.getStringValue(Specification.VISCOSITY));
     }
 
     private void applyBase(final Oil oil, final TableRow tableRow) {
-        oil.setBase(tableRow.getStringValue(Characteristic.BASE));
+        oil.setBase(tableRow.getStringValue(Specification.BASE));
     }
 
     private void applySeasonality(final Oil oil, final TableRow tableRow) {
-        oil.setSeasonality(tableRow.getStringValue(Characteristic.SEASONALITY));
+        oil.setSeasonality(tableRow.getStringValue(Specification.SEASONALITY));
     }
 
 }

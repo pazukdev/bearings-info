@@ -1,6 +1,6 @@
 package com.pazukdev.backend.entity.product;
 
-import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.entity.manufacturer.Manufacturer;
@@ -30,17 +30,17 @@ public abstract class ProductFactory<Entity extends Product> extends AbstractEnt
     }
 
     protected void applyProductionStartYear(final Product product, final TableRow tableRow) {
-        final Integer productionStartYear = tableRow.getProductionStartYear(Characteristic.PRODUCTION);
+        final Integer productionStartYear = tableRow.getProductionStartYear(Specification.PRODUCTION);
         product.setProductionStartYear(productionStartYear);
     }
 
     protected void applyProductionStopYear(final Product product, final TableRow tableRow) {
-        final Integer productionStopYear = tableRow.getProductionStopYear(Characteristic.PRODUCTION);
+        final Integer productionStopYear = tableRow.getProductionStopYear(Specification.PRODUCTION);
         product.setProductionStopYear(productionStopYear);
     }
 
     protected void applyManufacturer(final Product product, final TableRow tableRow) {
-        final String manufacturerName = tableRow.getStringValue(Characteristic.MANUFACTURER);
+        final String manufacturerName = tableRow.getStringValue(Specification.MANUFACTURER);
         final ManufacturerService manufacturerService = context != null ? context.getManufacturerService() : null;
         final Manufacturer manufacturer = getEntity(manufacturerName, manufacturerService, manufacturerFactory);
 

@@ -1,5 +1,5 @@
-name,manufacturer,production,weight_kg,engine
-M-72,imz,1941-1957,300,M67-36
-K-750,kmz,1958-1964,350,M67-36
-Ural,imz,1957-1993,350,M67-36
-Dnepr,kmz,1960-1993,350,MT-8
+name,manufacturer,production,weight_kg,engine,fuel_capacity_l
+M-72,imz,1941-1957,300,M67-36,19
+K-750,kmz,1958-1964,350,M67-36,19
+Ural,imz,1957-1993,350,M67-36,20
+Dnepr,kmz,1960-1993,350,MT-8,20

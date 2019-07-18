@@ -1,6 +1,6 @@
 package com.pazukdev.backend.entity.product.seal;
 
-import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.ProductFactory;
@@ -39,12 +39,12 @@ public class SealFactory extends ProductFactory<Seal> {
     }
 
     private void applyRotation(final Seal seal, TableRow tableRow) {
-        final String rotation = tableRow.getStringValue(Characteristic.ROTATION);
+        final String rotation = tableRow.getStringValue(Specification.ROTATION);
         seal.setRotation(rotation);
     }
 
     private void applyMaterial(final Seal seal, final TableRow tableRow) {
-        final String material = tableRow.getStringValue(Characteristic.MATERIAL);
+        final String material = tableRow.getStringValue(Specification.MATERIAL);
         seal.setMaterial(material);
     }
 

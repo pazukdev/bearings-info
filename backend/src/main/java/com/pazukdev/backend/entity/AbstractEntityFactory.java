@@ -1,6 +1,6 @@
 package com.pazukdev.backend.entity;
 
-import com.pazukdev.backend.characteristic.Characteristic;
+import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.service.AbstractService;
 import com.pazukdev.backend.tablemodel.TableModel;
@@ -66,7 +66,7 @@ public abstract class AbstractEntityFactory<Entity extends AbstractEntity> {
     }
 
     protected void applyName(final AbstractEntity entity, final TableRow tableRow) {
-        final String name = tableRow.getStringValue(Characteristic.NAME);
+        final String name = tableRow.getStringValue(Specification.NAME);
         entity.setName(name);
     }
 
