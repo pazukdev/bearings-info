@@ -31,8 +31,9 @@ public class SealFactory extends ProductFactory<Seal> {
     }
 
     @Override
-    protected void applyCharacteristics(Seal seal, TableRow tableRow) {
-        applyName(seal, tableRow);
+    protected void applyCharacteristics(final Seal seal, final TableRow tableRow) {
+        super.applyCharacteristics(seal, tableRow);
+
         applyRotation(seal, tableRow);
         applyMaterial(seal, tableRow);
     }

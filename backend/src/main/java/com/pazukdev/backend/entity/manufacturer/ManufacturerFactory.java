@@ -1,7 +1,7 @@
 package com.pazukdev.backend.entity.manufacturer;
 
 import com.pazukdev.backend.characteristic.Characteristic;
-import com.pazukdev.backend.dto.AbstractEntityFactory;
+import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import lombok.Data;
@@ -32,7 +32,8 @@ public class ManufacturerFactory extends AbstractEntityFactory<Manufacturer> {
 
     @Override
     protected void applyCharacteristics(Manufacturer manufacturer, TableRow tableRow) {
-        applyName(manufacturer, tableRow);
+        super.applyCharacteristics(manufacturer, tableRow);
+
         applyFounded(manufacturer, tableRow);
         applyDefunct(manufacturer, tableRow);
     }

@@ -50,11 +50,8 @@ public class EngineFactory extends UnitFactory<Engine> {
     }
 
     @Override
-    protected void applyCharacteristics(Engine engine, TableRow tableRow) {
-        applyName(engine, tableRow);
-        applyManufacturer(engine, tableRow);
-        applyProductionStartYear(engine, tableRow);
-        applyProductionStopYear(engine, tableRow);
+    protected void applyCharacteristics(final Engine engine, final TableRow tableRow) {
+        super.applyCharacteristics(engine, tableRow);
 
         applyPower(engine, tableRow);
         applyTorque(engine, tableRow);

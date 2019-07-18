@@ -31,8 +31,9 @@ public class OilFactory extends ProductFactory<Oil> {
     }
 
     @Override
-    protected void applyCharacteristics(Oil oil, TableRow tableRow) {
-        applyName(oil, tableRow);
+    protected void applyCharacteristics(final Oil oil, final TableRow tableRow) {
+        super.applyCharacteristics(oil, tableRow);
+
         applyViscosity(oil, tableRow);
         applyBase(oil, tableRow);
         applySeasonality(oil, tableRow);

@@ -29,7 +29,7 @@ public class ValveFactory extends ProductFactory<Valve> {
     }
 
     @Override
-    protected void applyCharacteristics(Valve valve, TableRow tableRow) {
-
+    protected void applyCharacteristics(final Valve valve, final TableRow tableRow) {
+        super.applyCharacteristics(valve, tableRow);
     }
 }

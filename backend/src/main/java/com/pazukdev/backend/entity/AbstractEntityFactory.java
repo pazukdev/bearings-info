@@ -1,8 +1,7 @@
-package com.pazukdev.backend.dto;
+package com.pazukdev.backend.entity;
 
 import com.pazukdev.backend.characteristic.Characteristic;
 import com.pazukdev.backend.dto.search.DefaultSearchRequest;
-import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.service.AbstractService;
 import com.pazukdev.backend.tablemodel.TableModel;
 import com.pazukdev.backend.tablemodel.TableModelFactory;
@@ -28,14 +27,16 @@ public abstract class AbstractEntityFactory<Entity extends AbstractEntity> {
 
     protected abstract File getCSVFile();
 
-    protected abstract void applyCharacteristics(final Entity entity, final TableRow tableRow);
-
     public Entity searchByName(final String name) {
         return createEntitiesFromCSVFile()
                 .stream()
                 .filter(entity -> entity.getName().equals(name))
                 .findFirst()
                 .orElse(null);
+    }
+
+    protected void applyCharacteristics(final Entity entity, final TableRow tableRow) {
+        applyName(entity, tableRow);
     }
 
     private TableModel getTableModelFromCSVFile() {

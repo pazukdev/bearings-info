@@ -31,8 +31,9 @@ public class BearingFactory extends ProductFactory<Bearing> {
     }
 
     @Override
-    protected void applyCharacteristics(Bearing bearing, TableRow tableRow) {
-        applyName(bearing, tableRow);
+    protected void applyCharacteristics(final Bearing bearing, final TableRow tableRow) {
+        super.applyCharacteristics(bearing, tableRow);
+
         applyType(bearing, tableRow);
         applyRollingElement(bearing, tableRow);
         applyRollingElementsQuantity(bearing, tableRow);

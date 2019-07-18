@@ -40,11 +40,8 @@ public class MotorcycleFactory extends ProductFactory<Motorcycle> {
     }
 
     @Override
-    protected void applyCharacteristics(Motorcycle motorcycle, TableRow tableRow) {
-        applyName(motorcycle, tableRow);
-        applyManufacturer(motorcycle, tableRow);
-        applyProductionStartYear(motorcycle, tableRow);
-        applyProductionStopYear(motorcycle, tableRow);
+    protected void applyCharacteristics(final Motorcycle motorcycle, final TableRow tableRow) {
+        super.applyCharacteristics(motorcycle, tableRow);
 
         applyWeight(motorcycle, tableRow);
         applyEngine(motorcycle, tableRow);

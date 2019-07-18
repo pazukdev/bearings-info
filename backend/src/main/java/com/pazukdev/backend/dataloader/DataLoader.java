@@ -1,7 +1,7 @@
 package com.pazukdev.backend.dataloader;
 
-import com.pazukdev.backend.dto.AbstractEntityFactory;
 import com.pazukdev.backend.entity.AbstractEntity;
+import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingFactory;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleFactory;

@@ -31,8 +31,8 @@ public class SparkPlugFactory extends ProductFactory<SparkPlug> {
     }
 
     @Override
-    protected void applyCharacteristics(SparkPlug sparkPlug, TableRow tableRow) {
-        applyName(sparkPlug, tableRow);
+    protected void applyCharacteristics(final SparkPlug sparkPlug, final TableRow tableRow) {
+        super.applyCharacteristics(sparkPlug, tableRow);
         applyHeatRange(sparkPlug, tableRow);
     }
 

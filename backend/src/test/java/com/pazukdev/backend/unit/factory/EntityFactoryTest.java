@@ -2,8 +2,8 @@ package com.pazukdev.backend.unit.factory;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.config.ServiceContext;
-import com.pazukdev.backend.dto.AbstractEntityFactory;
 import com.pazukdev.backend.entity.AbstractEntity;
+import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.entity.manufacturer.Manufacturer;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.Bearing;
