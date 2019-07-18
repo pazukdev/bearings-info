@@ -1,5 +1,6 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.dto.MotorcycleSpeedReportRS;
 import com.pazukdev.backend.entity.product.motorcycle.Motorcycle;
 import lombok.Getter;
 
@@ -8,8 +9,10 @@ import lombok.Getter;
  */
 public class SpeedCalculatorUtil {
 
-    public static int calculateSpeedWithDefaultGearTrain(final Motorcycle motorcycle) {
-        return calculateSpeed(motorcycle.getEngine().getSpeedRpm());
+    public static MotorcycleSpeedReportRS createSpeedReport(final Motorcycle motorcycle) {
+        final MotorcycleSpeedReportRS report = new MotorcycleSpeedReportRS();
+        report.setMaxSpeedKmh(calculateSpeed(motorcycle.getEngine().getSpeedRpm()));
+        return report;
     }
 
     public static int calculateSpeed(final int engineRpm) {
