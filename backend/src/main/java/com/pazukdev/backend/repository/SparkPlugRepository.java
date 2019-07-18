@@ -1,6 +1,6 @@
 package com.pazukdev.backend.repository;
 
-import com.pazukdev.backend.entity.product.SparkPlug;
+import com.pazukdev.backend.entity.product.sparkplug.SparkPlug;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

@@ -1,6 +1,8 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDto;
+import com.pazukdev.backend.converter.MotorcycleConverter;
+import com.pazukdev.backend.dto.MotorcycleSpeedReportRS;
+import com.pazukdev.backend.dto.product.MotorcycleDto;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.MotorcycleService;
 import io.swagger.annotations.Api;
@@ -31,39 +33,48 @@ import java.util.List;
 public class MotorcycleController {
 
     private final MotorcycleService service;
+    private final MotorcycleConverter converter;
 
     @GetMapping("/list")
-    @ApiOperation(value = "Get info about all motorcycles")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get all motorcycles")
     public List<MotorcycleDto> getAll() {
-        return service.getProductsList();
+        return converter.convertToDtoList(service.findAll());
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get info about motorcycle")
+    @ResponseStatus(HttpStatus.FOUND)
+    @ApiOperation(value = "Get motorcycle")
     public MotorcycleDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
-        return service.get(id);
+        return converter.convertToDto(service.getOne(id));
+    }
+
+    @GetMapping("/{id}/speed-report")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get motorcycle speed report")
+    public MotorcycleSpeedReportRS getSpeedReport(@PathVariable("id") Long id) throws ProductNotFoundException {
+        return service.getSpeedReport(id);
     }
 
     @PostMapping("/create")
-    @ApiOperation(value = "Create a new motorcycle")
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create new motorcycle")
     public boolean create(@RequestBody final MotorcycleDto dto) throws EntityExistsException, JSONException {
-        service.create(dto);
-        return true;
+        return service.create(dto) != null;
     }
 
     @DeleteMapping("/delete/{id}")
-    @ApiOperation(value = "Delete motorcycle by id")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete motorcycle")
     public MotorcycleDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
-        return service.delete(id);
+        return converter.convertToDto(service.delete(id));
     }
 
     @PostMapping("/delete-all")
-    @ApiOperation(value = "Delete motorcycles by ids")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete motorcycles")
     public List<MotorcycleDto> deleteAll(@RequestBody final Long[] ids) throws ProductNotFoundException {
-        return service.deleteAll(Arrays.asList(ids));
+        return converter.convertToDtoList(service.deleteAll(Arrays.asList(ids)));
     }
 
 }

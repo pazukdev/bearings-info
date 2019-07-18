@@ -1,9 +1,9 @@
 package com.pazukdev.backend.util;
 
 import com.opencsv.CSVReader;
-import com.pazukdev.backend.dto.AbstractDto;
-import com.pazukdev.backend.dto.AbstractDtoFactory;
-import com.pazukdev.backend.search.DefaultSearchRequest;
+import com.pazukdev.backend.dto.AbstractEntityFactory;
+import com.pazukdev.backend.dto.search.DefaultSearchRequest;
+import com.pazukdev.backend.entity.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,8 +60,8 @@ public class CSVFileUtil {
         return format(lines);
     }
 
-    public static <Dto extends AbstractDto> Dto searchByName(final DefaultSearchRequest request,
-                                                             final AbstractDtoFactory<Dto> factory) {
+    public static <Entity extends AbstractEntity> Entity searchByName(final DefaultSearchRequest request,
+                                                                      final AbstractEntityFactory<Entity> factory) {
         return factory.searchByName(request.getName());
     }
 

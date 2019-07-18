@@ -1,8 +1,8 @@
 package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
-import com.pazukdev.backend.dto.product.sparkplug.SparkPlugDto;
-import com.pazukdev.backend.entity.product.SparkPlug;
+import com.pazukdev.backend.dto.product.SparkPlugDto;
+import com.pazukdev.backend.entity.product.sparkplug.SparkPlug;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

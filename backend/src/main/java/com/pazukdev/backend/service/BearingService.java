@@ -1,10 +1,10 @@
 package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.BearingConverter;
-import com.pazukdev.backend.dto.product.bearing.BearingDto;
-import com.pazukdev.backend.entity.product.Bearing;
+import com.pazukdev.backend.dto.product.BearingDto;
+import com.pazukdev.backend.dto.search.DefaultSearchRequest;
+import com.pazukdev.backend.entity.product.bearing.Bearing;
 import com.pazukdev.backend.repository.BearingRepository;
-import com.pazukdev.backend.search.DefaultSearchRequest;
 import org.springframework.stereotype.Service;
 
 /**

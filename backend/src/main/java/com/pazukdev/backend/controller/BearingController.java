@@ -1,8 +1,9 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dto.product.bearing.BearingDto;
+import com.pazukdev.backend.converter.BearingConverter;
+import com.pazukdev.backend.dto.product.BearingDto;
+import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.exception.ProductNotFoundException;
-import com.pazukdev.backend.search.DefaultSearchRequest;
 import com.pazukdev.backend.service.BearingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,43 +32,59 @@ import java.util.List;
 public class BearingController {
 
     private final BearingService service;
+    private final BearingConverter converter;
 
     @GetMapping("/list")
-    @ApiOperation(value = "Get info about all bearings")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get all bearings")
     public List<BearingDto> getAll() {
-        return service.getProductsList();
+        return converter.convertToDtoList(service.findAll());
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get info about bearing")
+    @ResponseStatus(HttpStatus.FOUND)
+    @ApiOperation(value = "Get bearing")
     public BearingDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
-        return service.get(id);
+        return converter.convertToDto(service.getOne(id));
     }
 
     @PostMapping("/create")
-    @ApiOperation(value = "Create a new bearing")
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create new bearing")
     public boolean create(@RequestBody final BearingDto dto) throws EntityExistsException, JSONException {
         service.create(dto);
         return true;
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete bearing")
     public void delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
         service.delete(id);
     }
 
     @PostMapping(value = "/search-by-name")
-    @ApiOperation(value = "get bearing by name")
+    @ResponseStatus(HttpStatus.FOUND)
+    @ApiOperation(value = "Get bearing by name")
     public BearingDto searchByName(@RequestBody final DefaultSearchRequest request) {
-        return service.search(request);
+        return converter.convertToDto(service.search(request));
     }
 
     @PostMapping(value = "/search")
-    @ApiOperation(value = "get bearings list by ids list")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get bearings list by ids list")
     public List<BearingDto> search(@RequestBody final List<Long> ids) {
-        return service.search(ids);
+        return converter.convertToDtoList(service.search(ids));
     }
 
 }
+
+
+
+
+
+
+
+
+
+

@@ -2,8 +2,8 @@ package com.pazukdev.backend.unit.converter;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.BearingConverter;
-import com.pazukdev.backend.dto.product.bearing.BearingDto;
-import com.pazukdev.backend.entity.product.Bearing;
+import com.pazukdev.backend.dto.product.BearingDto;
+import com.pazukdev.backend.entity.product.bearing.Bearing;
 import org.junit.Test;
 
 import static com.pazukdev.backend.unit.converter.util.ConverterTestUtil.validateBearingConversion;

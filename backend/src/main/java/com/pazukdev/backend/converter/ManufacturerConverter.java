@@ -1,8 +1,8 @@
 package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
-import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
-import com.pazukdev.backend.entity.Manufacturer;
+import com.pazukdev.backend.dto.ManufacturerDto;
+import com.pazukdev.backend.entity.manufacturer.Manufacturer;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

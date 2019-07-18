@@ -2,8 +2,7 @@ package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.MotorcycleConverter;
-import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDto;
-import com.pazukdev.backend.entity.product.Motorcycle;
+import com.pazukdev.backend.entity.product.motorcycle.Motorcycle;
 import com.pazukdev.backend.repository.MotorcycleRepository;
 import com.pazukdev.backend.service.MotorcycleService;
 import org.junit.Test;
@@ -48,7 +47,7 @@ public class MotorcycleServiceTest {
     }
 
     @Test
-    public void getMotorcyclesList() {
+    public void findAllMotorcycles() {
         final Motorcycle motorcycle = mockData.motorcycle();
 
         final List<Motorcycle> findAllResult = new ArrayList<>();
@@ -56,17 +55,9 @@ public class MotorcycleServiceTest {
         findAllResult.add(motorcycle);
 
         doReturn(findAllResult).when(repository).findAll();
-        final List<MotorcycleDto> dtos = service.getProductsList();
-
+        final List<Motorcycle> motorcycles = service.findAll();
         verify(repository, times(1)).findAll();
-        assertEquals(findAllResult.size(), dtos.size());
-        for (final MotorcycleDto dto : dtos) {
-            assertEquals(motorcycle.getName(), dto.getName());
-            assertEquals(motorcycle.getProductionStartYear(), dto.getProductionStartYear());
-            assertEquals(motorcycle.getProductionStopYear(), dto.getProductionStopYear());
-            assertEquals(motorcycle.getManufacturer().getId(), dto.getManufacturerId());
-            assertEquals(motorcycle.getWeightG(), dto.getWeightG());
-        }
+        assertEquals(findAllResult.size(), motorcycles.size());
     }
 
 }

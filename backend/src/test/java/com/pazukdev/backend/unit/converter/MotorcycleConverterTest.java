@@ -2,8 +2,8 @@ package com.pazukdev.backend.unit.converter;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.MotorcycleConverter;
-import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDto;
-import com.pazukdev.backend.entity.product.Motorcycle;
+import com.pazukdev.backend.dto.product.MotorcycleDto;
+import com.pazukdev.backend.entity.product.motorcycle.Motorcycle;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

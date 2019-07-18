@@ -1,6 +1,6 @@
 package com.pazukdev.backend.repository;
 
-import com.pazukdev.backend.entity.product.Seal;
+import com.pazukdev.backend.entity.product.seal.Seal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

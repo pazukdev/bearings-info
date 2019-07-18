@@ -1,10 +1,10 @@
 package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
-import com.pazukdev.backend.dto.product.unit.engine.EngineDto;
-import com.pazukdev.backend.entity.product.Bearing;
-import com.pazukdev.backend.entity.product.Oil;
-import com.pazukdev.backend.entity.product.unit.Engine;
+import com.pazukdev.backend.dto.product.unit.EngineDto;
+import com.pazukdev.backend.entity.product.bearing.Bearing;
+import com.pazukdev.backend.entity.product.oil.Oil;
+import com.pazukdev.backend.entity.product.unit.engine.Engine;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

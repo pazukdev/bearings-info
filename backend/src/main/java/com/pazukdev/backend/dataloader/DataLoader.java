@@ -1,26 +1,25 @@
 package com.pazukdev.backend.dataloader;
 
-import com.pazukdev.backend.config.ServiceContext;
-import com.pazukdev.backend.dto.AbstractDto;
-import com.pazukdev.backend.dto.AbstractDtoFactory;
-import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
-import com.pazukdev.backend.dto.product.bearing.BearingDtoFactory;
-import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDtoFactory;
-import com.pazukdev.backend.dto.product.oil.OilDtoFactory;
-import com.pazukdev.backend.dto.product.seal.SealDtoFactory;
-import com.pazukdev.backend.dto.product.sparkplug.SparkPlugDtoFactory;
-import com.pazukdev.backend.dto.product.unit.engine.EngineDtoFactory;
+import com.pazukdev.backend.dto.AbstractEntityFactory;
 import com.pazukdev.backend.entity.AbstractEntity;
-import com.pazukdev.backend.service.AbstractService;
-import com.pazukdev.backend.service.BearingService;
-import com.pazukdev.backend.service.ManufacturerService;
-import com.pazukdev.backend.service.MotorcycleService;
-import com.pazukdev.backend.service.OilService;
-import com.pazukdev.backend.service.SealService;
-import com.pazukdev.backend.service.SparkPlugService;
+import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
+import com.pazukdev.backend.entity.product.bearing.BearingFactory;
+import com.pazukdev.backend.entity.product.motorcycle.MotorcycleFactory;
+import com.pazukdev.backend.entity.product.oil.OilFactory;
+import com.pazukdev.backend.entity.product.seal.SealFactory;
+import com.pazukdev.backend.entity.product.sparkplug.SparkPlugFactory;
+import com.pazukdev.backend.entity.product.unit.engine.EngineFactory;
+import com.pazukdev.backend.repository.BearingRepository;
+import com.pazukdev.backend.repository.EngineRepository;
+import com.pazukdev.backend.repository.ManufacturerRepository;
+import com.pazukdev.backend.repository.MotorcycleRepository;
+import com.pazukdev.backend.repository.OilRepository;
+import com.pazukdev.backend.repository.SealRepository;
+import com.pazukdev.backend.repository.SparkPlugRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,21 +31,21 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DataLoader implements ApplicationRunner {
 
-    private final ManufacturerService manufacturerService;
-    private final MotorcycleService motorcycleService;
-    private final BearingService bearingService;
-    private final SealService sealService;
-    private final OilService oilService;
-    private final SparkPlugService sparkPlugService;
-    private final ServiceContext serviceContext;
+    private final ManufacturerRepository manufacturerRepository;
+    private final MotorcycleRepository motorcycleRepository;
+    private final BearingRepository bearingRepository;
+    private final SealRepository sealRepository;
+    private final OilRepository oilRepository;
+    private final SparkPlugRepository sparkPlugRepository;
+    private final EngineRepository engineRepository;
 
-    private final ManufacturerDtoFactory manufacturerDtoFactory;
-    private final MotorcycleDtoFactory motorcycleDtoFactory;
-    private final BearingDtoFactory bearingDtoFactory;
-    private final SealDtoFactory sealDtoFactory;
-    private final OilDtoFactory oilDtoFactory;
-    private final SparkPlugDtoFactory sparkPlugDtoFactory;
-    private final EngineDtoFactory engineDtoFactory;
+    private final ManufacturerFactory manufacturerFactory;
+    private final MotorcycleFactory motorcycleFactory;
+    private final BearingFactory bearingFactory;
+    private final SealFactory sealFactory;
+    private final OilFactory oilFactory;
+    private final SparkPlugFactory sparkPlugFactory;
+    private final EngineFactory engineFactory;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -54,64 +53,64 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void populateEmptyTables() {
-        loadManufacturers(productsListIsEmpty(manufacturerService));
-        loadOils(productsListIsEmpty(oilService));
-        loadSparkPlugs(productsListIsEmpty(sparkPlugService));
-        loadBearings(productsListIsEmpty(bearingService));
-        loadSeals(productsListIsEmpty(sealService));
-        loadEngines(productsListIsEmpty(serviceContext.getEngineService()));
-        loadMotorcycles(productsListIsEmpty(motorcycleService));
+        loadManufacturers(repositoryIsEmpty(manufacturerRepository));
+        loadOils(repositoryIsEmpty(oilRepository));
+        loadSparkPlugs(repositoryIsEmpty(sparkPlugRepository));
+        loadBearings(repositoryIsEmpty(bearingRepository));
+        loadSeals(repositoryIsEmpty(sealRepository));
+        loadEngines(repositoryIsEmpty(engineRepository));
+        loadMotorcycles(repositoryIsEmpty(motorcycleRepository));
     }
 
-    private Boolean productsListIsEmpty(final AbstractService service) {
-        return service.getProductsList().isEmpty();
+    private <Entity extends AbstractEntity> Boolean repositoryIsEmpty(final JpaRepository<Entity, Long> repository) {
+        return repository.findAll().isEmpty();
     }
 
     private void loadManufacturers(final Boolean tableIsEmpty) {
         if (tableIsEmpty) {
-            createAll(manufacturerDtoFactory, manufacturerService);
+            createAll(manufacturerFactory, manufacturerRepository);
         }
     }
 
     private void loadMotorcycles(final Boolean tableIsEmpty) {
         if (tableIsEmpty) {
-            createAll(motorcycleDtoFactory, motorcycleService);
+            createAll(motorcycleFactory, motorcycleRepository);
         }
     }
 
     private void loadBearings(final Boolean tableIsEmpty) {
         if (tableIsEmpty) {
-            createAll(bearingDtoFactory, bearingService);
+            createAll(bearingFactory, bearingRepository);
         }
     }
 
     private void loadSeals(final Boolean tableIsEmpty) {
         if (tableIsEmpty) {
-            createAll(sealDtoFactory, sealService);
+            createAll(sealFactory, sealRepository);
         }
     }
 
     private void loadOils(final Boolean tableIsEmpty) {
         if (tableIsEmpty) {
-            createAll(oilDtoFactory, oilService);
+            createAll(oilFactory, oilRepository);
         }
     }
 
     private void loadSparkPlugs(final Boolean tableIsEmpty) {
         if (tableIsEmpty) {
-            createAll(sparkPlugDtoFactory, sparkPlugService);
+            createAll(sparkPlugFactory, sparkPlugRepository);
         }
     }
 
     private void loadEngines(final Boolean tableIsEmpty) {
         if (tableIsEmpty) {
-            createAll(engineDtoFactory, serviceContext.getEngineService());
+            createAll(engineFactory, engineRepository);
         }
     }
 
-    private <D extends AbstractDto, E extends AbstractEntity> void createAll(final AbstractDtoFactory<D> factory,
-                                                                             final AbstractService<E, D> service) {
-        factory.createDtosFromCSVFile().forEach(service::create);
+    private <Entity extends AbstractEntity> void createAll(final AbstractEntityFactory<Entity> factory,
+                                                           final JpaRepository<Entity, Long> repository) {
+        factory.createEntitiesFromCSVFile().forEach(repository::save);
     }
 
 }

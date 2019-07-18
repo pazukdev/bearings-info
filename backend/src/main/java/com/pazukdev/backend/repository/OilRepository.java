@@ -1,6 +1,6 @@
 package com.pazukdev.backend.repository;
 
-import com.pazukdev.backend.entity.product.Oil;
+import com.pazukdev.backend.entity.product.oil.Oil;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

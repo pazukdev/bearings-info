@@ -1,9 +1,9 @@
 package com.pazukdev.backend.config;
 
-import com.pazukdev.backend.dto.manufacturer.ManufacturerDtoFactory;
-import com.pazukdev.backend.dto.product.bearing.BearingDtoFactory;
-import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDtoFactory;
-import com.pazukdev.backend.dto.product.seal.SealDtoFactory;
+import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
+import com.pazukdev.backend.entity.product.bearing.BearingFactory;
+import com.pazukdev.backend.entity.product.motorcycle.MotorcycleFactory;
+import com.pazukdev.backend.entity.product.seal.SealFactory;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class FactoryContext {
 
-    private final ManufacturerDtoFactory manufacturerDtoFactory;
-    private final BearingDtoFactory bearingDtoFactory;
-    private final SealDtoFactory sealDtoFactory;
-    private final MotorcycleDtoFactory motorcycleDtoFactory;
+    private final ManufacturerFactory manufacturerDtoFactory;
+    private final BearingFactory bearingDtoFactory;
+    private final SealFactory sealDtoFactory;
+    private final MotorcycleFactory motorcycleDtoFactory;
 
 }

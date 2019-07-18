@@ -1,8 +1,8 @@
 package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
-import com.pazukdev.backend.dto.product.seal.SealDto;
-import com.pazukdev.backend.entity.product.Seal;
+import com.pazukdev.backend.dto.product.SealDto;
+import com.pazukdev.backend.entity.product.seal.Seal;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

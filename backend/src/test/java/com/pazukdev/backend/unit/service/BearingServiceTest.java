@@ -2,8 +2,7 @@ package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.BearingConverter;
-import com.pazukdev.backend.dto.product.bearing.BearingDto;
-import com.pazukdev.backend.entity.product.Bearing;
+import com.pazukdev.backend.entity.product.bearing.Bearing;
 import com.pazukdev.backend.repository.BearingRepository;
 import com.pazukdev.backend.service.BearingService;
 import org.junit.Test;
@@ -45,7 +44,7 @@ public class BearingServiceTest {
     }
 
     @Test
-    public void getBearingsList() {
+    public void findAllBearings() {
         final Bearing bearing = mockData.bearing();
 
         final List<Bearing> findAllResult = new ArrayList<>();
@@ -53,16 +52,9 @@ public class BearingServiceTest {
         findAllResult.add(bearing);
 
         doReturn(findAllResult).when(repository).findAll();
-        final List<BearingDto> dtos = service.getProductsList();
-
+        final List<Bearing> bearings = service.findAll();
         verify(repository, times(1)).findAll();
-        assertEquals(findAllResult.size(), dtos.size());
-        for (final BearingDto dto : dtos) {
-            assertEquals(bearing.getName(), dto.getName());
-            assertEquals(bearing.getType(), dto.getType());
-            assertEquals(bearing.getRollingElement(), dto.getRollingElement());
-            assertEquals(bearing.getRollingElementsQuantity(), dto.getRollingElementsQuantity());
-        }
+        assertEquals(findAllResult.size(), bearings.size());
     }
 
 }

@@ -1,6 +1,7 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dto.product.sparkplug.SparkPlugDto;
+import com.pazukdev.backend.converter.SparkPlugConverter;
+import com.pazukdev.backend.dto.product.SparkPlugDto;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.SparkPlugService;
 import io.swagger.annotations.Api;
@@ -31,39 +32,41 @@ import java.util.List;
 public class SparkPlugController {
 
     private final SparkPlugService service;
+    private final SparkPlugConverter converter;
 
     @GetMapping("/list")
-    @ApiOperation(value = "Get info about all spark plugs")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get all spark plugs")
     public List<SparkPlugDto> getAll() {
-        return service.getProductsList();
+        return converter.convertToDtoList(service.findAll());
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get info about spark plug")
+    @ResponseStatus(HttpStatus.FOUND)
+    @ApiOperation(value = "Get spark plug")
     public SparkPlugDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
-        return service.get(id);
+        return converter.convertToDto(service.getOne(id));
     }
 
     @PostMapping("/create")
-    @ApiOperation(value = "Create a new spark plug")
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create new spark plug")
     public boolean create(@RequestBody final SparkPlugDto dto) throws EntityExistsException, JSONException {
-        service.create(dto);
-        return true;
+        return service.create(dto) != null;
     }
 
     @DeleteMapping("/delete/{id}")
-    @ApiOperation(value = "Delete spark plug by id")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete spark plug")
     public SparkPlugDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
-        return service.delete(id);
+        return converter.convertToDto(service.delete(id));
     }
 
     @PostMapping("/delete-all")
-    @ApiOperation(value = "Delete spark plugs by ids")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete spark plugs")
     public List<SparkPlugDto> deleteAll(@RequestBody final Long[] ids) throws ProductNotFoundException {
-        return service.deleteAll(Arrays.asList(ids));
+        return converter.convertToDtoList(service.deleteAll(Arrays.asList(ids)));
     }
 
 }

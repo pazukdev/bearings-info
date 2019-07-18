@@ -2,9 +2,9 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.AbstractDto;
+import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
-import com.pazukdev.backend.search.DefaultSearchRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,14 +22,14 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     protected final EntityDtoConverter<Entity, Dto> converter;
 
     @Transactional
-    public List<Dto> getProductsList() {
-        return converter.convertToDtoList(repository.findAll());
+    public List<Entity> findAll() {
+        return repository.findAll();
     }
 
     @Transactional
-    public Dto get(final Long id) throws ProductNotFoundException {
+    public Entity getOne(final Long id) throws ProductNotFoundException {
         checkProductExists(id);
-        return converter.convertToDto(repository.getOne(id));
+        return repository.getOne(id);
     }
 
     @Transactional
@@ -38,20 +38,20 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     }
 
     @Transactional
-    public Dto delete(final Long id) throws ProductNotFoundException {
-        final Entity entity = converter.convertToEntity(get(id));
+    public Entity delete(final Long id) throws ProductNotFoundException {
+        final Entity entity = getOne(id);
         repository.deleteById(entity.getId());
-        return converter.convertToDto(entity);
+        return entity;
     }
 
     @Transactional
-    public List<Dto> deleteAll(final List<Long> ids) throws ProductNotFoundException {
-        final List<Dto> dtos = new ArrayList<>();
+    public List<Entity> deleteAll(final List<Long> ids) throws ProductNotFoundException {
+        final List<Entity> entities = new ArrayList<>();
         for (final Long id : ids) {
-            dtos.add(get(id));
+            entities.add(getOne(id));
             repository.deleteById(id);
         }
-        return dtos;
+        return entities;
     }
 
     public Boolean productExists(final Long id) throws ProductNotFoundException {
@@ -68,20 +68,19 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     }
 
     @Transactional
-    public Dto search(final DefaultSearchRequest request) {
-        final Entity entity = findByName(request);
-        return converter.convertToDto(entity);
+    public Entity search(final DefaultSearchRequest request) {
+        return findByName(request);
     }
 
     @Transactional
-    public List<Dto> search(final List<Long> ids) {
+    public List<Entity> search(final List<Long> ids) {
         final List<Entity> entities;
         if (ids == null || ids.isEmpty()) {
             entities = repository.findAll();
         } else {
             entities = repository.findAllById(ids);
         }
-        return converter.convertToDtoList(entities);
+        return entities;
     }
 
     protected abstract Entity findByName(final DefaultSearchRequest request);

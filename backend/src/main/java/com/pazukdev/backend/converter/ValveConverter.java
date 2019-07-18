@@ -1,8 +1,8 @@
 package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
-import com.pazukdev.backend.dto.product.valve.ValveDto;
-import com.pazukdev.backend.entity.product.Valve;
+import com.pazukdev.backend.dto.product.ValveDto;
+import com.pazukdev.backend.entity.product.valve.Valve;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

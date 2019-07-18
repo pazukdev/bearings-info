@@ -2,8 +2,8 @@ package com.pazukdev.backend.unit.converter;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.ManufacturerConverter;
-import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
-import com.pazukdev.backend.entity.Manufacturer;
+import com.pazukdev.backend.dto.ManufacturerDto;
+import com.pazukdev.backend.entity.manufacturer.Manufacturer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

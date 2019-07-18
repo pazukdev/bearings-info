@@ -1,11 +1,11 @@
 package com.pazukdev.backend.unit.converter.util;
 
 import com.pazukdev.backend.dto.AbstractDto;
+import com.pazukdev.backend.dto.product.BearingDto;
 import com.pazukdev.backend.dto.product.ProductDto;
-import com.pazukdev.backend.dto.product.bearing.BearingDto;
 import com.pazukdev.backend.entity.AbstractEntity;
-import com.pazukdev.backend.entity.product.Bearing;
 import com.pazukdev.backend.entity.product.Product;
+import com.pazukdev.backend.entity.product.bearing.Bearing;
 
 import java.util.Set;
 import java.util.stream.Collectors;

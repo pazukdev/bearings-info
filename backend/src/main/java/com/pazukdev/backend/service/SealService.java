@@ -1,10 +1,10 @@
 package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.SealConverter;
-import com.pazukdev.backend.dto.product.seal.SealDto;
-import com.pazukdev.backend.entity.product.Seal;
+import com.pazukdev.backend.dto.product.SealDto;
+import com.pazukdev.backend.dto.search.DefaultSearchRequest;
+import com.pazukdev.backend.entity.product.seal.Seal;
 import com.pazukdev.backend.repository.SealRepository;
-import com.pazukdev.backend.search.DefaultSearchRequest;
 import org.springframework.stereotype.Service;
 
 /**

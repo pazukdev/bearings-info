@@ -1,13 +1,13 @@
 package com.pazukdev.backend;
 
-import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
-import com.pazukdev.backend.dto.product.bearing.BearingDto;
-import com.pazukdev.backend.dto.product.motorcycle.MotorcycleDto;
-import com.pazukdev.backend.dto.product.seal.SealDto;
-import com.pazukdev.backend.entity.Manufacturer;
-import com.pazukdev.backend.entity.product.Bearing;
-import com.pazukdev.backend.entity.product.Motorcycle;
-import com.pazukdev.backend.entity.product.Seal;
+import com.pazukdev.backend.dto.ManufacturerDto;
+import com.pazukdev.backend.dto.product.BearingDto;
+import com.pazukdev.backend.dto.product.MotorcycleDto;
+import com.pazukdev.backend.dto.product.SealDto;
+import com.pazukdev.backend.entity.manufacturer.Manufacturer;
+import com.pazukdev.backend.entity.product.bearing.Bearing;
+import com.pazukdev.backend.entity.product.motorcycle.Motorcycle;
+import com.pazukdev.backend.entity.product.seal.Seal;
 import lombok.Getter;
 
 import java.util.HashSet;

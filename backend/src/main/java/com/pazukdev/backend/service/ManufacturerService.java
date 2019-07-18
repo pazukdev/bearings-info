@@ -1,10 +1,10 @@
 package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.ManufacturerConverter;
-import com.pazukdev.backend.dto.manufacturer.ManufacturerDto;
-import com.pazukdev.backend.entity.Manufacturer;
+import com.pazukdev.backend.dto.ManufacturerDto;
+import com.pazukdev.backend.dto.search.DefaultSearchRequest;
+import com.pazukdev.backend.entity.manufacturer.Manufacturer;
 import com.pazukdev.backend.repository.ManufacturerRepository;
-import com.pazukdev.backend.search.DefaultSearchRequest;
 import org.springframework.stereotype.Service;
 
 /**

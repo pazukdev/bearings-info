@@ -1,7 +1,7 @@
 package com.pazukdev.backend.entity.product;
 
 import com.pazukdev.backend.entity.AbstractEntity;
-import com.pazukdev.backend.entity.Manufacturer;
+import com.pazukdev.backend.entity.manufacturer.Manufacturer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

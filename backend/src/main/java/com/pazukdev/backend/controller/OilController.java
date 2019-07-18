@@ -1,6 +1,7 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dto.product.oil.OilDto;
+import com.pazukdev.backend.converter.OilConverter;
+import com.pazukdev.backend.dto.product.OilDto;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.OilService;
 import io.swagger.annotations.Api;
@@ -31,39 +32,41 @@ import java.util.List;
 public class OilController {
 
     private final OilService service;
+    private final OilConverter converter;
 
     @GetMapping("/list")
-    @ApiOperation(value = "Get info about all Oils")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get all oils")
     public List<OilDto> getAll() {
-        return service.getProductsList();
+        return converter.convertToDtoList(service.findAll());
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get info about Oil")
+    @ResponseStatus(HttpStatus.FOUND)
+    @ApiOperation(value = "Get oil")
     public OilDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
-        return service.get(id);
+        return converter.convertToDto(service.getOne(id));
     }
 
     @PostMapping("/create")
-    @ApiOperation(value = "Create a new Oil")
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create new oil")
     public boolean create(@RequestBody final OilDto dto) throws EntityExistsException, JSONException {
-        service.create(dto);
-        return true;
+        return service.create(dto) != null;
     }
 
     @DeleteMapping("/delete/{id}")
-    @ApiOperation(value = "Delete Oil by id")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete oil")
     public OilDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
-        return service.delete(id);
+        return converter.convertToDto(service.delete(id));
     }
 
     @PostMapping("/delete-all")
-    @ApiOperation(value = "Delete Oils by ids")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete oils")
     public List<OilDto> deleteAll(@RequestBody final Long[] ids) throws ProductNotFoundException {
-        return service.deleteAll(Arrays.asList(ids));
+        return converter.convertToDtoList(service.deleteAll(Arrays.asList(ids)));
     }
 
 }

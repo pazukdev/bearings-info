@@ -1,6 +1,7 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dto.product.unit.engine.EngineDto;
+import com.pazukdev.backend.converter.EngineConverter;
+import com.pazukdev.backend.dto.product.unit.EngineDto;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.EngineService;
 import io.swagger.annotations.Api;
@@ -31,39 +32,41 @@ import java.util.List;
 public class EngineController {
 
     private final EngineService service;
+    private final EngineConverter converter;
 
     @GetMapping("/list")
-    @ApiOperation(value = "Get info about all Engines")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get all engines")
     public List<EngineDto> getAll() {
-        return service.getProductsList();
+        return converter.convertToDtoList(service.findAll());
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get info about Engine")
+    @ResponseStatus(HttpStatus.FOUND)
+    @ApiOperation(value = "Get engine")
     public EngineDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
-        return service.get(id);
+        return converter.convertToDto(service.getOne(id));
     }
 
     @PostMapping("/create")
-    @ApiOperation(value = "Create a new Engine")
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create new engine")
     public boolean create(@RequestBody final EngineDto dto) throws EntityExistsException, JSONException {
-        service.create(dto);
-        return true;
+        return service.create(dto) != null;
     }
 
     @DeleteMapping("/delete/{id}")
-    @ApiOperation(value = "Delete Engine by id")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete engine")
     public EngineDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
-        return service.delete(id);
+        return converter.convertToDto(service.delete(id));
     }
 
     @PostMapping("/delete-all")
-    @ApiOperation(value = "Delete Engines by ids")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete engines")
     public List<EngineDto> deleteAll(@RequestBody final Long[] ids) throws ProductNotFoundException {
-        return service.deleteAll(Arrays.asList(ids));
+        return converter.convertToDtoList(service.deleteAll(Arrays.asList(ids)));
     }
     
 }
