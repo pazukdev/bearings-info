@@ -28,10 +28,14 @@
                         @select-motorcycle="selectMotorcycle"
                         @add-motorcycle="addMotorcycle"
                         :motorcyclesList="motorcycles"/>
+
                 <ModelPartsList v-show="component === 'ModelPartsList'" :motorcycle="motorcycle"/>
+
                 <AddMotorcycle
                         v-show="component === 'AddMotorcycle'"
                         @refresh-motorcycles="refresh()"/>
+
+                <Login v-show="component === 'Login'"/>
             </div>
             <table>
                 <tbody>
@@ -58,6 +62,7 @@
     import SealList from "./components/SealList";
     import ModelPartsList from "./components/ModelPartsList"
     import AddMotorcycle from "./components/AddMotorcycle"
+    import Login from "./components/Login"
 
     export default {
         name: 'app',
@@ -84,7 +89,8 @@
             BearingList,
             SealList,
             ModelPartsList,
-            AddMotorcycle
+            AddMotorcycle,
+            Login
         },
 
         methods: {
@@ -106,7 +112,8 @@
             },
 
             showMotorcycleMenu() {
-                this.component = 'MotorcycleMenu';
+                //this.component = 'MotorcycleMenu';
+                this.component = 'Login';
                 this.getMotorcycles();
             },
 
@@ -165,6 +172,12 @@
         background: #929292;
     }
 
+    input {
+        border-radius: 4px;
+        border: none;
+        background: navajowhite;
+    }
+
     table {
         text-align: center;
         margin-left:auto;
@@ -174,14 +187,5 @@
     th {
         font-weight: normal;
     }
-
-    #triangle-left {
-        width: 0;
-        height: 0;
-        border-top: 50px solid transparent;
-        border-right: 100px solid red;
-        border-bottom: 50px solid transparent;
-    }
-
 
 </style>

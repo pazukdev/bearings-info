@@ -1,6 +1,6 @@
 package com.pazukdev.backend.repository;
 
-import com.pazukdev.backend.entity.product.oil.Oil;
+import com.pazukdev.backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,8 +8,9 @@ import org.springframework.stereotype.Repository;
  * @author Siarhei Sviarkaltsau
  */
 @Repository
-public interface OilRepository extends JpaRepository<Oil, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    Oil findByName(final String name);
+    User findByName(final String name);
+    User findByLogin(final String login);
 
 }

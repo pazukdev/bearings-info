@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/engine")
-@Api(tags = "Engine Controller", value = "API methods for Engines")
+@Api(tags = "Engine Controller", value = "API methods for engines")
 @RequiredArgsConstructor
 public class EngineController {
 

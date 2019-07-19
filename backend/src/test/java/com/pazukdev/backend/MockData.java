@@ -1,14 +1,18 @@
 package com.pazukdev.backend;
 
+import com.pazukdev.backend.constant.UserRole;
 import com.pazukdev.backend.dto.ManufacturerDto;
+import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.product.BearingDto;
 import com.pazukdev.backend.dto.product.MotorcycleDto;
 import com.pazukdev.backend.dto.product.SealDto;
+import com.pazukdev.backend.entity.User;
 import com.pazukdev.backend.entity.manufacturer.Manufacturer;
 import com.pazukdev.backend.entity.product.bearing.Bearing;
 import com.pazukdev.backend.entity.product.motorcycle.Motorcycle;
 import com.pazukdev.backend.entity.product.seal.Seal;
 import lombok.Getter;
+import org.modelmapper.ModelMapper;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -63,6 +67,22 @@ public class MockData {
 
     public BearingDto bearingDto() {
         return bearingDto(11L, "bearingDto name");
+    }
+
+    public UserDto userDto() {
+        final UserDto dto = new UserDto();
+        dto.setLogin("login");
+        dto.setPassword("password");
+        dto.setRole("USER");
+        return dto;
+    }
+
+    public User user() {
+        final User user = new User();
+        user.setLogin("login");
+        user.setPassword("password");
+        user.setRole(UserRole.USER);
+        return user;
     }
 
     public BearingDto bearingDto(final Long id, final String name) {
@@ -122,6 +142,10 @@ public class MockData {
         sealDto.setRotation("right");
         sealDto.setMaterial("rubber");
         return sealDto;
+    }
+
+    public ModelMapper modelMapper() {
+        return testContext.getModelMapper();
     }
 
 }

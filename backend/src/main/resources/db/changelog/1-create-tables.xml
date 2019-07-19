@@ -5,6 +5,25 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+    <changeSet id="create_user_table" author="sviarkaltsau">
+        <createTable tableName="user">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKeyName="user_pk" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="enum('ADMIN', 'USER')"/>
+            <column defaultValueNumeric="1" name="ACTIVE" type="TINYINT(2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="user"/>
+        </rollback>
+    </changeSet>
+
     <changeSet id="create_manufacturer_table" author="sviarkaltsau">
         <createTable tableName="manufacturer">
             <column autoIncrement="true" name="id" type="bigint">
@@ -125,6 +144,18 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="create_wishlist_table" author="sviarkaltsau">
+        <createTable tableName="wishlist">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="wishlist"/>
+        </rollback>
+    </changeSet>
+
     <changeSet id="create_engine_oil_table" author="sviarkaltsau">
         <createTable tableName="engine_oil">
             <column name="engine_id" type="bigint">
@@ -150,6 +181,20 @@
         </createTable>
         <rollback>
             <dropTable tableName="engine_bearing"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_wishlist_bearing_table" author="sviarkaltsau">
+        <createTable tableName="wishlist_bearing">
+            <column name="wishlist_id" type="bigint">
+                <constraints foreignKeyName="fk_wishlist_bearing_engine_id" references="engine (id)"/>
+            </column>
+            <column name="bearing_id" type="bigint">
+                <constraints foreignKeyName="fk_wishlist_bearing_bearing_id" references="bearing (id)"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="wishlist_bearing"/>
         </rollback>
     </changeSet>
 

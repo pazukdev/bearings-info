@@ -4,15 +4,19 @@ import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.ManufacturerDto;
 import com.pazukdev.backend.entity.manufacturer.Manufacturer;
 import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
-@Service
+@Component
 public class ManufacturerConverter implements EntityDtoConverter<Manufacturer, ManufacturerDto> {
 
-    private static final ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper;
+
+    public ManufacturerConverter(final ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     @Override
     public ManufacturerDto convertToDto(final Manufacturer entity) {

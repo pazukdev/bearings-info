@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 public class ManufacturerConverterTest {
 
     private final MockData mockData = new MockData();
-    private final ManufacturerConverter converter = new ManufacturerConverter();
+    private final ManufacturerConverter converter = new ManufacturerConverter(mockData.modelMapper());
 
     @Test
     public void convertToDto() {

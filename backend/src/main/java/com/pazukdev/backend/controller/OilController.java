@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/oil")
-@Api(tags = "Oil Controller", value = "API methods for Oils")
+@Api(tags = "Oil Controller", value = "API methods for oils")
 @RequiredArgsConstructor
 public class OilController {
 
