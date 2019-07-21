@@ -22,8 +22,4 @@ public class UserService extends AbstractService<User, UserDto> {
         return ((UserRepository) repository).findByName(request.getName());
     }
 
-    public User findByLogin(final String login) {
-        return ((UserRepository)repository).findByLogin(login);
-    }
-
 }

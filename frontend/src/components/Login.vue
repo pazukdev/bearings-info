@@ -11,10 +11,10 @@
             </tr>
             <tr>
                 <td>
-                    Nick name
+                    Login
                 </td>
                 <td>
-                    <input v-model="alias"/>
+                    <input type="text" name="j_username" v-model="credentials.alias"/>
                 </td>
             </tr>
             <tr>
@@ -22,7 +22,7 @@
                     Password
                 </td>
                 <td>
-                    <input type="password" v-model="password"/>
+                    <input type="password" name="j_password" v-model="credentials.password"/>
                 </td>
             </tr>
             <tr>
@@ -50,47 +50,35 @@
     export default {
         data() {
             return {
-                checked: false,
-                alias: "",
-                password: "",
-                name: "",
                 isLogin: true,
-                dictionaryData: {}
+                credentials: {
+                    alias: "",
+                    password: ""
+                }
             };
         },
         methods: {
+
             login() {
                 let credentials = {
-                    alias: this.alias,
-                    password: this.password,
-                    name: this.name
+                    alias: this.credentials.alias,
+                    password: this.credentials.password
                 };
+
+                axios.post('/backend/login', credentials, {
+                    headers: {
+                        Authorization: 'Basic' + credentials
+                    }})
+                    .then(response => {
+                        if (response.status === 200) {
+                            addAuthorization(response)
+                        }
+                    });
+
                 function addAuthorization(response) {
                     let authorization = response.headers.authorization;
                     VueCookies.config('7d');
                     VueCookies.set('authorization', authorization);
-                    axios.get('/backend/dictionary', {
-                        headers: {
-                            Authorization: authorization
-                        }
-                    }).then(response => {
-                        this.$store.commit('dictionary/init', response.data);
-                    });
-                }
-                if (this.isLogin) {
-                    axios.post('/backend/login', credentials)
-                        .then(response => {
-                            if (response.status === 200) {
-                                addAuthorization(response);
-                            }
-                        })
-                } else {
-                    axios.post('/backend/public/user', credentials)
-                        .then(response => {
-                            if (response.status === 200) {
-                                addAuthorization(response);
-                            }
-                        })
                 }
             },
             signUp() {

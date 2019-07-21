@@ -12,7 +12,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class UserDto extends AbstractDto {
 
-    private String login;
     private String password;
     private String role;
 

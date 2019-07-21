@@ -1,6 +1,5 @@
 package com.pazukdev.backend;
 
-import com.pazukdev.backend.constant.UserRole;
 import com.pazukdev.backend.dto.ManufacturerDto;
 import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.product.BearingDto;
@@ -71,17 +70,15 @@ public class MockData {
 
     public UserDto userDto() {
         final UserDto dto = new UserDto();
-        dto.setLogin("login");
+        dto.setName("login");
         dto.setPassword("password");
-        dto.setRole("USER");
         return dto;
     }
 
     public User user() {
         final User user = new User();
-        user.setLogin("login");
+        user.setName("login");
         user.setPassword("password");
-        user.setRole(UserRole.USER);
         return user;
     }
 

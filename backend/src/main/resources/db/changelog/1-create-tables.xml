@@ -8,16 +8,11 @@
     <changeSet id="create_user_table" author="sviarkaltsau">
         <createTable tableName="user">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKeyName="user_pk" primaryKey="true"/>
+                <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
-            <column name="password" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="password" type="varchar(255)"/>
             <column name="role" type="enum('ADMIN', 'USER')"/>
-            <column defaultValueNumeric="1" name="ACTIVE" type="TINYINT(2)">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
         <rollback>
             <dropTable tableName="user"/>
@@ -26,7 +21,7 @@
 
     <changeSet id="create_manufacturer_table" author="sviarkaltsau">
         <createTable tableName="manufacturer">
-            <column autoIncrement="true" name="id" type="bigint">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
@@ -40,7 +35,7 @@
 
     <changeSet id="create_spark_plug_table" author="sviarkaltsau">
         <createTable tableName="spark_plug">
-            <column autoIncrement="true" name="id" type="bigint">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
@@ -154,6 +149,17 @@
         <rollback>
             <dropTable tableName="wishlist"/>
         </rollback>
+    </changeSet>
+
+    <changeSet id="create_token_table" author="neznaev">
+        <createTable tableName="verification_token">
+            <column name="id" type="bigint(20)" autoIncrement="true">
+                <constraints primaryKeyName="verification_token_pk"
+                             primaryKey="true"/>
+            </column>
+            <column name="token" type="VARCHAR(500)"/>
+            <column name="expiry_date" type="date"/>
+        </createTable>
     </changeSet>
 
     <changeSet id="create_engine_oil_table" author="sviarkaltsau">

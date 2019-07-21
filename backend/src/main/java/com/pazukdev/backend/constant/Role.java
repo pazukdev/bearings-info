@@ -3,7 +3,7 @@ package com.pazukdev.backend.constant;
 /**
  * @author Siarhei Sviarkaltsau
  */
-public enum UserRole {
+public enum Role {
 
     USER, ADMIN
 

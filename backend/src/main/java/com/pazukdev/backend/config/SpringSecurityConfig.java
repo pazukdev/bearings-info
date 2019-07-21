@@ -1,35 +1,72 @@
 package com.pazukdev.backend.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.pazukdev.backend.filter.AuthenticationFilter;
+import com.pazukdev.backend.filter.LoginFilter;
+import com.pazukdev.backend.service.TokenAuthenticationService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.sql.DataSource;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
+@Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final DataSource dataSource;
+    private final TokenAuthenticationService tokenAuthenticationService;
+    private final Jackson2ObjectMapperBuilder objectMapperBuilder;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/css/**", "/index").permitAll()
-                .antMatchers("/api/**").authenticated()
-                .antMatchers("/user/**").hasRole("USER")
+                .antMatchers("/login").anonymous()
+                //.antMatchers("/**").authenticated()
+                .antMatchers("/css/**", "/index", "/js/**").permitAll()
+                .antMatchers("/registration**", "/login**").permitAll()
+                .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
+                .anyRequest().authenticated()
+                .and().formLogin().loginPage("/login")
+                .and().logout()
                 .and()
-                .formLogin()
-                .loginPage("/login").failureUrl("/login-error");
+                .addFilterBefore(new LoginFilter(tokenAuthenticationService, authenticationManager(), objectMapperBuilder),
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new AuthenticationFilter(tokenAuthenticationService),
+                        UsernamePasswordAuthenticationFilter.class);
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    @Override
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .inMemoryAuthentication()
-                .withUser("user").password("password").roles("USER");
+                .jdbcAuthentication().dataSource(dataSource)
+                .usersByUsernameQuery("select name, password from user where name=?")
+                .authoritiesByUsernameQuery("select name from user where name=?");
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
 }
