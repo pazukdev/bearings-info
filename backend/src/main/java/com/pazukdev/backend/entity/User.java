@@ -21,10 +21,19 @@ import javax.persistence.Table;
 @Table(name = "user")
 public class User extends AbstractEntity {
 
+    @Column(name = "alias")
+    private String alias;
     @Column(name = "password")
     private String password;
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Column(name = "enabled")
+    private boolean enabled = true;
+
+
+    public void setAlias(String alias) {
+        this.alias = getName();
+    }
 
 }

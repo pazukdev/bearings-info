@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDate;
@@ -18,7 +19,9 @@ import java.time.LocalDate;
 @Table(name = "verification_token")
 public class VerificationToken extends AbstractEntity {
 
+    @Column(name = "token")
     private String token;
+    @Column(name = "date")
     private LocalDate expiryDate;
 
 }

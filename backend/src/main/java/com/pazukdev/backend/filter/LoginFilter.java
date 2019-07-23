@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -47,9 +49,10 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
                                                 final HttpServletResponse response)
             throws AuthenticationException, IOException {
         final CredentialsDto credentials = getObjectMapper().readValue(request.getInputStream(), CredentialsDto.class);
-
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + "ADMIN"));
         return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(
-                credentials.getAlias(), credentials.getPassword(), Collections.emptyList()));
+                credentials.getAlias(), credentials.getPassword(), authorities));
     }
 
     @Override

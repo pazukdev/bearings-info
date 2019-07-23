@@ -4,7 +4,6 @@ import com.pazukdev.backend.service.TokenAuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -17,13 +16,9 @@ import java.io.IOException;
 /**
  * @author Siarhei Sviarkaltsau
  */
-@Component
+//@Component
 @RequiredArgsConstructor
 public class AuthenticationFilter extends GenericFilterBean {
-
-    private static final String SECRET = "D90#11%fhBpP";
-    private static final String TOKEN_PREFIX = "Bearer";
-    public static final String HEADER_STRING = "Authorization";
 
     private final TokenAuthenticationService tokenAuthenticationService;
 

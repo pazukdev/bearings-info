@@ -1,7 +1,9 @@
 package com.pazukdev.backend.dataloader;
 
+import com.pazukdev.backend.constant.Role;
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.entity.AbstractEntityFactory;
+import com.pazukdev.backend.entity.User;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingFactory;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleFactory;
@@ -16,10 +18,12 @@ import com.pazukdev.backend.repository.MotorcycleRepository;
 import com.pazukdev.backend.repository.OilRepository;
 import com.pazukdev.backend.repository.SealRepository;
 import com.pazukdev.backend.repository.SparkPlugRepository;
+import com.pazukdev.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -46,6 +50,9 @@ public class DataLoader implements ApplicationRunner {
     private final OilFactory oilFactory;
     private final SparkPlugFactory sparkPlugFactory;
     private final EngineFactory engineFactory;
+    private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -53,6 +60,14 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void populateEmptyTables() {
+        if (repositoryIsEmpty(userRepository)) {
+            User user = new User();
+            user.setName("admin");
+            user.setAlias("admin");
+            user.setPassword(passwordEncoder.encode("123"));
+            user.setRole(Role.ADMIN);
+            userRepository.save(user);
+        }
         loadManufacturers(repositoryIsEmpty(manufacturerRepository));
         loadOils(repositoryIsEmpty(oilRepository));
         loadSparkPlugs(repositoryIsEmpty(sparkPlugRepository));

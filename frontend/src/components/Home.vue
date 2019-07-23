@@ -1,5 +1,6 @@
 <template>
     <div id="app_area" style="padding: 10px">
+        <p>{{manufacturers}}</p>
         <MotorcycleMenu
                 v-show="component === 'MotorcycleMenu'"
                 @select-motorcycle="selectMotorcycle"

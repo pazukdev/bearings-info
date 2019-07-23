@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App.vue'
+import store from "./store";
 import Login from './components/Login'
 import Home from './components/Home'
 
@@ -15,6 +16,7 @@ const router = new VueRouter({
 });
 
 new Vue({
-  render: h => h(App),
-  router
+  router,
+  store,
+  render: h => h(App)
 }).$mount('#app');

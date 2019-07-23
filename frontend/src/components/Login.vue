@@ -14,7 +14,7 @@
                     Login
                 </td>
                 <td>
-                    <input type="text" name="j_username" v-model="credentials.alias"/>
+                    <input type="text" name="username" v-model="credentials.alias"/>
                 </td>
             </tr>
             <tr>
@@ -22,7 +22,7 @@
                     Password
                 </td>
                 <td>
-                    <input type="password" name="j_password" v-model="credentials.password"/>
+                    <input type="password" name="password" v-model="credentials.password"/>
                 </td>
             </tr>
             <tr>
@@ -65,12 +65,11 @@
                     password: this.credentials.password
                 };
 
-                axios.post('/backend/login', credentials, {
-                    headers: {
-                        Authorization: 'Basic' + credentials
-                    }})
+                axios.post('/backend/login', credentials)
                     .then(response => {
+                        //log(response.status);
                         if (response.status === 200) {
+                            this.$router.push({ path: '/'});
                             addAuthorization(response)
                         }
                     });

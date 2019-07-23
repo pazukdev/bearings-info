@@ -1,6 +1,5 @@
 package com.pazukdev.backend.config;
 
-import com.pazukdev.backend.filter.AuthenticationFilter;
 import com.pazukdev.backend.filter.LoginFilter;
 import com.pazukdev.backend.service.TokenAuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +11,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.sql.DataSource;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -26,42 +21,48 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final DataSource dataSource;
+    private final AuthProviderImpl authProvider;
+    //private final DataSource dataSource;
     private final TokenAuthenticationService tokenAuthenticationService;
     private final Jackson2ObjectMapperBuilder objectMapperBuilder;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .cors().and().csrf().disable()
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login").anonymous()
-                //.antMatchers("/**").authenticated()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/**").authenticated()
                 .antMatchers("/css/**", "/index", "/js/**").permitAll()
                 .antMatchers("/registration**", "/login**").permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
+                .antMatchers("/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
-                .and().formLogin().loginPage("/login")
                 .and().logout()
+                .and().formLogin()
+                .loginPage("/login")
+                //.defaultSuccessUrl("/motorcycle/list", true)
                 .and()
                 .addFilterBefore(new LoginFilter(tokenAuthenticationService, authenticationManager(), objectMapperBuilder),
-                        UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new AuthenticationFilter(tokenAuthenticationService),
                         UsernamePasswordAuthenticationFilter.class);
+//                .addFilterBefore(new AuthenticationFilter(tokenAuthenticationService),
+//                        UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery("select name, password from user where name=?")
-                .authoritiesByUsernameQuery("select name from user where name=?");
+        auth.authenticationProvider(authProvider);
+//                .jdbcAuthentication().dataSource(dataSource)
+//                .passwordEncoder(passwordEncoder())
+//                .usersByUsernameQuery("select alias, password, enabled from user where alias=?")
+//                .authoritiesByUsernameQuery("select alias, role from user where alias=?");
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 
     @Override
     @Bean

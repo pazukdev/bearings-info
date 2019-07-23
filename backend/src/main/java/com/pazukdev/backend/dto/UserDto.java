@@ -12,7 +12,9 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class UserDto extends AbstractDto {
 
+    private String alias;
     private String password;
     private String role;
+    private boolean enabled;
 
 }
