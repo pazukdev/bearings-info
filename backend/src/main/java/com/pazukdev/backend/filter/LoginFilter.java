@@ -10,9 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
@@ -25,22 +25,25 @@ import java.util.stream.Collectors;
 /**
  * @author Siarhei Sviarkaltsau
  */
-@Component
+//@Component
 public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private static final String LOGIN_URL = "/login";
 
     private final TokenAuthenticationService tokenAuthenticationService;
     private final Jackson2ObjectMapperBuilder objectMapperBuilder;
+    private final PasswordEncoder passwordEncoder;
 
     private ObjectMapper objectMapper;
 
     public LoginFilter(final TokenAuthenticationService tokenAuthenticationService,
                        final AuthenticationManager authenticationManager,
-                       final Jackson2ObjectMapperBuilder objectMapperBuilder) {
+                       final Jackson2ObjectMapperBuilder objectMapperBuilder,
+                       PasswordEncoder passwordEncoder) {
         super(new AntPathRequestMatcher(LOGIN_URL));
         this.objectMapperBuilder = objectMapperBuilder;
         this.tokenAuthenticationService = tokenAuthenticationService;
+        this.passwordEncoder = passwordEncoder;
         setAuthenticationManager(authenticationManager);
     }
 
@@ -51,8 +54,11 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         final CredentialsDto credentials = getObjectMapper().readValue(request.getInputStream(), CredentialsDto.class);
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + "ADMIN"));
+        String pass = credentials.getPassword();
+        pass = passwordEncoder.encode(pass);
+
         return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(
-                credentials.getAlias(), credentials.getPassword(), authorities));
+                credentials.getAlias(), pass, authorities));
     }
 
     @Override

@@ -2,9 +2,10 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
-import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.entity.User;
 import com.pazukdev.backend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,13 +14,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService extends AbstractService<User, UserDto> {
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UserService(UserRepository repository, UserConverter converter) {
         super(repository, converter);
     }
 
     @Override
-    protected User findByName(final DefaultSearchRequest request) {
-        return ((UserRepository) repository).findByName(request.getName());
+    public User findByName(final String name) {
+        return ((UserRepository) repository).findByName(name);
+    }
+
+    public void save(UserDto dto) {
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        super.create(dto);
     }
 
 }

@@ -83,7 +83,13 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
         return entities;
     }
 
-    protected abstract Entity findByName(final DefaultSearchRequest request);
+    protected Entity findByName(final DefaultSearchRequest request) {
+        return null;
+    }
+
+    protected Entity findByName(final String name) {
+        return null;
+    }
 
 }
 
