@@ -2,6 +2,7 @@ package com.pazukdev.backend.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -21,12 +22,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
-        //registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/login").setViewName("login");
     }
 
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
-        //registry.addMapping("/**").allowedMethods(CorsConfiguration.ALL);
+        registry
+                .addMapping("/**")
+                .allowedMethods(CorsConfiguration.ALL)
+                .allowedOrigins("*")
+                .allowedHeaders("*");
     }
 
     @Override

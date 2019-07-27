@@ -28,39 +28,13 @@
 </template>
 
 <script>
-    import axios from 'axios';
-    import {mapState} from 'vuex';
-    import VueCookies from 'vue-cookies';
-    import Login from './components/Login.vue'
+    import Login from './components/Login.vue';
 
     export default {
         name: 'app',
 
         components: {
             Login
-        },
-        computed: {
-            ...mapState({
-                user: state => state.dictionary.user,
-                admin: state => state.dictionary.admin,
-                login: state => state.dictionary.login,
-            })
-        },
-
-        beforeCreate() {
-            if (!this.$store.state.auth === false) {
-                this.$store.commit('dictionary/init', null);
-            }
-        },
-
-        methods: {
-            logout() {
-                axios.post('/backend/user/logout', {}, {
-                    headers: {
-                        Authorization: VueCookies.get('authorization')
-                    }
-                }).then(VueCookies.remove('authorization'));
-            }
         }
     }
 </script>

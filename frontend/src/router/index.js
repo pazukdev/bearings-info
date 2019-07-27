@@ -1,0 +1,29 @@
+import VueRouter from 'vue-router';
+import Vue from "vue";
+import Home from "../components/Home";
+import Login from "../components/Login";
+import store from "../store";
+
+Vue.use(VueRouter);
+
+const router = new VueRouter({
+    routes: [
+        {path: '/', component: Home, meta: { requiresAuth: true }},
+        {path: '/login', component: Login}
+    ]
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (store.state.authorizationHeaderData === "") {
+            next("/login");
+        } else {
+            next()
+        }
+    } else {
+        next()
+    }
+});
+
+export default router;
+

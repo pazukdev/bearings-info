@@ -1,18 +1,17 @@
 package com.pazukdev.backend.config;
 
-import com.pazukdev.backend.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Collections;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -22,28 +21,39 @@ import java.util.Collections;
 //@RequiredArgsConstructor
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private static String REALM="MY_TEST_REALM";
 
-    //private final AuthProviderImpl authProvider;
-//    private final DataSource dataSource;
-//    private final TokenAuthenticationService tokenAuthenticationService;
-//    private final Jackson2ObjectMapperBuilder objectMapperBuilder;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RestAuthenticationEntryPoint authenticationEntryPoint;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests().anyRequest().authenticated()
+                .csrf().disable()
+                .authorizeRequests()
+                //.antMatchers("/**").permitAll()
+                //.antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/css/**", "/index", "/js/**").permitAll()
-                .antMatchers("/registration**", "/login**").permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
-                .antMatchers("/**").hasRole("ADMIN")
-                //.and().logout()
-                .and().formLogin()
-                .loginPage("/login").permitAll()
-                .and().csrf().disable();
+                .anyRequest().authenticated()
+                .and().httpBasic().realmName(REALM).authenticationEntryPoint(authenticationEntryPoint)
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .formLogin().permitAll();
+//                .and()
+//                .logout()
+//                .and()
+//                .addFilterAfter(new CustomFilter(), BasicAuthenticationFilter.class);
+//                .csrf().disable()
+//                .authorizeRequests().anyRequest().authenticated()
+//                .antMatchers("/css/**", "/index", "/js/**").permitAll()
+//                .antMatchers("/registration**", "/login**").permitAll()
+//                .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
+//                .antMatchers("/**").authenticated()
+//                .and().formLogin().loginPage("/login").permitAll()
+//                .and().logout();
                 //.defaultSuccessUrl("/motorcycle/list", true)
 //                .and()
 //                .addFilterBefore(new LoginFilter(tokenAuthenticationService, authenticationManager(), objectMapperBuilder, passwordEncoder),
@@ -52,47 +62,25 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //                        UsernamePasswordAuthenticationFilter.class);
     }
 
-//    @Override
-//    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//
-//                .authenticationProvider(authProvider);
-//                .jdbcAuthentication().dataSource(dataSource)
-//                .usersByUsernameQuery("select alias, password, enabled from user where alias=?")
-//                .authoritiesByUsernameQuery("select alias, role from user where alias=?");
-//    }
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-
-//    @Override
-//    @Bean
-//    public AuthenticationManager authenticationManagerBean() throws Exception {
-//        return super.authenticationManagerBean();
-//    }
-
-//    @Bean
-//    public AuthenticationManager customAuthenticationManager() throws Exception {
-//        return authManager;
-//    }
-
-    public SpringSecurityConfig() {
-        super(false);
-    }
-
-    @Bean
+    /* To allow Pre-flight [OPTIONS] request from browser */
     @Override
-    public AuthenticationManager authenticationManager() {
-        return new ProviderManager(Collections.singletonList(new AuthProviderImpl()));
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
     }
 
-    @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
-                .and().inMemoryAuthentication()
-                .withUser("admin").password(passwordEncoder.encode("123")).roles("ADMIN");
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .inMemoryAuthentication()
+                .withUser("admin").password(passwordEncoder.encode("pass")).roles("ADMIN")
+                .and()
+                .withUser("user").password("$2a$04$AjFEmZeX7mN8zSn57PUEZeJgBeoKMvwteZMBiP57Jb4AGFsUORmLC").roles("USER");
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
 }

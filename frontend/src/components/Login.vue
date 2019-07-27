@@ -14,7 +14,7 @@
                     Login
                 </td>
                 <td>
-                    <input type="text" name="username" v-model="credentials.alias"/>
+                    <input type="text" name="username" v-model="credentials.username"/>
                 </td>
             </tr>
             <tr>
@@ -45,14 +45,13 @@
 
 <script>
     import axios from 'axios';
-    import VueCookies from 'vue-cookies';
 
     export default {
         data() {
             return {
                 isLogin: true,
                 credentials: {
-                    alias: "",
+                    username: "",
                     password: ""
                 }
             };
@@ -61,25 +60,24 @@
 
             login() {
                 let credentials = {
-                    alias: this.credentials.alias,
-                    password: this.credentials.password
+                    username: "user",
+                    password: "password"
                 };
-
-                axios.post('/backend/login', credentials)
+                let headerData ="Basic " + btoa(credentials.username + ":" + credentials.password);
+                axios
+                    .get('/backend/login', {
+                    headers: {
+                        Authorization: headerData
+                    }
+                })
                     .then(response => {
-                        //log(response.status);
                         if (response.status === 200) {
+                            this.$store.dispatch("setAuthorizationHeaderData", headerData);
                             this.$router.push({ path: '/'});
-                            addAuthorization(response)
                         }
                     });
-
-                function addAuthorization(response) {
-                    let authorization = response.headers.authorization;
-                    VueCookies.config('7d');
-                    VueCookies.set('authorization', authorization);
-                }
             },
+
             signUp() {
                 this.isLogin = !this.isLogin;
             },

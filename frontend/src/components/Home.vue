@@ -1,5 +1,6 @@
 <template>
     <div id="app_area" style="padding: 10px">
+        <p>{{authorizationHeaderData}}</p>
         <p>{{manufacturers}}</p>
         <MotorcycleMenu
                 v-show="component === 'MotorcycleMenu'"
@@ -17,12 +18,13 @@
 
 <script>
     import axios from 'axios';
+    import {mapState} from 'vuex';
     import MotorcycleMenu from "./MotorcycleMenu";
     import MotorcycleList from "./MotorcycleList";
     import BearingList from "./BearingList";
     import SealList from "./SealList";
-    import ModelPartsList from "./ModelPartsList"
-    import AddMotorcycle from "./AddMotorcycle"
+    import ModelPartsList from "./ModelPartsList";
+    import AddMotorcycle from "./AddMotorcycle";
 
     export default {
 
@@ -38,8 +40,18 @@
         created() {
             this.refresh();
             this.manufacturers = axios
-                .get("backend/manufacturer/list")
+                .get("backend/manufacturer/list", {
+                    headers: {
+                        Authorization: this.authorizationHeaderData
+                    }
+                })
                 .then(response => this.manufacturers = response.data);
+        },
+
+        computed: {
+            ...mapState({
+                authorizationHeaderData: state => state.dictionary.authorizationHeaderData
+            })
         },
 
         components: {
@@ -75,7 +87,13 @@
             },
 
             getMotorcycles() {
-                this.motorcycles = axios.get(`/backend/motorcycle/list`).then(response => this.motorcycles = response.data);
+                this.motorcycles = axios
+                    .get(`/backend/motorcycle/list`, {
+                        headers: {
+                            Authorization: this.authorizationHeaderData
+                        }
+                    })
+                    .then(response => this.motorcycles = response.data);
             }
         }
     }

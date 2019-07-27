@@ -32,6 +32,7 @@
 
 <script>
     import axios from 'axios';
+    import {mapState} from 'vuex';
 
     export default {
 
@@ -51,7 +52,13 @@
         },
 
         created() {
-            this.manufacturers = axios.get(`/backend/manufacturer/list`).then(response => this.manufacturers = response.data)
+            this.manufacturers = axios
+                .get(`/backend/manufacturer/list`, {
+                    headers: {
+                        Authorization: this.authorizationHeaderData
+                    }
+                })
+                .then(response => this.manufacturers = response.data)
         },
 
         watch: {
@@ -72,7 +79,11 @@
                 }
 
                 return this.motorcycles.sort(compare);
-            }
+            },
+
+            ...mapState({
+                authorizationHeaderData: state => state.dictionary.authorizationHeaderData
+            })
         },
 
         methods: {
