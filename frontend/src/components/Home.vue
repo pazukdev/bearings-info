@@ -1,6 +1,7 @@
 <template>
     <div id="app_area" style="padding: 10px">
-        <p>{{authorizationHeaderData}}</p>
+        <p>{{incorrectCredentials}}</p>
+        <p>{{authorization}}</p>
         <p>{{manufacturers}}</p>
         <MotorcycleMenu
                 v-show="component === 'MotorcycleMenu'"
@@ -42,7 +43,7 @@
             this.manufacturers = axios
                 .get("backend/manufacturer/list", {
                     headers: {
-                        Authorization: this.authorizationHeaderData
+                        Authorization: this.authorization
                     }
                 })
                 .then(response => this.manufacturers = response.data);
@@ -50,7 +51,8 @@
 
         computed: {
             ...mapState({
-                authorizationHeaderData: state => state.dictionary.authorizationHeaderData
+                authorization: state => state.dictionary.authorization,
+                incorrectCredentials: state => state.dictionary.incorrectCredentials
             })
         },
 
@@ -90,7 +92,7 @@
                 this.motorcycles = axios
                     .get(`/backend/motorcycle/list`, {
                         headers: {
-                            Authorization: this.authorizationHeaderData
+                            Authorization: this.authorization
                         }
                     })
                     .then(response => this.motorcycles = response.data);

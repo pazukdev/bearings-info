@@ -55,7 +55,7 @@
             this.manufacturers = axios
                 .get(`/backend/manufacturer/list`, {
                     headers: {
-                        Authorization: this.authorizationHeaderData
+                        Authorization: this.authorization
                     }
                 })
                 .then(response => this.manufacturers = response.data)
@@ -82,7 +82,7 @@
             },
 
             ...mapState({
-                authorizationHeaderData: state => state.dictionary.authorizationHeaderData
+                authorization: state => state.dictionary.authorization
             })
         },
 

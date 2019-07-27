@@ -14,7 +14,7 @@
                     Login
                 </td>
                 <td>
-                    <input type="text" name="username" v-model="credentials.username"/>
+                    <input type="text" name="username" v-model="username"/>
                 </td>
             </tr>
             <tr>
@@ -22,7 +22,7 @@
                     Password
                 </td>
                 <td>
-                    <input type="password" name="password" v-model="credentials.password"/>
+                    <input type="password" name="password" v-model="password"/>
                 </td>
             </tr>
             <tr>
@@ -38,6 +38,11 @@
                     <button v-on:click="login">{{buttonName()}}</button>
                 </td>
             </tr>
+            <tr v-if="incorrectCredentials" style="color: red">
+                <td colspan="2">
+                    Incorrect name or password !
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -45,34 +50,35 @@
 
 <script>
     import axios from 'axios';
+    import {mapState} from 'vuex';
 
     export default {
         data() {
             return {
                 isLogin: true,
-                credentials: {
-                    username: "",
-                    password: ""
-                }
+                username: "",
+                password: ""
             };
         },
+
+        computed: {
+            ...mapState({
+                incorrectCredentials: state => state.dictionary.incorrectCredentials
+            })
+        },
+
         methods: {
 
             login() {
-                let credentials = {
-                    username: "user",
-                    password: "password"
-                };
-                let headerData ="Basic " + btoa(credentials.username + ":" + credentials.password);
+                this.$store.dispatch("setIncorrectCredentials", true);
+                let credentialsUrl ="username=" + this.username + "&" + "password=" + this.password;
                 axios
-                    .get('/backend/login', {
-                    headers: {
-                        Authorization: headerData
-                    }
-                })
+                    .post('/backend/login', credentialsUrl)
                     .then(response => {
                         if (response.status === 200) {
-                            this.$store.dispatch("setAuthorizationHeaderData", headerData);
+                            this.$store.dispatch("setIncorrectCredentials", false);
+                            let authorization = response.headers.authorization;
+                            this.$store.dispatch("setAuthorization", authorization);
                             this.$router.push({ path: '/'});
                         }
                     });

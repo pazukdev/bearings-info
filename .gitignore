@@ -27,3 +27,6 @@ HELP.md
 
 ### VS Code ###
 .vscode/
+/.m2/
+/backend/.surefire-EB8C3FCFC8251A3BA88EB6F00841E12CC88BF885
+log/

@@ -4,18 +4,27 @@ const state = {
     login: true,
     admin: "",
     user: "",
-    authorizationHeaderData: ""
+    authorization: "",
+    incorrectCredentials: false
 };
 
 const actions = {
-    setAuthorizationHeaderData: ({commit}, context) => {
-        commit("setAuthorizationHeaderData", context)
+    setAuthorization: ({commit}, context) => {
+        commit("setAuthorization", context)
+    },
+
+    setIncorrectCredentials: ({commit}, context) => {
+        commit("setIncorrectCredentials", context)
     }
 };
 
 const mutations = {
-    setAuthorizationHeaderData(state, data) {
-        state.authorizationHeaderData = data;
+    setAuthorization(state, authorization) {
+        state.authorization = authorization;
+    },
+
+    setIncorrectCredentials(state, incorrectCredentials) {
+        state.incorrectCredentials = incorrectCredentials === true;
     }
 };
 

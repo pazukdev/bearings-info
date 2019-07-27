@@ -2,7 +2,6 @@ package com.pazukdev.backend.config;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +12,7 @@ import java.io.PrintWriter;
 /**
  * @author Siarhei Sviarkaltsau
  */
-@Component
+//@Component
 public class RestAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
 
 //    @Override
