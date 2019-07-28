@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Siarhei Sviarkaltsau
  */
 @RestController
-@Api(tags = "M", value = "API m")
+@Api(tags = "Default Controller", value = "Auxiliary API methods")
 @RequiredArgsConstructor
 public class DefaultController {
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "g")
-    public String g() {
-        return "!!!!!!!!!!";
+    @ApiOperation(value = "Get test response from server")
+    public String getTestResponse() {
+        return "This is test response";
     }
 
 }

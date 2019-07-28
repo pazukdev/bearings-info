@@ -4,7 +4,6 @@ import com.pazukdev.backend.converter.BearingConverter;
 import com.pazukdev.backend.converter.WishListConverter;
 import com.pazukdev.backend.dto.WishListDto;
 import com.pazukdev.backend.dto.product.BearingDto;
-import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.WishListService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,7 +46,7 @@ public class WishListController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
     @ApiOperation(value = "Get wish list")
-    public WishListDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
+    public WishListDto get(@PathVariable("id") Long id) throws Exception {
         return wishListConverter.convertToDto(service.getOne(id));
     }
 
@@ -62,7 +61,7 @@ public class WishListController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete wish list")
-    public void delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
+    public void delete(@PathVariable("id") final Long id) throws Exception {
         service.delete(id);
     }
 

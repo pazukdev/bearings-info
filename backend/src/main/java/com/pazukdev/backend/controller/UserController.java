@@ -2,7 +2,6 @@ package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
-import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,19 +23,8 @@ public class UserController {
 
     @GetMapping(value = "/user/{id}")
     @ApiOperation(value = "Create a new user")
-    public UserDto getUser(@PathVariable("id") final Long id) throws ProductNotFoundException {
+    public UserDto getUser(@PathVariable("id") final Long id) throws Exception {
         return converter.convertToDto(service.getOne(id));
     }
-
-//    @GetMapping("/login")
-//    public String login(Model model, String error, String logout) {
-//        if (error != null)
-//            model.addAttribute("error", "Your username and password is invalid.");
-//
-//        if (logout != null)
-//            model.addAttribute("message", "You have been logged out successfully.");
-//
-//        return "login";
-//    }
 
 }

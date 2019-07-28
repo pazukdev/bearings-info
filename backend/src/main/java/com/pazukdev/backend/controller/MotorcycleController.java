@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityExistsException;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -76,13 +75,6 @@ public class MotorcycleController {
     @ApiOperation(value = "Delete motorcycle")
     public MotorcycleDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
         return converter.convertToDto(service.delete(id));
-    }
-
-    @PostMapping("/delete-all")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Delete motorcycles")
-    public List<MotorcycleDto> deleteAll(@RequestBody final Long[] ids) throws ProductNotFoundException {
-        return converter.convertToDtoList(service.deleteAll(Arrays.asList(ids)));
     }
 
 }
