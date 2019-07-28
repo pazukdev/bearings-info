@@ -17,7 +17,15 @@
                         <td id="appName" style="text-align: center; font-size: x-large">
                             <b>Bearings info</b>
                         </td>
-                        <td style="width: 80px"></td>
+                        <td style="width: 80px">
+                            <button
+                                    v-show="isAuthorized()"
+                                    @click="logout()"
+                                    id="logout"
+                                    style="width: 100%; height: 100%; background: none; font-size: larger; color: #252525">
+                                <b>Logout</b>
+                            </button>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -29,12 +37,39 @@
 
 <script>
     import Login from './components/Login.vue';
+    import {mapState} from 'vuex';
 
     export default {
         name: 'app',
 
         components: {
             Login
+        },
+
+        computed: {
+            ...mapState({
+                authorization: state => state.dictionary.authorization
+            })
+        },
+
+        methods: {
+            logout() {
+                this.removeToken();
+                this.reload();
+            },
+
+            removeToken() {
+                let token = null;
+                this.$store.dispatch("setAuthorization", token);
+            },
+
+            isAuthorized() {
+                return this.authorization !== "";
+            },
+
+            reload() {
+                window.location.reload();
+            }
         }
     }
 </script>

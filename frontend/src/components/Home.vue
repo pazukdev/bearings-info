@@ -1,6 +1,5 @@
 <template>
     <div id="app_area" style="padding: 10px">
-        <p>{{incorrectCredentials}}</p>
         <p>{{authorization}}</p>
         <p>{{manufacturers}}</p>
         <MotorcycleMenu
@@ -80,6 +79,7 @@
             },
 
             refresh() {
+                this.redirectToLogin();
                 this.showMotorcycleMenu();
             },
 
@@ -96,6 +96,20 @@
                         }
                     })
                     .then(response => this.motorcycles = response.data);
+            },
+
+            redirectToLogin() {
+                if (!this.isAuthorized()) {
+                    this.goToLogin();
+                }
+            },
+
+            goToLogin() {
+                this.$router.push({ path: '/login'});
+            },
+
+            isAuthorized() {
+                return this.authorization !== "";
             }
         }
     }

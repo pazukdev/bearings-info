@@ -40,7 +40,7 @@
             </tr>
             <tr v-if="incorrectCredentials" style="color: red">
                 <td colspan="2">
-                    Incorrect name or password !
+                    Incorrect login or password !
                 </td>
             </tr>
             </tbody>
