@@ -1,17 +1,18 @@
 <template>
     <div id="app_area" style="padding: 10px">
-        <p>{{authorization}}</p>
-        <p>{{manufacturers}}</p>
+<!--        <p>{{homeComponent}}</p>-->
+<!--        <p>{{authorization}}</p>-->
+<!--        <p>{{manufacturers}}</p>-->
         <MotorcycleMenu
-                v-show="component === 'MotorcycleMenu'"
+                v-show="homeComponent === 'MotorcycleMenu'"
                 @select-motorcycle="selectMotorcycle"
                 @add-motorcycle="addMotorcycle"
                 :motorcyclesList="motorcycles"/>
 
-        <ModelPartsList v-show="component === 'ModelPartsList'" :motorcycle="motorcycle"/>
+        <ModelPartsList v-show="homeComponent === 'ModelPartsList'" :motorcycle="motorcycle" :engine="engine"/>
 
         <AddMotorcycle
-                v-show="component === 'AddMotorcycle'"
+                v-show="homeComponent === 'AddMotorcycle'"
                 @refresh-motorcycles="refresh()"/>
     </div>
 </template>
@@ -30,8 +31,8 @@
 
         data() {
             return {
-                component: "",
                 motorcycle: "",
+                engine: "",
                 motorcycles: "",
                 manufacturers: ""
             }
@@ -51,7 +52,8 @@
         computed: {
             ...mapState({
                 authorization: state => state.dictionary.authorization,
-                incorrectCredentials: state => state.dictionary.incorrectCredentials
+                incorrectCredentials: state => state.dictionary.incorrectCredentials,
+                homeComponent: state => state.dictionary.homeComponent
             })
         },
 
@@ -65,13 +67,18 @@
         },
 
         methods: {
+            switchComponent(component) {
+                this.$store.dispatch("setHomeComponent", component);
+            },
+
             selectMotorcycle(motorcycle) {
                 this.motorcycle = motorcycle;
-                this.component = 'ModelPartsList';
+                this.engine = this.getEngine([motorcycle.engineId]);
+                this.switchComponent('ModelPartsList');
             },
 
             addMotorcycle() {
-                this.component = 'AddMotorcycle';
+                this.switchComponent('AddMotorcycle');
             },
 
             reload() {
@@ -84,7 +91,7 @@
             },
 
             showMotorcycleMenu() {
-                this.component = 'MotorcycleMenu';
+                this.switchComponent('MotorcycleMenu');
                 this.getMotorcycles();
             },
 
@@ -96,6 +103,17 @@
                         }
                     })
                     .then(response => this.motorcycles = response.data);
+            },
+
+            getEngine(ids) {
+                axios
+                    .post('backend/engine/search', ids, {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => this.engine = response.data[0]);
+
             },
 
             redirectToLogin() {

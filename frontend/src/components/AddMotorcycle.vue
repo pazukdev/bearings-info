@@ -92,6 +92,7 @@
 
 <script>
     import axios from 'axios';
+    import {mapState} from 'vuex';
 
     export default {
 
@@ -113,11 +114,25 @@
 
         created() {
             axios
-                .get(`/backend/manufacturer/list`)
+                .get(`/backend/manufacturer/list`, {
+                    headers: {
+                        Authorization: this.authorization
+                    }
+                })
                 .then(response => this.manufacturers = response.data);
             axios
-                .get(`/backend/bearing/list`)
+                .get(`/backend/bearing/list`, {
+                    headers: {
+                        Authorization: this.authorization
+                    }
+                })
                 .then(response => this.bearings = response.data)
+        },
+
+        computed: {
+            ...mapState({
+                authorization: state => state.dictionary.authorization
+            })
         },
 
         methods: {

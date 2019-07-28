@@ -68,5 +68,12 @@ public class EngineController {
     public List<EngineDto> deleteAll(@RequestBody final Long[] ids) throws ProductNotFoundException {
         return converter.convertToDtoList(service.deleteAll(Arrays.asList(ids)));
     }
+
+    @PostMapping(value = "/search")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get engines list by ids list")
+    public List<EngineDto> search(@RequestBody final List<Long> ids) {
+        return converter.convertToDtoList(service.search(ids));
+    }
     
 }

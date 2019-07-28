@@ -7,10 +7,10 @@
                     <tr>
                         <td style="width: 80px">
                             <button
-                                    v-show="false"
-                                    @click="refresh()"
+                                    v-show="isBackButtonDisplayed()"
+                                    @click="back()"
                                     id="back"
-                                    style="width: 100%; height: 100%; background: none; font-size: larger; color: #252525">
+                                    class="app-bar-button">
                                     <b>Back</b>
                             </button>
                         </td>
@@ -22,7 +22,7 @@
                                     v-show="isAuthorized()"
                                     @click="logout()"
                                     id="logout"
-                                    style="width: 100%; height: 100%; background: none; font-size: larger; color: #252525">
+                                    class="app-bar-button">
                                 <b>Logout</b>
                             </button>
                         </td>
@@ -30,25 +30,22 @@
                     </tbody>
                 </table>
             </div>
+<!--            <p>{{homeComponent}}</p>-->
             <router-view></router-view>
         </div>
     </div>
 </template>
 
 <script>
-    import Login from './components/Login.vue';
     import {mapState} from 'vuex';
 
     export default {
         name: 'app',
 
-        components: {
-            Login
-        },
-
         computed: {
             ...mapState({
-                authorization: state => state.dictionary.authorization
+                authorization: state => state.dictionary.authorization,
+                homeComponent: state => state.dictionary.homeComponent
             })
         },
 
@@ -69,6 +66,22 @@
 
             reload() {
                 window.location.reload();
+            },
+
+            getCurrentRouteName() {
+                return this.$router.currentRoute.name;
+            },
+
+            isBackButtonDisplayed() {
+                return !this.isLoginPage() && this.homeComponent !== "MotorcycleMenu";
+            },
+
+            isLoginPage() {
+                return this.getCurrentRouteName() === "login";
+            },
+
+            back() {
+                this.$store.dispatch("setHomeComponent", "MotorcycleMenu");
             }
         }
     }
@@ -105,6 +118,14 @@
 
     #appName {
         text-align: center;
+    }
+
+    .app-bar-button {
+        width: 100%;
+        height: 100%;
+        background: none;
+        font-size: larger;
+        color: #252525
     }
 
     button {

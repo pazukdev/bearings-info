@@ -5,7 +5,8 @@ const state = {
     admin: "",
     user: "",
     authorization: "",
-    incorrectCredentials: false
+    incorrectCredentials: false,
+    homeComponent: ""
 };
 
 const actions = {
@@ -15,6 +16,10 @@ const actions = {
 
     setIncorrectCredentials: ({commit}, context) => {
         commit("setIncorrectCredentials", context)
+    },
+
+    setHomeComponent: ({commit}, context) => {
+        commit("setHomeComponent", context)
     }
 };
 
@@ -25,6 +30,10 @@ const mutations = {
 
     setIncorrectCredentials(state, incorrectCredentials) {
         state.incorrectCredentials = incorrectCredentials === true;
+    },
+
+    setHomeComponent(state, homeComponent) {
+        state.homeComponent = homeComponent;
     }
 };
 

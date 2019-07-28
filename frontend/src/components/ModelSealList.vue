@@ -24,11 +24,12 @@
 
 <script>
     import axios from 'axios';
+    import {mapState} from 'vuex';
 
     export default {
         name: "ModelSealList.vue",
 
-        props: ['motorcycleId'],
+        props: ['engine'],
 
         data() {
             return {
@@ -52,12 +53,20 @@
                 }));
         },
 
+        computed: {
+            ...mapState({
+                authorization: state => state.dictionary.authorization
+            })
+        },
+
         methods: {
-
             getAllSeals() {
-                return axios.get(`/backend/seal/list`)
+                return axios.get(`/backend/seal/list`, {
+                    headers: {
+                        Authorization: this.authorization
+                    }
+                })
             }
-
         }
     }
 

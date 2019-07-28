@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ModelBearingList :motorcycle="motorcycle"/>
+        <ModelBearingList :engine="engine"/>
         <ModelSealList :motorcycle="motorcycle"/>
     </div>
 </template>
@@ -12,7 +12,7 @@
     export default {
         name: "ModelPartsList.vue",
 
-        props: ['motorcycle'],
+        props: ['motorcycle', 'engine'],
 
         components: {
             ModelBearingList,

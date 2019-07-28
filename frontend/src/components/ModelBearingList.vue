@@ -24,11 +24,12 @@
 
 <script>
     import axios from 'axios';
+    import {mapState} from 'vuex';
 
     export default {
         name: "ModelBearingList.vue",
 
-        props: ['motorcycle'],
+        props: ['engine'],
 
         data() {
             return {
@@ -36,8 +37,14 @@
             }
         },
 
+        computed: {
+            ...mapState({
+                authorization: state => state.dictionary.authorization
+            })
+        },
+
         watch: {
-            motorcycle(newVal) {
+            engine(newVal) {
                 this.bearings = this.getBearings(newVal.bearingIds);
             }
         },
@@ -45,7 +52,11 @@
         methods: {
             getBearings(ids) {
                 axios
-                    .post('backend/bearing/search', ids)
+                    .post('backend/bearing/search', ids, {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
                     .then(response => this.bearings = response.data);
 
             },
