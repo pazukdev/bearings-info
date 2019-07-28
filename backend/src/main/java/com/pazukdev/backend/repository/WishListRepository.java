@@ -1,6 +1,6 @@
 package com.pazukdev.backend.repository;
 
-import com.pazukdev.backend.entity.WishList;
+import com.pazukdev.backend.entity.WishListEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
  * @author Siarhei Sviarkaltsau
  */
 @Repository
-public interface WishListRepository extends JpaRepository<WishList, Long> {
+public interface WishListRepository extends JpaRepository<WishListEntity, Long> {
 
-    WishList findByName(final String name);
+    WishListEntity findByName(final String name);
 
 }

@@ -1,7 +1,7 @@
 package com.pazukdev.backend.entity.product.motorcycle;
 
 import com.pazukdev.backend.entity.product.Product;
-import com.pazukdev.backend.entity.product.unit.engine.Engine;
+import com.pazukdev.backend.entity.product.unit.engine.EngineEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,11 +20,11 @@ import javax.persistence.Table;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "motorcycle")
-public class Motorcycle extends Product {
+public class MotorcycleEntity extends Product {
 
     @ManyToOne
     @JoinColumn(name = "engine_id")
-    private Engine engine;
+    private EngineEntity engine;
     @Column(name = "weight_g")
     private Integer weightG;
     @Column(name = "fuel_capacity_l")

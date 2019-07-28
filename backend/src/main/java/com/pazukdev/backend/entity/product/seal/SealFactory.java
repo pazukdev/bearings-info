@@ -14,7 +14,7 @@ import java.io.File;
  * @author Siarhei Sviarkaltsau
  */
 @Component
-public class SealFactory extends ProductFactory<Seal> {
+public class SealFactory extends ProductFactory<SealEntity> {
 
     public SealFactory(final ServiceContext context, final ManufacturerFactory manufacturerFactory) {
         super(context, manufacturerFactory);
@@ -26,24 +26,24 @@ public class SealFactory extends ProductFactory<Seal> {
     }
 
     @Override
-    public Seal createEntity() {
-        return new Seal();
+    public SealEntity createEntity() {
+        return new SealEntity();
     }
 
     @Override
-    protected void applyCharacteristics(final Seal seal, final TableRow tableRow) {
+    protected void applyCharacteristics(final SealEntity seal, final TableRow tableRow) {
         super.applyCharacteristics(seal, tableRow);
 
         applyRotation(seal, tableRow);
         applyMaterial(seal, tableRow);
     }
 
-    private void applyRotation(final Seal seal, TableRow tableRow) {
+    private void applyRotation(final SealEntity seal, TableRow tableRow) {
         final String rotation = tableRow.getStringValue(Specification.ROTATION);
         seal.setRotation(rotation);
     }
 
-    private void applyMaterial(final Seal seal, final TableRow tableRow) {
+    private void applyMaterial(final SealEntity seal, final TableRow tableRow) {
         final String material = tableRow.getStringValue(Specification.MATERIAL);
         seal.setMaterial(material);
     }

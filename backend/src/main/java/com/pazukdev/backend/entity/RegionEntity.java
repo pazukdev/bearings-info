@@ -5,7 +5,7 @@ import java.util.Locale;
 /**
  * @author Siarhei Sviarkaltsau
  */
-public class Region extends AbstractEntity {
+public class RegionEntity extends AbstractEntity {
 
     private Locale locale;
     private String countryName;

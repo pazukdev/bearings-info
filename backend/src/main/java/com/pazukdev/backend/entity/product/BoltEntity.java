@@ -3,5 +3,5 @@ package com.pazukdev.backend.entity.product;
 /**
  * @author Siarhei Sviarkaltsau
  */
-public class Carburetor {
+public class BoltEntity {
 }

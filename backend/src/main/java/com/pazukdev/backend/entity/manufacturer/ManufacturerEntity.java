@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "manufacturer")
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Manufacturer extends AbstractEntity {
+public class ManufacturerEntity extends AbstractEntity {
 
     @Column(name = "founded")
     private String founded;

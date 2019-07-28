@@ -2,7 +2,7 @@ package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.product.SparkPlugDto;
-import com.pazukdev.backend.entity.product.sparkplug.SparkPlug;
+import com.pazukdev.backend.entity.product.sparkplug.SparkPlugEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * @author Siarhei Sviarkaltsau
  */
 @Service
-public class SparkPlugConverter implements EntityDtoConverter<SparkPlug, SparkPlugDto> {
+public class SparkPlugConverter implements EntityDtoConverter<SparkPlugEntity, SparkPlugDto> {
 
     private final ModelMapper modelMapper;
 
@@ -19,13 +19,13 @@ public class SparkPlugConverter implements EntityDtoConverter<SparkPlug, SparkPl
     }
 
     @Override
-    public SparkPlugDto convertToDto(final SparkPlug entity) {
+    public SparkPlugDto convertToDto(final SparkPlugEntity entity) {
         return modelMapper.map(entity, SparkPlugDto.class);
     }
 
     @Override
-    public SparkPlug convertToEntity(final SparkPlugDto dto) {
-        return modelMapper.map(dto, SparkPlug.class);
+    public SparkPlugEntity convertToEntity(final SparkPlugDto dto) {
+        return modelMapper.map(dto, SparkPlugEntity.class);
     }
 
 }

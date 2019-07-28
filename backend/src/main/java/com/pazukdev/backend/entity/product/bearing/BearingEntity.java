@@ -1,4 +1,4 @@
-package com.pazukdev.backend.entity.product.sparkplug;
+package com.pazukdev.backend.entity.product.bearing;
 
 import com.pazukdev.backend.entity.product.Product;
 import lombok.Data;
@@ -16,10 +16,14 @@ import javax.persistence.Table;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity
-@Table(name = "spark_plug")
-public class SparkPlug extends Product {
+@Table(name = "bearing")
+public class BearingEntity extends Product {
 
-    @Column(name = "heat_range")
-    private Integer heatRange;
+    @Column(name = "type")
+    private String type;
+    @Column(name = "rolling_element")
+    private String rollingElement;
+    @Column(name = "rolling_elements_quantity")
+    private Integer rollingElementsQuantity;
 
 }

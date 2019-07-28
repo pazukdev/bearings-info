@@ -2,7 +2,7 @@ package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.ManufacturerDto;
-import com.pazukdev.backend.entity.manufacturer.Manufacturer;
+import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @author Siarhei Sviarkaltsau
  */
 @Component
-public class ManufacturerConverter implements EntityDtoConverter<Manufacturer, ManufacturerDto> {
+public class ManufacturerConverter implements EntityDtoConverter<ManufacturerEntity, ManufacturerDto> {
 
     private final ModelMapper modelMapper;
 
@@ -19,14 +19,14 @@ public class ManufacturerConverter implements EntityDtoConverter<Manufacturer, M
     }
 
     @Override
-    public ManufacturerDto convertToDto(final Manufacturer entity) {
+    public ManufacturerDto convertToDto(final ManufacturerEntity entity) {
         final ManufacturerDto dto = modelMapper.map(entity, ManufacturerDto.class);
         return dto;
     }
 
     @Override
-    public Manufacturer convertToEntity(final ManufacturerDto dto) {
-        final Manufacturer entity = modelMapper.map(dto, Manufacturer.class);
+    public ManufacturerEntity convertToEntity(final ManufacturerDto dto) {
+        final ManufacturerEntity entity = modelMapper.map(dto, ManufacturerEntity.class);
         return entity;
     }
 

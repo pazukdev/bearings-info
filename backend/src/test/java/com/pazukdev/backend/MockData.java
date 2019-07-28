@@ -5,11 +5,11 @@ import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.product.BearingDto;
 import com.pazukdev.backend.dto.product.MotorcycleDto;
 import com.pazukdev.backend.dto.product.SealDto;
-import com.pazukdev.backend.entity.User;
-import com.pazukdev.backend.entity.manufacturer.Manufacturer;
-import com.pazukdev.backend.entity.product.bearing.Bearing;
-import com.pazukdev.backend.entity.product.motorcycle.Motorcycle;
-import com.pazukdev.backend.entity.product.seal.Seal;
+import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
+import com.pazukdev.backend.entity.product.bearing.BearingEntity;
+import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
+import com.pazukdev.backend.entity.product.seal.SealEntity;
 import lombok.Getter;
 import org.modelmapper.ModelMapper;
 
@@ -26,8 +26,8 @@ public class MockData {
 
     private final TestContext testContext = TestContext.create();
 
-    public Manufacturer manufacturer() {
-        final Manufacturer manufacturer = new Manufacturer();
+    public ManufacturerEntity manufacturer() {
+        final ManufacturerEntity manufacturer = new ManufacturerEntity();
         manufacturer.setId(1L);
         manufacturer.setFounded("1917");
         manufacturer.setDefunct("1993");
@@ -42,12 +42,12 @@ public class MockData {
         return dto;
     }
 
-    public Bearing bearing() {
+    public BearingEntity bearing() {
         return bearing(99L, "bearing name");
     }
 
-    public Bearing bearing(final Long id, final String name) {
-        final Bearing bearing = new Bearing();
+    public BearingEntity bearing(final Long id, final String name) {
+        final BearingEntity bearing = new BearingEntity();
         bearing.setId(id);
         bearing.setName(name);
         bearing.setType("bearing type");
@@ -56,8 +56,8 @@ public class MockData {
         return bearing;
     }
 
-    public Set<Bearing> bearings() {
-        final Set<Bearing> entities = new HashSet<>();
+    public Set<BearingEntity> bearings() {
+        final Set<BearingEntity> entities = new HashSet<>();
         entities.add(bearing(11L, "bearing 1"));
         entities.add(bearing(12L, "bearing 2"));
         entities.add(bearing(13L, "bearing 3"));
@@ -75,8 +75,8 @@ public class MockData {
         return dto;
     }
 
-    public User user() {
-        final User user = new User();
+    public UserEntity user() {
+        final UserEntity user = new UserEntity();
         user.setName("login");
         user.setPassword("password");
         return user;
@@ -100,7 +100,7 @@ public class MockData {
         return dtos;
     }
 
-    public Motorcycle motorcycle() {
+    public MotorcycleEntity motorcycle() {
         return getFirstEntity(testContext.getMotorcycleFactory());
     }
 
@@ -115,12 +115,12 @@ public class MockData {
         return motorcycleDto;
     }
 
-    public Seal seal() {
+    public SealEntity seal() {
         return seal(100L, "seal name");
     }
 
-    public Seal seal(final Long id, final String name) {
-        final Seal seal = new Seal();
+    public SealEntity seal(final Long id, final String name) {
+        final SealEntity seal = new SealEntity();
         seal.setId(id);
         seal.setName(name);
         seal.setRotation("left");

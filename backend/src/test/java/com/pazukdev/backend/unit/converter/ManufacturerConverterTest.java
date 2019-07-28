@@ -3,7 +3,7 @@ package com.pazukdev.backend.unit.converter;
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.ManufacturerConverter;
 import com.pazukdev.backend.dto.ManufacturerDto;
-import com.pazukdev.backend.entity.manufacturer.Manufacturer;
+import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -18,7 +18,7 @@ public class ManufacturerConverterTest {
 
     @Test
     public void convertToDto() {
-        final Manufacturer entity = mockData.manufacturer();
+        final ManufacturerEntity entity = mockData.manufacturer();
         final ManufacturerDto dto = converter.convertToDto(entity);
 
         assertEquals(entity.getName(), dto.getName());
@@ -29,7 +29,7 @@ public class ManufacturerConverterTest {
     @Test
     public void convertToEntity() {
         final ManufacturerDto dto = mockData.manufacturerDto();
-        final Manufacturer entity = converter.convertToEntity(dto);
+        final ManufacturerEntity entity = converter.convertToEntity(dto);
 
         assertEquals(dto.getName(), entity.getName());
         assertEquals(dto.getFounded(), entity.getFounded());

@@ -2,7 +2,7 @@ package com.pazukdev.backend.unit.converter;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.dto.product.BearingDto;
-import com.pazukdev.backend.entity.product.bearing.Bearing;
+import com.pazukdev.backend.entity.product.bearing.BearingEntity;
 import org.junit.Test;
 
 import static com.pazukdev.backend.unit.converter.util.ConverterTestUtil.validateBearingConversion;
@@ -16,7 +16,7 @@ public class ConverterTest {
 
     @Test
     public void bearingToBearingDto() {
-        final Bearing entity = mockData.bearing();
+        final BearingEntity entity = mockData.bearing();
         final BearingDto dto = mockData.getTestContext().getBearingConverter().convertToDto(entity);
 
         validateBearingConversion(entity, dto);
@@ -25,7 +25,7 @@ public class ConverterTest {
     @Test
     public void bearingDtoToBearing() {
         final BearingDto dto = mockData.bearingDto();
-        final Bearing entity = mockData.getTestContext().getBearingConverter().convertToEntity(dto);
+        final BearingEntity entity = mockData.getTestContext().getBearingConverter().convertToEntity(dto);
 
         validateBearingConversion(entity, dto);
     }

@@ -1,7 +1,7 @@
 package com.pazukdev.backend.entity.product;
 
 import com.pazukdev.backend.entity.AbstractEntity;
-import com.pazukdev.backend.entity.manufacturer.Manufacturer;
+import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -22,7 +22,7 @@ public class Product extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "manufacturer_id")
-    private Manufacturer manufacturer;
+    private ManufacturerEntity manufacturer;
     @Column(name = "production_start_year")
     private Integer productionStartYear;
     @Column(name = "production_stop_year")

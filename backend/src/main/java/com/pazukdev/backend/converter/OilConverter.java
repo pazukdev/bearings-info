@@ -2,7 +2,7 @@ package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.product.OilDto;
-import com.pazukdev.backend.entity.product.oil.Oil;
+import com.pazukdev.backend.entity.product.oil.OilEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * @author Siarhei Sviarkaltsau
  */
 @Service
-public class OilConverter implements EntityDtoConverter<Oil, OilDto> {
+public class OilConverter implements EntityDtoConverter<OilEntity, OilDto> {
 
     private final ModelMapper modelMapper;
 
@@ -19,13 +19,13 @@ public class OilConverter implements EntityDtoConverter<Oil, OilDto> {
     }
 
     @Override
-    public OilDto convertToDto(final Oil entity) {
+    public OilDto convertToDto(final OilEntity entity) {
         return modelMapper.map(entity, OilDto.class);
     }
 
     @Override
-    public Oil convertToEntity(final OilDto dto) {
-        return modelMapper.map(dto, Oil.class);
+    public OilEntity convertToEntity(final OilDto dto) {
+        return modelMapper.map(dto, OilEntity.class);
     }
 
 }

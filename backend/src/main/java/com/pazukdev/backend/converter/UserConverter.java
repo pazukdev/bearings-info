@@ -2,7 +2,7 @@ package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.UserDto;
-import com.pazukdev.backend.entity.User;
+import com.pazukdev.backend.entity.UserEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @author Siarhei Sviarkaltsau
  */
 @Component
-public class UserConverter implements EntityDtoConverter<User, UserDto> {
+public class UserConverter implements EntityDtoConverter<UserEntity, UserDto> {
 
     private final ModelMapper modelMapper;
 
@@ -19,13 +19,13 @@ public class UserConverter implements EntityDtoConverter<User, UserDto> {
     }
 
     @Override
-    public UserDto convertToDto(final User user) {
+    public UserDto convertToDto(final UserEntity user) {
         return modelMapper.map(user, UserDto.class);
     }
 
     @Override
-    public User convertToEntity(final UserDto dto) {
-        return modelMapper.map(dto, User.class);
+    public UserEntity convertToEntity(final UserDto dto) {
+        return modelMapper.map(dto, UserEntity.class);
     }
 
 }

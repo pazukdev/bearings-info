@@ -14,15 +14,15 @@ import java.io.File;
  * @author Siarhei Sviarkaltsau
  */
 @Component
-public class SparkPlugFactory extends ProductFactory<SparkPlug> {
+public class SparkPlugFactory extends ProductFactory<SparkPlugEntity> {
 
     public SparkPlugFactory(final ServiceContext context, final ManufacturerFactory manufacturerFactory) {
         super(context, manufacturerFactory);
     }
 
     @Override
-    public SparkPlug createEntity() {
-        return new SparkPlug();
+    public SparkPlugEntity createEntity() {
+        return new SparkPlugEntity();
     }
 
     @Override
@@ -31,12 +31,12 @@ public class SparkPlugFactory extends ProductFactory<SparkPlug> {
     }
 
     @Override
-    protected void applyCharacteristics(final SparkPlug sparkPlug, final TableRow tableRow) {
+    protected void applyCharacteristics(final SparkPlugEntity sparkPlug, final TableRow tableRow) {
         super.applyCharacteristics(sparkPlug, tableRow);
         applyHeatRange(sparkPlug, tableRow);
     }
 
-    private void applyHeatRange(final SparkPlug sparkPlug, final TableRow tableRow) {
+    private void applyHeatRange(final SparkPlugEntity sparkPlug, final TableRow tableRow) {
         sparkPlug.setHeatRange(tableRow.getIntegerValue(Specification.HEAT_RANGE));
     }
 }

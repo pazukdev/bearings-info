@@ -1,6 +1,6 @@
 package com.pazukdev.backend.repository;
 
-import com.pazukdev.backend.entity.product.bearing.Bearing;
+import com.pazukdev.backend.entity.product.bearing.BearingEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
  * @author Siarhei Sviarkaltsau
  */
 @Repository
-public interface BearingRepository extends JpaRepository<Bearing, Long> {
+public interface BearingRepository extends JpaRepository<BearingEntity, Long> {
 
-    Bearing findByName(final String name);
+    BearingEntity findByName(final String name);
 
 }

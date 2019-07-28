@@ -1,6 +1,6 @@
 package com.pazukdev.backend.dto.report;
 
-import com.pazukdev.backend.entity.product.motorcycle.Motorcycle;
+import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
 import com.pazukdev.backend.util.FuelUtil;
 import com.pazukdev.backend.util.SpeedUtil;
 
@@ -9,7 +9,7 @@ import com.pazukdev.backend.util.SpeedUtil;
  */
 public class ReportFactory {
 
-    public static FuelReportRS createFuelReport(final Motorcycle motorcycle) {
+    public static FuelReportRS createFuelReport(final MotorcycleEntity motorcycle) {
         final double fuelCapacityL = motorcycle.getFuelCapacityL();
         final double fuelConsumptionLPer100Km = 10D;
 
@@ -18,7 +18,7 @@ public class ReportFactory {
         return report;
     }
 
-    public static SpeedReportRS createSpeedReport(final Motorcycle motorcycle) {
+    public static SpeedReportRS createSpeedReport(final MotorcycleEntity motorcycle) {
         final int engineSpeedRpm = motorcycle.getEngine().getSpeedRpm();
 
         final SpeedReportRS report = new SpeedReportRS();

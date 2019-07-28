@@ -1,6 +1,5 @@
-package com.pazukdev.backend.entity.product.seal;
+package com.pazukdev.backend.entity;
 
-import com.pazukdev.backend.entity.product.Product;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -8,20 +7,21 @@ import lombok.ToString;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDate;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
 @Data
-@Entity
-@Table(name = "seal")
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Seal extends Product {
+@Entity
+@Table(name = "verification_token")
+public class VerificationTokenEntity extends AbstractEntity {
 
-    @Column(name = "rotation")
-    private String rotation;
-    @Column(name = "material")
-    private String material;
+    @Column(name = "token")
+    private String token;
+    @Column(name = "date")
+    private LocalDate expiryDate;
 
 }

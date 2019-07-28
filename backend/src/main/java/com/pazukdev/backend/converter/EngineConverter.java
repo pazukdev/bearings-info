@@ -2,9 +2,9 @@ package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.product.unit.EngineDto;
-import com.pazukdev.backend.entity.product.bearing.Bearing;
-import com.pazukdev.backend.entity.product.oil.Oil;
-import com.pazukdev.backend.entity.product.unit.engine.Engine;
+import com.pazukdev.backend.entity.product.bearing.BearingEntity;
+import com.pazukdev.backend.entity.product.oil.OilEntity;
+import com.pazukdev.backend.entity.product.unit.engine.EngineEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * @author Siarhei Sviarkaltsau
  */
 @Service
-public class EngineConverter implements EntityDtoConverter<Engine, EngineDto> {
+public class EngineConverter implements EntityDtoConverter<EngineEntity, EngineDto> {
 
     private final ModelMapper modelMapper;
 
@@ -21,27 +21,27 @@ public class EngineConverter implements EntityDtoConverter<Engine, EngineDto> {
     }
 
     @Override
-    public EngineDto convertToDto(final Engine entity) {
+    public EngineDto convertToDto(final EngineEntity entity) {
         final EngineDto dto = modelMapper.map(entity, EngineDto.class);
-        for (final Bearing bearing : entity.getBearings()) {
+        for (final BearingEntity bearing : entity.getBearings()) {
             dto.getBearingIds().add(bearing.getId());
         }
-        for (final Oil oil : entity.getOils()) {
+        for (final OilEntity oil : entity.getOils()) {
             dto.getOilIds().add(oil.getId());
         }
         return dto;
     }
 
     @Override
-    public Engine convertToEntity(final EngineDto dto) {
-        final Engine entity = modelMapper.map(dto, Engine.class);
+    public EngineEntity convertToEntity(final EngineDto dto) {
+        final EngineEntity entity = modelMapper.map(dto, EngineEntity.class);
         for (final Long bearingId : dto.getBearingIds()) {
-            final Bearing bearing = new Bearing();
+            final BearingEntity bearing = new BearingEntity();
             bearing.setId(bearingId);
             entity.getBearings().add(bearing);
         }
         for (final Long oilId : dto.getOilIds()) {
-            final Oil oil = new Oil();
+            final OilEntity oil = new OilEntity();
             oil.setId(oilId);
             entity.getOils().add(oil);
         }

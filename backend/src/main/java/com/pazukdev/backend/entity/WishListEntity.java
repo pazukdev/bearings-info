@@ -1,6 +1,6 @@
 package com.pazukdev.backend.entity;
 
-import com.pazukdev.backend.entity.product.bearing.Bearing;
+import com.pazukdev.backend.entity.product.bearing.BearingEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -21,7 +21,7 @@ import java.util.Set;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "wishlist")
-public class WishList extends AbstractEntity {
+public class WishListEntity extends AbstractEntity {
 
     @OneToMany
     @JoinTable(
@@ -29,6 +29,6 @@ public class WishList extends AbstractEntity {
             joinColumns = @JoinColumn(name = "wishlist_id"),
             inverseJoinColumns = @JoinColumn(name = "bearing_id")
     )
-    private Set<Bearing> bearings = new HashSet<>();
+    private Set<BearingEntity> bearings = new HashSet<>();
 
 }

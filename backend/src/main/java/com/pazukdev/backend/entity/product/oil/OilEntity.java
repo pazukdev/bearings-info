@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "oil")
-public class Oil extends Product {
+public class OilEntity extends Product {
 
     @Column(name = "base")
     private String base;

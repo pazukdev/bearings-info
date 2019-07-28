@@ -3,7 +3,7 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.converter.SealConverter;
 import com.pazukdev.backend.dto.product.SealDto;
 import com.pazukdev.backend.dto.search.DefaultSearchRequest;
-import com.pazukdev.backend.entity.product.seal.Seal;
+import com.pazukdev.backend.entity.product.seal.SealEntity;
 import com.pazukdev.backend.repository.SealRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * @author Siarhei Sviarkaltsau
  */
 @Service
-public class SealService extends AbstractService<Seal, SealDto>{
+public class SealService extends AbstractService<SealEntity, SealDto>{
 
     public SealService(final SealRepository repository,
                        final SealConverter converter) {
@@ -19,7 +19,7 @@ public class SealService extends AbstractService<Seal, SealDto>{
     }
 
     @Override
-    protected Seal findByName(DefaultSearchRequest request) {
+    protected SealEntity findByName(DefaultSearchRequest request) {
         return ((SealRepository) repository).findByName(request.getName());
     }
 

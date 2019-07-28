@@ -4,9 +4,9 @@ import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingFactory;
-import com.pazukdev.backend.entity.product.oil.Oil;
+import com.pazukdev.backend.entity.product.oil.OilEntity;
 import com.pazukdev.backend.entity.product.oil.OilFactory;
-import com.pazukdev.backend.entity.product.sparkplug.SparkPlug;
+import com.pazukdev.backend.entity.product.sparkplug.SparkPlugEntity;
 import com.pazukdev.backend.entity.product.sparkplug.SparkPlugFactory;
 import com.pazukdev.backend.entity.product.unit.UnitFactory;
 import com.pazukdev.backend.service.BearingService;
@@ -22,7 +22,7 @@ import java.util.List;
  * @author Siarhei Sviarkaltsau
  */
 @Component
-public class EngineFactory extends UnitFactory<Engine> {
+public class EngineFactory extends UnitFactory<EngineEntity> {
 
     private final BearingFactory bearingFactory;
     private final OilFactory oilFactory;
@@ -40,8 +40,8 @@ public class EngineFactory extends UnitFactory<Engine> {
     }
 
     @Override
-    public Engine createEntity() {
-        return new Engine();
+    public EngineEntity createEntity() {
+        return new EngineEntity();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class EngineFactory extends UnitFactory<Engine> {
     }
 
     @Override
-    protected void applyCharacteristics(final Engine engine, final TableRow tableRow) {
+    protected void applyCharacteristics(final EngineEntity engine, final TableRow tableRow) {
         super.applyCharacteristics(engine, tableRow);
 
         applyPower(engine, tableRow);
@@ -61,27 +61,27 @@ public class EngineFactory extends UnitFactory<Engine> {
         applyOils(engine, tableRow);
     }
 
-    private void applyPower(final Engine engine, final TableRow tableRow) {
+    private void applyPower(final EngineEntity engine, final TableRow tableRow) {
         engine.setPowerHp(tableRow.getIntegerValue(Specification.POWER_HP));
     }
 
-    private void applyTorque(final Engine engine, final TableRow tableRow) {
+    private void applyTorque(final EngineEntity engine, final TableRow tableRow) {
         engine.setTorqueNm(tableRow.getIntegerValue(Specification.TORQUE_NM));
     }
 
-    private void applySpeed(final Engine engine, final TableRow tableRow) {
+    private void applySpeed(final EngineEntity engine, final TableRow tableRow) {
         engine.setSpeedRpm(tableRow.getIntegerValue(Specification.SPEED_RPM));
     }
 
-    private void applySparkPlug(final Engine engine, final TableRow tableRow) {
+    private void applySparkPlug(final EngineEntity engine, final TableRow tableRow) {
         final String sparkPlugName = tableRow.getStringValue(Specification.SPARK_PLUG);
         final SparkPlugService sparkPlugService = context != null ? context.getSparkPlugService() : null;
-        final SparkPlug sparkPlug = getEntity(sparkPlugName, sparkPlugService, sparkPlugFactory);
+        final SparkPlugEntity sparkPlug = getEntity(sparkPlugName, sparkPlugService, sparkPlugFactory);
 
         engine.setSparkPlug(sparkPlug);
     }
 
-    private void applyBearings(final Engine engine, final TableRow tableRow) {
+    private void applyBearings(final EngineEntity engine, final TableRow tableRow) {
         final List<String> bearingNames = tableRow.getStringValues(Specification.BEARING);
         final BearingService bearingService = context != null ? context.getBearingService() : null;
         for (final String bearingName : bearingNames) {
@@ -89,11 +89,11 @@ public class EngineFactory extends UnitFactory<Engine> {
         }
     }
 
-    private void applyOils(final Engine engine, final TableRow tableRow) {
+    private void applyOils(final EngineEntity engine, final TableRow tableRow) {
         if (context == null || context.getOilService() == null) {
             return;
         }
-        for (final Oil oil : context.getOilService().findAll()) {
+        for (final OilEntity oil : context.getOilService().findAll()) {
             engine.getOils().add(oil);
         }
     }

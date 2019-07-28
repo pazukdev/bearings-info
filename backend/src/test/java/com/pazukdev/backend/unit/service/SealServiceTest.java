@@ -2,7 +2,7 @@ package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.SealConverter;
-import com.pazukdev.backend.entity.product.seal.Seal;
+import com.pazukdev.backend.entity.product.seal.SealEntity;
 import com.pazukdev.backend.repository.SealRepository;
 import com.pazukdev.backend.service.SealService;
 import org.junit.Test;
@@ -36,21 +36,21 @@ public class SealServiceTest {
 
     @Test
     public void createSeal() {
-        doReturn(mockData.seal()).when(repository).save(any(Seal.class));
+        doReturn(mockData.seal()).when(repository).save(any(SealEntity.class));
         service.create(mockData.sealDto());
-        verify(repository, times(1)).save(any(Seal.class));
+        verify(repository, times(1)).save(any(SealEntity.class));
     }
 
     @Test
     public void findAllSeals() {
-        final Seal seal = mockData.seal();
+        final SealEntity seal = mockData.seal();
 
-        final List<Seal> findAllResult = new ArrayList<>();
+        final List<SealEntity> findAllResult = new ArrayList<>();
         findAllResult.add(seal);
         findAllResult.add(seal);
 
         doReturn(findAllResult).when(repository).findAll();
-        final List<Seal> seals = service.findAll();
+        final List<SealEntity> seals = service.findAll();
         verify(repository, times(1)).findAll();
         assertEquals(findAllResult.size(), seals.size());
     }

@@ -2,7 +2,7 @@ package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.MotorcycleConverter;
-import com.pazukdev.backend.entity.product.motorcycle.Motorcycle;
+import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
 import com.pazukdev.backend.repository.MotorcycleRepository;
 import com.pazukdev.backend.service.MotorcycleService;
 import org.junit.Test;
@@ -37,25 +37,25 @@ public class MotorcycleServiceTest {
 
     @Test
     public void createMotorcycle() {
-        final Motorcycle motorcycle = mockData.motorcycle();
+        final MotorcycleEntity motorcycle = mockData.motorcycle();
 
-        doReturn(motorcycle).when(repository).save(any(Motorcycle.class));
+        doReturn(motorcycle).when(repository).save(any(MotorcycleEntity.class));
         service.create(mockData.motorcycleDto());
 
-        verify(repository, times(1)).save(any(Motorcycle.class));
+        verify(repository, times(1)).save(any(MotorcycleEntity.class));
 
     }
 
     @Test
     public void findAllMotorcycles() {
-        final Motorcycle motorcycle = mockData.motorcycle();
+        final MotorcycleEntity motorcycle = mockData.motorcycle();
 
-        final List<Motorcycle> findAllResult = new ArrayList<>();
+        final List<MotorcycleEntity> findAllResult = new ArrayList<>();
         findAllResult.add(motorcycle);
         findAllResult.add(motorcycle);
 
         doReturn(findAllResult).when(repository).findAll();
-        final List<Motorcycle> motorcycles = service.findAll();
+        final List<MotorcycleEntity> motorcycles = service.findAll();
         verify(repository, times(1)).findAll();
         assertEquals(findAllResult.size(), motorcycles.size());
     }

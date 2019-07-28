@@ -18,7 +18,7 @@ import java.io.File;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Component
-public class ManufacturerFactory extends AbstractEntityFactory<Manufacturer> {
+public class ManufacturerFactory extends AbstractEntityFactory<ManufacturerEntity> {
 
     @Override
     protected File getCSVFile() {
@@ -26,24 +26,24 @@ public class ManufacturerFactory extends AbstractEntityFactory<Manufacturer> {
     }
 
     @Override
-    public Manufacturer createEntity() {
-        return new Manufacturer();
+    public ManufacturerEntity createEntity() {
+        return new ManufacturerEntity();
     }
 
     @Override
-    protected void applyCharacteristics(Manufacturer manufacturer, TableRow tableRow) {
+    protected void applyCharacteristics(ManufacturerEntity manufacturer, TableRow tableRow) {
         super.applyCharacteristics(manufacturer, tableRow);
 
         applyFounded(manufacturer, tableRow);
         applyDefunct(manufacturer, tableRow);
     }
 
-    private void applyFounded(final Manufacturer manufacturer, final TableRow tableRow) {
+    private void applyFounded(final ManufacturerEntity manufacturer, final TableRow tableRow) {
         final String year = tableRow.getStringValue(Specification.FOUNDED);
         manufacturer.setFounded(year);
     }
 
-    private void applyDefunct(final Manufacturer manufacturer, final TableRow tableRow) {
+    private void applyDefunct(final ManufacturerEntity manufacturer, final TableRow tableRow) {
         final String year = tableRow.getStringValue(Specification.DEFUNCT);
         manufacturer.setDefunct(year);
     }

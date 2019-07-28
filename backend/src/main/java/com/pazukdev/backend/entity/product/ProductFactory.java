@@ -3,7 +3,7 @@ package com.pazukdev.backend.entity.product;
 import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.entity.AbstractEntityFactory;
-import com.pazukdev.backend.entity.manufacturer.Manufacturer;
+import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.service.ManufacturerService;
 import com.pazukdev.backend.tablemodel.TableRow;
@@ -42,7 +42,7 @@ public abstract class ProductFactory<Entity extends Product> extends AbstractEnt
     protected void applyManufacturer(final Product product, final TableRow tableRow) {
         final String manufacturerName = tableRow.getStringValue(Specification.MANUFACTURER);
         final ManufacturerService manufacturerService = context != null ? context.getManufacturerService() : null;
-        final Manufacturer manufacturer = getEntity(manufacturerName, manufacturerService, manufacturerFactory);
+        final ManufacturerEntity manufacturer = getEntity(manufacturerName, manufacturerService, manufacturerFactory);
 
         product.setManufacturer(manufacturer);
     }

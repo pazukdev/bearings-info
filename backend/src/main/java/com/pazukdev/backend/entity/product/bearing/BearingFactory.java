@@ -14,7 +14,7 @@ import java.io.File;
  * @author Siarhei Sviarkaltsau
  */
 @Component
-public class BearingFactory extends ProductFactory<Bearing> {
+public class BearingFactory extends ProductFactory<BearingEntity> {
 
     public BearingFactory(final ServiceContext context, final ManufacturerFactory manufacturerFactory) {
         super(context, manufacturerFactory);
@@ -26,12 +26,12 @@ public class BearingFactory extends ProductFactory<Bearing> {
     }
 
     @Override
-    public Bearing createEntity() {
-        return new Bearing();
+    public BearingEntity createEntity() {
+        return new BearingEntity();
     }
 
     @Override
-    protected void applyCharacteristics(final Bearing bearing, final TableRow tableRow) {
+    protected void applyCharacteristics(final BearingEntity bearing, final TableRow tableRow) {
         super.applyCharacteristics(bearing, tableRow);
 
         applyType(bearing, tableRow);
@@ -39,17 +39,17 @@ public class BearingFactory extends ProductFactory<Bearing> {
         applyRollingElementsQuantity(bearing, tableRow);
     }
 
-    private void applyType(final Bearing bearing, final TableRow tableRow) {
+    private void applyType(final BearingEntity bearing, final TableRow tableRow) {
         final String type = tableRow.getStringValue(Specification.TYPE);
         bearing.setType(type);
     }
 
-    private void applyRollingElement(final Bearing bearing, final TableRow tableRow) {
+    private void applyRollingElement(final BearingEntity bearing, final TableRow tableRow) {
         final String rollingElementData = tableRow.getStringValueBeforeParenthesises(Specification.ROLLING_ELEMENT);
         bearing.setRollingElement(rollingElementData);
     }
 
-    private void applyRollingElementsQuantity(final Bearing bearing, final TableRow tableRow) {
+    private void applyRollingElementsQuantity(final BearingEntity bearing, final TableRow tableRow) {
         final Integer rollingElementsQuantity = tableRow.getIntegerValue(Specification.ROLLING_ELEMENT);
         bearing.setRollingElementsQuantity(rollingElementsQuantity);
     }

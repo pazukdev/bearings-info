@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "user")
-public class User extends AbstractEntity {
+public class UserEntity extends AbstractEntity {
 
     @Column(name = "alias")
     private String alias;

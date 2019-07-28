@@ -1,8 +1,8 @@
 package com.pazukdev.backend.entity.product.unit.engine;
 
-import com.pazukdev.backend.entity.product.bearing.Bearing;
-import com.pazukdev.backend.entity.product.oil.Oil;
-import com.pazukdev.backend.entity.product.sparkplug.SparkPlug;
+import com.pazukdev.backend.entity.product.bearing.BearingEntity;
+import com.pazukdev.backend.entity.product.oil.OilEntity;
+import com.pazukdev.backend.entity.product.sparkplug.SparkPlugEntity;
 import com.pazukdev.backend.entity.product.unit.Unit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,7 +26,7 @@ import java.util.Set;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "engine")
-public class Engine extends Unit {
+public class EngineEntity extends Unit {
 
     @Column(name = "power_hp")
     private Integer powerHp;
@@ -36,7 +36,7 @@ public class Engine extends Unit {
     private Integer speedRpm;
     @ManyToOne
     @JoinColumn(name = "spark_plug_id")
-    private SparkPlug sparkPlug;
+    private SparkPlugEntity sparkPlug;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany
@@ -45,7 +45,7 @@ public class Engine extends Unit {
             joinColumns = @JoinColumn(name = "engine_id"),
             inverseJoinColumns = @JoinColumn(name = "bearing_id")
     )
-    private Set<Bearing> bearings = new HashSet<>();
+    private Set<BearingEntity> bearings = new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany
@@ -54,7 +54,7 @@ public class Engine extends Unit {
             joinColumns = @JoinColumn(name = "engine_id"),
             inverseJoinColumns = @JoinColumn(name = "oil_id")
     )
-    private Set<Oil> oils = new HashSet<>();
+    private Set<OilEntity> oils = new HashSet<>();
 
 }
 

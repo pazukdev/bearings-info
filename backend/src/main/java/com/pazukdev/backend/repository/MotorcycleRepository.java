@@ -1,6 +1,6 @@
 package com.pazukdev.backend.repository;
 
-import com.pazukdev.backend.entity.product.motorcycle.Motorcycle;
+import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
  * @author Siarhei Sviarkaltsau
  */
 @Repository
-public interface MotorcycleRepository extends JpaRepository<Motorcycle, Long> {
+public interface MotorcycleRepository extends JpaRepository<MotorcycleEntity, Long> {
 
-    Motorcycle findByName(final String name);
+    MotorcycleEntity findByName(final String name);
 
 }

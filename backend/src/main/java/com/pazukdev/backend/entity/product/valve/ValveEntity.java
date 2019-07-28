@@ -15,7 +15,7 @@ import javax.persistence.Column;
 @ToString(callSuper = true)
 //@Entity
 //@Table(name = "valve")
-public class Valve extends Product {
+public class ValveEntity extends Product {
 
     @Column(name = "type")
     private String type;

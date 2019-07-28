@@ -14,15 +14,15 @@ import java.io.File;
  * @author Siarhei Sviarkaltsau
  */
 @Component
-public class OilFactory extends ProductFactory<Oil> {
+public class OilFactory extends ProductFactory<OilEntity> {
 
     public OilFactory(final ServiceContext context, final ManufacturerFactory manufacturerFactory) {
         super(context, manufacturerFactory);
     }
 
     @Override
-    public Oil createEntity() {
-        return new Oil();
+    public OilEntity createEntity() {
+        return new OilEntity();
     }
 
     @Override
@@ -31,7 +31,7 @@ public class OilFactory extends ProductFactory<Oil> {
     }
 
     @Override
-    protected void applyCharacteristics(final Oil oil, final TableRow tableRow) {
+    protected void applyCharacteristics(final OilEntity oil, final TableRow tableRow) {
         super.applyCharacteristics(oil, tableRow);
 
         applyViscosity(oil, tableRow);
@@ -39,15 +39,15 @@ public class OilFactory extends ProductFactory<Oil> {
         applySeasonality(oil, tableRow);
     }
 
-    private void applyViscosity(final Oil oil, final TableRow tableRow) {
+    private void applyViscosity(final OilEntity oil, final TableRow tableRow) {
         oil.setViscosity(tableRow.getStringValue(Specification.VISCOSITY));
     }
 
-    private void applyBase(final Oil oil, final TableRow tableRow) {
+    private void applyBase(final OilEntity oil, final TableRow tableRow) {
         oil.setBase(tableRow.getStringValue(Specification.BASE));
     }
 
-    private void applySeasonality(final Oil oil, final TableRow tableRow) {
+    private void applySeasonality(final OilEntity oil, final TableRow tableRow) {
         oil.setSeasonality(tableRow.getStringValue(Specification.SEASONALITY));
     }
 

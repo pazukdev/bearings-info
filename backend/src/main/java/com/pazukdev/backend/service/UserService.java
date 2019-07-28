@@ -2,7 +2,7 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
-import com.pazukdev.backend.entity.User;
+import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * @author Siarhei Sviarkaltsau
  */
 @Service
-public class UserService extends AbstractService<User, UserDto> {
+public class UserService extends AbstractService<UserEntity, UserDto> {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -22,7 +22,7 @@ public class UserService extends AbstractService<User, UserDto> {
     }
 
     @Override
-    public User findByName(final String name) {
+    public UserEntity findByName(final String name) {
         return ((UserRepository) repository).findByName(name);
     }
 

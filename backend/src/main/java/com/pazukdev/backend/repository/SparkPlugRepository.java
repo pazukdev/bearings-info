@@ -1,13 +1,13 @@
 package com.pazukdev.backend.repository;
 
-import com.pazukdev.backend.entity.product.sparkplug.SparkPlug;
+import com.pazukdev.backend.entity.product.sparkplug.SparkPlugEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
-public interface SparkPlugRepository extends JpaRepository<SparkPlug, Long> {
+public interface SparkPlugRepository extends JpaRepository<SparkPlugEntity, Long> {
 
-    SparkPlug findByName(final String name);
+    SparkPlugEntity findByName(final String name);
 
 }

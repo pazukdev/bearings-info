@@ -3,7 +3,7 @@ package com.pazukdev.backend.unit.converter;
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.MotorcycleConverter;
 import com.pazukdev.backend.dto.product.MotorcycleDto;
-import com.pazukdev.backend.entity.product.motorcycle.Motorcycle;
+import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -29,7 +29,7 @@ public class MotorcycleConverterTest {
 
     @Test
     public void convertToDto() {
-        final Motorcycle entity = mockData.motorcycle();
+        final MotorcycleEntity entity = mockData.motorcycle();
         final MotorcycleDto dto= converter.convertToDto(entity);
 
         validate(entity, dto);
@@ -38,12 +38,12 @@ public class MotorcycleConverterTest {
     @Test
     public void convertToEntity() {
         final MotorcycleDto dto = mockData.motorcycleDto();
-        final Motorcycle entity = converter.convertToEntity(dto);
+        final MotorcycleEntity entity = converter.convertToEntity(dto);
 
         validate(entity, dto);
     }
 
-    private void validate(final Motorcycle entity, final MotorcycleDto dto) {
+    private void validate(final MotorcycleEntity entity, final MotorcycleDto dto) {
         validateAbstractEntityConversion(entity, dto);
         validateAbstractProductConversion(entity, dto);
 

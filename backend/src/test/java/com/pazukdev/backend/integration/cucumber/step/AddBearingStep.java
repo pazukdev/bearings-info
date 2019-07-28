@@ -1,7 +1,7 @@
 package com.pazukdev.backend.integration.cucumber.step;
 
 import com.pazukdev.backend.controller.BearingController;
-import com.pazukdev.backend.entity.product.bearing.Bearing;
+import com.pazukdev.backend.entity.product.bearing.BearingEntity;
 import com.pazukdev.backend.integration.testcore.core.TestContext;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -14,7 +14,7 @@ import lombok.Data;
 public class AddBearingStep {
 
     private final TestContext context;
-    private Bearing bearing;
+    private BearingEntity bearing;
     private BearingController controller;
 
     @When("^adds a new bearing with data: (.*), (.*), (.*), (.*)$")

@@ -3,7 +3,7 @@ package com.pazukdev.backend.unit.converter;
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.SealConverter;
 import com.pazukdev.backend.dto.product.SealDto;
-import com.pazukdev.backend.entity.product.seal.Seal;
+import com.pazukdev.backend.entity.product.seal.SealEntity;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -18,7 +18,7 @@ public class SealConverterTest {
 
     @Test
     public void convertToDto() {
-        final Seal seal = mockData.seal();
+        final SealEntity seal = mockData.seal();
         final SealDto dto= converter.convertToDto(seal);
 
         assertEquals(seal.getName(), dto.getName());
@@ -29,7 +29,7 @@ public class SealConverterTest {
     @Test
     public void convertToDbo() {
         final SealDto dto = mockData.sealDto();
-        final Seal seal = converter.convertToEntity(dto);
+        final SealEntity seal = converter.convertToEntity(dto);
 
         assertEquals(dto.getName(), seal.getName());
         assertEquals(dto.getRotation(), seal.getRotation());

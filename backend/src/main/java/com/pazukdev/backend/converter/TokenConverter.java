@@ -2,7 +2,7 @@ package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.VerificationTokenDto;
-import com.pazukdev.backend.entity.VerificationToken;
+import com.pazukdev.backend.entity.VerificationTokenEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @author Siarhei Sviarkaltsau
  */
 @Component
-public class TokenConverter implements EntityDtoConverter<VerificationToken, VerificationTokenDto> {
+public class TokenConverter implements EntityDtoConverter<VerificationTokenEntity, VerificationTokenDto> {
 
     private final ModelMapper modelMapper;
 
@@ -19,13 +19,13 @@ public class TokenConverter implements EntityDtoConverter<VerificationToken, Ver
     }
 
     @Override
-    public VerificationTokenDto convertToDto(final VerificationToken token) {
+    public VerificationTokenDto convertToDto(final VerificationTokenEntity token) {
         return modelMapper.map(token, VerificationTokenDto.class);
     }
 
     @Override
-    public VerificationToken convertToEntity(final VerificationTokenDto dto) {
-        return modelMapper.map(dto, VerificationToken.class);
+    public VerificationTokenEntity convertToEntity(final VerificationTokenDto dto) {
+        return modelMapper.map(dto, VerificationTokenEntity.class);
     }
 
 }

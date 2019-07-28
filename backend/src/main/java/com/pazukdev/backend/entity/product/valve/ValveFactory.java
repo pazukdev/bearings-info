@@ -11,7 +11,7 @@ import java.io.File;
 /**
  * @author Siarhei Sviarkaltsau
  */
-public class ValveFactory extends ProductFactory<Valve> {
+public class ValveFactory extends ProductFactory<ValveEntity> {
 
     public ValveFactory(final ServiceContext context,
                         final ManufacturerFactory manufacturerDtoFactory) {
@@ -19,8 +19,8 @@ public class ValveFactory extends ProductFactory<Valve> {
     }
 
     @Override
-    public Valve createEntity() {
-        return new Valve();
+    public ValveEntity createEntity() {
+        return new ValveEntity();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ValveFactory extends ProductFactory<Valve> {
     }
 
     @Override
-    protected void applyCharacteristics(final Valve valve, final TableRow tableRow) {
+    protected void applyCharacteristics(final ValveEntity valve, final TableRow tableRow) {
         super.applyCharacteristics(valve, tableRow);
     }
 }

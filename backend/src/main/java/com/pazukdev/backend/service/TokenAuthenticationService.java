@@ -2,8 +2,8 @@ package com.pazukdev.backend.service;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.pazukdev.backend.entity.User;
-import com.pazukdev.backend.entity.VerificationToken;
+import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.VerificationTokenEntity;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.repository.VerificationTokenRepository;
 import io.jsonwebtoken.Jwts;
@@ -45,7 +45,7 @@ public class TokenAuthenticationService {
     private final VerificationTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private final Cache<String, VerificationToken> cache = CacheBuilder
+    private final Cache<String, VerificationTokenEntity> cache = CacheBuilder
             .newBuilder()
             .expireAfterWrite(120, TimeUnit.MINUTES)
             .build();
@@ -60,7 +60,7 @@ public class TokenAuthenticationService {
 
     public Authentication getAuthentication(final HttpServletRequest request) throws SignatureException {
 
-        User user = userRepository.findByName("admin");
+        UserEntity user = userRepository.findByName("admin");
         if (!passwordEncoder.matches("123", user.getPassword())) {
             throw new BadCredentialsException("Bad credentials");
         }
@@ -107,9 +107,9 @@ public class TokenAuthenticationService {
 //            return token;
 //        });
 
-        VerificationToken verificationToken = tokenRepository.findByToken(JWT);
+        VerificationTokenEntity verificationToken = tokenRepository.findByToken(JWT);
         if (verificationToken == null) {
-            verificationToken = new VerificationToken();
+            verificationToken = new VerificationTokenEntity();
             verificationToken.setToken(JWT);
         }
 
@@ -136,7 +136,7 @@ public class TokenAuthenticationService {
 
 //    h
 
-    private Optional<VerificationToken> getFromCache(final String token) {
+    private Optional<VerificationTokenEntity> getFromCache(final String token) {
         return Optional.ofNullable(cache.getIfPresent(token));
     }
 

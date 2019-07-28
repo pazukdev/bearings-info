@@ -3,5 +3,5 @@ package com.pazukdev.backend.entity.product.cylinderhead;
 /**
  * @author Siarhei Sviarkaltsau
  */
-public class CylinderHead {
+public class CylinderHeadEntity {
 }

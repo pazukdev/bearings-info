@@ -3,7 +3,7 @@ package com.pazukdev.backend.dataloader;
 import com.pazukdev.backend.constant.Role;
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.entity.AbstractEntityFactory;
-import com.pazukdev.backend.entity.User;
+import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingFactory;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleFactory;
@@ -61,7 +61,7 @@ public class DataLoader implements ApplicationRunner {
 
     private void populateEmptyTables() {
         if (repositoryIsEmpty(userRepository)) {
-            User user = new User();
+            UserEntity user = new UserEntity();
             user.setName("admin");
             user.setAlias("admin");
             user.setPassword(passwordEncoder.encode("123"));

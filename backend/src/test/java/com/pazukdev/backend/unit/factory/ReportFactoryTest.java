@@ -4,7 +4,7 @@ import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.dto.report.FuelReportRS;
 import com.pazukdev.backend.dto.report.ReportFactory;
 import com.pazukdev.backend.dto.report.SpeedReportRS;
-import com.pazukdev.backend.entity.product.motorcycle.Motorcycle;
+import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class ReportFactoryTest {
 
-    private final Motorcycle motorcycle = new MockData().motorcycle();
+    private final MotorcycleEntity motorcycle = new MockData().motorcycle();
 
     @Test
     public void speedReportTest() {
