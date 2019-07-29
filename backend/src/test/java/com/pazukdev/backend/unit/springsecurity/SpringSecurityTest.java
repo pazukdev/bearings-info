@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,6 +39,13 @@ public class SpringSecurityTest {
         mvc
                 .perform(formLogin().password("invalid"))
                 .andExpect(unauthenticated());
+    }
+
+    @Test
+    public void anonymousUser() throws Exception {
+        mvc
+                .perform(get("/").with(anonymous()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isFound());
     }
 
 }
