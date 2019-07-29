@@ -2,7 +2,6 @@ package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.MotorcycleConverter;
-import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.repository.MotorcycleRepository;
@@ -46,7 +45,8 @@ public class MotorcycleServiceTest {
         verify(repository, times(1)).save(any(MotorcycleEntity.class));
     }
 
-    //@Test
+    //@Ignore
+    @Test
     public void delete() throws ProductNotFoundException {
         final Long id = 1L;
         when(repository.existsById(any(Long.class))).thenReturn(true);
@@ -77,9 +77,7 @@ public class MotorcycleServiceTest {
     @Test
     public void findByName() {
         doReturn(mockData.motorcycle()).when(repository).findByName(any(String.class));
-        final DefaultSearchRequest searchRequest = new DefaultSearchRequest();
-        searchRequest.setName("name");
-        service.search(searchRequest);
+        service.findByName("name");
 
         verify(repository, times(1)).findByName(any(String.class));
     }

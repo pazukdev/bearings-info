@@ -2,7 +2,6 @@ package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.UserConverter;
-import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.repository.UserRepository;
@@ -75,9 +74,8 @@ public class UserServiceTest {
     //@Test
     public void findByName() {
         doReturn(mockData.user()).when(repository).findByName(any(String.class));
-        final DefaultSearchRequest searchRequest = new DefaultSearchRequest();
-        searchRequest.setName("name");
-        service.search(searchRequest);
+        service.findByName("name");
+
         verify(repository, times(1)).findByName(any(String.class));
     }
 

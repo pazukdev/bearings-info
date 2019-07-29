@@ -2,7 +2,6 @@ package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.converter.ManufacturerConverter;
 import com.pazukdev.backend.dto.ManufacturerDto;
-import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.ManufacturerService;
 import io.swagger.annotations.Api;
@@ -65,8 +64,8 @@ public class ManufacturerController {
     @PostMapping(value = "/search")
     @ResponseStatus(HttpStatus.FOUND)
     @ApiOperation(value = "Get manufacturer by name")
-    public ManufacturerDto searchByName(@RequestBody final DefaultSearchRequest request) {
-        return converter.convertToDto(service.search(request));
+    public ManufacturerDto searchByName(@RequestBody final String name) {
+        return converter.convertToDto(service.findByName(name));
     }
 
 }

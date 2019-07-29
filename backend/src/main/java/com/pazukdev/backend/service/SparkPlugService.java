@@ -2,7 +2,6 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.SparkPlugConverter;
 import com.pazukdev.backend.dto.product.SparkPlugDto;
-import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.entity.product.sparkplug.SparkPlugEntity;
 import com.pazukdev.backend.repository.SparkPlugRepository;
 import org.springframework.stereotype.Service;
@@ -18,8 +17,8 @@ public class SparkPlugService extends AbstractService<SparkPlugEntity, SparkPlug
     }
 
     @Override
-    protected SparkPlugEntity findByName(DefaultSearchRequest request) {
-        return ((SparkPlugRepository) repository).findByName(request.getName());
+    public SparkPlugEntity findByName(final String name) {
+        return ((SparkPlugRepository) repository).findByName(name);
     }
 
 }

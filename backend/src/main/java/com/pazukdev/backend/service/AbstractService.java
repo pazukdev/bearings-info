@@ -2,7 +2,6 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.AbstractDto;
-import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -68,11 +67,6 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     }
 
     @Transactional
-    public Entity search(final DefaultSearchRequest request) {
-        return findByName(request);
-    }
-
-    @Transactional
     public List<Entity> search(final List<Long> ids) {
         final List<Entity> entities;
         if (ids == null || ids.isEmpty()) {
@@ -83,13 +77,8 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
         return entities;
     }
 
-    protected Entity findByName(final DefaultSearchRequest request) {
-        return null;
-    }
-
-    protected Entity findByName(final String name) {
-        return null;
-    }
+    @Transactional
+    public abstract Entity findByName(final String name);
 
 }
 

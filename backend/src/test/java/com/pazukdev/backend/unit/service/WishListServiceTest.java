@@ -2,7 +2,6 @@ package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.WishListConverter;
-import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.entity.WishListEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.repository.WishListRepository;
@@ -78,9 +77,7 @@ public class WishListServiceTest {
     @Test
     public void findByName() {
         doReturn(mockData.wishList()).when(repository).findByName(any(String.class));
-        final DefaultSearchRequest searchRequest = new DefaultSearchRequest();
-        searchRequest.setName("name");
-        service.search(searchRequest);
+        service.findByName("name");
 
         verify(repository, times(1)).findByName(any(String.class));
     }

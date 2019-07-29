@@ -2,7 +2,6 @@ package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.OilConverter;
-import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.entity.product.oil.OilEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.repository.OilRepository;
@@ -75,9 +74,8 @@ public class OilServiceTest {
     @Test
     public void findByName() {
         doReturn(mockData.oil()).when(repository).findByName(any(String.class));
-        final DefaultSearchRequest searchRequest = new DefaultSearchRequest();
-        searchRequest.setName("name");
-        service.search(searchRequest);
+        service.findByName("name");
+
         verify(repository, times(1)).findByName(any(String.class));
     }
 

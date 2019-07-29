@@ -5,7 +5,6 @@ import com.pazukdev.backend.dto.product.MotorcycleDto;
 import com.pazukdev.backend.dto.report.FuelReportRS;
 import com.pazukdev.backend.dto.report.ReportFactory;
 import com.pazukdev.backend.dto.report.SpeedReportRS;
-import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.repository.MotorcycleRepository;
@@ -22,8 +21,8 @@ public class MotorcycleService extends AbstractService<MotorcycleEntity, Motorcy
     }
 
     @Override
-    protected MotorcycleEntity findByName(DefaultSearchRequest request) {
-        return ((MotorcycleRepository) repository).findByName(request.getName());
+    public MotorcycleEntity findByName(final String name) {
+        return ((MotorcycleRepository) repository).findByName(name);
     }
 
     public SpeedReportRS getSpeedReport(final Long motorcycleId) throws ProductNotFoundException {

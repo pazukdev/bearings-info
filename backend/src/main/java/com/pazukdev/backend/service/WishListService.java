@@ -2,7 +2,6 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.WishListConverter;
 import com.pazukdev.backend.dto.WishListDto;
-import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.entity.WishListEntity;
 import com.pazukdev.backend.entity.product.bearing.BearingEntity;
 import com.pazukdev.backend.repository.WishListRepository;
@@ -21,8 +20,8 @@ public class WishListService extends AbstractService<WishListEntity, WishListDto
     }
 
     @Override
-    public WishListEntity findByName(final DefaultSearchRequest request) {
-        return ((WishListRepository) repository).findByName(request.getName());
+    public WishListEntity findByName(final String name) {
+        return ((WishListRepository) repository).findByName(name);
     }
 
     public Boolean addItem(final Long wishListId, final BearingEntity bearing) {

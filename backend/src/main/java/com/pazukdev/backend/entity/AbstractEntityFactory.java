@@ -1,7 +1,6 @@
 package com.pazukdev.backend.entity;
 
 import com.pazukdev.backend.characteristic.Specification;
-import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.service.AbstractService;
 import com.pazukdev.backend.tablemodel.TableModel;
 import com.pazukdev.backend.tablemodel.TableModelFactory;
@@ -27,7 +26,7 @@ public abstract class AbstractEntityFactory<Entity extends AbstractEntity> {
 
     protected abstract File getCSVFile();
 
-    public Entity searchByName(final String name) {
+    public Entity findByName(final String name) {
         return createEntitiesFromCSVFile()
                 .stream()
                 .filter(entity -> entity.getName().equals(name))
@@ -74,14 +73,11 @@ public abstract class AbstractEntityFactory<Entity extends AbstractEntity> {
     protected <T extends AbstractEntity> T getEntity(final String name,
                                                      final AbstractService service,
                                                      final AbstractEntityFactory<T> dtoFactory) {
-        final DefaultSearchRequest request = new DefaultSearchRequest();
-        request.setName(name);
-
         final T entity;
         if (service != null) {
-            entity = (T) service.search(request);
+            entity = (T) service.findByName(name);
         } else {
-            entity = CSVFileUtil.searchByName(request, dtoFactory);
+            entity = CSVFileUtil.findByName(name, dtoFactory);
         }
         return entity;
     }

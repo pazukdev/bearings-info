@@ -2,7 +2,6 @@ package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.converter.BearingConverter;
 import com.pazukdev.backend.dto.product.BearingDto;
-import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.BearingService;
 import io.swagger.annotations.Api;
@@ -65,8 +64,8 @@ public class BearingController {
     @PostMapping(value = "/search-by-name")
     @ResponseStatus(HttpStatus.FOUND)
     @ApiOperation(value = "Get bearing by name")
-    public BearingDto searchByName(@RequestBody final DefaultSearchRequest request) {
-        return converter.convertToDto(service.search(request));
+    public BearingDto searchByName(@RequestBody final String name) {
+        return converter.convertToDto(service.findByName(name));
     }
 
     @PostMapping(value = "/search")

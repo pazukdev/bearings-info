@@ -2,7 +2,6 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.SealConverter;
 import com.pazukdev.backend.dto.product.SealDto;
-import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.entity.product.seal.SealEntity;
 import com.pazukdev.backend.repository.SealRepository;
 import org.springframework.stereotype.Service;
@@ -19,8 +18,8 @@ public class SealService extends AbstractService<SealEntity, SealDto>{
     }
 
     @Override
-    protected SealEntity findByName(DefaultSearchRequest request) {
-        return ((SealRepository) repository).findByName(request.getName());
+    public SealEntity findByName(final String name) {
+        return ((SealRepository) repository).findByName(name);
     }
 
 }
