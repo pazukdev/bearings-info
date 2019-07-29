@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class MotorcycleServiceTest {
     @Mock
     private MotorcycleRepository repository;
     @Spy
-    private MotorcycleConverter converter = new MotorcycleConverter(new ModelMapper());
+    private MotorcycleConverter converter = new MotorcycleConverter(mockData.getTestContext().getModelMapper());
 
     @Test
     public void createMotorcycle() {

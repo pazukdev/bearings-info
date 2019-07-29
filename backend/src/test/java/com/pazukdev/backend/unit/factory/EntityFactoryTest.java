@@ -16,6 +16,8 @@ import com.pazukdev.backend.entity.product.sparkplug.SparkPlugEntity;
 import com.pazukdev.backend.entity.product.sparkplug.SparkPlugFactory;
 import com.pazukdev.backend.entity.product.unit.engine.EngineEntity;
 import com.pazukdev.backend.entity.product.unit.engine.EngineFactory;
+import com.pazukdev.backend.entity.product.valve.ValveEntity;
+import com.pazukdev.backend.entity.product.valve.ValveFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -46,6 +48,8 @@ public class EntityFactoryTest {
     private SparkPlugFactory sparkPlugFactory = new SparkPlugFactory(serviceContext, manufacturerFactory);
     @Spy
     private OilFactory oilFactory = new OilFactory(serviceContext,manufacturerFactory);
+    @Spy
+    private ValveFactory valveFactory = new ValveFactory(serviceContext, manufacturerFactory);
     @Spy
     private EngineFactory engineFactory = new EngineFactory(
             serviceContext, manufacturerFactory, bearingFactory, oilFactory, sparkPlugFactory);
@@ -78,6 +82,16 @@ public class EntityFactoryTest {
         assertEquals("10w-60", oil.getViscosity());
         assertEquals("synthetic", oil.getBase());
         assertEquals("multigrade", oil.getSeasonality());
+    }
+
+    @Test
+    public void valveFactoryTest() {
+        ValveEntity valve = null;
+        try {
+            valve = getFirstEntity(valveFactory);
+        } catch (NullPointerException e) {}
+
+        assertNull(valve);
     }
 
     @Test

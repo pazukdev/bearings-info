@@ -1,5 +1,6 @@
 package com.pazukdev.backend.filter;
 
+import com.pazukdev.backend.constant.SecurityConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

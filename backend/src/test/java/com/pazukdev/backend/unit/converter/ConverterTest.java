@@ -10,6 +10,7 @@ import com.pazukdev.backend.dto.product.MotorcycleDto;
 import com.pazukdev.backend.dto.product.OilDto;
 import com.pazukdev.backend.dto.product.SealDto;
 import com.pazukdev.backend.dto.product.SparkPlugDto;
+import com.pazukdev.backend.dto.product.ValveDto;
 import com.pazukdev.backend.dto.product.unit.EngineDto;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.VerificationTokenEntity;
@@ -21,6 +22,7 @@ import com.pazukdev.backend.entity.product.oil.OilEntity;
 import com.pazukdev.backend.entity.product.seal.SealEntity;
 import com.pazukdev.backend.entity.product.sparkplug.SparkPlugEntity;
 import com.pazukdev.backend.entity.product.unit.engine.EngineEntity;
+import com.pazukdev.backend.entity.product.valve.ValveEntity;
 import org.junit.Test;
 
 import static com.pazukdev.backend.unit.converter.util.ConverterTestUtil.*;
@@ -172,6 +174,26 @@ public class ConverterTest {
         assertEquals(dto.getName(), user.getName());
         assertEquals(dto.getName(), user.getName());
         assertEquals(dto.getPassword(), user.getPassword());
+    }
+
+    @Test
+    public void valveToValveDto() {
+        final ValveEntity entity = new ValveEntity();
+        final ValveDto dto = mockData.getTestContext().getValveConverter().convertToDto(entity);
+
+        assertEquals(entity.getName(), dto.getName());
+        assertEquals(entity.getDiameter(), dto.getDiameter());
+        assertEquals(entity.getType(), dto.getType());
+    }
+
+    @Test
+    public void valveDtoToValve() {
+        final ValveDto dto = new ValveDto();
+        final ValveEntity entity = mockData.getTestContext().getValveConverter().convertToEntity(dto);
+
+        assertEquals(entity.getName(), dto.getName());
+        assertEquals(entity.getDiameter(), dto.getDiameter());
+        assertEquals(entity.getType(), dto.getType());
     }
 
     @Test

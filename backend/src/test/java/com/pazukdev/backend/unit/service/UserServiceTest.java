@@ -1,12 +1,12 @@
 package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
-import com.pazukdev.backend.converter.SealConverter;
+import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.search.DefaultSearchRequest;
-import com.pazukdev.backend.entity.product.seal.SealEntity;
+import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
-import com.pazukdev.backend.repository.SealRepository;
-import com.pazukdev.backend.service.SealService;
+import com.pazukdev.backend.repository.UserRepository;
+import com.pazukdev.backend.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -25,40 +25,40 @@ import static org.mockito.Mockito.*;
  * @author Siarhei Sviarkaltsau
  */
 @RunWith(MockitoJUnitRunner.class)
-public class SealServiceTest {
+public class UserServiceTest {
 
     private MockData mockData = new MockData();
-
     @InjectMocks
-    private SealService service;
+    private UserService service;
     @Mock
-    private SealRepository repository;
+    private UserRepository repository;
     @Spy
-    private SealConverter converter;
+    private UserConverter converter = new UserConverter(mockData.getTestContext().getModelMapper());
 
     @Test
-    public void createSeal() {
-        doReturn(mockData.seal()).when(repository).save(any(SealEntity.class));
-        service.create(mockData.sealDto());
+    public void createUser() {
+        final UserEntity user = mockData.user();
 
-        verify(repository, times(1)).save(any(SealEntity.class));
+        doReturn(user).when(repository).save(any(UserEntity.class));
+        service.create(mockData.userDto());
+
+        verify(repository, times(1)).save(any(UserEntity.class));
     }
 
     @Test
     public void delete() throws ProductNotFoundException {
         final Long id = 1L;
         doReturn(true).when(repository).existsById(any(Long.class));
-        when(repository.getOne(id)).thenReturn(mockData.seal());
-        service.delete(id);
+        when(repository.getOne(id)).thenReturn(mockData.user());
 
+        service.delete(id);
         verify(repository, times(1)).deleteById(any(Long.class));
     }
 
     @Test
-    public void sealExistsById() throws ProductNotFoundException {
+    public void userExistsById() throws ProductNotFoundException {
         doReturn(true).when(repository).existsById(any(Long.class));
         service.productExists(1L);
-
         verify(repository, times(1)).existsById(any(Long.class));
     }
 
@@ -66,35 +66,33 @@ public class SealServiceTest {
     public void getById() throws ProductNotFoundException {
         final Long id = 1L;
         doReturn(true).when(repository).existsById(any(Long.class));
-        when(repository.getOne(id)).thenReturn(mockData.seal());
+        when(repository.getOne(id)).thenReturn(mockData.user());
         service.getOne(id);
 
         verify(repository, times(1)).getOne((any(Long.class)));
     }
 
     @Test
-    public void findSealByName() {
-        doReturn(mockData.seal()).when(repository).findByName(any(String.class));
+    public void findByName() {
+        doReturn(mockData.user()).when(repository).findByName(any(String.class));
         final DefaultSearchRequest searchRequest = new DefaultSearchRequest();
         searchRequest.setName("name");
         service.search(searchRequest);
-
         verify(repository, times(1)).findByName(any(String.class));
     }
 
     @Test
-    public void findAllSeals() {
-        final SealEntity seal = mockData.seal();
+    public void findAllUsers() {
+        final UserEntity user = mockData.user();
 
-        final List<SealEntity> findAllResult = new ArrayList<>();
-        findAllResult.add(seal);
-        findAllResult.add(seal);
+        final List<UserEntity> findAllResult = new ArrayList<>();
+        findAllResult.add(user);
+        findAllResult.add(user);
 
         doReturn(findAllResult).when(repository).findAll();
-        final List<SealEntity> seals = service.findAll();
-
+        final List<UserEntity> users = service.findAll();
         verify(repository, times(1)).findAll();
-        assertEquals(findAllResult.size(), seals.size());
+        assertEquals(findAllResult.size(), users.size());
     }
 
 }

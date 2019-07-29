@@ -1,4 +1,4 @@
-package com.pazukdev.backend.unit;
+package com.pazukdev.backend.unit.passwordencoder;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -8,6 +8,7 @@ import com.pazukdev.backend.integration.testcore.route.RouteNode;
 import com.pazukdev.backend.integration.testcore.scenario.GetPageScenario;
 import com.pazukdev.backend.integration.testcore.util.TestContextUtil;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -25,28 +26,33 @@ public class IT {
         this.context = TestContextUtil.createTestContext();
     }
 
+    @Ignore
     @Test
     public void basicWebdriverAndBrowserTest() {
         new GetPageScenario<>(context, GooglePage.class).perform();
     }
 
+    @Ignore
     @Test
     public void getMainPageTest() {
         new GetPageScenario<>(context, MainPage.class).perform();
     }
 
+    @Ignore
     @Test
     public void getMotorcyclePageTest() {
         final RouteNode<MainPage> mainPage = new RouteNode<>(MainPage.class, "motorcyclesButton");
         new GetPageScenario<>(context, new Route<>(mainPage)).perform();
     }
 
+    @Ignore
     @Test
     public void getBearingPageTest() {
         final RouteNode<MainPage> mainPage = new RouteNode<>(MainPage.class, "bearingsButton");
         new GetPageScenario<>(context, new Route<>(mainPage)).perform();
     }
 
+    @Ignore
     @Test
     public void getSealPageTest() {
         final RouteNode<MainPage> mainPage = new RouteNode<>(MainPage.class, "sealsButton");

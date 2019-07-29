@@ -1,4 +1,4 @@
-package com.pazukdev.backend.filter;
+package com.pazukdev.backend.constant;
 
 /**
  * @author Siarhei Sviarkaltsau

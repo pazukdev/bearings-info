@@ -2,17 +2,25 @@ package com.pazukdev.backend;
 
 import com.pazukdev.backend.dto.ManufacturerDto;
 import com.pazukdev.backend.dto.UserDto;
+import com.pazukdev.backend.dto.WishListDto;
 import com.pazukdev.backend.dto.product.BearingDto;
 import com.pazukdev.backend.dto.product.MotorcycleDto;
+import com.pazukdev.backend.dto.product.OilDto;
 import com.pazukdev.backend.dto.product.SealDto;
+import com.pazukdev.backend.dto.product.SparkPlugDto;
+import com.pazukdev.backend.dto.product.unit.EngineDto;
 import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.WishListEntity;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
 import com.pazukdev.backend.entity.product.bearing.BearingEntity;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
+import com.pazukdev.backend.entity.product.oil.OilEntity;
 import com.pazukdev.backend.entity.product.seal.SealEntity;
+import com.pazukdev.backend.entity.product.sparkplug.SparkPlugEntity;
+import com.pazukdev.backend.entity.product.unit.engine.EngineEntity;
 import lombok.Getter;
-import org.modelmapper.ModelMapper;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -70,6 +78,7 @@ public class MockData {
 
     public UserDto userDto() {
         final UserDto dto = new UserDto();
+        dto.setId(1L);
         dto.setName("login");
         dto.setPassword("password");
         return dto;
@@ -77,9 +86,68 @@ public class MockData {
 
     public UserEntity user() {
         final UserEntity user = new UserEntity();
+        user.setId(1L);
         user.setName("login");
         user.setPassword("password");
         return user;
+    }
+
+    public OilEntity oil() {
+        final OilEntity oil = new OilEntity();
+        oil.setId(1L);
+        oil.setName("20w-50");
+        oil.setViscosity("20w-50");
+        oil.setBase("mineral");
+        oil.setSeasonality("multigrade");
+        return oil;
+    }
+
+    public OilDto oilDto() {
+        final OilDto dto = new OilDto();
+        dto.setId(1L);
+        dto.setName("20w-50");
+        dto.setViscosity("20w-50");
+        dto.setBase("mineral");
+        dto.setSeasonality("multigrade");
+        return dto;
+    }
+
+    public SparkPlugEntity sparkPlug() {
+        final SparkPlugEntity sparkPlug = new SparkPlugEntity();
+        sparkPlug.setName("a14");
+        sparkPlug.setHeatRange(14);
+        return sparkPlug;
+    }
+
+    public SparkPlugDto sparkPlugDto() {
+        final SparkPlugDto dto = new SparkPlugDto();
+        dto.setName("a14");
+        dto.setHeatRange(14);
+        return dto;
+    }
+
+    public EngineEntity engine() {
+        final EngineEntity engine = new EngineEntity();
+        engine.setName("MT-8");
+        engine.setManufacturer(manufacturer());
+        engine.setPowerHp(32);
+        engine.setTorqueNm(40);
+        engine.setSpeedRpm(5900);
+        engine.setSparkPlug(sparkPlug());
+        engine.setBearings(bearings());
+        return engine;
+    }
+
+    public EngineDto engineDto() {
+        final EngineDto engine = new EngineDto();
+        engine.setName("MT-8");
+        engine.setManufacturerId(1L);
+        engine.setPowerHp(32);
+        engine.setTorqueNm(40);
+        engine.setSpeedRpm(5900);
+        engine.setSparkPlugId(1L);
+        engine.setBearingIds(new HashSet<>(Arrays.asList(1L, 2L)));
+        return engine;
     }
 
     public BearingDto bearingDto(final Long id, final String name) {
@@ -141,8 +209,36 @@ public class MockData {
         return sealDto;
     }
 
-    public ModelMapper modelMapper() {
-        return testContext.getModelMapper();
+    public WishListEntity wishList() {
+        final WishListEntity wishList = new WishListEntity();
+        wishList.setId(1L);
+        wishList.setBearings(bearings());
+        return wishList;
+    }
+
+    public WishListDto wishListDto() {
+        final WishListDto dto = new WishListDto();
+        dto.setId(1L);
+        dto.setBearingIds(new HashSet<>(Arrays.asList(1L, 2L)));
+        return dto;
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
