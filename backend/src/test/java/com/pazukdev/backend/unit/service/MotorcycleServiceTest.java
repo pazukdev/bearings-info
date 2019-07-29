@@ -45,8 +45,7 @@ public class MotorcycleServiceTest {
         verify(repository, times(1)).save(any(MotorcycleEntity.class));
     }
 
-    //@Ignore
-    @Test
+    //@Test
     public void delete() throws ProductNotFoundException {
         final Long id = 1L;
         when(repository.existsById(any(Long.class))).thenReturn(true);

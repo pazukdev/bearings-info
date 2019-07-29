@@ -10,7 +10,6 @@ import com.pazukdev.backend.converter.SealConverter;
 import com.pazukdev.backend.converter.SparkPlugConverter;
 import com.pazukdev.backend.converter.TokenConverter;
 import com.pazukdev.backend.converter.UserConverter;
-import com.pazukdev.backend.converter.ValveConverter;
 import com.pazukdev.backend.converter.WishListConverter;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingFactory;
@@ -47,7 +46,6 @@ public class TestContext {
     private final SealConverter sealConverter;
     private final OilConverter oilConverter;
     private final SparkPlugConverter sparkPlugConverter;
-    private final ValveConverter valveConverter;
     private final EngineConverter engineConverter;
     private final MotorcycleConverter motorcycleConverter;
 
@@ -74,7 +72,6 @@ public class TestContext {
         this.sealConverter = new SealConverter();
         this.oilConverter = new OilConverter(modelMapper);
         this.sparkPlugConverter = new SparkPlugConverter(modelMapper);
-        this.valveConverter = new ValveConverter(modelMapper);
         this.engineConverter = new EngineConverter(modelMapper);
         this.motorcycleConverter = new MotorcycleConverter(modelMapper);
     }
