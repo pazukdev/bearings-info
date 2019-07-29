@@ -6,12 +6,14 @@ import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.repository.MotorcycleRepository;
 import com.pazukdev.backend.service.MotorcycleService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,6 +115,22 @@ public class MotorcycleServiceTest {
         service.getFuelReport(id);
 
         verify(repository, times(1)).getOne((any(Long.class)));
+    }
+
+    @Test
+    public void getProductNotFoundException() {
+        Exception exception = null;
+        try {
+            service.getOne(1L);
+        } catch (Exception e) {
+            exception = e;
+        }
+
+        Assert.assertNotNull(exception);
+        Assert.assertTrue(exception instanceof ProductNotFoundException);
+        ProductNotFoundException productNotFoundException = (ProductNotFoundException) exception;
+        Assert.assertEquals(HttpStatus.NOT_FOUND, productNotFoundException.getStatus());
+        Assert.assertEquals("product under id == 1 is not exist", productNotFoundException.getMessage());
     }
 
 }
