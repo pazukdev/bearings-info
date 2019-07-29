@@ -96,4 +96,37 @@ public class WishListServiceTest {
         assertEquals(findAllResult.size(), wishLists.size());
     }
 
+    @Test
+    public void addItem() {
+        final Long id = 1L;
+        when(repository.getOne(id)).thenReturn(mockData.wishList());
+        service.addItem(id, mockData.bearing());
+
+        verify(repository, times(1)).getOne((any(Long.class)));
+    }
+
+    @Test
+    public void removeItem() {
+        final Long id = 1L;
+        when(repository.getOne(id)).thenReturn(mockData.wishList());
+        service.removeItem(id, 2L);
+
+        verify(repository, times(1)).getOne((any(Long.class)));
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
