@@ -2,7 +2,9 @@ package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.converter.MotorcycleConverter;
+import com.pazukdev.backend.dto.search.DefaultSearchRequest;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
+import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.repository.MotorcycleRepository;
 import com.pazukdev.backend.service.MotorcycleService;
 import org.junit.Test;
@@ -35,18 +37,55 @@ public class MotorcycleServiceTest {
     private MotorcycleConverter converter = new MotorcycleConverter(mockData.getTestContext().getModelMapper());
 
     @Test
-    public void createMotorcycle() {
+    public void create() {
         final MotorcycleEntity motorcycle = mockData.motorcycle();
 
         doReturn(motorcycle).when(repository).save(any(MotorcycleEntity.class));
         service.create(mockData.motorcycleDto());
 
         verify(repository, times(1)).save(any(MotorcycleEntity.class));
+    }
 
+    //@Test
+    public void delete() throws ProductNotFoundException {
+        final Long id = 1L;
+        when(repository.existsById(any(Long.class))).thenReturn(true);
+        when(repository.getOne(id)).thenReturn(mockData.motorcycle());
+        service.delete(id);
+
+        verify(repository, times(1)).deleteById(any(Long.class));
     }
 
     @Test
-    public void findAllMotorcycles() {
+    public void existsById() throws ProductNotFoundException {
+        doReturn(true).when(repository).existsById(any(Long.class));
+        service.productExists(1L);
+
+        verify(repository, times(1)).existsById(any(Long.class));
+    }
+
+    @Test
+    public void getById() throws ProductNotFoundException {
+        final Long id = 1L;
+        doReturn(true).when(repository).existsById(any(Long.class));
+        when(repository.getOne(id)).thenReturn(mockData.motorcycle());
+        service.getOne(id);
+
+        verify(repository, times(1)).getOne((any(Long.class)));
+    }
+
+    @Test
+    public void findByName() {
+        doReturn(mockData.motorcycle()).when(repository).findByName(any(String.class));
+        final DefaultSearchRequest searchRequest = new DefaultSearchRequest();
+        searchRequest.setName("name");
+        service.search(searchRequest);
+
+        verify(repository, times(1)).findByName(any(String.class));
+    }
+
+    @Test
+    public void findAll() {
         final MotorcycleEntity motorcycle = mockData.motorcycle();
 
         final List<MotorcycleEntity> findAllResult = new ArrayList<>();

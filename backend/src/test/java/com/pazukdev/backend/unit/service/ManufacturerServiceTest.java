@@ -1,12 +1,12 @@
 package com.pazukdev.backend.unit.service;
 
 import com.pazukdev.backend.MockData;
-import com.pazukdev.backend.converter.SparkPlugConverter;
+import com.pazukdev.backend.converter.ManufacturerConverter;
 import com.pazukdev.backend.dto.search.DefaultSearchRequest;
-import com.pazukdev.backend.entity.product.sparkplug.SparkPlugEntity;
+import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
-import com.pazukdev.backend.repository.SparkPlugRepository;
-import com.pazukdev.backend.service.SparkPlugService;
+import com.pazukdev.backend.repository.ManufacturerRepository;
+import com.pazukdev.backend.service.ManufacturerService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -18,37 +18,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
 @RunWith(MockitoJUnitRunner.class)
-public class SparkPlugServiceTest {
+public class ManufacturerServiceTest {
 
     private MockData mockData = new MockData();
+
     @InjectMocks
-    private SparkPlugService service;
+    private ManufacturerService service;
     @Mock
-    private SparkPlugRepository repository;
+    private ManufacturerRepository repository;
     @Spy
-    private SparkPlugConverter converter = new SparkPlugConverter(mockData.getTestContext().getModelMapper());
+    private ManufacturerConverter converter = new ManufacturerConverter(mockData.getTestContext().getModelMapper());
 
     @Test
     public void create() {
-        final SparkPlugEntity sparkPlug = mockData.sparkPlug();
+        doReturn(mockData.manufacturer()).when(repository).save(any(ManufacturerEntity.class));
+        service.create(mockData.manufacturerDto());
 
-        doReturn(sparkPlug).when(repository).save(any(SparkPlugEntity.class));
-        service.create(mockData.sparkPlugDto());
-
-        verify(repository, times(1)).save(any(SparkPlugEntity.class));
+        verify(repository, times(1)).save(any(ManufacturerEntity.class));
     }
 
     @Test
     public void delete() throws ProductNotFoundException {
         final Long id = 1L;
         doReturn(true).when(repository).existsById(any(Long.class));
-        when(repository.getOne(id)).thenReturn(mockData.sparkPlug());
+        when(repository.getOne(id)).thenReturn(mockData.manufacturer());
         service.delete(id);
 
         verify(repository, times(1)).deleteById(any(Long.class));
@@ -66,7 +66,7 @@ public class SparkPlugServiceTest {
     public void getById() throws ProductNotFoundException {
         final Long id = 1L;
         doReturn(true).when(repository).existsById(any(Long.class));
-        when(repository.getOne(id)).thenReturn(mockData.sparkPlug());
+        when(repository.getOne(id)).thenReturn(mockData.manufacturer());
         service.getOne(id);
 
         verify(repository, times(1)).getOne((any(Long.class)));
@@ -74,7 +74,7 @@ public class SparkPlugServiceTest {
 
     @Test
     public void findByName() {
-        doReturn(mockData.sparkPlug()).when(repository).findByName(any(String.class));
+        doReturn(mockData.manufacturer()).when(repository).findByName(any(String.class));
         final DefaultSearchRequest searchRequest = new DefaultSearchRequest();
         searchRequest.setName("name");
         service.search(searchRequest);
@@ -84,16 +84,17 @@ public class SparkPlugServiceTest {
 
     @Test
     public void findAll() {
-        final SparkPlugEntity sparkPlug = mockData.sparkPlug();
+        final ManufacturerEntity manufacturer = mockData.manufacturer();
 
-        final List<SparkPlugEntity> findAllResult = new ArrayList<>();
-        findAllResult.add(sparkPlug);
-        findAllResult.add(sparkPlug);
+        final List<ManufacturerEntity> findAllResult = new ArrayList<>();
+        findAllResult.add(manufacturer);
+        findAllResult.add(manufacturer);
 
         doReturn(findAllResult).when(repository).findAll();
-        final List<SparkPlugEntity> sparkPlugs = service.findAll();
+        final List<ManufacturerEntity> manufacturers = service.findAll();
+
         verify(repository, times(1)).findAll();
-        assertEquals(findAllResult.size(), sparkPlugs.size());
+        assertEquals(findAllResult.size(), manufacturers.size());
     }
 
 }

@@ -73,7 +73,7 @@ public class OilServiceTest {
     }
 
     @Test
-    public void findOilByName() {
+    public void findByName() {
         doReturn(mockData.oil()).when(repository).findByName(any(String.class));
         final DefaultSearchRequest searchRequest = new DefaultSearchRequest();
         searchRequest.setName("name");

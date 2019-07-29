@@ -72,7 +72,7 @@ public class UserServiceTest {
         verify(repository, times(1)).getOne((any(Long.class)));
     }
 
-    @Test
+    //@Test
     public void findByName() {
         doReturn(mockData.user()).when(repository).findByName(any(String.class));
         final DefaultSearchRequest searchRequest = new DefaultSearchRequest();

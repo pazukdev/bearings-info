@@ -44,7 +44,7 @@ public class MockData {
 
     public ManufacturerDto manufacturerDto() {
         final ManufacturerDto dto = new ManufacturerDto();
-        dto.setId(101L);
+        dto.setId(1L);
         dto.setFounded("1914");
         dto.setDefunct("1918");
         return dto;
@@ -114,6 +114,7 @@ public class MockData {
 
     public SparkPlugEntity sparkPlug() {
         final SparkPlugEntity sparkPlug = new SparkPlugEntity();
+        sparkPlug.setId(1L);
         sparkPlug.setName("a14");
         sparkPlug.setHeatRange(14);
         return sparkPlug;
@@ -121,6 +122,7 @@ public class MockData {
 
     public SparkPlugDto sparkPlugDto() {
         final SparkPlugDto dto = new SparkPlugDto();
+        dto.setId(1L);
         dto.setName("a14");
         dto.setHeatRange(14);
         return dto;
@@ -128,6 +130,7 @@ public class MockData {
 
     public EngineEntity engine() {
         final EngineEntity engine = new EngineEntity();
+        engine.setId(1L);
         engine.setName("MT-8");
         engine.setManufacturer(manufacturer());
         engine.setPowerHp(32);
@@ -139,15 +142,16 @@ public class MockData {
     }
 
     public EngineDto engineDto() {
-        final EngineDto engine = new EngineDto();
-        engine.setName("MT-8");
-        engine.setManufacturerId(1L);
-        engine.setPowerHp(32);
-        engine.setTorqueNm(40);
-        engine.setSpeedRpm(5900);
-        engine.setSparkPlugId(1L);
-        engine.setBearingIds(new HashSet<>(Arrays.asList(1L, 2L)));
-        return engine;
+        final EngineDto dto = new EngineDto();
+        dto.setId(1L);
+        dto.setName("MT-8");
+        dto.setManufacturerId(1L);
+        dto.setPowerHp(32);
+        dto.setTorqueNm(40);
+        dto.setSpeedRpm(5900);
+        dto.setSparkPlugId(1L);
+        dto.setBearingIds(new HashSet<>(Arrays.asList(1L, 2L)));
+        return dto;
     }
 
     public BearingDto bearingDto(final Long id, final String name) {
@@ -173,14 +177,15 @@ public class MockData {
     }
 
     public MotorcycleDto motorcycleDto() {
-        final MotorcycleDto motorcycleDto = new MotorcycleDto();
-        motorcycleDto.setName("motorcycleDto name");
-        motorcycleDto.setProductionStartYear(1939);
-        motorcycleDto.setProductionStopYear(1946);
-        motorcycleDto.setManufacturerId(manufacturerDto().getId());
-        motorcycleDto.setWeightG(300);
-        motorcycleDto.setFuelCapacityL(20D);
-        return motorcycleDto;
+        final MotorcycleDto dto = new MotorcycleDto();
+        dto.setId(1L);
+        dto.setName("motorcycleDto name");
+        dto.setProductionStartYear(1939);
+        dto.setProductionStopYear(1946);
+        dto.setManufacturerId(manufacturerDto().getId());
+        dto.setWeightG(300);
+        dto.setFuelCapacityL(20D);
+        return dto;
     }
 
     public SealEntity seal() {
@@ -201,12 +206,12 @@ public class MockData {
     }
 
     public SealDto sealDto(final Long id, final String name) {
-        final SealDto sealDto = new SealDto();
-        sealDto.setId(id);
-        sealDto.setName(name);
-        sealDto.setRotation("right");
-        sealDto.setMaterial("rubber");
-        return sealDto;
+        final SealDto dto = new SealDto();
+        dto.setId(id);
+        dto.setName(name);
+        dto.setRotation("right");
+        dto.setMaterial("rubber");
+        return dto;
     }
 
     public WishListEntity wishList() {

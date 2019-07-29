@@ -37,7 +37,7 @@ public class SealServiceTest {
     private SealConverter converter;
 
     @Test
-    public void createSeal() {
+    public void create() {
         doReturn(mockData.seal()).when(repository).save(any(SealEntity.class));
         service.create(mockData.sealDto());
 
@@ -55,7 +55,7 @@ public class SealServiceTest {
     }
 
     @Test
-    public void sealExistsById() throws ProductNotFoundException {
+    public void existsById() throws ProductNotFoundException {
         doReturn(true).when(repository).existsById(any(Long.class));
         service.productExists(1L);
 
@@ -73,7 +73,7 @@ public class SealServiceTest {
     }
 
     @Test
-    public void findSealByName() {
+    public void findByName() {
         doReturn(mockData.seal()).when(repository).findByName(any(String.class));
         final DefaultSearchRequest searchRequest = new DefaultSearchRequest();
         searchRequest.setName("name");
@@ -83,7 +83,7 @@ public class SealServiceTest {
     }
 
     @Test
-    public void findAllSeals() {
+    public void findAll() {
         final SealEntity seal = mockData.seal();
 
         final List<SealEntity> findAllResult = new ArrayList<>();
