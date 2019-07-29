@@ -1,19 +1,32 @@
 version: '3'
 services:
 
-  mysql-server:
-    container_name: mysql-server
-    image: mysql:latest
-    environment:
-      MYSQL_DATABASE: motorcycle_info
-      MYSQL_ROOT_PASSWORD: demo
-      MYSQL_PASSWORD: demo
-      MYSQL_ROOT_HOST: '%'
-    ports:
-      - 13306:3306
-    expose:
-      - 3306
+#  db:
+#    container_name: db
+#    image: mysql:latest
+#    environment:
+#      MYSQL_DATABASE: motorcycle_info
+#      MYSQL_ROOT_PASSWORD: demo
+#      MYSQL_PASSWORD: demo
+#      MYSQL_ROOT_HOST: '%'
+#    ports:
+#      - 13306:3306
+#    expose:
+#      - 3306
+#    restart: always
+
+  db:
+    image: mysql:5.7
     restart: always
+    container_name: db
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: 'motorcycle_info'
+      MYSQL_PASSWORD: 'demo'
+      MYSQL_ROOT_PASSWORD: 'demo'
+    ports:
+      - '13306:3306'
 
   backend-spring-boot-app:
     container_name: backend-spring-boot-app
@@ -22,9 +35,9 @@ services:
       dockerfile: Dockerfile
     image: backend-spring-boot-app:latest
     depends_on:
-      - mysql-server
+      - db
     links:
-      - mysql-server
+      - db
     restart: always
     ports:
       - 8090:8090
@@ -37,30 +50,30 @@ services:
       - DATABASE_NAME=motorcycle_info
       - DATABASE_PORT=3306
 
-  nodejs:
-    container_name: nodejs
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    image: nodejs:latest
-    volumes:
-      - .:/app/
-      - .:/app/node_modules/
-    ports:
-      - 8091:8091
-    restart: always
-    depends_on:
-      - nginx
-      - backend-spring-boot-app
-    command: npm run serve -- --port 8091
-
-  nginx:
-    container_name: nginx
-    image: nginx:latest
-    ports:
-      - 10080:80
-      - 10443:443
-    volumes:
-      - ./frontend/nginx/conf.d:/etc/nginx/conf.d
-    restart: always
+#  nodejs:
+#    container_name: nodejs
+#    build:
+#      context: ./frontend
+#      dockerfile: Dockerfile
+#    image: nodejs:latest
+#    volumes:
+#      - .:/app/
+#      - .:/app/node_modules/
+#    ports:
+#      - 8091:8091
+#    restart: always
+#    depends_on:
+#      - nginx
+#      - backend-spring-boot-app
+#    command: npm run serve -- --port 8091
+#
+#  nginx:
+#    container_name: nginx
+#    image: nginx:latest
+#    ports:
+#      - 10080:80
+#      - 10443:443
+#    volumes:
+#      - ./frontend/nginx/conf.d:/etc/nginx/conf.d
+#    restart: always
 
