@@ -2,8 +2,6 @@ package com.pazukdev.backend.filter;
 
 import com.pazukdev.backend.constant.SecurityConstants;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -56,7 +54,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
 
         String token = Jwts.builder()
-                .signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
+                //.signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
                 .setHeaderParam("typ", SecurityConstants.TOKEN_TYPE)
                 .setIssuer(SecurityConstants.TOKEN_ISSUER)
                 .setAudience(SecurityConstants.TOKEN_AUDIENCE)

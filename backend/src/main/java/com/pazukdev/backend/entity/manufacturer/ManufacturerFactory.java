@@ -3,13 +3,15 @@ package com.pazukdev.backend.entity.manufacturer;
 import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.tablemodel.TableRow;
-import com.pazukdev.backend.util.CSVFileUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -22,7 +24,15 @@ public class ManufacturerFactory extends AbstractEntityFactory<ManufacturerEntit
 
     @Override
     protected File getCSVFile() {
-        return CSVFileUtil.file(CSVFileUtil.MANUFACTURER_FILE_NAME);
+        //CSVFileUtil.file(CSVFileUtil.MANUFACTURER_FILE_NAME);
+        InputStream in = getClass().getResourceAsStream("/static/manufacturer.csv");
+        File file = new File("manufacturer.csv");
+        try {
+            FileUtils.copyInputStreamToFile(in, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 
     @Override
