@@ -3,8 +3,11 @@ package com.pazukdev.backend.tablemodel;
 import com.pazukdev.backend.util.CSVFileUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +17,19 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TableModelFactory {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(TableModelFactory.class);
+
     public static TableModelFactory create() {
         return new TableModelFactory();
     }
 
-    public TableModel createTableModel(final File file) {
-        final List<TableRow> tableRows = getTableRows(CSVFileUtil.readFile(file));
+    public TableModel createTableModel(final String filePath) {
+        List<TableRow> tableRows = null;
+        try (final InputStream in= getClass().getResourceAsStream(filePath)) {
+            tableRows = getTableRows(CSVFileUtil.readInputStreamFromCSVFile(in));
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
         return new TableModelImpl(tableRows);
     }
 

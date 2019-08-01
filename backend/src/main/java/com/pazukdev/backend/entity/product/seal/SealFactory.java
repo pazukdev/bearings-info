@@ -8,8 +8,6 @@ import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -21,8 +19,8 @@ public class SealFactory extends ProductFactory<SealEntity> {
     }
 
     @Override
-    protected File getCSVFile() {
-        return CSVFileUtil.file(CSVFileUtil.SEAL_FILE_NAME);
+    protected String getCSVFilePath() {
+        return CSVFileUtil.filePath(CSVFileUtil.SEAL_FILE_NAME);
     }
 
     @Override

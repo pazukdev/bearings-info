@@ -6,15 +6,10 @@ import com.pazukdev.backend.entity.AbstractEntityFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -23,7 +18,7 @@ public class CSVFileUtil {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(CSVFileUtil.class);
 
-    public static final String PACKAGE = "static/";
+    public static final String PACKAGE = "/static/";
     public static final String FILE_FORMAT = "csv";
     public static final String MANUFACTURER_FILE_NAME = "manufacturer";
     public static final String MOTORCYCLE_FILE_NAME = "motorcycle";
@@ -45,16 +40,16 @@ public class CSVFileUtil {
     public static final String FRAME_FILE_NAME = "frame";
     public static final String CYLINDER_HEAD_FILE_NAME = "cylinder_head";
 
-    public static File file(final String fileName) {
-        return Objects.requireNonNull(path(dataFilePathInResources(fileName))).toFile();
+    public static String filePath(final String fileName) {
+        return dataFilePathInResources(fileName);
     }
 
-    public static List<String[]> readFile(final File file) {
+    public static List<String[]> readInputStreamFromCSVFile(final InputStream in) {
         List<String[]> lines = null;
-        try (CSVReader reader = new CSVReader(new FileReader(file))) {
+        try (final CSVReader reader = new CSVReader(new InputStreamReader(in))) {
             lines = reader.readAll();
         } catch (IOException e) {
-            LOGGER.error("Error collecting data from .csv file: " + file.getName(), e);
+            LOGGER.error("Error collecting data from input stream", e);
         }
         return format(lines);
     }
@@ -70,19 +65,6 @@ public class CSVFileUtil {
 
     private static List<String[]> format(final List<String[]> list) {
         return AppCollectionUtil.toLowerCase(AppCollectionUtil.removeSpaces(list));
-    }
-
-    private static Path path(final String filePathInResources) {
-        final ClassLoader classLoader = CSVFileUtil.class.getClassLoader();
-        final URL url = classLoader.getResource(filePathInResources);
-
-        Path path = null;
-        try {
-            path = Paths.get(Objects.requireNonNull(url).toURI());
-        } catch (URISyntaxException e) {
-            LOGGER.error("Error getting path from: " + filePathInResources, e);
-        }
-        return path;
     }
 
     private static String dataFilePathInResources(final String fileName) {

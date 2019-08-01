@@ -8,8 +8,6 @@ import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -26,8 +24,8 @@ public class OilFactory extends ProductFactory<OilEntity> {
     }
 
     @Override
-    protected File getCSVFile() {
-        return CSVFileUtil.file(CSVFileUtil.OIL_FILE_NAME);
+    protected String getCSVFilePath() {
+        return CSVFileUtil.filePath(CSVFileUtil.OIL_FILE_NAME);
     }
 
     @Override

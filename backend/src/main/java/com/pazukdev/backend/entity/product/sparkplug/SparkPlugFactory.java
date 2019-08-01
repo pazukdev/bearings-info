@@ -8,8 +8,6 @@ import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -26,8 +24,8 @@ public class SparkPlugFactory extends ProductFactory<SparkPlugEntity> {
     }
 
     @Override
-    protected File getCSVFile() {
-        return CSVFileUtil.file(CSVFileUtil.SPARK_PLUG_FILE_NAME);
+    protected String getCSVFilePath() {
+        return CSVFileUtil.filePath(CSVFileUtil.SPARK_PLUG_FILE_NAME);
     }
 
     @Override

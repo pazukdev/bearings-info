@@ -8,7 +8,6 @@ import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import lombok.Data;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public abstract class AbstractEntityFactory<Entity extends AbstractEntity> {
 
     public abstract Entity createEntity();
 
-    protected abstract File getCSVFile();
+    protected abstract String getCSVFilePath();
 
     public Entity findByName(final String name) {
         return createEntitiesFromCSVFile()
@@ -40,7 +39,7 @@ public abstract class AbstractEntityFactory<Entity extends AbstractEntity> {
 
     private TableModel getTableModelFromCSVFile() {
         final TableModelFactory factory = TableModelFactory.create();
-        return factory.createTableModel(getCSVFile());
+        return factory.createTableModel(getCSVFilePath());
     }
 
     private List<Entity> createEntitiesFromTableModel(final TableModel tableModel) {

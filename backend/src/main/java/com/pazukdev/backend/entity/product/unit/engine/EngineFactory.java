@@ -15,7 +15,6 @@ import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -45,8 +44,8 @@ public class EngineFactory extends UnitFactory<EngineEntity> {
     }
 
     @Override
-    protected File getCSVFile() {
-        return CSVFileUtil.file(CSVFileUtil.ENGINE_FILE_NAME);
+    protected String getCSVFilePath() {
+        return CSVFileUtil.filePath(CSVFileUtil.ENGINE_FILE_NAME);
     }
 
     @Override

@@ -12,8 +12,6 @@ import com.pazukdev.backend.util.CSVFileUtil;
 import com.pazukdev.backend.util.WeightUtil;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -30,8 +28,8 @@ public class MotorcycleFactory extends ProductFactory<MotorcycleEntity> {
     }
 
     @Override
-    protected File getCSVFile() {
-        return CSVFileUtil.file(CSVFileUtil.MOTORCYCLE_FILE_NAME);
+    protected String getCSVFilePath() {
+        return CSVFileUtil.filePath(CSVFileUtil.MOTORCYCLE_FILE_NAME);
     }
 
     @Override
