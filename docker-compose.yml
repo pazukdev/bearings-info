@@ -9,6 +9,8 @@ services:
       MYSQL_DATABASE: motorcycle_info
       MYSQL_USER: demo
       MYSQL_PASSWORD: demo
+    volumes:
+      - /opt/mysql_data:/var/lib/mysql
     ports:
       - 3306:3306
     healthcheck:
