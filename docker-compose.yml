@@ -18,8 +18,8 @@ services:
       timeout: 20s
       retries: 10
 
-  bearings-info-app:
-    container_name: bearings-info-app
+  bearings-info-backend:
+    container_name: bearings-info-backend
     build:
       context: ./backend
     restart: on-failure
@@ -36,3 +36,10 @@ services:
       - DATABASE_PASSWORD=demo
       - DATABASE_NAME=motorcycle_info
       - DATABASE_PORT=3306
+
+  bearings-info-frontend:
+    container_name: bearings-info-frontend
+    build:
+      context: ./frontend
+    ports:
+      - 8091:8091
