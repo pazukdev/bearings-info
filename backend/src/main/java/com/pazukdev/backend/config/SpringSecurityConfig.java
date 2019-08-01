@@ -27,6 +27,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/css/**", "/index", "/js/**").permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
+                .antMatchers("/test/public").permitAll()
                 .antMatchers("/**").permitAll() // temporarily permitted to avoid authorization until issue with io.jsonwebtoken version will be resolved
                 .anyRequest().authenticated()
                 .and()
