@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TestController {
 
-    @GetMapping("/test/protected")
+    @GetMapping("/test/secured")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get test response from protected url")
+    @ApiOperation(value = "Get test response from secured url")
     public String getTestResponseFromProtectedUrl() {
-        return "This is test response from protected url";
+        return "This is test response from secured url";
     }
 
     @GetMapping("/test/public")

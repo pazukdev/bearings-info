@@ -2,6 +2,7 @@ package com.pazukdev.backend.filter;
 
 import com.pazukdev.backend.constant.SecurityConstants;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
  */
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    private final Integer TEN_DAYS_MILLIS = 864000000;
+
     private final AuthenticationManager authenticationManager;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -30,37 +33,37 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+    public Authentication attemptAuthentication(final HttpServletRequest request, final HttpServletResponse response) {
+        final String username = request.getParameter("username");
+        final String password = request.getParameter("password");
+        final Authentication authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
 
         return authenticationManager.authenticate(authenticationToken);
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request,
-                                            HttpServletResponse response,
-                                            FilterChain filterChain,
-                                            Authentication authentication) {
+    protected void successfulAuthentication(final HttpServletRequest request,
+                                            final HttpServletResponse response,
+                                            final FilterChain filterChain,
+                                            final Authentication authentication) {
 
-        User user = ((User) authentication.getPrincipal());
+        final User user = ((User) authentication.getPrincipal());
 
-        List<String> roles = user.getAuthorities()
+        final List<String> roles = user.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
+        final byte[] secretBytes = SecurityConstants.JWT_SECRET.getBytes(); // TODO replace with smth like secretService.getHS256SecretBytes()
 
-        String token = Jwts.builder()
-                //.signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
-                .setHeaderParam("typ", SecurityConstants.TOKEN_TYPE)
+        final String token = Jwts.builder()
+                .signWith(SignatureAlgorithm.HS512, secretBytes)
+                .setHeaderParam("tokenType", SecurityConstants.TOKEN_TYPE)
                 .setIssuer(SecurityConstants.TOKEN_ISSUER)
                 .setAudience(SecurityConstants.TOKEN_AUDIENCE)
                 .setSubject(user.getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + 864000000))
-                .claim("rol", roles)
+                .setExpiration(new Date(System.currentTimeMillis() + TEN_DAYS_MILLIS))
+                .claim("roles", roles)
                 .compact();
 
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);

@@ -10,7 +10,7 @@ services:
       MYSQL_USER: demo
       MYSQL_PASSWORD: demo
     volumes:
-      - /opt/bearings-info-database-container-data-persistence/mysql:/var/lib/mysql
+      - /opt/bearings-info-db-container-data-persistence/mysql:/var/lib/mysql
     ports:
       - 3306:3306
     healthcheck:
