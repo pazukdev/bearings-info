@@ -5,14 +5,20 @@ Features:
 - provides bearings and seals info
 - add/remove/edit items
 
-App run:
-- run back: mvn spring-boot:run
-- run front: 1. npm install 2. npm run serve -- --port 8091
-
 DB: mysql -udemo -pdemo
 
+App run:
+- run back: from bearings-info/backend: mvn spring-boot:run
+- run front: from bearings-info/frontend: 1. npm install 2. npm run serve -- --port 8091
+
+Run dockerized:
+- in app props: comment local mysql db: jdbc:mysql://localhost:3306/motorcycle_info 
+- in app props: uncomment docker db service: jdbc:mysql://db:3306/motorcycle_info
+- if you have local mysql server running - stop it to release 3306 port for docker db service
+- from bearings-info: docker-compose up
+
 API documentation: 
-http://localhost:8090/bearings-info/api/swagger-ui.html 
+http://localhost:8090/bearings-info/api/swagger-ui.html
 
 Project protection:
 https://docs.google.com/document/d/16tis1_LvQdWmRWXWd_qR710tbKsTSLjuKyg3dECgEzY/edit?usp=sharing
