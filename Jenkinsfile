@@ -6,16 +6,15 @@ pipeline {
     stages {
         stage('build backend') {
             steps {
-                script {
-                    sh 'cd backend;'
-                     + 'mvn clean install -DskipTests'
-                }
+                sh 'cd backend;'
+                + 'mvn clean install -DskipTests'
             }
         }
 
         stage ('up docker containers') {
             steps {
-                sh 'sudo docker-compose up'
+                sh 'cd ..'
+                 + 'sudo docker-compose up'
             }
         }
     }
