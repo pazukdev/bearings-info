@@ -14,7 +14,6 @@ App run:
 Run dockerized:
 - in app props: comment local mysql db: jdbc:mysql://localhost:3306/motorcycle_info 
 - in app props: uncomment docker db service: jdbc:mysql://db:3306/motorcycle_info
-- if you have local mysql server running - stop it to release 3306 port for docker db service
 - from bearings-info: docker-compose up
 
 API documentation: 
