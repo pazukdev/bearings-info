@@ -7,7 +7,8 @@ pipeline {
         stage('build backend') {
             steps {
                 script {
-                    bat 'cd backend && start mvn clean install -DskipTests'
+                    sh 'cd backend;'
+                     + 'mvn clean install -DskipTests'
                 }
             }
         }
