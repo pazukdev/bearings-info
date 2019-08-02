@@ -1,9 +1,9 @@
 package com.pazukdev.backend.entity.product.sparkplug;
 
-import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.ProductFactory;
+import com.pazukdev.backend.product.specification.Specification;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import org.springframework.stereotype.Component;

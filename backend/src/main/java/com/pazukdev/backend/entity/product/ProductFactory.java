@@ -1,10 +1,10 @@
 package com.pazukdev.backend.entity.product;
 
-import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
+import com.pazukdev.backend.product.specification.Specification;
 import com.pazukdev.backend.service.ManufacturerService;
 import com.pazukdev.backend.tablemodel.TableRow;
 import lombok.Data;

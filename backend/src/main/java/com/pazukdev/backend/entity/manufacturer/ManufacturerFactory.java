@@ -1,7 +1,7 @@
 package com.pazukdev.backend.entity.manufacturer;
 
-import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.entity.AbstractEntityFactory;
+import com.pazukdev.backend.product.specification.Specification;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import lombok.Data;

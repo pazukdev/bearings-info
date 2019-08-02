@@ -1,4 +1,4 @@
-package com.pazukdev.backend.characteristic;
+package com.pazukdev.backend.product.specification;
 
 /**
  * @author Siarhei Sviarkaltsau

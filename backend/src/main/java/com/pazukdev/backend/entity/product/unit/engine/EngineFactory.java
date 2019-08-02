@@ -1,6 +1,5 @@
 package com.pazukdev.backend.entity.product.unit.engine;
 
-import com.pazukdev.backend.characteristic.Specification;
 import com.pazukdev.backend.config.ServiceContext;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingFactory;
@@ -9,6 +8,7 @@ import com.pazukdev.backend.entity.product.oil.OilFactory;
 import com.pazukdev.backend.entity.product.sparkplug.SparkPlugEntity;
 import com.pazukdev.backend.entity.product.sparkplug.SparkPlugFactory;
 import com.pazukdev.backend.entity.product.unit.UnitFactory;
+import com.pazukdev.backend.product.specification.Specification;
 import com.pazukdev.backend.service.BearingService;
 import com.pazukdev.backend.service.SparkPlugService;
 import com.pazukdev.backend.tablemodel.TableRow;

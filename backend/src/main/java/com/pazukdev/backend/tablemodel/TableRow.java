@@ -1,6 +1,6 @@
 package com.pazukdev.backend.tablemodel;
 
-import com.pazukdev.backend.characteristic.Specification;
+import com.pazukdev.backend.product.specification.Specification;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
