@@ -13,11 +13,13 @@ pipeline {
             }
         }
 
-//        stage ('up docker containers') {
-//            steps {
-//                sh 'cd ..;'
-//                 + 'sudo docker-compose up'
-//            }
-//        }
+        stage ('up docker containers') {
+            steps {
+                script {
+                    sh 'cd ..'
+                    sh 'sudo docker-compose up'
+                }
+            }
+        }
     }
 }
