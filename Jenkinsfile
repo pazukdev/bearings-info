@@ -17,7 +17,8 @@ pipeline {
             steps {
                 script {
                     sh 'cd ..'
-                    sh 'sudo docker-compose up'
+                    sh 'sudo docker-compose up --no-start'
+                    sh 'sudo docker-compose down' // to remove container
                 }
             }
         }
