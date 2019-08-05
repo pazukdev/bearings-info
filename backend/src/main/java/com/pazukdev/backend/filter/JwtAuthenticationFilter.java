@@ -7,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -47,13 +46,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             final FilterChain filterChain,
                                             final Authentication authentication) {
 
-        final User user = ((User) authentication.getPrincipal());
-
-        final List<String> roles = user.getAuthorities()
+        final List<String> roles = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-
+        final String userName = authentication.getPrincipal().toString();
         final byte[] secretBytes = SecurityConstants.JWT_SECRET.getBytes(); // TODO replace with smth like secretService.getHS256SecretBytes()
 
         final String token = Jwts.builder()
@@ -61,7 +58,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setHeaderParam("tokenType", SecurityConstants.TOKEN_TYPE)
                 .setIssuer(SecurityConstants.TOKEN_ISSUER)
                 .setAudience(SecurityConstants.TOKEN_AUDIENCE)
-                .setSubject(user.getUsername())
+                .setSubject(userName)
                 .setExpiration(new Date(System.currentTimeMillis() + TEN_DAYS_MILLIS))
                 .claim("roles", roles)
                 .compact();

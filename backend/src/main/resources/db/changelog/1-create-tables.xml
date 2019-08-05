@@ -11,10 +11,8 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
-            <column name="alias" type="varchar(255)"/>
             <column name="password" type="varchar(255)"/>
             <column name="role" type="enum('ADMIN', 'USER')"/>
-            <column name="enabled" type="boolean"/>
         </createTable>
         <rollback>
             <dropTable tableName="user"/>

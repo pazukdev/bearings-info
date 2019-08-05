@@ -63,7 +63,6 @@ public class DataLoader implements ApplicationRunner {
         if (repositoryIsEmpty(userRepository)) {
             UserEntity user = new UserEntity();
             user.setName("admin");
-            user.setAlias("admin");
             user.setPassword(passwordEncoder.encode("123"));
             user.setRole(Role.ADMIN);
             userRepository.save(user);
