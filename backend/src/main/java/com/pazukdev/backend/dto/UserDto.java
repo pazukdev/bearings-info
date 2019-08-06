@@ -1,5 +1,6 @@
 package com.pazukdev.backend.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,6 +14,7 @@ import lombok.ToString;
 public class UserDto extends AbstractDto {
 
     private String password;
+    @ApiModelProperty(hidden = true)
     private String role;
 
 }

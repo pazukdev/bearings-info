@@ -9,12 +9,12 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,38 +25,49 @@ import java.util.List;
  * @author Siarhei Sviarkaltsau
  */
 @RestController
-@RequestMapping("/user")
 @RequiredArgsConstructor
 @Api(tags = "User Controller", value = "API methods for Users")
 public class UserController {
 
     private final UserService service;
     private final UserConverter converter;
+    private final PasswordEncoder passwordEncoder;
 
-    @GetMapping("/list")
+    @GetMapping("/admin/user/list")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get all Users")
+    @ApiOperation(value = "Get all Users. Admins-only permitted")
     public List<UserDto> getAll() {
         return converter.convertToDtoList(service.findAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/admin/user/{id}")
     @ResponseStatus(HttpStatus.FOUND)
-    @ApiOperation(value = "Get User")
+    @ApiOperation(value = "Get User. Admins-only permitted")
     public UserDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
         return converter.convertToDto(service.getOne(id));
     }
 
-    @PostMapping("/create")
+    @PostMapping("/user/create")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new User")
     public boolean create(@RequestBody final UserDto dto) throws EntityExistsException, JSONException {
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        dto.setRole("USER");
         return service.create(dto) != null;
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PostMapping("/admin/user/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create new Admin. Admins-only permitted")
+    public boolean createAdmin(@RequestBody final UserDto dto) throws EntityExistsException, JSONException {
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        dto.setRole("ADMIN");
+        return service.create(dto) != null;
+    }
+
+    @DeleteMapping("/admin/user/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Delete User")
+    @ApiOperation(value = "Delete User. Admins-only permitted")
     public UserDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
         return converter.convertToDto(service.delete(id));
     }
