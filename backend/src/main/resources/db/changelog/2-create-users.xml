@@ -13,4 +13,13 @@
         </insert>
     </changeSet>
 
+    <changeSet id="insert_default_user" author="sviarkaltsau">
+        <insert tableName="user">
+            <column name="id" value="2"/>
+            <column name="name" value="user"/>
+            <column name="password" value="$2a$10$50E.w9jZJAIjGlsb4OU0N.wSvxrfWe.VEmiAV7.filaKuuKN.f992"/>
+            <column name="role" value="USER"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
