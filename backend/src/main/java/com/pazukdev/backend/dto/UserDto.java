@@ -14,6 +14,7 @@ import lombok.ToString;
 public class UserDto extends AbstractDto {
 
     private String password;
+    private String repeatedPassword;
     @ApiModelProperty(hidden = true)
     private String role;
 

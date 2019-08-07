@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +29,6 @@ public class UserController {
 
     private final UserService service;
     private final UserConverter converter;
-    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/admin/user/list")
     @ResponseStatus(HttpStatus.OK)
@@ -49,19 +47,15 @@ public class UserController {
     @PostMapping("/user/create")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new User")
-    public boolean create(@RequestBody final UserDto dto) throws EntityExistsException, JSONException {
-        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-        dto.setRole("USER");
-        return service.create(dto) != null;
+    public List<String> create(@RequestBody final UserDto dto) throws EntityExistsException, JSONException {
+        return service.createUser(dto);
     }
 
     @PostMapping("/admin/user/create")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new Admin. Admins-only permitted")
-    public boolean createAdmin(@RequestBody final UserDto dto) throws EntityExistsException, JSONException {
-        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-        dto.setRole("ADMIN");
-        return service.create(dto) != null;
+    public List<String> createAdmin(@RequestBody final UserDto dto) throws EntityExistsException, JSONException {
+        return service.createAdmin(dto);
     }
 
     @DeleteMapping("/admin/user/delete/{id}")

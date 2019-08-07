@@ -9,7 +9,7 @@
                     </div>
                 </td>
             </tr>
-            <tr>
+            <tr style="text-align: left">
                 <td>
                     Login
                 </td>
@@ -17,7 +17,7 @@
                     <input type="text" name="username" v-model="username"/>
                 </td>
             </tr>
-            <tr>
+            <tr style="text-align: left">
                 <td>
                     Password
                 </td>
@@ -25,7 +25,7 @@
                     <input type="password" name="password" v-model="password"/>
                 </td>
             </tr>
-            <tr>
+            <tr style="text-align: left">
                 <td>
                     <div v-if="!isLogin">Repeat password</div>
                 </td>
@@ -43,7 +43,7 @@
                     Incorrect login or password !
                 </td>
             </tr>
-            <tr v-if="!messageIsEmpty()" style="color: red">
+            <tr v-for="message in validationMessages" style="color: red">
                 <td colspan="2">
                     {{message}}
                 </td>
@@ -64,7 +64,7 @@
                 username: "",
                 password: "",
                 repeatedPassword: "",
-                message: ""
+                validationMessages: []
             };
         },
 
@@ -83,14 +83,21 @@
                 }
             },
 
+            loginIfValid(validationMessage) {
+                this.validationMessages = validationMessage;
+                if (this.validationMessages.length === 0) {
+                    this.login();
+                }
+            },
+
             login() {
-                this.$store.dispatch("setIncorrectCredentials", true);
+                this.setIncorrectCredentials(true);
                 let credentialsUrl ="username=" + this.username + "&" + "password=" + this.password;
                 axios
                     .post('/backend/login', credentialsUrl)
                     .then(response => {
                         if (response.status === 200) {
-                            this.$store.dispatch("setIncorrectCredentials", false);
+                            this.setIncorrectCredentials(false);
                             let authorization = response.headers.authorization;
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$router.push({ path: '/'});
@@ -99,22 +106,14 @@
             },
 
             signUp() {
-                if (this.repeatedPassword !== this.password) {
-                    this.message = "Passwords are different !";
-                } else if (this.username === "") {
-                    this.message = "Login is empty !";
-                } else if (this.password === "") {
-                    this.message = "Password is empty !";
-                } else {
-                    let newUser = {
-                        name: this.username,
-                        password: this.password,
-                        role: "USER"
-                    };
-                    axios.post("/backend/user/create", newUser);
-                    this.message = "Account is created !";
-                    this.resetUserData();
-                }
+                let newUser = {
+                    name: this.username,
+                    password: this.password,
+                    repeatedPassword: this.repeatedPassword
+                };
+                axios
+                    .post("/backend/user/create", newUser)
+                    .then(response =>  this.loginIfValid(response.data));
             },
 
             switchForm() {
@@ -131,8 +130,9 @@
             },
 
             resetData() {
-                this.clearMessage();
                 this.resetUserData();
+                this.validationMessages = [];
+                this.$store.dispatch("setIncorrectCredentials", false);
             },
 
             resetUserData() {
@@ -141,12 +141,8 @@
                 this.repeatedPassword = "";
             },
 
-            clearMessage() {
-                this.message = "";
-            },
-
-            messageIsEmpty() {
-                return this.message === "";
+            setIncorrectCredentials(incorrectCredentials) {
+                this.$store.dispatch("setIncorrectCredentials", incorrectCredentials = true);
             }
         }
     }
