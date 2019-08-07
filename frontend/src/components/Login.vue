@@ -5,7 +5,7 @@
             <tr>
                 <td colspan="2">
                     <div>Please, {{buttonName().toLowerCase()}} or
-                        <button v-on:click="signUp">{{buttonReverseName()}}</button>
+                        <button v-on:click="switchForm">{{buttonReverseName()}}</button>
                     </div>
                 </td>
             </tr>
@@ -27,20 +27,25 @@
             </tr>
             <tr>
                 <td>
-                    <div v-if="!isLogin">Name</div>
+                    <div v-if="!isLogin">Repeat password</div>
                 </td>
                 <td>
-                    <input v-if="!isLogin" v-model="name"/>
+                    <input v-if="!isLogin" v-model="repeatedPassword"/>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <button v-on:click="login">{{buttonName()}}</button>
+                    <button v-on:click="performLoginPageAction">{{buttonName()}}</button>
                 </td>
             </tr>
             <tr v-if="incorrectCredentials" style="color: red">
                 <td colspan="2">
                     Incorrect login or password !
+                </td>
+            </tr>
+            <tr v-if="!messageIsEmpty()" style="color: red">
+                <td colspan="2">
+                    {{message}}
                 </td>
             </tr>
             </tbody>
@@ -56,8 +61,10 @@
         data() {
             return {
                 isLogin: true,
-                username: "admin",
-                password: "admin"
+                username: "",
+                password: "",
+                repeatedPassword: "",
+                message: ""
             };
         },
 
@@ -68,6 +75,13 @@
         },
 
         methods: {
+            performLoginPageAction() {
+                if (this.isLogin) {
+                    this.login();
+                } else {
+                    this.signUp();
+                }
+            },
 
             login() {
                 this.$store.dispatch("setIncorrectCredentials", true);
@@ -85,13 +99,54 @@
             },
 
             signUp() {
-                this.isLogin = !this.isLogin;
+                if (this.repeatedPassword !== this.password) {
+                    this.message = "Passwords are different !";
+                } else if (this.username === "") {
+                    this.message = "Login is empty !";
+                } else if (this.password === "") {
+                    this.message = "Password is empty !";
+                } else {
+                    let newUser = {
+                        name: this.username,
+                        password: this.password,
+                        role: "USER"
+                    };
+                    axios.post("/backend/user/create", newUser);
+                    this.message = "Account is created !";
+                    this.resetUserData();
+                }
             },
+
+            switchForm() {
+                this.isLogin = !this.isLogin;
+                this.resetData();
+            },
+
             buttonName() {
                 return this.isLogin ? "Log in" : "Sign up";
             },
+
             buttonReverseName() {
                 return this.isLogin ? "Sign up" : "Log in";
+            },
+
+            resetData() {
+                this.clearMessage();
+                this.resetUserData();
+            },
+
+            resetUserData() {
+                this.username = "";
+                this.password = "";
+                this.repeatedPassword = "";
+            },
+
+            clearMessage() {
+                this.message = "";
+            },
+
+            messageIsEmpty() {
+                return this.message === "";
             }
         }
     }
