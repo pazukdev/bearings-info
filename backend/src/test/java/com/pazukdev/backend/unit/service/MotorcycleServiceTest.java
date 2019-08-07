@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.EntityExistsException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,9 +127,9 @@ public class MotorcycleServiceTest {
         }
 
         Assert.assertNotNull(exception);
-        Assert.assertTrue(exception instanceof EntityNotFoundException);
-        final EntityNotFoundException entityNotFoundException = (EntityNotFoundException) exception;
-        Assert.assertEquals("product under id == 1 is not exist", entityNotFoundException.getMessage());
+        Assert.assertTrue(exception instanceof EntityExistsException);
+        final EntityExistsException entityExistsException = (EntityExistsException) exception;
+        Assert.assertEquals("entity under id == 1 is not exist", entityExistsException.getMessage());
     }
 
 }
