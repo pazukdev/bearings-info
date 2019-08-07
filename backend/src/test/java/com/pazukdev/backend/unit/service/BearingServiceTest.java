@@ -57,7 +57,7 @@ public class BearingServiceTest {
     @Test
     public void existsById() throws ProductNotFoundException {
         doReturn(true).when(repository).existsById(any(Long.class));
-        service.productExists(1L);
+        service.entityExists(1L);
         verify(repository, times(1)).existsById(any(Long.class));
     }
 

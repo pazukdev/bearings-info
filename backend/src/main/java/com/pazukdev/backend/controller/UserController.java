@@ -2,7 +2,6 @@ package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
-import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,7 +42,7 @@ public class UserController {
     @GetMapping("/admin/user/{id}")
     @ResponseStatus(HttpStatus.FOUND)
     @ApiOperation(value = "Get User. Admins-only permitted")
-    public UserDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
+    public UserDto get(@PathVariable("id") Long id) {
         return converter.convertToDto(service.getOne(id));
     }
 
@@ -68,7 +67,7 @@ public class UserController {
     @DeleteMapping("/admin/user/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete User. Admins-only permitted")
-    public UserDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
+    public UserDto delete(@PathVariable("id") final Long id) {
         return converter.convertToDto(service.delete(id));
     }
 

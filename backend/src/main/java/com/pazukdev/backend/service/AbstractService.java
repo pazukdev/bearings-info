@@ -3,11 +3,11 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.AbstractDto;
 import com.pazukdev.backend.entity.AbstractEntity;
-import com.pazukdev.backend.exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityExistsException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +26,8 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     }
 
     @Transactional
-    public Entity getOne(final Long id) throws ProductNotFoundException {
-        checkProductExists(id);
+    public Entity getOne(final Long id) throws EntityExistsException {
+        checkEntityExists(id);
         return repository.getOne(id);
     }
 
@@ -37,14 +37,14 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     }
 
     @Transactional
-    public Entity delete(final Long id) throws ProductNotFoundException {
+    public Entity delete(final Long id) throws EntityExistsException {
         final Entity entity = getOne(id);
         repository.deleteById(entity.getId());
         return entity;
     }
 
     @Transactional
-    public List<Entity> deleteAll(final List<Long> ids) throws ProductNotFoundException {
+    public List<Entity> deleteAll(final List<Long> ids) {
         final List<Entity> entities = new ArrayList<>();
         for (final Long id : ids) {
             entities.add(getOne(id));
@@ -53,16 +53,16 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
         return entities;
     }
 
-    public Boolean productExists(final Long id) throws ProductNotFoundException {
+    public Boolean entityExists(final Long id) throws EntityExistsException {
         if (!repository.existsById(id)) {
-            throw new ProductNotFoundException(id);
+            throw new EntityExistsException("entity under id == " + id + " is not exist");
         }
         return true;
     }
 
-    private void checkProductExists(final Long id) throws ProductNotFoundException {
+    private void checkEntityExists(final Long id) throws EntityExistsException {
         if (!repository.existsById(id)) {
-            throw new ProductNotFoundException(id);
+            throw new EntityExistsException("entity under id == " + id + " is not exist");
         }
     }
 

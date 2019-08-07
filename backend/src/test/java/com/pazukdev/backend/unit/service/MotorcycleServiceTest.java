@@ -13,8 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class MotorcycleServiceTest {
     @Test
     public void existsById() throws ProductNotFoundException {
         doReturn(true).when(repository).existsById(any(Long.class));
-        service.productExists(1L);
+        service.entityExists(1L);
 
         verify(repository, times(1)).existsById(any(Long.class));
     }
@@ -127,10 +127,9 @@ public class MotorcycleServiceTest {
         }
 
         Assert.assertNotNull(exception);
-        Assert.assertTrue(exception instanceof ProductNotFoundException);
-        ProductNotFoundException productNotFoundException = (ProductNotFoundException) exception;
-        Assert.assertEquals(HttpStatus.NOT_FOUND, productNotFoundException.getStatus());
-        Assert.assertEquals("product under id == 1 is not exist", productNotFoundException.getMessage());
+        Assert.assertTrue(exception instanceof EntityNotFoundException);
+        final EntityNotFoundException entityNotFoundException = (EntityNotFoundException) exception;
+        Assert.assertEquals("product under id == 1 is not exist", entityNotFoundException.getMessage());
     }
 
 }
