@@ -14,6 +14,26 @@
         <AddMotorcycle
                 v-show="homeComponent === 'AddMotorcycle'"
                 @refresh-motorcycles="refresh()"/>
+
+        <Report v-show="homeComponent === 'Report'"/>
+
+        <table v-show="homeComponent === 'MotorcycleMenu'">
+            <tbody>
+            <tr>
+                <td colspan="1">
+                    Additional utils
+                </td>
+            </tr>
+            <tr>
+                <td><button class="content" type="button" v-on:click="reports()">Reports</button></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div v-show="homeComponent === 'MotorcycleMenu'"
+             style="width: 100%; text-align: center; margin-top: 60px; margin-bottom: 20px">
+            Minsk 2019
+        </div>
     </div>
 </template>
 
@@ -26,6 +46,7 @@
     import SealList from "./SealList";
     import ModelPartsList from "./ModelPartsList";
     import AddMotorcycle from "./AddMotorcycle";
+    import Report from "./Report";
 
     export default {
 
@@ -63,7 +84,8 @@
             BearingList,
             SealList,
             ModelPartsList,
-            AddMotorcycle
+            AddMotorcycle,
+            Report
         },
 
         methods: {
@@ -79,6 +101,10 @@
 
             addMotorcycle() {
                 this.switchComponent('AddMotorcycle');
+            },
+
+            reports() {
+                this.switchComponent('Report')
             },
 
             reload() {
@@ -133,3 +159,13 @@
     }
 
 </script>
+
+<style scoped>
+    table {
+        margin-top: 20px;
+        border-spacing: 20px;
+        border-collapse: separate;
+    }
+</style>
+
+}

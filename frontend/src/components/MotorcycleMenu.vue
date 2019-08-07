@@ -24,9 +24,6 @@
                 <td><button style="width: 100%" @click="$emit('add-motorcycle')">Add</button></td></tr>
             </tbody>
         </table>
-        <br/>
-        <p class="centredText">Minsk 2019</p>
-        <br/>
     </div>
 </template>
 
