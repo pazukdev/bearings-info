@@ -25,7 +25,9 @@
                 </td>
             </tr>
             <tr>
-                <td><button class="content" type="button" v-on:click="reports()">Reports</button></td>
+                <td><button class="content" type="button" style="width: 160px" v-on:click="reports()">
+                    Reports
+                </button></td>
             </tr>
             </tbody>
         </table>

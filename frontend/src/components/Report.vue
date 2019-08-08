@@ -4,7 +4,7 @@
 
         <div>
             <table style="width: 100%">
-                <tbody style="width: 100%">
+                <tbody>
                 <tr>
                     <td>
                         <select class="content" v-model ="motorcycleId" v-on:click="removeReport(empty)">
@@ -101,16 +101,8 @@
         margin-right:auto;
     }
 
-    tr {
-        width: 100%;
-    }
-
-    td {
-        width: 100%;
-    }
-
     .content {
-        width: 100%;
+        width: 160px;
     }
 
 </style>

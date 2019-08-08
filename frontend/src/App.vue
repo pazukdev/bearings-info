@@ -132,6 +132,13 @@
         border-radius: 4px;
         border: none;
         background: #929292;
+        height: 36px;
+    }
+
+    select {
+        border-radius: 4px;
+        text-indent: 10px;
+        height: 36px;
     }
 
     input {
