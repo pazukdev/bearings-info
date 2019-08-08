@@ -1,9 +1,8 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.converter.MotorcycleConverter;
+import com.pazukdev.backend.dto.item.ItemDto;
 import com.pazukdev.backend.dto.product.MotorcycleDto;
-import com.pazukdev.backend.dto.report.FuelReportRS;
-import com.pazukdev.backend.dto.report.SpeedReportRS;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.MotorcycleService;
 import io.swagger.annotations.Api;
@@ -52,14 +51,14 @@ public class MotorcycleController {
     @GetMapping("/{id}/speed-report")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get motorcycle speed report")
-    public SpeedReportRS getSpeedReport(@PathVariable("id") Long id) throws ProductNotFoundException {
+    public ItemDto getSpeedReport(@PathVariable("id") Long id) {
         return service.getSpeedReport(id);
     }
 
     @GetMapping("/{id}/fuel-report")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get motorcycle fuel report")
-    public FuelReportRS getFuelReport(@PathVariable("id") Long id) throws ProductNotFoundException {
+    public ItemDto getFuelReport(@PathVariable("id") Long id) {
         return service.getFuelReport(id);
     }
 

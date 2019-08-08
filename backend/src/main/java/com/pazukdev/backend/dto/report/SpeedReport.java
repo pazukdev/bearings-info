@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author Siarhei Sviarkaltsau
  */
 @Data
-public class SpeedReportRS implements Serializable {
+public class SpeedReport implements Serializable {
 
     private final static long serialVersionUID = 12343L;
 

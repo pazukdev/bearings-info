@@ -3,7 +3,7 @@
         <p id="title" style="text-align: center"><b>Reports</b></p>
 
         <div>
-            <table style="width: 100%">
+            <table>
                 <tbody>
                 <tr>
                     <td>
@@ -16,17 +16,24 @@
                 </tr>
                 <tr>
                     <td>
-                        <button class="content" type="button" v-on:click="getSpeedReport(motorcycleId)">Get Speed report</button>
+                        <button class="content" type="button" v-on:click="getSpeedReport(motorcycleId)">Speed report</button>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <button class="content" type="button" v-on:click="getFuelReport(motorcycleId)">Get Fuel report</button>
+                        <button class="content" type="button" v-on:click="getFuelReport(motorcycleId)">Fuel report</button>
                     </td>
                 </tr>
-                <tr>
+                </tbody>
+            </table>
+            <table style="text-align: left">
+                <tbody>
+                <tr style="text-align: left" v-for="description in item.descriptions" :key="item.id">
                     <td>
-                        {{report}}
+                        {{description.parameter}}
+                    </td>
+                    <td>
+                        {{description.value}}
                     </td>
                 </tr>
                 </tbody>
@@ -45,7 +52,7 @@
             return {
                 motorcycles: [],
                 motorcycleId: "",
-                report: "",
+                item: "",
                 empty: ""
             }
         },
@@ -73,7 +80,7 @@
                         headers: {
                             Authorization: this.authorization
                         }
-                    }) .then(response => this.report = response.data)
+                    }) .then(response => this.item = response.data)
             },
 
             getFuelReport(id) {
@@ -82,11 +89,11 @@
                     headers: {
                         Authorization: this.authorization
                     }
-                }) .then(response => this.report = response.data)
+                }) .then(response => this.item = response.data)
             },
 
             removeReport(val) {
-                this.report = val;
+                this.item = val;
             }
         }
     }

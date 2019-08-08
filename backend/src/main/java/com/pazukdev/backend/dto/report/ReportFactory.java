@@ -9,19 +9,19 @@ import com.pazukdev.backend.util.SpeedUtil;
  */
 public class ReportFactory {
 
-    public static FuelReportRS createFuelReport(final MotorcycleEntity motorcycle) {
+    public static FuelReport createFuelReport(final MotorcycleEntity motorcycle) {
         final double fuelCapacityL = motorcycle.getFuelCapacityL();
         final double fuelConsumptionLPer100Km = 10D;
 
-        final FuelReportRS report = new FuelReportRS();
+        final FuelReport report = new FuelReport();
         report.setOperationalRangeKm(FuelUtil.getOperationalRange(fuelCapacityL, fuelConsumptionLPer100Km));
         return report;
     }
 
-    public static SpeedReportRS createSpeedReport(final MotorcycleEntity motorcycle) {
+    public static SpeedReport createSpeedReport(final MotorcycleEntity motorcycle) {
         final int engineSpeedRpm = motorcycle.getEngine().getSpeedRpm();
 
-        final SpeedReportRS report = new SpeedReportRS();
+        final SpeedReport report = new SpeedReport();
         report.setMaxSpeedKmh(SpeedUtil.calculateSpeed(engineSpeedRpm));
         return report;
     }

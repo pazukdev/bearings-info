@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author Siarhei Sviarkaltsau
  */
 @Data
-public class FuelReportRS implements Serializable {
+public class FuelReport implements Serializable {
 
     private final static long serialVersionUID = 12343L;
 
