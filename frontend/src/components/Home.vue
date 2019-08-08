@@ -1,8 +1,20 @@
 <template>
     <div id="app_area" style="padding: 10px">
-<!--        <p>{{homeComponent}}</p>-->
-<!--        <p>{{authorization}}</p>-->
-<!--        <p>{{manufacturers}}</p>-->
+        <table style="border-spacing: 0px; text-align: right" v-show="homeComponent === 'MotorcycleMenu'">
+            <tbody>
+            <tr>
+                <td>
+                    {{userName}}
+                </td>
+            </tr>
+            <tr v-if="admin">
+                <td>
+                    {{"You are admin"}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
         <MotorcycleMenu
                 v-show="homeComponent === 'MotorcycleMenu'"
                 @select-motorcycle="selectMotorcycle"
@@ -17,17 +29,28 @@
 
         <Report v-show="homeComponent === 'Report'"/>
 
+        <Users v-show="homeComponent === 'Users'"/>
+
         <table v-show="homeComponent === 'MotorcycleMenu'">
             <tbody>
             <tr>
                 <td colspan="1">
-                    Additional utils
+                    Additional
                 </td>
             </tr>
             <tr>
-                <td><button class="content" type="button" style="width: 160px" v-on:click="reports()">
-                    Reports
-                </button></td>
+                <td>
+                    <button class="content" type="button" style="width: 160px" v-on:click="reports()">
+                        Reports
+                    </button>
+                </td>
+            </tr>
+            <tr v-if="admin">
+                <td>
+                    <button class="content" type="button" style="width: 160px" v-on:click="users()">
+                        Users
+                    </button>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -49,6 +72,7 @@
     import ModelPartsList from "./ModelPartsList";
     import AddMotorcycle from "./AddMotorcycle";
     import Report from "./Report";
+    import Users from "./Users";
 
     export default {
 
@@ -57,7 +81,8 @@
                 motorcycle: "",
                 engine: "",
                 motorcycles: "",
-                manufacturers: ""
+                manufacturers: "",
+                decodedJwtData: ""
             }
         },
 
@@ -70,13 +95,17 @@
                     }
                 })
                 .then(response => this.manufacturers = response.data);
+
+            this.isAdmin();
         },
 
         computed: {
             ...mapState({
                 authorization: state => state.dictionary.authorization,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
-                homeComponent: state => state.dictionary.homeComponent
+                homeComponent: state => state.dictionary.homeComponent,
+                userName: state => state.dictionary.userName,
+                admin: state => state.dictionary.admin
             })
         },
 
@@ -87,7 +116,8 @@
             SealList,
             ModelPartsList,
             AddMotorcycle,
-            Report
+            Report,
+            Users
         },
 
         methods: {
@@ -107,6 +137,10 @@
 
             reports() {
                 this.switchComponent('Report')
+            },
+
+            users() {
+                this.switchComponent('Users')
             },
 
             reload() {
@@ -156,7 +190,16 @@
 
             isAuthorized() {
                 return this.authorization !== "";
+            },
+
+            isAdmin() {
+                let jwtData = this.authorization.split('.')[1];
+                let decodedJwtJsonData = window.atob(jwtData);
+                let decodedJwtData = JSON.parse(decodedJwtJsonData);
+                let isAdmin = decodedJwtData.roles[0] === "ROLE_ADMIN";
+                this.$store.dispatch("setAdmin", isAdmin);
             }
+
         }
     }
 
@@ -164,7 +207,6 @@
 
 <style scoped>
     table {
-        margin-top: 20px;
         border-spacing: 20px;
         border-collapse: separate;
     }

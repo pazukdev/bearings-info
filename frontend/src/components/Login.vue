@@ -100,6 +100,7 @@
                             this.setIncorrectCredentials(false);
                             let authorization = response.headers.authorization;
                             this.$store.dispatch("setAuthorization", authorization);
+                            this.$store.dispatch("setUserName", this.username);
                             this.$router.push({ path: '/'});
                         }
                     });
