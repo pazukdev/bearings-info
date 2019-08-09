@@ -129,7 +129,7 @@
                         Authorization: this.authorization
                     }
                 }).then(response => {
-                    this.$emit('refresh-bearings');
+                    this.$emit('reopen-bearings');
                 });
             },
 

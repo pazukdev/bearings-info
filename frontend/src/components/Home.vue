@@ -28,7 +28,7 @@
 
         <Report v-show="homeComponent === 'Report'"/>
 
-        <BearingList v-show="homeComponent === 'Bearings'" @refresh-bearings="refreshBearings()"/>
+        <BearingList v-show="homeComponent === 'Bearings'" @reopen-bearings="reopenBearings()"/>
 
         <SealList v-show="homeComponent === 'Seals'"/>
 
@@ -55,7 +55,7 @@
             </tr>
             <tr>
                 <td>
-                    <button class="content" type="button" style="width: 160px" v-on:click="bearings()">
+                    <button class="content" type="button" style="width: 160px" v-on:click="openBearings()">
                         Bearings
                     </button>
                 </td>
@@ -164,8 +164,13 @@
                 this.switchComponent('Report')
             },
 
-            bearings() {
+            openBearings() {
                 this.switchComponent('Bearings')
+            },
+
+            reopenBearings() {
+                this.refreshBearings();
+                this.bearings();
             },
 
             seals() {
@@ -208,7 +213,6 @@
                     .then(response => {
                         this.$store.dispatch("setBearings", response.data)
                     });
-                this.bearings();
             },
 
             getEngine(ids) {
