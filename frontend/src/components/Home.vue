@@ -18,31 +18,25 @@
         <MotorcycleMenu
                 v-show="homeComponent === 'MotorcycleMenu'"
                 @select-motorcycle="selectMotorcycle"
-                @add-motorcycle="addMotorcycle"
-                :motorcyclesList="motorcycles"/>
+                @add-motorcycle="addMotorcycle"/>
 
         <ModelPartsList v-show="homeComponent === 'ModelPartsList'" :motorcycle="motorcycle" :engine="engine"/>
 
-        <AddMotorcycle
-                v-show="homeComponent === 'AddMotorcycle'"
-                @refresh-motorcycles="refresh()"/>
+        <AddMotorcycle v-show="homeComponent === 'AddMotorcycle'" @refresh-motorcycles="refresh()"/>
+
+        <Users v-show="homeComponent === 'Users'"/>
 
         <Report v-show="homeComponent === 'Report'"/>
 
-        <Users v-show="homeComponent === 'Users'"/>
+        <BearingList v-show="homeComponent === 'Bearings'" @refresh-bearings="refreshBearings()"/>
+
+        <SealList v-show="homeComponent === 'Seals'"/>
 
         <table v-show="homeComponent === 'MotorcycleMenu'">
             <tbody>
             <tr>
                 <td colspan="1">
                     Additional
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button class="content" type="button" style="width: 160px" v-on:click="reports()">
-                        Reports
-                    </button>
                 </td>
             </tr>
             <tr v-if="admin">
@@ -52,6 +46,27 @@
                     </button>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <button class="content" type="button" style="width: 160px" v-on:click="reports()">
+                        Reports
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button class="content" type="button" style="width: 160px" v-on:click="bearings()">
+                        Bearings
+                    </button>
+                </td>
+            </tr>
+<!--            <tr>-->
+<!--                <td>-->
+<!--                    <button class="content" type="button" style="width: 160px" v-on:click="seals()">-->
+<!--                        Seals-->
+<!--                    </button>-->
+<!--                </td>-->
+<!--            </tr>-->
             </tbody>
         </table>
 
@@ -66,7 +81,6 @@
     import axios from 'axios';
     import {mapState} from 'vuex';
     import MotorcycleMenu from "./MotorcycleMenu";
-    import MotorcycleList from "./MotorcycleList";
     import BearingList from "./BearingList";
     import SealList from "./SealList";
     import ModelPartsList from "./ModelPartsList";
@@ -80,8 +94,8 @@
             return {
                 motorcycle: "",
                 engine: "",
-                motorcycles: "",
-                manufacturers: "",
+                manufacturers: [],
+                engines: [],
                 decodedJwtData: ""
             }
         },
@@ -95,8 +109,16 @@
                     }
                 })
                 .then(response => this.manufacturers = response.data);
+            this.engines = axios
+                .get("backend/engine/list", {
+                    headers: {
+                        Authorization: this.authorization
+                    }
+                })
+                .then(response => this.engines = response.data);
 
             this.isAdmin();
+            this.refreshBearings();
         },
 
         computed: {
@@ -105,13 +127,12 @@
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 homeComponent: state => state.dictionary.homeComponent,
                 userName: state => state.dictionary.userName,
-                admin: state => state.dictionary.admin
+                admin: state => state.dictionary.admin,
             })
         },
 
         components: {
             MotorcycleMenu,
-            MotorcycleList,
             BearingList,
             SealList,
             ModelPartsList,
@@ -135,12 +156,20 @@
                 this.switchComponent('AddMotorcycle');
             },
 
+            users() {
+                this.switchComponent('Users')
+            },
+
             reports() {
                 this.switchComponent('Report')
             },
 
-            users() {
-                this.switchComponent('Users')
+            bearings() {
+                this.switchComponent('Bearings')
+            },
+
+            seals() {
+                this.switchComponent('Seals')
             },
 
             reload() {
@@ -153,18 +182,33 @@
             },
 
             showMotorcycleMenu() {
-                this.switchComponent('MotorcycleMenu');
                 this.getMotorcycles();
+                this.switchComponent('MotorcycleMenu');
             },
 
             getMotorcycles() {
-                this.motorcycles = axios
+                axios
                     .get(`/backend/motorcycle/list`, {
                         headers: {
                             Authorization: this.authorization
                         }
                     })
-                    .then(response => this.motorcycles = response.data);
+                    .then(response => {
+                        this.$store.dispatch("setMotorcycles", response.data)
+                    });
+            },
+
+            refreshBearings() {
+                axios
+                    .get(`/backend/bearing/list`, {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => {
+                        this.$store.dispatch("setBearings", response.data)
+                    });
+                this.bearings();
             },
 
             getEngine(ids) {

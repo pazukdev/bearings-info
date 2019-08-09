@@ -6,7 +6,11 @@ const state = {
     userName: "",
     authorization: "",
     incorrectCredentials: false,
-    homeComponent: ""
+    homeComponent: "",
+    motorcycles: [],
+    bearings: [],
+    seals: [],
+    users: []
 };
 
 const actions = {
@@ -28,6 +32,14 @@ const actions = {
 
     setHomeComponent: ({commit}, context) => {
         commit("setHomeComponent", context)
+    },
+
+    setMotorcycles: ({commit}, context) => {
+        commit("setMotorcycles", context)
+    },
+
+    setBearings: ({commit}, context) => {
+        commit("setBearings", context)
     }
 };
 
@@ -45,11 +57,19 @@ const mutations = {
     },
 
     setUserName(state, userName) {
-        state.userName = userName;;
+        state.userName = userName;
     },
 
     setHomeComponent(state, homeComponent) {
         state.homeComponent = homeComponent;
+    },
+
+    setMotorcycles(state, motorcycles) {
+        state.motorcycles = motorcycles;
+    },
+
+    setBearings(state, bearings) {
+        state.bearings = bearings;
     }
 };
 

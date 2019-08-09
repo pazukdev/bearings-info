@@ -128,6 +128,22 @@
         color: #252525
     }
 
+    .creation-form {
+        text-align: left;
+        border-spacing: 20px;
+        border-collapse: separate;
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .content {
+        width: 100%;
+    }
+
+    .right {
+        width: 50%;
+    }
+
     button {
         border-radius: 4px;
         border: none;
@@ -145,6 +161,8 @@
         border-radius: 4px;
         border: none;
         background: navajowhite;
+        height: 36px;
+        text-align: center;
     }
 
     table {

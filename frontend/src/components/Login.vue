@@ -1,23 +1,24 @@
 <template>
     <div class="login">
-        <table>
+        <table class="creation-form">
             <tbody>
             <tr>
-                <td colspan="2">
-                    <div>Please, {{buttonName().toLowerCase()}} or
-                        <button v-on:click="switchForm">{{buttonReverseName()}}</button>
-                    </div>
+                <td style="text-align: right">
+                    Please, {{buttonName().toLowerCase()}} or
+                </td>
+                <td>
+                    <button style="width: 50%" v-on:click="switchForm">{{buttonReverseName()}}</button>
                 </td>
             </tr>
-            <tr style="text-align: left">
+            <tr>
                 <td>
                     Login
                 </td>
-                <td>
+                <td class="right">
                     <input type="text" name="username" v-model="username"/>
                 </td>
             </tr>
-            <tr style="text-align: left">
+            <tr>
                 <td>
                     Password
                 </td>
@@ -25,25 +26,26 @@
                     <input type="password" name="password" v-model="password"/>
                 </td>
             </tr>
-            <tr style="text-align: left">
+            <tr v-if="!isLogin">
                 <td>
-                    <div v-if="!isLogin">Repeat password</div>
+                    Repeat password
                 </td>
                 <td>
-                    <input v-if="!isLogin" v-model="repeatedPassword"/>
+                    <input v-model="repeatedPassword"/>
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
-                    <button v-on:click="performLoginPageAction">{{buttonName()}}</button>
+                <td></td>
+                <td>
+                    <button style="width: 100%;" v-on:click="performLoginPageAction">{{buttonName()}}</button>
                 </td>
             </tr>
-            <tr v-if="incorrectCredentials" style="color: red">
+            <tr v-if="incorrectCredentials" class="warning-message">
                 <td colspan="2">
                     Incorrect login or password !
                 </td>
             </tr>
-            <tr v-for="message in validationMessages" style="color: red">
+            <tr v-for="message in validationMessages" class="warning-message">
                 <td colspan="2">
                     {{message}}
                 </td>
@@ -152,7 +154,14 @@
 <style scoped>
     table {
         margin-top: 120px;
-        border-spacing: 20px;
-        border-collapse: separate;
+    }
+
+    input {
+        width: 100%;
+    }
+
+    .warning-message {
+        text-align: center;
+        color: red;
     }
 </style>

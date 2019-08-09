@@ -10,6 +10,10 @@ import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.repository.MotorcycleRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -19,6 +23,14 @@ public class MotorcycleService extends AbstractService<MotorcycleEntity, Motorcy
 
     public MotorcycleService(final MotorcycleRepository repository, final MotorcycleConverter converter) {
         super(repository, converter);
+    }
+
+    @Override
+    @Transactional
+    public List<MotorcycleEntity> findAll() {
+        final List<MotorcycleEntity> motorcycles = repository.findAll();
+        motorcycles.sort(Comparator.comparing(MotorcycleEntity::getProductionStartYear));
+        return motorcycles;
     }
 
     @Override

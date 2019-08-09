@@ -1,25 +1,7 @@
 <template>
     <div>
         <br/>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;<b id="title">Bearings</b></p>
-        &nbsp;
-        <input v-model="name" type="text" placeholder="name"/>
-        &nbsp;
-        <select v-model="type">
-            <option v-for="type in types">
-                {{type}}
-            </option>
-        </select>
-        &nbsp;
-        <select v-model="rollingElement">
-            <option v-for="rollingElement in rollingElements">
-                {{rollingElement}}
-            </option>
-        </select>
-        &nbsp;
-        <input v-model="rollingElementsQuantity" type="text" placeholder="rollingElementsQuantity"/>
-        &nbsp;
-        <button type="button" v-on:click="submit">Add Bearing</button>
+        <p id="title" style="text-align: center;"><b>Bearings</b></p>
 
         <table id="productsTable" class="table">
             <thead>
@@ -31,11 +13,67 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(bearing, index) in bearings" :key="index">
+            <tr v-for="(bearing, index) in bearingzz" :key="index">
                 <td>{{bearing.name}}</td>
                 <td>{{bearing.type}}</td>
                 <td>{{bearing.rollingElement}}</td>
                 <td>{{bearing.rollingElementsQuantity}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="creation-form">
+            <tbody>
+            <tr style="text-align: center">
+                <td colspan="2">
+                    <b>Create bearing</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Name
+                </td>
+                <td class="right">
+                    <input class="content" v-model="name" type="text"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Type
+                </td>
+                <td class="right">
+                    <select class="content" v-model ="type">
+                        <option v-for="type in types">
+                            {{type}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Rolling element
+                </td>
+                <td class="right">
+                    <select class="content" v-model="rollingElement">
+                        <option v-for="rollingElement in rollingElements">
+                            {{rollingElement}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Rollin elements quantity
+                </td>
+                <td class="right">
+                    <input v-model="rollingElementsQuantity" type="text"/>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="right">
+                    <button class="content" type="button" v-on:click="submit()">Create</button>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -44,6 +82,7 @@
 
 <script>
     import axios from 'axios';
+    import {mapState} from 'vuex';
 
     export default {
 
@@ -61,8 +100,19 @@
 
         created() {
             axios
-                .get(`/backend/bearing/list`)
+                .get(`/backend/bearing/list`, {
+                    headers: {
+                        Authorization: this.authorization
+                    }
+                })
                 .then(response => this.bearings = response.data);
+        },
+
+        computed: {
+            ...mapState({
+                authorization: state => state.dictionary.authorization,
+                bearingzz: state => state.dictionary.bearings
+            })
         },
 
         methods: {
@@ -74,9 +124,20 @@
                     rollingElementsQuantity: this.rollingElementsQuantity
                 };
 
-                axios.post(`/backend/bearing/create`, newBearing);
-                this.bearings.push(newBearing);
+                axios.post(`/backend/bearing/create`, newBearing, {
+                    headers: {
+                        Authorization: this.authorization
+                    }
+                }).then(response => {
+                    this.$emit('refresh-bearings');
+                });
+            },
 
+            clearForm() {
+                this.name = "";
+                this.type = "";
+                this.rollingElement = "";
+                this.rollingElementsQuantity = "";
             }
         }
     }

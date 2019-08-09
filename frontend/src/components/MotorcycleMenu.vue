@@ -33,13 +33,8 @@
 
     export default {
 
-        name: "MotorcycleMenu.vue",
-
-        props: ['motorcyclesList'],
-
         data() {
             return {
-                motorcycles: [],
                 manufacturers: [],
                 motorcycleId: "",
                 motorcycleName: "",
@@ -58,34 +53,19 @@
                 .then(response => this.manufacturers = response.data)
         },
 
-        watch: {
-            motorcyclesList(newVal) {
-                this.motorcycles = newVal;
-                this.motorcycles = this.sortedMotorcycles();
-            }
-        },
-
         computed: {
-            sortedMotorcycles() {
-                function compare(a, b) {
-                    if (a.productionStartYear < b.productionStartYear)
-                        return -1;
-                    if (a.productionStartYear > b.productionStartYear)
-                        return 1;
-                    return 0;
-                }
-
-                return this.motorcycles.sort(compare);
-            },
-
             ...mapState({
-                authorization: state => state.dictionary.authorization
+                authorization: state => state.dictionary.authorization,
+                motorcycles: state => state.dictionary.motorcycles
             })
         },
 
         methods: {
 
             getManufacturerName(manufacturerId)  {
+                if (manufacturerId === null) {
+                    return "-";
+                }
                 return this.manufacturers.filter(function(manufacturer){
                     return (manufacturer.id === manufacturerId)
                 })[0].name;
