@@ -37,6 +37,12 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     }
 
     @Transactional
+    public Entity update(final Long id, final Dto dto) {
+        dto.setId(id);
+        return repository.save(converter.convertToEntity(dto));
+    }
+
+    @Transactional
     public Entity delete(final Long id) throws EntityExistsException {
         final Entity entity = getOne(id);
         repository.deleteById(entity.getId());

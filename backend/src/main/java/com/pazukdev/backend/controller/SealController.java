@@ -41,7 +41,7 @@ public class SealController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get seal")
     public SealDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
         return converter.convertToDto(service.getOne(id));

@@ -1,4 +1,4 @@
-package com.pazukdev.backend.constant;
+package com.pazukdev.backend.constant.security;
 
 /**
  * @author Siarhei Sviarkaltsau

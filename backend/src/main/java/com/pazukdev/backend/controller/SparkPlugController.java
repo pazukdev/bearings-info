@@ -41,7 +41,7 @@ public class SparkPlugController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get spark plug")
     public SparkPlugDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
         return converter.convertToDto(service.getOne(id));

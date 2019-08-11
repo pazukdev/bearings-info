@@ -28,7 +28,7 @@ public class MotorcycleService extends AbstractService<MotorcycleEntity, Motorcy
     @Override
     @Transactional
     public List<MotorcycleEntity> findAll() {
-        final List<MotorcycleEntity> motorcycles = repository.findAll();
+        final List<MotorcycleEntity> motorcycles = super.findAll();
         motorcycles.sort(Comparator.comparing(MotorcycleEntity::getProductionStartYear));
         return motorcycles;
     }

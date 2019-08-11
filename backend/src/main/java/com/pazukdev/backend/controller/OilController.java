@@ -41,7 +41,7 @@ public class OilController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get oil")
     public OilDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
         return converter.convertToDto(service.getOne(id));

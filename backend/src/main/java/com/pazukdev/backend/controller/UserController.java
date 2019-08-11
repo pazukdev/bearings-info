@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/admin/user/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get User. Admins-only permitted")
     public UserDto get(@PathVariable("id") Long id) {
         return converter.convertToDto(service.getOne(id));

@@ -1,6 +1,6 @@
 package com.pazukdev.backend.dataloader;
 
-import com.pazukdev.backend.constant.Role;
+import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.entity.UserEntity;

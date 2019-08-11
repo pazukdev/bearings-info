@@ -44,7 +44,7 @@ public class WishListController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get wish list")
     public WishListDto get(@PathVariable("id") Long id) throws Exception {
         return wishListConverter.convertToDto(service.getOne(id));

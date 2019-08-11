@@ -41,7 +41,7 @@ public class EngineController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get engine")
     public EngineDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
         return converter.convertToDto(service.getOne(id));

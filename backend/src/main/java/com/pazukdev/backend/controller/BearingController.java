@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -41,7 +42,7 @@ public class BearingController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get bearing")
     public BearingDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
         return converter.convertToDto(service.getOne(id));
@@ -54,15 +55,30 @@ public class BearingController {
         return service.create(dto) != null;
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update bearing")
+    public BearingDto update(@PathVariable("id") final Long id,
+                             @RequestBody final BearingDto dto) throws ProductNotFoundException {
+        return converter.convertToDto(service.update(id, dto));
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete bearing")
-    public void delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
-        service.delete(id);
+    public BearingDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
+        return converter.convertToDto(service.delete(id));
+    }
+
+    @DeleteMapping("/list")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete all bearings by ids list")
+    public List<BearingDto> delete(@RequestBody final List<Long> ids) throws ProductNotFoundException {
+        return converter.convertToDtoList(service.deleteAll(ids));
     }
 
     @PostMapping(value = "/search-by-name")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get bearing by name")
     public BearingDto searchByName(@RequestBody final String name) {
         return converter.convertToDto(service.findByName(name));
@@ -73,6 +89,13 @@ public class BearingController {
     @ApiOperation(value = "Get bearings list by ids list")
     public List<BearingDto> search(@RequestBody final List<Long> ids) {
         return converter.convertToDtoList(service.search(ids));
+    }
+
+    @GetMapping("/types")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get bearing types")
+    public List<String> getTypes() {
+        return service.getTypes();
     }
 
 }

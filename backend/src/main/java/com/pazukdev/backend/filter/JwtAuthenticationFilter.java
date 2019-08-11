@@ -1,6 +1,6 @@
 package com.pazukdev.backend.filter;
 
-import com.pazukdev.backend.constant.SecurityConstants;
+import com.pazukdev.backend.constant.security.SecurityConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;

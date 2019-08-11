@@ -1,6 +1,6 @@
 package com.pazukdev.backend.entity;
 
-import com.pazukdev.backend.constant.Role;
+import com.pazukdev.backend.constant.security.Role;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

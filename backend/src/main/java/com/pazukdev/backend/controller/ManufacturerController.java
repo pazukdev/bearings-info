@@ -41,7 +41,7 @@ public class ManufacturerController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get manufacturer")
     public ManufacturerDto get(@PathVariable("id") final Long id) throws ProductNotFoundException {
         return converter.convertToDto(service.getOne(id));
@@ -62,7 +62,7 @@ public class ManufacturerController {
     }
 
     @PostMapping(value = "/search")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get manufacturer by name")
     public ManufacturerDto searchByName(@RequestBody final String name) {
         return converter.convertToDto(service.findByName(name));

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -90,6 +91,47 @@ public class SpecificStringUtil {
 
     public static String getString(final String source) {
         return getString(source, Position.NOT_SPECIFIED, Separator.NOT_SPECIFIED);
+    }
+
+    public static List<String> enumClassToCapitalizedStrings(final Class<? extends Enum<?>> enumClass) {
+        return enumNamesToListOfStrings(getNames(enumClass));
+    }
+
+    public static String[] getNames(final Class<? extends Enum<?>> enumClass) {
+        return Arrays.stream(enumClass.getEnumConstants()).map(Enum::toString).toArray(String[]::new);
+    }
+
+    public static List<String> enumNamesToListOfStrings(final String[] names) {
+        final List<String> refactoredNames = new ArrayList<>();
+        for (final String name : names) {
+            refactoredNames.add(enumNameToCapitalizedLowerCaseString(name));
+        }
+        return refactoredNames;
+    }
+
+    public static String capitalize(final String s) {
+        return StringUtils.capitalize(s);
+    }
+
+    public static String enumNameToCapitalizedLowerCaseString(final String name) {
+        return capitalize(name.replaceAll("_", " ").toLowerCase());
+    }
+
+    public static String enumToCapitalizedLowerCaseString(final Enum e) {
+        return enumNameToCapitalizedLowerCaseString(e.name());
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends Enum> T stringToEnum(final Class<T> enumClass, final String s) {
+        return (T) Enum.valueOf(enumClass, stringToEnumName(s));
+    }
+
+    public static String stringToEnumName(final String s) {
+        return s.replaceAll(" ", "_").toUpperCase();
+    }
+
+    public static boolean isNotLowerCasedEnumName(final String s) {
+        return s.contains(" ") || !s.equals(s.toLowerCase());
     }
 
     private static Integer getInteger(final String source, final Position position, final Separator separator) {
