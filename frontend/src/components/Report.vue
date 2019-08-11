@@ -3,7 +3,7 @@
         <p id="title" style="text-align: center"><b>Reports</b></p>
 
         <div>
-            <table>
+            <table class="centred-table">
                 <tbody>
                 <tr>
                     <td>
@@ -80,16 +80,18 @@
                         headers: {
                             Authorization: this.authorization
                         }
-                    }) .then(response => this.item = response.data)
+                    })
+                    .then(response => this.item = response.data)
             },
 
             getFuelReport(id) {
                 axios
                     .get("/backend/motorcycle/" + id + "/fuel-report", {
-                    headers: {
-                        Authorization: this.authorization
-                    }
-                }) .then(response => this.item = response.data)
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => this.item = response.data)
             },
 
             removeReport(val) {

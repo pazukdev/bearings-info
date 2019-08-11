@@ -63,8 +63,8 @@
         data() {
             return {
                 isLogin: true,
-                username: "",
-                password: "",
+                username: "admin",
+                password: "admin",
                 repeatedPassword: "",
                 validationMessages: []
             };

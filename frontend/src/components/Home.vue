@@ -1,5 +1,5 @@
 <template>
-    <div id="app_area" style="padding: 10px">
+    <div id="app_area">
         <table style="border-spacing: 0px; text-align: right" v-show="homeComponent === 'MotorcycleMenu'">
             <tbody>
             <tr>
@@ -32,7 +32,7 @@
 
         <SealList v-show="homeComponent === 'Seals'"/>
 
-        <table v-show="homeComponent === 'MotorcycleMenu'">
+        <table class="centred-table" v-show="homeComponent === 'MotorcycleMenu'">
             <tbody>
             <tr>
                 <td colspan="1">

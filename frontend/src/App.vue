@@ -30,8 +30,7 @@
                     </tbody>
                 </table>
             </div>
-<!--            <p>{{homeComponent}}</p>-->
-            <router-view></router-view>
+            <router-view style="padding: 20px"></router-view>
         </div>
     </div>
 </template>
@@ -94,7 +93,6 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
-        margin-top: 60px;
     }
 
     #background {
@@ -128,12 +126,18 @@
         color: #252525
     }
 
+    .centred-table {
+        text-align: center;
+    }
+
+    .get-all-table {
+        text-align: center;
+    }
+
     .creation-form {
         text-align: left;
         border-spacing: 20px;
         border-collapse: separate;
-        margin-left:auto;
-        margin-right:auto;
     }
 
     .content {
@@ -142,6 +146,18 @@
 
     .right {
         width: 50%;
+    }
+
+    .default-width-1 {
+        width: 160px;
+    }
+
+    .default-width-2 {
+        width: 100px;
+    }
+
+    .full-width {
+        width: 100%;
     }
 
     button {
@@ -167,7 +183,7 @@
 
     table {
         width: 100%;
-        text-align: center;
+        text-align: left;
         margin-left:auto;
         margin-right:auto;
     }
