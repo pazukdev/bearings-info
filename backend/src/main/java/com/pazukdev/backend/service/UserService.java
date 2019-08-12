@@ -4,11 +4,10 @@ import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.UserRepository;
-import org.apache.commons.lang3.StringUtils;
+import com.pazukdev.backend.validator.CredentialsValidator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,12 +17,15 @@ import java.util.List;
 public class UserService extends AbstractService<UserEntity, UserDto> {
 
     private final PasswordEncoder passwordEncoder;
+    private final CredentialsValidator credentialsValidator;
 
     public UserService(final UserRepository repository,
                        final UserConverter converter,
-                       final PasswordEncoder passwordEncoder) {
+                       final PasswordEncoder passwordEncoder,
+                       final CredentialsValidator credentialsValidator) {
         super(repository, converter);
         this.passwordEncoder = passwordEncoder;
+        this.credentialsValidator = credentialsValidator;
     }
 
     @Override
@@ -51,20 +53,8 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     }
 
     private List<String> validateCredentials(final UserDto dto) {
-        final List<String> validationMessages = new ArrayList<>();
-        if (StringUtils.isBlank(dto.getName())) {
-            validationMessages.add("Login is empty");
-        }
-        if (StringUtils.isBlank(dto.getPassword())) {
-            validationMessages.add("Password is empty");
-        }
-        if (!dto.getRepeatedPassword().equals(dto.getPassword())) {
-            validationMessages.add("Passwords are different");
-        }
-        if (findByName(dto.getName()) != null) {
-            validationMessages.add("User with this Login already exists");
-        }
-        return validationMessages;
+        final boolean userExists = findByName(dto.getName()) != null;
+        return credentialsValidator.validate(dto, userExists);
     }
 
 }
