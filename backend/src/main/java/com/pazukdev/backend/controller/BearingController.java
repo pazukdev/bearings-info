@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityExistsException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -94,8 +95,15 @@ public class BearingController {
     @GetMapping("/types")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get bearing types")
-    public List<String> getTypes() {
+    public Set<String> getTypes() {
         return service.getTypes();
+    }
+
+    @GetMapping("/rolling-elements")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get bearing rolling elements")
+    public Set<String> getRollingElements() {
+        return service.getRollingElements();
     }
 
 }

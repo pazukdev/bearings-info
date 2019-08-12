@@ -138,7 +138,7 @@
                 rollingElement: "",
                 rollingElementsQuantity: "",
                 types: [],
-                rollingElements: ["ball", "roller", "tapered roller"],
+                rollingElements: [],
                 selected: [],
                 selectAll: false,
                 isEdit: false,
@@ -149,14 +149,21 @@
 
         created() {
             axios
-                .get(`/backend/bearing/types`, {
+                .get("/backend/bearing/types", {
                     headers: {
                         Authorization: this.authorization
                     }
                 })
                 .then(response => this.types = response.data);
             axios
-                .get(`/backend/bearing/list`, {
+                .get("/backend/bearing/rolling-elements", {
+                    headers: {
+                        Authorization: this.authorization
+                    }
+                })
+                .then(response => this.rollingElements = response.data);
+            axios
+                .get("/backend/bearing/list", {
                     headers: {
                         Authorization: this.authorization
                     }
