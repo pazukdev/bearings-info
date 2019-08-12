@@ -1,9 +1,7 @@
 package com.pazukdev.backend.dataloader;
 
-import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.entity.AbstractEntityFactory;
-import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingFactory;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleFactory;
@@ -60,13 +58,6 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void populateEmptyTables() {
-        if (repositoryIsEmpty(userRepository)) {
-            UserEntity user = new UserEntity();
-            user.setName("admin");
-            user.setPassword(passwordEncoder.encode("123"));
-            user.setRole(Role.ADMIN);
-            userRepository.save(user);
-        }
         loadManufacturers(repositoryIsEmpty(manufacturerRepository));
         loadOils(repositoryIsEmpty(oilRepository));
         loadSparkPlugs(repositoryIsEmpty(sparkPlugRepository));
