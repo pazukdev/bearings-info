@@ -12,9 +12,14 @@
             <tbody>
             <tr v-for="(user, index) in users" :key="index">
                 <td>
-                    <label class="form-checkbox">
-                        <input type="checkbox" :value="user.id" v-model="selected" @click="closeForm()">
+                    <label class="form-checkbox" style="text-align: center">
+                        <input type="checkbox"
+                               v-if="user.name !== userName"
+                               :value="user.id"
+                               v-model="selected"
+                               @click="closeForm()">
                     </label>
+                    <p v-if="user.name === userName">You</p>
                 </td>
                 <td>{{replaceEmptyWithDash(user.name)}}</td>
                 <td>{{replaceEmptyWithDash(user.role)}}</td>
@@ -148,7 +153,8 @@
         computed: {
             ...mapState({
                 authorization: state => state.dictionary.authorization,
-                users: state => state.dictionary.users
+                users: state => state.dictionary.users,
+                userName: state => state.dictionary.userName,
             })
         },
 
