@@ -11,7 +11,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(bearing, index) in bearingzz" :key="index">
+            <tr v-for="(bearing, index) in bearings" :key="index">
                 <td>
                     <label class="form-checkbox">
                         <input type="checkbox" :value="bearing.id" v-model="selected" @click="closeForm">
@@ -131,7 +131,6 @@
 
         data() {
             return {
-                bearings: [],
                 id: "",
                 name: "",
                 type: "",
@@ -162,19 +161,12 @@
                     }
                 })
                 .then(response => this.rollingElements = response.data);
-            axios
-                .get("/backend/bearing/list", {
-                    headers: {
-                        Authorization: this.authorization
-                    }
-                })
-                .then(response => this.bearings = response.data);
         },
 
         computed: {
             ...mapState({
                 authorization: state => state.dictionary.authorization,
-                bearingzz: state => state.dictionary.bearings
+                bearings: state => state.dictionary.bearings
             })
         },
 
@@ -294,8 +286,8 @@
             select() {
                 this.selected = [];
                 if (!this.selectAll) {
-                    for (let i in this.motorcycles) {
-                        this.selected.push(this.motorcycles[i].id);
+                    for (let i in this.bearings) {
+                        this.selected.push(this.bearings[i].id);
                     }
                 }
             },
