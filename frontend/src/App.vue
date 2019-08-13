@@ -72,11 +72,12 @@
             },
 
             isBackButtonDisplayed() {
-                return !this.isLoginPage() && this.homeComponent !== "MotorcycleMenu";
+                return this.isBackAllowedUrl() || this.homeComponent !== "MotorcycleMenu";
             },
 
-            isLoginPage() {
-                return this.getCurrentRouteName() === "login";
+            isBackAllowedUrl() {
+                return this.getCurrentRouteName() !== "login"
+                    && this.getCurrentRouteName() !== "home";
             },
 
             back() {

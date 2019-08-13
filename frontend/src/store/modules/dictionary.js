@@ -40,6 +40,14 @@ const actions = {
 
     setBearings: ({commit}, context) => {
         commit("setBearings", context)
+    },
+
+    setSeals: ({commit}, context) => {
+        commit("setSeals", context)
+    },
+
+    setUsers: ({commit}, context) => {
+        commit("setUsers", context)
     }
 };
 
@@ -70,6 +78,14 @@ const mutations = {
 
     setBearings(state, bearings) {
         state.bearings = bearings;
+    },
+
+    setSeals(state, seals) {
+        state.seals = seals;
+    },
+
+    setUsers(state, users) {
+        state.users = users;
     }
 };
 

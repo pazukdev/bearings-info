@@ -157,20 +157,20 @@
             },
 
             users() {
-                this.switchComponent('Users')
+                this.switchComponent('Users');
             },
 
             reports() {
-                this.switchComponent('Report')
+                this.switchComponent('Report');
             },
 
             openBearings() {
-                this.switchComponent('Bearings')
+                this.switchComponent('Bearings');
             },
 
             reopenBearings() {
                 this.refreshBearings();
-                this.bearings();
+                this.openBearings();
             },
 
             seals() {

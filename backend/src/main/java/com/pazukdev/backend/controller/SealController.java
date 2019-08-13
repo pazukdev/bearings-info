@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityExistsException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -59,6 +60,20 @@ public class SealController {
     @ApiOperation(value = "Delete seal")
     public SealDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
         return converter.convertToDto(service.delete(id));
+    }
+
+    @GetMapping("/rotations")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get seal rotations")
+    public Set<String> getRotations() {
+        return service.getRotations();
+    }
+
+    @GetMapping("/materials")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get seal materials")
+    public Set<String> getMaterials() {
+        return service.getMaterials();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.pazukdev.backend.service;
 
+import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.entity.UserEntity;
@@ -7,8 +8,13 @@ import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.validator.CredentialsValidator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -28,19 +34,35 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         this.credentialsValidator = credentialsValidator;
     }
 
+    @Transactional
     @Override
     public UserEntity findByName(final String name) {
         return ((UserRepository) repository).findByName(name);
     }
 
+    @Transactional
+    @Override
+    public List<UserEntity> findAll() {
+        final List<UserEntity> users = super.findAll();
+        users.sort(Comparator.comparing(UserEntity::getRole));
+        return users;
+    }
+
+    @Transactional
     public List<String> createUser(final UserDto dto) {
-        dto.setRole("USER");
+        dto.setRole(Role.USER.name());
         return createWithCredentialsValidation(dto);
     }
 
+    @Transactional
     public List<String> createAdmin(final UserDto dto) {
-        dto.setRole("ADMIN");
+        dto.setRole(Role.ADMIN.name());
         return createWithCredentialsValidation(dto);
+    }
+
+    @Transactional
+    public Set<String> getRoles() {
+        return new HashSet<>(Arrays.asList(Role.USER.name(), Role.ADMIN.name()));
     }
 
     private List<String> createWithCredentialsValidation(final UserDto dto) {

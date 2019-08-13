@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityExistsException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -63,6 +64,13 @@ public class UserController {
     @ApiOperation(value = "Delete User. Admins-only permitted")
     public UserDto delete(@PathVariable("id") final Long id) {
         return converter.convertToDto(service.delete(id));
+    }
+
+    @GetMapping("/admin/user/roles")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get user roles")
+    public Set<String> getRoles() {
+        return service.getRoles();
     }
 
 }

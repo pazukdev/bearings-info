@@ -236,7 +236,7 @@
                         data: this.selected
                     })
                     .then(() => {
-                        this.$emit('reopen-bearings');
+                        this.emitReopenBearings();
                     });
                 this.selected = [];
             },
@@ -301,5 +301,6 @@
         }
     }
 </script>
+
 <style scoped>
 </style>
