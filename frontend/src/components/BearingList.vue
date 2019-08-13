@@ -14,12 +14,12 @@
             <tr v-for="(bearing, index) in bearings" :key="index">
                 <td>
                     <label class="form-checkbox">
-                        <input type="checkbox" :value="bearing.id" v-model="selected" @click="closeForm">
+                        <input type="checkbox" :value="bearing.id" v-model="selected" @click="closeForm()">
                     </label>
                 </td>
-                <td>{{bearing.name}}</td>
-                <td>{{bearing.type}}</td>
-                <td>{{bearing.rollingElementsQuantity}}</td>
+                <td>{{replaceEmptyWithDash(bearing.name)}}</td>
+                <td>{{replaceEmptyWithDash(bearing.type)}}</td>
+                <td>{{replaceEmptyWithDash(bearing.rollingElementsQuantity)}}</td>
             </tr>
             </tbody>
         </table>
@@ -47,7 +47,7 @@
                     <td>
                         <button type="button"
                                 class="default-width-2"
-                                v-on:click="deleteBearings()"
+                                v-on:click="deleteSelected()"
                                 :disabled="!isDeleteButtonVisible()">
                             Delete
                         </button>
@@ -68,8 +68,8 @@
             <tbody>
             <tr style="text-align: center">
                 <td colspan="2">
-                    <b v-if="isEditFormOpened()">Edit bearing</b>
-                    <b v-if="isCreateFormOpened()">Create bearing</b>
+                    <b v-if="isEditFormOpened()">Edit</b>
+                    <b v-if="isCreateFormOpened()">Create</b>
                 </td>
             </tr>
             <tr>
@@ -227,20 +227,6 @@
                     });
             },
 
-            deleteBearings() {
-                axios
-                    .delete("/backend/bearing/list", {
-                        headers: {
-                            Authorization: this.authorization
-                        },
-                        data: this.selected
-                    })
-                    .then(() => {
-                        this.emitReopenBearings();
-                    });
-                this.selected = [];
-            },
-
             save() {
                 if (this.isEditFormOpened()) {
                     this.edit(this.id);
@@ -257,7 +243,7 @@
                         Authorization: this.authorization
                     }
                 })
-                    .then(() => this.emitReopenBearings());
+                    .then(() => this.emitReopen());
             },
 
             edit(id) {
@@ -267,10 +253,24 @@
                             Authorization: this.authorization
                         }
                     })
-                    .then(() => this.emitReopenBearings());
+                    .then(() => this.emitReopen());
             },
 
-            emitReopenBearings() {
+            deleteSelected() {
+                axios
+                    .delete("/backend/bearing/list", {
+                        headers: {
+                            Authorization: this.authorization
+                        },
+                        data: this.selected
+                    })
+                    .then(() => {
+                        this.emitReopen();
+                        this.selected = [];
+                    });
+            },
+
+            emitReopen() {
                 this.$emit('reopen-bearings');
             },
 
@@ -293,10 +293,18 @@
             },
 
             clearForm() {
+                this.id = "";
                 this.name = "";
                 this.type = "";
                 this.rollingElement = "";
                 this.rollingElementsQuantity = "";
+            },
+
+            replaceEmptyWithDash(string) {
+                if (string === null || string === "") {
+                    return "-";
+                }
+                return string;
             }
         }
     }

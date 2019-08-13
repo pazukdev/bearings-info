@@ -6,6 +6,7 @@ import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.validator.CredentialsValidator;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,14 +51,15 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
     @Transactional
     public List<String> createUser(final UserDto dto) {
-        dto.setRole(Role.USER.name());
-        return createWithCredentialsValidation(dto);
+        final Long id = null;
+        final boolean create = true;
+        return createOrUpdateWithCredentialsValidation(id, dto, create);
     }
 
     @Transactional
-    public List<String> createAdmin(final UserDto dto) {
-        dto.setRole(Role.ADMIN.name());
-        return createWithCredentialsValidation(dto);
+    public List<String> updateUser(final Long id, final UserDto dto) {
+        final boolean create = false;
+        return createOrUpdateWithCredentialsValidation(id, dto, create);
     }
 
     @Transactional
@@ -65,17 +67,29 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         return new HashSet<>(Arrays.asList(Role.USER.name(), Role.ADMIN.name()));
     }
 
-    private List<String> createWithCredentialsValidation(final UserDto dto) {
-        final List<String> validationMessages = validateCredentials(dto);
+    private List<String> createOrUpdateWithCredentialsValidation(final Long id,
+                                                                 final UserDto dto,
+                                                                 final boolean create) {
+        final List<String> validationMessages = validateCredentials(dto, create);
         if (validationMessages.isEmpty()) {
+            if (StringUtils.isBlank(dto.getRole())) {
+                dto.setRole(Role.USER.name());
+            }
             dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-            create(dto);
+            if (create) {
+                create(dto);
+            } else {
+                update(id, dto);
+            }
         }
         return validationMessages;
     }
 
-    private List<String> validateCredentials(final UserDto dto) {
-        final boolean userExists = findByName(dto.getName()) != null;
+    private List<String> validateCredentials(final UserDto dto, final boolean checkIfAlreadyExists) {
+        boolean userExists = false;
+        if (checkIfAlreadyExists) {
+            userExists = findByName(dto.getName()) != null;
+        }
         return credentialsValidator.validate(dto, userExists);
     }
 

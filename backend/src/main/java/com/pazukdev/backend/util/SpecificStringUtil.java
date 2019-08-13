@@ -201,6 +201,10 @@ public class SpecificStringUtil {
         return source.contains("(") && source.contains(")");
     }
 
+    public static String replaceBlankWithDash(final String s) {
+        return StringUtils.isBlank(s) ? "-" : s;
+    }
+
 }
 
 

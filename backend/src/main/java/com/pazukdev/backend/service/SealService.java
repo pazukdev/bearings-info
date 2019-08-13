@@ -13,6 +13,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.pazukdev.backend.util.SpecificStringUtil.replaceBlankWithDash;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -24,9 +26,18 @@ public class SealService extends AbstractService<SealEntity, SealDto>{
         super(repository, converter);
     }
 
+    @Transactional
     @Override
     public SealEntity findByName(final String name) {
         return ((SealRepository) repository).findByName(name);
+    }
+
+    @Transactional
+    @Override
+    public SealEntity create(SealDto dto) {
+        dto.setMaterial(replaceBlankWithDash(dto.getMaterial()));
+        dto.setRotation(replaceBlankWithDash(dto.getRotation()));
+        return super.create(dto);
     }
 
     @Transactional

@@ -24,13 +24,13 @@
 
         <AddMotorcycle v-show="homeComponent === 'AddMotorcycle'" @refresh-motorcycles="refresh()"/>
 
-        <Users v-show="homeComponent === 'Users'"/>
+        <Users v-show="homeComponent === 'Users'" @reopen-users="reopenUsers()"/>
 
         <Report v-show="homeComponent === 'Report'"/>
 
         <BearingList v-show="homeComponent === 'Bearings'" @reopen-bearings="reopenBearings()"/>
 
-        <SealList v-show="homeComponent === 'Seals'"/>
+        <SealList v-show="homeComponent === 'Seals'" @reopen-seals="reopenSeals()"/>
 
         <table class="centred-table" v-show="homeComponent === 'MotorcycleMenu'">
             <tbody>
@@ -41,14 +41,14 @@
             </tr>
             <tr v-if="admin">
                 <td>
-                    <button class="content" type="button" style="width: 160px" v-on:click="users()">
+                    <button class="content" type="button" style="width: 160px" v-on:click="openUsers()">
                         Users
                     </button>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <button class="content" type="button" style="width: 160px" v-on:click="reports()">
+                    <button class="content" type="button" style="width: 160px" v-on:click="openReports()">
                         Reports
                     </button>
                 </td>
@@ -60,13 +60,13 @@
                     </button>
                 </td>
             </tr>
-<!--            <tr>-->
-<!--                <td>-->
-<!--                    <button class="content" type="button" style="width: 160px" v-on:click="seals()">-->
-<!--                        Seals-->
-<!--                    </button>-->
-<!--                </td>-->
-<!--            </tr>-->
+            <tr>
+                <td>
+                    <button class="content" type="button" style="width: 160px" v-on:click="openSeals()">
+                        Seals
+                    </button>
+                </td>
+            </tr>
             </tbody>
         </table>
 
@@ -118,7 +118,9 @@
                 .then(response => this.engines = response.data);
 
             this.isAdmin();
+            this.refreshUsers();
             this.refreshBearings();
+            this.refreshSeals();
         },
 
         computed: {
@@ -156,11 +158,16 @@
                 this.switchComponent('AddMotorcycle');
             },
 
-            users() {
+            openUsers() {
                 this.switchComponent('Users');
             },
 
-            reports() {
+            reopenUsers() {
+                this.refreshUsers();
+                this.openUsers();
+            },
+
+            openReports() {
                 this.switchComponent('Report');
             },
 
@@ -173,8 +180,13 @@
                 this.openBearings();
             },
 
-            seals() {
+            openSeals() {
                 this.switchComponent('Seals')
+            },
+
+            reopenSeals() {
+                this.refreshSeals();
+                this.openSeals();
             },
 
             reload() {
@@ -212,6 +224,30 @@
                     })
                     .then(response => {
                         this.$store.dispatch("setBearings", response.data)
+                    });
+            },
+
+            refreshSeals() {
+                axios
+                    .get(`/backend/seal/list`, {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => {
+                        this.$store.dispatch("setSeals", response.data)
+                    });
+            },
+
+            refreshUsers() {
+                axios
+                    .get(`/backend/admin/user/list`, {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => {
+                        this.$store.dispatch("setUsers", response.data)
                     });
             },
 

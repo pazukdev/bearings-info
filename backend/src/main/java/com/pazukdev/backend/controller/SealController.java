@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -55,11 +56,26 @@ public class SealController {
         return service.create(dto) != null;
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update seal")
+    public SealDto update(@PathVariable("id") final Long id,
+                          @RequestBody final SealDto dto) throws ProductNotFoundException {
+        return converter.convertToDto(service.update(id, dto));
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete seal")
     public SealDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
         return converter.convertToDto(service.delete(id));
+    }
+
+    @DeleteMapping("/list")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete all seals by ids list")
+    public List<SealDto> delete(@RequestBody final List<Long> ids) throws ProductNotFoundException {
+        return converter.convertToDtoList(service.deleteAll(ids));
     }
 
     @GetMapping("/rotations")

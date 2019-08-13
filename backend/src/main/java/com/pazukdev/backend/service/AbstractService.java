@@ -11,6 +11,8 @@ import javax.persistence.EntityExistsException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.pazukdev.backend.util.SpecificStringUtil.replaceBlankWithDash;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -33,12 +35,14 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
 
     @Transactional
     public Entity create(final Dto dto) {
+        dto.setName(replaceBlankWithDash(dto.getName()));
         return repository.save(converter.convertToEntity(dto));
     }
 
     @Transactional
     public Entity update(final Long id, final Dto dto) {
         dto.setId(id);
+        dto.setName(replaceBlankWithDash(dto.getName()));
         return repository.save(converter.convertToEntity(dto));
     }
 

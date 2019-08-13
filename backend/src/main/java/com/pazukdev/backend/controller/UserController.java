@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,11 +53,11 @@ public class UserController {
         return service.createUser(dto);
     }
 
-    @PostMapping("/admin/user/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "Create new Admin. Admins-only permitted")
-    public List<String> createAdmin(@RequestBody final UserDto dto) throws EntityExistsException, JSONException {
-        return service.createAdmin(dto);
+    @PutMapping("/admin/user/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update user")
+    public List<String> update(@PathVariable("id") final Long id, @RequestBody final UserDto dto) {
+        return service.updateUser(id, dto);
     }
 
     @DeleteMapping("/admin/user/delete/{id}")
@@ -64,6 +65,13 @@ public class UserController {
     @ApiOperation(value = "Delete User. Admins-only permitted")
     public UserDto delete(@PathVariable("id") final Long id) {
         return converter.convertToDto(service.delete(id));
+    }
+
+    @DeleteMapping("/admin/user/list")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete all users by ids list")
+    public List<UserDto> delete(@RequestBody final List<Long> ids) {
+        return converter.convertToDtoList(service.deleteAll(ids));
     }
 
     @GetMapping("/admin/user/roles")
