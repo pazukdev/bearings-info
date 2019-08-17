@@ -1,10 +1,9 @@
-package com.pazukdev.backend.dto;
+package com.pazukdev.backend.dto.item;
 
+import com.pazukdev.backend.dto.AbstractDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.time.LocalDate;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -12,9 +11,9 @@ import java.time.LocalDate;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class VerificationTokenDto extends AbstractDto {
+public class ItemDescriptionDto extends AbstractDto {
 
-    private String token;
-    private LocalDate expiryDate;
+    private String parameter;
+    private String value;
 
 }

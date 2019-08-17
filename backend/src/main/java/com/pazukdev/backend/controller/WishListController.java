@@ -3,7 +3,6 @@ package com.pazukdev.backend.controller;
 import com.pazukdev.backend.converter.BearingConverter;
 import com.pazukdev.backend.converter.WishListConverter;
 import com.pazukdev.backend.dto.WishListDto;
-import com.pazukdev.backend.dto.product.BearingDto;
 import com.pazukdev.backend.service.WishListService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -72,18 +70,18 @@ public class WishListController {
         return wishListConverter.convertToDtoList(service.search(ids));
     }
 
-    @PutMapping(value = "/add-item")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Add item to wish list")
-    public Boolean addItem(final Long wishListId, final BearingDto dto) {
-        return service.addItem(wishListId, bearingConverter.convertToEntity(dto));
-    }
-
-    @PutMapping(value = "/remove-item")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Remove item from wish list")
-    public Boolean removeItem(final Long wishListId, final Long bearingToRemoveId) {
-        return service.removeItem(wishListId, bearingToRemoveId);
-    }
+//    @PutMapping(value = "/add-item")
+//    @ResponseStatus(HttpStatus.OK)
+//    @ApiOperation(value = "Add item to wish list")
+//    public Boolean addItem(final Long wishListId, final BearingDto dto) {
+//        return service.addItem(wishListId, bearingConverter.convertToEntity(dto));
+//    }
+//
+//    @PutMapping(value = "/remove-item")
+//    @ResponseStatus(HttpStatus.OK)
+//    @ApiOperation(value = "Remove item from wish list")
+//    public Boolean removeItem(final Long wishListId, final Long bearingToRemoveId) {
+//        return service.removeItem(wishListId, bearingToRemoveId);
+//    }
 
 }

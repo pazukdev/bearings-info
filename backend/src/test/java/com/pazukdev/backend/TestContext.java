@@ -8,7 +8,6 @@ import com.pazukdev.backend.converter.MotorcycleConverter;
 import com.pazukdev.backend.converter.OilConverter;
 import com.pazukdev.backend.converter.SealConverter;
 import com.pazukdev.backend.converter.SparkPlugConverter;
-import com.pazukdev.backend.converter.TokenConverter;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.converter.WishListConverter;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
@@ -39,7 +38,6 @@ public class TestContext {
     private final MotorcycleFactory motorcycleFactory;
 
     private final UserConverter userConverter;
-    private final TokenConverter tokenConverter;
     private final WishListConverter wishListConverter;
     private final ManufacturerConverter manufacturerConverter;
     private final BearingConverter bearingConverter;
@@ -65,10 +63,9 @@ public class TestContext {
         this.motorcycleFactory = new MotorcycleFactory(serviceContext, manufacturerFactory, engineFactory);
 
         this.userConverter = new UserConverter(modelMapper);
-        this.tokenConverter = new TokenConverter(modelMapper);
         this.wishListConverter = new WishListConverter(modelMapper);
         this.manufacturerConverter = new ManufacturerConverter(modelMapper);
-        this.bearingConverter = new BearingConverter();
+        this.bearingConverter = new BearingConverter(modelMapper);
         this.sealConverter = new SealConverter();
         this.oilConverter = new OilConverter(modelMapper);
         this.sparkPlugConverter = new SparkPlugConverter(modelMapper);

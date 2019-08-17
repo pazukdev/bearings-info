@@ -2,7 +2,6 @@ package com.pazukdev.backend;
 
 import com.pazukdev.backend.dto.ManufacturerDto;
 import com.pazukdev.backend.dto.UserDto;
-import com.pazukdev.backend.dto.WishListDto;
 import com.pazukdev.backend.dto.product.BearingDto;
 import com.pazukdev.backend.dto.product.MotorcycleDto;
 import com.pazukdev.backend.dto.product.OilDto;
@@ -10,7 +9,6 @@ import com.pazukdev.backend.dto.product.SealDto;
 import com.pazukdev.backend.dto.product.SparkPlugDto;
 import com.pazukdev.backend.dto.product.unit.EngineDto;
 import com.pazukdev.backend.entity.UserEntity;
-import com.pazukdev.backend.entity.WishListEntity;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
 import com.pazukdev.backend.entity.product.bearing.BearingEntity;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
@@ -214,19 +212,19 @@ public class MockData {
         return dto;
     }
 
-    public WishListEntity wishList() {
-        final WishListEntity wishList = new WishListEntity();
-        wishList.setId(1L);
-        wishList.setBearings(bearings());
-        return wishList;
-    }
-
-    public WishListDto wishListDto() {
-        final WishListDto dto = new WishListDto();
-        dto.setId(1L);
-        dto.setBearingIds(new HashSet<>(Arrays.asList(1L, 2L)));
-        return dto;
-    }
+//    public WishListEntity wishList() {
+//        final WishListEntity wishList = new WishListEntity();
+//        wishList.setId(1L);
+//        wishList.setBearings(bearings());
+//        return wishList;
+//    }
+//
+//    public WishListDto wishListDto() {
+//        final WishListDto dto = new WishListDto();
+//        dto.setId(1L);
+//        dto.setBearingIds(new HashSet<>(Arrays.asList(1L, 2L)));
+//        return dto;
+//    }
 
 }
 

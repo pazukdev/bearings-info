@@ -9,6 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -26,5 +28,8 @@ public class UserEntity extends AbstractEntity {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
+    @ManyToOne
+    @JoinColumn(name = "wishlist_id")
+    private WishListEntity wishList;
 
 }

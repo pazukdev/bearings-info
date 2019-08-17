@@ -1,6 +1,6 @@
-package com.pazukdev.backend.entity;
+package com.pazukdev.backend.entity.item;
 
-import com.pazukdev.backend.entity.item.ItemEntity;
+import com.pazukdev.backend.entity.AbstractEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,15 +20,17 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity
-@Table(name = "wishlist")
-public class WishListEntity extends AbstractEntity {
+@Table(name = "item")
+public class ItemEntity extends AbstractEntity {
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany
     @JoinTable(
-            name = "wishlist_item",
-            joinColumns = @JoinColumn(name = "wishlist_id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id")
+            name = "item_description",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "description_id")
     )
-    private Set<ItemEntity> items = new HashSet<>();
+    private Set<ItemDescriptionEntity> descriptions = new HashSet<>();
 
 }

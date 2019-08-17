@@ -3,7 +3,7 @@ package com.pazukdev.backend.converter;
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.WishListDto;
 import com.pazukdev.backend.entity.WishListEntity;
-import com.pazukdev.backend.entity.product.bearing.BearingEntity;
+import com.pazukdev.backend.entity.item.ItemEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -21,20 +21,20 @@ public class WishListConverter implements EntityDtoConverter<WishListEntity, Wis
 
     @Override
     public WishListDto convertToDto(final WishListEntity wishList) {
-        final WishListDto dto = modelMapper.map(wishList, WishListDto.class);
-        for (final BearingEntity bearing : wishList.getBearings()) {
-            dto.getBearingIds().add(bearing.getId());
+        final WishListDto wishListDto = modelMapper.map(wishList, WishListDto.class);
+        for (final ItemEntity item : wishList.getItems()) {
+            wishListDto.getItemIds().add(item.getId());
         }
-        return dto;
+        return wishListDto;
     }
 
     @Override
-    public WishListEntity convertToEntity(final WishListDto dto) {
-        final WishListEntity wishList = modelMapper.map(dto, WishListEntity.class);
-        for (final Long bearingId : dto.getBearingIds()) {
-            final BearingEntity bearing = new BearingEntity();
-            bearing.setId(bearingId);
-            wishList.getBearings().add(bearing);
+    public WishListEntity convertToEntity(final WishListDto wishListDto) {
+        final WishListEntity wishList = modelMapper.map(wishListDto, WishListEntity.class);
+        for (final Long itemId : wishListDto.getItemIds()) {
+            final ItemEntity item = new ItemEntity();
+            item.setId(itemId);
+            wishList.getItems().add(item);
         }
         return wishList;
     }

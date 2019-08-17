@@ -15,6 +15,10 @@ import java.util.Set;
 @ToString(callSuper = true)
 public class WishListDto extends AbstractDto {
 
-    private Set<Long> bearingIds = new HashSet<>();
+    private final static long serialVersionUID = 12343L;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Long> itemIds = new HashSet<>();
 
 }

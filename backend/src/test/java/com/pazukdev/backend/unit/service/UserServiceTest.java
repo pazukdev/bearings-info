@@ -13,10 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -79,18 +75,18 @@ public class UserServiceTest {
         verify(repository, times(1)).findByName(any(String.class));
     }
 
-    @Test
-    public void findAllUsers() {
-        final UserEntity user = mockData.user();
-
-        final List<UserEntity> findAllResult = new ArrayList<>();
-        findAllResult.add(user);
-        findAllResult.add(user);
-
-        doReturn(findAllResult).when(repository).findAll();
-        final List<UserEntity> users = service.findAll();
-        verify(repository, times(1)).findAll();
-        assertEquals(findAllResult.size(), users.size());
-    }
+//    @Test
+//    public void findAllUsers() {
+//        final UserEntity user = mockData.user();
+//
+//        final List<UserEntity> findAllResult = new ArrayList<>();
+//        findAllResult.add(user);
+//        findAllResult.add(user);
+//
+//        doReturn(findAllResult).when(repository).findAll();
+//        final List<UserEntity> users = service.findAll();
+//        verify(repository, times(1)).findAll();
+//        assertEquals(findAllResult.size(), users.size());
+//    }
 
 }

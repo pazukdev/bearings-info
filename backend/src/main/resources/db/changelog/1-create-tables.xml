@@ -5,6 +5,35 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+    <changeSet id="create_description_table" author="sviarkaltsau">
+        <createTable tableName="description">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="parameter" type="varchar(255)"/>
+            <column name="value" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_item_table" author="sviarkaltsau">
+        <createTable tableName="item">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_wishlist_table" author="sviarkaltsau">
+        <createTable tableName="wishlist">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
     <changeSet id="create_user_table" author="sviarkaltsau">
         <createTable tableName="user">
             <column name="id" type="bigint" autoIncrement="true">
@@ -13,10 +42,8 @@
             <column name="name" type="varchar(255)"/>
             <column name="password" type="varchar(255)"/>
             <column name="role" type="enum('ADMIN', 'USER')"/>
+            <column name="wishlist_id" type="bigint"/>
         </createTable>
-        <rollback>
-            <dropTable tableName="user"/>
-        </rollback>
     </changeSet>
 
     <changeSet id="create_manufacturer_table" author="sviarkaltsau">
@@ -139,30 +166,6 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="create_wishlist_table" author="sviarkaltsau">
-        <createTable tableName="wishlist">
-            <column autoIncrement="true" name="id" type="bigint">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="name" type="varchar(255)"/>
-        </createTable>
-        <rollback>
-            <dropTable tableName="wishlist"/>
-        </rollback>
-    </changeSet>
-
-    <changeSet id="create_token_table" author="sviarkaltsau">
-        <createTable tableName="verification_token">
-            <column name="id" type="bigint(20)" autoIncrement="true">
-                <constraints primaryKeyName="verification_token_pk"
-                             primaryKey="true"/>
-            </column>
-            <column name="name" type="varchar(255)"/>
-            <column name="token" type="varchar(500)"/>
-            <column name="date" type="date"/>
-        </createTable>
-    </changeSet>
-
     <changeSet id="create_engine_oil_table" author="sviarkaltsau">
         <createTable tableName="engine_oil">
             <column name="engine_id" type="bigint">
@@ -191,18 +194,26 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="create_wishlist_bearing_table" author="sviarkaltsau">
-        <createTable tableName="wishlist_bearing">
-            <column name="wishlist_id" type="bigint">
-                <constraints foreignKeyName="fk_wishlist_bearing_engine_id" references="engine (id)"/>
+    <changeSet id="create_item_description_table" author="sviarkaltsau">
+        <createTable tableName="item_description">
+            <column name="item_id" type="bigint">
+                <constraints foreignKeyName="fk_item_description_item_id" references="item (id)"/>
             </column>
-            <column name="bearing_id" type="bigint">
-                <constraints foreignKeyName="fk_wishlist_bearing_bearing_id" references="bearing (id)"/>
+            <column name="description_id" type="bigint">
+                <constraints foreignKeyName="fk_item_description_description_id" references="description (id)"/>
             </column>
         </createTable>
-        <rollback>
-            <dropTable tableName="wishlist_bearing"/>
-        </rollback>
+    </changeSet>
+
+    <changeSet id="create_wishlist_item_table" author="sviarkaltsau">
+        <createTable tableName="wishlist_item">
+            <column name="wishlist_id" type="bigint">
+                <constraints foreignKeyName="fk_wishlist_item_wishlist_id" references="wishlist (id)"/>
+            </column>
+            <column name="item_id" type="bigint">
+                <constraints foreignKeyName="fk_wishlist_item_item_id" references="item (id)"/>
+            </column>
+        </createTable>
     </changeSet>
 
 </databaseChangeLog>

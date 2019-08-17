@@ -97,25 +97,25 @@ public class MotorcycleServiceTest {
         assertEquals(findAllResult.size(), motorcycles.size());
     }
 
-    @Test
-    public void getSpeedReport() throws ProductNotFoundException {
-        final Long id = 1L;
-        doReturn(true).when(repository).existsById(any(Long.class));
-        when(repository.getOne(id)).thenReturn(mockData.motorcycle());
-        service.getSpeedReport(id);
+//    @Test
+//    public void getSpeedReport() throws ProductNotFoundException {
+//        final Long id = 1L;
+//        doReturn(true).when(repository).existsById(any(Long.class));
+//        when(repository.getOne(id)).thenReturn(mockData.motorcycle());
+//        service.getSpeedReport(id);
+//
+//        verify(repository, times(1)).getOne((any(Long.class)));
+//    }
 
-        verify(repository, times(1)).getOne((any(Long.class)));
-    }
-
-    @Test
-    public void getFuelReport() throws ProductNotFoundException {
-        final Long id = 1L;
-        doReturn(true).when(repository).existsById(any(Long.class));
-        when(repository.getOne(id)).thenReturn(mockData.motorcycle());
-        service.getFuelReport(id);
-
-        verify(repository, times(1)).getOne((any(Long.class)));
-    }
+//    @Test
+//    public void getFuelReport() throws ProductNotFoundException {
+//        final Long id = 1L;
+//        doReturn(true).when(repository).existsById(any(Long.class));
+//        when(repository.getOne(id)).thenReturn(mockData.motorcycle());
+//        service.getFuelReport(id);
+//
+//        verify(repository, times(1)).getOne((any(Long.class)));
+//    }
 
     @Test
     public void getProductNotFoundException() {

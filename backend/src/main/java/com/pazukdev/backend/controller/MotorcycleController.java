@@ -1,5 +1,6 @@
 package com.pazukdev.backend.controller;
 
+import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.converter.MotorcycleConverter;
 import com.pazukdev.backend.dto.item.ItemDto;
 import com.pazukdev.backend.dto.product.MotorcycleDto;
@@ -32,35 +33,36 @@ import java.util.List;
 public class MotorcycleController {
 
     private final MotorcycleService service;
-    private final MotorcycleConverter converter;
+    private final MotorcycleConverter motorcycleConverter;
+    private final ItemConverter itemConverter;
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get all motorcycles")
     public List<MotorcycleDto> getAll() {
-        return converter.convertToDtoList(service.findAll());
+        return motorcycleConverter.convertToDtoList(service.findAll());
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get motorcycle")
     public MotorcycleDto get(@PathVariable("id") Long id) throws ProductNotFoundException {
-        return converter.convertToDto(service.getOne(id));
+        return motorcycleConverter.convertToDto(service.getOne(id));
     }
 
     @GetMapping("/{id}/speed-report")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get motorcycle speed report")
     public ItemDto getSpeedReport(@PathVariable("id") Long id) {
-        return service.getSpeedReport(id);
+        return itemConverter.convertToDto(service.getSpeedReport(id));
     }
 
-    @GetMapping("/{id}/fuel-report")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get motorcycle fuel report")
-    public ItemDto getFuelReport(@PathVariable("id") Long id) {
-        return service.getFuelReport(id);
-    }
+//    @GetMapping("/{id}/fuel-report")
+//    @ResponseStatus(HttpStatus.OK)
+//    @ApiOperation(value = "Get motorcycle fuel report")
+//    public ItemDto getFuelReport(@PathVariable("id") Long id) {
+//        return service.getFuelReport(id);
+//    }
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
@@ -73,7 +75,7 @@ public class MotorcycleController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete motorcycle")
     public MotorcycleDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
-        return converter.convertToDto(service.delete(id));
+        return motorcycleConverter.convertToDto(service.delete(id));
     }
 
 }

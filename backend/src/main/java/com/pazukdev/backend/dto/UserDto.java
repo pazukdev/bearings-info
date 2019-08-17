@@ -13,9 +13,12 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class UserDto extends AbstractDto {
 
+    private final static long serialVersionUID = 12343L;
+
     private String password;
     private String repeatedPassword;
     @ApiModelProperty(hidden = true)
     private String role;
+    private Long wishListId;
 
 }

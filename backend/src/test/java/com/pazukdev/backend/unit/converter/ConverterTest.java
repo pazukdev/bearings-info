@@ -3,7 +3,6 @@ package com.pazukdev.backend.unit.converter;
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.dto.ManufacturerDto;
 import com.pazukdev.backend.dto.UserDto;
-import com.pazukdev.backend.dto.VerificationTokenDto;
 import com.pazukdev.backend.dto.WishListDto;
 import com.pazukdev.backend.dto.product.BearingDto;
 import com.pazukdev.backend.dto.product.MotorcycleDto;
@@ -12,7 +11,6 @@ import com.pazukdev.backend.dto.product.SealDto;
 import com.pazukdev.backend.dto.product.SparkPlugDto;
 import com.pazukdev.backend.dto.product.unit.EngineDto;
 import com.pazukdev.backend.entity.UserEntity;
-import com.pazukdev.backend.entity.VerificationTokenEntity;
 import com.pazukdev.backend.entity.WishListEntity;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
 import com.pazukdev.backend.entity.product.bearing.BearingEntity;
@@ -142,26 +140,6 @@ public class ConverterTest {
         assertEquals(dto.getName(), entity.getName());
         assertEquals(dto.getRotation(), entity.getRotation());
         assertEquals(dto.getMaterial(), entity.getMaterial());
-    }
-
-    @Test
-    public void verificationTokenToVerificationTokenDto() {
-        final VerificationTokenEntity entity = new VerificationTokenEntity();
-        final VerificationTokenDto dto = mockData.getTestContext().getTokenConverter().convertToDto(entity);
-
-        assertEquals(dto.getName(), entity.getName());
-        assertEquals(dto.getToken(), entity.getToken());
-        assertEquals(dto.getExpiryDate(), entity.getExpiryDate());
-    }
-
-    @Test
-    public void verificationTokenDtoToVerificationToken() {
-        final VerificationTokenDto dto = new VerificationTokenDto();
-        final VerificationTokenEntity entity = mockData.getTestContext().getTokenConverter().convertToEntity(dto);
-
-        assertEquals(dto.getName(), entity.getName());
-        assertEquals(dto.getToken(), entity.getToken());
-        assertEquals(dto.getExpiryDate(), entity.getExpiryDate());
     }
 
     @Test
