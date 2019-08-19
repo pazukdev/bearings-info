@@ -11,7 +11,7 @@ App run:
 
 Run dockerized:
 - in app props: comment local mysql db: jdbc:mysql://localhost:3306/motorcycle_info 
-- in app props: uncomment docker db service: jdbc:mysql://db:3306/motorcycle_info
+- in app props: uncomment docker db service: jdbc:mysql://bearings-info-database:3306/motorcycle_info
 - stop your local nginx if running (to release port 80)
 - from bearings-info: docker-compose up
 
