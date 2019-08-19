@@ -5,9 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -16,8 +13,6 @@ import java.util.Set;
 @ToString(callSuper = true)
 public class ItemDto extends AbstractDto {
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<Long> descriptionIds = new HashSet<>();
+    private String description;
 
 }

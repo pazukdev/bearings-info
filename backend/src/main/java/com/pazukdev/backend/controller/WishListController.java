@@ -1,6 +1,6 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.converter.BearingConverter;
+import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.converter.WishListConverter;
 import com.pazukdev.backend.dto.WishListDto;
 import com.pazukdev.backend.service.WishListService;
@@ -32,7 +32,7 @@ public class WishListController {
 
     private final WishListService service;
     private final WishListConverter wishListConverter;
-    private final BearingConverter bearingConverter;
+    private final ItemConverter itemConverter;
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
@@ -44,7 +44,7 @@ public class WishListController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get wish list")
-    public WishListDto get(@PathVariable("id") Long id) throws Exception {
+    public WishListDto get(@PathVariable("id") Long id) {
         return wishListConverter.convertToDto(service.getOne(id));
     }
 
@@ -59,7 +59,7 @@ public class WishListController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete wish list")
-    public void delete(@PathVariable("id") final Long id) throws Exception {
+    public void delete(@PathVariable("id") final Long id) {
         service.delete(id);
     }
 
@@ -69,19 +69,5 @@ public class WishListController {
     public List<WishListDto> search(@RequestBody final List<Long> ids) {
         return wishListConverter.convertToDtoList(service.search(ids));
     }
-
-//    @PutMapping(value = "/add-item")
-//    @ResponseStatus(HttpStatus.OK)
-//    @ApiOperation(value = "Add item to wish list")
-//    public Boolean addItem(final Long wishListId, final BearingDto dto) {
-//        return service.addItem(wishListId, bearingConverter.convertToEntity(dto));
-//    }
-//
-//    @PutMapping(value = "/remove-item")
-//    @ResponseStatus(HttpStatus.OK)
-//    @ApiOperation(value = "Remove item from wish list")
-//    public Boolean removeItem(final Long wishListId, final Long bearingToRemoveId) {
-//        return service.removeItem(wishListId, bearingToRemoveId);
-//    }
 
 }

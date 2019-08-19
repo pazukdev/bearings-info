@@ -4,12 +4,25 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
+    <changeSet id="insert_admin_wishlist" author="sviarkaltsau">
+        <insert tableName="wishlist">
+            <column name="id" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_user_wishlist" author="sviarkaltsau">
+        <insert tableName="wishlist">
+            <column name="id" value="2"/>
+        </insert>
+    </changeSet>
+
     <changeSet id="insert_admin" author="sviarkaltsau">
         <insert tableName="user">
             <column name="id" value="1"/>
             <column name="name" value="admin"/>
             <column name="password" value="$2a$10$LJDm6BOaekdsan3q3j15Q.ceRCSHHb1J8kAPqQasWZSdKoJtDAnyO"/>
             <column name="role" value="ADMIN"/>
+            <column name="wishlist_id" value="1"/>
         </insert>
     </changeSet>
 
@@ -19,6 +32,7 @@
             <column name="name" value="user"/>
             <column name="password" value="$2a$10$50E.w9jZJAIjGlsb4OU0N.wSvxrfWe.VEmiAV7.filaKuuKN.f992"/>
             <column name="role" value="USER"/>
+            <column name="wishlist_id" value="2"/>
         </insert>
     </changeSet>
 

@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.pazukdev.backend.util.SpecificStringUtil.replaceBlankWithDash;
 
@@ -40,10 +42,24 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     }
 
     @Transactional
+    public Set<Entity> createAll(final Set<Dto> dtos) {
+        final Set<Entity> entities = new HashSet<>();
+        for (final Dto dto : dtos) {
+            entities.add(create(dto));
+        }
+        return entities;
+    }
+
+    @Transactional
     public Entity update(final Long id, final Dto dto) {
         dto.setId(id);
         dto.setName(replaceBlankWithDash(dto.getName()));
         return repository.save(converter.convertToEntity(dto));
+    }
+
+    @Transactional
+    public Entity update(final Entity entity) {
+        return repository.save(entity);
     }
 
     @Transactional

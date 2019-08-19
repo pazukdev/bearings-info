@@ -5,23 +5,13 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="create_description_table" author="sviarkaltsau">
-        <createTable tableName="description">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="name" type="varchar(255)"/>
-            <column name="parameter" type="varchar(255)"/>
-            <column name="value" type="varchar(255)"/>
-        </createTable>
-    </changeSet>
-
     <changeSet id="create_item_table" author="sviarkaltsau">
         <createTable tableName="item">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
+            <column name="description" type="varchar(255)"/>
         </createTable>
     </changeSet>
 
@@ -192,17 +182,6 @@
         <rollback>
             <dropTable tableName="engine_bearing"/>
         </rollback>
-    </changeSet>
-
-    <changeSet id="create_item_description_table" author="sviarkaltsau">
-        <createTable tableName="item_description">
-            <column name="item_id" type="bigint">
-                <constraints foreignKeyName="fk_item_description_item_id" references="item (id)"/>
-            </column>
-            <column name="description_id" type="bigint">
-                <constraints foreignKeyName="fk_item_description_description_id" references="description (id)"/>
-            </column>
-        </createTable>
     </changeSet>
 
     <changeSet id="create_wishlist_item_table" author="sviarkaltsau">

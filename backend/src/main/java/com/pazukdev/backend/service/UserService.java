@@ -3,7 +3,11 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
+import com.pazukdev.backend.dto.WishListDto;
+import com.pazukdev.backend.dto.item.ItemDto;
 import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.WishListEntity;
+import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.validator.CredentialsValidator;
 import org.apache.commons.lang3.StringUtils;
@@ -25,14 +29,19 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
     private final PasswordEncoder passwordEncoder;
     private final CredentialsValidator credentialsValidator;
+    private final ItemService itemService;
+    private final WishListService wishListService;
 
     public UserService(final UserRepository repository,
                        final UserConverter converter,
                        final PasswordEncoder passwordEncoder,
-                       final CredentialsValidator credentialsValidator) {
+                       final CredentialsValidator credentialsValidator,
+                       ItemService itemService, final WishListService wishListService) {
         super(repository, converter);
         this.passwordEncoder = passwordEncoder;
         this.credentialsValidator = credentialsValidator;
+        this.itemService = itemService;
+        this.wishListService = wishListService;
     }
 
     @Transactional
@@ -67,6 +76,26 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         return new HashSet<>(Arrays.asList(Role.USER.name(), Role.ADMIN.name()));
     }
 
+    public ItemEntity addItem(final String userName, final ItemDto itemDto) {
+        final ItemEntity item = itemService.create(itemDto);
+        final UserEntity user = findByName(userName);
+        final WishListEntity wishList = user.getWishList();
+        wishList.getItems().add(item);
+        wishListService.update(wishList);
+        update(user);
+        return item;
+    }
+
+//        public Boolean removeItem(final Long wishListId, final Long bearingToRemoveId) {
+//        final Set<BearingEntity> bearings = repository.getOne(wishListId).getBearings();
+//        for (final BearingEntity bearing : bearings) {
+//            if (bearing.getId().longValue() == bearingToRemoveId.longValue()) {
+//                return bearings.remove(bearing);
+//            }
+//        }
+//        return false;
+//    }
+
     private List<String> createOrUpdateWithCredentialsValidation(final Long id,
                                                                  final UserDto dto,
                                                                  final boolean create) {
@@ -77,6 +106,8 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
             }
             dto.setPassword(passwordEncoder.encode(dto.getPassword()));
             if (create) {
+                final WishListEntity wishList = wishListService.create(new WishListDto());
+                dto.setWishListId(wishList.getId());
                 create(dto);
             } else {
                 update(id, dto);

@@ -1,7 +1,9 @@
 package com.pazukdev.backend.controller;
 
+import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
+import com.pazukdev.backend.dto.item.ItemDto;
 import com.pazukdev.backend.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,20 +32,21 @@ import java.util.Set;
 public class UserController {
 
     private final UserService service;
-    private final UserConverter converter;
+    private final UserConverter userConverter;
+    private final ItemConverter itemConverter;
 
     @GetMapping("/admin/user/list")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get all Users. Admins-only permitted")
     public List<UserDto> getAll() {
-        return converter.convertToDtoList(service.findAll());
+        return userConverter.convertToDtoList(service.findAll());
     }
 
     @GetMapping("/admin/user/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get User. Admins-only permitted")
     public UserDto get(@PathVariable("id") Long id) {
-        return converter.convertToDto(service.getOne(id));
+        return userConverter.convertToDto(service.getOne(id));
     }
 
     @PostMapping("/user/create")
@@ -64,14 +67,14 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete User. Admins-only permitted")
     public UserDto delete(@PathVariable("id") final Long id) {
-        return converter.convertToDto(service.delete(id));
+        return userConverter.convertToDto(service.delete(id));
     }
 
     @DeleteMapping("/admin/user/list")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete all users by ids list")
     public List<UserDto> delete(@RequestBody final List<Long> ids) {
-        return converter.convertToDtoList(service.deleteAll(ids));
+        return userConverter.convertToDtoList(service.deleteAll(ids));
     }
 
     @GetMapping("/admin/user/roles")
@@ -80,5 +83,19 @@ public class UserController {
     public Set<String> getRoles() {
         return service.getRoles();
     }
+
+    @PutMapping(value = "{userName}/add-item")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Add item to wish list")
+    public ItemDto addItem(@PathVariable final String userName, @RequestBody final ItemDto dto) {
+        return itemConverter.convertToDto(service.addItem(userName, dto));
+    }
+//
+//    @PutMapping(value = "/remove-item")
+//    @ResponseStatus(HttpStatus.OK)
+//    @ApiOperation(value = "Remove item from wish list")
+//    public Boolean removeItem(final Long wishListId, final Long bearingToRemoveId) {
+//        return service.removeItem(wishListId, bearingToRemoveId);
+//    }
 
 }

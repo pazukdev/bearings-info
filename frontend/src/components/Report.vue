@@ -28,12 +28,12 @@
             </table>
             <table style="text-align: left">
                 <tbody>
-                <tr style="text-align: left" v-for="description in item.descriptions" :key="item.id">
+                <tr style="text-align: left" v-for="row in table.matrix">
                     <td>
-                        {{description.parameter}}
+                        {{row[0]}}
                     </td>
                     <td>
-                        {{description.value}}
+                        {{row[1]}}
                     </td>
                 </tr>
                 </tbody>
@@ -52,7 +52,7 @@
             return {
                 motorcycles: [],
                 motorcycleId: "",
-                item: "",
+                table: "",
                 empty: ""
             }
         },
@@ -81,7 +81,7 @@
                             Authorization: this.authorization
                         }
                     })
-                    .then(response => this.item = response.data)
+                    .then(response => this.table = response.data)
             },
 
             getFuelReport(id) {
@@ -91,11 +91,11 @@
                             Authorization: this.authorization
                         }
                     })
-                    .then(response => this.item = response.data)
+                    .then(response => this.table = response.data)
             },
 
             removeReport(val) {
-                this.item = val;
+                this.table = val;
             }
         }
     }
