@@ -5,6 +5,7 @@ import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.WishListDto;
 import com.pazukdev.backend.dto.item.ItemDto;
+import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.WishListEntity;
 import com.pazukdev.backend.entity.item.ItemEntity;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -76,25 +78,45 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         return new HashSet<>(Arrays.asList(Role.USER.name(), Role.ADMIN.name()));
     }
 
-    public ItemEntity addItem(final String userName, final ItemDto itemDto) {
-        final ItemEntity item = itemService.create(itemDto);
-        final UserEntity user = findByName(userName);
-        final WishListEntity wishList = user.getWishList();
-        wishList.getItems().add(item);
-        wishListService.update(wishList);
-        update(user);
-        return item;
+    public TableDto getItemTable(final String userName) {
+        final Set<ItemEntity> items = getAllItems(userName);
+        final List<String[]> rows = new ArrayList<>();
+        for (final ItemEntity item : items) {
+            final String[] row = {item.getType(), item.getName(), item.getQuantity().toString()};
+            rows.add(row);
+        }
+        final String[][] rowArray = rows.toArray(new String[0][]);
+        return new TableDto(rowArray);
     }
 
-//        public Boolean removeItem(final Long wishListId, final Long bearingToRemoveId) {
-//        final Set<BearingEntity> bearings = repository.getOne(wishListId).getBearings();
-//        for (final BearingEntity bearing : bearings) {
-//            if (bearing.getId().longValue() == bearingToRemoveId.longValue()) {
-//                return bearings.remove(bearing);
-//            }
-//        }
-//        return false;
-//    }
+    public Set<ItemEntity> getAllItems(final String userName) {
+        return getWishList(userName).getItems();
+    }
+
+    private WishListEntity getWishList(final String userName) {
+        return findByName(userName).getWishList();
+    }
+
+    public Boolean addItem(final String userName, final ItemDto itemDto) {
+        final WishListEntity wishList = getWishList(userName);
+        final ItemEntity item = itemService.create(itemDto);
+        wishList.getItems().add(item);
+        wishListService.update(wishList);
+        return true;
+    }
+
+    public Boolean removeItem(final String userName, final Long itemId) {
+        final WishListEntity wishList = getWishList(userName);
+        for (final ItemEntity item : wishList.getItems()) {
+            if (item.getId().longValue() == itemId) {
+                wishList.getItems().remove(item);
+                wishListService.update(wishList);
+                itemService.delete(itemId);
+                return true;
+            }
+        }
+        return false;
+    }
 
     private List<String> createOrUpdateWithCredentialsValidation(final Long id,
                                                                  final UserDto dto,

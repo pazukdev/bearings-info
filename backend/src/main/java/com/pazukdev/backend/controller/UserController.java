@@ -1,9 +1,9 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.item.ItemDto;
+import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +33,6 @@ public class UserController {
 
     private final UserService service;
     private final UserConverter userConverter;
-    private final ItemConverter itemConverter;
 
     @GetMapping("/admin/user/list")
     @ResponseStatus(HttpStatus.OK)
@@ -87,15 +86,22 @@ public class UserController {
     @PutMapping(value = "{userName}/add-item")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Add item to wish list")
-    public ItemDto addItem(@PathVariable final String userName, @RequestBody final ItemDto dto) {
-        return itemConverter.convertToDto(service.addItem(userName, dto));
+    public Boolean addItem(@PathVariable final String userName, @RequestBody final ItemDto dto) {
+        return service.addItem(userName, dto);
     }
-//
-//    @PutMapping(value = "/remove-item")
-//    @ResponseStatus(HttpStatus.OK)
-//    @ApiOperation(value = "Remove item from wish list")
-//    public Boolean removeItem(final Long wishListId, final Long bearingToRemoveId) {
-//        return service.removeItem(wishListId, bearingToRemoveId);
-//    }
+
+    @PutMapping(value = "{userName}/remove-item/{itemId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Remove item from wish list")
+    public Boolean removeItem(@PathVariable final String userName, @PathVariable final Long itemId) {
+        return service.removeItem(userName, itemId);
+    }
+
+    @GetMapping(value = "{userName}/wishlist")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get user wishlist")
+    public TableDto wishList(@PathVariable final String userName) {
+        return service.getItemTable(userName);
+    }
 
 }

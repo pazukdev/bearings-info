@@ -10,7 +10,8 @@ const state = {
     motorcycles: [],
     bearings: [],
     seals: [],
-    users: []
+    users: [],
+    wishList: ""
 };
 
 const actions = {
@@ -48,6 +49,10 @@ const actions = {
 
     setUsers: ({commit}, context) => {
         commit("setUsers", context)
+    },
+
+    setWishList: ({commit}, context) => {
+        commit("setWishList", context)
     }
 };
 
@@ -86,6 +91,10 @@ const mutations = {
 
     setUsers(state, users) {
         state.users = users;
+    },
+
+    setWishList(state, wishList) {
+        state.wishList = wishList;
     }
 };
 

@@ -3,11 +3,15 @@
         <table style="border-spacing: 0px; text-align: right" v-show="homeComponent === 'MotorcycleMenu'">
             <tbody>
             <tr>
+                <td style="text-align: left">
+                    {{"Wishlist: " + wishList.matrix.length + " items"}}
+                </td>
                 <td>
                     {{userName}}
                 </td>
             </tr>
             <tr v-if="admin">
+                <td></td>
                 <td>
                     {{"You are admin"}}
                 </td>
@@ -121,6 +125,7 @@
             this.refreshUsers();
             this.refreshBearings();
             this.refreshSeals();
+            this.refreshWishList(this.userName);
         },
 
         computed: {
@@ -130,6 +135,7 @@
                 homeComponent: state => state.dictionary.homeComponent,
                 userName: state => state.dictionary.userName,
                 admin: state => state.dictionary.admin,
+                wishList: state => state.dictionary.wishList
             })
         },
 
@@ -177,6 +183,7 @@
 
             reopenBearings() {
                 this.refreshBearings();
+                this.refreshWishList(this.userName);
                 this.openBearings();
             },
 
@@ -249,6 +256,19 @@
                     .then(response => {
                         this.$store.dispatch("setUsers", response.data)
                     });
+            },
+
+            refreshWishList(userName) {
+                axios
+                    .get("backend/" + userName + "/wishlist", {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => {
+                        this.$store.dispatch("setWishList", response.data)
+                    })
+
             },
 
             getEngine(ids) {

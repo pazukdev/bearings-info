@@ -13,6 +13,8 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ItemDto extends AbstractDto {
 
+    private String type;
+    private Integer quantity;
     private String description;
 
 }

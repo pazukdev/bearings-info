@@ -1,6 +1,36 @@
 <template>
     <div>
-        <p id="title" style="text-align: center;"><b>Bearings</b></p>
+        <table>
+            <tr v-if="!isAddToWishListFormOpened()">
+                <td style="width: 290px"></td>
+                <td style="text-align: right">
+                    <button type="button"
+                            v-on:click="openAddToWishListForm()"
+                            :disabled="!isAddToWishListButtonEnabled()">
+                        Add to wishlist
+                    </button>
+                </td>
+            </tr>
+            <tr v-if="isAddToWishListFormOpened()">
+                <td style="width: 290px; text-align: center"></td>
+                <td>
+                    <input style="width: 40px" v-model="quantity"/>
+                </td>
+                <td>
+                    <button type="button"
+                            class="default-width-2"
+                            v-on:click="addToWishList()"
+                            :disabled="!(quantity > 0)">
+                        Add
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <p id="title" style="text-align: center;"><b>Bearings</b></p>
+                </td>
+            </tr>
+        </table>
         <table id="productsTable" class="get-all-table">
             <thead>
             <tr>
@@ -64,7 +94,7 @@
                 </tbody>
             </table>
         </div>
-        <table class="creation-form" v-if="isFormVisible()">
+        <table class="creation-form" v-if="isFormVisible() && !isAddToWishListFormOpened()">
             <tbody>
             <tr style="text-align: center">
                 <td colspan="2">
@@ -142,7 +172,9 @@
                 selectAll: false,
                 isEdit: false,
                 isCreate: false,
-                bearing: ""
+                isAddToWishList: false,
+                bearing: "",
+                quantity: 1
             }
         },
 
@@ -166,13 +198,15 @@
         computed: {
             ...mapState({
                 authorization: state => state.dictionary.authorization,
-                bearings: state => state.dictionary.bearings
+                bearings: state => state.dictionary.bearings,
+                userName: state => state.dictionary.userName,
+                wishList: state => state.dictionary.wishList
             })
         },
 
         methods: {
             isFormVisible() {
-                return this.isEditFormOpened() || this.isCreateFormOpened();
+                return this.isEditFormOpened() || this.isCreateFormOpened() || this.isAddToWishListFormOpened();
             },
 
             openEditForm() {
@@ -185,10 +219,22 @@
                 this.isCreate = true;
             },
 
+            openAddToWishListForm() {
+                this.isAddToWishList = true;
+                this.id = this.selected[0];
+                this.getBearing(this.id);
+            },
+
             closeForm() {
                 this.isEdit = false;
                 this.isCreate = false;
+                this.isAddToWishList = false;
                 this.clearForm();
+            },
+
+            isAddToWishListFormOpened() {
+                return this.isAddToWishList && this.selected.length === 1;
+
             },
 
             isEditFormOpened() {
@@ -200,15 +246,19 @@
             },
 
             isEditButtonVisible() {
-                return this.selected.length === 1 && !this.isEditFormOpened();
+                return this.selected.length === 1 && !this.isEditFormOpened() && !this.isAddToWishListFormOpened();
             },
 
             isAddButtonVisible() {
-                return this.selected.length === 0 && !this.isCreateFormOpened();
+                return this.selected.length === 0 && !this.isCreateFormOpened() && !this.isEditFormOpened();
             },
 
             isDeleteButtonVisible() {
                 return this.selected.length > 0 && !this.isFormVisible();
+            },
+
+            isAddToWishListButtonEnabled() {
+                return this.selected.length === 1 && !this.isEditFormOpened() && !this.isCreateFormOpened();
             },
 
             getBearing(id) {
@@ -283,6 +333,26 @@
                 };
             },
 
+            addToWishList() {
+                let newItem = {
+                    type: "bearing",
+                    name: this.name,
+                    quantity: this.quantity
+                };
+
+                axios
+                    .put("/backend/" + this.userName + "/add-item", newItem, {
+                        headers: {
+                            Authorization: this.authorization
+                        },
+                    })
+                    .then(() => {
+                        this.emitReopen();
+                        this.clearForm();
+                        this.selected = [];
+                    })
+            },
+
             select() {
                 this.selected = [];
                 if (!this.selectAll) {
@@ -298,6 +368,7 @@
                 this.type = "";
                 this.rollingElement = "";
                 this.rollingElementsQuantity = "";
+                this.quantity = 1;
             },
 
             replaceEmptyWithDash(string) {
