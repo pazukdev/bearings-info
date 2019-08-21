@@ -4,7 +4,9 @@
             <tbody>
             <tr>
                 <td style="text-align: left">
-                    {{"Wishlist: " + wishList.matrix.length + " items"}}
+                    <button type="button" v-on:click="openWishList()">
+                        {{"Wishlist: " + wishList.count + " items"}}
+                    </button>
                 </td>
                 <td>
                     {{userName}}
@@ -31,6 +33,8 @@
         <Users v-show="homeComponent === 'Users'" @reopen-users="reopenUsers()"/>
 
         <Report v-show="homeComponent === 'Report'"/>
+
+        <WishList v-show="homeComponent === 'WishList'"/>
 
         <BearingList v-show="homeComponent === 'Bearings'" @reopen-bearings="reopenBearings()"/>
 
@@ -91,6 +95,7 @@
     import AddMotorcycle from "./AddMotorcycle";
     import Report from "./Report";
     import Users from "./Users";
+    import WishList from "./WishList";
 
     export default {
 
@@ -146,7 +151,8 @@
             ModelPartsList,
             AddMotorcycle,
             Report,
-            Users
+            Users,
+            WishList
         },
 
         methods: {
@@ -162,6 +168,15 @@
 
             addMotorcycle() {
                 this.switchComponent('AddMotorcycle');
+            },
+
+            openWishList() {
+                this.switchComponent("WishList");
+            },
+
+            reopenWishList() {
+                this.refreshWishList(this.userName);
+                this.openWishList();
             },
 
             openUsers() {
@@ -260,7 +275,7 @@
 
             refreshWishList(userName) {
                 axios
-                    .get("backend/" + userName + "/wishlist", {
+                    .get("backend/" + userName + "/categorized-wishlist", {
                         headers: {
                             Authorization: this.authorization
                         }

@@ -335,7 +335,7 @@
 
             addToWishList() {
                 let newItem = {
-                    type: "bearing",
+                    category: "bearing",
                     name: this.name,
                     quantity: this.quantity
                 };

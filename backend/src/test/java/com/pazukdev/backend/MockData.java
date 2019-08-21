@@ -9,6 +9,7 @@ import com.pazukdev.backend.dto.product.SealDto;
 import com.pazukdev.backend.dto.product.SparkPlugDto;
 import com.pazukdev.backend.dto.product.unit.EngineDto;
 import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
 import com.pazukdev.backend.entity.product.bearing.BearingEntity;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
@@ -18,8 +19,10 @@ import com.pazukdev.backend.entity.product.sparkplug.SparkPlugEntity;
 import com.pazukdev.backend.entity.product.unit.engine.EngineEntity;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.pazukdev.backend.util.CSVFileUtil.getFirstEntity;
@@ -225,6 +228,30 @@ public class MockData {
 //        dto.setBearingIds(new HashSet<>(Arrays.asList(1L, 2L)));
 //        return dto;
 //    }
+
+    public List<ItemEntity> itemsList() {
+        final ItemEntity item1 = new ItemEntity();
+        item1.setCategory("first category");
+        final ItemEntity item2 = new ItemEntity();
+        item2.setCategory("second category");
+        final ItemEntity item3 = new ItemEntity();
+        item3.setCategory("second category");
+        final ItemEntity item4 = new ItemEntity();
+        item4.setCategory("second category");
+        final ItemEntity item5 = new ItemEntity();
+        item5.setCategory("second category");
+        final ItemEntity item6 = new ItemEntity();
+        item6.setCategory("third category");
+        return new ArrayList<>(Arrays.asList(item1, item2, item3, item4, item5, item6));
+    }
+
+    public ItemEntity item(final String category, final String name, final Integer quantity) {
+        final ItemEntity item = new ItemEntity();
+        item.setCategory(category);
+        item.setName(name);
+        item.setQuantity(quantity);
+        return item;
+    }
 
 }
 

@@ -6,10 +6,12 @@ import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.WishListDto;
 import com.pazukdev.backend.dto.item.ItemDto;
 import com.pazukdev.backend.dto.table.TableDto;
+import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.WishListEntity;
 import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.repository.UserRepository;
+import com.pazukdev.backend.util.ItemUtil;
 import com.pazukdev.backend.validator.CredentialsValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -78,19 +80,36 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         return new HashSet<>(Arrays.asList(Role.USER.name(), Role.ADMIN.name()));
     }
 
-    public TableDto getItemTable(final String userName) {
-        final Set<ItemEntity> items = getAllItems(userName);
+    public TableViewDto createTableView(final String userName) {
+        return createTableView(getAllItems(userName));
+    }
+
+    public TableViewDto createTableView(final List<ItemEntity> items) {
+        final List<TableDto> tables = new ArrayList<>();
+        for (final List<ItemEntity> categorizedItems : ItemUtil.categorize(items)) {
+            tables.add(createTable(categorizedItems));
+        }
+        return new TableViewDto(items.size(), tables);
+    }
+
+    public TableDto createTable(final String userName) {
+        return createTable(getAllItems(userName));
+    }
+
+    public TableDto createTable(final List<ItemEntity> items) {
         final List<String[]> rows = new ArrayList<>();
         for (final ItemEntity item : items) {
-            final String[] row = {item.getType(), item.getName(), item.getQuantity().toString()};
+            final String[] row = {item.getCategory(), item.getName(), item.getQuantity().toString()};
             rows.add(row);
         }
         final String[][] rowArray = rows.toArray(new String[0][]);
         return new TableDto(rowArray);
     }
 
-    public Set<ItemEntity> getAllItems(final String userName) {
-        return getWishList(userName).getItems();
+    public List<ItemEntity> getAllItems(final String userName) {
+        final List<ItemEntity> items = new ArrayList<>(getWishList(userName).getItems());
+        ItemUtil.sort(items);
+        return items;
     }
 
     private WishListEntity getWishList(final String userName) {

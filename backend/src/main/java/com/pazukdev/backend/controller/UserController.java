@@ -4,6 +4,7 @@ import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.item.ItemDto;
 import com.pazukdev.backend.dto.table.TableDto;
+import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -100,8 +101,15 @@ public class UserController {
     @GetMapping(value = "{userName}/wishlist")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get user wishlist")
-    public TableDto wishList(@PathVariable final String userName) {
-        return service.getItemTable(userName);
+    public TableDto getWishList(@PathVariable final String userName) {
+        return service.createTable(userName);
+    }
+
+    @GetMapping(value = "{userName}/categorized-wishlist")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get user wishlist sorted by item categories")
+    public TableViewDto getCategorizedWishList(@PathVariable final String userName) {
+        return service.createTableView(userName);
     }
 
 }
