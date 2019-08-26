@@ -30,6 +30,7 @@
                     </tbody>
                 </table>
             </div>
+            {{homeComponent}}
             <router-view style="padding: 20px"></router-view>
         </div>
     </div>
@@ -44,7 +45,8 @@
         computed: {
             ...mapState({
                 authorization: state => state.dictionary.authorization,
-                homeComponent: state => state.dictionary.homeComponent
+                homeComponent: state => state.dictionary.homeComponent,
+                incorrectCredentials: state => state.dictionary.incorrectCredentials
             })
         },
 
@@ -52,6 +54,7 @@
             logout() {
                 this.removeToken();
                 this.reload();
+                this.$store.dispatch("clearHistory");
             },
 
             removeToken() {
@@ -72,7 +75,7 @@
             },
 
             isBackButtonDisplayed() {
-                return this.isBackAllowedUrl() || this.homeComponent !== "MotorcycleMenu";
+                return this.homeComponent.length > 1;
             },
 
             isBackAllowedUrl() {
@@ -81,7 +84,7 @@
             },
 
             back() {
-                this.$store.dispatch("setHomeComponent", "MotorcycleMenu");
+                this.$store.dispatch("removeLastComponent");
             }
         }
     }

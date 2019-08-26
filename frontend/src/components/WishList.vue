@@ -4,13 +4,7 @@
             <tr>
                 <td style="width: 120px"></td>
                 <td></td>
-                <td style="text-align: right; width: 80px">
-                    <button type="button"
-                            v-on:click="openAddToWishListForm()"
-                            :disabled="selected.length === 0">
-                        Remove
-                    </button>
-                </td>
+                <td style="text-align: right; width: 80px"></td>
             </tr>
             <tr>
                 <td colspan="3">
@@ -31,7 +25,7 @@
                         <tbody>
                         <tr>
                             <td style="width: 120px">
-                                <b>{{table.matrix[0][0]}}</b>
+                                <b>{{table.name}}</b>
                             </td>
                             <td></td>
                             <td style="width: 80px"></td>
@@ -41,7 +35,11 @@
                                 {{row[0]}}
                             </td>
                             <td>
-                                {{row[1]}}
+                                <button type="button"
+                                        style="width: 60%"
+                                        @click="$emit('select-item', row[3])">
+                                    {{row[1]}}
+                                </button>
                             </td>
                             <td>
                                 {{row[2]}}

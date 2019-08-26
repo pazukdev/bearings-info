@@ -97,13 +97,18 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     }
 
     public TableDto createTable(final List<ItemEntity> items) {
+        final String tableName = items.get(0).getCategory();
         final List<String[]> rows = new ArrayList<>();
         for (final ItemEntity item : items) {
-            final String[] row = {item.getCategory(), item.getName(), item.getQuantity().toString()};
+            final String[] row = {
+                    item.getCategory(),
+                    item.getName(),
+                    item.getQuantity().toString(),
+                    item.getId().toString()};
             rows.add(row);
         }
         final String[][] rowArray = rows.toArray(new String[0][]);
-        return new TableDto(rowArray);
+        return new TableDto(tableName, rowArray);
     }
 
     public List<ItemEntity> getAllItems(final String userName) {

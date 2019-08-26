@@ -26,8 +26,11 @@
                 </tr>
                 </tbody>
             </table>
-            <table style="text-align: left">
+            <table>
                 <tbody>
+                <tr>
+                    <td colspan="2" style="text-align: center">{{table.name}}</td>
+                </tr>
                 <tr style="text-align: left" v-for="row in table.matrix">
                     <td>
                         {{row[0]}}

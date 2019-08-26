@@ -1,6 +1,6 @@
 <template>
     <div id="app_area">
-        <table style="border-spacing: 0px; text-align: right" v-show="homeComponent === 'MotorcycleMenu'">
+        <table style="border-spacing: 0px; text-align: right" v-show="isLastComponent('MotorcycleMenu')">
             <tbody>
             <tr>
                 <td style="text-align: left">
@@ -22,25 +22,27 @@
         </table>
 
         <MotorcycleMenu
-                v-show="homeComponent === 'MotorcycleMenu'"
+                v-show="isLastComponent('MotorcycleMenu')"
                 @select-motorcycle="selectMotorcycle"
                 @add-motorcycle="addMotorcycle"/>
 
-        <ModelPartsList v-show="homeComponent === 'ModelPartsList'" :motorcycle="motorcycle" :engine="engine"/>
+        <ModelPartsList v-show="isLastComponent('ModelPartsList')" :motorcycle="motorcycle" :engine="engine"/>
 
-        <AddMotorcycle v-show="homeComponent === 'AddMotorcycle'" @refresh-motorcycles="refresh()"/>
+        <AddMotorcycle v-show="isLastComponent('AddMotorcycle')" @refresh-motorcycles="refresh()"/>
 
-        <Users v-show="homeComponent === 'Users'" @reopen-users="reopenUsers()"/>
+        <Users v-show="isLastComponent('Users')" @reopen-users="reopenUsers()"/>
 
-        <Report v-show="homeComponent === 'Report'"/>
+        <Report v-show="isLastComponent('Report')"/>
 
-        <WishList v-show="homeComponent === 'WishList'"/>
+        <WishList v-show="isLastComponent('WishList')" @select-item="selectItem"/>
 
-        <BearingList v-show="homeComponent === 'Bearings'" @reopen-bearings="reopenBearings()"/>
+        <Item v-show="isLastComponent('Item')"/>
 
-        <SealList v-show="homeComponent === 'Seals'" @reopen-seals="reopenSeals()"/>
+        <BearingList v-show="isLastComponent('Bearings')" @reopen-bearings="reopenBearings()"/>
 
-        <table class="centred-table" v-show="homeComponent === 'MotorcycleMenu'">
+        <SealList v-show="isLastComponent('Seals')" @reopen-seals="reopenSeals()"/>
+
+        <table class="centred-table" v-show="isLastComponent('MotorcycleMenu')">
             <tbody>
             <tr>
                 <td colspan="1">
@@ -78,7 +80,7 @@
             </tbody>
         </table>
 
-        <div v-show="homeComponent === 'MotorcycleMenu'"
+        <div v-show="isLastComponent('MotorcycleMenu')"
              style="width: 100%; text-align: center; margin-top: 60px; margin-bottom: 20px">
             Minsk 2019
         </div>
@@ -96,6 +98,7 @@
     import Report from "./Report";
     import Users from "./Users";
     import WishList from "./WishList";
+    import Item from "./Item";
 
     export default {
 
@@ -140,7 +143,8 @@
                 homeComponent: state => state.dictionary.homeComponent,
                 userName: state => state.dictionary.userName,
                 admin: state => state.dictionary.admin,
-                wishList: state => state.dictionary.wishList
+                wishList: state => state.dictionary.wishList,
+                table: state => state.dictionary.table
             })
         },
 
@@ -152,10 +156,15 @@
             AddMotorcycle,
             Report,
             Users,
-            WishList
+            WishList,
+            Item
         },
 
         methods: {
+            isLastComponent(component) {
+                return this.homeComponent[this.homeComponent.length - 1] === component;
+            },
+
             switchComponent(component) {
                 this.$store.dispatch("setHomeComponent", component);
             },
@@ -164,6 +173,11 @@
                 this.motorcycle = motorcycle;
                 this.engine = this.getEngine([motorcycle.engineId]);
                 this.switchComponent('ModelPartsList');
+            },
+
+            selectItem(id) {
+                this.setItem(id);
+                this.switchComponent("Item");
             },
 
             addMotorcycle() {
@@ -222,6 +236,7 @@
 
             showMotorcycleMenu() {
                 this.getMotorcycles();
+                this.$store.dispatch("clearHistory");
                 this.switchComponent('MotorcycleMenu');
             },
 
@@ -295,6 +310,16 @@
                     })
                     .then(response => this.engine = response.data[0]);
 
+            },
+
+            setItem(id) {
+                axios
+                    .get("backend/item/" + id, {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => this.$store.dispatch("setTable", response.data));
             },
 
             redirectToLogin() {

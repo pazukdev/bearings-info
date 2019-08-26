@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class TableDto {
 
+    private final String name;
     private final String[][] matrix;
 
 }

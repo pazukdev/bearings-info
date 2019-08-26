@@ -6,17 +6,18 @@ const state = {
     userName: "",
     authorization: "",
     incorrectCredentials: false,
-    homeComponent: "",
+    homeComponent: [],
     motorcycles: [],
     bearings: [],
     seals: [],
     users: [],
-    wishList: ""
+    wishList: "",
+    table: ""
 };
 
 const actions = {
     setAuthorization: ({commit}, context) => {
-        commit("setAuthorization", context)
+        commit("setAuthorization", context);
     },
 
     setIncorrectCredentials: ({commit}, context) => {
@@ -24,35 +25,47 @@ const actions = {
     },
 
     setUserName: ({commit}, context) => {
-        commit("setUserName", context)
+        commit("setUserName", context);
     },
 
     setAdmin: ({commit}, context) => {
-        commit("setAdmin", context)
+        commit("setAdmin", context);
     },
 
     setHomeComponent: ({commit}, context) => {
-        commit("setHomeComponent", context)
+        commit("setHomeComponent", context);
+    },
+
+    removeLastComponent: ({commit}, context) => {
+        commit("removeLastComponent", context);
+    },
+
+    clearHistory: ({commit}, context) => {
+        commit("clearHistory", context);
     },
 
     setMotorcycles: ({commit}, context) => {
-        commit("setMotorcycles", context)
+        commit("setMotorcycles", context);
     },
 
     setBearings: ({commit}, context) => {
-        commit("setBearings", context)
+        commit("setBearings", context);
     },
 
     setSeals: ({commit}, context) => {
-        commit("setSeals", context)
+        commit("setSeals", context);
     },
 
     setUsers: ({commit}, context) => {
-        commit("setUsers", context)
+        commit("setUsers", context);
     },
 
     setWishList: ({commit}, context) => {
-        commit("setWishList", context)
+        commit("setWishList", context);
+    },
+
+    setTable: ({commit}, context) => {
+        commit("setTable", context);
     }
 };
 
@@ -74,7 +87,15 @@ const mutations = {
     },
 
     setHomeComponent(state, homeComponent) {
-        state.homeComponent = homeComponent;
+        state.homeComponent.push(homeComponent);
+    },
+
+    removeLastComponent(state) {
+        state.homeComponent.splice(state.homeComponent.length - 1, 1);
+    },
+
+    clearHistory(state) {
+        state.homeComponent = [];
     },
 
     setMotorcycles(state, motorcycles) {
@@ -95,6 +116,10 @@ const mutations = {
 
     setWishList(state, wishList) {
         state.wishList = wishList;
+    },
+
+    setTable(state, table) {
+        state.table = table;
     }
 };
 

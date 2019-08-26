@@ -44,7 +44,7 @@ public class MotorcycleService extends AbstractService<MotorcycleEntity, Motorcy
         final SpeedReport report = ReportFactory.createSpeedReport(getOne(motorcycleId));
         final String maxSpeed = report.getMaxSpeedKmh().toString();
         final String[][] matrix = {{"Max speed, km/h",  maxSpeed}};
-        return new TableDto(matrix);
+        return new TableDto("Speed report", matrix);
     }
 
     @Transactional
@@ -52,7 +52,7 @@ public class MotorcycleService extends AbstractService<MotorcycleEntity, Motorcy
         final FuelReport report = ReportFactory.createFuelReport(getOne(motorcycleId));
         final String operationalRange = report.getOperationalRangeKm().toString();
         final String[][] matrix = {{"Operational range, km",  operationalRange}};
-        return new TableDto(matrix);
+        return new TableDto("Fuel report", matrix);
     }
 
 }
