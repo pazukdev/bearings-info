@@ -2,6 +2,7 @@ package com.pazukdev.backend.dataloader;
 
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.entity.AbstractEntityFactory;
+import com.pazukdev.backend.entity.item.ItemFactory;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingFactory;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleFactory;
@@ -11,6 +12,7 @@ import com.pazukdev.backend.entity.product.sparkplug.SparkPlugFactory;
 import com.pazukdev.backend.entity.product.unit.engine.EngineFactory;
 import com.pazukdev.backend.repository.BearingRepository;
 import com.pazukdev.backend.repository.EngineRepository;
+import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.repository.ManufacturerRepository;
 import com.pazukdev.backend.repository.MotorcycleRepository;
 import com.pazukdev.backend.repository.OilRepository;
@@ -33,6 +35,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DataLoader implements ApplicationRunner {
 
+    private final ItemRepository itemRepository;
     private final ManufacturerRepository manufacturerRepository;
     private final MotorcycleRepository motorcycleRepository;
     private final BearingRepository bearingRepository;
@@ -41,6 +44,7 @@ public class DataLoader implements ApplicationRunner {
     private final SparkPlugRepository sparkPlugRepository;
     private final EngineRepository engineRepository;
 
+    private final ItemFactory itemFactory;
     private final ManufacturerFactory manufacturerFactory;
     private final MotorcycleFactory motorcycleFactory;
     private final BearingFactory bearingFactory;
@@ -58,6 +62,9 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void populateEmptyTables() {
+        if (repositoryIsEmpty(itemRepository)) {
+            createAll(itemFactory, itemRepository);
+        }
         loadManufacturers(repositoryIsEmpty(manufacturerRepository));
         loadOils(repositoryIsEmpty(oilRepository));
         loadSparkPlugs(repositoryIsEmpty(sparkPlugRepository));

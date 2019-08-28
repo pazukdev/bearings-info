@@ -21,4 +21,14 @@ public class ItemUtilTest {
         Assert.assertTrue(categories.size() == 3);
     }
 
+    @Test
+    public void getValueFromDescription() {
+        Assert.assertEquals("{name=Bob, weight=200}", ItemUtil.toMap(description()).toString());
+        Assert.assertEquals("Bob", ItemUtil.getValueFromDescription(description(), "name"));
+    }
+
+    private String description() {
+        return "name:Bob;weight:200;";
+    }
+
 }

@@ -3,9 +3,12 @@ package com.pazukdev.backend.util;
 import com.pazukdev.backend.entity.item.ItemEntity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,6 +40,19 @@ public class ItemUtil {
 
         }
         return categorizedItems;
+    }
+
+    public static String getValueFromDescription(final String description, final String key) {
+        return toMap(description).get(key);
+    }
+
+    public static Map<String, String> toMap(final String description) {
+        final List<String> descriptionList = Arrays.asList(description.split(";"));
+        final Map<String, String> map = new HashMap<>();
+        for (final String element : descriptionList) {
+            map.put(element.split(":")[0], element.split(":")[1]);
+        }
+        return map;
     }
 
 }

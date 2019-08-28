@@ -30,7 +30,6 @@
                     </tbody>
                 </table>
             </div>
-            {{homeComponent}}
             <router-view style="padding: 20px"></router-view>
         </div>
     </div>

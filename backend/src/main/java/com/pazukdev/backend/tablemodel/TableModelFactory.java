@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,15 +34,94 @@ public class TableModelFactory {
         return new TableModelImpl(tableRows);
     }
 
-    private List<TableRow> getTableRows(final List<String[]> fileLines) {
-        final List<TableRow> rows = new ArrayList<>();
-        final String[] header = getHeader(fileLines);
-        final List<String[]> body = getBody(fileLines);
+    private boolean isItemSourceFile(final List<List<String>> fileLines) {
+        for (List<String> line : fileLines) {
+            if (line.contains("category:")) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-        for (final String[] line : body) {
+    private List<TableRow> getTableRows(final List<List<String>> fileLines) {
+        if (isItemSourceFile(fileLines)) {
+            final List<TableRow> rows = new ArrayList<>();
+            for (final List<List<String>> list : categorize(fileLines)) {
+                rows.addAll(getRows(list));
+            }
+            return rows;
+        } else {
+            return getRows(fileLines);
+        }
+
+    }
+
+    public List<List<List<String>>> categorize(List<List<String>> fileLines) {
+        fileLines = removeEmptyLines(removeEmptyElements(fileLines));
+        final List<List<List<String>>> listOfCategorizedFileLines = new ArrayList<>();
+        List<List<String>> fileLinesSubList = null;
+        String category = null;
+        boolean header = false;
+        for (List<String> line : fileLines) {
+            if (line.isEmpty()) {
+                continue;
+            }
+            if (line.contains("category:")) {
+                addToListOfCategorizedFileLines(listOfCategorizedFileLines, fileLinesSubList);
+                fileLinesSubList = new ArrayList<>();
+                category = line.get(1);
+                header = true;
+                continue;
+            }
+            if (header) {
+                line.add("category");
+                header = false;
+            } else {
+                line.add(category);
+            }
+            if (fileLinesSubList != null) {
+                fileLinesSubList.add(line);
+            }
+        }
+        addToListOfCategorizedFileLines(listOfCategorizedFileLines, fileLinesSubList);
+        return listOfCategorizedFileLines;
+    }
+
+    private void addToListOfCategorizedFileLines(final List<List<List<String>>> listOfCategorizedFileLines,
+                                                 final List<List<String>> listToAdd) {
+        if (listToAdd == null || listToAdd.size() == 0) {
+            return;
+        }
+        listOfCategorizedFileLines.add(listToAdd);
+    }
+
+    public List<List<String>> removeEmptyLines(final List<List<String>> fileLines) {
+        final List<List<String>> filteredLines = new ArrayList<>();
+        for (List<String> line : fileLines) {
+            if (line.contains("") && Collections.frequency(line, line.get(0)) == line.size()) {
+                continue;
+            }
+            filteredLines.add(line);
+        }
+        return filteredLines;
+    }
+
+    public List<List<String>> removeEmptyElements(final List<List<String>> fileLines) {
+        for (List<String> line : fileLines) {
+            line.removeIf(""::equals);
+        }
+        return fileLines;
+    }
+
+    private List<TableRow> getRows(final List<List<String>> fileLines) {
+        final List<TableRow> rows = new ArrayList<>();
+        final List<String> header = getHeader(fileLines);
+        final List<List<String>> body = getBody(fileLines);
+
+        for (final List<String> line : body) {
             final TableRow row = TableRow.create();
-            for (int i = 0; i < line.length; i++) {
-                row.put(header[i], line[i]);
+            for (int i = 0; i < line.size(); i++) {
+                row.put(header.get(i), line.get(i));
             }
             rows.add(row);
         }
@@ -49,11 +129,11 @@ public class TableModelFactory {
         return rows;
     }
 
-    private String[] getHeader(final List<String[]> fileLines) {
+    private List<String> getHeader(final List<List<String>> fileLines) {
         return fileLines.get(0);
     }
 
-    private List<String[]> getBody(final List<String[]> fileLines) {
+    private List<List<String>> getBody(final List<List<String>> fileLines) {
         return fileLines.subList(1, fileLines.size());
     }
 

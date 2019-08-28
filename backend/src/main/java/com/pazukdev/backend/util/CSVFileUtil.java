@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,14 +46,14 @@ public class CSVFileUtil {
         return dataFilePathInResources(fileName);
     }
 
-    public static List<String[]> readInputStreamFromCSVFile(final InputStream in) {
+    public static List<List<String>> readInputStreamFromCSVFile(final InputStream in) {
         List<String[]> lines = null;
         try (final CSVReader reader = new CSVReader(new InputStreamReader(in))) {
             lines = reader.readAll();
         } catch (IOException e) {
             LOGGER.error("Error collecting data from input stream", e);
         }
-        return format(lines);
+        return listOfArraysToListOfLists(format(lines));
     }
 
     public static <E extends AbstractEntity> E findByName(final String name,
@@ -69,6 +71,14 @@ public class CSVFileUtil {
 
     private static String dataFilePathInResources(final String fileName) {
         return PACKAGE + fileName + "." + FILE_FORMAT;
+    }
+
+    private static List<List<String>> listOfArraysToListOfLists(final List<String[]> arrays) {
+        final List<List<String>> lists = new ArrayList<>();
+        for (final String[] array : arrays) {
+            lists.add(new ArrayList<>(Arrays.asList(array)));
+        }
+        return lists;
     }
 
 }
