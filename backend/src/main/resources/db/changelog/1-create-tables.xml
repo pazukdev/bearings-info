@@ -14,6 +14,7 @@
             <column name="category" type="varchar(255)"/>
             <column name="quantity" type="int"/>
             <column name="description" type="varchar(255)"/>
+            <column name="replacer" type="varchar(255)"/>
         </createTable>
     </changeSet>
 
@@ -193,6 +194,17 @@
             </column>
             <column name="item_id" type="bigint">
                 <constraints foreignKeyName="fk_wishlist_item_item_id" references="item (id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_item_item_table" author="sviarkaltsau">
+        <createTable tableName="item_item">
+            <column name="parent_item_id" type="bigint">
+                <constraints foreignKeyName="fk_item_item_parent_item_id" references="item (id)"/>
+            </column>
+            <column name="child_item_id" type="bigint">
+                <constraints foreignKeyName="fk_item_item_child_item_id" references="item (id)"/>
             </column>
         </createTable>
     </changeSet>

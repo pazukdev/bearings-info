@@ -36,6 +36,7 @@
 </template>
 
 <script>
+    import axios from 'axios';
     import {mapState} from 'vuex';
 
     export default {
@@ -45,7 +46,8 @@
             ...mapState({
                 authorization: state => state.dictionary.authorization,
                 homeComponent: state => state.dictionary.homeComponent,
-                incorrectCredentials: state => state.dictionary.incorrectCredentials
+                incorrectCredentials: state => state.dictionary.incorrectCredentials,
+                userName: state => state.dictionary.userName,
             })
         },
 
@@ -84,7 +86,23 @@
 
             back() {
                 this.$store.dispatch("removeLastComponent");
-            }
+                if (this.homeComponent.length === 1) {
+                    this.refreshWishList(this.userName);
+                }
+            },
+
+            refreshWishList(userName) {
+                axios
+                    .get("backend/" + userName + "/categorized-wishlist", {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => {
+                        this.$store.dispatch("setWishList", response.data)
+                    })
+
+            },
         }
     }
 </script>

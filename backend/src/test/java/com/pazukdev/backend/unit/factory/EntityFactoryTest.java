@@ -46,7 +46,7 @@ public class EntityFactoryTest {
 
     private final ServiceContext serviceContext = null;
 
-    private ItemFactory itemFactory = new ItemFactory();
+    private ItemFactory itemFactory = new ItemFactory(null);
     @Spy
     private ManufacturerFactory manufacturerFactory = new ManufacturerFactory();
     @Spy
@@ -105,7 +105,7 @@ public class EntityFactoryTest {
 
     @Test
     public void itemFactoryTest() {
-        final ItemEntity item = getFirstEntity(new ItemFactory());
+        final ItemEntity item = getFirstEntity(new ItemFactory(null));
         System.out.println(item);
     }
 

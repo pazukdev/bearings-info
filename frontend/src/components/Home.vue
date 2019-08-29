@@ -170,9 +170,11 @@
             },
 
             selectMotorcycle(motorcycle) {
-                this.motorcycle = motorcycle;
-                this.engine = this.getEngine([motorcycle.engineId]);
-                this.switchComponent('ModelPartsList');
+                this.refreshItems(motorcycle.name);
+                this.openWishList()
+                // this.motorcycle = motorcycle;
+                // this.engine = this.getEngine([motorcycle.engineId]);
+                // this.switchComponent('ModelPartsList');
             },
 
             selectItem(id) {
@@ -291,6 +293,19 @@
             refreshWishList(userName) {
                 axios
                     .get("backend/" + userName + "/categorized-wishlist", {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => {
+                        this.$store.dispatch("setWishList", response.data)
+                    })
+
+            },
+
+            refreshItems(motorcycleName) {
+                axios
+                    .get("backend/motorcycle/" + motorcycleName + "/items", {
                         headers: {
                             Authorization: this.authorization
                         }

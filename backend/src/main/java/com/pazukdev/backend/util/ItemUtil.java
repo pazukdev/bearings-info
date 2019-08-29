@@ -47,7 +47,7 @@ public class ItemUtil {
     }
 
     public static Map<String, String> toMap(final String description) {
-        final List<String> descriptionList = Arrays.asList(description.split(";"));
+        final List<String> descriptionList = Arrays.asList(description.split(";;"));
         final Map<String, String> map = new HashMap<>();
         for (final String element : descriptionList) {
             map.put(element.split(":")[0], element.split(":")[1]);
@@ -56,3 +56,21 @@ public class ItemUtil {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,9 +1,9 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.converter.MotorcycleConverter;
 import com.pazukdev.backend.dto.product.MotorcycleDto;
 import com.pazukdev.backend.dto.table.TableDto;
+import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.MotorcycleService;
 import io.swagger.annotations.Api;
@@ -34,7 +34,6 @@ public class MotorcycleController {
 
     private final MotorcycleService service;
     private final MotorcycleConverter motorcycleConverter;
-    private final ItemConverter itemConverter;
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
@@ -76,6 +75,13 @@ public class MotorcycleController {
     @ApiOperation(value = "Delete motorcycle")
     public MotorcycleDto delete(@PathVariable("id") final Long id) throws ProductNotFoundException {
         return motorcycleConverter.convertToDto(service.delete(id));
+    }
+
+    @GetMapping(value = "{motorcycleName}/items")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get motorcycle items")
+    public TableViewDto getCategorizedWishList(@PathVariable final String motorcycleName) {
+        return service.createTableView(motorcycleName);
     }
 
 }

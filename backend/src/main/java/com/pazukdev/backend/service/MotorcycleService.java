@@ -6,12 +6,16 @@ import com.pazukdev.backend.dto.report.FuelReport;
 import com.pazukdev.backend.dto.report.ReportFactory;
 import com.pazukdev.backend.dto.report.SpeedReport;
 import com.pazukdev.backend.dto.table.TableDto;
+import com.pazukdev.backend.dto.table.TableViewDto;
+import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.repository.MotorcycleRepository;
+import com.pazukdev.backend.util.ItemUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -21,8 +25,13 @@ import java.util.List;
 @Service
 public class MotorcycleService extends AbstractService<MotorcycleEntity, MotorcycleDto> {
 
-    public MotorcycleService(final MotorcycleRepository repository, final MotorcycleConverter converter) {
+    private final ItemService itemService;
+
+    public MotorcycleService(final MotorcycleRepository repository,
+                             final MotorcycleConverter converter,
+                             final ItemService itemService) {
         super(repository, converter);
+        this.itemService = itemService;
     }
 
     @Transactional
@@ -55,4 +64,48 @@ public class MotorcycleService extends AbstractService<MotorcycleEntity, Motorcy
         return new TableDto("Fuel report", matrix);
     }
 
+    public TableViewDto createTableView(final String userName) {
+        return createTableView(getItems(userName));
+    }
+
+    public TableViewDto createTableView(final List<ItemEntity> items) {
+        final List<TableDto> tables = new ArrayList<>();
+        for (final List<ItemEntity> categorizedItems : ItemUtil.categorize(items)) {
+            tables.add(createTable(categorizedItems));
+        }
+        return new TableViewDto(items.size(), tables);
+    }
+
+    public TableDto createTable(final String motorcycleName) {
+        return createTable(getItems(motorcycleName));
+    }
+
+    public TableDto createTable(final List<ItemEntity> items) {
+        final String tableName = items.get(0).getCategory();
+        final List<String[]> rows = new ArrayList<>();
+        for (final ItemEntity item : items) {
+            final String[] row = {
+                    item.getCategory(),
+                    item.getName(),
+                    item.getQuantity() != null ? item.getQuantity().toString() : "0",
+                    item.getId().toString()};
+            rows.add(row);
+        }
+        final String[][] rowArray = rows.toArray(new String[0][]);
+        return new TableDto(tableName, rowArray);
+    }
+
+    public List<ItemEntity> getItems(final String motorcycleName) {
+        final ItemEntity item = itemService.findByName(motorcycleName);
+        return new ArrayList<>(item.getItems());
+    }
+
 }
+
+
+
+
+
+
+
+
