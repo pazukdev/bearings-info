@@ -22,6 +22,6 @@ public class ItemDto extends AbstractDto {
     private String replacer;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<Long> itemIds = new HashSet<>();
+    private Set<Long> itemQuantityIds = new HashSet<>();
 
 }

@@ -1,6 +1,7 @@
 package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.entity.item.ItemEntity;
+import com.pazukdev.backend.entity.item.ItemQuantity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,11 +33,32 @@ public class ItemUtil {
         return categories;
     }
 
+    public static Set<String> getItemQuantityCategories(final List<ItemQuantity> items) {
+        final Set<String> categories = new HashSet<>();
+        for (final ItemQuantity item : items) {
+            if (item.getItem().getCategory() == null) {
+                item.getItem().setCategory("-");
+            }
+            categories.add(item.getItem().getCategory());
+        }
+        return categories;
+    }
+
     public static List<List<ItemEntity>> categorize(final List<ItemEntity> items) {
         final List<List<ItemEntity>> categorizedItems = new ArrayList<>();
         for (final String category : getCategories(items)) {
             categorizedItems.add(items.stream()
                     .filter(item -> item.getCategory().equals(category)).collect(Collectors.toList()));
+
+        }
+        return categorizedItems;
+    }
+
+    public static List<List<ItemQuantity>> categorizeItemQuantities(final List<ItemQuantity> items) {
+        final List<List<ItemQuantity>> categorizedItems = new ArrayList<>();
+        for (final String category : getItemQuantityCategories(items)) {
+            categorizedItems.add(items.stream()
+                    .filter(item -> item.getItem().getCategory().equals(category)).collect(Collectors.toList()));
 
         }
         return categorizedItems;

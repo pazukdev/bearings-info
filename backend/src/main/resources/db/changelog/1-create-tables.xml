@@ -198,13 +198,24 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create_item_item_table" author="sviarkaltsau">
-        <createTable tableName="item_item">
+    <changeSet id="create_item_quantity_table" author="sviarkaltsau">
+        <createTable tableName="item_quantity">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="item_id" type="bigint"/>
+            <column name="quantity" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_item_item_quantity_table" author="sviarkaltsau">
+        <createTable tableName="item_item_quantity">
             <column name="parent_item_id" type="bigint">
                 <constraints foreignKeyName="fk_item_item_parent_item_id" references="item (id)"/>
             </column>
-            <column name="child_item_id" type="bigint">
-                <constraints foreignKeyName="fk_item_item_child_item_id" references="item (id)"/>
+            <column name="child_item_quantity_id" type="bigint">
+                <constraints foreignKeyName="fk_item_item_child_item_quantity_id" references="item_quantity (id)"/>
             </column>
         </createTable>
     </changeSet>

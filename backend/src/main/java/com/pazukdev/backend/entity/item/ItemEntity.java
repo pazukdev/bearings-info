@@ -32,10 +32,10 @@ public class ItemEntity extends AbstractEntity {
     @EqualsAndHashCode.Exclude
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "item_item",
+            name = "item_item_quantity",
             joinColumns = @JoinColumn(name = "parent_item_id"),
-            inverseJoinColumns = @JoinColumn(name = "child_item_id")
+            inverseJoinColumns = @JoinColumn(name = "child_item_quantity_id")
     )
-    private Set<ItemEntity> items = new HashSet<>();
+    private Set<ItemQuantity> itemQuantities = new HashSet<>();
 
 }

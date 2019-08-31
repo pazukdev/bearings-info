@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 public class TableViewDto {
 
+    private String name;
     private final Integer count;
     private final List<TableDto> tables;
 

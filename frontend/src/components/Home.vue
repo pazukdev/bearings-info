@@ -36,7 +36,7 @@
 
         <WishList v-show="isLastComponent('WishList')" @select-item="selectItem"/>
 
-        <Item v-show="isLastComponent('Item')"/>
+        <Item v-show="isLastComponent('Item')" @select-item="selectItem"/>
 
         <BearingList v-show="isLastComponent('Bearings')" @reopen-bearings="reopenBearings()"/>
 
@@ -334,7 +334,7 @@
                             Authorization: this.authorization
                         }
                     })
-                    .then(response => this.$store.dispatch("setTable", response.data));
+                    .then(response => this.$store.dispatch("addItemView", response.data));
             },
 
             redirectToLogin() {

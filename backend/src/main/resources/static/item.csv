@@ -1,5 +1,5 @@
-,,,,
-category: ,bearing,,,,,,,,
+,,,,,,,,,
+category:,bearing,,,,,,,,
 name,type,rolling_element (pcs),enclosure,rolling_row,cage,size,weight_g,,replacer
 209,deepgroove,ball (9),open,single_row,sheet_metal,45x85x19,-,,6209
 207,deepgroove,ball (9),open,single_row,sheet_metal,35x72x17,-,,6207
@@ -16,9 +16,9 @@ category:,seal,,,,,,,,
 name,size,rotation,material,,,,,,replacer
 7201191,50x70x9,left,rubber,,,,,,Corteco_12011238b
 7201122,15x30x7,left,rubber,,,,,,Corteco_12011109b
-7204152,31.4x45.1x8,right,rubber,,,,,,"Payen_NJ416;123"
-Payen_NJ416,31.4x45.1x8,right,rubber,,,,,,"7204152;123"
-123,31.4x45.1x8,right,rubber,,,,,,"Payen_NJ416;7204152"
+7204152,31.4x45.1x8,right,rubber,,,,,,"Payen_NJ416; 123"
+Payen_NJ416,31.4x45.1x8,right,rubber,,,,,,"7204152; 123"
+123,31.4x45.1x8,right,rubber,,,,,,"Payen_NJ416; 7204152"
 ,,,,,,,,,
 category:,oil,,,,,,,,
 name,viscosity,base,seasonality,,,,,,
@@ -34,22 +34,28 @@ A8U,10,,,,,,,,
 A11,11,,,,,,,,
 A14,14,,,,,,,,
 A17,17,,,,,,,,
-,,,,
+,,,,,,,,,
 category:,gearbox,,,,,,,,
-name,manufacturer,bearing,seal,,,
-MT804,kmz,209;205,7201191;7201122,,
-6204,kmz,209;205,7201191;7201122,,
-8.101-04001,imz,207;205,7204152;Payen_NJ416,,
-,,,,
-,,,,
+name,manufacturer,bearing,seal,,,,,,
+7204,kmz,209; 205,7201191; 7201122,,,,,,
+6204,kmz,207; 205,7204152; Payen_NJ416,,,,,,
+MT804,kmz,209; 205,7201191; 7201122,,,,,,
+8.101-04001,imz,207; 205,7204152; Payen_NJ416,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
 category:,engine,,,,,,,,
-name,manufacturer,power_hp,torque_nm,speed_rpm,spark_plug,bearing,seal,,,
-MT-8,kmz,32,40,5900,A11,209;205,7201191;7201122,,
-M67-36,imz,36,34,6100,A11,207;205,7204152;Payen_NJ416,,
-,,,,
+name,manufacturer,power_hp,torque_nm,speed_rpm,spark_plug,bearing,seal,,
+MT-8,kmz,32,40,5900,A11,209 (2); 205,7201191; 7201122,,
+M67-36,imz,36,34,6100,A14,207 (3); 205,7204152; Payen_NJ416,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
 category:,motorcycle,,,,,,,,
-name,manufacturer,production,weight_kg,engine,gearbox,fuel_capacity_l,,,,
-M-72,imz,1941-1957,300,M67-36,6204,19,,,,
-K-750,kmz,1958-1964,350,M67-36,6204,19,,,,
-Ural,imz,1957-1993,350,M67-36,8.101-04001,20,,,,
-Dnepr,kmz,1960-1993,350,MT-8,MT804,20,,,,
+name,manufacturer,production,weight_kg,engine,gearbox,fuel_capacity_l,,,
+M-72,imz,1941-1957,300,M67-36,7204,19,,,
+K-750,kmz,1958-1964,350,M67-36,6204,19,,,
+Ural,imz,1957-1993,350,M67-36,8.101-04001,20,,,
+Dnepr,kmz,1960-1993,350,MT-8,MT804,20,,,

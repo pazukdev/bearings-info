@@ -1,7 +1,7 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.dto.item.ItemDto;
-import com.pazukdev.backend.dto.table.TableDto;
+import com.pazukdev.backend.dto.table.ItemView;
 import com.pazukdev.backend.service.ItemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +32,7 @@ public class ItemController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get item")
-    public TableDto get(@PathVariable("id") Long id)  {
+    public ItemView get(@PathVariable("id") Long id)  {
         return service.getItem(id);
     }
 

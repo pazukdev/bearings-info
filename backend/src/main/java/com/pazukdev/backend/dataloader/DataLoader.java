@@ -4,6 +4,7 @@ import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.entity.item.ItemFactory;
+import com.pazukdev.backend.entity.item.ItemQuantity;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingFactory;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleFactory;
@@ -13,6 +14,7 @@ import com.pazukdev.backend.entity.product.sparkplug.SparkPlugFactory;
 import com.pazukdev.backend.entity.product.unit.engine.EngineFactory;
 import com.pazukdev.backend.repository.BearingRepository;
 import com.pazukdev.backend.repository.EngineRepository;
+import com.pazukdev.backend.repository.ItemQuantityRepository;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.repository.ManufacturerRepository;
 import com.pazukdev.backend.repository.MotorcycleRepository;
@@ -22,6 +24,7 @@ import com.pazukdev.backend.repository.SparkPlugRepository;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.util.ItemUtil;
+import com.pazukdev.backend.util.SpecificStringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -29,11 +32,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import static com.pazukdev.backend.util.ItemUtil.getValueFromDescription;
+import java.util.Map;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -45,6 +45,7 @@ import static com.pazukdev.backend.util.ItemUtil.getValueFromDescription;
 public class DataLoader implements ApplicationRunner {
 
     private final ItemRepository itemRepository;
+    private final ItemQuantityRepository itemQuantityRepository;
     private final ManufacturerRepository manufacturerRepository;
     private final MotorcycleRepository motorcycleRepository;
     private final BearingRepository bearingRepository;
@@ -139,38 +140,15 @@ public class DataLoader implements ApplicationRunner {
             if (entity instanceof ItemEntity) {
                 ItemEntity item = (ItemEntity) entity;
 
-                if (item.getCategory().equals("engine") || item.getCategory().equals("gearbox")) {
-                    final String bearingDescription = getValueFromDescription(item.getDescription(), "bearing");
-                    final String[] bearingNames = bearingDescription.replaceAll(" ", "").split(";");
-                    final List<ItemEntity> bearings = itemService.find("bearing", bearingNames);
-
-                    final String sealDescription = getValueFromDescription(item.getDescription(), "seal");
-                    final String[] sealNames = sealDescription.replaceAll(" ", "").split(";");
-                    final List<ItemEntity> seals = itemService.find("bearing", sealNames);
-
-                    item.getItems().addAll(bearings);
-                    item.getItems().addAll(seals);
-
-                }
-
-                if (item.getCategory().equals("engine")) {
-                    final String sparkPlugName = ItemUtil.getValueFromDescription(item.getDescription(), "spark_plug");
-                    final ItemEntity sparkPlug = itemService.findByName(sparkPlugName);
-                    item.getItems().add(sparkPlug);
-
-                }
-
-                if (item.getCategory().equals("motorcycle")) {
-                    final ItemEntity motorcycle = item;
-
-                    final String engineName = getValueFromDescription(motorcycle.getDescription(), "engine");
-                    final String gearboxName = getValueFromDescription(motorcycle.getDescription(), "gearbox");
-                    final ItemEntity engine = itemService.findByName(engineName);
-                    final ItemEntity gearbox = itemService.findByName(gearboxName);
-                    motorcycle.getItems().addAll(collectItems(engine, gearbox));
-                    motorcycle.getItems().addAll(itemService.find("oil"));
-
-                    item = motorcycle;
+                for (final Map.Entry entry : ItemUtil.toMap(item.getDescription()).entrySet()) {
+                    if (entry.getValue().toString().contains(";")) {
+                        final String[] names = entry.getValue().toString().replaceAll(" ", "").split(";");
+                        for (final String name : names) {
+                            addChildItem(item, name, entry.getKey().toString());
+                        }
+                    } else {
+                        addChildItem(item, entry.getValue().toString(), entry.getKey().toString());
+                    }
                 }
 
                 entityToSave = (Entity) item;
@@ -180,13 +158,35 @@ public class DataLoader implements ApplicationRunner {
         }
     }
 
-    private List<ItemEntity> collectItems(ItemEntity... items) {
-        List<ItemEntity> collectedItems = new ArrayList<>();
-        for (ItemEntity item : items) {
-            collectedItems.addAll(item.getItems());
+    private void addChildItem(final ItemEntity parentItem, final String value, final String category) {
+        String name;
+        Integer quantity;
+        if (SpecificStringUtil.containsParentheses(value)) {
+            name = SpecificStringUtil.getStringBeforeParentheses(value);
+            quantity = SpecificStringUtil.extractIntegerAutomatically(value);
+        } else {
+            name = value;
+            quantity = 1;
         }
-        collectedItems.addAll(Arrays.asList(items));
-        return collectedItems;
+        final ItemEntity child = itemService.find(category, name);
+        if (child != null) {
+            final ItemQuantity itemQuantity = new ItemQuantity();
+            itemQuantity.setName(parentItem.getName() + "-" + child.getName());
+            itemQuantity.setItem(child);
+            itemQuantity.setQuantity(quantity);
+            itemQuantityRepository.save(itemQuantity);
+            parentItem.getItemQuantities().add(itemQuantity);
+        }
+    }
+
+    private List<ItemEntity> collectItems(ItemEntity... items) {
+//        List<ItemEntity> collectedItems = new ArrayList<>();
+//        for (ItemEntity item : items) {
+//            collectedItems.addAll(item.getItemQuantities());
+//        }
+//        collectedItems.addAll(Arrays.asList(items));
+//        return collectedItems;
+        return null;
     }
 
 }

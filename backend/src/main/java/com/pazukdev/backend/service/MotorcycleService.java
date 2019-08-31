@@ -8,6 +8,7 @@ import com.pazukdev.backend.dto.report.SpeedReport;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.entity.item.ItemEntity;
+import com.pazukdev.backend.entity.item.ItemQuantity;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.repository.MotorcycleRepository;
@@ -97,7 +98,11 @@ public class MotorcycleService extends AbstractService<MotorcycleEntity, Motorcy
 
     public List<ItemEntity> getItems(final String motorcycleName) {
         final ItemEntity item = itemService.findByName(motorcycleName);
-        return new ArrayList<>(item.getItems());
+        final List<ItemEntity> items = new ArrayList<>();
+        for (final ItemQuantity itemQuantity : item.getItemQuantities()) {
+            items.add(itemQuantity.getItem());
+        }
+        return items;
     }
 
 }
