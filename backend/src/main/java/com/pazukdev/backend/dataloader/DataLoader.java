@@ -5,6 +5,7 @@ import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.entity.item.ItemFactory;
 import com.pazukdev.backend.entity.item.ItemQuantity;
+import com.pazukdev.backend.entity.item.Replacer;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingFactory;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleFactory;
@@ -12,16 +13,7 @@ import com.pazukdev.backend.entity.product.oil.OilFactory;
 import com.pazukdev.backend.entity.product.seal.SealFactory;
 import com.pazukdev.backend.entity.product.sparkplug.SparkPlugFactory;
 import com.pazukdev.backend.entity.product.unit.engine.EngineFactory;
-import com.pazukdev.backend.repository.BearingRepository;
-import com.pazukdev.backend.repository.EngineRepository;
-import com.pazukdev.backend.repository.ItemQuantityRepository;
-import com.pazukdev.backend.repository.ItemRepository;
-import com.pazukdev.backend.repository.ManufacturerRepository;
-import com.pazukdev.backend.repository.MotorcycleRepository;
-import com.pazukdev.backend.repository.OilRepository;
-import com.pazukdev.backend.repository.SealRepository;
-import com.pazukdev.backend.repository.SparkPlugRepository;
-import com.pazukdev.backend.repository.UserRepository;
+import com.pazukdev.backend.repository.*;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.util.ItemUtil;
 import com.pazukdev.backend.util.SpecificStringUtil;
@@ -46,6 +38,7 @@ public class DataLoader implements ApplicationRunner {
 
     private final ItemRepository itemRepository;
     private final ItemQuantityRepository itemQuantityRepository;
+    private final ReplacerRepository replacerRepository;
     private final ManufacturerRepository manufacturerRepository;
     private final MotorcycleRepository motorcycleRepository;
     private final BearingRepository bearingRepository;
@@ -149,6 +142,13 @@ public class DataLoader implements ApplicationRunner {
                     } else {
                         addChildItem(item, entry.getValue().toString(), entry.getKey().toString());
                     }
+                }
+
+                for (final Replacer replacer : item.getReplacers()) {
+                    final String replacerItemName = replacer.getName().split("-")[1];
+                    final ItemEntity replacerItem = itemService.find(item.getCategory(), replacerItemName);
+                    replacer.setItem(replacerItem);
+                    replacerRepository.save(replacer);
                 }
 
                 entityToSave = (Entity) item;

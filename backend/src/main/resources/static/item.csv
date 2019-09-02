@@ -1,6 +1,24 @@
 ,,,,,,,,,
-category:,bearing,,,,,,,,
-name,type,rolling_element (pcs),enclosure,rolling_row,cage,size,weight_g,,replacer
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+Category: ,Bearing,,,,,,,,
+name,type,rolling_element (pcs),enclosure,rolling_row,cage,"size, mm",weight_g,,Replacer
 209,deepgroove,ball (9),open,single_row,sheet_metal,45x85x19,-,,6209
 207,deepgroove,ball (9),open,single_row,sheet_metal,35x72x17,-,,6207
 205,deepgroove,ball (9),open,single_row,sheet_metal,25x52x15,-,,6205
@@ -12,30 +30,99 @@ name,type,rolling_element (pcs),enclosure,rolling_row,cage,size,weight_g,,replac
 12204,cylindrical_roller,roller (11),open,single_row,brass,20x47x14,-,,NF204
 7204,tapered_roller,tapered_roller (12),open,single_row,sheet_metal,20x47x15.3,-,,30204
 ,,,,,,,,,
-category:,seal,,,,,,,,
-name,size,rotation,material,,,,,,replacer
-7201191,50x70x9,left,rubber,,,,,,Corteco_12011238b
-7201122,15x30x7,left,rubber,,,,,,Corteco_12011109b
-7204152,31.4x45.1x8,right,rubber,,,,,,"Payen_NJ416; 123"
-Payen_NJ416,31.4x45.1x8,right,rubber,,,,,,"7204152; 123"
-123,31.4x45.1x8,right,rubber,,,,,,"Payen_NJ416; 7204152"
+Category:,Seal,,,,,,,,
+"Size, mm",Name,Manufacturer,Rotation,Material,,,,,Replacer
+50x65x8,01030104B,Corteco,-,-,,,,,-
+50x65x8,01014252B,Corteco,-,-,,,,,-
+50x70x6/10.25,12011238B,Corteco,-,-,,,,,-
+50x70x9,01019463B,Corteco,-,-,,,,,-
+50x70x9,01032639B,Corteco,-,-,,,,,-
+50x70x10,12000520B,Corteco,-,-,,,,,-
+50x70x9.5/11.5,19019529B,Corteco,-,-,,,,,-
+50x70x10,12014726B,Corteco,-,-,,,,,-
+50x70x9,T1086,Musashi,-,-,,,,,-
+15x30x7,12011109B,Corteco,-,-,,,,,-
+15x30x7,12010794B,Corteco,-,-,,,,,-
+16x30x7,19026201B,Corteco,-,-,,,,,-
+31.4x45.1x8,NJ416,Payen,-,-,,,,,-
+60x85x13,01002867B,Corteco,-,-,,,,,-
+60x85x8,12015893B,Corteco,-,-,,,,,-
+60x85x8,12015894B,Corteco,-,-,,,,,-
+60x85x8,12011193B,Corteco,-,-,,,,,-
+59.7x85x12,MT801190,USSR,-,-,,,,,01002867B; 12015893B; 12015894B; 12011193B
+50x65x5.5,7201142,USSR,-,felt,,,,,01030104B (crankshaft rear bearing housing mashining); 01014252B (crankshaft rear bearing housing mashining); 7201191 (crankshaft rear bearing housing mashining)
+15x30x7,7201122 (7201124),USSR,-,-,,,,,12011109B; 12010794B; 19026201B
+50x70x9,7201191 (7201025),USSR,-,-,,,,,12011238B; 01019463B; 01032639B; 12000520B; 19019529B; 12014726B; T1086
+31.4x45.1x8,7204152,USSR,-,-,,,,,NJ416
 ,,,,,,,,,
-category:,oil,,,,,,,,
-name,viscosity,base,seasonality,,,,,,
-10W-60,10W-60,synthetic,multigrade,,,,,,
-15W-50,15W-50,semisynthetic,multigrade,,,,,,
-20W-50,20W-50,mineral,multigrade,,,,,,
-SAE 50,SAE 50,mineral,summer use,,,,,,
-SAE 60,SAE 60,synthetic,summer use,,,,,,
 ,,,,,,,,,
-category:,spark_plug,,,,,,,,
-name,heat_range,,,,,,,,
-A8U,10,,,,,,,,
-A11,11,,,,,,,,
-A14,14,,,,,,,,
-A17,17,,,,,,,,
 ,,,,,,,,,
-category:,gearbox,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+Category:,Oil,,,,,,,,
+Usage,Viscosity,Base,Seasonality,Manufacturer,,,,,
+motor,SAE 50,mineral,summer use,-,,,,,
+motor,20W-50,mineral,multigrade,Areca; Mannol,,,,,
+motor,25W-70,mineral,multigrade,-,,,,,
+motor,15W-50,semisynthetic,multigrade,-,,,,,
+motor,SAE 60,synthetic,summer use,-,,,,,
+motor,5W-50,synthetic,multigrade,-,,,,,
+motor,5W-60,synthetic,multigrade,-,,,,,
+motor,10W-50,synthetic,multigrade,-,,,,,
+motor,10W-60,synthetic,multigrade,Agip; Eni; Mannol,,,,,
+motor,15W-50,synthetic,multigrade,-,,,,,
+motor,20W-50,synthetic,multigrade,-,,,,,
+motor,20W-60,synthetic,multigrade,-,,,,,
+gear,80W-90,mineral,multigrade,-,,,,,
+gear,85W-90,mineral,multigrade,-,,,,,
+gear,85W-140,mineral,multigrade,-,,,,,
+gear,75W-90,synthetic,multigrade,-,,,,,
+gear,80W-140,synthetic,multigrade,-,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+Category:,Spark plug,,,,,,,,
+Name,Producer,GOST,Heat range,Thread,"Thread length, mm","Gap, mm",,,Replacer
+14-10A,Beru,-,-,M14x1.25,-,-,,,-
+14-9A,Beru,-,-,M14x1.25,-,-,,,-
+14-8B,Beru,-,-,M14x1.25,-,-,,,-
+14-7B,Beru,-,-,M14x1.25,-,-,,,-
+W10AC,Bosch,-,-,M14x1.25,-,-,,,-
+W9AC,Bosch,-,-,M14x1.25,-,-,,,-
+W8BC,Bosch,-,-,M14x1.25,-,-,,,-
+W7BC,Bosch,-,-,M14x1.25,-,-,,,-
+N19,Brisk,-,-,M14x1.25,-,-,,,-
+N17Y,Brisk,-,-,M14x1.25,-,-,,,-
+N15Y,Brisk,-,-,M14x1.25,-,-,,,-
+L86C,Champion,-,-,M14x1.25,-,-,,,-
+L92YC,Champion,-,-,M14x1.25,-,-,,,-
+L87YC,Champion,-,-,M14x1.25,-,-,,,-
+W14F-U,Denso,-,-,M14x1.25,-,-,,,-
+W14FP,Denso,-,-,M14x1.25,-,-,,,-
+W16FP,Denso,-,-,M14x1.25,-,-,,,-
+B-4H,NGK,-,-,M14x1.25,-,-,,,-
+BP5HS,NGK,-,-,M14x1.25,-,-,,,-
+BP6HS,NGK,-,-,M14x1.25,-,-,,,-
+A10NT,USSR,2043-74,10,M14x1.25,11,0.5-0.7,,,W10AC; 14-10A; L86C; B-4H; W14F-U; N19
+A11N,USSR,2043-74,11,M14x1.25,11,0.5-0.7,,,W9AC; 14-9A; L86C; B-4H; W14F-U; N19
+A14V,USSR,2043-74,14,M14x1.25,12,0.5-0.7,,,W8BC; 14-8B; L92YC; BP5HS; W14FP; N17Y
+A17,USSR,2043-74,17,M14x1.25,12,0.5-0.7,,,W7BC; 14-7B; L87YC; BP6HS; W16FP; N15Y
+NA11 (11A),USSR,B 2043-43,10,M14x1.25,11,0.5-0.7,,,A10NT; W10AC; 14-10A; L86C; B-4H; W14F-U; N19
+A8U,USSR,2043-54,10,M14x1.25,11,0.5-0.7,,,A10NT; W10AC; 14-10A; L86C; B-4H; W14F-U; N19
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+Category:,Gearbox,,,,,,,,
 name,manufacturer,bearing,seal,,,,,,
 7204,kmz,209; 205,7201191; 7201122,,,,,,
 6204,kmz,207; 205,7204152; Payen_NJ416,,,,,,
@@ -45,17 +132,27 @@ MT804,kmz,209; 205,7201191; 7201122,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
-category:,engine,,,,,,,,
-name,manufacturer,power_hp,torque_nm,speed_rpm,spark_plug,bearing,seal,,
-MT-8,kmz,32,40,5900,A11,209 (2); 205,7201191; 7201122,,
-M67-36,imz,36,34,6100,A14,207 (3); 205,7204152; Payen_NJ416,,
+Category:,Engine,,,,,,,,
+Name,Manufacturer,"Power, hp","Torque, nm","Max speed, rpm",Spark plugs,Bearings,Seals,,
+M-72 type,IMZ / KMZ,22,30,5900,NA11; 11A,"207 (crankshaft, 2); 7201404 (camshaft, front journal, 1); 7201107 (camshaft, rear journal, 1)","50x65x5.5 (crankshaft, 1); 15x30x7 (camshaft, 1)",,
+K-750 type,KMZ,26,30,5900,A8U,"207 (crankshaft, 2); 205 (camshaft, front journal, 1)","50x65x5.5 (crankshaft, 1); 15x30x7 (camshaft, 1)",,
+K-750M type,KMZ,26,30,5900,A8U,"207 (crankshaft, 2); 205 (camshaft, front journal, 1)","50x65x5.5 (crankshaft, 1); 15x30x7 (camshaft, 1)",,
+MT-8,KMZ,32,30,5900,A8U,"42209 (crankshaft, rear journal, 1); 209 (crankshaft, front journal, 1); 205 (camshaft, front journal, 1)","59.7x85x12 (crankshaft, 1); 15x30x7 (camshaft, 1)",,
+M67 type,IMZ,32,30,5900,A11N; A14V,"207 (crankshaft, 2); 205 (camshaft, front journal, 1)","50x70x9 (crankshaft, 1); 15x30x7 (camshaft, 1)",,
+M67-36 type,IMZ,36,30,5900,A11N; A14V,"207 (crankshaft, 2); 205 (camshaft, front journal, 1)","50x70x9 (crankshaft, 1); 15x30x7 (camshaft, 1)",,
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
-category:,motorcycle,,,,,,,,
-name,manufacturer,production,weight_kg,engine,gearbox,fuel_capacity_l,,,
-M-72,imz,1941-1957,300,M67-36,7204,19,,,
-K-750,kmz,1958-1964,350,M67-36,6204,19,,,
-Ural,imz,1957-1993,350,M67-36,8.101-04001,20,,,
-Dnepr,kmz,1960-1993,350,MT-8,MT804,20,,,
+,,,,,,,,,
+Category:,Motorcycle,,,,,,,,
+Name,Manufacturer,Production,"Max speed, km/h","Weight, kg",Engine,Gearbox,"Fuel capacity, l",,
+M-72,IMZ,1941-1957,90,300,M-72 type,7204,19,,
+M-72M,IMZ / KMZ,1955-1960,90,300,M-72 type,7204,19,,
+M-72N,KMZ,1957-1958,90,300,M-72 type,7204,19,,
+K-750,KMZ,1958-1964,90,350,K-750 type,7204,19,,
+K-750M,KMZ,1963-1970,90,350,K-750M type,6204,19,,
+K-650 Dnepr,KMZ,1968-1971,105,350,MT-8,6204,19,,
+Dnepr MT-9,KMZ,1971-1976,105,350,MT-9 type,MT804,19,,
+Ural M67,IMZ,1973-1976,105,350,M67 type,8.101-04001,20,,
+Ural M67-36,IMZ,1976-1974,105,350,M67-36 type,8.101-04001,20,,

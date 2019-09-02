@@ -66,7 +66,7 @@ public class CSVFileUtil {
     }
 
     private static List<String[]> format(final List<String[]> list) {
-        return AppCollectionUtil.toLowerCase(AppCollectionUtil.removeSpaces(list));
+        return AppCollectionUtil.toLowerCase(list);
     }
 
     private static String dataFilePathInResources(final String fileName) {

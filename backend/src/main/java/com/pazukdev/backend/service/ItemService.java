@@ -7,6 +7,7 @@ import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.entity.item.ItemQuantity;
+import com.pazukdev.backend.entity.item.Replacer;
 import com.pazukdev.backend.repository.ItemQuantityRepository;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.util.ItemUtil;
@@ -66,17 +67,10 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         itemView.setItems(createTableView(item));
 
         list = new ArrayList<>();
-        final String[] replacerNames = item.getReplacer().replaceAll(" ", "").split(";");
-        final List<ItemEntity> replacers = new ArrayList<>();
-        for (final String name : replacerNames) {
-            final ItemEntity replacer = findByName(name);
-            if (replacer != null) {
-                replacers.add(replacer);
-            }
-        }
         int i = 0;
-        for (final ItemEntity replacer : replacers) {
-            list.add(new String[]{"Replacer #" + ++i, replacer.getName(), replacer.getId().toString()});
+        for (final Replacer replacer : item.getReplacers()) {
+            final ItemEntity replacerItem = replacer.getItem();
+            list.add(new String[]{replacer.getComment(), replacerItem.getName(), replacerItem.getId().toString()});
         }
         int k = 0;
         matrix = new String[list.size()][];

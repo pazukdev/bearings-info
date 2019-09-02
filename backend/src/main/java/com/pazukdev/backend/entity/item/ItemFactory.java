@@ -4,11 +4,13 @@ import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
+import com.pazukdev.backend.util.SpecificStringUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -39,7 +41,7 @@ public class ItemFactory extends AbstractEntityFactory<ItemEntity> {
         applyCategory(item, tableRow);
         applyQuantity(item, tableRow);
         applyDescription(item, tableRow);
-        applyReplacer(item, tableRow);
+        applyReplacers(item, tableRow);
     }
 
     private void applyCategory(final ItemEntity item, final TableRow tableRow) {
@@ -66,9 +68,26 @@ public class ItemFactory extends AbstractEntityFactory<ItemEntity> {
         item.setDescription(description);
     }
 
-    private void applyReplacer(final ItemEntity item, final TableRow tableRow) {
-        final String replacer = tableRow.getData().get("replacer");
-        item.setReplacer(replacer != null ? replacer : "-");
+    private void applyReplacers(final ItemEntity item, final TableRow tableRow) {
+        final String replacersSourceString = tableRow.getData().get("replacer");
+        if (replacersSourceString == null || replacersSourceString.equals("-")) {
+            return;
+        }
+        for (final String replacerData : Arrays.asList(replacersSourceString.split("; "))) {
+            String replacerName;
+            String comment = null;
+            if (SpecificStringUtil.containsParentheses(replacerData)) {
+                replacerName = SpecificStringUtil.getStringBeforeParentheses(replacerData);
+                comment = SpecificStringUtil.getStringBetweenParentheses(replacerData);
+            } else {
+                replacerName = replacerData;
+            }
+            final Replacer replacer = new Replacer();
+            replacer.setName(item.getName() + "-" + replacerName);
+            replacer.setComment(comment);
+
+            item.getReplacers().add(replacer);
+        }
     }
 
 }

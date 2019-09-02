@@ -1,6 +1,7 @@
 package com.pazukdev.backend.tablemodel;
 
 import com.pazukdev.backend.util.CSVFileUtil;
+import com.pazukdev.backend.util.SpecificStringUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
@@ -51,6 +52,11 @@ public class TableModelFactory {
             }
             return rows;
         } else {
+            for (List<String> lines : fileLines) {
+                for (String s : lines) {
+                    SpecificStringUtil.removeSpaces(s);
+                }
+            }
             return getRows(fileLines);
         }
 
@@ -108,7 +114,7 @@ public class TableModelFactory {
 
     public List<List<String>> removeEmptyElements(final List<List<String>> fileLines) {
         for (List<String> line : fileLines) {
-            line.removeIf(""::equals);
+            line.removeIf("" :: equals);
         }
         return fileLines;
     }
