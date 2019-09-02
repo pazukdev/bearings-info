@@ -14,6 +14,7 @@
             <column name="category" type="varchar(255)"/>
             <column name="quantity" type="int"/>
             <column name="description" type="varchar(1000)"/>
+            <column name="replacer" type="varchar(1000)"/>
         </createTable>
     </changeSet>
 
@@ -197,17 +198,6 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create_replacer_table" author="sviarkaltsau">
-        <createTable tableName="replacer">
-            <column autoIncrement="true" name="id" type="bigint">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="name" type="varchar(255)"/>
-            <column name="item_id" type="bigint"/>
-            <column name="comment" type="varchar(255)"/>
-        </createTable>
-    </changeSet>
-
     <changeSet id="create_item_quantity_table" author="sviarkaltsau">
         <createTable tableName="item_quantity">
             <column autoIncrement="true" name="id" type="bigint">
@@ -226,17 +216,6 @@
             </column>
             <column name="child_item_quantity_id" type="bigint">
                 <constraints foreignKeyName="fk_item_item_child_item_quantity_id" references="item_quantity (id)"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="create_item_replacer_table" author="sviarkaltsau">
-        <createTable tableName="item_replacer">
-            <column name="original_item_id" type="bigint">
-                <constraints foreignKeyName="fk_item_replacer_original_item_id" references="item (id)"/>
-            </column>
-            <column name="replacer_item_id" type="bigint">
-                <constraints foreignKeyName="fk_item_replacer_replacer_item_id" references="replacer (id)"/>
             </column>
         </createTable>
     </changeSet>

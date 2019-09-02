@@ -69,25 +69,8 @@ public class ItemFactory extends AbstractEntityFactory<ItemEntity> {
     }
 
     private void applyReplacers(final ItemEntity item, final TableRow tableRow) {
-        final String replacersSourceString = tableRow.getData().get("replacer");
-        if (replacersSourceString == null || replacersSourceString.equals("-")) {
-            return;
-        }
-        for (final String replacerData : Arrays.asList(replacersSourceString.split("; "))) {
-            String replacerName;
-            String comment = null;
-            if (SpecificStringUtil.containsParentheses(replacerData)) {
-                replacerName = SpecificStringUtil.getStringBeforeParentheses(replacerData);
-                comment = SpecificStringUtil.getStringBetweenParentheses(replacerData);
-            } else {
-                replacerName = replacerData;
-            }
-            final Replacer replacer = new Replacer();
-            replacer.setName(item.getName() + "-" + replacerName);
-            replacer.setComment(comment);
-
-            item.getReplacers().add(replacer);
-        }
+        final String replacer = tableRow.getData().get("replacer");
+        item.setReplacer(replacer != null ? replacer : "-");
     }
 
 }

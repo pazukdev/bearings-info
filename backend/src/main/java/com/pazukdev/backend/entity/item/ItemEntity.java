@@ -27,6 +27,7 @@ public class ItemEntity extends AbstractEntity {
     private String category;
     private Integer quantity;
     private String description;
+    private String replacer;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(fetch = FetchType.EAGER)
@@ -36,14 +37,5 @@ public class ItemEntity extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "child_item_quantity_id")
     )
     private Set<ItemQuantity> itemQuantities = new HashSet<>();
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "item_replacer",
-            joinColumns = @JoinColumn(name = "original_item_id"),
-            inverseJoinColumns = @JoinColumn(name = "replacer_item_id")
-    )
-    private Set<Replacer> replacers = new HashSet<>();
 
 }

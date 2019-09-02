@@ -7,7 +7,6 @@ import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.entity.item.ItemQuantity;
-import com.pazukdev.backend.entity.item.Replacer;
 import com.pazukdev.backend.repository.ItemQuantityRepository;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.util.ItemUtil;
@@ -17,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -67,11 +67,20 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         itemView.setItems(createTableView(item));
 
         list = new ArrayList<>();
-        int i = 0;
-        for (final Replacer replacer : item.getReplacers()) {
-            final ItemEntity replacerItem = replacer.getItem();
-            list.add(new String[]{replacer.getComment(), replacerItem.getName(), replacerItem.getId().toString()});
+        final String replacersSourceString = item.getReplacer();
+        for (final String replacerData : Arrays.asList(replacersSourceString.split("; "))) {
+            String replacerName;
+            String comment = null;
+            if (SpecificStringUtil.containsParentheses(replacerData)) {
+                replacerName = SpecificStringUtil.getStringBeforeParentheses(replacerData);
+                comment = SpecificStringUtil.getStringBetweenParentheses(replacerData);
+            } else {
+                replacerName = replacerData;
+            }
+            final ItemEntity replacer = find(item.getCategory(), replacerName);
+            list.add(new String[]{comment, replacer.getName(), replacer.getId().toString()});
         }
+
         int k = 0;
         matrix = new String[list.size()][];
         for (String[] s : list) {

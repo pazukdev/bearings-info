@@ -5,7 +5,6 @@ import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.entity.item.ItemFactory;
 import com.pazukdev.backend.entity.item.ItemQuantity;
-import com.pazukdev.backend.entity.item.Replacer;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingFactory;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleFactory;
@@ -38,7 +37,6 @@ public class DataLoader implements ApplicationRunner {
 
     private final ItemRepository itemRepository;
     private final ItemQuantityRepository itemQuantityRepository;
-    private final ReplacerRepository replacerRepository;
     private final ManufacturerRepository manufacturerRepository;
     private final MotorcycleRepository motorcycleRepository;
     private final BearingRepository bearingRepository;
@@ -142,13 +140,6 @@ public class DataLoader implements ApplicationRunner {
                     } else {
                         addChildItem(item, entry.getValue().toString(), entry.getKey().toString());
                     }
-                }
-
-                for (final Replacer replacer : item.getReplacers()) {
-                    final String replacerItemName = replacer.getName().split("-")[1];
-                    final ItemEntity replacerItem = itemService.find(item.getCategory(), replacerItemName);
-                    replacer.setItem(replacerItem);
-                    replacerRepository.save(replacer);
                 }
 
                 entityToSave = (Entity) item;
