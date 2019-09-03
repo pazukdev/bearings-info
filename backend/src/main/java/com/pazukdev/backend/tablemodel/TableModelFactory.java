@@ -35,9 +35,13 @@ public class TableModelFactory {
         return new TableModelImpl(tableRows);
     }
 
+    private boolean containsCategory(final List<String> line) {
+        return line.contains("category:") || line.contains("category: ");
+    }
+
     private boolean isItemSourceFile(final List<List<String>> fileLines) {
         for (List<String> line : fileLines) {
-            if (line.contains("category:")) {
+            if (containsCategory(line)) {
                 return true;
             }
         }
@@ -72,7 +76,7 @@ public class TableModelFactory {
             if (line.isEmpty()) {
                 continue;
             }
-            if (line.contains("category:")) {
+            if (containsCategory(line)) {
                 addToListOfCategorizedFileLines(listOfCategorizedFileLines, fileLinesSubList);
                 fileLinesSubList = new ArrayList<>();
                 category = line.get(1);

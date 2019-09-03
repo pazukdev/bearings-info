@@ -239,7 +239,8 @@
             showMotorcycleMenu() {
                 this.getMotorcycles();
                 this.$store.dispatch("clearHistory");
-                this.switchComponent('MotorcycleMenu');
+                //this.switchComponent('MotorcycleMenu');
+                this.openWishList();
             },
 
             getMotorcycles() {

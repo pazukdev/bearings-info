@@ -12,7 +12,16 @@ import com.pazukdev.backend.entity.product.oil.OilFactory;
 import com.pazukdev.backend.entity.product.seal.SealFactory;
 import com.pazukdev.backend.entity.product.sparkplug.SparkPlugFactory;
 import com.pazukdev.backend.entity.product.unit.engine.EngineFactory;
-import com.pazukdev.backend.repository.*;
+import com.pazukdev.backend.repository.BearingRepository;
+import com.pazukdev.backend.repository.EngineRepository;
+import com.pazukdev.backend.repository.ItemQuantityRepository;
+import com.pazukdev.backend.repository.ItemRepository;
+import com.pazukdev.backend.repository.ManufacturerRepository;
+import com.pazukdev.backend.repository.MotorcycleRepository;
+import com.pazukdev.backend.repository.OilRepository;
+import com.pazukdev.backend.repository.SealRepository;
+import com.pazukdev.backend.repository.SparkPlugRepository;
+import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.util.ItemUtil;
 import com.pazukdev.backend.util.SpecificStringUtil;
@@ -133,7 +142,7 @@ public class DataLoader implements ApplicationRunner {
 
                 for (final Map.Entry entry : ItemUtil.toMap(item.getDescription()).entrySet()) {
                     if (entry.getValue().toString().contains(";")) {
-                        final String[] names = entry.getValue().toString().replaceAll(" ", "").split(";");
+                        final String[] names = entry.getValue().toString().split("; ");
                         for (final String name : names) {
                             addChildItem(item, name, entry.getKey().toString());
                         }
@@ -146,6 +155,30 @@ public class DataLoader implements ApplicationRunner {
             }
 
             repository.save(entityToSave);
+        }
+
+        createStubReplacers(itemService.findAll());
+    }
+
+    private void createStubReplacers(final List<ItemEntity> items) {
+        for (final ItemEntity item : items) {
+            createStubReplacers(item);
+        }
+    }
+
+    private void createStubReplacers(final ItemEntity item) {
+        final List<String[]> replacersData = ItemUtil.parseReplacersSourceString(item.getReplacer());
+        for (final String[] replacerData : replacersData) {
+            final ItemEntity replacer = itemService.find(item.getCategory(), replacerData[0]);
+            if (replacer == null) {
+                final ItemEntity stubReplacer = new ItemEntity();
+                stubReplacer.setName(replacerData[0]);
+                stubReplacer.setReplacer("-");
+                stubReplacer.setDescription(item.getDescription());
+                stubReplacer.setCategory(item.getCategory());
+                stubReplacer.setItemQuantities(item.getItemQuantities());
+                itemRepository.save(stubReplacer);
+            }
         }
     }
 

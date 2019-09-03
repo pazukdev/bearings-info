@@ -77,6 +77,28 @@ public class ItemUtil {
         return map;
     }
 
+    public static String[] parseReplacerData(final String replacerData) {
+        String replacerName;
+        String comment = "-";
+        if (SpecificStringUtil.containsParentheses(replacerData)) {
+            replacerName = SpecificStringUtil.getStringBeforeParentheses(replacerData);
+            comment = SpecificStringUtil.getStringBetweenParentheses(replacerData);
+        } else {
+            replacerName = replacerData;
+        }
+        return new String[]{replacerName, comment};
+    }
+
+    public static List<String[]> parseReplacersSourceString(final String replacersSourceString) {
+        final List<String[]> data = new ArrayList<>();
+        if (!replacersSourceString.equals("-")) {
+            for (final String replacerData : Arrays.asList(replacersSourceString.split("; "))) {
+                data.add(parseReplacerData(replacerData));
+            }
+        }
+        return data;
+    }
+
 }
 
 

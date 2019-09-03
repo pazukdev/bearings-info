@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -67,18 +66,12 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         itemView.setItems(createTableView(item));
 
         list = new ArrayList<>();
-        final String replacersSourceString = item.getReplacer();
-        for (final String replacerData : Arrays.asList(replacersSourceString.split("; "))) {
-            String replacerName;
-            String comment = null;
-            if (SpecificStringUtil.containsParentheses(replacerData)) {
-                replacerName = SpecificStringUtil.getStringBeforeParentheses(replacerData);
-                comment = SpecificStringUtil.getStringBetweenParentheses(replacerData);
-            } else {
-                replacerName = replacerData;
+        final List<String[]> replacersData = ItemUtil.parseReplacersSourceString(item.getReplacer());
+        for (final String[] replacerData : replacersData) {
+            final ItemEntity replacer = find(item.getCategory(), replacerData[0]);
+            if (replacer != null) {
+                list.add(new String[]{replacerData[1], replacer.getName(), replacer.getId().toString()});
             }
-            final ItemEntity replacer = find(item.getCategory(), replacerName);
-            list.add(new String[]{comment, replacer.getName(), replacer.getId().toString()});
         }
 
         int k = 0;
@@ -92,24 +85,24 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
     }
 
     public TableViewDto createTableView(final ItemEntity parentItem) {
-//        final List<ItemEntity> items = new ArrayList<>();
-//        for (Map.Entry entry : ItemUtil.toMap(parentItem.getDescription()).entrySet()) {
-//            final String value = entry.getValue().toString();
-//            if (value.contains(";")) {
-//                final String[] names = value.replaceAll(" ", "").split(";");
-//                for (final String name : names) {
-//                    final ItemEntity childItem = findByName(name);
-//                    if (childItem != null) {
-//                        items.add(childItem);
-//                    }
-//                }
-//            } else {
-//                final ItemEntity childItem = findByName(value);
-//                if (childItem != null) {
-//                    items.add(childItem);
-//                }
-//            }
-//        }
+        final List<ItemEntity> items = new ArrayList<>();
+        for (Map.Entry entry : ItemUtil.toMap(parentItem.getDescription()).entrySet()) {
+            final String value = entry.getValue().toString();
+            if (value.contains(";")) {
+                final String[] names = value.split("; ");
+                for (final String name : names) {
+                    final ItemEntity childItem = findByName(name);
+                    if (childItem != null) {
+                        items.add(childItem);
+                    }
+                }
+            } else {
+                final ItemEntity childItem = findByName(value);
+                if (childItem != null) {
+                    items.add(childItem);
+                }
+            }
+        }
 
         return createTableView(parentItem.getName(), new ArrayList<>(parentItem.getItemQuantities()));
     }

@@ -17,7 +17,7 @@
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
-Category: ,Bearing,,,,,,,,
+Category:,Bearing,,,,,,,,
 name,type,rolling_element (pcs),enclosure,rolling_row,cage,"size, mm",weight_g,,Replacer
 209,deepgroove,ball (9),open,single_row,sheet_metal,45x85x19,-,,6209
 207,deepgroove,ball (9),open,single_row,sheet_metal,35x72x17,-,,6207
@@ -51,8 +51,10 @@ Category:,Seal,,,,,,,,
 60x85x8,12011193B,Corteco,-,-,,,,,-
 59.7x85x12,MT801190,USSR,-,-,,,,,01002867B; 12015893B; 12015894B; 12011193B
 50x65x5.5,7201142,USSR,-,felt,,,,,01030104B (crankshaft rear bearing housing mashining); 01014252B (crankshaft rear bearing housing mashining); 7201191 (crankshaft rear bearing housing mashining)
-15x30x7,7201122 (7201124),USSR,-,-,,,,,12011109B; 12010794B; 19026201B
-50x70x9,7201191 (7201025),USSR,-,-,,,,,12011238B; 01019463B; 01032639B; 12000520B; 19019529B; 12014726B; T1086
+15x30x7,7201122,USSR,-,-,,,,,12011109B; 12010794B; 19026201B
+15x30x7,7201124,USSR,-,-,,,,,12011109B; 12010794B; 19026201B
+50x70x9,7201191,USSR,-,-,,,,,12011238B; 01019463B; 01032639B; 12000520B; 19019529B; 12014726B; T1086
+50x70x9,7201025,USSR,-,-,,,,,12011238B; 01019463B; 01032639B; 12000520B; 19019529B; 12014726B; T1086
 31.4x45.1x8,7204152,USSR,-,-,,,,,NJ416
 ,,,,,,,,,
 ,,,,,,,,,
@@ -115,9 +117,9 @@ A10NT,USSR,2043-74,10,M14x1.25,11,0.5-0.7,,,W10AC; 14-10A; L86C; B-4H; W14F-U; N
 A11N,USSR,2043-74,11,M14x1.25,11,0.5-0.7,,,W9AC; 14-9A; L86C; B-4H; W14F-U; N19
 A14V,USSR,2043-74,14,M14x1.25,12,0.5-0.7,,,W8BC; 14-8B; L92YC; BP5HS; W14FP; N17Y
 A17,USSR,2043-74,17,M14x1.25,12,0.5-0.7,,,W7BC; 14-7B; L87YC; BP6HS; W16FP; N15Y
-NA11 (11A),USSR,B 2043-43,10,M14x1.25,11,0.5-0.7,,,A10NT; W10AC; 14-10A; L86C; B-4H; W14F-U; N19
+NA11,USSR,B 2043-43,10,M14x1.25,11,0.5-0.7,,,A10NT; W10AC; 14-10A; L86C; B-4H; W14F-U; N19
+11A,USSR,B 2043-43,10,M14x1.25,11,0.5-0.7,,,A10NT; W10AC; 14-10A; L86C; B-4H; W14F-U; N19
 A8U,USSR,2043-54,10,M14x1.25,11,0.5-0.7,,,A10NT; W10AC; 14-10A; L86C; B-4H; W14F-U; N19
-,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
