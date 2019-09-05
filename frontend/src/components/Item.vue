@@ -15,6 +15,7 @@
             </tr>
             <tr v-for="item in itemView.items.tables">
                 <td colspan="2">
+                    {{item.matrix}}
                     <table class="get-all-table">
                         <tbody>
                         <tr>
@@ -46,12 +47,12 @@
                     </table>
                 </td>
             </tr>
-            <tr>
+            <tr v-if="notStub()">
                 <td style="text-align: center" colspan="2">
                     {{itemView.replacers.name}}
                 </td>
             </tr>
-            <tr style="text-align: left" v-for="row in itemView.replacers.matrix">
+            <tr v-if="notStub()" style="text-align: left" v-for="row in itemView.replacers.matrix">
                 <td style="width: 70%">
                     {{row[0]}}
                 </td>
@@ -89,6 +90,9 @@
         },
 
         methods: {
+            notStub() {
+                return this.itemView.replacers.name !== "stub";
+            }
         }
     }
 </script>

@@ -37,7 +37,7 @@
                             <td>
                                 <button type="button"
                                         style="width: 60%"
-                                        @click="$emit('select-item', row[3])">
+                                        @click="$emit('select-motorcycle', row[3])">
                                     {{row[1]}}
                                 </button>
                             </td>

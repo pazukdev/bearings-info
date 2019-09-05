@@ -1,6 +1,7 @@
 package com.pazukdev.backend.dto.item;
 
 import com.pazukdev.backend.dto.AbstractDto;
+import com.pazukdev.backend.entity.item.ItemEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -11,11 +12,10 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ItemDto extends AbstractDto {
+public class ItemQuantity extends AbstractDto {
 
-    private String category;
+    private ItemEntity item;
+    private String location;
     private Integer quantity;
-    private String description;
-    private String replacer;
 
 }

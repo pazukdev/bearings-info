@@ -4,7 +4,6 @@ import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.entity.item.ItemFactory;
-import com.pazukdev.backend.entity.item.ItemQuantity;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingFactory;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleFactory;
@@ -14,7 +13,6 @@ import com.pazukdev.backend.entity.product.sparkplug.SparkPlugFactory;
 import com.pazukdev.backend.entity.product.unit.engine.EngineFactory;
 import com.pazukdev.backend.repository.BearingRepository;
 import com.pazukdev.backend.repository.EngineRepository;
-import com.pazukdev.backend.repository.ItemQuantityRepository;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.repository.ManufacturerRepository;
 import com.pazukdev.backend.repository.MotorcycleRepository;
@@ -24,7 +22,6 @@ import com.pazukdev.backend.repository.SparkPlugRepository;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.util.ItemUtil;
-import com.pazukdev.backend.util.SpecificStringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -33,7 +30,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -45,7 +41,6 @@ import java.util.Map;
 public class DataLoader implements ApplicationRunner {
 
     private final ItemRepository itemRepository;
-    private final ItemQuantityRepository itemQuantityRepository;
     private final ManufacturerRepository manufacturerRepository;
     private final MotorcycleRepository motorcycleRepository;
     private final BearingRepository bearingRepository;
@@ -136,27 +131,8 @@ public class DataLoader implements ApplicationRunner {
                                                            final JpaRepository<Entity, Long> repository) {
         final List<Entity> entities = factory.createEntitiesFromCSVFile();
         for (final Entity entity : entities) {
-            Entity entityToSave = entity;
-            if (entity instanceof ItemEntity) {
-                ItemEntity item = (ItemEntity) entity;
-
-                for (final Map.Entry entry : ItemUtil.toMap(item.getDescription()).entrySet()) {
-                    if (entry.getValue().toString().contains(";")) {
-                        final String[] names = entry.getValue().toString().split("; ");
-                        for (final String name : names) {
-                            addChildItem(item, name, entry.getKey().toString());
-                        }
-                    } else {
-                        addChildItem(item, entry.getValue().toString(), entry.getKey().toString());
-                    }
-                }
-
-                entityToSave = (Entity) item;
-            }
-
-            repository.save(entityToSave);
+            repository.save(entity);
         }
-
         createStubReplacers(itemService.findAll());
     }
 
@@ -176,32 +152,12 @@ public class DataLoader implements ApplicationRunner {
                 stubReplacer.setReplacer("-");
                 stubReplacer.setDescription(item.getDescription());
                 stubReplacer.setCategory(item.getCategory());
-                stubReplacer.setItemQuantities(item.getItemQuantities());
                 itemRepository.save(stubReplacer);
             }
         }
     }
 
-    private void addChildItem(final ItemEntity parentItem, final String value, final String category) {
-        String name;
-        Integer quantity;
-        if (SpecificStringUtil.containsParentheses(value)) {
-            name = SpecificStringUtil.getStringBeforeParentheses(value);
-            quantity = SpecificStringUtil.extractIntegerAutomatically(value);
-        } else {
-            name = value;
-            quantity = 1;
-        }
-        final ItemEntity child = itemService.find(category, name);
-        if (child != null) {
-            final ItemQuantity itemQuantity = new ItemQuantity();
-            itemQuantity.setName(parentItem.getName() + "-" + child.getName());
-            itemQuantity.setItem(child);
-            itemQuantity.setQuantity(quantity);
-            itemQuantityRepository.save(itemQuantity);
-            parentItem.getItemQuantities().add(itemQuantity);
-        }
-    }
+
 
     private List<ItemEntity> collectItems(ItemEntity... items) {
 //        List<ItemEntity> collectedItems = new ArrayList<>();

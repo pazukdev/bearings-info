@@ -6,13 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -28,14 +22,5 @@ public class ItemEntity extends AbstractEntity {
     private Integer quantity;
     private String description;
     private String replacer;
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "item_item_quantity",
-            joinColumns = @JoinColumn(name = "parent_item_id"),
-            inverseJoinColumns = @JoinColumn(name = "child_item_quantity_id")
-    )
-    private Set<ItemQuantity> itemQuantities = new HashSet<>();
 
 }

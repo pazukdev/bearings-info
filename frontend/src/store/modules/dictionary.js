@@ -96,7 +96,11 @@ const mutations = {
     },
 
     setHomeComponent(state, homeComponent) {
-        state.homeComponent.push(homeComponent);
+        if (homeComponent === "Item") {
+            state.homeComponent.push(homeComponent);
+        } else if (homeComponent !== state.homeComponent[state.homeComponent.length - 1]) {
+            state.homeComponent.push(homeComponent);
+        }
     },
 
     removeLastComponent(state) {

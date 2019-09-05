@@ -23,7 +23,7 @@
 
         <MotorcycleMenu
                 v-show="isLastComponent('MotorcycleMenu')"
-                @select-motorcycle="selectMotorcycle"
+                @select-item="selectItem"
                 @add-motorcycle="addMotorcycle"/>
 
         <ModelPartsList v-show="isLastComponent('ModelPartsList')" :motorcycle="motorcycle" :engine="engine"/>
@@ -114,21 +114,6 @@
 
         created() {
             this.refresh();
-            this.manufacturers = axios
-                .get("backend/manufacturer/list", {
-                    headers: {
-                        Authorization: this.authorization
-                    }
-                })
-                .then(response => this.manufacturers = response.data);
-            this.engines = axios
-                .get("backend/engine/list", {
-                    headers: {
-                        Authorization: this.authorization
-                    }
-                })
-                .then(response => this.engines = response.data);
-
             this.isAdmin();
             this.refreshUsers();
             this.refreshBearings();
@@ -167,14 +152,6 @@
 
             switchComponent(component) {
                 this.$store.dispatch("setHomeComponent", component);
-            },
-
-            selectMotorcycle(motorcycle) {
-                this.refreshItems(motorcycle.name);
-                this.openWishList()
-                // this.motorcycle = motorcycle;
-                // this.engine = this.getEngine([motorcycle.engineId]);
-                // this.switchComponent('ModelPartsList');
             },
 
             selectItem(id) {
@@ -237,22 +214,16 @@
             },
 
             showMotorcycleMenu() {
-                this.getMotorcycles();
-                this.$store.dispatch("clearHistory");
-                //this.switchComponent('MotorcycleMenu');
-                this.openWishList();
-            },
-
-            getMotorcycles() {
                 axios
-                    .get(`/backend/motorcycle/list`, {
+                    .get("/backend/item/motorcycles", {
                         headers: {
                             Authorization: this.authorization
                         }
                     })
                     .then(response => {
-                        this.$store.dispatch("setMotorcycles", response.data)
+                        this.$store.dispatch("addItemView", response.data)
                     });
+                this.switchComponent('MotorcycleMenu');
             },
 
             refreshBearings() {
@@ -314,17 +285,6 @@
                     .then(response => {
                         this.$store.dispatch("setWishList", response.data)
                     })
-
-            },
-
-            getEngine(ids) {
-                axios
-                    .post('backend/engine/search', ids, {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => this.engine = response.data[0]);
 
             },
 

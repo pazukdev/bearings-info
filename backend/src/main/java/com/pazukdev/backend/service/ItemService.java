@@ -2,12 +2,11 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.dto.item.ItemDto;
+import com.pazukdev.backend.dto.item.ItemQuantity;
 import com.pazukdev.backend.dto.table.ItemView;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.entity.item.ItemEntity;
-import com.pazukdev.backend.entity.item.ItemQuantity;
-import com.pazukdev.backend.repository.ItemQuantityRepository;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.util.ItemUtil;
 import com.pazukdev.backend.util.SpecificStringUtil;
@@ -16,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -25,13 +25,8 @@ import java.util.Map;
 @Service
 public class ItemService extends AbstractService<ItemEntity, ItemDto> {
 
-    private final ItemQuantityRepository itemQuantityRepository;
-
-    public ItemService(final ItemRepository repository,
-                       final ItemConverter converter,
-                       final ItemQuantityRepository itemQuantityRepository) {
+    public ItemService(final ItemRepository repository, final ItemConverter converter) {
         super(repository, converter);
-        this.itemQuantityRepository = itemQuantityRepository;
     }
 
     @Transactional
@@ -50,17 +45,14 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         }
         for (Map.Entry entry : ItemUtil.toMap(item.getDescription()).entrySet()) {
             final String value = entry.getValue().toString();
-            if (!value.contains(";") && findByName(value) == null) {
+            if (!value.contains(";") && find(entry.getKey().toString(), value) == null) {
                 list.add(new String[]{
                         SpecificStringUtil.capitalize(entry.getKey().toString()),
                         entry.getValue().toString()});
             }
         }
         int j = 0;
-        String[][] matrix = new String[list.size()][];
-        for (String[] s : list) {
-            matrix[j++] = s;
-        }
+        String[][] matrix = listToMatrix(list);
         itemView.setHeader(new TableDto(tableName, matrix));
 
         itemView.setItems(createTableView(item));
@@ -74,37 +66,134 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
             }
         }
 
-        int k = 0;
-        matrix = new String[list.size()][];
-        for (String[] s : list) {
-            matrix[k++] = s;
-        }
+        matrix = listToMatrix(list);
         itemView.setReplacers(new TableDto(matrix.length > 0 ? "Replacers" : null, matrix));
 
         return itemView;
     }
 
+    public ItemView motorcycleCatalogue() {
+        final List<ItemEntity> motorcycles = find("motorcycle");
+
+        final String tableName = "Motorcycle catalogue";
+        List<String[]> list = new ArrayList<>();
+        list.add(new String[]{"Models", String.valueOf(motorcycles.size())});
+
+        final ItemView itemView = new ItemView();
+        itemView.setHeader(new TableDto(tableName, listToMatrix(list)));
+        itemView.setItems(new TableViewDto(22, new ArrayList<>(Collections.singletonList(motorcyclesTable(motorcycles)))));
+        itemView.setReplacers(stubTable());
+        return itemView;
+    }
+
+    private TableDto stubTable() {
+        return new TableDto("stub", new String[][]{{""}});
+    }
+
+    private String[][] listToMatrix(List<String[]> list) {
+        int j = 0;
+        String[][] matrix = new String[list.size()][];
+        for (String[] s : list) {
+            matrix[j++] = s;
+        }
+        return matrix;
+    }
+
+    public TableDto motorcyclesTable(final List<ItemEntity> motorcycles) {
+        final String tableName = "Motorcycles";
+        final List<String[]> rows = new ArrayList<>();
+        for (final ItemEntity motorcycle : motorcycles) {
+            final String[] row = {
+                    ItemUtil.getValueFromDescription(motorcycle.getDescription(), "production"),
+                    motorcycle.getName(),
+                    ItemUtil.getValueFromDescription(motorcycle.getDescription(), "manufacturer"),
+                    motorcycle.getId().toString()};
+            rows.add(row);
+        }
+        final String[][] rowArray = rows.toArray(new String[0][]);
+        return new TableDto(tableName, rowArray);
+    }
+
     public TableViewDto createTableView(final ItemEntity parentItem) {
-        final List<ItemEntity> items = new ArrayList<>();
-        for (Map.Entry entry : ItemUtil.toMap(parentItem.getDescription()).entrySet()) {
-            final String value = entry.getValue().toString();
-            if (value.contains(";")) {
-                final String[] names = value.split("; ");
+        final List<ItemQuantity> itemQuantities = createItemQuantities(parentItem);
+        return createTableView(parentItem.getName(), itemQuantities);
+    }
+
+    private List<ItemQuantity> createItemQuantities(final ItemEntity parentItem) {
+        final List<ItemQuantity> itemQuantities = new ArrayList<>();
+        for (final Map.Entry entry : ItemUtil.toMap(parentItem.getDescription()).entrySet()) {
+            final String category = entry.getKey().toString();
+            if (entry.getValue().toString().contains(";")) {
+                final String[] names = entry.getValue().toString().split("; ");
                 for (final String name : names) {
-                    final ItemEntity childItem = findByName(name);
-                    if (childItem != null) {
-                        items.add(childItem);
+                    final ItemQuantity itemQuantity = createItemQuantity(parentItem, name,category);
+                    if (itemQuantity != null) {
+                        itemQuantities.add(itemQuantity);
                     }
                 }
             } else {
-                final ItemEntity childItem = findByName(value);
-                if (childItem != null) {
-                    items.add(childItem);
+                final String name = entry.getValue().toString();
+                final ItemQuantity itemQuantity = createItemQuantity(parentItem, name, category);
+                if (itemQuantity != null) {
+                    itemQuantities.add(itemQuantity);
                 }
             }
         }
+        return itemQuantities;
+    }
 
-        return createTableView(parentItem.getName(), new ArrayList<>(parentItem.getItemQuantities()));
+    private ItemQuantity createItemQuantity(final ItemEntity parentItem, final String value, final String category) {
+        String name;
+        String location = "";
+        Integer quantity;
+        if (SpecificStringUtil.containsParentheses(value)) {
+            name = SpecificStringUtil.getStringBeforeParentheses(value);
+            String additionalData = SpecificStringUtil.getStringBetweenParentheses(value);
+            location = additionalData.contains(", ") ? additionalData.split(", ")[0] : "-";
+            final String[] additionalDataArray = additionalData.split(", ");
+            if (additionalData.contains(", ")) {
+                for (int i = 0; i < additionalDataArray.length - 1; i++) {
+                    location += additionalDataArray[i] + ((i <= additionalDataArray.length - 1) ? ", " : "");
+                }
+            }
+            quantity = SpecificStringUtil.extractIntegerAutomatically(value);
+        } else {
+            name = value;
+            location = "-";
+            quantity = 1;
+        }
+        final ItemEntity child = category.equals("seal") ? getUssrSealBySize(name) : find(category, name);
+        if (child != null) {
+            final ItemQuantity itemQuantity  = new ItemQuantity();
+            itemQuantity.setItem(child);
+            itemQuantity.setLocation(location);
+            itemQuantity.setQuantity(quantity);
+            return itemQuantity;
+        } else {
+            return null;
+        }
+    }
+
+    private ItemEntity getUssrSealBySize(final String searchingSize) {
+        final List<ItemEntity> ussrSeals = filterUssrMade(find("seal"));
+        for (ItemEntity seal : ussrSeals) {
+            final String actualSize = ItemUtil.getValueFromDescription(seal.getDescription(), "size, mm");
+            if (actualSize.equals(searchingSize)) {
+                return seal;
+            }
+        }
+        return null;
+    }
+
+    private List<ItemEntity> filterUssrMade(final List<ItemEntity> items) {
+        final List<ItemEntity> filteredItems = new ArrayList<>();
+        for (ItemEntity item : items) {
+            final String manufacturer = ItemUtil.getValueFromDescription(item.getDescription(), "manufacturer");
+            if (manufacturer != null && manufacturer.equals("ussr")) {
+                filteredItems.add(item);
+            }
+        }
+        return filteredItems;
     }
 
     public TableViewDto createTableView(final String parentItemName, final List<ItemQuantity> quantities) {
@@ -116,8 +205,8 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         return new TableViewDto(quantities.size(), tables);
     }
 
-    public TableDto createTable(final String motorcycleName) {
-        return createTable(getItems(motorcycleName));
+    public TableDto createTable(final String itemName) {
+        return createTable(getItems(itemName));
     }
 
     public TableDto createTable(final List<ItemQuantity> itemQuantities) {
@@ -126,19 +215,21 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         for (final ItemQuantity itemQuantity : itemQuantities) {
             final ItemEntity item = itemQuantity.getItem();
             final String[] row = {
-                    item.getCategory(),
+                    itemQuantity.getLocation(),
                     item.getName(),
                     itemQuantity.getQuantity() != null ? itemQuantity.getQuantity().toString() : "0",
-                    item.getId().toString()};
+                    item.getId().toString()
+            };
+
             rows.add(row);
         }
         final String[][] rowArray = rows.toArray(new String[0][]);
         return new TableDto(tableName, rowArray);
     }
 
-    public List<ItemQuantity> getItems(final String motorcycleName) {
-        final ItemEntity item = findByName(motorcycleName);
-        return new ArrayList<>(item.getItemQuantities());
+    public List<ItemQuantity> getItems(final String itemName) {
+        final ItemEntity item = findByName(itemName);
+        return createItemQuantities(item);
     }
 
     @Transactional
@@ -170,7 +261,7 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
     public List<ItemEntity> find(final String category) {
         final List<ItemEntity> categorizedItems = new ArrayList<>();
         for (final ItemEntity item : findAll()) {
-            if (item.getCategory().equals(category)) {
+            if (item.getCategory().toLowerCase().equals(category.toLowerCase())) {
                 categorizedItems.add(item);
             }
         }

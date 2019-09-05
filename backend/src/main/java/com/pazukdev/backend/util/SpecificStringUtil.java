@@ -158,7 +158,7 @@ public class SpecificStringUtil {
             result = source.split(separator.getSeparator())[position.getIndex()];
         }
 
-        result = removeSpaces(result);
+        result = StringUtils.trim(result);
 
         if (isEmpty(result)) {
             return null;

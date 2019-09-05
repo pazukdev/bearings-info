@@ -1,7 +1,9 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.dto.item.ItemDto;
+import com.pazukdev.backend.dto.product.BearingDto;
 import com.pazukdev.backend.dto.table.ItemView;
+import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.service.ItemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityExistsException;
+import java.util.List;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -41,6 +44,13 @@ public class ItemController {
     @ApiOperation(value = "Create new item")
     public boolean create(@RequestBody final ItemDto dto) throws EntityExistsException, JSONException {
         return service.create(dto) != null;
+    }
+
+    @GetMapping("/motorcycles")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get all motorcycles")
+    public ItemView motorcycleCatalogue() {
+        return service.motorcycleCatalogue();
     }
 
 }

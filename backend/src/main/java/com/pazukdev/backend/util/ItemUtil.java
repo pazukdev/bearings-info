@@ -1,7 +1,7 @@
 package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.entity.item.ItemEntity;
-import com.pazukdev.backend.entity.item.ItemQuantity;
+import com.pazukdev.backend.dto.item.ItemQuantity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
