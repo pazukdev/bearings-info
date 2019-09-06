@@ -87,7 +87,7 @@ public class EntityFactoryTest {
     @Test
     public void categorizeFileLines() {
         List<List<String>> fileLines = new ArrayList<>();
-        fileLines.add(new ArrayList<>(Arrays.asList("category:", "bearing")));
+        fileLines.add(new ArrayList<>(Arrays.asList("Category:", "bearing")));
         fileLines.add(new ArrayList<>(Arrays.asList("header1", "header2")));
         fileLines.add(new ArrayList<>(Arrays.asList("value1", "value2")));
         fileLines.add(new ArrayList<>(Arrays.asList("category:", "seal")));

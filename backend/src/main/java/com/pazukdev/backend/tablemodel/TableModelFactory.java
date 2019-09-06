@@ -36,7 +36,7 @@ public class TableModelFactory {
     }
 
     private boolean containsCategory(final List<String> line) {
-        return line.contains("category:") || line.contains("category: ");
+        return line.contains("Category:") || line.contains("Category: ");
     }
 
     private boolean isItemSourceFile(final List<List<String>> fileLines) {
@@ -84,7 +84,7 @@ public class TableModelFactory {
                 continue;
             }
             if (header) {
-                line.add("category");
+                line.add("Category");
                 header = false;
             } else {
                 line.add(category);

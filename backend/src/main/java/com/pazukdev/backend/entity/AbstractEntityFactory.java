@@ -1,6 +1,5 @@
 package com.pazukdev.backend.entity;
 
-import com.pazukdev.backend.product.specification.Specification;
 import com.pazukdev.backend.service.AbstractService;
 import com.pazukdev.backend.tablemodel.TableModel;
 import com.pazukdev.backend.tablemodel.TableModelFactory;
@@ -64,9 +63,9 @@ public abstract class AbstractEntityFactory<Entity extends AbstractEntity> {
     }
 
     protected void applyName(final AbstractEntity entity, final TableRow tableRow) {
-        String name = tableRow.getStringValue(Specification.NAME);
+        String name = tableRow.getData().get("Name");
         if (name == null) {
-            name = tableRow.getData().get("viscosity");
+            name = tableRow.getData().get("Viscosity");
         }
         entity.setName(name);
     }

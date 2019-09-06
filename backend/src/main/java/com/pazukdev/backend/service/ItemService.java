@@ -41,7 +41,7 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
 
     public ItemView createItemView(final ItemEntity item) {
         final ItemView itemView = new ItemView();
-        final String tableName = SpecificStringUtil.capitalize(item.getCategory()) + " " + item.getName();
+        final String tableName = item.getCategory() + " " + item.getName();
         List<String[]> list = new ArrayList<>();
         list.add(new String[]{"Name", item.getName()});
         final Integer quantity = item.getQuantity();
@@ -50,7 +50,7 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         }
         final ItemDescriptionMap descriptionMap = createDescriptionMap(item);
         for (final Map.Entry<String, String> entry : descriptionMap.getCharacteristics().entrySet()) {
-            list.add(new String[]{SpecificStringUtil.capitalize(entry.getKey()), entry.getValue()});
+            list.add(new String[]{entry.getKey(), entry.getValue()});
         }
 
         String[][] matrix = listToMatrix(list);
@@ -63,7 +63,12 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         for (final String[] replacerData : replacersData) {
             final ItemEntity replacer = find(item.getCategory(), replacerData[0]);
             if (replacer != null) {
-                list.add(new String[]{replacerData[1], replacer.getName(), replacer.getId().toString()});
+                list.add(new String[]{
+                        replacerData[1],
+                        (replacer.getCategory().equals("Seal")
+                                ? (ItemUtil.getValueFromDescription(replacer, "Manufacturer") + " ")
+                                : "") + replacer.getName(),
+                        replacer.getId().toString()});
             }
         }
 
@@ -74,7 +79,7 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
     }
 
     public ItemView motorcycleCatalogue() {
-        final List<ItemEntity> motorcycles = find("motorcycle");
+        final List<ItemEntity> motorcycles = find("Motorcycle");
 
         final String tableName = "Motorcycle catalogue";
         List<String[]> list = new ArrayList<>();
@@ -105,9 +110,9 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         final List<String[]> rows = new ArrayList<>();
         for (final ItemEntity motorcycle : motorcycles) {
             final String[] row = {
-                    ItemUtil.getValueFromDescription(motorcycle.getDescription(), "production"),
+                    ItemUtil.getValueFromDescription(motorcycle.getDescription(), "Production"),
                     motorcycle.getName(),
-                    ItemUtil.getValueFromDescription(motorcycle.getDescription(), "manufacturer"),
+                    ItemUtil.getValueFromDescription(motorcycle.getDescription(), "Manufacturer"),
                     motorcycle.getId().toString()};
             rows.add(row);
         }
@@ -156,9 +161,9 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         } else {
             name = value;
             location = "-";
-            quantity = category.equals("spark plug") ? 2 : 1;
+            quantity = category.equals("Spark plug") ? 2 : 1;
         }
-        final ItemEntity child = category.equals("seal") ? getUssrSealBySize(name) : find(category, name);
+        final ItemEntity child = category.equals("Seal") ? getUssrSealBySize(name) : find(category, name);
         if (child != null) {
             final ItemQuantity itemQuantity  = new ItemQuantity();
             itemQuantity.setItem(child);
@@ -171,9 +176,9 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
     }
 
     private ItemEntity getUssrSealBySize(final String searchingSize) {
-        final List<ItemEntity> ussrSeals = filterUssrMade(find("seal"));
+        final List<ItemEntity> ussrSeals = filterUssrMade(find("Seal"));
         for (ItemEntity seal : ussrSeals) {
-            final String actualSize = ItemUtil.getValueFromDescription(seal.getDescription(), "size, mm");
+            final String actualSize = ItemUtil.getValueFromDescription(seal.getDescription(), "Size, mm");
             if (actualSize.equals(searchingSize)) {
                 return seal;
             }
@@ -184,8 +189,8 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
     private List<ItemEntity> filterUssrMade(final List<ItemEntity> items) {
         final List<ItemEntity> filteredItems = new ArrayList<>();
         for (ItemEntity item : items) {
-            final String manufacturer = ItemUtil.getValueFromDescription(item.getDescription(), "manufacturer");
-            if (manufacturer != null && manufacturer.equals("ussr")) {
+            final String manufacturer = ItemUtil.getValueFromDescription(item.getDescription(), "Manufacturer");
+            if (manufacturer != null && manufacturer.equals("USSR")) {
                 filteredItems.add(item);
             }
         }
@@ -212,7 +217,8 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
             final ItemEntity item = itemQuantity.getItem();
             final String[] row = {
                     itemQuantity.getLocation(),
-                    item.getName(),
+                    item.getCategory().equals("Seal") ?
+                            ItemUtil.getValueFromDescription(item, "Size, mm") : item.getName(),
                     itemQuantity.getQuantity() != null ? itemQuantity.getQuantity().toString() : "0",
                     item.getId().toString()
             };

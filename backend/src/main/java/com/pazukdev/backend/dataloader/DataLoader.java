@@ -72,13 +72,13 @@ public class DataLoader implements ApplicationRunner {
         if (repositoryIsEmpty(itemRepository)) {
             createAll(itemFactory, itemRepository);
         }
-        loadManufacturers(repositoryIsEmpty(manufacturerRepository));
-        loadOils(repositoryIsEmpty(oilRepository));
-        loadSparkPlugs(repositoryIsEmpty(sparkPlugRepository));
-        loadBearings(repositoryIsEmpty(bearingRepository));
-        loadSeals(repositoryIsEmpty(sealRepository));
-        loadEngines(repositoryIsEmpty(engineRepository));
-        loadMotorcycles(repositoryIsEmpty(motorcycleRepository));
+//        loadManufacturers(repositoryIsEmpty(manufacturerRepository));
+//        loadOils(repositoryIsEmpty(oilRepository));
+//        loadSparkPlugs(repositoryIsEmpty(sparkPlugRepository));
+//        loadBearings(repositoryIsEmpty(bearingRepository));
+//        loadSeals(repositoryIsEmpty(sealRepository));
+//        loadEngines(repositoryIsEmpty(engineRepository));
+//        loadMotorcycles(repositoryIsEmpty(motorcycleRepository));
     }
 
     private <Entity extends AbstractEntity> Boolean repositoryIsEmpty(final JpaRepository<Entity, Long> repository) {

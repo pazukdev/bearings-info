@@ -6,7 +6,7 @@
                 <td colspan="2" style="text-align: center"><b>{{itemView.header.name}}</b></td>
             </tr>
             <tr style="text-align: left" v-for="row in itemView.header.matrix">
-                <td style="width: 70%">
+                <td style="width: 50%">
                     {{row[0]}}
                 </td>
                 <td>
@@ -30,7 +30,7 @@
                             </td>
                             <td>
                                 <button type="button"
-                                        style="width: 60%"
+                                        style="width: 80%"
                                         @click="$emit('select-item', row[3])">
                                     {{row[1]}}
                                 </button>
@@ -52,7 +52,7 @@
                 </td>
             </tr>
             <tr v-if="notStub()" style="text-align: left" v-for="row in itemView.replacers.matrix">
-                <td style="width: 70%">
+                <td>
                     {{row[0]}}
                 </td>
                 <td>

@@ -53,7 +53,7 @@ public class CSVFileUtil {
         } catch (IOException e) {
             LOGGER.error("Error collecting data from input stream", e);
         }
-        return listOfArraysToListOfLists(format(lines));
+        return listOfArraysToListOfLists(lines);
     }
 
     public static <E extends AbstractEntity> E findByName(final String name,

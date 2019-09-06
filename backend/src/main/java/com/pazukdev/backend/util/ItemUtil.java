@@ -67,6 +67,10 @@ public class ItemUtil {
         return categorizedItems;
     }
 
+    public static String getValueFromDescription(final ItemEntity item, final String key) {
+        return getValueFromDescription(item.getDescription(), key);
+    }
+
     public static String getValueFromDescription(final String description, final String key) {
         return toMap(description).get(key);
     }

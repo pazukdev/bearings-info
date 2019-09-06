@@ -4,13 +4,11 @@ import com.pazukdev.backend.entity.AbstractEntityFactory;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
-import com.pazukdev.backend.util.SpecificStringUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -45,12 +43,12 @@ public class ItemFactory extends AbstractEntityFactory<ItemEntity> {
     }
 
     private void applyCategory(final ItemEntity item, final TableRow tableRow) {
-        final String category = tableRow.getData().get("category");
+        final String category = tableRow.getData().get("Category");
         item.setCategory(category);
     }
 
     private void applyQuantity(final ItemEntity item, final TableRow tableRow) {
-        final String quantity = tableRow.getData().get("quantity");
+        final String quantity = tableRow.getData().get("Quantity");
         if (quantity != null) {
             item.setQuantity(Integer.valueOf(quantity));
         }
@@ -60,7 +58,7 @@ public class ItemFactory extends AbstractEntityFactory<ItemEntity> {
         String description = "";
         for (final Map.Entry<String, String> entry : tableRow.getData().entrySet()) {
             final String key = entry.getKey();
-            if (key.equals("name") || key.equals("category") || key.equals("quantity") || key.equals("replacer")) {
+            if (key.equals("Name") || key.equals("Category") || key.equals("Quantity") || key.equals("Replacer")) {
                 continue;
             }
             description = description + entry.getKey() + ":" + entry.getValue() + ";;";
@@ -69,7 +67,7 @@ public class ItemFactory extends AbstractEntityFactory<ItemEntity> {
     }
 
     private void applyReplacers(final ItemEntity item, final TableRow tableRow) {
-        final String replacer = tableRow.getData().get("replacer");
+        final String replacer = tableRow.getData().get("Replacer");
         item.setReplacer(replacer != null ? replacer : "-");
     }
 

@@ -30,8 +30,8 @@
                     </tbody>
                 </table>
             </div>
-            {{homeComponent}}<br>
-            {{itemViews.length}}<br>
+<!--            {{homeComponent}}<br>-->
+<!--            {{itemViews.length}}<br>-->
             <router-view style="padding: 20px"></router-view>
         </div>
     </div>
@@ -214,6 +214,8 @@
         text-align: left;
         margin-left:auto;
         margin-right:auto;
+        border-spacing: 10px;
+        border-collapse: separate;
     }
 
     th {
