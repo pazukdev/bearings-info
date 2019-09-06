@@ -23,14 +23,19 @@ name,type,rolling_element (pcs),enclosure,rolling_row,cage,"size, mm",weight_g,M
 207,deepgroove,ball (9),open,single_row,sheet_metal,35x72x17,-,-,6207
 205,deepgroove,ball (9),open,single_row,sheet_metal,25x52x15,-,-,6205
 204,deepgroove,ball (8),open,single_row,sheet_metal,20x47x14,-,-,6204
+303,deepgroove,ball (-),open,single_row,sheet_metal,17x47x14,-,-,6303
+304,deepgroove,ball (-),open,single_row,sheet_metal,20x52x15,-,-,6304
 201,deepgroove,ball (7),open,single_row,sheet_metal,12x32x10,-,-,6201
 200,deepgroove,ball (6),open,single_row,sheet_metal,10x30x9,-,-,6200
 18,deepgroove,ball (7),open,single_row,sheet_metal,8x22x7,-,-,608
 42209l,cylindrical_roller,roller (16),open,single_row,brass,45x85x19,-,-,NJ209
 12204,cylindrical_roller,roller (11),open,single_row,brass,20x47x14,-,-,NF204
 7204,tapered_roller,tapered_roller (12),open,single_row,sheet_metal,20x47x15.3,-,-,30204
-7201404,plain,-,-,-,-,-,,AL-5; BrAZHMc 10-3-1.5,rrr
-7201107,plain,-,-,-,-,20x26x19.5,,BrAZHMc 10-3-1.5,zzz
+7201404,plain,-,-,-,-,-,-,AL-5; BrAZHMc 10-3-1.5,-
+7201107,plain,-,-,-,-,20x26x19.5,-,BrAZHMc 10-3-1.5,-
+948066,thrust,ball (-),open,single_row,-,6x22.7x5.5,-,-,AXK0619NF
+,,,,,,,,,
+,,,,,,,,,
 ,,,,,,,,,
 Category:,Seal,,,,,,,,
 "Size, mm",Name,Manufacturer,Rotation,Material,,,,,Replacer
@@ -51,16 +56,21 @@ Category:,Seal,,,,,,,,
 60x85x8,12015893B,Corteco,-,-,,,,,-
 60x85x8,12015894B,Corteco,-,-,,,,,-
 60x85x8,12011193B,Corteco,-,-,,,,,-
+20x34x7,19026213B,Corteco,-,-,,,,,-
+36x48x10,12000792B,Corteco,right,-,,,,,-
+35x48x7,2012018755,Hans Pries,right,-,,,,,-
 59.7x85x12,MT801190,USSR,-,-,,,,,01002867B; 12015893B; 12015894B; 12011193B
 50x65x5.5,7201142,USSR,-,felt,,,,,01030104B (crankshaft rear bearing housing mashining); 01014252B (crankshaft rear bearing housing mashining); 7201191 (crankshaft rear bearing housing mashining)
 15x30x7,7201122,USSR,-,-,,,,,12011109B; 12010794B; 19026201B
 15x30x7,7201124,USSR,-,-,,,,,12011109B; 12010794B; 19026201B
+15.8x30x7,MT804130,USSR,-,-,,,,,12011109B; 12010794B; 19026201B
 50x70x9,7201191,USSR,-,-,,,,,12011238B; 01019463B; 01032639B; 12000520B; 19019529B; 12014726B; T1086
 50x70x9,7201025,USSR,-,-,,,,,12011238B; 01019463B; 01032639B; 12000520B; 19019529B; 12014726B; T1086
 31.4x45.1x8,7204152,USSR,-,-,,,,,NJ416
-,,,,,,,,,
-,,,,,,,,,
-,,,,,,,,,
+31.5x45x7,7204151,USSR,-,-,,,,,NJ416
+36x48x8,7204157,USSR,right,-,,,,,12000792B; 2012018755
+19.5x34x8.5,75004122,USSR,-,-,,,,,19026213B
+4.4x10x10.3x8,MT803605,USSR,-,oil-resistant rubber,,,,,-
 ,,,,,,,,,
 ,,,,,,,,,
 Category:,Oil,,,,,,,,
@@ -130,7 +140,7 @@ Category:,Gearbox,,,,,,,,
 name,manufacturer,bearing,seal,,,,,,
 7204,kmz,209; 205,7201191; 7201122,,,,,,
 6204,kmz,207; 205,7204152; NJ416,,,,,,
-MT804,kmz,209; 205,7201191; 7201122,,,,,,
+MT804,kmz,205 (clutch shaft - 1); 303 (clutch shaft - 1); 304 (main shaft - 2); 948066 (clutch release rod - 1),31.5x45x7 (clutch shaft - 1); 36x48x8 (main shaft - 1); 19.5x34x8.5 (kickstarter shaft - 1); 15.8x30x7 (gearshift lever - 1); 4.4x10.3x8 (clutch release rod - 1),,,,,,
 8.101-04001,imz,207; 205,7204152; NJ416,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
@@ -138,12 +148,13 @@ MT804,kmz,209; 205,7201191; 7201122,,,,,,
 ,,,,,,,,,
 Category:,Engine,,,,,,,,
 Name,Manufacturer,"Power, hp","Torque, nm","Max speed, rpm",Spark plug,Bearing,Seal,,
-M-72 type,IMZ / KMZ,22,30,5900,NA11; 11A,"207 (crankshaft; 2); 7201404 (camshaft, front journal; 1); 7201107 (camshaft, rear journal; 1)",50x65x5.5 (crankshaft; 1); 15x30x7 (camshaft; 1),,
-K-750 type,KMZ,26,30,5900,A8U,"207 (crankshaft; 2); 205 (camshaft, front journal; 1)",50x65x5.5 (crankshaft; 1); 15x30x7 (camshaft; 1),,
-K-750M type,KMZ,26,30,5900,A8U,"207 (crankshaft; 2); 205 (camshaft, front journal; 1)",50x65x5.5 (crankshaft; 1); 15x30x7 (camshaft; 1),,
-MT-8,KMZ,32,30,5900,A8U,"42209 (crankshaft; rear journal; 1); 209 (crankshaft, front journal; 1); 205 (camshaft, front journal; 1)",59.7x85x12 (crankshaft; 1); 15x30x7 (camshaft; 1),,
-M67 type,IMZ,32,30,5900,A11N; A14V,"207 (crankshaft; 2); 205 (camshaft, front journal; 1)",50x70x9 (crankshaft; 1); 15x30x7 (camshaft; 1),,
-M67-36 type,IMZ,36,30,5900,A11N; A14V,"207 (crankshaft; 2); 205 (camshaft, front journal; 1)",50x70x9 (crankshaft; 1); 15x30x7 (camshaft; 1),,
+M-72 type,IMZ / KMZ,22,30,5900,NA11; 11A,"207 (crankshaft - 2); 7201404 (camshaft, front journal - 1); 7201107 (camshaft, rear journal - 1)",50x65x5.5 (crankshaft - 1); 15x30x7 (camshaft - 1),,
+K-750 type,KMZ,26,30,5900,A8U,"207 (crankshaft - 2); 205 (camshaft, front journal - 1)",50x65x5.5 (crankshaft - 1); 15x30x7 (camshaft - 1),,
+K-750M type,KMZ,26,30,5900,A8U,"207 (crankshaft - 2); 205 (camshaft, front journal - 1)",50x65x5.5 (crankshaft - 1); 15x30x7 (camshaft - 1),,
+MT-8,KMZ,32,30,5900,A8U,"42209 (crankshaft, rear journal - 1); 209 (crankshaft, front journal - 1); 205 (camshaft, front journal - 1)",59.7x85x12 (crankshaft - 1); 15x30x7 (camshaft - 1),,
+MT-9 type,KMZ,32,30,5900,A8U,"42209 (crankshaft, rear journal - 1); 209 (crankshaft, front journal - 1); 205 (camshaft, front journal - 1)",59.7x85x12 (crankshaft - 1); 15x30x7 (camshaft - 1),,
+M67 type,IMZ,32,30,5900,A11N; A14V,"207 (crankshaft - 2); 205 (camshaft, front journal - 1)",50x70x9 (crankshaft - 1); 15x30x7 (camshaft - 1),,
+M67-36 type,IMZ,36,30,5900,A11N; A14V,"207 (crankshaft - 2); 205 (camshaft, front journal - 1)",50x70x9 (crankshaft - 1); 15x30x7 (camshaft - 1),,
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,

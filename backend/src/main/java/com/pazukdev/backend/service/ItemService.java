@@ -1,6 +1,7 @@
 package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.ItemConverter;
+import com.pazukdev.backend.dto.item.ItemDescriptionMap;
 import com.pazukdev.backend.dto.item.ItemDto;
 import com.pazukdev.backend.dto.item.ItemQuantity;
 import com.pazukdev.backend.dto.table.ItemView;
@@ -34,6 +35,10 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         return createItemView(getOne(id));
     }
 
+    public ItemDescriptionMap createDescriptionMap(final ItemEntity item) {
+        return ItemUtil.createDescriptionMap(item, this);
+    }
+
     public ItemView createItemView(final ItemEntity item) {
         final ItemView itemView = new ItemView();
         final String tableName = SpecificStringUtil.capitalize(item.getCategory()) + " " + item.getName();
@@ -43,19 +48,15 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         if (quantity != null && quantity > 0) {
             list.add(new String[]{"Quantity",  quantity.toString()});
         }
-        for (Map.Entry entry : ItemUtil.toMap(item.getDescription()).entrySet()) {
-            final String value = entry.getValue().toString();
-            if (!value.contains(";") && find(entry.getKey().toString(), value) == null) {
-                list.add(new String[]{
-                        SpecificStringUtil.capitalize(entry.getKey().toString()),
-                        entry.getValue().toString()});
-            }
+        final ItemDescriptionMap descriptionMap = createDescriptionMap(item);
+        for (final Map.Entry<String, String> entry : descriptionMap.getCharacteristics().entrySet()) {
+            list.add(new String[]{SpecificStringUtil.capitalize(entry.getKey()), entry.getValue()});
         }
-        int j = 0;
+
         String[][] matrix = listToMatrix(list);
         itemView.setHeader(new TableDto(tableName, matrix));
 
-        itemView.setItems(createTableView(item));
+        itemView.setItems(createTableView(descriptionMap));
 
         list = new ArrayList<>();
         final List<String[]> replacersData = ItemUtil.parseReplacersSourceString(item.getReplacer());
@@ -114,26 +115,26 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         return new TableDto(tableName, rowArray);
     }
 
-    public TableViewDto createTableView(final ItemEntity parentItem) {
-        final List<ItemQuantity> itemQuantities = createItemQuantities(parentItem);
-        return createTableView(parentItem.getName(), itemQuantities);
+    public TableViewDto createTableView(final ItemDescriptionMap descriptionMap) {
+        final List<ItemQuantity> itemQuantities = createItemQuantities(descriptionMap);
+        return createTableView(descriptionMap.getParent().getName(), itemQuantities);
     }
 
-    private List<ItemQuantity> createItemQuantities(final ItemEntity parentItem) {
+    private List<ItemQuantity> createItemQuantities(final ItemDescriptionMap descriptionMap) {
         final List<ItemQuantity> itemQuantities = new ArrayList<>();
-        for (final Map.Entry entry : ItemUtil.toMap(parentItem.getDescription()).entrySet()) {
+        for (final Map.Entry entry : descriptionMap.getItems().entrySet()) {
             final String category = entry.getKey().toString();
             if (entry.getValue().toString().contains(";")) {
                 final String[] names = entry.getValue().toString().split("; ");
                 for (final String name : names) {
-                    final ItemQuantity itemQuantity = createItemQuantity(parentItem, name,category);
+                    final ItemQuantity itemQuantity = createItemQuantity(descriptionMap.getParent(), name,category);
                     if (itemQuantity != null) {
                         itemQuantities.add(itemQuantity);
                     }
                 }
             } else {
                 final String name = entry.getValue().toString();
-                final ItemQuantity itemQuantity = createItemQuantity(parentItem, name, category);
+                final ItemQuantity itemQuantity = createItemQuantity(descriptionMap.getParent(), name, category);
                 if (itemQuantity != null) {
                     itemQuantities.add(itemQuantity);
                 }
@@ -149,18 +150,13 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         if (SpecificStringUtil.containsParentheses(value)) {
             name = SpecificStringUtil.getStringBeforeParentheses(value);
             String additionalData = SpecificStringUtil.getStringBetweenParentheses(value);
-            location = additionalData.contains(", ") ? additionalData.split(", ")[0] : "-";
-            final String[] additionalDataArray = additionalData.split(", ");
-            if (additionalData.contains(", ")) {
-                for (int i = 0; i < additionalDataArray.length - 1; i++) {
-                    location += additionalDataArray[i] + ((i <= additionalDataArray.length - 1) ? ", " : "");
-                }
-            }
-            quantity = SpecificStringUtil.extractIntegerAutomatically(value);
+            location = additionalData.contains(" - ") ? additionalData.split(" - ")[0] : "-";
+            quantity = additionalData.contains(" - ") ?
+                    Integer.valueOf(additionalData.split(" - ")[1]) : Integer.valueOf(additionalData);
         } else {
             name = value;
             location = "-";
-            quantity = 1;
+            quantity = category.equals("spark plug") ? 2 : 1;
         }
         final ItemEntity child = category.equals("seal") ? getUssrSealBySize(name) : find(category, name);
         if (child != null) {
@@ -205,9 +201,9 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         return new TableViewDto(quantities.size(), tables);
     }
 
-    public TableDto createTable(final String itemName) {
-        return createTable(getItems(itemName));
-    }
+//    public TableDto createTable(final String itemName) {
+//        return createTable(getItems(itemName));
+//    }
 
     public TableDto createTable(final List<ItemQuantity> itemQuantities) {
         final String tableName = itemQuantities.get(0).getItem().getCategory();
@@ -227,10 +223,10 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         return new TableDto(tableName, rowArray);
     }
 
-    public List<ItemQuantity> getItems(final String itemName) {
-        final ItemEntity item = findByName(itemName);
-        return createItemQuantities(item);
-    }
+//    public List<ItemQuantity> getItems(final String itemName) {
+//        final ItemEntity item = findByName(itemName);
+//        return createItemQuantities(item);
+//    }
 
     @Transactional
     @Override

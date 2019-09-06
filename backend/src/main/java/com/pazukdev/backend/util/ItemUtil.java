@@ -1,7 +1,10 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.dto.item.ItemDescriptionMap;
 import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.dto.item.ItemQuantity;
+import com.pazukdev.backend.service.ItemService;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,6 +78,27 @@ public class ItemUtil {
             map.put(element.split(":")[0], element.split(":")[1]);
         }
         return map;
+    }
+
+    public static ItemDescriptionMap createDescriptionMap(final ItemEntity item, final ItemService service) {
+        final Map<String, String> unsortedMap = toMap(item.getDescription());
+        final ItemDescriptionMap itemDescriptionMap = new ItemDescriptionMap();
+        itemDescriptionMap.setParent(item);
+        for (final Map.Entry<String, String> entry : unsortedMap.entrySet()) {
+            final String key = entry.getKey();
+            final String value = entry.getValue();
+            if (isLinkToItem(entry, service)) {
+                itemDescriptionMap.getItems().put(key, value);
+            } else {
+                itemDescriptionMap.getCharacteristics().put(key, value);
+            }
+        }
+        return itemDescriptionMap;
+    }
+
+    public static boolean isLinkToItem(final Map.Entry<String, String> entry, final ItemService service) {
+        final String category = StringUtils.trim(entry.getKey());
+        return service.find(category).size() > 0;
     }
 
     public static String[] parseReplacerData(final String replacerData) {

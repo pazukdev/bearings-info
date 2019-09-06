@@ -15,7 +15,6 @@
             </tr>
             <tr v-for="item in itemView.items.tables">
                 <td colspan="2">
-                    {{item.matrix}}
                     <table class="get-all-table">
                         <tbody>
                         <tr>
