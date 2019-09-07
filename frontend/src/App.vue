@@ -192,7 +192,7 @@
         border-radius: 4px;
         border: none;
         background: #929292;
-        height: 36px;
+        height: 52px;
     }
 
     select {

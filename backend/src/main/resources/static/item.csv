@@ -9,9 +9,9 @@
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
-,,,,,,,,,
-,,,,,,,,,
-,,,,,,,,,
+Category:,Screw,,,,,,,,
+Name,"Dimensions, mm",GOST,GOST (newer),Material,Screw class,,,,Replacer
+M10x1.5x18,M10x1.5x18,1490-80,17475-80,-,4.8 or higher,,,,DIN 963; DIN 7991
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
@@ -28,6 +28,7 @@ Name,Type,Rolling element (pcs),Enclosure,Rolling row,Cage,"Size, mm","Weight, g
 201,deepgroove,ball (7),open,single row,sheet metal,12x32x10,-,-,6201
 200,deepgroove,ball (6),open,single row,sheet metal,10x30x9,-,-,6200
 18,deepgroove,ball (7),open,single row,sheet metal,8x22x7,-,-,608
+180503,deepgroove,ball (-),closed,single row,-,17x40x16,-,-,62203zz
 42209l,cylindrical roller,roller (16),open,single row,brass,45x85x19,-,-,NJ209
 12204,cylindrical roller,roller (11),open,single row,brass,20x47x14,-,-,NF204
 7204,tapered roller,tapered roller (12),open,single row,sheet metal,20x47x15.3,-,-,30204
@@ -60,6 +61,9 @@ Category:,Seal,,,,,,,,
 20x40x5.5,12014346B,Corteco,-,-,,,,,-
 36x48x10,12000792B,Corteco,right,-,,,,,-
 35x48x7,2012018755,Hans Pries,right,-,,,,,-
+18x35x8,H3070,Musashi,left,-,,,,,-
+18x35x10,12010819B,Corteco,left,-,,,,,-
+22x40x12,43605,Erling,left,-,,,,,-
 12x25x7,OAS-12X25x7-NBR,-,-,-,,,,,-
 59.7x85x12,MT801190,USSR,-,-,,,,,01002867B; 12015893B; 12015894B; 12011193B
 50x65x5.5,7201142,USSR,-,felt,,,,,01030104B (crankshaft rear bearing housing mashining); 01014252B (crankshaft rear bearing housing mashining); 7201191 (crankshaft rear bearing housing mashining)
@@ -82,27 +86,35 @@ Category:,Seal,,,,,,,,
 11x6.5x11,75003213-A,USSR,-,oil-resistant rubber,,,,,-
 11x6.5x11,6326155,USSR,-,oil-resistant rubber,,,,,-
 11x6.5x11,7203213-20,USSR,-,oil-resistant rubber,,,,,-
+18x35x7.5,G4143701459,USSR,left,-,,,,,H3070; 12010819B
+22x40x12,22x40x12,USSR,left,-,,,,,43605
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
 Category:,Oil,,,,,,,,
-Usage,Viscosity,Base,Seasonality,Manufacturer,,,,,
-motor,SAE 50,mineral,summer use,-,,,,,
-motor,20W-50,mineral,multigrade,Areca; Mannol,,,,,
-motor,25W-70,mineral,multigrade,-,,,,,
-motor,15W-50,semisynthetic,multigrade,-,,,,,
-motor,SAE 60,synthetic,summer use,-,,,,,
-motor,5W-50,synthetic,multigrade,-,,,,,
-motor,5W-60,synthetic,multigrade,-,,,,,
-motor,10W-50,synthetic,multigrade,-,,,,,
-motor,10W-60,synthetic,multigrade,Agip; Eni; Mannol,,,,,
-motor,15W-50,synthetic,multigrade,-,,,,,
-motor,20W-50,synthetic,multigrade,-,,,,,
-motor,20W-60,synthetic,multigrade,-,,,,,
-gear,80W-90,mineral,multigrade,-,,,,,
-gear,85W-90,mineral,multigrade,-,,,,,
-gear,85W-140,mineral,multigrade,-,,,,,
-gear,75W-90,synthetic,multigrade,-,,,,,
-gear,80W-140,synthetic,multigrade,-,,,,,
+Usage,Name,"Viscosity, SAE",Base,Seasonality,Manufacturer,,,,Replacer
+Motor,M8,20W-20,Mineral,Multigrade,USSR,,,,SAE 50; 20W-50; 25W-70; 15W-50; SAE 60; 5W-50; 5W-60; 10W-50; 10W-60; 15W-50; 20W-50; 20W-60
+Motor,SAE 50,50,Mineral,Summer use,-,,,,-
+Motor,20W-50,20W-50,Mineral,Multigrade,Areca; Mannol,,,,-
+Motor,25W-70,25W-70,Mineral,Multigrade,-,,,,-
+Motor,15W-50,15W-50,Semisynthetic,Multigrade,-,,,,-
+Motor,SAE 60,60,Synthetic,Summer use,-,,,,-
+Motor,5W-50,5W-50,Synthetic,Multigrade,-,,,,-
+Motor,5W-60,5W-60,Synthetic,Multigrade,-,,,,-
+Motor,10W-50,10W-50,Synthetic,Multigrade,-,,,,-
+Motor,10W-60,10W-60,Synthetic,Multigrade,Agip; Eni; Mannol,,,,-
+Motor,15W-50,15W-50,Synthetic,Multigrade,-,,,,-
+Motor,20W-50,20W-50,Synthetic,Multigrade,-,,,,-
+Motor,20W-60,20W-60,Synthetic,Multigrade,-,,,,-
+Gear,Gear oil for gearbox,-,Mineral,Multigrade,-,,,,80W-90; 85W-90; 75W-90
+Gear,Gear oil for final drive,-,Mineral,Multigrade,-,,,,85W-140; 80W-140
+Gear,80W-90,80W-90,Mineral,Multigrade,-,,,,-
+Gear,85W-90,85W-90,Mineral,Multigrade,-,,,,-
+Gear,85W-140,85W-140,Mineral,Multigrade,-,,,,-
+Gear,75W-90,75W-90,Synthetic,Multigrade,-,,,,-
+Gear,80W-140,80W-140,Synthetic,Multigrade,-,,,,-
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
@@ -115,7 +127,7 @@ gear,80W-140,synthetic,multigrade,-,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
 Category:,Spark plug,,,,,,,,
-Name,Producer,GOST,Heat range,Thread,"Thread length, mm","Gap, mm",,,Replacer
+Name,Manufacturer,GOST,Heat range,Thread,"Thread length, mm","Gap, mm",,,Replacer
 14-10A,Beru,-,-,M14x1.25,-,-,,,-
 14-9A,Beru,-,-,M14x1.25,-,-,,,-
 14-8B,Beru,-,-,M14x1.25,-,-,,,-
@@ -145,40 +157,47 @@ NA11,USSR,B 2043-43,10,M14x1.25,11,0.5-0.7,,,A10NT; W10AC; 14-10A; L86C; B-4H; W
 A8U,USSR,2043-54,10,M14x1.25,11,0.5-0.7,,,A10NT; W10AC; 14-10A; L86C; B-4H; W14F-U; N19
 ,,,,,,,,,
 ,,,,,,,,,
+Category:,Generator,,,,,,,,
+Name,Type,"Tension, V","Power, W","Amperage, A",Bearing,Seal,Screw,,
+G-11A,Direct current type,6,45,7,201 (Rotor shaft - 1); 18 (Rotor shaft - 1),Felt seal ring,M10x1.5x18 (Pole shoe screw - 1),,
+G-414,Direct current type,6,65,10,201 (Rotor shaft - 1); 200 (Rotor shaft - 1),18x35x7.5 (Rotor shaft - 1),M10x1.5x18 (Pole shoe screw - 1),,
+G-424,Alternator,14,150,11,180503 (Rotor shaft - 2),22x40x12 (Rotor shaft - 1),-,,
+,,,,,,,,,
+,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
 Category:,Gearbox,,,,,,,,
-Name,Manufacturer,Bearing,Seal,,,,,,
-7204,KMZ,205 (clutch shaft - 1); 12204 (clutch shaft - 1); 304 (main shaft - 2); 948066 (clutch release rod - 1),31.4x45.1x8 (clutch shaft - 1); 35.4x48.1x8.5 (main shaft - 1); 19x38x8 (kickstarter shaft - 1); 11.5x25.1x7 (gearshift lever - 1); 11x6.5x11 (clutch release rod - 1); 4.5 (right and left covers - 2),,,,,,
-6204,KMZ,205 (clutch shaft - 1); 12204 (clutch shaft - 1); 304 (main shaft - 2); 948066 (clutch release rod - 1),31.4x45.1x8 (clutch shaft - 1); 35.4x48.1x8.5 (main shaft - 1); 19x38x8 (kickstarter shaft - 1); 11.5x25.1x7 (gearshift lever - 1); 11x6.5x11 (clutch release rod - 1); 11.5x25.1x7 (right and left covers - 2),,,,,,
-MT804,KMZ,205 (clutch shaft - 1); 303 (clutch shaft - 1); 304 (main shaft - 2); 948066 (clutch release rod - 1),31.5x45x7 (clutch shaft - 1); 36x48x8 (main shaft - 1); 19.5x34x8.5 (kickstarter shaft - 1); 15.8x30x7 (gearshift lever - 1); 4.4x10.3x8 (clutch release rod - 1),,,,,,
-8.101-04001,IMZ,205 (clutch shaft - 1); 12204 (clutch shaft - 1); 304 (main shaft - 2); 948066 (clutch release rod - 1),31.4x45.1x8 (clutch shaft - 1); 35.4x48.1x8.5 (main shaft - 1); 19.8x40x10 (kickstarter shaft - 1); 11.5x25.1x7 (gearshift lever - 1); 11x6.5x11 (clutch release rod - 1),,,,,,
+Name,Manufacturer,Bearing,Seal,Oil,,,,,
+7204,KMZ,205 (clutch shaft - 1); 12204 (clutch shaft - 1); 304 (main shaft - 2); 948066 (clutch release rod - 1),31.4x45.1x8 (clutch shaft - 1); 35.4x48.1x8.5 (main shaft - 1); 19x38x8 (kickstarter shaft - 1); 11.5x25.1x7 (gearshift lever - 1); 11x6.5x11 (clutch release rod - 1); 4.5 (right and left covers - 2),M8 (1.2 L),,,,,
+6204,KMZ,205 (clutch shaft - 1); 12204 (clutch shaft - 1); 304 (main shaft - 2); 948066 (clutch release rod - 1),31.4x45.1x8 (clutch shaft - 1); 35.4x48.1x8.5 (main shaft - 1); 19x38x8 (kickstarter shaft - 1); 11.5x25.1x7 (gearshift lever - 1); 11x6.5x11 (clutch release rod - 1); 11.5x25.1x7 (right and left covers - 2),M8 (1.2 L),,,,,
+MT804,KMZ,205 (clutch shaft - 1); 303 (clutch shaft - 1); 304 (main shaft - 2); 948066 (clutch release rod - 1),31.5x45x7 (clutch shaft - 1); 36x48x8 (main shaft - 1); 19.5x34x8.5 (kickstarter shaft - 1); 15.8x30x7 (gearshift lever - 1); 4.4x10.3x8 (clutch release rod - 1),Gear oil for gearbox (1.2L),,,,,
+8.101-04001,IMZ,205 (clutch shaft - 1); 12204 (clutch shaft - 1); 304 (main shaft - 2); 948066 (clutch release rod - 1),31.4x45.1x8 (clutch shaft - 1); 35.4x48.1x8.5 (main shaft - 1); 19.8x40x10 (kickstarter shaft - 1); 11.5x25.1x7 (gearshift lever - 1); 11x6.5x11 (clutch release rod - 1),M8 (1.2 L),,,,,
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
 Category:,Engine,,,,,,,,
-Name,Manufacturer,"Power, hp","Torque, nm","Max speed, rpm",Spark plug,Bearing,Seal,,
-M-72 type,IMZ / KMZ,22,30,5900,NA11; 11A,"207 (crankshaft - 2); 7201404 (camshaft, front journal - 1); 7201107 (camshaft, rear journal - 1)",50x65x5.5 (crankshaft - 1); 15x30x7 (camshaft - 1),,
-K-750 type,KMZ,26,30,5900,A8U,"207 (crankshaft - 2); 205 (camshaft, front journal - 1)",50x65x5.5 (crankshaft - 1); 15x30x7 (camshaft - 1),,
-K-750M type,KMZ,26,30,5900,A8U,"207 (crankshaft - 2); 205 (camshaft, front journal - 1)",50x65x5.5 (crankshaft - 1); 15x30x7 (camshaft - 1),,
-MT-8,KMZ,32,30,5900,A8U,"42209 (crankshaft, rear journal - 1); 209 (crankshaft, front journal - 1); 205 (camshaft, front journal - 1)",59.7x85x12 (crankshaft - 1); 15x30x7 (camshaft - 1),,
-MT-9 type,KMZ,32,30,5900,A8U,"42209 (crankshaft, rear journal - 1); 209 (crankshaft, front journal - 1); 205 (camshaft, front journal - 1)",59.7x85x12 (crankshaft - 1); 15x30x7 (camshaft - 1),,
-M67 type,IMZ,32,30,5900,A11N; A14V,"207 (crankshaft - 2); 205 (camshaft, front journal - 1)",50x70x9 (crankshaft - 1); 15x30x7 (camshaft - 1),,
-M67-36 type,IMZ,36,30,5900,A11N; A14V,"207 (crankshaft - 2); 205 (camshaft, front journal - 1)",50x70x9 (crankshaft - 1); 15x30x7 (camshaft - 1),,
+Name,Manufacturer,"Power, hp","Torque, nm","Max speed, rpm",Spark plug,Bearing,Seal,Oil,
+M-72 type,IMZ / KMZ,22,30,5900,NA11; 11A,"207 (crankshaft - 2); 7201404 (camshaft, front journal - 1); 7201107 (camshaft, rear journal - 1)",50x65x5.5 (crankshaft - 1); 15x30x7 (camshaft - 1),M8 (2.1 L),
+K-750 type,KMZ,26,30,5900,A8U,"207 (crankshaft - 2); 205 (camshaft, front journal - 1)",50x65x5.5 (crankshaft - 1); 15x30x7 (camshaft - 1),M8 (2.1 L),
+K-750M type,KMZ,26,30,5900,A8U,"207 (crankshaft - 2); 205 (camshaft, front journal - 1)",50x65x5.5 (crankshaft - 1); 15x30x7 (camshaft - 1),M8 (2.1 L),
+MT-8,KMZ,32,30,5900,A8U,"42209 (crankshaft, rear journal - 1); 209 (crankshaft, front journal - 1); 205 (camshaft, front journal - 1)",59.7x85x12 (crankshaft - 1); 15x30x7 (camshaft - 1),M8 (2.1 L),
+MT-9 type,KMZ,32,30,5900,A8U,"42209 (crankshaft, rear journal - 1); 209 (crankshaft, front journal - 1); 205 (camshaft, front journal - 1)",59.7x85x12 (crankshaft - 1); 15x30x7 (camshaft - 1),M8 (2.1 L),
+M67 type,IMZ,32,30,5900,A11N; A14V,"207 (crankshaft - 2); 205 (camshaft, front journal - 1)",50x70x9 (crankshaft - 1); 15x30x7 (camshaft - 1),M8 (2.1 L),
+M67-36 type,IMZ,36,30,5900,A11N; A14V,"207 (crankshaft - 2); 205 (camshaft, front journal - 1)",50x70x9 (crankshaft - 1); 15x30x7 (camshaft - 1),M8 (2.1 L),
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
 Category:,Motorcycle,,,,,,,,
-Name,Manufacturer,Production,"Max speed, km/h","Weight, kg",Engine,Gearbox,"Fuel capacity, l",,
-M-72,IMZ,1941-1957,90,300,M-72 type,7204,19,,
-M-72M,IMZ / KMZ,1955-1960,90,300,M-72 type,7204,19,,
-M-72N,KMZ,1957-1958,90,300,M-72 type,7204,19,,
-K-750,KMZ,1958-1964,90,350,K-750 type,7204,19,,
-K-750M,KMZ,1963-1970,90,350,K-750M type,6204,19,,
-K-650 Dnepr,KMZ,1968-1971,105,350,MT-8,6204,19,,
-Dnepr MT-9,KMZ,1971-1976,105,350,MT-9 type,MT804,19,,
-Ural M67,IMZ,1973-1976,105,350,M67 type,8.101-04001,20,,
-Ural M67-36,IMZ,1976-1974,105,350,M67-36 type,8.101-04001,20,,
+Name,Manufacturer,Production,"Max speed, km/h","Weight, kg","Fuel capacity, l",Engine,Gearbox,Generator,
+M-72,IMZ,1941-1957,90,300,19,M-72 type,7204,G-11A,
+M-72M,IMZ / KMZ,1955-1960,90,300,19,M-72 type,7204,G-11A,
+M-72N,KMZ,1957-1958,90,300,19,M-72 type,7204,G-11A,
+K-750,KMZ,1958-1964,90,350,19,K-750 type,7204,G-11A,
+K-750M,KMZ,1963-1970,90,350,19,K-750M type,6204,G-414,
+K-650 Dnepr,KMZ,1968-1971,105,350,19,MT-8,6204,G-414,
+Dnepr MT-9,KMZ,1971-1976,105,350,19,MT-9 type,MT804,G-414,
+Ural M67,IMZ,1973-1976,105,350,20,M67 type,8.101-04001,G-424,
+Ural M67-36,IMZ,1976-1974,105,350,20,M67-36 type,8.101-04001,G-424,

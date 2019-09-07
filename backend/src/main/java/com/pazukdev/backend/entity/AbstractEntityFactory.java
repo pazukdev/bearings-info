@@ -64,9 +64,6 @@ public abstract class AbstractEntityFactory<Entity extends AbstractEntity> {
 
     protected void applyName(final AbstractEntity entity, final TableRow tableRow) {
         String name = tableRow.getData().get("Name");
-        if (name == null) {
-            name = tableRow.getData().get("Viscosity");
-        }
         entity.setName(name);
     }
 

@@ -16,6 +16,6 @@ public class ItemQuantity extends AbstractDto {
 
     private ItemEntity item;
     private String location;
-    private Integer quantity;
+    private String quantity;
 
 }

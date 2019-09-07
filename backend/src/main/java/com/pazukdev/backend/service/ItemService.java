@@ -4,6 +4,7 @@ import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.dto.item.ItemDescriptionMap;
 import com.pazukdev.backend.dto.item.ItemDto;
 import com.pazukdev.backend.dto.item.ItemQuantity;
+import com.pazukdev.backend.dto.item.ReplacerData;
 import com.pazukdev.backend.dto.table.ItemView;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
@@ -15,10 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -58,24 +56,49 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
 
         itemView.setItems(createTableView(descriptionMap));
 
-        list = new ArrayList<>();
-        final List<String[]> replacersData = ItemUtil.parseReplacersSourceString(item.getReplacer());
-        for (final String[] replacerData : replacersData) {
-            final ItemEntity replacer = find(item.getCategory(), replacerData[0]);
-            if (replacer != null) {
-                list.add(new String[]{
-                        replacerData[1],
-                        (replacer.getCategory().equals("Seal")
-                                ? (ItemUtil.getValueFromDescription(replacer, "Manufacturer") + " ")
-                                : "") + replacer.getName(),
-                        replacer.getId().toString()});
-            }
-        }
+        final List<ReplacerData> replacersData = ItemUtil.parseReplacersSourceString(item.getReplacer());
+        list = getReplacers(item.getCategory(), replacersData);
 
         matrix = listToMatrix(list);
         itemView.setReplacers(new TableDto(matrix.length > 0 ? "Replacers" : null, matrix));
 
         return itemView;
+    }
+
+    private List<String[]> getReplacers(final String category,
+                                        final List<ReplacerData> replacersData) {
+        final Map<ItemEntity, String> map = new HashMap<>();
+
+        for (final ReplacerData replacerData : replacersData) {
+            final ItemEntity replacer = find(category, replacerData.getName());
+            if (replacer != null) {
+                map.put(replacer, replacerData.getComment());
+            }
+        }
+
+        final List<String[]> data = new ArrayList<>();
+        for (final Map.Entry<ItemEntity, String> entry : map.entrySet()) {
+            final ItemEntity replacer = entry.getKey();
+            final String comment = entry.getValue();
+            data.add(new String[]{
+                    comment,
+                    createReplacerButtonText(replacer),
+                    replacer.getId().toString()});
+        }
+        return data;
+    }
+
+    private String createReplacerButtonText(final ItemEntity replacer) {
+        if (isAddManufacturerName(replacer)) {
+            return ItemUtil.getValueFromDescription(replacer, "Manufacturer") + " " + replacer.getName();
+        } else {
+            return replacer.getName();
+        }
+    }
+
+    private boolean isAddManufacturerName(final ItemEntity replacer) {
+        final String category = replacer.getCategory();
+        return category.equals("Seal") || category.equals("Spark plug");
     }
 
     public ItemView motorcycleCatalogue() {
@@ -145,23 +168,23 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
                 }
             }
         }
+
         return itemQuantities;
     }
 
     private ItemQuantity createItemQuantity(final ItemEntity parentItem, final String value, final String category) {
         String name;
         String location = "";
-        Integer quantity;
+        String quantity;
         if (SpecificStringUtil.containsParentheses(value)) {
             name = SpecificStringUtil.getStringBeforeParentheses(value);
             String additionalData = SpecificStringUtil.getStringBetweenParentheses(value);
             location = additionalData.contains(" - ") ? additionalData.split(" - ")[0] : "-";
-            quantity = additionalData.contains(" - ") ?
-                    Integer.valueOf(additionalData.split(" - ")[1]) : Integer.valueOf(additionalData);
+            quantity = additionalData.contains(" - ") ? additionalData.split(" - ")[1] : additionalData;
         } else {
             name = value;
             location = "-";
-            quantity = category.equals("Spark plug") ? 2 : 1;
+            quantity = category.equals("Spark plug") ? "2" : "1";
         }
         final ItemEntity child = category.equals("Seal") ? getUssrSealBySize(name) : find(category, name);
         if (child != null) {
@@ -176,7 +199,7 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
     }
 
     private ItemEntity getUssrSealBySize(final String searchingSize) {
-        final List<ItemEntity> ussrSeals = filterUssrMade(find("Seal"));
+        final List<ItemEntity> ussrSeals = filter(find("Seal"), "Manufacturer", "Ussr");
         for (ItemEntity seal : ussrSeals) {
             final String actualSize = ItemUtil.getValueFromDescription(seal.getDescription(), "Size, mm");
             if (actualSize.equals(searchingSize)) {
@@ -186,11 +209,13 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         return null;
     }
 
-    private List<ItemEntity> filterUssrMade(final List<ItemEntity> items) {
+    private List<ItemEntity> filter(final List<ItemEntity> items,
+                                    final String parameter,
+                                    final String searchingValue) {
         final List<ItemEntity> filteredItems = new ArrayList<>();
         for (ItemEntity item : items) {
-            final String manufacturer = ItemUtil.getValueFromDescription(item.getDescription(), "Manufacturer");
-            if (manufacturer != null && manufacturer.equals("USSR")) {
+            final String value = ItemUtil.getValueFromDescription(item.getDescription(), parameter);
+            if (value != null && value.equals(searchingValue)) {
                 filteredItems.add(item);
             }
         }

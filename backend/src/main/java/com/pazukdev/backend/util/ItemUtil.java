@@ -1,19 +1,13 @@
 package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.dto.item.ItemDescriptionMap;
-import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.dto.item.ItemQuantity;
+import com.pazukdev.backend.dto.item.ReplacerData;
+import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.service.ItemService;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -105,20 +99,23 @@ public class ItemUtil {
         return service.find(category).size() > 0;
     }
 
-    public static String[] parseReplacerData(final String replacerData) {
+    public static ReplacerData parseReplacerData(final String replacerDataSourceString) {
+        final ReplacerData replacerData = new ReplacerData();
         String replacerName;
         String comment = "-";
-        if (SpecificStringUtil.containsParentheses(replacerData)) {
-            replacerName = SpecificStringUtil.getStringBeforeParentheses(replacerData);
-            comment = SpecificStringUtil.getStringBetweenParentheses(replacerData);
+        if (SpecificStringUtil.containsParentheses(replacerDataSourceString)) {
+            replacerName = SpecificStringUtil.getStringBeforeParentheses(replacerDataSourceString);
+            comment = SpecificStringUtil.getStringBetweenParentheses(replacerDataSourceString);
         } else {
-            replacerName = replacerData;
+            replacerName = replacerDataSourceString;
         }
-        return new String[]{replacerName, comment};
+        replacerData.setName(replacerName);
+        replacerData.setComment(comment);
+        return replacerData;
     }
 
-    public static List<String[]> parseReplacersSourceString(final String replacersSourceString) {
-        final List<String[]> data = new ArrayList<>();
+    public static List<ReplacerData> parseReplacersSourceString(final String replacersSourceString) {
+        final List<ReplacerData> data = new ArrayList<>();
         if (!replacersSourceString.equals("-")) {
             for (final String replacerData : Arrays.asList(replacersSourceString.split("; "))) {
                 data.add(parseReplacerData(replacerData));
