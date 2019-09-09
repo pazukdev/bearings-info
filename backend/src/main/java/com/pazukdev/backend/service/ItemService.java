@@ -12,6 +12,7 @@ import com.pazukdev.backend.entity.item.ItemEntity;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.util.ItemUtil;
 import com.pazukdev.backend.util.SpecificStringUtil;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +25,13 @@ import java.util.*;
 @Service
 public class ItemService extends AbstractService<ItemEntity, ItemDto> {
 
-    public ItemService(final ItemRepository repository, final ItemConverter converter) {
+    @Getter
+    private final ItemRepository repository;
+
+    public ItemService(final ItemRepository repository,
+                       final ItemConverter converter) {
         super(repository, converter);
+        this.repository = repository;
     }
 
     @Transactional
@@ -43,9 +49,7 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         List<String[]> list = new ArrayList<>();
         list.add(new String[]{"Name", item.getName()});
         final Integer quantity = item.getQuantity();
-        if (quantity != null && quantity > 0) {
-            list.add(new String[]{"Quantity",  quantity.toString()});
-        }
+
         final ItemDescriptionMap descriptionMap = createDescriptionMap(item);
         for (final Map.Entry<String, String> entry : descriptionMap.getCharacteristics().entrySet()) {
             list.add(new String[]{entry.getKey(), entry.getValue()});
@@ -199,7 +203,7 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
     }
 
     private ItemEntity getUssrSealBySize(final String searchingSize) {
-        final List<ItemEntity> ussrSeals = filter(find("Seal"), "Manufacturer", "Ussr");
+        final List<ItemEntity> ussrSeals = filter(find("Seal"), "Manufacturer", "USSR");
         for (ItemEntity seal : ussrSeals) {
             final String actualSize = ItemUtil.getValueFromDescription(seal.getDescription(), "Size, mm");
             if (actualSize.equals(searchingSize)) {
