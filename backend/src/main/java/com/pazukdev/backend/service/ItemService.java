@@ -48,7 +48,6 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         final String tableName = item.getCategory() + " " + item.getName();
         List<String[]> list = new ArrayList<>();
         list.add(new String[]{"Name", item.getName()});
-        final Integer quantity = item.getQuantity();
 
         final ItemDescriptionMap descriptionMap = createDescriptionMap(item);
         for (final Map.Entry<String, String> entry : descriptionMap.getCharacteristics().entrySet()) {

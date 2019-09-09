@@ -72,18 +72,6 @@ public class DataLoader implements ApplicationRunner {
         }
     }
 
-
-
-    private List<ItemEntity> collectItems(ItemEntity... items) {
-//        List<ItemEntity> collectedItems = new ArrayList<>();
-//        for (ItemEntity item : items) {
-//            collectedItems.addAll(item.getItemQuantities());
-//        }
-//        collectedItems.addAll(Arrays.asList(items));
-//        return collectedItems;
-        return null;
-    }
-
 }
 
 

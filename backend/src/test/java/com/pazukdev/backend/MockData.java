@@ -2,11 +2,7 @@ package com.pazukdev.backend;
 
 import com.pazukdev.backend.dto.ManufacturerDto;
 import com.pazukdev.backend.dto.UserDto;
-import com.pazukdev.backend.dto.product.BearingDto;
-import com.pazukdev.backend.dto.product.MotorcycleDto;
-import com.pazukdev.backend.dto.product.OilDto;
-import com.pazukdev.backend.dto.product.SealDto;
-import com.pazukdev.backend.dto.product.SparkPlugDto;
+import com.pazukdev.backend.dto.product.*;
 import com.pazukdev.backend.dto.product.unit.EngineDto;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.item.ItemEntity;
@@ -19,11 +15,7 @@ import com.pazukdev.backend.entity.product.sparkplug.SparkPlugEntity;
 import com.pazukdev.backend.entity.product.unit.engine.EngineEntity;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.pazukdev.backend.util.CSVFileUtil.getFirstEntity;
 
@@ -249,7 +241,6 @@ public class MockData {
         final ItemEntity item = new ItemEntity();
         item.setCategory(category);
         item.setName(name);
-        item.setQuantity(quantity);
         return item;
     }
 

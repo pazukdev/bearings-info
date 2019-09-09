@@ -87,7 +87,7 @@ public class MotorcycleService extends AbstractService<MotorcycleEntity, Motorcy
             final String[] row = {
                     item.getCategory(),
                     item.getName(),
-                    item.getQuantity() != null ? item.getQuantity().toString() : "0",
+                    item.getName(),
                     item.getId().toString()};
             rows.add(row);
         }

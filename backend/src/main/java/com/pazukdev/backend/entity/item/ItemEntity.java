@@ -19,7 +19,6 @@ import javax.persistence.Table;
 public class ItemEntity extends AbstractEntity {
 
     private String category;
-    private Integer quantity;
     private String description;
     private String replacer;
 

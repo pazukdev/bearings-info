@@ -37,7 +37,6 @@ public class ItemFactory extends AbstractEntityFactory<ItemEntity> {
         super.applyCharacteristics(item, tableRow);
 
         applyCategory(item, tableRow);
-        applyQuantity(item, tableRow);
         applyDescription(item, tableRow);
         applyReplacers(item, tableRow);
     }
@@ -45,13 +44,6 @@ public class ItemFactory extends AbstractEntityFactory<ItemEntity> {
     private void applyCategory(final ItemEntity item, final TableRow tableRow) {
         final String category = tableRow.getData().get("Category");
         item.setCategory(category);
-    }
-
-    private void applyQuantity(final ItemEntity item, final TableRow tableRow) {
-        final String quantity = tableRow.getData().get("Quantity");
-        if (quantity != null) {
-            item.setQuantity(Integer.valueOf(quantity));
-        }
     }
 
     private void applyDescription(final ItemEntity item, final TableRow tableRow) {

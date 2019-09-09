@@ -14,7 +14,6 @@ import lombok.ToString;
 public class ItemDto extends AbstractDto {
 
     private String category;
-    private Integer quantity;
     private String description;
     private String replacer;
 
