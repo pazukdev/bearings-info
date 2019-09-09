@@ -13,6 +13,21 @@
                     {{row[1]}}
                 </td>
             </tr>
+            <tr v-if="itemView.selectableData.name !== 'stub'"
+                style="text-align: left"
+                v-for="row in itemView.selectableData.matrix">
+                <td style="width: 50%">
+                    {{row[0]}}
+                </td>
+                <td>
+                    <p v-if="row[2] === 'no id'">{{row[1]}}</p>
+                    <button v-if="row[2] !== 'no id'" type="button"
+                            style="width: 100%"
+                            @click="$emit('select-item', row[2])">
+                        {{row[1]}}
+                    </button>
+                </td>
+            </tr>
             <tr v-for="item in itemView.items.tables">
                 <td colspan="2">
                     <table class="get-all-table">

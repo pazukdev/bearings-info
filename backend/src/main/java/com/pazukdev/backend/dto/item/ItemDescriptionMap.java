@@ -14,6 +14,7 @@ public class ItemDescriptionMap {
 
     private ItemEntity parent;
     private Map<String, String> characteristics = new HashMap<>();
+    private Map<String, String> selectableCharacteristics = new HashMap<>();
     private Map<String, String> items = new HashMap<>();
 
 }

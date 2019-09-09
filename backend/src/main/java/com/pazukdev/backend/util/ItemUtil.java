@@ -83,20 +83,27 @@ public class ItemUtil {
         final ItemDescriptionMap itemDescriptionMap = new ItemDescriptionMap();
         itemDescriptionMap.setParent(item);
         for (final Map.Entry<String, String> entry : unsortedMap.entrySet()) {
-            final String key = entry.getKey();
-            final String value = entry.getValue();
-            if (isLinkToItem(entry, service)) {
-                itemDescriptionMap.getItems().put(key, value);
+            final String parameter = StringUtils.trim(entry.getKey());
+            final String value = StringUtils.trim(entry.getValue());
+            if (isSelectableCharacteristic(parameter, value,service)) {
+                itemDescriptionMap.getSelectableCharacteristics().put(parameter, value);
+            } else if (isLinkToItem(parameter, value, service)) {
+                itemDescriptionMap.getItems().put(parameter, value);
             } else {
-                itemDescriptionMap.getCharacteristics().put(key, value);
+                itemDescriptionMap.getCharacteristics().put(parameter, value);
             }
         }
         return itemDescriptionMap;
     }
 
-    public static boolean isLinkToItem(final Map.Entry<String, String> entry, final ItemService service) {
-        final String category = StringUtils.trim(entry.getKey());
-        return service.find(category).size() > 0;
+    public static boolean isLinkToItem(final String parameter, final String value, final ItemService service) {
+        return !isSelectableCharacteristic(parameter, value, service) && service.find(parameter).size() > 0;
+    }
+
+    public static boolean isSelectableCharacteristic(final String parameter,
+                                                     final String value,
+                                                     final ItemService service) {
+        return service.find(parameter + " (i)").size() > 0;
     }
 
     public static ReplacerData parseReplacerData(final String replacerDataSourceString) {

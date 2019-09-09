@@ -44,28 +44,48 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
     }
 
     public ItemView createItemView(final ItemEntity item) {
-        final ItemView itemView = new ItemView();
-        final String tableName = item.getCategory() + " " + item.getName();
-        List<String[]> list = new ArrayList<>();
-        list.add(new String[]{"Name", item.getName()});
-
         final ItemDescriptionMap descriptionMap = createDescriptionMap(item);
-        for (final Map.Entry<String, String> entry : descriptionMap.getCharacteristics().entrySet()) {
+        final ItemView itemView = new ItemView();
+        itemView.setHeader(createHeader(item, descriptionMap));
+        itemView.setSelectableData(createSelectableCharacteristics(descriptionMap));
+        itemView.setItems(createTableView(descriptionMap));
+        itemView.setReplacers(createReplacers(item));
+        return itemView;
+    }
+
+    private TableDto createHeader(final ItemEntity item, final ItemDescriptionMap descriptionMap) {
+        final List<String[]> list = new ArrayList<>();
+        list.add(new String[]{"Name", item.getName()});
+        final String tableName = item.getCategory().replace(" (i)", "") + " " + item.getName();
+        return createTable(tableName, descriptionMap.getCharacteristics(), list);
+    }
+
+    private TableDto createTable(final String tableName, final Map<String, String> map, final List<String[]> list) {
+        for (final Map.Entry<String, String> entry : map.entrySet()) {
             list.add(new String[]{entry.getKey(), entry.getValue()});
         }
+        return new TableDto(tableName, listToMatrix(list));
+    }
 
-        String[][] matrix = listToMatrix(list);
-        itemView.setHeader(new TableDto(tableName, matrix));
+    private TableDto createSelectableCharacteristics(final ItemDescriptionMap descriptionMap) {
+        final String noName = "";
+        final List<String[]> list = new ArrayList<>();
+        for (final Map.Entry<String, String> entry : descriptionMap.getSelectableCharacteristics().entrySet()) {
+            final String category = entry.getKey();
+            final ItemEntity selectable = createSelectableItem(entry.getValue(), category);
+            list.add(new String[]{
+                    category.replace(" (i)", ""),
+                    selectable.getName(),
+                    selectable.getId() != null ? selectable.getId().toString() : "no id"});
+        }
+        return new TableDto(noName, listToMatrix(list));
+    }
 
-        itemView.setItems(createTableView(descriptionMap));
-
+    private TableDto createReplacers(final ItemEntity item) {
         final List<ReplacerData> replacersData = ItemUtil.parseReplacersSourceString(item.getReplacer());
-        list = getReplacers(item.getCategory(), replacersData);
-
-        matrix = listToMatrix(list);
-        itemView.setReplacers(new TableDto(matrix.length > 0 ? "Replacers" : null, matrix));
-
-        return itemView;
+        final List<String[]> list = getReplacers(item.getCategory(), replacersData);
+        final String[][] matrix = listToMatrix(list);
+        return new TableDto(matrix.length > 0 ? "Replacers" : null, matrix);
     }
 
     private List<String[]> getReplacers(final String category,
@@ -113,6 +133,7 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
 
         final ItemView itemView = new ItemView();
         itemView.setHeader(new TableDto(tableName, listToMatrix(list)));
+        itemView.setSelectableData(stubTable());
         itemView.setItems(new TableViewDto(22, new ArrayList<>(Collections.singletonList(motorcyclesTable(motorcycles)))));
         itemView.setReplacers(stubTable());
         return itemView;
@@ -158,14 +179,14 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
             if (entry.getValue().toString().contains(";")) {
                 final String[] names = entry.getValue().toString().split("; ");
                 for (final String name : names) {
-                    final ItemQuantity itemQuantity = createItemQuantity(descriptionMap.getParent(), name,category);
+                    final ItemQuantity itemQuantity = createItemQuantity(name,category);
                     if (itemQuantity != null) {
                         itemQuantities.add(itemQuantity);
                     }
                 }
             } else {
                 final String name = entry.getValue().toString();
-                final ItemQuantity itemQuantity = createItemQuantity(descriptionMap.getParent(), name, category);
+                final ItemQuantity itemQuantity = createItemQuantity(name, category);
                 if (itemQuantity != null) {
                     itemQuantities.add(itemQuantity);
                 }
@@ -175,7 +196,7 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         return itemQuantities;
     }
 
-    private ItemQuantity createItemQuantity(final ItemEntity parentItem, final String value, final String category) {
+    private ItemQuantity createItemQuantity(final String value, final String category) {
         String name;
         String location = "";
         String quantity;
@@ -198,6 +219,18 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
             return itemQuantity;
         } else {
             return null;
+        }
+    }
+
+    private ItemEntity createSelectableItem(final String value, final String category) {
+        final ItemEntity selectable = find(category + " (i)", value);
+        if (selectable != null) {
+            return selectable;
+        } else {
+            final ItemEntity selectableStub = new ItemEntity();
+            selectableStub.setCategory(category);
+            selectableStub.setName(value);
+            return selectableStub;
         }
     }
 
@@ -234,10 +267,6 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         return new TableViewDto(quantities.size(), tables);
     }
 
-//    public TableDto createTable(final String itemName) {
-//        return createTable(getItems(itemName));
-//    }
-
     public TableDto createTable(final List<ItemQuantity> itemQuantities) {
         final String tableName = itemQuantities.get(0).getItem().getCategory();
         final List<String[]> rows = new ArrayList<>();
@@ -247,7 +276,7 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
                     itemQuantity.getLocation(),
                     item.getCategory().equals("Seal") ?
                             ItemUtil.getValueFromDescription(item, "Size, mm") : item.getName(),
-                    itemQuantity.getQuantity() != null ? itemQuantity.getQuantity().toString() : "0",
+                    itemQuantity.getQuantity() != null ? itemQuantity.getQuantity() : "0",
                     item.getId().toString()
             };
 
@@ -256,11 +285,6 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         final String[][] rowArray = rows.toArray(new String[0][]);
         return new TableDto(tableName, rowArray);
     }
-
-//    public List<ItemQuantity> getItems(final String itemName) {
-//        final ItemEntity item = findByName(itemName);
-//        return createItemQuantities(item);
-//    }
 
     @Transactional
     @Override

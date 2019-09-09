@@ -50,7 +50,7 @@ public class ItemFactory extends AbstractEntityFactory<ItemEntity> {
         String description = "";
         for (final Map.Entry<String, String> entry : tableRow.getData().entrySet()) {
             final String key = entry.getKey();
-            if (key.equals("Name") || key.equals("Category") || key.equals("Quantity") || key.equals("Replacer")) {
+            if (key.equals("Name") || key.equals("Category") || key.equals("Replacer")) {
                 continue;
             }
             description = description + entry.getKey() + ":" + entry.getValue() + ";;";
