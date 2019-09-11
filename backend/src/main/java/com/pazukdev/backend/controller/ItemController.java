@@ -1,25 +1,18 @@
 package com.pazukdev.backend.controller;
 
+import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.dto.item.ItemDto;
-import com.pazukdev.backend.dto.product.BearingDto;
 import com.pazukdev.backend.dto.table.ItemView;
-import com.pazukdev.backend.dto.table.TableDto;
+import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.ItemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityExistsException;
-import java.util.List;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -31,6 +24,7 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService service;
+    private final ItemConverter converter;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -44,6 +38,14 @@ public class ItemController {
     @ApiOperation(value = "Create new item")
     public boolean create(@RequestBody final ItemDto dto) throws EntityExistsException, JSONException {
         return service.create(dto) != null;
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update item")
+    public ItemView update(@PathVariable("id") final Long id,
+                          @RequestBody final ItemView itemView) throws ProductNotFoundException {
+        return service.update(id, itemView);
     }
 
     @GetMapping("/motorcycles")

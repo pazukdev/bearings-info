@@ -1,5 +1,6 @@
 package com.pazukdev.backend.dto.table;
 
+import com.pazukdev.backend.dto.item.ItemDto;
 import lombok.Data;
 
 /**
@@ -12,5 +13,6 @@ public class ItemView {
     private TableDto selectableData;
     private TableViewDto items;
     private TableDto replacers;
+    private ItemDto item;
 
 }

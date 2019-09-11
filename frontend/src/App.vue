@@ -30,8 +30,9 @@
                     </tbody>
                 </table>
             </div>
-<!--            {{homeComponent}}<br>-->
-<!--            {{itemViews.length}}<br>-->
+            {{homeComponent}}<br>
+            {{itemViews.length}}<br>
+            {{itemIds}}
             <router-view style="padding: 20px"></router-view>
         </div>
     </div>
@@ -49,6 +50,7 @@
                 authorization: state => state.dictionary.authorization,
                 homeComponent: state => state.dictionary.homeComponent,
                 itemViews: state => state.dictionary.itemViews,
+                itemIds: state => state.dictionary.itemIds,
                 itemView: state => state.dictionary.itemViews[state.dictionary.itemViews.length - 1],
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
@@ -90,7 +92,8 @@
 
             back() {
                 if (this.homeComponent[this.homeComponent.length - 1] === "Item") {
-                    this.$store.dispatch("removeLastItemView")
+                    this.$store.dispatch("removeLastItemView");
+                    this.$store.dispatch("removeLastItemId")
                 }
                 this.$store.dispatch("removeLastComponent");
                 if (this.homeComponent.length === 1) {

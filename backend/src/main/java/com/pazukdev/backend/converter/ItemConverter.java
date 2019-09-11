@@ -18,22 +18,12 @@ public class ItemConverter implements EntityDtoConverter<ItemEntity, ItemDto> {
 
     @Override
     public ItemDto convertToDto(final ItemEntity item) {
-        final ItemDto itemDto = modelMapper.map(item, ItemDto.class);
-//        for (final ItemEntity childItem : item.getItems()) {
-//            itemDto.getItemIds().add(childItem.getId());
-//        }
-        return itemDto;
+        return modelMapper.map(item, ItemDto.class);
     }
 
     @Override
     public ItemEntity convertToEntity(final ItemDto itemDto) {
-        final ItemEntity item = modelMapper.map(itemDto, ItemEntity.class);
-//        for (final Long childItemId : itemDto.getItemIds()) {
-//            final ItemEntity childItem = new ItemEntity();
-//            childItem.setId(childItemId);
-//            item.getItems().add(childItem);
-//        }
-        return item;
+        return modelMapper.map(itemDto, ItemEntity.class);
     }
 
 }

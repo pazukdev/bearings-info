@@ -39,6 +39,42 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         return createItemView(getOne(id));
     }
 
+    @Transactional
+    public ItemView update(final Long id, final ItemView itemView) {
+        final ItemDto oldItem = itemView.getItem();
+        oldItem.setId(id);
+        final String oldName = oldItem.getName();
+        final TableDto header = itemView.getHeader();
+        final String[][] headerMatrix = header.getMatrix();
+        final Map<String, String> headerMatrixMap = new HashMap<>();
+        for (final String[] row : headerMatrix) {
+            headerMatrixMap.put(row[0], row[1]);
+        }
+        final String newName = headerMatrixMap.get("Name");
+        if (newName != null && !newName.equals(oldName)) {
+            oldItem.setName(newName);
+            repository.save(converter.convertToEntity(oldItem));
+
+            final List<ItemEntity> items = findAll();
+            for (final ItemEntity item : items) {
+                final String description = item.getDescription();
+                if (description.contains(oldName)) {
+                    final String newDescription = description.replace(oldName, newName);
+                    item.setDescription(newDescription);
+                    repository.save(item);
+                }
+                final String replacer = item.getReplacer();
+                if (replacer.contains(oldName)) {
+                    final String newReplacer = replacer.replace(oldName, newName);
+                    item.setReplacer(newReplacer);
+                    repository.save(item);
+                }
+            }
+        }
+
+        return getItem(id);
+    }
+
     public ItemDescriptionMap createDescriptionMap(final ItemEntity item) {
         return ItemUtil.createDescriptionMap(item, this);
     }
@@ -46,6 +82,8 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
     public ItemView createItemView(final ItemEntity item) {
         final ItemDescriptionMap descriptionMap = createDescriptionMap(item);
         final ItemView itemView = new ItemView();
+        final ItemDto dto = converter.convertToDto(item);
+        itemView.setItem(dto);
         itemView.setHeader(createHeader(item, descriptionMap));
         itemView.setSelectableData(createSelectableCharacteristics(descriptionMap));
         itemView.setItems(createTableView(descriptionMap));

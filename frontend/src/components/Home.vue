@@ -289,6 +289,7 @@
             },
 
             setItem(id) {
+                this.$store.dispatch("addItemId", id);
                 axios
                     .get("backend/item/" + id, {
                         headers: {

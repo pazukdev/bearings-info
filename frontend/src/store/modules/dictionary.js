@@ -13,7 +13,8 @@ const state = {
     users: [],
     wishList: "",
     table: "",
-    itemViews: []
+    itemViews: [],
+    itemIds: []
 };
 
 const actions = {
@@ -47,6 +48,14 @@ const actions = {
 
     removeLastItemView: ({commit}, context) => {
         commit("removeLastItemView", context);
+    },
+
+    addItemId: ({commit}, context) => {
+        commit("addItemId", context);
+    },
+
+    removeLastItemId: ({commit}, context) => {
+        commit("removeLastItemId", context);
     },
 
     clearHistory: ({commit}, context) => {
@@ -113,6 +122,14 @@ const mutations = {
 
     removeLastItemView(state) {
         state.itemViews.splice(state.itemViews.length - 1, 1);
+    },
+
+    addItemId(state, itemId) {
+        state.itemIds.push(itemId);
+    },
+
+    removeLastItemId(state) {
+        state.itemIds.splice(state.itemIds.length - 1, 1);
     },
 
     clearHistory(state) {
