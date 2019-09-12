@@ -50,6 +50,20 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         for (final String[] row : headerMatrix) {
             headerMatrixMap.put(row[0], row[1]);
         }
+
+        final Map<String, String> oldItemDescriptionMap = ItemUtil.toMap(oldItem.getDescription());
+        for (final Map.Entry<String, String> entry : headerMatrixMap.entrySet()) {
+            final String parameter = entry.getKey();
+            final String oldValue = oldItemDescriptionMap.get(parameter);
+            final String newValue = entry.getValue();
+            if (oldValue != null && !oldValue.equals(newValue)) {
+                oldItemDescriptionMap.replace(parameter, newValue);
+            }
+        }
+        final String newDescription = ItemUtil.toDescription(oldItemDescriptionMap);
+        oldItem.setDescription(newDescription);
+        repository.save(converter.convertToEntity(oldItem));
+
         final String newName = headerMatrixMap.get("Name");
         if (newName != null && !newName.equals(oldName)) {
             oldItem.setName(newName);
@@ -65,28 +79,22 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
                                    final String newValue) {
         final String editingItemCategory = editingItem.getCategory();
         final List<ItemEntity> items = findAll();
+        final Set<String> categories = ItemUtil.getCategories(items);
         for (final ItemEntity item : items) {
-            final ItemDescriptionMap itemDescriptionMap = ItemUtil.createDescriptionMap(item, this);
-            for (final Map.Entry<String, String> entry : itemDescriptionMap.getItems().entrySet()) {
-                if (entry.getValue().equals(oldValue)) {
-                    if (entry.getKey().equals(editingItemCategory)) {
-                        entry.setValue(newValue);
+            final Map<String, String> descriptionMap = ItemUtil.toMap(item.getDescription());
+            for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
+                final String value = entry.getValue().split(" \\(")[0];
+                if (value.equals(oldValue)) {
+                    if (categories.contains(entry.getKey())) {
+                        if (entry.getKey().equals(editingItemCategory)) {
+                            entry.setValue(entry.getValue().replace(oldValue, newValue));
+                        }
+                    } else {
+                        entry.setValue(entry.getValue().replace(oldValue, newValue));
                     }
                 }
             }
-            for (final Map.Entry<String, String> entry
-                    : itemDescriptionMap.getSelectableCharacteristics().entrySet()) {
-                if (entry.getValue().equals(oldValue)) {
-                    entry.setValue(newValue);
-                }
-            }
-            for (final Map.Entry<String, String> entry
-                    : itemDescriptionMap.getCharacteristics().entrySet()) {
-                if (entry.getValue().equals(oldValue)) {
-                    entry.setValue(newValue);
-                }
-            }
-            final String newDescription = ItemUtil.toDescription(itemDescriptionMap);
+            final String newDescription = ItemUtil.toDescription(descriptionMap);
             item.setDescription(newDescription);
 
             final String replacer = item.getReplacer();

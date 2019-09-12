@@ -23,7 +23,7 @@
                 v-if="isEditMode"
                 v-for="row in itemView.header.matrix">
                 <td style="width: 50%">
-                    <input v-model="row[0]" type="text"/>
+                    {{row[0]}}
                 </td>
                 <td>
                     <input v-model="row[1]" type="text"/>
@@ -46,11 +46,23 @@
             </tr>
             <tr style="text-align: left">
                 <td style="width: 50%">
+                </td>
+                <td>
                     <button v-if="isEditMode"
                             type="button"
                             style="width: 100%"
                             @click="save()">
-                        {{"Save"}}
+                        {{"+"}}
+                    </button>
+                </td>
+            </tr>
+            <tr style="text-align: left">
+                <td style="width: 50%">
+                    <button v-if="isEditMode"
+                            type="button"
+                            style="width: 100%"
+                            @click="cancel()">
+                        {{"Cancel"}}
                     </button>
                 </td>
                 <td>
@@ -63,8 +75,8 @@
                     <button v-if="isEditMode"
                             type="button"
                             style="width: 100%"
-                            @click="cancel()">
-                        {{"Cancel"}}
+                            @click="save()">
+                        {{"Save"}}
                     </button>
                 </td>
             </tr>
