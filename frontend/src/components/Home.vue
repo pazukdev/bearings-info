@@ -24,6 +24,7 @@
         <MotorcycleMenu
                 v-show="isLastComponent('MotorcycleMenu')"
                 @select-item="selectItem"
+                @cancel="cancel"
                 @add-motorcycle="addMotorcycle"/>
 
         <ModelPartsList v-show="isLastComponent('ModelPartsList')" :motorcycle="motorcycle" :engine="engine"/>
@@ -36,7 +37,9 @@
 
         <WishList v-show="isLastComponent('WishList')" @select-item="selectItem"/>
 
-        <Item v-show="isLastComponent('Item')" @select-item="selectItem"/>
+        <Item v-show="isLastComponent('Item')"
+              @cancel="cancel"
+              @select-item="selectItem"/>
 
         <BearingList v-show="isLastComponent('Bearings')" @reopen-bearings="reopenBearings()"/>
 
@@ -129,7 +132,8 @@
                 userName: state => state.dictionary.userName,
                 admin: state => state.dictionary.admin,
                 wishList: state => state.dictionary.wishList,
-                table: state => state.dictionary.table
+                table: state => state.dictionary.table,
+                itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
             })
         },
 
@@ -156,6 +160,22 @@
 
             selectItem(id) {
                 this.setItem(id);
+                this.switchComponent("Item");
+            },
+
+            cancel(id) {
+                axios
+                    .get("backend/item/" + this.itemId, {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => {
+                        this.$store.dispatch("removeLastComponent");
+                        this.$store.dispatch("removeLastItemView");
+                        this.$store.dispatch("addItemView", response.data);
+                    });
+
                 this.switchComponent("Item");
             },
 
@@ -289,9 +309,8 @@
             },
 
             setItem(id) {
-                this.$store.dispatch("addItemId", id);
                 axios
-                    .get("backend/item/" + id, {
+                    .get("backend/item/" + this.itemId, {
                         headers: {
                             Authorization: this.authorization
                         }

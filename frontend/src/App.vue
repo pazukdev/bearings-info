@@ -54,6 +54,7 @@
                 itemView: state => state.dictionary.itemViews[state.dictionary.itemViews.length - 1],
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
+                itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
             })
         },
 
@@ -93,12 +94,45 @@
             back() {
                 if (this.homeComponent[this.homeComponent.length - 1] === "Item") {
                     this.$store.dispatch("removeLastItemView");
-                    this.$store.dispatch("removeLastItemId")
+                    if (this.homeComponent[this.homeComponent.length - 1] === "Item") {
+                        this.$store.dispatch("removeLastItemId");
+                        this.refreshItem();
+                    }
+
                 }
                 this.$store.dispatch("removeLastComponent");
+                if (this.itemIds.length === 0) {
+                    this.showMotorcycleMenu();
+                }
+
                 if (this.homeComponent.length === 1) {
                     this.refreshWishList(this.userName);
                 }
+            },
+
+            refreshItem() {
+                axios
+                    .get("backend/item/" + this.itemId, {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => {
+                        this.$store.dispatch("removeLastItemView");
+                        this.$store.dispatch("addItemView", response.data);
+                    });
+            },
+
+            showMotorcycleMenu() {
+                axios
+                    .get("/backend/item/motorcycles", {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => {
+                        this.$store.dispatch("addItemView", response.data)
+                    });
             },
 
             refreshWishList(userName) {

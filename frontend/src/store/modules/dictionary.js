@@ -50,6 +50,10 @@ const actions = {
         commit("removeLastItemView", context);
     },
 
+    removePreLastItemView: ({commit}, context) => {
+        commit("removePreLastItemView", context);
+    },
+
     addItemId: ({commit}, context) => {
         commit("addItemId", context);
     },
@@ -122,6 +126,10 @@ const mutations = {
 
     removeLastItemView(state) {
         state.itemViews.splice(state.itemViews.length - 1, 1);
+    },
+
+    removePreLastItemView(state) {
+        state.itemViews.splice(state.itemViews.length - 2, 1);
     },
 
     addItemId(state, itemId) {
