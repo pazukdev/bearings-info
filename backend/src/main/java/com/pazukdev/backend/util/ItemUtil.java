@@ -69,6 +69,20 @@ public class ItemUtil {
         return toMap(description).get(key);
     }
 
+    public static String toDescription(final Map<String, String> map) {
+        String description = "";
+        for (final Map.Entry<String, String> entry : map.entrySet()) {
+            description += entry.getKey() + ":" + entry.getValue() + ";;";
+        }
+        return description;
+    }
+
+    public static String toDescription(final ItemDescriptionMap itemDescriptionMap) {
+        return toDescription(itemDescriptionMap.getCharacteristics())
+                + toDescription(itemDescriptionMap.getSelectableCharacteristics())
+                + toDescription(itemDescriptionMap.getItems());
+    }
+
     public static Map<String, String> toMap(final String description) {
         final List<String> descriptionList = Arrays.asList(description.split(";;"));
         final Map<String, String> map = new HashMap<>();

@@ -54,25 +54,48 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
         if (newName != null && !newName.equals(oldName)) {
             oldItem.setName(newName);
             repository.save(converter.convertToEntity(oldItem));
-
-            final List<ItemEntity> items = findAll();
-            for (final ItemEntity item : items) {
-                final String description = item.getDescription();
-                if (description.contains(oldName)) {
-                    final String newDescription = description.replace(oldName, newName);
-                    item.setDescription(newDescription);
-                    repository.save(item);
-                }
-                final String replacer = item.getReplacer();
-                if (replacer.contains(oldName)) {
-                    final String newReplacer = replacer.replace(oldName, newName);
-                    item.setReplacer(newReplacer);
-                    repository.save(item);
-                }
-            }
+            replaceEverywhere(getOne(id), oldName, newName);
         }
 
         return getItem(id);
+    }
+
+    private void replaceEverywhere(final ItemEntity editingItem,
+                                   final String oldValue,
+                                   final String newValue) {
+        final String editingItemCategory = editingItem.getCategory();
+        final List<ItemEntity> items = findAll();
+        for (final ItemEntity item : items) {
+            final ItemDescriptionMap itemDescriptionMap = ItemUtil.createDescriptionMap(item, this);
+            for (final Map.Entry<String, String> entry : itemDescriptionMap.getItems().entrySet()) {
+                if (entry.getValue().equals(oldValue)) {
+                    if (entry.getKey().equals(editingItemCategory)) {
+                        entry.setValue(newValue);
+                    }
+                }
+            }
+            for (final Map.Entry<String, String> entry
+                    : itemDescriptionMap.getSelectableCharacteristics().entrySet()) {
+                if (entry.getValue().equals(oldValue)) {
+                    entry.setValue(newValue);
+                }
+            }
+            for (final Map.Entry<String, String> entry
+                    : itemDescriptionMap.getCharacteristics().entrySet()) {
+                if (entry.getValue().equals(oldValue)) {
+                    entry.setValue(newValue);
+                }
+            }
+            final String newDescription = ItemUtil.toDescription(itemDescriptionMap);
+            item.setDescription(newDescription);
+
+            final String replacer = item.getReplacer();
+            if (item.getCategory().equals(editingItemCategory) && replacer.contains(oldValue)) {
+                final String newReplacer = replacer.replace(oldValue, newValue);
+                item.setReplacer(newReplacer);
+            }
+            repository.save(item);
+        }
     }
 
     public ItemDescriptionMap createDescriptionMap(final ItemEntity item) {
