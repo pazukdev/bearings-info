@@ -29,6 +29,15 @@
                     <input v-model="row[1]" type="text"/>
                 </td>
             </tr>
+            <tr style="text-align: left"
+                v-if="isEditMode && isAddLine">
+                <td style="width: 50%">
+                    <input v-model="newParameter" type="text"/>
+                </td>
+                <td>
+                    <input v-model="newValue" type="text"/>
+                </td>
+            </tr>
             <tr v-if="itemView.selectableData.name !== 'stub'"
                 style="text-align: left"
                 v-for="row in itemView.selectableData.matrix">
@@ -48,11 +57,17 @@
                 <td style="width: 50%">
                 </td>
                 <td>
-                    <button v-if="isEditMode"
+                    <button v-if="isEditMode && !isAddLine"
                             type="button"
                             style="width: 100%"
-                            @click="save()">
+                            @click="addLine()">
                         {{"+"}}
+                    </button>
+                    <button v-if="isEditMode && isAddLine"
+                            type="button"
+                            style="width: 100%"
+                            @click="cancelAddLine()">
+                        {{"-"}}
                     </button>
                 </td>
             </tr>
@@ -144,8 +159,11 @@
         data() {
             return {
                 isEditMode: false,
+                isAddLine: false,
                 newItemView: "",
-                text: "start"
+                text: "start",
+                newParameter: "",
+                newValue: ""
             }
         },
 
@@ -161,6 +179,20 @@
         },
 
         methods: {
+            newLineIsEmpty() {
+                return this.newParameter === "" || this.newValue === "";
+            },
+
+            addLine() {
+                this.isAddLine = true;
+            },
+
+            cancelAddLine() {
+                this.newParameter = "";
+                this.newValue = "";
+                this.isAddLine = false;
+            },
+
             setItem(id) {
                 this.$store.dispatch("addItemId", id);
                 this.$emit('select-item', id);
@@ -172,15 +204,25 @@
             },
 
             cancel() {
+                this.newParameter = "";
+                this.newValue = "";
                 let id = this.itemId;
                 this.$emit('cancel', id);
                 this.isEditMode = false;
+                this.isAddLine = false;
             },
 
             save() {
+                if (this.isAddLine && !this.newLineIsEmpty()) {
+                    let newLine = [this.newParameter, this.newValue];
+                    this.newItemView.header.matrix.push(newLine);
+                }
                 let id = this.newItemView.item.id;
                 this.update(id);
+                this.newParameter = "";
+                this.newValue = "";
                 this.isEditMode = false;
+                this.isAddLine = false;
             },
 
             update(id) {

@@ -72,6 +72,9 @@ public class ItemUtil {
     public static String toDescription(final Map<String, String> map) {
         String description = "";
         for (final Map.Entry<String, String> entry : map.entrySet()) {
+            if (entry.getKey().equals("Name")) {
+                continue;
+            }
             description += entry.getKey() + ":" + entry.getValue() + ";;";
         }
         return description;

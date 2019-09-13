@@ -51,14 +51,23 @@ public class ItemService extends AbstractService<ItemEntity, ItemDto> {
             headerMatrixMap.put(row[0], row[1]);
         }
 
+        String[] newParameter = null;
         final Map<String, String> oldItemDescriptionMap = ItemUtil.toMap(oldItem.getDescription());
         for (final Map.Entry<String, String> entry : headerMatrixMap.entrySet()) {
             final String parameter = entry.getKey();
-            final String oldValue = oldItemDescriptionMap.get(parameter);
             final String newValue = entry.getValue();
-            if (oldValue != null && !oldValue.equals(newValue)) {
-                oldItemDescriptionMap.replace(parameter, newValue);
+            final String oldValue = oldItemDescriptionMap.get(parameter);
+            if (oldValue == null) {
+                newParameter = new String[]{parameter, newValue};
+            } else {
+                if (!oldValue.equals(newValue)) {
+                    oldItemDescriptionMap.replace(parameter, newValue);
+                }
             }
+            if (newParameter != null) {
+                oldItemDescriptionMap.put(newParameter[0], newParameter[1]);
+            }
+
         }
         final String newDescription = ItemUtil.toDescription(oldItemDescriptionMap);
         oldItem.setDescription(newDescription);
