@@ -1,7 +1,7 @@
 package com.pazukdev.backend.unit.util;
 
 import com.pazukdev.backend.MockData;
-import com.pazukdev.backend.entity.item.ItemEntity;
+import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.util.ItemUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,7 +17,7 @@ public class ItemUtilTest {
 
     @Test
     public void categorizeTest() {
-        final List<List<ItemEntity>> categories = ItemUtil.categorize(mockData.itemsList());
+        final List<List<TransitiveItem>> categories = ItemUtil.categorize(mockData.itemsList());
         Assert.assertTrue(categories.size() == 3);
     }
 

@@ -2,8 +2,8 @@ package com.pazukdev.backend.unit.factory;
 
 import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.config.ServiceContext;
-import com.pazukdev.backend.entity.item.ItemEntity;
-import com.pazukdev.backend.entity.item.ItemFactory;
+import com.pazukdev.backend.entity.item.TransitiveItem;
+import com.pazukdev.backend.entity.item.TransitiveItemFactory;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerFactory;
 import com.pazukdev.backend.entity.product.bearing.BearingEntity;
@@ -46,7 +46,7 @@ public class EntityFactoryTest {
 
     private final ServiceContext serviceContext = null;
 
-    private ItemFactory itemFactory = new ItemFactory(null);
+    private TransitiveItemFactory transitiveItemFactory = new TransitiveItemFactory(null);
     @Spy
     private ManufacturerFactory manufacturerFactory = new ManufacturerFactory();
     @Spy
@@ -105,7 +105,7 @@ public class EntityFactoryTest {
 
     @Test
     public void itemFactoryTest() {
-        final ItemEntity item = getFirstEntity(new ItemFactory(null));
+        final TransitiveItem item = getFirstEntity(new TransitiveItemFactory(null));
         System.out.println(item);
     }
 

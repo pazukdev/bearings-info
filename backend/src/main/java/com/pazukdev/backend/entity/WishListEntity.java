@@ -1,15 +1,11 @@
 package com.pazukdev.backend.entity;
 
-import com.pazukdev.backend.entity.item.ItemEntity;
+import com.pazukdev.backend.entity.item.TransitiveItem;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +25,6 @@ public class WishListEntity extends AbstractEntity {
             joinColumns = @JoinColumn(name = "wishlist_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id")
     )
-    private Set<ItemEntity> items = new HashSet<>();
+    private Set<TransitiveItem> items = new HashSet<>();
 
 }

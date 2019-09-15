@@ -5,6 +5,18 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+    <changeSet id="create_transitive_item_table" author="sviarkaltsau">
+        <createTable tableName="transitive_item">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="category" type="varchar(255)"/>
+            <column name="description" type="varchar(1000)"/>
+            <column name="replacer" type="varchar(1000)"/>
+        </createTable>
+    </changeSet>
+
     <changeSet id="create_item_table" author="sviarkaltsau">
         <createTable tableName="item">
             <column name="id" type="bigint" autoIncrement="true">
@@ -14,6 +26,29 @@
             <column name="category" type="varchar(255)"/>
             <column name="description" type="varchar(1000)"/>
             <column name="replacer" type="varchar(1000)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_child_item_table" author="sviarkaltsau">
+        <createTable tableName="child_item">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="item_id" type="bigint"/>
+            <column name="location" type="varchar(255)"/>
+            <column name="quantity" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_item_child_item_table" author="sviarkaltsau">
+        <createTable tableName="item_child_item">
+            <column name="parent_item_id" type="bigint">
+                <constraints foreignKeyName="fk_item_item_parent_item_id" references="item (id)"/>
+            </column>
+            <column name="child_item_id" type="bigint">
+                <constraints foreignKeyName="fk_item_item_child_item_id" references="child_item (id)"/>
+            </column>
         </createTable>
     </changeSet>
 

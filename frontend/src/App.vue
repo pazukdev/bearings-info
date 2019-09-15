@@ -30,9 +30,9 @@
                     </tbody>
                 </table>
             </div>
-            {{homeComponent}}<br>
-            {{itemViews.length}}<br>
-            {{itemIds}}
+<!--            {{homeComponent}}<br>-->
+<!--            {{itemViews.length}}<br>-->
+<!--            {{itemIds}}-->
             <router-view style="padding: 20px"></router-view>
         </div>
     </div>

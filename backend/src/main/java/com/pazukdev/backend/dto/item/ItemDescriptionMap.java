@@ -1,6 +1,6 @@
 package com.pazukdev.backend.dto.item;
 
-import com.pazukdev.backend.entity.item.ItemEntity;
+import com.pazukdev.backend.entity.item.TransitiveItem;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.Map;
 @Data
 public class ItemDescriptionMap {
 
-    private ItemEntity parent;
+    private TransitiveItem parent;
     private Map<String, String> characteristics = new HashMap<>();
     private Map<String, String> selectableCharacteristics = new HashMap<>();
     private Map<String, String> items = new HashMap<>();

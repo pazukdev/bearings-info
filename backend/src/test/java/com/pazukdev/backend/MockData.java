@@ -5,7 +5,7 @@ import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.product.*;
 import com.pazukdev.backend.dto.product.unit.EngineDto;
 import com.pazukdev.backend.entity.UserEntity;
-import com.pazukdev.backend.entity.item.ItemEntity;
+import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
 import com.pazukdev.backend.entity.product.bearing.BearingEntity;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
@@ -221,24 +221,24 @@ public class MockData {
 //        return dto;
 //    }
 
-    public List<ItemEntity> itemsList() {
-        final ItemEntity item1 = new ItemEntity();
+    public List<TransitiveItem> itemsList() {
+        final TransitiveItem item1 = new TransitiveItem();
         item1.setCategory("first category");
-        final ItemEntity item2 = new ItemEntity();
+        final TransitiveItem item2 = new TransitiveItem();
         item2.setCategory("second category");
-        final ItemEntity item3 = new ItemEntity();
+        final TransitiveItem item3 = new TransitiveItem();
         item3.setCategory("second category");
-        final ItemEntity item4 = new ItemEntity();
+        final TransitiveItem item4 = new TransitiveItem();
         item4.setCategory("second category");
-        final ItemEntity item5 = new ItemEntity();
+        final TransitiveItem item5 = new TransitiveItem();
         item5.setCategory("second category");
-        final ItemEntity item6 = new ItemEntity();
+        final TransitiveItem item6 = new TransitiveItem();
         item6.setCategory("third category");
         return new ArrayList<>(Arrays.asList(item1, item2, item3, item4, item5, item6));
     }
 
-    public ItemEntity item(final String category, final String name, final Integer quantity) {
-        final ItemEntity item = new ItemEntity();
+    public TransitiveItem item(final String category, final String name, final Integer quantity) {
+        final TransitiveItem item = new TransitiveItem();
         item.setCategory(category);
         item.setName(name);
         return item;

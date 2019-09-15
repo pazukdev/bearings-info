@@ -7,7 +7,7 @@ import com.pazukdev.backend.dto.report.ReportFactory;
 import com.pazukdev.backend.dto.report.SpeedReport;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
-import com.pazukdev.backend.entity.item.ItemEntity;
+import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.repository.MotorcycleRepository;
@@ -25,13 +25,13 @@ import java.util.List;
 @Service
 public class MotorcycleService extends AbstractService<MotorcycleEntity, MotorcycleDto> {
 
-    private final ItemService itemService;
+    private final TransitiveItemService transitiveItemService;
 
     public MotorcycleService(final MotorcycleRepository repository,
                              final MotorcycleConverter converter,
-                             final ItemService itemService) {
+                             final TransitiveItemService transitiveItemService) {
         super(repository, converter);
-        this.itemService = itemService;
+        this.transitiveItemService = transitiveItemService;
     }
 
     @Transactional
@@ -68,9 +68,9 @@ public class MotorcycleService extends AbstractService<MotorcycleEntity, Motorcy
         return createTableView(getItems(userName));
     }
 
-    public TableViewDto createTableView(final List<ItemEntity> items) {
+    public TableViewDto createTableView(final List<TransitiveItem> items) {
         final List<TableDto> tables = new ArrayList<>();
-        for (final List<ItemEntity> categorizedItems : ItemUtil.categorize(items)) {
+        for (final List<TransitiveItem> categorizedItems : ItemUtil.categorize(items)) {
             tables.add(createTable(categorizedItems));
         }
         return new TableViewDto(items.size(), tables);
@@ -80,10 +80,10 @@ public class MotorcycleService extends AbstractService<MotorcycleEntity, Motorcy
         return createTable(getItems(motorcycleName));
     }
 
-    public TableDto createTable(final List<ItemEntity> items) {
+    public TableDto createTable(final List<TransitiveItem> items) {
         final String tableName = items.get(0).getCategory();
         final List<String[]> rows = new ArrayList<>();
-        for (final ItemEntity item : items) {
+        for (final TransitiveItem item : items) {
             final String[] row = {
                     item.getCategory(),
                     item.getName(),
@@ -95,7 +95,7 @@ public class MotorcycleService extends AbstractService<MotorcycleEntity, Motorcy
         return new TableDto(tableName, rowArray);
     }
 
-    public List<ItemEntity> getItems(final String motorcycleName) {
+    public List<TransitiveItem> getItems(final String motorcycleName) {
         return null;
     }
 

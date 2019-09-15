@@ -5,8 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -15,11 +14,13 @@ import javax.persistence.Table;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity
-@Table(name = "item")
-public class ItemEntity extends AbstractEntity {
+@Table(name = "child_item")
+public class ChildItem extends AbstractEntity {
 
-    private String category;
-    private String description;
-    private String replacer;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "item_id")
+    private Item item;
+    private String location;
+    private String quantity;
 
 }

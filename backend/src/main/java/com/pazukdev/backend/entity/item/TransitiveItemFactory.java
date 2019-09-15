@@ -1,7 +1,7 @@
 package com.pazukdev.backend.entity.item;
 
 import com.pazukdev.backend.entity.AbstractEntityFactory;
-import com.pazukdev.backend.service.ItemService;
+import com.pazukdev.backend.service.TransitiveItemService;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.CSVFileUtil;
 import lombok.Data;
@@ -18,9 +18,9 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Component
-public class ItemFactory extends AbstractEntityFactory<ItemEntity> {
+public class TransitiveItemFactory extends AbstractEntityFactory<TransitiveItem> {
 
-    private final ItemService service;
+    private final TransitiveItemService service;
 
     @Override
     protected String getCSVFilePath() {
@@ -28,12 +28,12 @@ public class ItemFactory extends AbstractEntityFactory<ItemEntity> {
     }
 
     @Override
-    public ItemEntity createEntity() {
-        return new ItemEntity();
+    public TransitiveItem createEntity() {
+        return new TransitiveItem();
     }
 
     @Override
-    protected void applyCharacteristics(ItemEntity item, TableRow tableRow) {
+    protected void applyCharacteristics(TransitiveItem item, TableRow tableRow) {
         super.applyCharacteristics(item, tableRow);
 
         applyCategory(item, tableRow);
@@ -41,12 +41,12 @@ public class ItemFactory extends AbstractEntityFactory<ItemEntity> {
         applyReplacers(item, tableRow);
     }
 
-    private void applyCategory(final ItemEntity item, final TableRow tableRow) {
+    private void applyCategory(final TransitiveItem item, final TableRow tableRow) {
         final String category = tableRow.getData().get("Category");
         item.setCategory(category);
     }
 
-    private void applyDescription(final ItemEntity item, final TableRow tableRow) {
+    private void applyDescription(final TransitiveItem item, final TableRow tableRow) {
         String description = "";
         for (final Map.Entry<String, String> entry : tableRow.getData().entrySet()) {
             final String key = entry.getKey();
@@ -58,7 +58,7 @@ public class ItemFactory extends AbstractEntityFactory<ItemEntity> {
         item.setDescription(description);
     }
 
-    private void applyReplacers(final ItemEntity item, final TableRow tableRow) {
+    private void applyReplacers(final TransitiveItem item, final TableRow tableRow) {
         final String replacer = tableRow.getData().get("Replacer");
         item.setReplacer(replacer != null ? replacer : "-");
     }

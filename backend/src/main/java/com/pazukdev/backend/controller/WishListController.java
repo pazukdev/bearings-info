@@ -1,6 +1,6 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.converter.ItemConverter;
+import com.pazukdev.backend.converter.TransitiveItemConverter;
 import com.pazukdev.backend.converter.WishListConverter;
 import com.pazukdev.backend.dto.WishListDto;
 import com.pazukdev.backend.service.WishListService;
@@ -9,14 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityExistsException;
 import java.util.List;
@@ -32,7 +25,7 @@ public class WishListController {
 
     private final WishListService service;
     private final WishListConverter wishListConverter;
-    private final ItemConverter itemConverter;
+    private final TransitiveItemConverter transitiveItemConverter;
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)

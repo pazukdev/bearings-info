@@ -9,7 +9,7 @@ import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.WishListEntity;
-import com.pazukdev.backend.entity.item.ItemEntity;
+import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.util.ItemUtil;
 import com.pazukdev.backend.validator.CredentialsValidator;
@@ -28,18 +28,18 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
     private final PasswordEncoder passwordEncoder;
     private final CredentialsValidator credentialsValidator;
-    private final ItemService itemService;
+    private final TransitiveItemService transitiveItemService;
     private final WishListService wishListService;
 
     public UserService(final UserRepository repository,
                        final UserConverter converter,
                        final PasswordEncoder passwordEncoder,
                        final CredentialsValidator credentialsValidator,
-                       ItemService itemService, final WishListService wishListService) {
+                       TransitiveItemService transitiveItemService, final WishListService wishListService) {
         super(repository, converter);
         this.passwordEncoder = passwordEncoder;
         this.credentialsValidator = credentialsValidator;
-        this.itemService = itemService;
+        this.transitiveItemService = transitiveItemService;
         this.wishListService = wishListService;
     }
 
@@ -79,9 +79,9 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         return createTableView(getAllItems(userName));
     }
 
-    public TableViewDto createTableView(final List<ItemEntity> items) {
+    public TableViewDto createTableView(final List<TransitiveItem> items) {
         final List<TableDto> tables = new ArrayList<>();
-        for (final List<ItemEntity> categorizedItems : ItemUtil.categorize(items)) {
+        for (final List<TransitiveItem> categorizedItems : ItemUtil.categorize(items)) {
             tables.add(createTable(categorizedItems));
         }
         return new TableViewDto(items.size(), tables);
@@ -91,10 +91,10 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         return createTable(getAllItems(userName));
     }
 
-    public TableDto createTable(final List<ItemEntity> items) {
+    public TableDto createTable(final List<TransitiveItem> items) {
         final String tableName = items.get(0).getCategory();
         final List<String[]> rows = new ArrayList<>();
-        for (final ItemEntity item : items) {
+        for (final TransitiveItem item : items) {
             final String[] row = {
                     item.getCategory(),
                     item.getName(),
@@ -106,8 +106,8 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         return new TableDto(tableName, rowArray);
     }
 
-    public List<ItemEntity> getAllItems(final String userName) {
-        final List<ItemEntity> items = new ArrayList<>(getWishList(userName).getItems());
+    public List<TransitiveItem> getAllItems(final String userName) {
+        final List<TransitiveItem> items = new ArrayList<>(getWishList(userName).getItems());
         ItemUtil.sort(items);
         return items;
     }
@@ -118,7 +118,7 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
     public Boolean addItem(final String userName, final ItemDto itemDto) {
         final WishListEntity wishList = getWishList(userName);
-        final ItemEntity item = itemService.create(itemDto);
+        final TransitiveItem item = transitiveItemService.create(itemDto);
         wishList.getItems().add(item);
         wishListService.update(wishList);
         return true;
@@ -126,11 +126,11 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
     public Boolean removeItem(final String userName, final Long itemId) {
         final WishListEntity wishList = getWishList(userName);
-        for (final ItemEntity item : wishList.getItems()) {
+        for (final TransitiveItem item : wishList.getItems()) {
             if (item.getId().longValue() == itemId) {
                 wishList.getItems().remove(item);
                 wishListService.update(wishList);
-                itemService.delete(itemId);
+                transitiveItemService.delete(itemId);
                 return true;
             }
         }

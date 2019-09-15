@@ -1,7 +1,7 @@
 package com.pazukdev.backend.dto.item;
 
 import com.pazukdev.backend.dto.AbstractDto;
-import com.pazukdev.backend.entity.item.ItemEntity;
+import com.pazukdev.backend.entity.item.TransitiveItem;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ItemQuantity extends AbstractDto {
 
-    private ItemEntity item;
+    private TransitiveItem item;
     private String location;
     private String quantity;
 

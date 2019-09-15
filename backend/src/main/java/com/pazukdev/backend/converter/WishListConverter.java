@@ -3,7 +3,7 @@ package com.pazukdev.backend.converter;
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.WishListDto;
 import com.pazukdev.backend.entity.WishListEntity;
-import com.pazukdev.backend.entity.item.ItemEntity;
+import com.pazukdev.backend.entity.item.TransitiveItem;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ public class WishListConverter implements EntityDtoConverter<WishListEntity, Wis
     @Override
     public WishListDto convertToDto(final WishListEntity wishList) {
         final WishListDto wishListDto = modelMapper.map(wishList, WishListDto.class);
-        for (final ItemEntity item : wishList.getItems()) {
+        for (final TransitiveItem item : wishList.getItems()) {
             wishListDto.getItemIds().add(item.getId());
         }
         return wishListDto;
@@ -32,7 +32,7 @@ public class WishListConverter implements EntityDtoConverter<WishListEntity, Wis
     public WishListEntity convertToEntity(final WishListDto wishListDto) {
         final WishListEntity wishList = modelMapper.map(wishListDto, WishListEntity.class);
         for (final Long itemId : wishListDto.getItemIds()) {
-            final ItemEntity item = new ItemEntity();
+            final TransitiveItem item = new TransitiveItem();
             item.setId(itemId);
             wishList.getItems().add(item);
         }

@@ -3,8 +3,8 @@ package com.pazukdev.backend.util;
 import com.pazukdev.backend.dto.item.ItemDescriptionMap;
 import com.pazukdev.backend.dto.item.ItemQuantity;
 import com.pazukdev.backend.dto.item.ReplacerData;
-import com.pazukdev.backend.entity.item.ItemEntity;
-import com.pazukdev.backend.service.ItemService;
+import com.pazukdev.backend.entity.item.TransitiveItem;
+import com.pazukdev.backend.service.TransitiveItemService;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -15,13 +15,13 @@ import java.util.stream.Collectors;
  */
 public class ItemUtil {
 
-    public static void sort(final List<ItemEntity> items) {
-        items.sort(Comparator.comparing(ItemEntity::getCategory));
+    public static void sort(final List<TransitiveItem> items) {
+        items.sort(Comparator.comparing(TransitiveItem::getCategory));
     }
 
-    public static Set<String> getCategories(final List<ItemEntity> items) {
+    public static Set<String> getCategories(final List<TransitiveItem> items) {
         final Set<String> categories = new HashSet<>();
-        for (final ItemEntity item : items) {
+        for (final TransitiveItem item : items) {
             if (item.getCategory() == null) {
                 item.setCategory("-");
             }
@@ -41,8 +41,8 @@ public class ItemUtil {
         return categories;
     }
 
-    public static List<List<ItemEntity>> categorize(final List<ItemEntity> items) {
-        final List<List<ItemEntity>> categorizedItems = new ArrayList<>();
+    public static List<List<TransitiveItem>> categorize(final List<TransitiveItem> items) {
+        final List<List<TransitiveItem>> categorizedItems = new ArrayList<>();
         for (final String category : getCategories(items)) {
             categorizedItems.add(items.stream()
                     .filter(item -> item.getCategory().equals(category)).collect(Collectors.toList()));
@@ -61,7 +61,7 @@ public class ItemUtil {
         return categorizedItems;
     }
 
-    public static String getValueFromDescription(final ItemEntity item, final String key) {
+    public static String getValueFromDescription(final TransitiveItem item, final String key) {
         return getValueFromDescription(item.getDescription(), key);
     }
 
@@ -95,7 +95,7 @@ public class ItemUtil {
         return map;
     }
 
-    public static ItemDescriptionMap createDescriptionMap(final ItemEntity item, final ItemService service) {
+    public static ItemDescriptionMap createDescriptionMap(final TransitiveItem item, final TransitiveItemService service) {
         final Map<String, String> unsortedMap = toMap(item.getDescription());
         final ItemDescriptionMap itemDescriptionMap = new ItemDescriptionMap();
         itemDescriptionMap.setParent(item);
@@ -113,13 +113,13 @@ public class ItemUtil {
         return itemDescriptionMap;
     }
 
-    public static boolean isLinkToItem(final String parameter, final String value, final ItemService service) {
+    public static boolean isLinkToItem(final String parameter, final String value, final TransitiveItemService service) {
         return !isSelectableCharacteristic(parameter, value, service) && service.find(parameter).size() > 0;
     }
 
     public static boolean isSelectableCharacteristic(final String parameter,
                                                      final String value,
-                                                     final ItemService service) {
+                                                     final TransitiveItemService service) {
         return service.find(parameter + " (i)").size() > 0;
     }
 
