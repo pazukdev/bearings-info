@@ -10,7 +10,7 @@ import java.util.Map;
  * @author Siarhei Sviarkaltsau
  */
 @Data
-public class ItemDescriptionMap {
+public class TransitiveItemDescriptionMap {
 
     private TransitiveItem parent;
     private Map<String, String> characteristics = new HashMap<>();

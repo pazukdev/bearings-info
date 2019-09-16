@@ -1,6 +1,7 @@
 package com.pazukdev.backend.dataloader;
 
 import com.pazukdev.backend.dto.item.ReplacerData;
+import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.entity.item.TransitiveItemFactory;
 import com.pazukdev.backend.repository.ChildItemRepository;
@@ -14,6 +15,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -36,7 +38,8 @@ public class DataLoader implements ApplicationRunner {
 
     private void populateEmptyTables() {
         if (repositoryIsEmpty(transitiveItemService.getTransitiveItemRepository())) {
-            createAll();
+            createTransitiveItems();
+            createItems();
         }
     }
 
@@ -44,14 +47,11 @@ public class DataLoader implements ApplicationRunner {
         return repository.findAll().isEmpty();
     }
 
-    private void createAll() {
+    private void createTransitiveItems() {
         final List<TransitiveItem> transitiveItems = transitiveItemFactory.createEntitiesFromCSVFile();
-        for (final TransitiveItem transitiveItem : transitiveItems) {
-            transitiveItemService.getTransitiveItemRepository().save(transitiveItem);
-        }
-        createStubReplacers(transitiveItemService.findAll());
-
-        createItems();
+        saveTransitiveItems(transitiveItems);
+        createStubReplacers(transitiveItems);
+        createStubInfoItems(transitiveItems);
     }
 
     private void createItems() {
@@ -61,9 +61,35 @@ public class DataLoader implements ApplicationRunner {
         }
     }
 
+    private void saveTransitiveItems(final List<TransitiveItem> items) {
+        for (final TransitiveItem item : items) {
+            transitiveItemService.getTransitiveItemRepository().save(item);
+        }
+    }
+
     private void createStubReplacers(final List<TransitiveItem> items) {
         for (final TransitiveItem item : items) {
             createStubReplacers(item);
+        }
+    }
+
+    private void createStubInfoItems(final List<TransitiveItem> items) {
+        for (final TransitiveItem item : items) {
+            createStubInfoItems(item);
+        }
+    }
+
+    private void createStubInfoItems(final TransitiveItem item) {
+        final TransitiveItemDescriptionMap descriptionMap = ItemUtil.createDescriptionMap(item, transitiveItemService);
+        for (final Map.Entry<String, String> entry : descriptionMap.getSelectableCharacteristics().entrySet()) {
+            final String category = entry.getKey();
+            final String name = entry.getValue();
+            if (transitiveItemService.find(category + " (i)", name) == null) {
+                final TransitiveItem stub = new TransitiveItem();
+                stub.setName(name);
+                stub.setCategory(category + " (i)");
+                transitiveItemService.getTransitiveItemRepository().save(stub);
+            }
         }
     }
 

@@ -45,8 +45,8 @@
                     {{row[0]}}
                 </td>
                 <td>
-                    <p v-if="row[2] === 'no id'">{{row[1]}}</p>
-                    <button v-if="row[2] !== 'no id'" type="button"
+                    <p v-if="row[3] === 'no data'">{{row[1]}}</p>
+                    <button v-if="row[3] !== 'no data'" type="button"
                             style="width: 100%"
                             @click="setItem(row[2])">
                         {{row[1]}}

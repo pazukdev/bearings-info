@@ -1,10 +1,10 @@
 package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.TransitiveItemConverter;
-import com.pazukdev.backend.dto.item.ItemDescriptionMap;
-import com.pazukdev.backend.dto.item.ItemDto;
 import com.pazukdev.backend.dto.item.ItemQuantity;
 import com.pazukdev.backend.dto.item.ReplacerData;
+import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
+import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.ItemView;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
@@ -23,7 +23,7 @@ import java.util.*;
  * @author Siarhei Sviarkaltsau
  */
 @Service
-public class TransitiveItemService extends AbstractService<TransitiveItem, ItemDto> {
+public class TransitiveItemService extends AbstractService<TransitiveItem, TransitiveItemDto> {
 
     @Getter
     private final TransitiveItemRepository transitiveItemRepository;
@@ -41,7 +41,7 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, ItemD
 
     @Transactional
     public ItemView update(final Long id, final ItemView itemView) {
-        final ItemDto oldItem = itemView.getItem();
+        final TransitiveItemDto oldItem = itemView.getItem();
         oldItem.setId(id);
         final String oldName = oldItem.getName();
         final TableDto header = itemView.getHeader();
@@ -88,7 +88,7 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, ItemD
                                    final String newValue) {
         final String editingItemCategory = editingItem.getCategory();
         final List<TransitiveItem> items = findAll();
-        final Set<String> categories = ItemUtil.getCategories(items);
+        final Set<String> categories = ItemUtil.findCategories(items);
         for (final TransitiveItem item : items) {
             final Map<String, String> descriptionMap = ItemUtil.toMap(item.getDescription());
             for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
@@ -115,14 +115,14 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, ItemD
         }
     }
 
-    public ItemDescriptionMap createDescriptionMap(final TransitiveItem item) {
+    public TransitiveItemDescriptionMap createDescriptionMap(final TransitiveItem item) {
         return ItemUtil.createDescriptionMap(item, this);
     }
 
     public ItemView createItemView(final TransitiveItem item) {
-        final ItemDescriptionMap descriptionMap = createDescriptionMap(item);
+        final TransitiveItemDescriptionMap descriptionMap = createDescriptionMap(item);
         final ItemView itemView = new ItemView();
-        final ItemDto dto = converter.convertToDto(item);
+        final TransitiveItemDto dto = converter.convertToDto(item);
         itemView.setItem(dto);
         itemView.setHeader(createHeader(item, descriptionMap));
         itemView.setSelectableData(createSelectableCharacteristics(descriptionMap));
@@ -131,7 +131,7 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, ItemD
         return itemView;
     }
 
-    private TableDto createHeader(final TransitiveItem item, final ItemDescriptionMap descriptionMap) {
+    private TableDto createHeader(final TransitiveItem item, final TransitiveItemDescriptionMap descriptionMap) {
         final List<String[]> list = new ArrayList<>();
         list.add(new String[]{"Name", item.getName()});
         final String tableName = item.getCategory().replace(" (i)", "") + " " + item.getName();
@@ -145,7 +145,7 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, ItemD
         return new TableDto(tableName, listToMatrix(list));
     }
 
-    private TableDto createSelectableCharacteristics(final ItemDescriptionMap descriptionMap) {
+    private TableDto createSelectableCharacteristics(final TransitiveItemDescriptionMap descriptionMap) {
         final String noName = "";
         final List<String[]> list = new ArrayList<>();
         for (final Map.Entry<String, String> entry : descriptionMap.getSelectableCharacteristics().entrySet()) {
@@ -245,12 +245,12 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, ItemD
         return new TableDto(tableName, rowArray);
     }
 
-    public TableViewDto createTableView(final ItemDescriptionMap descriptionMap) {
+    public TableViewDto createTableView(final TransitiveItemDescriptionMap descriptionMap) {
         final List<ItemQuantity> itemQuantities = createItemQuantities(descriptionMap);
         return createTableView(descriptionMap.getParent().getName(), itemQuantities);
     }
 
-    private List<ItemQuantity> createItemQuantities(final ItemDescriptionMap descriptionMap) {
+    private List<ItemQuantity> createItemQuantities(final TransitiveItemDescriptionMap descriptionMap) {
         final List<ItemQuantity> itemQuantities = new ArrayList<>();
         for (final Map.Entry entry : descriptionMap.getItems().entrySet()) {
             final String category = entry.getKey().toString();
@@ -398,6 +398,24 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, ItemD
             }
         }
         return categorizedItems;
+    }
+
+    public Set<String> findAllInfoCategories() {
+        return findInfoCategories(findAllCategories());
+    }
+
+    public Set<String> findInfoCategories(final Set<String> categories) {
+        final Set<String> infoCategories = new HashSet<>();
+        for (final String category : categories) {
+            if (category.contains(" (i)")) {
+                infoCategories.add(category);
+            }
+        }
+        return infoCategories;
+    }
+
+    public Set<String> findAllCategories() {
+        return ItemUtil.findCategories(findAll());
     }
 
 }

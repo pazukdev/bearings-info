@@ -25,7 +25,6 @@
             <column name="name" type="varchar(255)"/>
             <column name="category" type="varchar(255)"/>
             <column name="description" type="varchar(1000)"/>
-            <column name="replacer" type="varchar(1000)"/>
         </createTable>
     </changeSet>
 
@@ -41,13 +40,46 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="create_replacer_table" author="sviarkaltsau">
+        <createTable tableName="replacer">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="item_id" type="bigint"/>
+            <column name="comment" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
     <changeSet id="create_item_child_item_table" author="sviarkaltsau">
         <createTable tableName="item_child_item">
             <column name="parent_item_id" type="bigint">
-                <constraints foreignKeyName="fk_item_item_parent_item_id" references="item (id)"/>
+                <constraints foreignKeyName="fk_item_child_item_parent_item_id" references="item (id)"/>
             </column>
             <column name="child_item_id" type="bigint">
-                <constraints foreignKeyName="fk_item_item_child_item_id" references="child_item (id)"/>
+                <constraints foreignKeyName="fk_item_child_item_child_item_id" references="child_item (id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_item_data_item_table" author="sviarkaltsau">
+        <createTable tableName="item_data_item">
+            <column name="item_id" type="bigint">
+                <constraints foreignKeyName="fk_item_data_item_item_id" references="item (id)"/>
+            </column>
+            <column name="data_item_id" type="bigint">
+                <constraints foreignKeyName="fk_item_data_item_data_item_id" references="item (id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_item_replacer_table" author="sviarkaltsau">
+        <createTable tableName="item_replacer">
+            <column name="original_item_id" type="bigint">
+                <constraints foreignKeyName="fk_item_replacer_original_item_id" references="item (id)"/>
+            </column>
+            <column name="replacer_item_id" type="bigint">
+                <constraints foreignKeyName="fk_item_replacer_replacer_item_id" references="replacer (id)"/>
             </column>
         </createTable>
     </changeSet>

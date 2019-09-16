@@ -2,7 +2,7 @@ package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
-import com.pazukdev.backend.dto.item.ItemDto;
+import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.service.UserService;
@@ -11,14 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityExistsException;
 import java.util.List;
@@ -87,7 +80,7 @@ public class UserController {
     @PutMapping(value = "{userName}/add-item")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Add item to wish list")
-    public Boolean addItem(@PathVariable final String userName, @RequestBody final ItemDto dto) {
+    public Boolean addItem(@PathVariable final String userName, @RequestBody final TransitiveItemDto dto) {
         return service.addItem(userName, dto);
     }
 

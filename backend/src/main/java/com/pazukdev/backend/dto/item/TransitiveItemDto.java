@@ -11,7 +11,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ItemDto extends AbstractDto {
+public class TransitiveItemDto extends AbstractDto {
 
     private String category;
     private String description;

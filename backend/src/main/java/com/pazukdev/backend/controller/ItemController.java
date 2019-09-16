@@ -1,10 +1,10 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.converter.TransitiveItemConverter;
-import com.pazukdev.backend.dto.item.ItemDto;
+import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.ItemView;
 import com.pazukdev.backend.exception.ProductNotFoundException;
-import com.pazukdev.backend.service.TransitiveItemService;
+import com.pazukdev.backend.service.ItemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,20 +23,20 @@ import javax.persistence.EntityExistsException;
 @Api(tags = "Item Controller", value = "API methods for items")
 public class ItemController {
 
-    private final TransitiveItemService service;
+    private final ItemService service;
     private final TransitiveItemConverter converter;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get item")
     public ItemView get(@PathVariable("id") Long id)  {
-        return service.getItem(id);
+        return service.createItemView(id);
     }
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new item")
-    public boolean create(@RequestBody final ItemDto dto) throws EntityExistsException, JSONException {
+    public boolean create(@RequestBody final TransitiveItemDto dto) throws EntityExistsException, JSONException {
         return service.create(dto) != null;
     }
 

@@ -1,8 +1,9 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.dto.item.ItemDescriptionMap;
 import com.pazukdev.backend.dto.item.ItemQuantity;
 import com.pazukdev.backend.dto.item.ReplacerData;
+import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
+import com.pazukdev.backend.entity.item.ChildItem;
 import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.service.TransitiveItemService;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +20,7 @@ public class ItemUtil {
         items.sort(Comparator.comparing(TransitiveItem::getCategory));
     }
 
-    public static Set<String> getCategories(final List<TransitiveItem> items) {
+    public static Set<String> findCategories(final List<TransitiveItem> items) {
         final Set<String> categories = new HashSet<>();
         for (final TransitiveItem item : items) {
             if (item.getCategory() == null) {
@@ -41,9 +42,20 @@ public class ItemUtil {
         return categories;
     }
 
+    public static Set<String> getChildItemsCategories(final List<ChildItem> childItems) {
+        final Set<String> categories = new HashSet<>();
+        for (final ChildItem childItem : childItems) {
+            if (childItem.getItem().getCategory() == null) {
+                childItem.getItem().setCategory("-");
+            }
+            categories.add(childItem.getItem().getCategory());
+        }
+        return categories;
+    }
+
     public static List<List<TransitiveItem>> categorize(final List<TransitiveItem> items) {
         final List<List<TransitiveItem>> categorizedItems = new ArrayList<>();
-        for (final String category : getCategories(items)) {
+        for (final String category : findCategories(items)) {
             categorizedItems.add(items.stream()
                     .filter(item -> item.getCategory().equals(category)).collect(Collectors.toList()));
 
@@ -55,6 +67,16 @@ public class ItemUtil {
         final List<List<ItemQuantity>> categorizedItems = new ArrayList<>();
         for (final String category : getItemQuantityCategories(items)) {
             categorizedItems.add(items.stream()
+                    .filter(item -> item.getItem().getCategory().equals(category)).collect(Collectors.toList()));
+
+        }
+        return categorizedItems;
+    }
+
+    public static List<List<ChildItem>> categorizeChildItems(final List<ChildItem> childItems) {
+        final List<List<ChildItem>> categorizedItems = new ArrayList<>();
+        for (final String category : getChildItemsCategories(childItems)) {
+            categorizedItems.add(childItems.stream()
                     .filter(item -> item.getItem().getCategory().equals(category)).collect(Collectors.toList()));
 
         }
@@ -80,31 +102,37 @@ public class ItemUtil {
         return description;
     }
 
-    public static String toDescription(final ItemDescriptionMap itemDescriptionMap) {
-        return toDescription(itemDescriptionMap.getCharacteristics())
-                + toDescription(itemDescriptionMap.getSelectableCharacteristics())
-                + toDescription(itemDescriptionMap.getItems());
+    public static String toDescription(final TransitiveItemDescriptionMap descriptionMap) {
+        final String description
+                = toDescription(descriptionMap.getCharacteristics())
+                + toDescription(descriptionMap.getSelectableCharacteristics())
+                + toDescription(descriptionMap.getItems());
+        return SpecificStringUtil.replaceBlankWithDash(description);
     }
 
     public static Map<String, String> toMap(final String description) {
-        final List<String> descriptionList = Arrays.asList(description.split(";;"));
         final Map<String, String> map = new HashMap<>();
+        if (description == null || !description.contains(":")) {
+            return map;
+        }
+        final List<String> descriptionList = Arrays.asList(description.split(";;"));
         for (final String element : descriptionList) {
             map.put(element.split(":")[0], element.split(":")[1]);
         }
         return map;
     }
 
-    public static ItemDescriptionMap createDescriptionMap(final TransitiveItem item, final TransitiveItemService service) {
+    public static TransitiveItemDescriptionMap createDescriptionMap(final TransitiveItem item,
+                                                                    final TransitiveItemService service) {
         final Map<String, String> unsortedMap = toMap(item.getDescription());
-        final ItemDescriptionMap itemDescriptionMap = new ItemDescriptionMap();
+        final TransitiveItemDescriptionMap itemDescriptionMap = new TransitiveItemDescriptionMap();
         itemDescriptionMap.setParent(item);
         for (final Map.Entry<String, String> entry : unsortedMap.entrySet()) {
             final String parameter = StringUtils.trim(entry.getKey());
             final String value = StringUtils.trim(entry.getValue());
-            if (isSelectableCharacteristic(parameter, value,service)) {
+            if (isInfoItem(parameter, service)) {
                 itemDescriptionMap.getSelectableCharacteristics().put(parameter, value);
-            } else if (isLinkToItem(parameter, value, service)) {
+            } else if (isLinkToItem(parameter, service)) {
                 itemDescriptionMap.getItems().put(parameter, value);
             } else {
                 itemDescriptionMap.getCharacteristics().put(parameter, value);
@@ -113,14 +141,16 @@ public class ItemUtil {
         return itemDescriptionMap;
     }
 
-    public static boolean isLinkToItem(final String parameter, final String value, final TransitiveItemService service) {
-        return !isSelectableCharacteristic(parameter, value, service) && service.find(parameter).size() > 0;
+    public static boolean isLinkToItem(final String parameter, final TransitiveItemService service) {
+        return !isInfoItem(parameter, service) && service.find(parameter).size() > 0;
     }
 
-    public static boolean isSelectableCharacteristic(final String parameter,
-                                                     final String value,
-                                                     final TransitiveItemService service) {
-        return service.find(parameter + " (i)").size() > 0;
+    public static boolean isInfoItem(final String parameter, final TransitiveItemService service) {
+        return findCategories(service.findAll()).contains(parameter + " (i)");
+    }
+
+    public static String getInfoCategory(final String parameter) {
+        return parameter + " (i)";
     }
 
     public static ReplacerData parseReplacerData(final String replacerDataSourceString) {

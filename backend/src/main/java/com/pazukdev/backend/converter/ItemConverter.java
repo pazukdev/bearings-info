@@ -1,7 +1,7 @@
 package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
-import com.pazukdev.backend.dto.item.ItemDto;
+import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.entity.item.Item;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
@@ -12,18 +12,18 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Data
-public class ItemConverter implements EntityDtoConverter<Item, ItemDto> {
+public class ItemConverter implements EntityDtoConverter<Item, TransitiveItemDto> {
 
     private final ModelMapper modelMapper;
 
     @Override
-    public ItemDto convertToDto(final Item item) {
-        return modelMapper.map(item, ItemDto.class);
+    public TransitiveItemDto convertToDto(final Item item) {
+        return modelMapper.map(item, TransitiveItemDto.class);
     }
 
     @Override
-    public Item convertToEntity(final ItemDto itemDto) {
-        return modelMapper.map(itemDto, Item.class);
+    public Item convertToEntity(final TransitiveItemDto transitiveItemDto) {
+        return modelMapper.map(transitiveItemDto, Item.class);
     }
 
 }

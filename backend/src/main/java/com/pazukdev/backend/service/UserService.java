@@ -4,7 +4,7 @@ import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.WishListDto;
-import com.pazukdev.backend.dto.item.ItemDto;
+import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.entity.UserEntity;
@@ -116,9 +116,9 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         return findByName(userName).getWishList();
     }
 
-    public Boolean addItem(final String userName, final ItemDto itemDto) {
+    public Boolean addItem(final String userName, final TransitiveItemDto transitiveItemDto) {
         final WishListEntity wishList = getWishList(userName);
-        final TransitiveItem item = transitiveItemService.create(itemDto);
+        final TransitiveItem item = transitiveItemService.create(transitiveItemDto);
         wishList.getItems().add(item);
         wishListService.update(wishList);
         return true;
