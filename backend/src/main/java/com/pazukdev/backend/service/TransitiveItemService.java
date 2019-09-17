@@ -41,7 +41,8 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
 
     @Transactional
     public ItemView update(final Long id, final ItemView itemView) {
-        final TransitiveItemDto oldItem = itemView.getItem();
+        final TransitiveItemDto oldItem = new TransitiveItemDto(); // stub
+        //final TransitiveItemDto oldItem = itemView.getItem();
         oldItem.setId(id);
         final String oldName = oldItem.getName();
         final TableDto header = itemView.getHeader();
@@ -123,9 +124,9 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
         final TransitiveItemDescriptionMap descriptionMap = createDescriptionMap(item);
         final ItemView itemView = new ItemView();
         final TransitiveItemDto dto = converter.convertToDto(item);
-        itemView.setItem(dto);
+        //itemView.setItem(dto);
         itemView.setHeader(createHeader(item, descriptionMap));
-        itemView.setSelectableData(createSelectableCharacteristics(descriptionMap));
+        //itemView.setSelectableData(createSelectableCharacteristics(descriptionMap));
         itemView.setItems(createTableView(descriptionMap));
         itemView.setReplacers(createReplacers(item));
         return itemView;
@@ -211,7 +212,7 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
 
         final ItemView itemView = new ItemView();
         itemView.setHeader(new TableDto(tableName, listToMatrix(list)));
-        itemView.setSelectableData(stubTable());
+        //itemView.setSelectableData(stubTable());
         itemView.setItems(new TableViewDto(22, new ArrayList<>(Collections.singletonList(motorcyclesTable(motorcycles)))));
         itemView.setReplacers(stubTable());
         return itemView;

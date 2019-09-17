@@ -146,7 +146,8 @@ public class ItemUtil {
     }
 
     public static boolean isInfoItem(final String parameter, final TransitiveItemService service) {
-        return findCategories(service.findAll()).contains(parameter + " (i)");
+        //return findCategories(service.findAll()).contains(parameter + " (i)");
+        return service.find(parameter + " (i)").size() > 0;
     }
 
     public static String getInfoCategory(final String parameter) {

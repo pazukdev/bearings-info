@@ -16,7 +16,12 @@
                     {{row[0]}}
                 </td>
                 <td>
-                    {{row[1]}}
+                    <p v-if="row[3] !== 'show button'">{{row[1]}}</p>
+                    <button v-if="row[3] === 'show button'" type="button"
+                            style="width: 100%"
+                            @click="setItem(row[2])">
+                        {{row[1]}}
+                    </button>
                 </td>
             </tr>
             <tr style="text-align: left"
@@ -36,21 +41,6 @@
                 </td>
                 <td>
                     <input v-model="newValue" type="text"/>
-                </td>
-            </tr>
-            <tr v-if="itemView.selectableData.name !== 'stub'"
-                style="text-align: left"
-                v-for="row in itemView.selectableData.matrix">
-                <td style="width: 50%">
-                    {{row[0]}}
-                </td>
-                <td>
-                    <p v-if="row[3] === 'no data'">{{row[1]}}</p>
-                    <button v-if="row[3] !== 'no data'" type="button"
-                            style="width: 100%"
-                            @click="setItem(row[2])">
-                        {{row[1]}}
-                    </button>
                 </td>
             </tr>
             <tr style="text-align: left">
@@ -217,7 +207,7 @@
                     let newLine = [this.newParameter, this.newValue];
                     this.newItemView.header.matrix.push(newLine);
                 }
-                let id = this.newItemView.item.id;
+                let id = this.newItemView.itemId;
                 this.update(id);
                 this.newParameter = "";
                 this.newValue = "";

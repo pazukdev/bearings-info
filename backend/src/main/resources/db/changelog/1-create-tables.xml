@@ -62,16 +62,16 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create_item_data_item_table" author="sviarkaltsau">
-        <createTable tableName="item_data_item">
-            <column name="item_id" type="bigint">
-                <constraints foreignKeyName="fk_item_data_item_item_id" references="item (id)"/>
-            </column>
-            <column name="data_item_id" type="bigint">
-                <constraints foreignKeyName="fk_item_data_item_data_item_id" references="item (id)"/>
-            </column>
-        </createTable>
-    </changeSet>
+<!--    <changeSet id="create_item_data_item_table" author="sviarkaltsau">-->
+<!--        <createTable tableName="item_data_item">-->
+<!--            <column name="item_id" type="bigint">-->
+<!--                <constraints foreignKeyName="fk_item_data_item_item_id" references="item (id)"/>-->
+<!--            </column>-->
+<!--            <column name="data_item_id" type="bigint">-->
+<!--                <constraints foreignKeyName="fk_item_data_item_data_item_id" references="item (id)"/>-->
+<!--            </column>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
 
     <changeSet id="create_item_replacer_table" author="sviarkaltsau">
         <createTable tableName="item_replacer">

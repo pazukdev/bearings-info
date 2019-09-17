@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{"Halo!"}}
         <Item @select-item="selectItem"/>
     </div>
 </template>

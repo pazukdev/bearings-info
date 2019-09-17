@@ -51,7 +51,7 @@ public class DataLoader implements ApplicationRunner {
         final List<TransitiveItem> transitiveItems = transitiveItemFactory.createEntitiesFromCSVFile();
         saveTransitiveItems(transitiveItems);
         createStubReplacers(transitiveItems);
-        createStubInfoItems(transitiveItems);
+        //createStubInfoItems(transitiveItems);
     }
 
     private void createItems() {
