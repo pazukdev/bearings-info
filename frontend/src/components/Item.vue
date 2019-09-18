@@ -1,7 +1,10 @@
 <template>
     <div>
+<!--        {{"isEditMode: " + isEditMode}}<br>-->
+<!--        {{"isAddLine: " + isAddLine}}<br>-->
+<!--        {{"isEditParameters: " + isEditParameters}}<br>-->
+<!--        {{"isEditValues: " + isEditValues}}<br>-->
 <!--        {{text}}-->
-<!--        {{isEditMode}}-->
 <!--        {{newItemView}}-->
 <!--        {{itemView}}-->
         <table>
@@ -10,28 +13,31 @@
                 <td colspan="2" style="text-align: center"><b>{{itemView.header.name}}</b></td>
             </tr>
             <tr style="text-align: left"
-                v-if="!isEditMode"
                 v-for="row in itemView.header.matrix">
                 <td style="width: 50%">
-                    {{row[0]}}
+                    <input v-if="isEditMode && isEditParameters && row[0] !== 'Name'" v-model="row[0]" type="text"/>
+                    <p v-if="!isEditParameters || (isEditMode && isEditParameters && row[0] === 'Name')">
+                        {{row[0]}}
+                    </p>
                 </td>
                 <td>
-                    <p v-if="row[3] !== 'show button'">{{row[1]}}</p>
-                    <button v-if="row[3] === 'show button'" type="button"
+                    <input v-if="isEditMode && isEditValues" v-model="row[1]" type="text"/>
+                    <p v-if="(!isShowInfoButton(row[3]) && !isEditValues) || isEditParameters || isAddLine">
+                        {{row[1]}}
+                    </p>
+                    <button v-if="isShowInfoButton(row[3])" type="button"
                             style="width: 100%"
                             @click="setItem(row[2])">
                         {{row[1]}}
                     </button>
                 </td>
-            </tr>
-            <tr style="text-align: left"
-                v-if="isEditMode"
-                v-for="row in itemView.header.matrix">
-                <td style="width: 50%">
-                    {{row[0]}}
-                </td>
                 <td>
-                    <input v-model="row[1]" type="text"/>
+                    <button v-if="isEditParameters && row[0] !== 'Name'"
+                            v-model="newItemView"
+                            type="button"
+                            @click="newItemView.header.matrix.splice(newItemView.header.matrix.indexOf(row), 1)">
+                        {{"-"}}
+                    </button>
                 </td>
             </tr>
             <tr style="text-align: left"
@@ -43,21 +49,36 @@
                     <input v-model="newValue" type="text"/>
                 </td>
             </tr>
-            <tr style="text-align: left">
+            <tr v-if="isEditMode" style="text-align: left">
                 <td style="width: 50%">
-                </td>
-                <td>
-                    <button v-if="isEditMode && !isAddLine"
+                    <button v-if="!isAddLine"
                             type="button"
                             style="width: 100%"
                             @click="addLine()">
                         {{"+"}}
                     </button>
-                    <button v-if="isEditMode && isAddLine"
+                    <button v-if="isAddLine"
                             type="button"
                             style="width: 100%"
                             @click="cancelAddLine()">
                         {{"-"}}
+                    </button>
+                </td>
+                <td></td>
+            </tr>
+            <tr v-if="isEditMode && !isAddLine" style="text-align: left">
+                <td style="width: 50%">
+                    <button type="button"
+                            style="width: 100%"
+                            @click="editParameters()">
+                        {{"Edit parameters"}}
+                    </button>
+                </td>
+                <td>
+                    <button type="button"
+                            style="width: 100%"
+                            @click="editValues()">
+                        {{"Edit values"}}
                     </button>
                 </td>
             </tr>
@@ -150,10 +171,13 @@
             return {
                 isEditMode: false,
                 isAddLine: false,
+                isEditValues: false,
+                isEditParameters: false,
                 newItemView: "",
                 text: "start",
                 newParameter: "",
-                newValue: ""
+                newValue: "",
+                paramsToRemove: []
             }
         },
 
@@ -169,18 +193,40 @@
         },
 
         methods: {
+            removeLine(parameter) {
+
+            },
+
+            isShowInfoButton(message) {
+                return message === 'show button' && !this.isEditMode;
+            },
+
+            editParameters() {
+                this.isEditParameters = true;
+                this.isEditValues = false;
+            },
+
+            editValues() {
+                this.isEditParameters = false;
+                this.isEditValues = true;
+            },
+
             newLineIsEmpty() {
                 return this.newParameter === "" || this.newValue === "";
             },
 
             addLine() {
                 this.isAddLine = true;
+                this.isEditParameters = false;
+                this.isEditValues = false;
             },
 
             cancelAddLine() {
                 this.newParameter = "";
                 this.newValue = "";
                 this.isAddLine = false;
+                this.isEditParameters = false;
+                this.isEditValues = true;
             },
 
             setItem(id) {
@@ -190,6 +236,7 @@
 
             edit() {
                 this.isEditMode = true;
+                this.editValues();
                 this.newItemView = this.itemView;
             },
 
@@ -200,6 +247,8 @@
                 this.$emit('cancel', id);
                 this.isEditMode = false;
                 this.isAddLine = false;
+                this.isEditParameters = false;
+                this.isEditValues = false;
             },
 
             save() {
@@ -213,6 +262,8 @@
                 this.newValue = "";
                 this.isEditMode = false;
                 this.isAddLine = false;
+                this.isEditParameters = false;
+                this.isEditValues = false;
             },
 
             update(id) {

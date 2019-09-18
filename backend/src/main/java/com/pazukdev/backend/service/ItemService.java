@@ -122,10 +122,38 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             if (newParameter != null) {
                 descriptionMap.put(newParameter[0], newParameter[1]);
             }
-
+        }
+        final List<String> paramsToRemove = new ArrayList<>();
+        for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
+            final String parameter = entry.getKey();
+            if (!headerMatrixMap.containsKey(parameter)) {
+                paramsToRemove.add(parameter);
+            }
+        }
+        for (final String parameter : paramsToRemove) {
+            descriptionMap.remove(parameter);
         }
         final String newDescription = ItemUtil.toDescription(descriptionMap);
+        applyNewDescriptionToCategory(item.getCategory(), descriptionMap);
         item.setDescription(newDescription);
+    }
+
+    public void applyNewDescriptionToCategory(final String category, final Map<String, String> newDescriptionMap) {
+        final List<Item> allItemsOfCategory = find(category);
+        for (final Item item : allItemsOfCategory) {
+            final Map<String, String> oldItemDescriptionMap = ItemUtil.toMap(item.getDescription());
+            final Map<String, String> newItemDescriptionMap = new HashMap<>(newDescriptionMap);
+            for (final Map.Entry<String, String> entry : newItemDescriptionMap.entrySet()) {
+                final String newParameter = entry.getKey();
+                final String value = oldItemDescriptionMap.get(newParameter);
+                if (value == null) {
+                    entry.setValue("-");
+                } else {
+                    entry.setValue(value);
+                }
+            }
+            item.setDescription(ItemUtil.toDescription(newItemDescriptionMap));
+        }
     }
 
     private void updateName(final Item item, final Map<String, String> headerMatrixMap) {
