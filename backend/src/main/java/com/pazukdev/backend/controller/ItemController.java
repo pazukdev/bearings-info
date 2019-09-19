@@ -3,6 +3,7 @@ package com.pazukdev.backend.controller;
 import com.pazukdev.backend.converter.TransitiveItemConverter;
 import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.ItemView;
+import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.ItemService;
 import io.swagger.annotations.Api;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityExistsException;
+import java.util.List;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -25,6 +27,13 @@ public class ItemController {
 
     private final ItemService service;
     private final TransitiveItemConverter converter;
+
+    @GetMapping("/list")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get all items")
+    public List<Item> getAll() {
+        return service.findAll();
+    }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

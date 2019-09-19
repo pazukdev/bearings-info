@@ -170,7 +170,7 @@
         background-color: aliceblue;
         margin: auto;
         width: 480px;
-        height: 700px;
+        height: 800px;
         overflow-y: auto;
         border-radius: 10px;
     }
@@ -223,6 +223,13 @@
 
     .full-width {
         width: 100%;
+    }
+
+    .round-button {
+        text-align: center;
+        height: 32px;
+        width: 32px;
+        border-radius: 16px;
     }
 
     button {

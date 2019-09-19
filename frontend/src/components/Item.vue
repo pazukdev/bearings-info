@@ -7,16 +7,31 @@
 <!--        {{text}}-->
 <!--        {{newItemView}}-->
 <!--        {{itemView}}-->
+<!--        {{this.items}}-->
+<!--        {{newReplacer}}-->
+<!--        {{newReplacerItem}}-->
         <table>
             <tbody>
-            <tr>
-                <td colspan="2" style="text-align: center"><b>{{itemView.header.name}}</b></td>
+            <tr style="text-align: center">
+                <td style="width: 120px"></td>
+                <td>
+                    <b>{{itemView.header.name}}</b>
+                </td>
+                <td style="width: 120px">
+                    <button style="width: 100%" type="button"
+                            @click="stubMethod()">
+                        {{"Google search"}}
+                    </button>
+                </td>
             </tr>
+            </tbody>
+        </table>
+        <table style="width: 440px">
+            <tbody>
             <tr style="text-align: left"
                 v-for="row in itemView.header.matrix">
-                <td style="width: 50%">
-                    <input v-if="isEditMode && isEditParameters && row[0] !== 'Name'" v-model="row[0]" type="text"/>
-                    <p v-if="!isEditParameters || (isEditMode && isEditParameters && row[0] === 'Name')">
+                <td>
+                    <p>
                         {{row[0]}}
                     </p>
                 </td>
@@ -35,6 +50,7 @@
                     <button v-if="isEditParameters && row[0] !== 'Name'"
                             v-model="newItemView"
                             type="button"
+                            class="round-button"
                             @click="newItemView.header.matrix.splice(newItemView.header.matrix.indexOf(row), 1)">
                         {{"-"}}
                     </button>
@@ -42,32 +58,35 @@
             </tr>
             <tr style="text-align: left"
                 v-if="isEditMode && isAddLine">
-                <td style="width: 50%">
+                <td>
                     <input v-model="newParameter" type="text"/>
                 </td>
                 <td>
                     <input v-model="newValue" type="text"/>
                 </td>
+                <td>
+                    <button v-if="isAddLine"
+                            type="button"
+                            class="round-button"
+                            @click="cancelAddLine()">
+                        {{"-"}}
+                    </button>
+                </td>
             </tr>
             <tr v-if="isEditMode" style="text-align: left">
-                <td style="width: 50%">
+                <td>
                     <button v-if="!isAddLine"
                             type="button"
                             style="width: 100%"
                             @click="addLine()">
                         {{"+"}}
                     </button>
-                    <button v-if="isAddLine"
-                            type="button"
-                            style="width: 100%"
-                            @click="cancelAddLine()">
-                        {{"-"}}
-                    </button>
                 </td>
+                <td></td>
                 <td></td>
             </tr>
             <tr v-if="isEditMode && !isAddLine" style="text-align: left">
-                <td style="width: 50%">
+                <td>
                     <button type="button"
                             style="width: 100%"
                             @click="editParameters()">
@@ -81,9 +100,10 @@
                         {{"Edit values"}}
                     </button>
                 </td>
+                <td></td>
             </tr>
             <tr style="text-align: left">
-                <td style="width: 50%">
+                <td>
                     <button v-if="isEditMode"
                             type="button"
                             style="width: 100%"
@@ -105,9 +125,10 @@
                         {{"Save"}}
                     </button>
                 </td>
+                <td></td>
             </tr>
             <tr v-for="item in itemView.items.tables">
-                <td colspan="2">
+                <td colspan="3">
                     <table class="get-all-table">
                         <tbody>
                         <tr>
@@ -140,11 +161,13 @@
                 </td>
             </tr>
             <tr v-if="notStub()">
-                <td style="text-align: center" colspan="2">
+                <td style="text-align: center" colspan="3">
                     {{itemView.replacers.name}}
                 </td>
             </tr>
-            <tr v-if="notStub()" style="text-align: left" v-for="row in itemView.replacers.matrix">
+            <tr v-if="notStub()"
+                style="text-align: left; width: 440px"
+                v-for="row in itemView.replacers.matrix">
                 <td>
                     {{row[0]}}
                 </td>
@@ -153,6 +176,34 @@
                             style="width: 100%"
                             @click="setItem(row[2])">
                         {{row[1]}}
+                    </button>
+                </td>
+                <td v-if="isEditMode">
+                    <button v-model="newItemView"
+                            type="button"
+                            class="round-button"
+                            @click="newItemView.replacers.matrix.splice(newItemView.replacers.matrix.indexOf(row), 1)">
+                        {{"-"}}
+                    </button>
+                </td>
+            </tr>
+            <tr v-if="notStub() && isEditMode" style="text-align: left">
+                <td>
+                    <input v-model="newReplacer.comment" type="text"/>
+                </td>
+                <td>
+                    <select class="content" v-model="newReplacerItem">
+                        <option v-for="item in itemView.sameCategoryItems" v-bind:value="item">
+                            {{item.name}}
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <button type="button"
+                            class="round-button"
+                            style="width: 100%"
+                            @click="addReplacer()">
+                        {{"+"}}
                     </button>
                 </td>
             </tr>
@@ -177,11 +228,28 @@
                 text: "start",
                 newParameter: "",
                 newValue: "",
-                paramsToRemove: []
+                paramsToRemove: [],
+                items: [],
+                newReplacerComment: "",
+                newReplacerName: "",
+                newReplacerId: "",
+                newReplacerItem: "",
+                newReplacer: {
+                    comment: "",
+                    name: "",
+                    id: ""
+                }
             }
         },
 
         created() {
+            axios
+                .get(`/backend/item/list`, {
+                    headers: {
+                        Authorization: this.authorization
+                    }
+                })
+                .then(response => this.items = response.data);
         },
 
         computed: {
@@ -193,7 +261,14 @@
         },
 
         methods: {
-            removeLine(parameter) {
+            addReplacer() {
+                let id = this.newReplacerItem.itemId;
+                let name = this.newReplacerItem.itemName;
+                let newRow = [this.newReplacer.comment, name, id];
+                this.newItemView.replacers.matrix.push(newRow);
+            },
+
+            stubMethod() {
 
             },
 
@@ -202,11 +277,15 @@
             },
 
             editParameters() {
+                // this.cancel();
+                // this.edit();
                 this.isEditParameters = true;
                 this.isEditValues = false;
             },
 
             editValues() {
+                // this.cancel();
+                // this.edit();
                 this.isEditParameters = false;
                 this.isEditValues = true;
             },
@@ -216,6 +295,8 @@
             },
 
             addLine() {
+                // this.cancel();
+                // this.edit();
                 this.isAddLine = true;
                 this.isEditParameters = false;
                 this.isEditValues = false;

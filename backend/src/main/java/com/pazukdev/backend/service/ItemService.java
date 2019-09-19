@@ -1,6 +1,7 @@
 package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.ItemConverter;
+import com.pazukdev.backend.dto.item.ItemSelect;
 import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.ItemView;
@@ -11,6 +12,7 @@ import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.entity.item.Replacer;
 import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.repository.ItemRepository;
+import com.pazukdev.backend.repository.ReplacerRepository;
 import com.pazukdev.backend.util.ItemUtil;
 import com.pazukdev.backend.util.SpecificStringUtil;
 import lombok.Getter;
@@ -32,13 +34,17 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     final TransitiveItemService transitiveItemService;
     @Getter
     private final ItemRepository itemRepository;
+    private final ReplacerRepository replacerRepository;
+
 
     public ItemService(final ItemRepository itemRepository,
                        final ItemConverter converter,
-                       final TransitiveItemService transitiveItemService) {
+                       final TransitiveItemService transitiveItemService,
+                       final ReplacerRepository replacerRepository) {
         super(itemRepository, converter);
         this.transitiveItemService = transitiveItemService;
         this.itemRepository = itemRepository;
+        this.replacerRepository = replacerRepository;
     }
 
     @Transactional
@@ -64,8 +70,13 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     @Transactional
     public List<Item> find(final String category) {
+        return find(category, findAll());
+    }
+
+    @Transactional
+    public List<Item> find(final String category, final List<Item> items) {
         final List<Item> categorizedItems = new ArrayList<>();
-        for (final Item item : findAll()) {
+        for (final Item item : items) {
             if (item.getCategory().toLowerCase().equals(category.toLowerCase())) {
                 categorizedItems.add(item);
             }
@@ -91,6 +102,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final Map<String, String> headerMatrixMap = createHeaderMatrixMap(itemView);
         updateName(item, headerMatrixMap);
         updateDescription(item, headerMatrixMap);
+        updateReplacers(item, itemView);
         itemRepository.save(item);
         return createItemView(id);
     }
@@ -106,35 +118,8 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     private void updateDescription(final Item item, final Map<String, String> headerMatrixMap) {
-        String[] newParameter = null;
-        final Map<String, String> descriptionMap = ItemUtil.toMap(item.getDescription());
-        for (final Map.Entry<String, String> entry : headerMatrixMap.entrySet()) {
-            final String parameter = entry.getKey();
-            final String newValue = entry.getValue();
-            final String oldValue = descriptionMap.get(parameter);
-            if (oldValue == null) {
-                newParameter = new String[]{parameter, newValue};
-            } else {
-                if (!oldValue.equals(newValue)) {
-                    descriptionMap.replace(parameter, newValue);
-                }
-            }
-            if (newParameter != null) {
-                descriptionMap.put(newParameter[0], newParameter[1]);
-            }
-        }
-        final List<String> paramsToRemove = new ArrayList<>();
-        for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
-            final String parameter = entry.getKey();
-            if (!headerMatrixMap.containsKey(parameter)) {
-                paramsToRemove.add(parameter);
-            }
-        }
-        for (final String parameter : paramsToRemove) {
-            descriptionMap.remove(parameter);
-        }
-        final String newDescription = ItemUtil.toDescription(descriptionMap);
-        applyNewDescriptionToCategory(item.getCategory(), descriptionMap);
+        final String newDescription = ItemUtil.toDescription(headerMatrixMap);
+        applyNewDescriptionToCategory(item.getCategory(), headerMatrixMap);
         item.setDescription(newDescription);
     }
 
@@ -156,6 +141,40 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         }
     }
 
+    private void updateReplacers(final Item item, final ItemView itemView) {
+        final String[][] matrix = itemView.getReplacers().getMatrix();
+        for (final String[] row : matrix) {
+            final String comment = row[0];
+            final Long id = Long.valueOf(row[2]);
+            final Item replacerItem = getOne(id);
+            final String replacerName = item.getName() + " - " + replacerItem.getName();
+            Replacer replacer = replacerRepository.findByName(replacerName);
+            if (replacer == null) {
+                replacer = new Replacer();
+                replacer.setName(replacerName);
+                replacer.setItem(replacerItem);
+            }
+            replacer.setComment(comment);
+            replacerRepository.save(replacer);
+            item.getReplacers().add(replacer);
+        }
+
+        final List<Long> ids = new ArrayList<>();
+        for (final String[] row : matrix) {
+            ids.add(Long.valueOf(row[2]));
+        }
+        final List<Replacer> toRemove = new ArrayList<>();
+        for (final Replacer replacer : item.getReplacers()) {
+            final Long id = replacer.getItem().getId();
+            if (ids.contains(id)) {
+                ids.remove(id);
+            } else {
+                toRemove.add(replacer);
+            }
+        }
+        item.getReplacers().removeAll(toRemove);
+    }
+
     private void updateName(final Item item, final Map<String, String> headerMatrixMap) {
         final String oldName = item.getName();
         final String newName = headerMatrixMap.get("Name");
@@ -163,6 +182,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             item.setName(newName);
             applyToAllItemDescriptions(item.getCategory(), oldName, newName);
         }
+        headerMatrixMap.remove("Name");
     }
 
     private void applyToAllItemDescriptions(final String updatingItemCategory,
@@ -191,13 +211,37 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     public ItemView createItemView(final Item item) {
+        final List<Item> allItems = findAll();
+
         final ItemView itemView = new ItemView();
         itemView.setItemId(item.getId());
         itemView.setHeader(createHeader(item));
-        //itemView.setSelectableData(createSelectableCharacteristics(item));
         itemView.setItems(createTableView(new ArrayList<>(item.getChildItems())));
         itemView.setReplacers(createReplacersTable(item));
+        itemView.setAllItems(createItemSelects(allItems));
+        itemView.setSameCategoryItems(createItemSelects(find(item.getCategory(), allItems)));
         return itemView;
+    }
+
+    private List<ItemSelect> createItemSelects(final List<Item> items) {
+        final List<ItemSelect> itemSelects = new ArrayList<>();
+        for (final Item item : items) {
+            String manufacturer = ItemUtil.getValueFromDescription(item.getDescription(), "Manufacturer");
+            String name = item.getName();
+            if (manufacturer != null) {
+                name = manufacturer + " " + item.getName();
+            }
+            if (item.getCategory().equals("Seal")) {
+                final String size = ItemUtil.getValueFromDescription(item.getDescription(), "Size");
+                name = size + " " + manufacturer + " " + item.getName();
+            }
+            final ItemSelect itemSelect = new ItemSelect();
+            itemSelect.setName(name);
+            itemSelect.setItemName(item.getName());
+            itemSelect.setItemId(item.getId());
+            itemSelects.add(itemSelect);
+        }
+        return itemSelects;
     }
 
     private TableDto createHeader(final Item item) {
@@ -248,7 +292,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final List<String[]> data = new ArrayList<>();
         for (final Replacer replacer : item.getReplacers()) {
             data.add(new String[]{
-                    replacer.getComment(),
+                    replacer.getComment() != null ? replacer.getComment() : "-",
                     createReplacerButtonText(replacer.getItem()),
                     replacer.getItem().getId().toString()
             });
@@ -279,7 +323,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
         final ItemView itemView = new ItemView();
         itemView.setHeader(new TableDto(tableName, listToMatrix(list)));
-        //itemView.setSelectableData(stubTable());
         final int noMatterWhatNumber = 123;
         final List<TableDto> tables = new ArrayList<>(Collections.singletonList(motorcyclesTable(motorcycles)));
         itemView.setItems(new TableViewDto(noMatterWhatNumber, tables));
