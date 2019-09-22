@@ -2,13 +2,12 @@
     <div>
 <!--        {{"isEditMode: " + isEditMode}}<br>-->
 <!--        {{"isAddLine: " + isAddLine}}<br>-->
-<!--        {{"isEditParameters: " + isEditParameters}}<br>-->
-<!--        {{"isEditValues: " + isEditValues}}<br>-->
 <!--        {{text}}-->
 <!--        {{newItemView}}-->
-<!--        {{itemView}}-->
+        {{itemView.replacersTable.replacers}}<br><br>
+<!--        {{itemView.replacers}}<br><br>-->
 <!--        {{this.items}}-->
-<!--        {{newReplacer}}-->
+        {{newReplacer}}<br><br>
 <!--        {{newReplacerItem}}-->
         <table>
             <tbody>
@@ -36,8 +35,8 @@
                     </p>
                 </td>
                 <td>
-                    <input v-if="isEditMode && isEditValues" v-model="row[1]" type="text"/>
-                    <p v-if="(!isShowInfoButton(row[3]) && !isEditValues) || isEditParameters || isAddLine">
+                    <input v-if="isEditMode" v-model="row[1]" type="text"/>
+                    <p v-if="!isShowInfoButton(row[3]) && !isEditMode">
                         {{row[1]}}
                     </p>
                     <button v-if="isShowInfoButton(row[3])" type="button"
@@ -47,7 +46,7 @@
                     </button>
                 </td>
                 <td>
-                    <button v-if="isEditParameters && row[0] !== 'Name'"
+                    <button v-if="isEditMode && row[0] !== 'Name'"
                             v-model="newItemView"
                             type="button"
                             class="round-button"
@@ -83,23 +82,6 @@
                     </button>
                 </td>
                 <td></td>
-                <td></td>
-            </tr>
-            <tr v-if="isEditMode && !isAddLine" style="text-align: left">
-                <td>
-                    <button type="button"
-                            style="width: 100%"
-                            @click="editParameters()">
-                        {{"Edit parameters"}}
-                    </button>
-                </td>
-                <td>
-                    <button type="button"
-                            style="width: 100%"
-                            @click="editValues()">
-                        {{"Edit values"}}
-                    </button>
-                </td>
                 <td></td>
             </tr>
             <tr style="text-align: left">
@@ -162,27 +144,29 @@
             </tr>
             <tr v-if="notStub()">
                 <td style="text-align: center" colspan="3">
-                    {{itemView.replacers.name}}
+                    {{itemView.replacersTable.name}}
                 </td>
             </tr>
             <tr v-if="notStub()"
                 style="text-align: left; width: 440px"
-                v-for="row in itemView.replacers.matrix">
-                <td>
-                    {{row[0]}}
+                v-for="replacer in itemView.replacersTable.replacers">
+                <td v-if="!isEditMode">
+                    {{replacer.comment}}
                 </td>
+                <input v-if="isEditMode" v-model="replacer.comment" type="text"/>
                 <td>
                     <button type="button"
                             style="width: 100%"
-                            @click="setItem(row[2])">
-                        {{row[1]}}
+                            @click="setItem(replacer.itemId)">
+                        {{replacer.buttonText}}
                     </button>
                 </td>
                 <td v-if="isEditMode">
                     <button v-model="newItemView"
                             type="button"
                             class="round-button"
-                            @click="newItemView.replacers.matrix.splice(newItemView.replacers.matrix.indexOf(row), 1)">
+                            @click="newItemView.replacersTable.replacers
+                            .splice(newItemView.replacersTable.replacers.indexOf(replacer), 1)">
                         {{"-"}}
                     </button>
                 </td>
@@ -192,9 +176,9 @@
                     <input v-model="newReplacer.comment" type="text"/>
                 </td>
                 <td>
-                    <select class="content" v-model="newReplacerItem">
-                        <option v-for="item in itemView.sameCategoryItems" v-bind:value="item">
-                            {{item.name}}
+                    <select class="content" v-model="newReplacer">
+                        <option v-for="replacer in itemView.replacers" v-bind:value="replacer">
+                            {{replacer.selectText}}
                         </option>
                     </select>
                 </td>
@@ -222,34 +206,27 @@
             return {
                 isEditMode: false,
                 isAddLine: false,
-                isEditValues: false,
-                isEditParameters: false,
                 newItemView: "",
                 text: "start",
                 newParameter: "",
                 newValue: "",
                 paramsToRemove: [],
-                items: [],
                 newReplacerComment: "",
                 newReplacerName: "",
                 newReplacerId: "",
                 newReplacerItem: "",
+                newComment: "",
                 newReplacer: {
-                    comment: "",
+                    id: "",
                     name: "",
-                    id: ""
+                    itemId: "",
+                    itemNameToDisplay: "",
+                    comment: ""
                 }
             }
         },
 
         created() {
-            axios
-                .get(`/backend/item/list`, {
-                    headers: {
-                        Authorization: this.authorization
-                    }
-                })
-                .then(response => this.items = response.data);
         },
 
         computed: {
@@ -262,10 +239,8 @@
 
         methods: {
             addReplacer() {
-                let id = this.newReplacerItem.itemId;
-                let name = this.newReplacerItem.itemName;
-                let newRow = [this.newReplacer.comment, name, id];
-                this.newItemView.replacers.matrix.push(newRow);
+                this.newReplacer.name = "itemView.header.matrix" + this.newReplacer.name;
+                this.newItemView.replacersTable.replacers.push(this.newReplacer);
             },
 
             stubMethod() {
@@ -276,38 +251,18 @@
                 return message === 'show button' && !this.isEditMode;
             },
 
-            editParameters() {
-                // this.cancel();
-                // this.edit();
-                this.isEditParameters = true;
-                this.isEditValues = false;
-            },
-
-            editValues() {
-                // this.cancel();
-                // this.edit();
-                this.isEditParameters = false;
-                this.isEditValues = true;
-            },
-
             newLineIsEmpty() {
                 return this.newParameter === "" || this.newValue === "";
             },
 
             addLine() {
-                // this.cancel();
-                // this.edit();
                 this.isAddLine = true;
-                this.isEditParameters = false;
-                this.isEditValues = false;
             },
 
             cancelAddLine() {
                 this.newParameter = "";
                 this.newValue = "";
                 this.isAddLine = false;
-                this.isEditParameters = false;
-                this.isEditValues = true;
             },
 
             setItem(id) {
@@ -317,7 +272,6 @@
 
             edit() {
                 this.isEditMode = true;
-                this.editValues();
                 this.newItemView = this.itemView;
             },
 
@@ -328,8 +282,6 @@
                 this.$emit('cancel', id);
                 this.isEditMode = false;
                 this.isAddLine = false;
-                this.isEditParameters = false;
-                this.isEditValues = false;
             },
 
             save() {
@@ -343,8 +295,6 @@
                 this.newValue = "";
                 this.isEditMode = false;
                 this.isAddLine = false;
-                this.isEditParameters = false;
-                this.isEditValues = false;
             },
 
             update(id) {
@@ -363,7 +313,7 @@
             },
 
             notStub() {
-                return this.itemView.replacers.name !== "stub";
+                return this.itemView.replacersTable.replacers.length > 0 || this.isEditMode;
             }
         }
     }

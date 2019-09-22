@@ -1,10 +1,13 @@
 package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.ItemConverter;
+import com.pazukdev.backend.converter.ReplacerConverter;
 import com.pazukdev.backend.dto.item.ItemSelect;
+import com.pazukdev.backend.dto.item.ReplacerDto;
 import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.ItemView;
+import com.pazukdev.backend.dto.table.ReplacersTable;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.entity.item.ChildItem;
@@ -14,8 +17,10 @@ import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.repository.ReplacerRepository;
 import com.pazukdev.backend.util.ItemUtil;
+import com.pazukdev.backend.util.ReplacerUtil;
 import com.pazukdev.backend.util.SpecificStringUtil;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,16 +40,19 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     @Getter
     private final ItemRepository itemRepository;
     private final ReplacerRepository replacerRepository;
+    private final ReplacerConverter replacerConverter;
 
 
     public ItemService(final ItemRepository itemRepository,
                        final ItemConverter converter,
                        final TransitiveItemService transitiveItemService,
-                       final ReplacerRepository replacerRepository) {
+                       final ReplacerRepository replacerRepository,
+                       final ReplacerConverter replacerConverter) {
         super(itemRepository, converter);
         this.transitiveItemService = transitiveItemService;
         this.itemRepository = itemRepository;
         this.replacerRepository = replacerRepository;
+        this.replacerConverter = replacerConverter;
     }
 
     @Transactional
@@ -141,38 +149,102 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         }
     }
 
-    private void updateReplacers(final Item item, final ItemView itemView) {
-        final String[][] matrix = itemView.getReplacers().getMatrix();
-        for (final String[] row : matrix) {
-            final String comment = row[0];
-            final Long id = Long.valueOf(row[2]);
-            final Item replacerItem = getOne(id);
-            final String replacerName = item.getName() + " - " + replacerItem.getName();
-            Replacer replacer = replacerRepository.findByName(replacerName);
-            if (replacer == null) {
-                replacer = new Replacer();
-                replacer.setName(replacerName);
-                replacer.setItem(replacerItem);
-            }
-            replacer.setComment(comment);
-            replacerRepository.save(replacer);
-            item.getReplacers().add(replacer);
-        }
+    private Set<Replacer> findEqualReplacer(final Set<Replacer> replacers, final Replacer checkingReplacer) {
+        final Long checkingReplacerId = checkingReplacer.getId();
+        final Long checkingReplacerItemId = checkingReplacer.getItem().getId();
+        final String checkingReplacerName = checkingReplacer.getName();
+        final String checkingReplacerComment = checkingReplacer.getComment();
 
-        final List<Long> ids = new ArrayList<>();
-        for (final String[] row : matrix) {
-            ids.add(Long.valueOf(row[2]));
-        }
-        final List<Replacer> toRemove = new ArrayList<>();
-        for (final Replacer replacer : item.getReplacers()) {
-            final Long id = replacer.getItem().getId();
-            if (ids.contains(id)) {
-                ids.remove(id);
-            } else {
-                toRemove.add(replacer);
+        final Set<Replacer> equalReplacers = new HashSet<>();
+        for (final Replacer replacer : replacers) {
+            final Long replacerId = replacer.getId();
+            if (checkingReplacerId != null
+                    && replacerId != null
+                    && replacer.getId().equals(checkingReplacer.getId())) {
+                equalReplacers.add(replacer);
+                continue;
+            }
+
+            final Long replacerItemId = replacer.getItem().getId();
+            final String replacerName = replacer.getName();
+            final String replacerComment = replacer.getComment();
+            if (replacerItemId.equals(checkingReplacerItemId)
+                    && replacerName.equals(checkingReplacerName)
+                    && replacerComment.equals(checkingReplacerComment)) {
+                equalReplacers.add(replacer);
             }
         }
-        item.getReplacers().removeAll(toRemove);
+        return equalReplacers;
+    }
+
+    private void updateReplacers(final Item item, final ItemView itemView) {
+        final Set<Replacer> oldReplacers = new HashSet<>(item.getReplacers());
+        final Set<Replacer> newReplacers = new HashSet<>(createReplacersFromItemView(item, itemView));
+        item.getReplacers().clear();
+        item.getReplacers().addAll(newReplacers);
+
+        final List<Replacer> toSave = new ArrayList<>();
+        for (final Replacer oldReplacer : oldReplacers) {
+            for (final Replacer newReplacer : newReplacers) {
+                if (newReplacer.getName().equals(oldReplacer.getName())) {
+                    toSave.add(oldReplacer);
+                }
+            }
+        }
+        oldReplacers.removeAll(toSave);
+        for (final Replacer orphan : oldReplacers) {
+            replacerRepository.deleteById(orphan.getId());
+        }
+    }
+
+    private Set<Replacer> createReplacersFromItemView(final Item item, final ItemView itemView) {
+        final ReplacersTable replacersTable = itemView.getReplacersTable();
+        final List<ReplacerDto> dtos = replacersTable.getReplacers();
+        final Set<Replacer> replacersFromItemView = new HashSet<>();
+        for (final ReplacerDto dto : dtos) {
+            final Item replacerItem = getOne(dto.getItemId());
+            final String name = ReplacerUtil.createName(item.getName(), replacerItem.getName());
+            final Replacer replacer = new Replacer();
+            replacer.setId(dto.getId());
+            replacer.setName(name);
+            replacer.setItem(replacerItem);
+            replacer.setComment(dto.getComment());
+            replacersFromItemView.add(replacer);
+        }
+        for (final Replacer newReplacer : replacersFromItemView) {
+            final String comment = newReplacer.getComment();
+            if (StringUtils.isBlank(comment)) {
+                newReplacer.setComment("-");
+            }
+        }
+        boolean alreadyAdded = false;
+        Set<Replacer> toReturn = new HashSet<>();
+        final Set<Replacer> toRemove = new HashSet<>();
+        for (final Replacer replacer : replacersFromItemView) {
+            final Set<Replacer> equalOldReplacers = findEqualReplacer(replacersFromItemView, replacer);
+            Replacer toSave = null;
+            for (Replacer r : equalOldReplacers) {
+                if (r.getId() != null) {
+                    toSave = r;
+                }
+            }
+            for (Replacer rep : toReturn) {
+                if (rep.getName().equals(replacer.getName())) {
+                    alreadyAdded = true;
+                }
+            }
+            if (alreadyAdded == false) {
+                if (toSave != null) {
+                    toReturn.add(toSave);
+                } else {
+                    toReturn.add(replacer);
+                }
+            }
+            toRemove.addAll(equalOldReplacers);
+            alreadyAdded = false;
+        }
+        replacersFromItemView.removeAll(toRemove);
+        return toReturn;
     }
 
     private void updateName(final Item item, final Map<String, String> headerMatrixMap) {
@@ -212,15 +284,42 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     public ItemView createItemView(final Item item) {
         final List<Item> allItems = findAll();
+        final List<Item> sameCategoryItems = find(item.getCategory(), allItems);
 
         final ItemView itemView = new ItemView();
         itemView.setItemId(item.getId());
         itemView.setHeader(createHeader(item));
         itemView.setItems(createTableView(new ArrayList<>(item.getChildItems())));
-        itemView.setReplacers(createReplacersTable(item));
+        itemView.setReplacersTable(createReplacersTable(item));
         itemView.setAllItems(createItemSelects(allItems));
-        itemView.setSameCategoryItems(createItemSelects(find(item.getCategory(), allItems)));
+        itemView.setSameCategoryItems(createItemSelects(sameCategoryItems));
+        itemView.setReplacers(createReplacerDtos(sameCategoryItems));
         return itemView;
+    }
+
+    private List<ReplacerDto> createReplacerDtos(final List<Item> items) {
+        final List<ReplacerDto> replacerDtos = new ArrayList<>();
+        for (final Item item : items) {
+            final String buttonName = item.getName();
+            String manufacturer = ItemUtil.getValueFromDescription(item.getDescription(), "Manufacturer");
+            String selectText = item.getName();
+            if (manufacturer != null) {
+                selectText = manufacturer + " " + item.getName();
+            }
+            if (item.getCategory().equals("Seal")) {
+                final String size = ItemUtil.getValueFromDescription(item.getDescription(), "Size");
+                selectText = size + " " + manufacturer + " " + item.getName();
+            }
+            final ReplacerDto replacerDto = new ReplacerDto();
+            replacerDto.setName(" - " + item.getName());
+            replacerDto.setItemName(item.getName());
+            replacerDto.setItemId(item.getId());
+            replacerDto.setButtonText(buttonName);
+            replacerDto.setSelectText(selectText);
+
+            replacerDtos.add(replacerDto);
+        }
+        return replacerDtos;
     }
 
     private List<ItemSelect> createItemSelects(final List<Item> items) {
@@ -269,36 +368,29 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return new TableDto(tableName, listToMatrix(list));
     }
 
-//    private TableDto createSelectableCharacteristics(final Item item, final ItemView itemView) {
-//        final String noName = "";
-//        final List<String[]> list = new ArrayList<>();
-//        for (final Item info : item.getAdditionalData()) {
-//            list.add(new String[]{
-//                    info.getCategory().replace(" (i)", ""),
-//                    info.getName(),
-//                    info.getId().toString(),
-//                    info.getDescription().equals("-") ? "no data" : info.getDescription()});
-//        }
-//        return new TableDto(noName, listToMatrix(list));
-//    }
-
-    private TableDto createReplacersTable(final Item item) {
-        final List<String[]> list = getReplacersData(item);
-        final String[][] matrix = listToMatrix(list);
-        return new TableDto(matrix.length > 0 ? "Replacers" : null, matrix);
-    }
-
-    private List<String[]> getReplacersData(final Item item) {
-        final List<String[]> data = new ArrayList<>();
-        for (final Replacer replacer : item.getReplacers()) {
-            data.add(new String[]{
-                    replacer.getComment() != null ? replacer.getComment() : "-",
-                    createReplacerButtonText(replacer.getItem()),
-                    replacer.getItem().getId().toString()
-            });
+    private ReplacersTable createReplacersTable(final Item item) {
+        final ReplacersTable replacersTable = new ReplacersTable();
+        replacersTable.setName("Replacers");
+        final List<Replacer> replacers = new ArrayList<>(item.getReplacers());
+        for (final Replacer replacer : replacers) {
+            final String buttonText = createReplacerButtonText(replacer.getItem());
+            final ReplacerDto replacerDto = replacerConverter.convertToDto(replacer, buttonText);
+            replacersTable.getReplacers().add(replacerDto);
         }
-        return data;
+        return replacersTable;
     }
+
+//    private List<String[]> getReplacersData(final Item item) {
+//        final List<String[]> data = new ArrayList<>();
+//        for (final Replacer replacer : item.getReplacers()) {
+//            data.add(new String[]{
+//                    replacer.getComment() != null ? replacer.getComment() : "-",
+//                    createReplacerButtonText(replacer.getItem()),
+//                    replacer.getItem().getId().toString()
+//            });
+//        }
+//        return data;
+//    }
 
     private String createReplacerButtonText(final Item replacer) {
         if (isAddManufacturerName(replacer)) {
@@ -326,12 +418,18 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final int noMatterWhatNumber = 123;
         final List<TableDto> tables = new ArrayList<>(Collections.singletonList(motorcyclesTable(motorcycles)));
         itemView.setItems(new TableViewDto(noMatterWhatNumber, tables));
-        itemView.setReplacers(stubTable());
+        itemView.setReplacersTable(stubReplacersTable());
         return itemView;
     }
 
     private TableDto stubTable() {
         return new TableDto("stub", new String[][]{{""}});
+    }
+
+    private ReplacersTable stubReplacersTable() {
+        final ReplacersTable replacersTable = new ReplacersTable();
+        replacersTable.setName("stub");
+        return replacersTable;
     }
 
     private String[][] listToMatrix(List<String[]> list) {
@@ -357,56 +455,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final String[][] rowArray = rows.toArray(new String[0][]);
         return new TableDto(tableName, rowArray);
     }
-
-//    private List<ItemQuantity> createItemQuantities(final TransitiveItemDescriptionMap descriptionMap) {
-//        final List<ItemQuantity> itemQuantities = new ArrayList<>();
-//        for (final Map.Entry entry : descriptionMap.getItems().entrySet()) {
-//            final String category = entry.getKey().toString();
-//            if (entry.getValue().toString().contains(";")) {
-//                final String[] names = entry.getValue().toString().split("; ");
-//                for (final String name : names) {
-//                    final ItemQuantity itemQuantity = createItemQuantity(name,category);
-//                    if (itemQuantity != null) {
-//                        itemQuantities.add(itemQuantity);
-//                    }
-//                }
-//            } else {
-//                final String name = entry.getValue().toString();
-//                final ItemQuantity itemQuantity = createItemQuantity(name, category);
-//                if (itemQuantity != null) {
-//                    itemQuantities.add(itemQuantity);
-//                }
-//            }
-//        }
-//
-//        return itemQuantities;
-//    }
-
-//    private ItemQuantity createItemQuantity(final String value, final String category) {
-//        String name;
-//        String location = "";
-//        String quantity;
-//        if (SpecificStringUtil.containsParentheses(value)) {
-//            name = SpecificStringUtil.getStringBeforeParentheses(value);
-//            String additionalData = SpecificStringUtil.getStringBetweenParentheses(value);
-//            location = additionalData.contains(" - ") ? additionalData.split(" - ")[0] : "-";
-//            quantity = additionalData.contains(" - ") ? additionalData.split(" - ")[1] : additionalData;
-//        } else {
-//            name = value;
-//            location = "-";
-//            quantity = category.equals("Spark plug") ? "2" : "1";
-//        }
-//        final TransitiveItem child = category.equals("Seal") ? getUssrSealBySize(name) : find(category, name);
-//        if (child != null) {
-//            final ItemQuantity itemQuantity  = new ItemQuantity();
-//            itemQuantity.setItem(child);
-//            itemQuantity.setLocation(location);
-//            itemQuantity.setQuantity(quantity);
-//            return itemQuantity;
-//        } else {
-//            return null;
-//        }
-//    }
 
     private Item createSelectableStub(final String value, final String category) {
         final Item selectableStub = new Item();
@@ -479,7 +527,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         item.setCategory(transitiveItem.getCategory().replace(" (i)", ""));
         item.setDescription(createItemDescription(transitiveItem));
         item.getChildItems().addAll(createChildItems(transitiveItem, descriptionMap.getItems()));
-        //item.getAdditionalData().addAll(createAdditionalDataItems(descriptionMap.getSelectableCharacteristics()));
         item.getReplacers().addAll(createReplacers(transitiveItem));
         return item;
     }
@@ -487,7 +534,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     public String createItemDescription(final TransitiveItem transitiveItem) {
         final TransitiveItemDescriptionMap descriptionMap = createDescriptionMap(transitiveItem, transitiveItemService);
         descriptionMap.getItems().clear();
-        //descriptionMap.getSelectableCharacteristics().clear();
         return ItemUtil.toDescription(descriptionMap);
     }
 
@@ -570,7 +616,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             final Replacer replacer = new Replacer();
             replacer.setName(transitiveItem.getName() + " - " + replacerName);
             replacer.setItem(replacerItem);
-            replacer.setComment(comment);
+            replacer.setComment(comment != null ? comment : "-");
 
             replacers.add(replacer);
         }
@@ -616,29 +662,5 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         }
         return categories;
     }
-
-//    public static TransitiveItemDescriptionMap createDescriptionMap(final TransitiveItem item,
-//                                                                    final TransitiveItemService service) {
-//        final Map<String, String> unsortedMap = toMap(item.getDescription());
-//        final TransitiveItemDescriptionMap itemDescriptionMap = new TransitiveItemDescriptionMap();
-//        itemDescriptionMap.setParent(item);
-//        for (final Map.Entry<String, String> entry : unsortedMap.entrySet()) {
-//            final String parameter = StringUtils.trim(entry.getKey());
-//            final String value = StringUtils.trim(entry.getValue());
-//            if (isInfoItem(parameter, service)) {
-//                itemDescriptionMap.getSelectableCharacteristics().put(parameter, value);
-//            } else if (isLinkToItem(parameter, service)) {
-//                itemDescriptionMap.getItems().put(parameter, value);
-//            } else {
-//                itemDescriptionMap.getCharacteristics().put(parameter, value);
-//            }
-//        }
-//        return itemDescriptionMap;
-//    }
-//
-//    public boolean isInfoItem(final String parameter, final TransitiveItemService service) {
-//        //return findCategories(service.findAll()).contains(parameter + " (i)");
-//        return service.find(parameter + " (i)").size() > 0;
-//    }
 
 }

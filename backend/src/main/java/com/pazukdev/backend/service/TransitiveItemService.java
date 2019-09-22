@@ -128,7 +128,7 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
         itemView.setHeader(createHeader(item, descriptionMap));
         //itemView.setSelectableData(createSelectableCharacteristics(descriptionMap));
         itemView.setItems(createTableView(descriptionMap));
-        itemView.setReplacers(createReplacers(item));
+        //itemView.setReplacersTable(createReplacers(item));
         return itemView;
     }
 
@@ -214,7 +214,7 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
         itemView.setHeader(new TableDto(tableName, listToMatrix(list)));
         //itemView.setSelectableData(stubTable());
         itemView.setItems(new TableViewDto(22, new ArrayList<>(Collections.singletonList(motorcyclesTable(motorcycles)))));
-        itemView.setReplacers(stubTable());
+        //itemView.setReplacersTable(stubTable());
         return itemView;
     }
 

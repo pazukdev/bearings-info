@@ -169,14 +169,14 @@
     #screen {
         background-color: aliceblue;
         margin: auto;
-        width: 480px;
+        width: 500px;
         height: 800px;
         overflow-y: auto;
         border-radius: 10px;
     }
 
     #screen::-webkit-scrollbar {
-        display: none;
+        /*display: none;*/
     }
 
     #appName {
