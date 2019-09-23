@@ -3,11 +3,11 @@
 <!--        {{"isEditMode: " + isEditMode}}<br>-->
 <!--        {{"isAddLine: " + isAddLine}}<br>-->
 <!--        {{text}}-->
-<!--        {{newItemView}}-->
-        {{itemView.replacersTable.replacers}}<br><br>
+<!--        {{itemView.header.matrix[0][1]}}<br><br>-->
+<!--        {{itemView.replacersTable.replacers}}<br><br>-->
 <!--        {{itemView.replacers}}<br><br>-->
 <!--        {{this.items}}-->
-        {{newReplacer}}<br><br>
+<!--        {{newReplacer}}<br><br>-->
 <!--        {{newReplacerItem}}-->
         <table>
             <tbody>
@@ -171,12 +171,17 @@
                     </button>
                 </td>
             </tr>
+            <tr style="text-align: center; color: red">
+                <td colspan="3">
+                    {{alertMessage}}
+                </td>
+            </tr>
             <tr v-if="notStub() && isEditMode" style="text-align: left">
                 <td>
                     <input v-model="newReplacer.comment" type="text"/>
                 </td>
                 <td>
-                    <select class="content" v-model="newReplacer">
+                    <select class="content" v-model="newReplacer" @change="onChange()">
                         <option v-for="replacer in itemView.replacers" v-bind:value="replacer">
                             {{replacer.selectText}}
                         </option>
@@ -216,11 +221,14 @@
                 newReplacerId: "",
                 newReplacerItem: "",
                 newComment: "",
+                alertMessage: "",
                 newReplacer: {
                     id: "",
                     name: "",
                     itemId: "",
-                    itemNameToDisplay: "",
+                    itemName: "",
+                    buttonText: "",
+                    selectText: "",
                     comment: ""
                 }
             }
@@ -239,8 +247,39 @@
 
         methods: {
             addReplacer() {
-                this.newReplacer.name = "itemView.header.matrix" + this.newReplacer.name;
-                this.newItemView.replacersTable.replacers.push(this.newReplacer);
+                this.newReplacer.name = this.itemView.header.matrix[0][1] + this.newReplacer.name;
+                if (this.replacerAlreadyInList(this.newReplacer.itemId)) {
+                    this.alertMessage = "Replacer already in list";
+                } else {
+                    this.newItemView.replacersTable.replacers.push(this.createReplacer());
+                    this.newReplacer = "";
+                    this.alertMessage = "";
+                }
+            },
+
+            replacerAlreadyInList(id) {
+                for(let i=0; i < this.newItemView.replacersTable.replacers.length; i++){
+                    if (this.newItemView.replacersTable.replacers[i].itemId === id) {
+                        return true
+                    }
+                }
+                return false
+            },
+
+            onChange() {
+                this.alertMessage = "";
+            },
+
+            createReplacer() {
+                return {
+                    id: this.newReplacer.id,
+                    name: this.newReplacer.name,
+                    itemId: this.newReplacer.itemId,
+                    itemName: this.newReplacer.itemName,
+                    buttonText: this.newReplacer.buttonText,
+                    selectText: this.newReplacer.selectText,
+                    comment: this.newReplacer.comment
+                };
             },
 
             stubMethod() {
@@ -282,6 +321,8 @@
                 this.$emit('cancel', id);
                 this.isEditMode = false;
                 this.isAddLine = false;
+                this.newReplacer = "";
+                this.alertMessage = "";
             },
 
             save() {
@@ -295,6 +336,7 @@
                 this.newValue = "";
                 this.isEditMode = false;
                 this.isAddLine = false;
+                this.alertMessage = "";
             },
 
             update(id) {

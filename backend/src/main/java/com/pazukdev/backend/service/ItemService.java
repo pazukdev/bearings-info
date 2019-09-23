@@ -149,7 +149,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         }
     }
 
-    private Set<Replacer> findEqualReplacer(final Set<Replacer> replacers, final Replacer checkingReplacer) {
+    private Set<Replacer> findEqualReplacer(final List<Replacer> replacers, final Replacer checkingReplacer) {
         final Long checkingReplacerId = checkingReplacer.getId();
         final Long checkingReplacerItemId = checkingReplacer.getItem().getId();
         final String checkingReplacerName = checkingReplacer.getName();
@@ -211,40 +211,64 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             replacer.setComment(dto.getComment());
             replacersFromItemView.add(replacer);
         }
-        for (final Replacer newReplacer : replacersFromItemView) {
-            final String comment = newReplacer.getComment();
-            if (StringUtils.isBlank(comment)) {
-                newReplacer.setComment("-");
+        replaceBlankCommentsWithDash(replacersFromItemView);
+        final List<Replacer> hasId = new ArrayList<>();
+        final List<Replacer> noId = new ArrayList<>();
+        for (final Replacer replacer : replacersFromItemView) {
+            if (replacer.getId() != null) {
+                hasId.add(replacer);
+            } else {
+                noId.add(replacer);
             }
         }
-        boolean alreadyAdded = false;
-        Set<Replacer> toReturn = new HashSet<>();
-        final Set<Replacer> toRemove = new HashSet<>();
-        for (final Replacer replacer : replacersFromItemView) {
-            final Set<Replacer> equalOldReplacers = findEqualReplacer(replacersFromItemView, replacer);
-            Replacer toSave = null;
+        final List<Replacer> list = removeEqualReplacers(hasId);
+        list.addAll(removeEqualReplacers(noId));
+        return new HashSet<>(removeEqualReplacers(list));
+    }
+
+    private List<Replacer> removeEqualReplacers(final List<Replacer> unfiltered) {
+        final List<Replacer> filtered = new ArrayList<>();
+        for (final Replacer replacer : unfiltered) {
+            if (equalReplacerAlreadyInList(filtered, replacer)) {
+                continue;
+            }
+            if (replacer.getId() != null) {
+                filtered.add(replacer);
+                continue;
+            }
+            Replacer toSave = replacer;
+            final Set<Replacer> equalOldReplacers = findEqualReplacer(unfiltered, replacer);
             for (Replacer r : equalOldReplacers) {
                 if (r.getId() != null) {
                     toSave = r;
                 }
             }
-            for (Replacer rep : toReturn) {
-                if (rep.getName().equals(replacer.getName())) {
-                    alreadyAdded = true;
-                }
-            }
-            if (alreadyAdded == false) {
-                if (toSave != null) {
-                    toReturn.add(toSave);
-                } else {
-                    toReturn.add(replacer);
-                }
-            }
-            toRemove.addAll(equalOldReplacers);
-            alreadyAdded = false;
+            filtered.add(toSave);
         }
-        replacersFromItemView.removeAll(toRemove);
-        return toReturn;
+        return filtered;
+    }
+
+    private boolean equalReplacerAlreadyInList(final List<Replacer> replacers, final Replacer checkingReplacer) {
+        final Long checkingReplacerId = checkingReplacer.getId();
+        for (Replacer replacer : replacers) {
+            final Long replacerId = replacer.getId();
+            if (replacerId != null && replacerId.equals(checkingReplacerId)) {
+                return true;
+            }
+            if (replacer.getName().equals(checkingReplacer.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void replaceBlankCommentsWithDash(final Set<Replacer> replacers) {
+        for (final Replacer newReplacer : replacers) {
+            final String comment = newReplacer.getComment();
+            if (StringUtils.isBlank(comment)) {
+                newReplacer.setComment("-");
+            }
+        }
     }
 
     private void updateName(final Item item, final Map<String, String> headerMatrixMap) {
