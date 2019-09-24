@@ -3,11 +3,13 @@
 <!--        {{"isEditMode: " + isEditMode}}<br>-->
 <!--        {{text}}-->
 <!--        {{itemView.header.matrix[0][1]}}<br><br>-->
+<!--        {{itemView.childItemsTable.childItems}}<br><br>-->
 <!--        {{itemView.replacersTable.replacers}}<br><br>-->
 <!--        {{itemView.replacers}}<br><br>-->
 <!--        {{this.items}}-->
-        {{newReplacer}}<br><br>
+<!--        {{newReplacer}}<br><br>-->
 <!--        {{newHeaderRow}}<br><br>-->
+<!--        {{newChildItem}}<br><br>-->
         <table>
             <tbody>
             <tr style="text-align: center">
@@ -49,7 +51,7 @@
                             v-model="newItemView"
                             type="button"
                             class="round-button"
-                            @click="newItemView.header.matrix.splice(newItemView.header.matrix.indexOf(row), 1)">
+                            @click="removeRowFromHeader(row)">
                         {{"-"}}
                     </button>
                 </td>
@@ -69,7 +71,6 @@
                 <td>
                     <button type="button"
                             class="round-button"
-                            style="width: 100%"
                             @click="addHeaderRow()">
                         {{"+"}}
                     </button>
@@ -117,7 +118,7 @@
                             </td>
                             <td>
                                 <button type="button"
-                                        style="width: 80%"
+                                        style="width: 100%"
                                         @click="setItem(row[3])">
                                     {{row[1]}}
                                 </button>
@@ -125,9 +126,56 @@
                             <td>
                                 {{row[2]}}
                             </td>
+                            <td v-if="isEditMode">
+                                <button v-model="newItemView"
+                                        type="button"
+                                        class="round-button"
+                                        @click="removeChildItemFromList(row)">
+                                    {{"-"}}
+                                </button>
+                            </td>
                         </tr>
                         <tr>
                             <p></p>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <table>
+                        <tbody>
+                        <tr style="text-align: center; color: red">
+                            <td colspan="3">
+                                {{newChildItemMessage}}
+                            </td>
+                        </tr>
+                        <tr v-if="notStub() && isEditMode" style="text-align: left">
+                            <td>
+                                <input style="width: 120px" v-model="newChildItem.location" type="text"/>
+                            </td>
+                            <td>
+                                <select style="width: 148px"
+                                        class="content"
+                                        v-model="newChildItem"
+                                        @change="onChange()">
+                                    <option v-for="part in itemView.possibleParts"
+                                            v-bind:value="part">
+                                        {{part.selectText}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td>
+                                <input style="width: 100%" v-model="newChildItem.quantity" type="text"/>
+                            </td>
+                            <td>
+                                <button type="button"
+                                        class="round-button"
+                                        @click="addChildItem()">
+                                    {{"+"}}
+                                </button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -156,8 +204,7 @@
                     <button v-model="newItemView"
                             type="button"
                             class="round-button"
-                            @click="newItemView.replacersTable.replacers
-                            .splice(newItemView.replacersTable.replacers.indexOf(replacer), 1)">
+                            @click="removeReplacerFromList(replacer)">
                         {{"-"}}
                     </button>
                 </td>
@@ -181,7 +228,6 @@
                 <td>
                     <button type="button"
                             class="round-button"
-                            style="width: 100%"
                             @click="addReplacer()">
                         {{"+"}}
                     </button>
@@ -203,10 +249,21 @@
                 isEditMode: false,
                 newItemView: "",
                 newHeaderRowMessage: "",
+                newChildItemMessage: "",
                 newReplacerMessage: "",
                 newHeaderRow: {
                     parameter: "",
                     value: ""
+                },
+                newChildItem: {
+                    id: "",
+                    mame: "",
+                    itemId: "",
+                    itemName: "",
+                    buttonText: "",
+                    selectText: "",
+                    location: "",
+                    quantity: ""
                 },
                 newReplacer: {
                     id: "",
@@ -245,8 +302,15 @@
                 }
             },
 
-            newLineIsEmpty() {
-                return this.newHeaderRow.parameter === "" || this.newHeaderRow.value === "";
+            addChildItem() {
+                this.newChildItemMessage = "";
+                this.newChildItem.name = "blabla" + this.newReplacer.name;
+                if (this.childItemAlreadyInList(this.newChildItem.itemId)) {
+                    this.newChildItemMessage = "Part already in list";
+                } else {
+                    this.newItemView.childItemsTable.childItems.push(this.createChildItem());
+                    this.clearNewChildItem();
+                }
             },
 
             addReplacer() {
@@ -260,13 +324,8 @@
                 }
             },
 
-            replacerAlreadyInList(id) {
-                for (let i=0; i < this.newItemView.replacersTable.replacers.length; i++) {
-                    if (this.newItemView.replacersTable.replacers[i].itemId === id) {
-                        return true
-                    }
-                }
-                return false
+            newLineIsEmpty() {
+                return this.newHeaderRow.parameter === "" || this.newHeaderRow.value === "";
             },
 
             rowAlreadyInList(parameter) {
@@ -278,8 +337,55 @@
                 return false
             },
 
+            childItemAlreadyInList(id) {
+                for (let i=0; i < this.newItemView.childItemsTable.childItems.length; i++) {
+                    if (this.newItemView.childItemsTable.childItems[i].itemId === id) {
+                        return true
+                    }
+                }
+                return false
+            },
+
+            replacerAlreadyInList(id) {
+                for (let i=0; i < this.newItemView.replacersTable.replacers.length; i++) {
+                    if (this.newItemView.replacersTable.replacers[i].itemId === id) {
+                        return true
+                    }
+                }
+                return false
+            },
+
+            removeRowFromHeader(row) {
+                this.removeFromArray(row, this.newItemView.header.matrix);
+            },
+
+            removeChildItemFromList(childItem) {
+                this.removeFromArray(childItem, this.newItemView.childItemsTable.childItems);
+            },
+
+            removeReplacerFromList(replacer) {
+                this.removeFromArray(replacer, this.newItemView.replacersTable.replacers);
+            },
+
+            removeFromArray(element, array) {
+                array.splice(array.indexOf(element), 1)
+            },
+
             onChange() {
                 this.newReplacerMessage = "";
+            },
+
+            createChildItem() {
+                return {
+                    id: this.newChildItem.id,
+                    name: this.newChildItem.mame,
+                    itemId: this.newChildItem.itemId,
+                    itemName: this.newChildItem.itemName,
+                    buttonText: this.newChildItem.buttonText,
+                    selectText: this.newChildItem.selectText,
+                    location: this.newChildItem.location,
+                    quantity: this.newChildItem.quantity
+                }
             },
 
             createReplacer() {
@@ -326,12 +432,14 @@
 
             clearAllEditData() {
                 this.clearNewHeaderRow();
+                this.clearNewChildItem();
                 this.clearNewReplacer();
                 this.clearAllMessages();
             },
 
             clearAllMessages() {
                 this.newHeaderRowMessage = "";
+                this.newChildItemMessage = "";
                 this.newReplacerMessage = "";
             },
 
@@ -340,6 +448,19 @@
                     parameter: "",
                     value: ""
                 };
+            },
+
+            clearNewChildItem() {
+                this.newChildItem = {
+                    id: "",
+                    name: "",
+                    itemId: "",
+                    itemName: "",
+                    buttonText: "",
+                    selectText: "",
+                    location: "",
+                    quantity: ""
+                }
             },
 
             clearNewReplacer() {

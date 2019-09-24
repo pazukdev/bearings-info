@@ -1,5 +1,6 @@
 package com.pazukdev.backend.dto.item;
 
+import com.pazukdev.backend.dto.AbstractDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -10,8 +11,11 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ReplacerDto extends ChildDto {
+public class ChildDto extends AbstractDto {
 
-    private String comment = "-";
+    private Long itemId;
+    private String itemName;
+    private String buttonText;
+    private String selectText;
 
 }

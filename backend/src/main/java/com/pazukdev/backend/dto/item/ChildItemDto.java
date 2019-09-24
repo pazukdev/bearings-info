@@ -10,8 +10,9 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ReplacerDto extends ChildDto {
+public class ChildItemDto extends ChildDto {
 
-    private String comment = "-";
+    private String location = "-";
+    private String quantity = "0";
 
 }

@@ -2,14 +2,8 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.converter.ReplacerConverter;
-import com.pazukdev.backend.dto.item.ItemSelect;
-import com.pazukdev.backend.dto.item.ReplacerDto;
-import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
-import com.pazukdev.backend.dto.item.TransitiveItemDto;
-import com.pazukdev.backend.dto.table.ItemView;
-import com.pazukdev.backend.dto.table.ReplacersTable;
-import com.pazukdev.backend.dto.table.TableDto;
-import com.pazukdev.backend.dto.table.TableViewDto;
+import com.pazukdev.backend.dto.item.*;
+import com.pazukdev.backend.dto.table.*;
 import com.pazukdev.backend.entity.item.ChildItem;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.entity.item.Replacer;
@@ -110,6 +104,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final Map<String, String> headerMatrixMap = createHeaderMatrixMap(itemView);
         updateName(item, headerMatrixMap);
         updateDescription(item, headerMatrixMap);
+        updateChildItems(item, itemView);
         updateReplacers(item, itemView);
         itemRepository.save(item);
         return createItemView(id);
@@ -175,6 +170,10 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             }
         }
         return equalReplacers;
+    }
+
+    private void updateChildItems(final Item item, final ItemView itemView) {
+
     }
 
     private void updateReplacers(final Item item, final ItemView itemView) {
@@ -314,34 +313,35 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         itemView.setItemId(item.getId());
         itemView.setHeader(createHeader(item));
         itemView.setItems(createTableView(new ArrayList<>(item.getChildItems())));
+        itemView.setChildItemsTable(new ChildItemsTable());
         itemView.setReplacersTable(createReplacersTable(item));
         itemView.setAllItems(createItemSelects(allItems));
         itemView.setSameCategoryItems(createItemSelects(sameCategoryItems));
-        itemView.setReplacers(createReplacerDtos(sameCategoryItems));
+        itemView.getPossibleParts().addAll(createPossibleParts(allItems));
+        itemView.getReplacers().addAll(createReplacerDtos(sameCategoryItems));
         return itemView;
+    }
+
+    private boolean isPartCategory(final String category) {
+        return !(category.equals("Motorcycle") || category.equals("Manufacturer"));
+    }
+
+    private List<ChildItemDto> createPossibleParts(final List<Item> items) {
+        final List<ChildItemDto> childItemDtos = new ArrayList<>();
+        for (final Item item : items) {
+            final String category = item.getCategory();
+            if (!isPartCategory(category)) {
+                continue;
+            }
+            childItemDtos.add(ChildDtoFactory.createChildItemDto(item));
+        }
+        return childItemDtos;
     }
 
     private List<ReplacerDto> createReplacerDtos(final List<Item> items) {
         final List<ReplacerDto> replacerDtos = new ArrayList<>();
         for (final Item item : items) {
-            final String buttonName = item.getName();
-            String manufacturer = ItemUtil.getValueFromDescription(item.getDescription(), "Manufacturer");
-            String selectText = item.getName();
-            if (manufacturer != null) {
-                selectText = manufacturer + " " + item.getName();
-            }
-            if (item.getCategory().equals("Seal")) {
-                final String size = ItemUtil.getValueFromDescription(item.getDescription(), "Size");
-                selectText = size + " " + manufacturer + " " + item.getName();
-            }
-            final ReplacerDto replacerDto = new ReplacerDto();
-            replacerDto.setName(" - " + item.getName());
-            replacerDto.setItemName(item.getName());
-            replacerDto.setItemId(item.getId());
-            replacerDto.setButtonText(buttonName);
-            replacerDto.setSelectText(selectText);
-
-            replacerDtos.add(replacerDto);
+            replacerDtos.add(ChildDtoFactory.createReplacerDto(item));
         }
         return replacerDtos;
     }
@@ -404,18 +404,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return replacersTable;
     }
 
-//    private List<String[]> getReplacersData(final Item item) {
-//        final List<String[]> data = new ArrayList<>();
-//        for (final Replacer replacer : item.getReplacers()) {
-//            data.add(new String[]{
-//                    replacer.getComment() != null ? replacer.getComment() : "-",
-//                    createReplacerButtonText(replacer.getItem()),
-//                    replacer.getItem().getId().toString()
-//            });
-//        }
-//        return data;
-//    }
-
     private String createReplacerButtonText(final Item replacer) {
         if (isAddManufacturerName(replacer)) {
             return ItemUtil.getValueFromDescription(replacer.getDescription(), "Manufacturer")
@@ -442,12 +430,19 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final int noMatterWhatNumber = 123;
         final List<TableDto> tables = new ArrayList<>(Collections.singletonList(motorcyclesTable(motorcycles)));
         itemView.setItems(new TableViewDto(noMatterWhatNumber, tables));
+        itemView.setChildItemsTable(stubChildItemsTable());
         itemView.setReplacersTable(stubReplacersTable());
         return itemView;
     }
 
     private TableDto stubTable() {
         return new TableDto("stub", new String[][]{{""}});
+    }
+
+    private ChildItemsTable stubChildItemsTable() {
+        final ChildItemsTable childItemsTable = new ChildItemsTable();
+        childItemsTable.setName("stub");
+        return childItemsTable;
     }
 
     private ReplacersTable stubReplacersTable() {
