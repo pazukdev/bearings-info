@@ -1,14 +1,13 @@
 <template>
     <div>
 <!--        {{"isEditMode: " + isEditMode}}<br>-->
-<!--        {{"isAddLine: " + isAddLine}}<br>-->
 <!--        {{text}}-->
 <!--        {{itemView.header.matrix[0][1]}}<br><br>-->
 <!--        {{itemView.replacersTable.replacers}}<br><br>-->
 <!--        {{itemView.replacers}}<br><br>-->
 <!--        {{this.items}}-->
-<!--        {{newReplacer}}<br><br>-->
-<!--        {{newReplacerItem}}-->
+        {{newReplacer}}<br><br>
+<!--        {{newHeaderRow}}<br><br>-->
         <table>
             <tbody>
             <tr style="text-align: center">
@@ -55,34 +54,26 @@
                     </button>
                 </td>
             </tr>
-            <tr style="text-align: left"
-                v-if="isEditMode && isAddLine">
-                <td>
-                    <input v-model="newParameter" type="text"/>
-                </td>
-                <td>
-                    <input v-model="newValue" type="text"/>
-                </td>
-                <td>
-                    <button v-if="isAddLine"
-                            type="button"
-                            class="round-button"
-                            @click="cancelAddLine()">
-                        {{"-"}}
-                    </button>
+            <tr style="text-align: center; color: red">
+                <td colspan="3">
+                    {{newHeaderRowMessage}}
                 </td>
             </tr>
-            <tr v-if="isEditMode" style="text-align: left">
+            <tr style="text-align: left" v-if="isEditMode">
                 <td>
-                    <button v-if="!isAddLine"
-                            type="button"
+                    <input v-model="newHeaderRow.parameter" type="text"/>
+                </td>
+                <td>
+                    <input v-model="newHeaderRow.value" type="text"/>
+                </td>
+                <td>
+                    <button type="button"
+                            class="round-button"
                             style="width: 100%"
-                            @click="addLine()">
+                            @click="addHeaderRow()">
                         {{"+"}}
                     </button>
                 </td>
-                <td></td>
-                <td></td>
             </tr>
             <tr style="text-align: left">
                 <td>
@@ -173,7 +164,7 @@
             </tr>
             <tr style="text-align: center; color: red">
                 <td colspan="3">
-                    {{alertMessage}}
+                    {{newReplacerMessage}}
                 </td>
             </tr>
             <tr v-if="notStub() && isEditMode" style="text-align: left">
@@ -210,18 +201,13 @@
         data() {
             return {
                 isEditMode: false,
-                isAddLine: false,
                 newItemView: "",
-                text: "start",
-                newParameter: "",
-                newValue: "",
-                paramsToRemove: [],
-                newReplacerComment: "",
-                newReplacerName: "",
-                newReplacerId: "",
-                newReplacerItem: "",
-                newComment: "",
-                alertMessage: "",
+                newHeaderRowMessage: "",
+                newReplacerMessage: "",
+                newHeaderRow: {
+                    parameter: "",
+                    value: ""
+                },
                 newReplacer: {
                     id: "",
                     name: "",
@@ -246,19 +232,36 @@
         },
 
         methods: {
+            addHeaderRow() {
+                this.newHeaderRowMessage = "";
+                if (this.newLineIsEmpty()) {
+                    this.newHeaderRowMessage = "Parameter and value fields shouldn't be empty"
+                } else if (this.rowAlreadyInList(this.newHeaderRow.parameter)) {
+                    this.newHeaderRowMessage = "Parameter already exists"
+                } else {
+                    let row = [this.newHeaderRow.parameter, this.newHeaderRow.value];
+                    this.newItemView.header.matrix.push(row);
+                    this.clearNewHeaderRow();
+                }
+            },
+
+            newLineIsEmpty() {
+                return this.newHeaderRow.parameter === "" || this.newHeaderRow.value === "";
+            },
+
             addReplacer() {
+                this.newReplacerMessage = "";
                 this.newReplacer.name = this.itemView.header.matrix[0][1] + this.newReplacer.name;
                 if (this.replacerAlreadyInList(this.newReplacer.itemId)) {
-                    this.alertMessage = "Replacer already in list";
+                    this.newReplacerMessage = "Replacer already in list";
                 } else {
                     this.newItemView.replacersTable.replacers.push(this.createReplacer());
-                    this.newReplacer = "";
-                    this.alertMessage = "";
+                    this.clearNewReplacer();
                 }
             },
 
             replacerAlreadyInList(id) {
-                for(let i=0; i < this.newItemView.replacersTable.replacers.length; i++){
+                for (let i=0; i < this.newItemView.replacersTable.replacers.length; i++) {
                     if (this.newItemView.replacersTable.replacers[i].itemId === id) {
                         return true
                     }
@@ -266,8 +269,17 @@
                 return false
             },
 
+            rowAlreadyInList(parameter) {
+                for (let i=0; i < this.newItemView.header.matrix.length; i++) {
+                    if (this.newItemView.header.matrix[i][0] === parameter) {
+                        return true
+                    }
+                }
+                return false
+            },
+
             onChange() {
-                this.alertMessage = "";
+                this.newReplacerMessage = "";
             },
 
             createReplacer() {
@@ -290,23 +302,10 @@
                 return message === 'show button' && !this.isEditMode;
             },
 
-            newLineIsEmpty() {
-                return this.newParameter === "" || this.newValue === "";
-            },
-
-            addLine() {
-                this.isAddLine = true;
-            },
-
-            cancelAddLine() {
-                this.newParameter = "";
-                this.newValue = "";
-                this.isAddLine = false;
-            },
-
             setItem(id) {
                 this.$store.dispatch("addItemId", id);
                 this.$emit('select-item', id);
+                this.switchEditModeOff();
             },
 
             edit() {
@@ -315,28 +314,49 @@
             },
 
             cancel() {
-                this.newParameter = "";
-                this.newValue = "";
                 let id = this.itemId;
                 this.$emit('cancel', id);
+                this.switchEditModeOff();
+            },
+
+            switchEditModeOff() {
                 this.isEditMode = false;
-                this.isAddLine = false;
-                this.newReplacer = "";
-                this.alertMessage = "";
+                this.clearAllEditData();
+            },
+
+            clearAllEditData() {
+                this.clearNewHeaderRow();
+                this.clearNewReplacer();
+                this.clearAllMessages();
+            },
+
+            clearAllMessages() {
+                this.newHeaderRowMessage = "";
+                this.newReplacerMessage = "";
+            },
+
+            clearNewHeaderRow() {
+                this.newHeaderRow = {
+                    parameter: "",
+                    value: ""
+                };
+            },
+
+            clearNewReplacer() {
+                this.newReplacer = {
+                    id: "",
+                    name: "",
+                    itemId: "",
+                    itemName: "",
+                    buttonText: "",
+                    selectText: "",
+                    comment: ""
+                }
             },
 
             save() {
-                if (this.isAddLine && !this.newLineIsEmpty()) {
-                    let newLine = [this.newParameter, this.newValue];
-                    this.newItemView.header.matrix.push(newLine);
-                }
                 let id = this.newItemView.itemId;
                 this.update(id);
-                this.newParameter = "";
-                this.newValue = "";
-                this.isEditMode = false;
-                this.isAddLine = false;
-                this.alertMessage = "";
             },
 
             update(id) {
