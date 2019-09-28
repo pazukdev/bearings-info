@@ -2,7 +2,10 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.converter.ReplacerConverter;
-import com.pazukdev.backend.dto.item.*;
+import com.pazukdev.backend.dto.item.NestedItemDto;
+import com.pazukdev.backend.dto.item.NestedItemDtoFactory;
+import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
+import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.*;
 import com.pazukdev.backend.entity.item.ChildItem;
 import com.pazukdev.backend.entity.item.Item;
@@ -11,6 +14,7 @@ import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.repository.ChildItemRepository;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.repository.ReplacerRepository;
+import com.pazukdev.backend.util.CategoryUtil;
 import com.pazukdev.backend.util.ItemUtil;
 import com.pazukdev.backend.util.NestedItemUtil;
 import com.pazukdev.backend.util.SpecificStringUtil;
@@ -217,19 +221,19 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     private Set<ChildItem> createPartsFromItemView(final Item item, final ItemView itemView) {
-        final PartsTable partsTable = itemView.getPartsTable();
-        final List<NestedItemDto> dtos = prepareNestedItemDtosToConverting(item, partsTable.getParts());
+        final List<NestedItemDto> allItems = NestedItemUtil.collectAllItems(itemView.getPartsTable());
+        final List<NestedItemDto> preparedItems = prepareNestedItemDtosToConverting(item, allItems);
 
         final Set<ChildItem> partsFromItemView = new HashSet<>();
-        for (final NestedItemDto dto : dtos) {
-            final Item partItem = getOne(dto.getItemId());
+        for (final NestedItemDto nestedItem : preparedItems) {
+            final Item partItem = getOne(nestedItem.getItemId());
 
             final ChildItem part = new ChildItem();
-            part.setId(dto.getId());
-            part.setName(dto.getName());
+            part.setId(nestedItem.getId());
+            part.setName(nestedItem.getName());
             part.setItem(partItem);
-            part.setLocation(dto.getLocation());
-            part.setQuantity(dto.getQuantity());
+            part.setLocation(nestedItem.getLocation());
+            part.setQuantity(nestedItem.getQuantity());
 
             partsFromItemView.add(part);
         }
@@ -310,15 +314,11 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return itemView;
     }
 
-    private boolean isPartCategory(final String category) {
-        return !(category.equals("Motorcycle") || category.equals("Manufacturer"));
-    }
-
     private List<NestedItemDto> createPossibleParts(final List<Item> items) {
         final List<NestedItemDto> childItemDtos = new ArrayList<>();
         for (final Item item : items) {
             final String category = item.getCategory();
-            if (!isPartCategory(category)) {
+            if (!CategoryUtil.isPartCategory(category)) {
                 continue;
             }
             childItemDtos.add(NestedItemDtoFactory.createBasicNestedItemDto(item));
@@ -334,26 +334,26 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return replacerDtos;
     }
 
-    private List<ItemSelect> createItemSelects(final List<Item> items) {
-        final List<ItemSelect> itemSelects = new ArrayList<>();
-        for (final Item item : items) {
-            String manufacturer = ItemUtil.getValueFromDescription(item.getDescription(), "Manufacturer");
-            String name = item.getName();
-            if (manufacturer != null) {
-                name = manufacturer + " " + item.getName();
-            }
-            if (item.getCategory().equals("Seal")) {
-                final String size = ItemUtil.getValueFromDescription(item.getDescription(), "Size");
-                name = size + " " + manufacturer + " " + item.getName();
-            }
-            final ItemSelect itemSelect = new ItemSelect();
-            itemSelect.setName(name);
-            itemSelect.setItemName(item.getName());
-            itemSelect.setItemId(item.getId());
-            itemSelects.add(itemSelect);
-        }
-        return itemSelects;
-    }
+//    private List<ItemSelect> createItemSelects(final List<Item> items) {
+//        final List<ItemSelect> itemSelects = new ArrayList<>();
+//        for (final Item item : items) {
+//            String manufacturer = ItemUtil.getValueFromDescription(item.getDescription(), "Manufacturer");
+//            String name = item.getName();
+//            if (manufacturer != null) {
+//                name = manufacturer + " " + item.getName();
+//            }
+//            if (item.getCategory().equals("Seal")) {
+//                final String size = ItemUtil.getValueFromDescription(item.getDescription(), "Size");
+//                name = size + " " + manufacturer + " " + item.getName();
+//            }
+//            final ItemSelect itemSelect = new ItemSelect();
+//            itemSelect.setName(name);
+//            itemSelect.setItemName(item.getName());
+//            itemSelect.setItemId(item.getId());
+//            itemSelects.add(itemSelect);
+//        }
+//        return itemSelects;
+//    }
 
     private TableDto createHeader(final Item item) {
         final List<String[]> list = new ArrayList<>();
@@ -380,10 +380,8 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return new TableDto(tableName, listToMatrix(list));
     }
 
-
-
     private PartsTable createPartsTable(final Item item) {
-        if (!ItemUtil.itemIsAbleToContainParts(item)) {
+        if (!CategoryUtil.itemIsAbleToContainParts(item)) {
             return stubPartsTable();
         }
         final PartsTable partsTable = new PartsTable();
@@ -398,13 +396,14 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             partDto.setName(part.getName());
             partDto.setItemId(partItem.getId());
             partDto.setItemName(partItem.getName());
+            partDto.setItemCategory(partItem.getCategory());
             partDto.setQuantity(part.getQuantity());
             partDto.setButtonText(buttonText);
             partDto.setLocation(part.getLocation());
 
             partsTable.getParts().add(partDto);
         }
-        return partsTable;
+        return PartsTable.create(partsTable.getParts(), findAllPartCategories());
     }
 
     private ReplacersTable createReplacersTable(final Item item) {
@@ -415,6 +414,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             final String buttonText = ItemUtil.createButtonText(replacer.getItem());
 
             final NestedItemDto replacerDto = replacerConverter.convertToDto(replacer, buttonText);
+            replacerDto.setItemCategory(replacer.getItem().getCategory());
 
             replacersTable.getReplacers().add(replacerDto);
         }
@@ -655,6 +655,14 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             categories.add(item.getCategory());
         }
         return categories;
+    }
+
+    public Set<String> findAllCategories() {
+        return findCategories(findAll());
+    }
+
+    public Set<String> findAllPartCategories() {
+        return CategoryUtil.filterPartCategories(findAllCategories());
     }
 
 }

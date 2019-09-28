@@ -14,9 +14,10 @@ import lombok.ToString;
 public class NestedItemDto extends AbstractDto {
 
     private Long itemId;
-    private String itemName;
-    private String buttonText;
-    private String selectText;
+    private String itemName = "-";
+    private String itemCategory = "-";
+    private String buttonText = "-";
+    private String selectText = "-";
     private String comment = "-";
     private String location = "-";
     private String quantity = "0";

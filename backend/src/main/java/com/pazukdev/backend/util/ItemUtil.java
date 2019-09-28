@@ -181,7 +181,7 @@ public class ItemUtil {
     }
 
     public static String createButtonText(final Item nestedItem) {
-        if (isAddManufacturerName(nestedItem)) {
+        if (CategoryUtil.isAddManufacturerName(nestedItem)) {
             return getValueFromDescription(nestedItem.getDescription(), "Manufacturer")
                     + " " + nestedItem.getName();
         } else {
@@ -200,22 +200,6 @@ public class ItemUtil {
             selectText = size + " " + manufacturer + " " + nestedItem.getName();
         }
         return selectText;
-    }
-
-    public static boolean isAddManufacturerName(final Item nestedItem) {
-        final String category = nestedItem.getCategory();
-        return category.equals("Seal") || category.equals("Spark plug");
-    }
-
-    public static boolean itemIsAbleToContainParts(final Item item) {
-        return !(item.getCategory().equals("Seal")
-                || item.getCategory().equals("Spark plug")
-                || item.getCategory().equals("Material")
-                || item.getCategory().equals("GOST")
-                || item.getCategory().equals("Screw")
-                || item.getCategory().equals("Lock ring")
-                || item.getCategory().equals("Universal joint cross")
-                || item.getCategory().equals("Oil"));
     }
 
 }

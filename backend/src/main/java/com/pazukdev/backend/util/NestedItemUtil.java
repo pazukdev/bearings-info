@@ -1,6 +1,7 @@
 package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.dto.item.NestedItemDto;
+import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.entity.item.Item;
 import org.apache.commons.lang3.StringUtils;
 
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class NestedItemUtil {
 
@@ -112,8 +114,34 @@ public class NestedItemUtil {
         }
     }
 
+    public static List<List<NestedItemDto>> categorize(final List<NestedItemDto> nestedItems) {
+        final List<List<NestedItemDto>> categorizedItems = new ArrayList<>();
+        for (final String category : getCategories(nestedItems)) {
+            categorizedItems.add(nestedItems.stream().filter(
+                    nestedItem -> nestedItem.getItemCategory().equals(category)).collect(Collectors.toList()));
+
+        }
+        return categorizedItems;
+    }
+
+    public static Set<String> getCategories(final List<NestedItemDto> nestedItems) {
+        final Set<String> categories = new HashSet<>();
+        for (final NestedItemDto nestedItem : nestedItems) {
+            categories.add(nestedItem.getItemCategory());
+        }
+        return categories;
+    }
+
     public static String createName(final String parentItemName, final String nestedItemName) {
         return parentItemName + " - " + nestedItemName;
+    }
+
+    public static List<NestedItemDto> collectAllItems(final PartsTable partsTable) {
+        final Set<NestedItemDto> allItems = new HashSet<>(partsTable.getParts());
+        for (final PartsTable childTable : partsTable.getTables()) {
+            allItems.addAll(childTable.getParts());
+        }
+        return new ArrayList<>(allItems);
     }
 
 }
