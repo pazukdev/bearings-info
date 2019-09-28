@@ -1,7 +1,7 @@
 package com.pazukdev.backend.dto.table;
 
 import com.pazukdev.backend.dto.AbstractDto;
-import com.pazukdev.backend.dto.item.ChildItemDto;
+import com.pazukdev.backend.dto.item.NestedItemDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -15,8 +15,8 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ChildItemsTable extends AbstractDto {
+public class PartsTable extends AbstractDto {
 
-    private List<ChildItemDto> childItems = new ArrayList<>();
+    private List<NestedItemDto> parts = new ArrayList<>();
 
 }

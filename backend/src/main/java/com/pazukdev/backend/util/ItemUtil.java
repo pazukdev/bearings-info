@@ -4,6 +4,7 @@ import com.pazukdev.backend.dto.item.ItemQuantity;
 import com.pazukdev.backend.dto.item.ReplacerData;
 import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.entity.item.ChildItem;
+import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.service.TransitiveItemService;
 import org.apache.commons.lang3.StringUtils;
@@ -177,6 +178,44 @@ public class ItemUtil {
             }
         }
         return data;
+    }
+
+    public static String createButtonText(final Item nestedItem) {
+        if (isAddManufacturerName(nestedItem)) {
+            return getValueFromDescription(nestedItem.getDescription(), "Manufacturer")
+                    + " " + nestedItem.getName();
+        } else {
+            return nestedItem.getName();
+        }
+    }
+
+    public static String createSelectText(final Item nestedItem) {
+        final String manufacturer = getValueFromDescription(nestedItem.getDescription(), "Manufacturer");
+        String selectText = nestedItem.getName();
+        if (manufacturer != null) {
+            selectText = manufacturer + " " + nestedItem.getName();
+        }
+        if (nestedItem.getCategory().equals("Seal")) {
+            final String size = ItemUtil.getValueFromDescription(nestedItem.getDescription(), "Size, mm");
+            selectText = size + " " + manufacturer + " " + nestedItem.getName();
+        }
+        return selectText;
+    }
+
+    public static boolean isAddManufacturerName(final Item nestedItem) {
+        final String category = nestedItem.getCategory();
+        return category.equals("Seal") || category.equals("Spark plug");
+    }
+
+    public static boolean itemIsAbleToContainParts(final Item item) {
+        return !(item.getCategory().equals("Seal")
+                || item.getCategory().equals("Spark plug")
+                || item.getCategory().equals("Material")
+                || item.getCategory().equals("GOST")
+                || item.getCategory().equals("Screw")
+                || item.getCategory().equals("Lock ring")
+                || item.getCategory().equals("Universal joint cross")
+                || item.getCategory().equals("Oil"));
     }
 
 }

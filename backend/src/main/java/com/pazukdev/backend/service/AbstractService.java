@@ -31,7 +31,7 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
 
     @Transactional
     public Entity getOne(final Long id) throws EntityExistsException {
-        checkEntityExists(id);
+        //checkEntityExists(id);
         return repository.getOne(id);
     }
 

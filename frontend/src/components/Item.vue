@@ -3,9 +3,11 @@
 <!--        {{"isEditMode: " + isEditMode}}<br>-->
 <!--        {{text}}-->
 <!--        {{itemView.header.matrix[0][1]}}<br><br>-->
-<!--        {{itemView.childItemsTable.childItems}}<br><br>-->
-<!--        {{itemView.replacersTable.replacers}}<br><br>-->
+<!--        {{itemView.replacersTable}}<br><br>-->
+<!--        {{itemView.partsTable}}<br><br>-->
+<!--        {{itemView.replacersTable}}<br><br>-->
 <!--        {{itemView.replacers}}<br><br>-->
+<!--        {{newPart}}<br><br>-->
 <!--        {{this.items}}-->
 <!--        {{newReplacer}}<br><br>-->
 <!--        {{newHeaderRow}}<br><br>-->
@@ -18,7 +20,9 @@
                     <b>{{itemView.header.name}}</b>
                 </td>
                 <td style="width: 120px">
-                    <button style="width: 100%" type="button"
+                    <button v-if="itemView.searchEnabled"
+                            style="width: 100%"
+                            type="button"
                             @click="stubMethod()">
                         {{"Google search"}}
                     </button>
@@ -101,6 +105,12 @@
                 </td>
                 <td></td>
             </tr>
+            <tr style="height: 26px"><td colspan="3"></td></tr>
+            <tr v-if="isPartsTitleVisible()">
+                <td style="text-align: center" colspan="3">
+                    {{itemView.partsTable.name}}
+                </td>
+            </tr>
             <tr v-for="item in itemView.items.tables">
                 <td colspan="3">
                     <table class="get-all-table">
@@ -130,7 +140,7 @@
                                 <button v-model="newItemView"
                                         type="button"
                                         class="round-button"
-                                        @click="removeChildItemFromList(row)">
+                                        @click="removePartFromList(row)">
                                     {{"-"}}
                                 </button>
                             </td>
@@ -142,23 +152,46 @@
                     </table>
                 </td>
             </tr>
-            <tr>
+            <tr v-if="notStub(itemView.partsTable.name)"
+                style="text-align: left; width: 440px"
+                v-for="part in itemView.partsTable.parts">
+                <td v-if="!isEditMode">
+                    {{part.location}}
+                </td>
+                <input v-if="isEditMode" v-model="part.location" type="text"/>
+                <td>
+                    <button type="button"
+                            style="width: 100%"
+                            @click="setItem(part.itemId)">
+                        {{part.buttonText}}
+                    </button>
+                </td>
+                <td v-if="isEditMode">
+                    <button v-model="newItemView"
+                            type="button"
+                            class="round-button"
+                            @click="removePartFromList(part)">
+                        {{"-"}}
+                    </button>
+                </td>
+            </tr>
+            <tr v-if="notStub(itemView.partsTable.name)">
                 <td colspan="3">
                     <table>
                         <tbody>
                         <tr style="text-align: center; color: red">
                             <td colspan="3">
-                                {{newChildItemMessage}}
+                                {{newPartMessage}}
                             </td>
                         </tr>
-                        <tr v-if="notStub() && isEditMode" style="text-align: left">
+                        <tr v-if="isEditMode" style="text-align: left">
                             <td>
-                                <input style="width: 120px" v-model="newChildItem.location" type="text"/>
+                                <input style="width: 120px" v-model="newPart.location" type="text"/>
                             </td>
                             <td>
                                 <select style="width: 148px"
                                         class="content"
-                                        v-model="newChildItem"
+                                        v-model="newPart"
                                         @change="onChange()">
                                     <option v-for="part in itemView.possibleParts"
                                             v-bind:value="part">
@@ -167,12 +200,12 @@
                                 </select>
                             </td>
                             <td>
-                                <input style="width: 100%" v-model="newChildItem.quantity" type="text"/>
+                                <input style="width: 100%" v-model="newPart.quantity" type="text"/>
                             </td>
                             <td>
                                 <button type="button"
                                         class="round-button"
-                                        @click="addChildItem()">
+                                        @click="addPart()">
                                     {{"+"}}
                                 </button>
                             </td>
@@ -181,12 +214,12 @@
                     </table>
                 </td>
             </tr>
-            <tr v-if="notStub()">
+            <tr v-if="isReplacersTitleVisible()">
                 <td style="text-align: center" colspan="3">
                     {{itemView.replacersTable.name}}
                 </td>
             </tr>
-            <tr v-if="notStub()"
+            <tr v-if="notStub(itemView.replacersTable.name)"
                 style="text-align: left; width: 440px"
                 v-for="replacer in itemView.replacersTable.replacers">
                 <td v-if="!isEditMode">
@@ -214,7 +247,7 @@
                     {{newReplacerMessage}}
                 </td>
             </tr>
-            <tr v-if="notStub() && isEditMode" style="text-align: left">
+            <tr v-if="notStub(itemView.replacersTable.name) && isEditMode" style="text-align: left">
                 <td>
                     <input v-model="newReplacer.comment" type="text"/>
                 </td>
@@ -249,19 +282,20 @@
                 isEditMode: false,
                 newItemView: "",
                 newHeaderRowMessage: "",
-                newChildItemMessage: "",
+                newPartMessage: "",
                 newReplacerMessage: "",
                 newHeaderRow: {
                     parameter: "",
                     value: ""
                 },
-                newChildItem: {
+                newPart: {
                     id: "",
-                    mame: "",
+                    name: "",
                     itemId: "",
                     itemName: "",
                     buttonText: "",
                     selectText: "",
+                    comment: "",
                     location: "",
                     quantity: ""
                 },
@@ -272,7 +306,9 @@
                     itemName: "",
                     buttonText: "",
                     selectText: "",
-                    comment: ""
+                    comment: "",
+                    location: "",
+                    quantity: ""
                 }
             }
         },
@@ -289,6 +325,7 @@
         },
 
         methods: {
+
             addHeaderRow() {
                 this.newHeaderRowMessage = "";
                 if (this.newLineIsEmpty()) {
@@ -302,26 +339,30 @@
                 }
             },
 
-            addChildItem() {
-                this.newChildItemMessage = "";
-                this.newChildItem.name = "blabla" + this.newReplacer.name;
-                if (this.childItemAlreadyInList(this.newChildItem.itemId)) {
-                    this.newChildItemMessage = "Part already in list";
+            addPart() {
+                this.newPartMessage = "";
+                this.newPart.name = this.getItemName() + this.newPart.name;
+                if (this.childItemAlreadyInList(this.newPart.itemId)) {
+                    this.newPartMessage = "Part already in list";
                 } else {
-                    this.newItemView.childItemsTable.childItems.push(this.createChildItem());
+                    this.newItemView.partsTable.parts.push(this.createPart());
                     this.clearNewChildItem();
                 }
             },
 
             addReplacer() {
                 this.newReplacerMessage = "";
-                this.newReplacer.name = this.itemView.header.matrix[0][1] + this.newReplacer.name;
+                this.newReplacer.name = this.getItemName() + this.newReplacer.name;
                 if (this.replacerAlreadyInList(this.newReplacer.itemId)) {
                     this.newReplacerMessage = "Replacer already in list";
                 } else {
                     this.newItemView.replacersTable.replacers.push(this.createReplacer());
                     this.clearNewReplacer();
                 }
+            },
+
+            getItemName() {
+                return this.itemView.header.matrix[0][1];
             },
 
             newLineIsEmpty() {
@@ -338,8 +379,8 @@
             },
 
             childItemAlreadyInList(id) {
-                for (let i=0; i < this.newItemView.childItemsTable.childItems.length; i++) {
-                    if (this.newItemView.childItemsTable.childItems[i].itemId === id) {
+                for (let i=0; i < this.newItemView.partsTable.parts.length; i++) {
+                    if (this.newItemView.partsTable.parts[i].itemId === id) {
                         return true
                     }
                 }
@@ -359,8 +400,8 @@
                 this.removeFromArray(row, this.newItemView.header.matrix);
             },
 
-            removeChildItemFromList(childItem) {
-                this.removeFromArray(childItem, this.newItemView.childItemsTable.childItems);
+            removePartFromList(part) {
+                this.removeFromArray(part, this.newItemView.partsTable.parts);
             },
 
             removeReplacerFromList(replacer) {
@@ -375,16 +416,17 @@
                 this.newReplacerMessage = "";
             },
 
-            createChildItem() {
+            createPart() {
                 return {
-                    id: this.newChildItem.id,
-                    name: this.newChildItem.mame,
-                    itemId: this.newChildItem.itemId,
-                    itemName: this.newChildItem.itemName,
-                    buttonText: this.newChildItem.buttonText,
-                    selectText: this.newChildItem.selectText,
-                    location: this.newChildItem.location,
-                    quantity: this.newChildItem.quantity
+                    id: this.newPart.id,
+                    name: this.newPart.name,
+                    itemId: this.newPart.itemId,
+                    itemName: this.newPart.itemName,
+                    buttonText: this.newPart.buttonText,
+                    selectText: this.newPart.selectText,
+                    comment: this.newPart.comment,
+                    location: this.newPart.location,
+                    quantity: this.newPart.quantity
                 }
             },
 
@@ -396,7 +438,9 @@
                     itemName: this.newReplacer.itemName,
                     buttonText: this.newReplacer.buttonText,
                     selectText: this.newReplacer.selectText,
-                    comment: this.newReplacer.comment
+                    comment: this.newReplacer.comment,
+                    location: this.newReplacer.location,
+                    quantity: this.newReplacer.quantity
                 };
             },
 
@@ -439,7 +483,7 @@
 
             clearAllMessages() {
                 this.newHeaderRowMessage = "";
-                this.newChildItemMessage = "";
+                this.newPartMessage = "";
                 this.newReplacerMessage = "";
             },
 
@@ -451,7 +495,7 @@
             },
 
             clearNewChildItem() {
-                this.newChildItem = {
+                this.newPart = {
                     id: "",
                     name: "",
                     itemId: "",
@@ -495,8 +539,20 @@
                     });
             },
 
-            notStub() {
-                return this.itemView.replacersTable.replacers.length > 0 || this.isEditMode;
+            isPartsTitleVisible() {
+                return (this.notStub(this.itemView.partsTable.name)
+                    && this.itemView.partsTable.parts.length > 0)
+                    || (this.notStub(this.itemView.partsTable.name) && this.isEditMode);
+            },
+
+            isReplacersTitleVisible() {
+                return (this.notStub(this.itemView.replacersTable.name)
+                    && this.itemView.replacersTable.replacers.length > 0)
+                || (this.notStub(this.itemView.replacersTable.name) && this.isEditMode);
+            },
+
+            notStub(name) {
+                return name !== "stub";
             }
         }
     }

@@ -11,11 +11,14 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ChildDto extends AbstractDto {
+public class NestedItemDto extends AbstractDto {
 
     private Long itemId;
     private String itemName;
     private String buttonText;
     private String selectText;
+    private String comment = "-";
+    private String location = "-";
+    private String quantity = "0";
 
 }

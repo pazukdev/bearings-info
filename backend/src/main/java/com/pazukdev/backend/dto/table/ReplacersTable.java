@@ -1,7 +1,7 @@
 package com.pazukdev.backend.dto.table;
 
 import com.pazukdev.backend.dto.AbstractDto;
-import com.pazukdev.backend.dto.item.ReplacerDto;
+import com.pazukdev.backend.dto.item.NestedItemDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,6 +17,6 @@ import java.util.List;
 @ToString(callSuper = true)
 public class ReplacersTable extends AbstractDto {
 
-    private List<ReplacerDto> replacers = new ArrayList<>();
+    private List<NestedItemDto> replacers = new ArrayList<>();
 
 }

@@ -1,9 +1,10 @@
 package com.pazukdev.backend.dto.table;
 
-import com.pazukdev.backend.dto.item.ChildItemDto;
-import com.pazukdev.backend.dto.item.ItemSelect;
-import com.pazukdev.backend.dto.item.ReplacerDto;
+import com.pazukdev.backend.dto.AbstractDto;
+import com.pazukdev.backend.dto.item.NestedItemDto;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,16 +13,20 @@ import java.util.List;
  * @author Siarhei Sviarkaltsau
  */
 @Data
-public class ItemView {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class ItemView extends AbstractDto {
 
+    private boolean searchEnabled = true;
+    private String category;
     private TableDto header;
     private TableViewDto items;
-    private ChildItemsTable childItemsTable;
+    private PartsTable partsTable;
     private ReplacersTable replacersTable;
     private Long itemId;
-    private List<ItemSelect> allItems = new ArrayList<>();
-    private List<ItemSelect> sameCategoryItems = new ArrayList<>();
-    private List<ChildItemDto> possibleParts = new ArrayList<>();
-    private List<ReplacerDto> replacers = new ArrayList<>();
+//    private List<ItemSelect> allItems = new ArrayList<>();
+//    private List<ItemSelect> sameCategoryItems = new ArrayList<>();
+    private List<NestedItemDto> possibleParts = new ArrayList<>();
+    private List<NestedItemDto> replacers = new ArrayList<>();
 
 }
