@@ -375,7 +375,7 @@
                 } else if (this.newPart.quantity.includes("-")) {
                     this.newPartMessage = "Quantity shouldn't include - character";
                 } else {
-                    targetTable.parts.push(this.createPart());
+                    targetTable.parts.push(this.newPart);
                     this.clearNewPart();
                 }
             },
@@ -386,7 +386,7 @@
                 if (this.replacerAlreadyInList(this.newReplacer.itemId)) {
                     this.newReplacerMessage = "Replacer already in list";
                 } else {
-                    this.newItemView.replacersTable.replacers.push(this.createReplacer());
+                    this.newItemView.replacersTable.replacers.push(this.newReplacer);
                     this.clearNewReplacer();
                 }
             },
@@ -455,36 +455,6 @@
                 this.newReplacerMessage = "";
             },
 
-            createPart() {
-                return {
-                    id: this.newPart.id,
-                    name: this.newPart.name,
-                    itemId: this.newPart.itemId,
-                    itemName: this.newPart.itemName,
-                    itemCategory: this.newPart.itemCategory,
-                    buttonText: this.newPart.buttonText,
-                    selectText: this.newPart.selectText,
-                    comment: this.newPart.comment,
-                    location: this.newPart.location,
-                    quantity: this.newPart.quantity
-                }
-            },
-
-            createReplacer() {
-                return {
-                    id: this.newReplacer.id,
-                    name: this.newReplacer.name,
-                    itemId: this.newReplacer.itemId,
-                    itemName: this.newReplacer.itemName,
-                    itemCategory: this.newReplacer.itemCategory,
-                    buttonText: this.newReplacer.buttonText,
-                    selectText: this.newReplacer.selectText,
-                    comment: this.newReplacer.comment,
-                    location: this.newReplacer.location,
-                    quantity: this.newReplacer.quantity
-                };
-            },
-
             stubMethod() {
 
             },
@@ -536,22 +506,15 @@
             },
 
             clearNewPart() {
-                this.newPart = {
-                    id: "",
-                    name: "",
-                    itemId: "",
-                    itemName: "",
-                    itemCategory: "",
-                    buttonText: "",
-                    selectText: "",
-                    comment: "",
-                    location: "",
-                    quantity: ""
-                }
+                this.newPart = this.clearItem();
             },
 
             clearNewReplacer() {
-                this.newReplacer = {
+                this.newReplacer = this.clearItem();
+            },
+
+            clearItem() {
+                return  {
                     id: "",
                     name: "",
                     itemId: "",
@@ -586,8 +549,7 @@
             },
 
             isPartsTitleVisible() {
-                return (this.notStub(this.itemView.partsTable.name)
-                    && this.itemView.partsTable.tables.length > 0)
+                return (this.notStub(this.itemView.partsTable.name) && this.itemHaveParts())
                     || (this.notStub(this.itemView.partsTable.name) && this.isEditMode);
             },
 
@@ -595,6 +557,18 @@
                 return (this.notStub(this.itemView.replacersTable.name)
                     && this.itemView.replacersTable.replacers.length > 0)
                 || (this.notStub(this.itemView.replacersTable.name) && this.isEditMode);
+            },
+
+            itemHaveParts() {
+                if (this.itemView.partsTable.tables.length < 1) {
+                    return false;
+                }
+                for (let i=0; i < this.itemView.partsTable.tables.length; i++) {
+                    if (this.itemView.partsTable.tables[i].parts.length > 0) {
+                        return true;
+                    }
+                }
+                return false;
             },
 
             isOrdinaryItemView() {
