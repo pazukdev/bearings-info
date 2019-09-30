@@ -103,7 +103,21 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     @Transactional
     public ItemView createItemView(final Long id) throws EntityExistsException {
+        if (id == -1) {
+            return itemManagement();
+        }
         return createItemView(getOne(id));
+    }
+
+    @Transactional
+    public ItemView createNewItemView(final String category) throws EntityExistsException {
+        final Item item = new Item();
+        item.setName("New item");
+        item.setCategory(category);
+        itemRepository.save(item);
+        final ItemView itemView = createItemView(item.getId());
+        itemView.setNewItem(true);
+        return itemView;
     }
 
     @Transactional
@@ -334,27 +348,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return replacerDtos;
     }
 
-//    private List<ItemSelect> createItemSelects(final List<Item> items) {
-//        final List<ItemSelect> itemSelects = new ArrayList<>();
-//        for (final Item item : items) {
-//            String manufacturer = ItemUtil.getValueFromDescription(item.getDescription(), "Manufacturer");
-//            String name = item.getName();
-//            if (manufacturer != null) {
-//                name = manufacturer + " " + item.getName();
-//            }
-//            if (item.getCategory().equals("Seal")) {
-//                final String size = ItemUtil.getValueFromDescription(item.getDescription(), "Size");
-//                name = size + " " + manufacturer + " " + item.getName();
-//            }
-//            final ItemSelect itemSelect = new ItemSelect();
-//            itemSelect.setName(name);
-//            itemSelect.setItemName(item.getName());
-//            itemSelect.setItemId(item.getId());
-//            itemSelects.add(itemSelect);
-//        }
-//        return itemSelects;
-//    }
-
     private TableDto createHeader(final Item item) {
         final List<String[]> list = new ArrayList<>();
         list.add(new String[]{"Name", item.getName()});
@@ -430,13 +423,61 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
         final ItemView itemView = new ItemView();
         itemView.setSearchEnabled(false);
+        itemView.setSpecialItemView(true);
         itemView.setHeader(new TableDto(tableName, listToMatrix(list)));
         final int noMatterWhatNumber = 123;
-        final List<TableDto> tables = new ArrayList<>(Collections.singletonList(motorcyclesTable(motorcycles)));
+        final TableDto motorcyclesTable = motorcyclesTable(motorcycles);
+        final List<TableDto> tables = new ArrayList<>(Collections.singletonList(motorcyclesTable));
         itemView.setItems(new TableViewDto(noMatterWhatNumber, tables));
         itemView.setPartsTable(stubPartsTable());
         itemView.setReplacersTable(stubReplacersTable());
         return itemView;
+    }
+
+    public ItemView itemManagement() {
+        final List<Item> allItems = findAll();
+
+        final String tableName = "Item management";
+        List<String[]> list = new ArrayList<>();
+        list.add(new String[]{"Items", String.valueOf(allItems.size())});
+
+        final ItemView itemView = new ItemView();
+        itemView.setSearchEnabled(false);
+        itemView.setSpecialItemView(true);
+        itemView.setHeader(new TableDto(tableName, listToMatrix(list)));
+        final int noMatterWhatNumber = 123;
+        final TableDto itemsManagementTable = itemsManagementTable(allItems);
+        final List<TableDto> tables = new ArrayList<>(Collections.singletonList(itemsManagementTable));
+        itemView.setItems(new TableViewDto(noMatterWhatNumber, tables));
+        itemView.setPartsTable(stubPartsTable());
+        itemView.setReplacersTable(stubReplacersTable());
+        return itemView;
+    }
+
+    public TableDto motorcyclesTable(final List<Item> motorcycles) {
+        final String tableName = "Motorcycles";
+        final List<String[]> rows = new ArrayList<>();
+        for (final Item motorcycle : motorcycles) {
+            final String[] row = {
+                    ItemUtil.getValueFromDescription(motorcycle.getDescription(), "Production"),
+                    motorcycle.getName(),
+                    ItemUtil.getValueFromDescription(motorcycle.getDescription(), "Manufacturer"),
+                    motorcycle.getId().toString()};
+            rows.add(row);
+        }
+        final String[][] rowArray = rows.toArray(new String[0][]);
+        return new TableDto(tableName, rowArray);
+    }
+
+    public TableDto itemsManagementTable(final List<Item> items) {
+        final String tableName = "Items";
+        final List<String[]> rows = new ArrayList<>();
+        for (final Item item : items) {
+            final String[] row = {"-", item.getName(), "-", item.getId().toString()};
+            rows.add(row);
+        }
+        final String[][] rowArray = rows.toArray(new String[0][]);
+        return new TableDto(tableName, rowArray);
     }
 
     private TableDto stubTable() {
@@ -462,52 +503,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             matrix[j++] = s;
         }
         return matrix;
-    }
-
-    public TableDto motorcyclesTable(final List<Item> motorcycles) {
-        final String tableName = "Motorcycles";
-        final List<String[]> rows = new ArrayList<>();
-        for (final Item motorcycle : motorcycles) {
-            final String[] row = {
-                    ItemUtil.getValueFromDescription(motorcycle.getDescription(), "Production"),
-                    motorcycle.getName(),
-                    ItemUtil.getValueFromDescription(motorcycle.getDescription(), "Manufacturer"),
-                    motorcycle.getId().toString()};
-            rows.add(row);
-        }
-        final String[][] rowArray = rows.toArray(new String[0][]);
-        return new TableDto(tableName, rowArray);
-    }
-
-    private Item createSelectableStub(final String value, final String category) {
-        final Item selectableStub = new Item();
-        selectableStub.setCategory(category);
-        selectableStub.setName(value);
-        return selectableStub;
-    }
-
-    public Item getUssrSealBySize(final String searchingSize) {
-        final List<Item> ussrSeals = filter(find("Seal"), "Manufacturer", "USSR");
-        for (Item seal : ussrSeals) {
-            final String actualSize = ItemUtil.getValueFromDescription(seal.getDescription(), "Size, mm");
-            if (actualSize.equals(searchingSize)) {
-                return seal;
-            }
-        }
-        return null;
-    }
-
-    private List<Item> filter(final List<Item> items,
-                              final String parameter,
-                              final String searchingValue) {
-        final List<Item> filteredItems = new ArrayList<>();
-        for (Item item : items) {
-            final String value = ItemUtil.getValueFromDescription(item.getDescription(), parameter);
-            if (value != null && value.equals(searchingValue)) {
-                filteredItems.add(item);
-            }
-        }
-        return filteredItems;
     }
 
     public TableViewDto createTableView(final List<ChildItem> childItems) {

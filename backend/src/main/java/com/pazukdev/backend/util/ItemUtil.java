@@ -6,6 +6,7 @@ import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.entity.item.ChildItem;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.entity.item.TransitiveItem;
+import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.TransitiveItemService;
 import org.apache.commons.lang3.StringUtils;
 
@@ -200,6 +201,30 @@ public class ItemUtil {
             selectText = size + " " + manufacturer + " " + nestedItem.getName();
         }
         return selectText;
+    }
+
+    public static Item getUssrSealBySize(final String searchingSize, final ItemService itemService) {
+        final List<Item> ussrSeals = filter(itemService.find("Seal"), "Manufacturer", "USSR");
+        for (Item seal : ussrSeals) {
+            final String actualSize = ItemUtil.getValueFromDescription(seal.getDescription(), "Size, mm");
+            if (actualSize.equals(searchingSize)) {
+                return seal;
+            }
+        }
+        return null;
+    }
+
+    public static List<Item> filter(final List<Item> items,
+                                    final String parameter,
+                                    final String searchingValue) {
+        final List<Item> filteredItems = new ArrayList<>();
+        for (Item item : items) {
+            final String value = ItemUtil.getValueFromDescription(item.getDescription(), parameter);
+            if (value != null && value.equals(searchingValue)) {
+                filteredItems.add(item);
+            }
+        }
+        return filteredItems;
     }
 
 }

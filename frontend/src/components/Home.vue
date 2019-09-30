@@ -27,10 +27,6 @@
                 @cancel="cancel"
                 @add-motorcycle="addMotorcycle"/>
 
-        <ModelPartsList v-show="isLastComponent('ModelPartsList')" :motorcycle="motorcycle" :engine="engine"/>
-
-        <AddMotorcycle v-show="isLastComponent('AddMotorcycle')" @refresh-motorcycles="refresh()"/>
-
         <Users v-show="isLastComponent('Users')" @reopen-users="reopenUsers()"/>
 
         <Report v-show="isLastComponent('Report')"/>
@@ -40,10 +36,6 @@
         <Item v-show="isLastComponent('Item')"
               @cancel="cancel"
               @select-item="selectItem"/>
-
-        <BearingList v-show="isLastComponent('Bearings')" @reopen-bearings="reopenBearings()"/>
-
-        <SealList v-show="isLastComponent('Seals')" @reopen-seals="reopenSeals()"/>
 
         <table class="centred-table" v-show="isLastComponent('MotorcycleMenu')">
             <tbody>
@@ -56,27 +48,6 @@
                 <td>
                     <button class="content" type="button" style="width: 160px" v-on:click="openUsers()">
                         Users
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button class="content" type="button" style="width: 160px" v-on:click="openReports()">
-                        Reports
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button class="content" type="button" style="width: 160px" v-on:click="openBearings()">
-                        Bearings
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button class="content" type="button" style="width: 160px" v-on:click="openSeals()">
-                        Seals
                     </button>
                 </td>
             </tr>
@@ -94,10 +65,6 @@
     import axios from 'axios';
     import {mapState} from 'vuex';
     import MotorcycleMenu from "./MotorcycleMenu";
-    import BearingList from "./BearingList";
-    import SealList from "./SealList";
-    import ModelPartsList from "./ModelPartsList";
-    import AddMotorcycle from "./AddMotorcycle";
     import Report from "./Report";
     import Users from "./Users";
     import WishList from "./WishList";
@@ -139,10 +106,6 @@
 
         components: {
             MotorcycleMenu,
-            BearingList,
-            SealList,
-            ModelPartsList,
-            AddMotorcycle,
             Report,
             Users,
             WishList,
@@ -309,8 +272,12 @@
             },
 
             setItem(id) {
+                this.getItem(this.itemId);
+            },
+
+            getItem(id) {
                 axios
-                    .get("backend/item/" + this.itemId, {
+                    .get("backend/item/" + id, {
                         headers: {
                             Authorization: this.authorization
                         }

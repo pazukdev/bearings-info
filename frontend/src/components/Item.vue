@@ -1,7 +1,7 @@
 <template>
     <div>
 <!--        {{"isEditMode: " + isEditMode}}<br>-->
-<!--        {{text}}-->
+<!--        {{itemView}}-->
 <!--        {{itemView.header.matrix[0][1]}}<br><br>-->
 <!--        {{itemView.replacersTable}}<br><br>-->
 <!--        {{itemView.partsTable}}<br><br>-->
@@ -290,6 +290,20 @@
             </tr>
             </tbody>
         </table>
+        <table style="text-align: center">
+            <tbody>
+            <tr>
+                <td>
+                    <button class="content"
+                            type="button"
+                            style="width: 174px"
+                            v-on:click="create()">
+                        {{"Create"}}
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -463,6 +477,19 @@
                 return message === 'show button' && !this.isEditMode;
             },
 
+            create() {
+                axios
+                    .post("backend/item/create", {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => {
+                        let newItemView = response.data;
+                        this.setItem(newItemView.itemId);
+                    });
+            },
+
             setItem(id) {
                 this.$store.dispatch("addItemId", id);
                 this.$emit('select-item', id);
@@ -572,7 +599,7 @@
             },
 
             isOrdinaryItemView() {
-                return this.itemView.header.name !== "Motorcycle catalogue";
+                return this.itemView.specialItemView === false;
             },
 
             notStub(name) {

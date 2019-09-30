@@ -1,7 +1,6 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.converter.TransitiveItemConverter;
-import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.ItemView;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.exception.ProductNotFoundException;
@@ -9,11 +8,9 @@ import com.pazukdev.backend.service.ItemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityExistsException;
 import java.util.List;
 
 /**
@@ -42,18 +39,18 @@ public class ItemController {
         return service.createItemView(id);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create/{category}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new item")
-    public boolean create(@RequestBody final TransitiveItemDto dto) throws EntityExistsException, JSONException {
-        return service.create(dto) != null;
+    public ItemView create(final String category) {
+        return service.createNewItemView(category);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update item")
     public ItemView update(@PathVariable("id") final Long id,
-                          @RequestBody final ItemView itemView) throws ProductNotFoundException {
+                           @RequestBody final ItemView itemView) throws ProductNotFoundException {
         return service.update(id, itemView);
     }
 

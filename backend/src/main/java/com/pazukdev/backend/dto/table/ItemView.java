@@ -18,6 +18,8 @@ import java.util.List;
 public class ItemView extends AbstractDto {
 
     private boolean searchEnabled = true;
+    private boolean specialItemView = false;
+    private boolean newItem = false;
     private String category;
     private TableDto header;
     private TableViewDto items;
