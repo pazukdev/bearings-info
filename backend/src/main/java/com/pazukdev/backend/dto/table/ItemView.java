@@ -7,7 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -17,9 +19,11 @@ import java.util.List;
 @ToString(callSuper = true)
 public class ItemView extends AbstractDto {
 
-    private boolean searchEnabled = true;
-    private boolean specialItemView = false;
-    private boolean newItem = false;
+    private boolean searchEnabled;
+    private boolean ordinaryItem;
+    private boolean specialItemView;
+    private boolean itemsManagement;
+    private boolean newItem;
     private String category;
     private TableDto header;
     private TableViewDto items;
@@ -30,5 +34,7 @@ public class ItemView extends AbstractDto {
 //    private List<ItemSelect> sameCategoryItems = new ArrayList<>();
     private List<NestedItemDto> possibleParts = new ArrayList<>();
     private List<NestedItemDto> replacers = new ArrayList<>();
+    private Set<String> categories = new HashSet<>();
+    private Set<Long> idsToRemove = new HashSet<>();
 
 }

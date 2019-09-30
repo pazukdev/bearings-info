@@ -1,7 +1,10 @@
 <template>
     <div>
 <!--        {{"isEditMode: " + isEditMode}}<br>-->
-<!--        {{itemView}}-->
+<!--        {{newItemCategory}}<br><br>-->
+<!--        {{itemView.categories}}<br><br>-->
+<!--        {{itemView}}<br><br>-->
+        {{itemView.idsToRemove}}<br><br>
 <!--        {{itemView.header.matrix[0][1]}}<br><br>-->
 <!--        {{itemView.replacersTable}}<br><br>-->
 <!--        {{itemView.partsTable}}<br><br>-->
@@ -29,6 +32,44 @@
                     </button>
                 </td>
             </tr>
+            <tr>
+                <td colspan="3">
+                    <table style="text-align: center" v-if="isItemsManagementView()">
+                        <tbody>
+                        <tr>
+                            <td colspan="2"><hr></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">{{"Create new item"}}</td>
+                        </tr>
+                        <tr style="color: red">
+                            <td colspan="2">{{categoryMessage}}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select class="content"
+                                        @change="categorySelectOnChange()"
+                                        v-model="newItemCategory">
+                                    <option v-for="category in itemView.categories" v-bind:value="category">
+                                        {{category}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="content"
+                                        type="button"
+                                        v-on:click="create()">
+                                    {{"Create"}}
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
             </tbody>
         </table>
         <table style="width: 440px">
@@ -41,8 +82,9 @@
                     </p>
                 </td>
                 <td>
-                    <input v-if="isEditMode" v-model="row[1]" type="text"/>
-                    <p v-if="!isShowInfoButton(row[3]) && !isEditMode">
+                    <input v-if="isEditMode && !itemView.itemsManagement" v-model="row[1]" type="text"/>
+                    <p v-if="!isShowInfoButton(row[3])
+                    && (!isEditMode || (isEditMode && itemView.itemsManagement))">
                         {{row[1]}}
                     </p>
                     <button v-if="isShowInfoButton(row[3])" type="button"
@@ -52,7 +94,7 @@
                     </button>
                 </td>
                 <td>
-                    <button v-if="isEditMode && row[0] !== 'Name'"
+                    <button v-if="isEditMode && !itemView.itemsManagement && row[0] !== 'Name'"
                             v-model="newItemView"
                             type="button"
                             class="round-button"
@@ -66,7 +108,7 @@
                     {{newHeaderRowMessage}}
                 </td>
             </tr>
-            <tr style="text-align: left" v-if="isEditMode">
+            <tr style="text-align: left" v-if="isEditMode && !itemView.itemsManagement">
                 <td>
                     <input v-model="newHeaderRow.parameter" type="text"/>
                 </td>
@@ -166,8 +208,12 @@
                         </tr>
                         <tr v-for="part in table.parts">
                             <td style="width: 120px">
-                                <p v-if="!isEditMode">{{part.location}}</p>
-                                <input style="width: 120px" v-if="isEditMode" v-model="part.location" type="text"/>
+                                <p v-if="!isEditMode || (isEditMode && itemView.itemsManagement)">
+                                    {{part.location}}
+                                </p>
+                                <input style="width: 120px"
+                                       v-if="isEditMode && !itemView.itemsManagement"
+                                       v-model="part.location" type="text"/>
                             </td>
                             <td>
                                 <button type="button"
@@ -177,8 +223,11 @@
                                 </button>
                             </td>
                             <td>
-                                <p v-if="!isEditMode">{{part.quantity}}</p>
-                                <input style="width: 80px" v-if="isEditMode" v-model="part.quantity" type="text"/>
+                                <p v-if="!isEditMode
+                                && part.quantity > 0">{{part.quantity}}</p>
+                                <input style="width: 80px"
+                                       v-if="isEditMode && !itemView.itemsManagement"
+                                       v-model="part.quantity" type="text"/>
                             </td>
                             <td>
                             <td v-if="isEditMode">
@@ -214,7 +263,7 @@
                                 <select style="width: 146px"
                                         class="content"
                                         v-model="newPart"
-                                        @change="onChange()">
+                                        @change="partSelectOnChange()">
                                     <option v-for="part in itemView.possibleParts"
                                             v-bind:value="part">
                                         {{part.selectText}}
@@ -274,7 +323,7 @@
                     <input v-model="newReplacer.comment" type="text"/>
                 </td>
                 <td>
-                    <select class="content" v-model="newReplacer" @change="onChange()">
+                    <select class="content" v-model="newReplacer" @change="replacerSelectOnChange()">
                         <option v-for="replacer in itemView.replacers" v-bind:value="replacer">
                             {{replacer.selectText}}
                         </option>
@@ -285,20 +334,6 @@
                             class="round-button"
                             @click="addReplacer()">
                         {{"+"}}
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <table style="text-align: center">
-            <tbody>
-            <tr>
-                <td>
-                    <button class="content"
-                            type="button"
-                            style="width: 174px"
-                            v-on:click="create()">
-                        {{"Create"}}
                     </button>
                 </td>
             </tr>
@@ -317,9 +352,11 @@
             return {
                 isEditMode: false,
                 newItemView: "",
+                newItemCategory: "",
                 newHeaderRowMessage: "",
                 newPartMessage: "",
                 newReplacerMessage: "",
+                categoryMessage: "",
                 newHeaderRow: {
                     parameter: "",
                     value: ""
@@ -446,6 +483,9 @@
 
             removePartFromList(part, array) {
                 this.removeFromArray(part, array);
+                if (this.itemView.itemsManagement) {
+                    this.itemView.idsToRemove.push(part.itemId);
+                }
             },
 
             removeReplacerFromList(replacer) {
@@ -465,8 +505,17 @@
                 return this.newItemView.partsTable;
             },
 
-            onChange() {
+            partSelectOnChange() {
+                this.newPartMessage = "";
+            },
+
+            replacerSelectOnChange() {
                 this.newReplacerMessage = "";
+                this.categoryMessage = "";
+            },
+
+            categorySelectOnChange() {
+                this.categoryMessage = "";
             },
 
             stubMethod() {
@@ -474,20 +523,25 @@
             },
 
             isShowInfoButton(message) {
-                return message === 'show button' && !this.isEditMode;
+                return message === 'show button' && !this.isEditMode && !this.itemView.itemsManagement;
             },
 
             create() {
-                axios
-                    .post("backend/item/create", {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => {
-                        let newItemView = response.data;
-                        this.setItem(newItemView.itemId);
-                    });
+                this.categoryMessage = "";
+                if (this.newItemCategory === "") {
+                    this.categoryMessage = "Category not specified";
+                } else {
+                    axios
+                        .post("backend/item/create/" + this.newItemCategory, {
+                            headers: {
+                                Authorization: this.authorization
+                            }
+                        })
+                        .then(response => {
+                            let newItemView = response.data;
+                            this.setItem(newItemView.itemId);
+                        });
+                }
             },
 
             setItem(id) {
@@ -509,6 +563,7 @@
 
             switchEditModeOff() {
                 this.isEditMode = false;
+                this.newItemCategory = "";
                 this.clearAllEditData();
             },
 
@@ -556,7 +611,12 @@
             },
 
             save() {
-                let id = this.newItemView.itemId;
+                let id;
+                if (this.itemView.itemsManagement) {
+                    id = -1;
+                } else {
+                    id = this.newItemView.itemId;
+                }
                 this.update(id);
             },
 
@@ -600,6 +660,10 @@
 
             isOrdinaryItemView() {
                 return this.itemView.specialItemView === false;
+            },
+
+            isItemsManagementView() {
+                return this.itemView.header.name === "Item management";
             },
 
             notStub(name) {

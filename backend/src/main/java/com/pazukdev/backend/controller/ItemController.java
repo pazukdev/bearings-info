@@ -1,6 +1,5 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.converter.TransitiveItemConverter;
 import com.pazukdev.backend.dto.table.ItemView;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.exception.ProductNotFoundException;
@@ -9,7 +8,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -23,7 +29,6 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService service;
-    private final TransitiveItemConverter converter;
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
@@ -42,7 +47,7 @@ public class ItemController {
     @PostMapping("/create/{category}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new item")
-    public ItemView create(final String category) {
+    public ItemView create(@PathVariable final String category) {
         return service.createNewItemView(category);
     }
 

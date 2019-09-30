@@ -6,7 +6,11 @@ import com.pazukdev.backend.dto.item.NestedItemDto;
 import com.pazukdev.backend.dto.item.NestedItemDtoFactory;
 import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.dto.item.TransitiveItemDto;
-import com.pazukdev.backend.dto.table.*;
+import com.pazukdev.backend.dto.table.ItemView;
+import com.pazukdev.backend.dto.table.PartsTable;
+import com.pazukdev.backend.dto.table.ReplacersTable;
+import com.pazukdev.backend.dto.table.TableDto;
+import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.entity.item.ChildItem;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.entity.item.Replacer;
@@ -23,7 +27,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static com.pazukdev.backend.util.ItemUtil.createDescriptionMap;
 import static com.pazukdev.backend.util.NestedItemUtil.prepareNestedItemDtosToConverting;
@@ -114,14 +125,51 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final Item item = new Item();
         item.setName("New item");
         item.setCategory(category);
+        item.setDescription(createEmptyDescription(category));
         itemRepository.save(item);
         final ItemView itemView = createItemView(item.getId());
         itemView.setNewItem(true);
         return itemView;
     }
 
+    private String createEmptyDescription(final String category) {
+        final Map<String, String> descriptionMap = ItemUtil.toMap(find(category).get(0).getDescription());
+        for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
+            entry.setValue("-");
+        }
+        return ItemUtil.toDescription(descriptionMap);
+    }
+
     @Transactional
     public ItemView update(final Long id, final ItemView itemView) {
+        if (id.equals(-1L)) {
+            for (final Long idToRemove : itemView.getIdsToRemove()) {
+                for (final Item item : findAll()) {
+                    final Set<Replacer> replacersToRemove = new HashSet<>();
+                    for (final Replacer replacer : item.getReplacers()) {
+                        if (replacer.getItem().getId().equals(idToRemove)) {
+                            replacersToRemove.add(replacer);
+                        }
+                    }
+                    item.getReplacers().removeAll(replacersToRemove);
+
+                    final Set<ChildItem> partsToRemove = new HashSet<>();
+                    for (final ChildItem part : item.getChildItems()) {
+                        if (part.getItem().getId().equals(idToRemove)) {
+                            partsToRemove.add(part);
+                        }
+                    }
+                    item.getChildItems().removeAll(partsToRemove);
+
+                    itemRepository.save(item);
+                }
+                itemRepository.deleteById(idToRemove);
+            }
+
+            itemView.getIdsToRemove().clear();
+            return itemView;
+        }
+
         final Item item = getOne(id);
         final Map<String, String> headerMatrixMap = createHeaderMatrixMap(itemView);
         updateName(item, headerMatrixMap);
@@ -442,15 +490,15 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         list.add(new String[]{"Items", String.valueOf(allItems.size())});
 
         final ItemView itemView = new ItemView();
-        itemView.setSearchEnabled(false);
-        itemView.setSpecialItemView(true);
+        itemView.setItemsManagement(true);
         itemView.setHeader(new TableDto(tableName, listToMatrix(list)));
         final int noMatterWhatNumber = 123;
-        final TableDto itemsManagementTable = itemsManagementTable(allItems);
-        final List<TableDto> tables = new ArrayList<>(Collections.singletonList(itemsManagementTable));
+//        final TableDto itemsManagementTable = itemsManagementTable(allItems);
+        final List<TableDto> tables = new ArrayList<>(Collections.singletonList(stubTable()));
         itemView.setItems(new TableViewDto(noMatterWhatNumber, tables));
-        itemView.setPartsTable(stubPartsTable());
+        itemView.setPartsTable(itemsManagementTable());
         itemView.setReplacersTable(stubReplacersTable());
+        itemView.setCategories(findAllCategories());
         return itemView;
     }
 
@@ -469,15 +517,24 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return new TableDto(tableName, rowArray);
     }
 
-    public TableDto itemsManagementTable(final List<Item> items) {
-        final String tableName = "Items";
-        final List<String[]> rows = new ArrayList<>();
-        for (final Item item : items) {
-            final String[] row = {"-", item.getName(), "-", item.getId().toString()};
-            rows.add(row);
+    public PartsTable itemsManagementTable() {
+        final List<NestedItemDto> dtos = new ArrayList<>();
+        for (final Item item : findAll()) {
+            final String buttonText = ItemUtil.createButtonText(item);
+
+            final NestedItemDto dto = new NestedItemDto();
+            //dto.setId(part.getId());
+            //dto.setName(part.getName());
+            dto.setItemId(item.getId());
+            dto.setItemName(item.getName());
+            dto.setItemCategory(item.getCategory());
+            //dto.setQuantity(part.getQuantity());
+            dto.setButtonText(buttonText);
+            dto.setLocation(item.getCategory());
+
+            dtos.add(dto);
         }
-        final String[][] rowArray = rows.toArray(new String[0][]);
-        return new TableDto(tableName, rowArray);
+        return PartsTable.create(dtos, findAllCategories());
     }
 
     private TableDto stubTable() {
