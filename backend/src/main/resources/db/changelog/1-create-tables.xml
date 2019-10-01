@@ -24,7 +24,30 @@
             </column>
             <column name="name" type="varchar(255)"/>
             <column name="category" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
             <column name="description" type="varchar(1000)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_user_action_table" author="sviarkaltsau">
+        <createTable tableName="user_action">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="userId" type="varchar(255)"/>
+            <column name="userName" type="varchar(255)"/>
+            <column name="userRole" type="varchar(255)"/>
+            <column name="actionDate" type="varchar(255)"/>
+            <column name="actionType" type="varchar(255)"/>
+            <column name="parentItemId" type="varchar(255)"/>
+            <column name="parentItemName" type="varchar(255)"/>
+            <column name="oldItemId" type="varchar(255)"/>
+            <column name="oldItemName" type="varchar(255)"/>
+            <column name="itemId" type="varchar(255)"/>
+            <column name="itemType" type="varchar(255)"/>
+            <column name="itemCategory" type="varchar(255)"/>
+            <column name="itemName" type="varchar(255)"/>
         </createTable>
     </changeSet>
 

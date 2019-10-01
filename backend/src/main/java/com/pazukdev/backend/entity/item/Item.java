@@ -20,6 +20,7 @@ import java.util.Set;
 public class Item extends AbstractEntity {
 
     private String category;
+    private String status = "-";
     private String description;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

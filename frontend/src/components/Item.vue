@@ -4,7 +4,7 @@
 <!--        {{newItemCategory}}<br><br>-->
 <!--        {{itemView.categories}}<br><br>-->
 <!--        {{itemView}}<br><br>-->
-        {{itemView.idsToRemove}}<br><br>
+<!--        {{itemView.idsToRemove}}<br><br>-->
 <!--        {{itemView.header.matrix[0][1]}}<br><br>-->
 <!--        {{itemView.replacersTable}}<br><br>-->
 <!--        {{itemView.partsTable}}<br><br>-->
@@ -37,23 +37,33 @@
                     <table style="text-align: center" v-if="isItemsManagementView()">
                         <tbody>
                         <tr>
-                            <td colspan="2"><hr></td>
+                            <td colspan="3"><hr></td>
                         </tr>
                         <tr>
-                            <td colspan="2">{{"Create new item"}}</td>
+                            <td colspan="3">{{"Create new item"}}</td>
                         </tr>
                         <tr style="color: red">
-                            <td colspan="2">{{categoryMessage}}</td>
+                            <td colspan="3">{{categoryMessage}}</td>
+                        </tr>
+                        <tr style="color: red">
+                            <td colspan="3">{{newItemNameMessage}}</td>
                         </tr>
                         <tr>
                             <td>
-                                <select class="content"
-                                        @change="categorySelectOnChange()"
-                                        v-model="newItemCategory">
-                                    <option v-for="category in itemView.categories" v-bind:value="category">
+                                <input type="text"
+                                       list="categories"
+                                       class="content"
+                                       @change="categorySelectOnChange()"
+                                       v-model="newItemCategory"/>
+                                <datalist id="categories">
+                                    <option v-for="category in itemView.categories"
+                                            v-bind:value="category">
                                         {{category}}
                                     </option>
-                                </select>
+                                </datalist>
+                            </td>
+                            <td>
+                                <input v-model="newItemName" type="text"/>
                             </td>
                             <td>
                                 <button class="content"
@@ -353,10 +363,13 @@
                 isEditMode: false,
                 newItemView: "",
                 newItemCategory: "",
+                newItemName: "",
                 newHeaderRowMessage: "",
                 newPartMessage: "",
                 newReplacerMessage: "",
                 categoryMessage: "",
+                newItemNameMessage: "",
+                actionType: "",
                 newHeaderRow: {
                     parameter: "",
                     value: ""
@@ -394,6 +407,7 @@
         computed: {
             ...mapState({
                 authorization: state => state.dictionary.authorization,
+                userName: state => state.dictionary.userName,
                 itemView: state => state.dictionary.itemViews[state.dictionary.itemViews.length - 1],
                 itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
             })
@@ -528,11 +542,18 @@
 
             create() {
                 this.categoryMessage = "";
+                this.newItemNameMessage = "";
                 if (this.newItemCategory === "") {
                     this.categoryMessage = "Category not specified";
+                } if (this.newItemName === "") {
+                    this.newItemNameMessage = "Item name not specified"
                 } else {
                     axios
-                        .post("backend/item/create/" + this.newItemCategory, {
+                        .post("backend/item/create/"
+                            + this.newItemCategory
+                            + "/" + this.newItemName
+                            + "/" + this.userName
+                            + "/" + "-", {
                             headers: {
                                 Authorization: this.authorization
                             }
@@ -578,6 +599,8 @@
                 this.newHeaderRowMessage = "";
                 this.newPartMessage = "";
                 this.newReplacerMessage = "";
+                this.categoryMessage = "";
+                this.newItemNameMessage = "";
             },
 
             clearNewHeaderRow() {
@@ -622,7 +645,9 @@
 
             update(id) {
                 axios
-                    .put("/backend/item/" + id, this.newItemView, {
+                    .put("/backend/item/" + id
+                        + "/" + this.userName
+                        + "/" + "-", this.newItemView, {
                         headers: {
                             Authorization: this.authorization
                         }

@@ -6,35 +6,17 @@ import com.pazukdev.backend.dto.item.NestedItemDto;
 import com.pazukdev.backend.dto.item.NestedItemDtoFactory;
 import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.dto.item.TransitiveItemDto;
-import com.pazukdev.backend.dto.table.ItemView;
-import com.pazukdev.backend.dto.table.PartsTable;
-import com.pazukdev.backend.dto.table.ReplacersTable;
-import com.pazukdev.backend.dto.table.TableDto;
-import com.pazukdev.backend.dto.table.TableViewDto;
-import com.pazukdev.backend.entity.item.ChildItem;
-import com.pazukdev.backend.entity.item.Item;
-import com.pazukdev.backend.entity.item.Replacer;
-import com.pazukdev.backend.entity.item.TransitiveItem;
-import com.pazukdev.backend.repository.ChildItemRepository;
-import com.pazukdev.backend.repository.ItemRepository;
-import com.pazukdev.backend.repository.ReplacerRepository;
-import com.pazukdev.backend.util.CategoryUtil;
-import com.pazukdev.backend.util.ItemUtil;
-import com.pazukdev.backend.util.NestedItemUtil;
-import com.pazukdev.backend.util.SpecificStringUtil;
+import com.pazukdev.backend.dto.table.*;
+import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.item.*;
+import com.pazukdev.backend.repository.*;
+import com.pazukdev.backend.util.*;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.pazukdev.backend.util.ItemUtil.createDescriptionMap;
 import static com.pazukdev.backend.util.NestedItemUtil.prepareNestedItemDtosToConverting;
@@ -50,6 +32,8 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     @Getter
     private final ItemRepository itemRepository;
     private final ChildItemRepository partRepository;
+    private final UserRepository userRepository;
+    private final UserActionRepository userActionRepository;
     private final ReplacerRepository replacerRepository;
     private final ReplacerConverter replacerConverter;
 
@@ -58,19 +42,29 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                        final ItemConverter converter,
                        final TransitiveItemService transitiveItemService,
                        final ChildItemRepository partRepository,
+                       final UserRepository userRepository,
+                       final UserActionRepository userActionRepository,
                        final ReplacerRepository replacerRepository,
                        final ReplacerConverter replacerConverter) {
         super(itemRepository, converter);
         this.transitiveItemService = transitiveItemService;
         this.itemRepository = itemRepository;
         this.partRepository = partRepository;
+        this.userRepository = userRepository;
+        this.userActionRepository = userActionRepository;
         this.replacerRepository = replacerRepository;
         this.replacerConverter = replacerConverter;
     }
 
     @Transactional
     public List<Item> findAll() {
-        return repository.findAll();
+        final List<Item> items = new ArrayList<>();
+//        for (final Item item : findAll()) {
+//            if (!item.getStatus().equals("deleted")) {
+//                items.add(item);
+//            }
+//        }
+        return itemRepository.findAll();
     }
 
     @Transactional
@@ -121,19 +115,31 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public ItemView createNewItemView(final String category) throws EntityExistsException {
+    public ItemView createNewItemView(final String category,
+                                      final String name,
+                                      final String userName) {
+
         final Item item = new Item();
-        item.setName("New item");
+        item.setName(name);
         item.setCategory(category);
+        item.setStatus("created");
         item.setDescription(createEmptyDescription(category));
         itemRepository.save(item);
         final ItemView itemView = createItemView(item.getId());
         itemView.setNewItem(true);
+
+        final UserEntity user = userRepository.findByName(userName);
+        userActionRepository.save(UserActionUtil.create(user, "created", "item", item));
+
         return itemView;
     }
 
     private String createEmptyDescription(final String category) {
-        final Map<String, String> descriptionMap = ItemUtil.toMap(find(category).get(0).getDescription());
+        final List<Item> items = find(category);
+        if (items.isEmpty()) {
+            return "";
+        }
+        final Map<String, String> descriptionMap = ItemUtil.toMap(items.get(0).getDescription());
         for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
             entry.setValue("-");
         }
@@ -141,43 +147,80 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public ItemView update(final Long id, final ItemView itemView) {
-        if (id.equals(-1L)) {
-            for (final Long idToRemove : itemView.getIdsToRemove()) {
-                for (final Item item : findAll()) {
-                    final Set<Replacer> replacersToRemove = new HashSet<>();
-                    for (final Replacer replacer : item.getReplacers()) {
-                        if (replacer.getItem().getId().equals(idToRemove)) {
-                            replacersToRemove.add(replacer);
-                        }
-                    }
-                    item.getReplacers().removeAll(replacersToRemove);
-
-                    final Set<ChildItem> partsToRemove = new HashSet<>();
-                    for (final ChildItem part : item.getChildItems()) {
-                        if (part.getItem().getId().equals(idToRemove)) {
-                            partsToRemove.add(part);
-                        }
-                    }
-                    item.getChildItems().removeAll(partsToRemove);
-
-                    itemRepository.save(item);
-                }
-                itemRepository.deleteById(idToRemove);
-            }
-
-            itemView.getIdsToRemove().clear();
-            return itemView;
+    public ItemView update(final Long itemId, final String userName, final ItemView itemView) {
+        final UserEntity user = userRepository.findByName(userName);
+        final boolean removeItem = itemId.equals(-1L);
+        if (removeItem) {
+            return removeItem(itemView, user);
+        } else {
+            return updateItem(itemId, itemView, user);
         }
+    }
 
-        final Item item = getOne(id);
+    private ItemView removeItem(final ItemView itemView, final UserEntity user) {
+        removeItems(itemView.getIdsToRemove(), user);
+        itemView.getIdsToRemove().clear();
+        return itemView;
+    }
+
+    private ItemView updateItem(final Long itemId, final ItemView itemView, final UserEntity user) {
+        final Item item = getOne(itemId);
         final Map<String, String> headerMatrixMap = createHeaderMatrixMap(itemView);
         updateName(item, headerMatrixMap);
         updateDescription(item, headerMatrixMap);
         updateParts(item, itemView);
         updateReplacers(item, itemView);
+
+        userActionRepository.save(UserActionUtil.create(user, "update", "item", item));
         itemRepository.save(item);
-        return createItemView(id);
+        return createItemView(itemId);
+    }
+
+    private void removeItems(final Set<Long> idsToRemove, final UserEntity user) {
+        final String actionType = "delete";
+        for (final Long idToRemove : idsToRemove) {
+            removeItemFromAllParentItems(idToRemove, user, actionType);
+            removeItem(getOne(idToRemove), user, actionType);
+        }
+    }
+
+    private void removeItem(final Item itemToRemove, final UserEntity user, final String actionType) {
+        final String itemType = "item";
+        final UserAction userAction = UserActionUtil.create(user, actionType, itemType, itemToRemove);
+        userActionRepository.save(userAction);
+        itemRepository.deleteById(itemToRemove.getId());
+    }
+
+    private void removeItemFromAllParentItems(final Long idToRemove,
+                                              final UserEntity user,
+                                              final String actionType) {
+        for (final Item item : findAll()) {
+            final Set<Replacer> replacersToRemove = new HashSet<>();
+            for (final Replacer replacer : item.getReplacers()) {
+                final Item nestedItem = replacer.getItem();
+                if (nestedItem.getId().equals(idToRemove)) {
+                    replacersToRemove.add(replacer);
+
+                    final UserAction userAction = UserActionUtil.create(user, actionType, nestedItem, replacer);
+                    userActionRepository.save(userAction);
+                }
+            }
+            item.getReplacers().removeAll(replacersToRemove);
+
+            final Set<ChildItem> partsToRemove = new HashSet<>();
+            for (final ChildItem part : item.getChildItems()) {
+                final Item nestedItem = part.getItem();
+                if (nestedItem.getId().equals(idToRemove)) {
+                    partsToRemove.add(part);
+
+                    final UserAction userAction = UserActionUtil.create(user, actionType, nestedItem, part);
+                    userActionRepository.save(userAction);
+                }
+            }
+            item.getChildItems().removeAll(partsToRemove);
+
+            itemRepository.save(item);
+        }
     }
 
     private Map<String, String> createHeaderMatrixMap(final ItemView itemView) {
