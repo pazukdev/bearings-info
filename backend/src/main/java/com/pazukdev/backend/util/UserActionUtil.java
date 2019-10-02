@@ -49,12 +49,10 @@ public class UserActionUtil {
         userAction.setActionDate(LocalDateTime.now().toString());
 
         userAction.setUserId(user.getId().toString());
-        userAction.setUserName(user.getName());
-        userAction.setUserRole(user.getRole().name());
 
         userAction.setItemId(item.getId().toString());
         userAction.setItemCategory(item.getCategory());
-        userAction.setItemName(item.getName());
+        userAction.setItemType("item");
 
         return userAction;
     }

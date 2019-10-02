@@ -12,6 +12,7 @@
             </column>
             <column name="name" type="varchar(255)"/>
             <column name="category" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
             <column name="description" type="varchar(1000)"/>
             <column name="replacer" type="varchar(1000)"/>
         </createTable>
@@ -36,18 +37,13 @@
             </column>
             <column name="name" type="varchar(255)"/>
             <column name="userId" type="varchar(255)"/>
-            <column name="userName" type="varchar(255)"/>
-            <column name="userRole" type="varchar(255)"/>
             <column name="actionDate" type="varchar(255)"/>
             <column name="actionType" type="varchar(255)"/>
             <column name="parentItemId" type="varchar(255)"/>
-            <column name="parentItemName" type="varchar(255)"/>
-            <column name="oldItemId" type="varchar(255)"/>
-            <column name="oldItemName" type="varchar(255)"/>
             <column name="itemId" type="varchar(255)"/>
             <column name="itemType" type="varchar(255)"/>
             <column name="itemCategory" type="varchar(255)"/>
-            <column name="itemName" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
         </createTable>
     </changeSet>
 
@@ -57,6 +53,7 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
             <column name="item_id" type="bigint"/>
             <column name="location" type="varchar(255)"/>
             <column name="quantity" type="varchar(255)"/>
@@ -69,6 +66,7 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
             <column name="item_id" type="bigint"/>
             <column name="comment" type="varchar(255)"/>
         </createTable>
@@ -84,17 +82,6 @@
             </column>
         </createTable>
     </changeSet>
-
-<!--    <changeSet id="create_item_data_item_table" author="sviarkaltsau">-->
-<!--        <createTable tableName="item_data_item">-->
-<!--            <column name="item_id" type="bigint">-->
-<!--                <constraints foreignKeyName="fk_item_data_item_item_id" references="item (id)"/>-->
-<!--            </column>-->
-<!--            <column name="data_item_id" type="bigint">-->
-<!--                <constraints foreignKeyName="fk_item_data_item_data_item_id" references="item (id)"/>-->
-<!--            </column>-->
-<!--        </createTable>-->
-<!--    </changeSet>-->
 
     <changeSet id="create_item_replacer_table" author="sviarkaltsau">
         <createTable tableName="item_replacer">
@@ -113,6 +100,7 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
         </createTable>
     </changeSet>
 
@@ -122,6 +110,7 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
             <column name="password" type="varchar(255)"/>
             <column name="role" type="enum('ADMIN', 'USER')"/>
             <column name="wishlist_id" type="bigint"/>

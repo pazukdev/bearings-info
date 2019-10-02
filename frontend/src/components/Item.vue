@@ -6,6 +6,7 @@
 <!--        {{itemView}}<br><br>-->
 <!--        {{itemView.idsToRemove}}<br><br>-->
 <!--        {{itemView.header.matrix[0][1]}}<br><br>-->
+<!--        {{itemView.items.tables}}<br><br>-->
 <!--        {{itemView.replacersTable}}<br><br>-->
 <!--        {{itemView.partsTable}}<br><br>-->
 <!--        {{itemView.replacersTable}}<br><br>-->
@@ -16,6 +17,9 @@
 <!--        {{newReplacer}}<br><br>-->
 <!--        {{newHeaderRow}}<br><br>-->
 <!--        {{newChildItem}}<br><br>-->
+<!--        {{newItemCategory}}<br><br>-->
+<!--        {{newItemName}}<br><br>-->
+<!--        {{newItemNameMessage}}<br><br>-->
         <table>
             <tbody>
             <tr style="text-align: center">
@@ -63,7 +67,7 @@
                                 </datalist>
                             </td>
                             <td>
-                                <input v-model="newItemName" type="text"/>
+                                <input @change="newItemNameMessage = ''" v-model="newItemName" type="text"/>
                             </td>
                             <td>
                                 <button class="content"
@@ -164,7 +168,8 @@
                     {{itemView.partsTable.name}}
                 </td>
             </tr>
-            <tr v-if="!isOrdinaryItemView()" v-for="item in itemView.items.tables">
+            <tr v-for="item in itemView.items.tables"
+                v-if="!isOrdinaryItemView()">
                 <td colspan="3">
                     <table class="get-all-table">
                         <tbody>
@@ -209,14 +214,14 @@
                 <td v-if="table.parts.length > 0" colspan="3">
                     <table class="get-all-table">
                         <tbody>
-                        <tr>
+                        <tr v-if="arrayHaveActiveItems(table.parts)">
                             <td style="width: 120px">
                                 <b>{{table.name}}</b>
                             </td>
                             <td></td>
                             <td style="width: 80px"></td>
                         </tr>
-                        <tr v-for="part in table.parts">
+                        <tr v-for="part in table.parts" v-if="statusActive(part)">
                             <td style="width: 120px">
                                 <p v-if="!isEditMode || (isEditMode && itemView.itemsManagement)">
                                     {{part.location}}
@@ -275,6 +280,7 @@
                                         v-model="newPart"
                                         @change="partSelectOnChange()">
                                     <option v-for="part in itemView.possibleParts"
+                                            v-if="selectOptionVisible(part)"
                                             v-bind:value="part">
                                         {{part.selectText}}
                                     </option>
@@ -300,7 +306,7 @@
                     {{itemView.replacersTable.name}}
                 </td>
             </tr>
-            <tr v-if="notStub(itemView.replacersTable.name)"
+            <tr v-if="notStub(itemView.replacersTable.name) && statusActive(replacer)"
                 style="text-align: left; width: 440px"
                 v-for="replacer in itemView.replacersTable.replacers">
                 <td>
@@ -334,7 +340,9 @@
                 </td>
                 <td>
                     <select class="content" v-model="newReplacer" @change="replacerSelectOnChange()">
-                        <option v-for="replacer in itemView.replacers" v-bind:value="replacer">
+                        <option v-for="replacer in itemView.replacers"
+                                v-if="selectOptionVisible(replacer)"
+                                v-bind:value="replacer">
                             {{replacer.selectText}}
                         </option>
                     </select>
@@ -384,7 +392,8 @@
                     selectText: "",
                     comment: "",
                     location: "",
-                    quantity: ""
+                    quantity: "",
+                    status: ""
                 },
                 newReplacer: {
                     id: "",
@@ -396,7 +405,8 @@
                     selectText: "",
                     comment: "",
                     location: "",
-                    quantity: ""
+                    quantity: "",
+                    status: ""
                 }
             }
         },
@@ -541,13 +551,13 @@
             },
 
             create() {
-                this.categoryMessage = "";
-                this.newItemNameMessage = "";
+                this.clearItemCreationMessages();
                 if (this.newItemCategory === "") {
                     this.categoryMessage = "Category not specified";
                 } if (this.newItemName === "") {
                     this.newItemNameMessage = "Item name not specified"
                 } else {
+                    this.clearItemCreationMessages();
                     axios
                         .post("backend/item/create/"
                             + this.newItemCategory
@@ -584,7 +594,6 @@
 
             switchEditModeOff() {
                 this.isEditMode = false;
-                this.newItemCategory = "";
                 this.clearAllEditData();
             },
 
@@ -593,14 +602,24 @@
                 this.clearNewPart();
                 this.clearNewReplacer();
                 this.clearAllMessages();
+                this.clearNewItemData();
             },
 
             clearAllMessages() {
                 this.newHeaderRowMessage = "";
                 this.newPartMessage = "";
                 this.newReplacerMessage = "";
+                this.clearItemCreationMessages();
+            },
+
+            clearItemCreationMessages() {
                 this.categoryMessage = "";
                 this.newItemNameMessage = "";
+            },
+
+            clearNewItemData() {
+                this.newItemCategory = "";
+                this.newItemName = "";
             },
 
             clearNewHeaderRow() {
@@ -629,7 +648,8 @@
                     selectText: "",
                     comment: "",
                     location: "",
-                    quantity: ""
+                    quantity: "",
+                    status: ""
                 }
             },
 
@@ -661,22 +681,29 @@
             },
 
             isPartsTitleVisible() {
-                return (this.notStub(this.itemView.partsTable.name) && this.itemHaveParts())
+                return (this.notStub(this.itemView.partsTable.name) && this.itemHaveActiveParts())
                     || (this.notStub(this.itemView.partsTable.name) && this.isEditMode);
             },
 
             isReplacersTitleVisible() {
                 return (this.notStub(this.itemView.replacersTable.name)
-                    && this.itemView.replacersTable.replacers.length > 0)
+                    && this.arrayHaveActiveItems(this.itemView.replacersTable.replacers))
                 || (this.notStub(this.itemView.replacersTable.name) && this.isEditMode);
             },
 
-            itemHaveParts() {
-                if (this.itemView.partsTable.tables.length < 1) {
-                    return false;
+            itemHaveActiveParts() {
+                for (let i = 0; i < this.itemView.partsTable.tables.length; i++) {
+                    let table = this.itemView.partsTable.tables[i];
+                    if (this.arrayHaveActiveItems(table.parts)) {
+                        return true;
+                    }
                 }
-                for (let i=0; i < this.itemView.partsTable.tables.length; i++) {
-                    if (this.itemView.partsTable.tables[i].parts.length > 0) {
+                return false;
+            },
+
+            arrayHaveActiveItems(array) {
+                for (let i=0; i < array.length; i++) {
+                    if (this.statusActive(array[i])) {
                         return true;
                     }
                 }
@@ -693,6 +720,18 @@
 
             notStub(name) {
                 return name !== "stub";
+            },
+
+            statusActive(item) {
+                return item.status === "active";
+            },
+
+            isNotThisItem(item) {
+                return item.itemId !== this.itemView.itemId;
+            },
+
+            selectOptionVisible(option) {
+                return this.statusActive(option) && this.isNotThisItem(option);
             }
         }
     }

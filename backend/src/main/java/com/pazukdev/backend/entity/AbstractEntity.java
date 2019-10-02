@@ -19,5 +19,6 @@ public abstract class AbstractEntity {
     @NotNull
     @Column(name = "name")
     private String name = "-";
+    private String status = "active";
 
 }

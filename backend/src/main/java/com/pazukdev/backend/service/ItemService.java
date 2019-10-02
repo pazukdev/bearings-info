@@ -57,17 +57,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public List<Item> findAll() {
-        final List<Item> items = new ArrayList<>();
-//        for (final Item item : findAll()) {
-//            if (!item.getStatus().equals("deleted")) {
-//                items.add(item);
-//            }
-//        }
-        return itemRepository.findAll();
-    }
-
-    @Transactional
     @Override
     public Item findByName(String name) {
         return ((ItemRepository) repository).findByName(name);
@@ -122,7 +111,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final Item item = new Item();
         item.setName(name);
         item.setCategory(category);
-        item.setStatus("created");
         item.setDescription(createEmptyDescription(category));
         itemRepository.save(item);
         final ItemView itemView = createItemView(item.getId());
@@ -185,10 +173,12 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     private void removeItem(final Item itemToRemove, final UserEntity user, final String actionType) {
+        itemToRemove.setStatus("deleted");
+        itemRepository.save(itemToRemove);
+
         final String itemType = "item";
         final UserAction userAction = UserActionUtil.create(user, actionType, itemType, itemToRemove);
         userActionRepository.save(userAction);
-        itemRepository.deleteById(itemToRemove.getId());
     }
 
     private void removeItemFromAllParentItems(final Long idToRemove,
@@ -200,24 +190,28 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                 final Item nestedItem = replacer.getItem();
                 if (nestedItem.getId().equals(idToRemove)) {
                     replacersToRemove.add(replacer);
+                    replacer.setStatus("deleted");
+                    replacerRepository.save(replacer);
 
                     final UserAction userAction = UserActionUtil.create(user, actionType, nestedItem, replacer);
                     userActionRepository.save(userAction);
                 }
             }
-            item.getReplacers().removeAll(replacersToRemove);
+            //item.getReplacers().removeAll(replacersToRemove);
 
             final Set<ChildItem> partsToRemove = new HashSet<>();
             for (final ChildItem part : item.getChildItems()) {
                 final Item nestedItem = part.getItem();
                 if (nestedItem.getId().equals(idToRemove)) {
                     partsToRemove.add(part);
+                    part.setStatus("deleted");
+                    partRepository.save(part);
 
                     final UserAction userAction = UserActionUtil.create(user, actionType, nestedItem, part);
                     userActionRepository.save(userAction);
                 }
             }
-            item.getChildItems().removeAll(partsToRemove);
+            //item.getChildItems().removeAll(partsToRemove);
 
             itemRepository.save(item);
         }
@@ -339,6 +333,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             part.setItem(partItem);
             part.setLocation(nestedItem.getLocation());
             part.setQuantity(nestedItem.getQuantity());
+            part.setStatus(nestedItem.getStatus());
 
             partsFromItemView.add(part);
         }
@@ -359,6 +354,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             replacer.setName(dto.getName());
             replacer.setItem(replacerItem);
             replacer.setComment(dto.getComment());
+            replacer.setStatus(dto.getStatus());
 
             replacersFromItemView.add(replacer);
         }
@@ -484,6 +480,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             partDto.setQuantity(part.getQuantity());
             partDto.setButtonText(buttonText);
             partDto.setLocation(part.getLocation());
+            partDto.setStatus(part.getStatus());
 
             partsTable.getParts().add(partDto);
         }
@@ -499,6 +496,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
             final NestedItemDto replacerDto = replacerConverter.convertToDto(replacer, buttonText);
             replacerDto.setItemCategory(replacer.getItem().getCategory());
+            replacerDto.setStatus(replacer.getItem().getStatus());
 
             replacersTable.getReplacers().add(replacerDto);
         }
@@ -574,6 +572,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             //dto.setQuantity(part.getQuantity());
             dto.setButtonText(buttonText);
             dto.setLocation(item.getCategory());
+            dto.setStatus(item.getStatus());
 
             dtos.add(dto);
         }
@@ -643,6 +642,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final Item item = new Item();
         item.setName(transitiveItem.getName());
         item.setCategory(transitiveItem.getCategory().replace(" (i)", ""));
+        item.setStatus("active");
         item.setDescription(createItemDescription(transitiveItem));
         item.getChildItems().addAll(createParts(transitiveItem, descriptionMap.getItems()));
         item.getReplacers().addAll(createReplacers(transitiveItem));

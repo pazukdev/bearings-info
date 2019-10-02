@@ -74,7 +74,7 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
         final List<Entity> entities = new ArrayList<>();
         for (final Long id : ids) {
             entities.add(getOne(id));
-            repository.deleteById(id);
+            delete(id);
         }
         return entities;
     }

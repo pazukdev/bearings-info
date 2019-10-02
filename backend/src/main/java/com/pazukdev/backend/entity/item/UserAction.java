@@ -19,17 +19,11 @@ import javax.persistence.Table;
 public class UserAction extends AbstractEntity {
 
     private String userId = "-";
-    private String userName = "-";
-    private String userRole = "-";
     private String actionDate = "-";
     private String actionType = "-";
     private String parentItemId = "-";
-    private String parentItemName = "-";
-    private String oldItemId = "-";
-    private String oldItemName = "-";
     private String itemId = "-";
     private String itemType = "-";
     private String itemCategory = "-";
-    private String itemName = "-";
 
 }

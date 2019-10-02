@@ -21,5 +21,6 @@ public class NestedItemDto extends AbstractDto {
     private String comment = "-";
     private String location = "-";
     private String quantity = "0";
+    private String status;
 
 }

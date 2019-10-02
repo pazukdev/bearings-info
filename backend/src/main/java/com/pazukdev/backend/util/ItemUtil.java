@@ -227,6 +227,16 @@ public class ItemUtil {
         return filteredItems;
     }
 
+    public static Item copy(final Item original) {
+        final Item copy = new Item();
+        copy.setName(original.getName());
+        copy.setCategory(original.getCategory());
+        copy.setDescription(original.getDescription());
+        copy.setReplacers(original.getReplacers());
+        copy.setChildItems(original.getChildItems());
+        return copy;
+    }
+
 }
 
 

@@ -20,7 +20,6 @@ import java.util.Set;
 public class Item extends AbstractEntity {
 
     private String category;
-    private String status = "-";
     private String description;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -33,6 +32,7 @@ public class Item extends AbstractEntity {
     private Set<ChildItem> childItems = new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    //@Getter(AccessLevel.NONE)
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "item_replacer",
@@ -40,4 +40,5 @@ public class Item extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "replacer_item_id")
     )
     private Set<Replacer> replacers = new HashSet<>();
+
 }

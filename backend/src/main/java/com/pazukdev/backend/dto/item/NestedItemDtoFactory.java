@@ -22,6 +22,7 @@ public class NestedItemDtoFactory {
         nestedItemDto.setItemCategory(item.getCategory());
         nestedItemDto.setButtonText(buttonText);
         nestedItemDto.setSelectText(selectText);
+        nestedItemDto.setStatus(item.getStatus());
         return nestedItemDto;
     }
 
