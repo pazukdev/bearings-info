@@ -1,9 +1,11 @@
 <template>
     <div>
+<!--        {{admin}}<br><br>-->
+<!--        {{text}}<br><br>-->
+<!--        {{userName}}<br><br>-->
 <!--        {{"isEditMode: " + isEditMode}}<br>-->
 <!--        {{newItemCategory}}<br><br>-->
 <!--        {{itemView.categories}}<br><br>-->
-<!--        {{itemView}}<br><br>-->
 <!--        {{itemView.idsToRemove}}<br><br>-->
 <!--        {{itemView.header.matrix[0][1]}}<br><br>-->
 <!--        {{itemView.items.tables}}<br><br>-->
@@ -247,6 +249,7 @@
                             <td>
                             <td v-if="isEditMode">
                                 <button v-model="newItemView"
+                                        v-if="isItemDeleteButtonVisibleToCurrentUser(part)"
                                         type="button"
                                         class="round-button"
                                         @click="removePartFromList(part, table.parts)">
@@ -368,6 +371,7 @@
 
         data() {
             return {
+                text: "",
                 isEditMode: false,
                 newItemView: "",
                 newItemCategory: "",
@@ -393,7 +397,8 @@
                     comment: "",
                     location: "",
                     quantity: "",
-                    status: ""
+                    status: "",
+                    creatorName: ""
                 },
                 newReplacer: {
                     id: "",
@@ -406,7 +411,8 @@
                     comment: "",
                     location: "",
                     quantity: "",
-                    status: ""
+                    status: "",
+                    creatorName: ""
                 }
             }
         },
@@ -418,6 +424,7 @@
             ...mapState({
                 authorization: state => state.dictionary.authorization,
                 userName: state => state.dictionary.userName,
+                admin: state => state.dictionary.admin,
                 itemView: state => state.dictionary.itemViews[state.dictionary.itemViews.length - 1],
                 itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
             })
@@ -562,8 +569,7 @@
                         .post("backend/item/create/"
                             + this.newItemCategory
                             + "/" + this.newItemName
-                            + "/" + this.userName
-                            + "/" + "-", {
+                            + "/" + this.userName, {
                             headers: {
                                 Authorization: this.authorization
                             }
@@ -649,7 +655,8 @@
                     comment: "",
                     location: "",
                     quantity: "",
-                    status: ""
+                    status: "",
+                    creatorName: ""
                 }
             },
 
@@ -665,9 +672,7 @@
 
             update(id) {
                 axios
-                    .put("/backend/item/" + id
-                        + "/" + this.userName
-                        + "/" + "-", this.newItemView, {
+                    .put("/backend/item/" + id + "/" + this.userName, this.newItemView, {
                         headers: {
                             Authorization: this.authorization
                         }
@@ -732,6 +737,15 @@
 
             selectOptionVisible(option) {
                 return this.statusActive(option) && this.isNotThisItem(option);
+            },
+
+            isItemDeleteButtonVisibleToCurrentUser(item) {
+                return this.admin || this.currentUserIsCreator(item)
+            },
+
+            currentUserIsCreator(item) {
+                this.text = item;
+                return item.creatorName === this.userName;
             }
         }
     }

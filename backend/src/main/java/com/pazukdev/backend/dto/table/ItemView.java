@@ -36,5 +36,6 @@ public class ItemView extends AbstractDto {
     private List<NestedItemDto> replacers = new ArrayList<>();
     private Set<String> categories = new HashSet<>();
     private Set<Long> idsToRemove = new HashSet<>();
+    private Long creatorId;
 
 }

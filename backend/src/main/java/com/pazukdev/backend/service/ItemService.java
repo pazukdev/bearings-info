@@ -9,13 +9,15 @@ import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.*;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.item.*;
-import com.pazukdev.backend.repository.*;
+import com.pazukdev.backend.repository.ChildItemRepository;
+import com.pazukdev.backend.repository.ItemRepository;
+import com.pazukdev.backend.repository.ReplacerRepository;
+import com.pazukdev.backend.repository.UserActionRepository;
 import com.pazukdev.backend.util.*;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityExistsException;
 import java.util.*;
 
 import static com.pazukdev.backend.util.ItemUtil.createDescriptionMap;
@@ -32,7 +34,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     @Getter
     private final ItemRepository itemRepository;
     private final ChildItemRepository partRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final UserActionRepository userActionRepository;
     private final ReplacerRepository replacerRepository;
     private final ReplacerConverter replacerConverter;
@@ -42,7 +44,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                        final ItemConverter converter,
                        final TransitiveItemService transitiveItemService,
                        final ChildItemRepository partRepository,
-                       final UserRepository userRepository,
+                       final UserService userService,
                        final UserActionRepository userActionRepository,
                        final ReplacerRepository replacerRepository,
                        final ReplacerConverter replacerConverter) {
@@ -50,7 +52,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         this.transitiveItemService = transitiveItemService;
         this.itemRepository = itemRepository;
         this.partRepository = partRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.userActionRepository = userActionRepository;
         this.replacerRepository = replacerRepository;
         this.replacerConverter = replacerConverter;
@@ -96,11 +98,13 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public ItemView createItemView(final Long id) throws EntityExistsException {
-        if (id == -1) {
-            return itemManagement();
+    public ItemView createItemView(final Long itemId, final String username) {
+        final UserEntity currentUser = userService.findByName(username);
+        if (itemId == -1) {
+            return itemManagement(currentUser);
         }
-        return createItemView(getOne(id));
+        final Item item = getOne(itemId);
+        return buildItemView(item, currentUser);
     }
 
     @Transactional
@@ -108,16 +112,19 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                                       final String name,
                                       final String userName) {
 
+        final UserEntity creator = userService.findByName(userName);
+
         final Item item = new Item();
         item.setName(name);
         item.setCategory(category);
+        item.setCreatorId(creator.getId());
+        item.setUserActionDate(DateUtil.now());
         item.setDescription(createEmptyDescription(category));
         itemRepository.save(item);
-        final ItemView itemView = createItemView(item.getId());
+        final ItemView itemView = createItemView(item.getId(), userName);
         itemView.setNewItem(true);
 
-        final UserEntity user = userRepository.findByName(userName);
-        userActionRepository.save(UserActionUtil.create(user, "created", "item", item));
+        userActionRepository.save(UserActionUtil.create(creator, "create", "item", item));
 
         return itemView;
     }
@@ -136,7 +143,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     @Transactional
     public ItemView update(final Long itemId, final String userName, final ItemView itemView) {
-        final UserEntity user = userRepository.findByName(userName);
+        final UserEntity user = userService.findByName(userName);
         final boolean removeItem = itemId.equals(-1L);
         if (removeItem) {
             return removeItem(itemView, user);
@@ -161,7 +168,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
         userActionRepository.save(UserActionUtil.create(user, "update", "item", item));
         itemRepository.save(item);
-        return createItemView(itemId);
+        return createItemView(itemId, user.getName());
     }
 
     private void removeItems(final Set<Long> idsToRemove, final UserEntity user) {
@@ -174,6 +181,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     private void removeItem(final Item itemToRemove, final UserEntity user, final String actionType) {
         itemToRemove.setStatus("deleted");
+        itemToRemove.setUserActionDate(DateUtil.now());
         itemRepository.save(itemToRemove);
 
         final String itemType = "item";
@@ -397,7 +405,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         }
     }
 
-    public ItemView createItemView(final Item item) {
+    public ItemView buildItemView(final Item item, final UserEntity currentUser) {
         final List<Item> allItems = findAll();
         final List<Item> sameCategoryItems = find(item.getCategory(), allItems);
 
@@ -412,6 +420,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 //        itemView.setSameCategoryItems(createItemSelects(sameCategoryItems));
         itemView.getPossibleParts().addAll(createPossibleParts(allItems));
         itemView.getReplacers().addAll(createReplacerDtos(sameCategoryItems));
+        itemView.setCreatorId(item.getCreatorId());
         return itemView;
     }
 
@@ -523,7 +532,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return itemView;
     }
 
-    public ItemView itemManagement() {
+    public ItemView itemManagement(final UserEntity currentUser) {
         final List<Item> allItems = findAll();
 
         final String tableName = "Item management";
@@ -534,7 +543,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         itemView.setItemsManagement(true);
         itemView.setHeader(new TableDto(tableName, listToMatrix(list)));
         final int noMatterWhatNumber = 123;
-//        final TableDto itemsManagementTable = itemsManagementTable(allItems);
         final List<TableDto> tables = new ArrayList<>(Collections.singletonList(stubTable()));
         itemView.setItems(new TableViewDto(noMatterWhatNumber, tables));
         itemView.setPartsTable(itemsManagementTable());
@@ -551,7 +559,9 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                     ItemUtil.getValueFromDescription(motorcycle.getDescription(), "Production"),
                     motorcycle.getName(),
                     ItemUtil.getValueFromDescription(motorcycle.getDescription(), "Manufacturer"),
-                    motorcycle.getId().toString()};
+                    motorcycle.getId().toString(),
+                    motorcycle.getCreatorId().toString()
+            };
             rows.add(row);
         }
         final String[][] rowArray = rows.toArray(new String[0][]);
@@ -573,10 +583,15 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             dto.setButtonText(buttonText);
             dto.setLocation(item.getCategory());
             dto.setStatus(item.getStatus());
+            dto.setCreatorName(getCreatorName(item));
 
             dtos.add(dto);
         }
         return PartsTable.create(dtos, findAllCategories());
+    }
+
+    private String getCreatorName(final Item item) {
+        return userService.getOne(item.getCreatorId()).getName();
     }
 
     private TableDto stubTable() {
@@ -639,6 +654,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     public Item create(final TransitiveItem transitiveItem) {
         final TransitiveItemDescriptionMap descriptionMap = createDescriptionMap(transitiveItem, transitiveItemService);
+
         final Item item = new Item();
         item.setName(transitiveItem.getName());
         item.setCategory(transitiveItem.getCategory().replace(" (i)", ""));
@@ -646,6 +662,8 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         item.setDescription(createItemDescription(transitiveItem));
         item.getChildItems().addAll(createParts(transitiveItem, descriptionMap.getItems()));
         item.getReplacers().addAll(createReplacers(transitiveItem));
+        item.setCreatorId(userService.getAdmin().getId());
+        item.setUserActionDate(DateUtil.now());
         return item;
     }
 

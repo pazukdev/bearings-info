@@ -112,7 +112,7 @@
 
             refreshItem() {
                 axios
-                    .get("backend/item/" + this.itemId, {
+                    .get("backend/item/" + this.itemId + "/" + this.userName, {
                         headers: {
                             Authorization: this.authorization
                         }

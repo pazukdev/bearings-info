@@ -128,7 +128,7 @@
 
             cancel(id) {
                 axios
-                    .get("backend/item/" + this.itemId, {
+                    .get("backend/item/" + this.itemId + "/" + this.userName, {
                         headers: {
                             Authorization: this.authorization
                         }
@@ -277,7 +277,7 @@
 
             getItem(id) {
                 axios
-                    .get("backend/item/" + id, {
+                    .get("backend/item/" + id + "/" + this.userName, {
                         headers: {
                             Authorization: this.authorization
                         }

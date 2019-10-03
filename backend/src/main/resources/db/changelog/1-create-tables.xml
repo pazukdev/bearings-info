@@ -26,6 +26,8 @@
             <column name="name" type="varchar(255)"/>
             <column name="category" type="varchar(255)"/>
             <column name="status" type="varchar(255)"/>
+            <column name="creator_id" type="bigint"/>
+            <column name="user_action_date" type="varchar(255)"/>
             <column name="description" type="varchar(1000)"/>
         </createTable>
     </changeSet>

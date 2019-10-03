@@ -87,6 +87,10 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         return new TableViewDto(items.size(), tables);
     }
 
+    public UserEntity getAdmin() {
+        return getOne(1L);
+    }
+
     public TableDto createTable(final String userName) {
         return createTable(getAllItems(userName));
     }

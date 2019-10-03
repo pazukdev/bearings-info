@@ -30,29 +30,27 @@ public class ItemController {
         return service.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/{username}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get item")
-    public ItemView get(@PathVariable("id") Long id)  {
-        return service.createItemView(id);
+    public ItemView get(@PathVariable final Long id, @PathVariable final String username)  {
+        return service.createItemView(id, username);
     }
 
-    @PostMapping("/create/{category}/{name}/{userName}/{actionType}")
+    @PostMapping("/create/{category}/{name}/{userName}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new item")
     public ItemView create(@PathVariable final String category,
                            @PathVariable final String name,
-                           @PathVariable String userName,
-                           @PathVariable String actionType) {
+                           @PathVariable String userName) {
         return service.createNewItemView(category, name, userName);
     }
 
-    @PutMapping("/{id}/{userName}/{actionType}")
+    @PutMapping("/{id}/{userName}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update item")
     public ItemView update(@PathVariable final Long id,
                            @PathVariable String userName,
-                           @PathVariable String actionType,
                            @RequestBody final ItemView itemView) throws ProductNotFoundException {
         return service.update(id, userName, itemView);
     }

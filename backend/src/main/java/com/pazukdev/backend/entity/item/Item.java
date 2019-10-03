@@ -20,6 +20,10 @@ import java.util.Set;
 public class Item extends AbstractEntity {
 
     private String category;
+    @Column(name = "creator_id")
+    private Long creatorId;
+    @Column(name = "user_action_date")
+    private String userActionDate;
     private String description;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

@@ -231,6 +231,8 @@ public class ItemUtil {
         final Item copy = new Item();
         copy.setName(original.getName());
         copy.setCategory(original.getCategory());
+        copy.setCreatorId(original.getCreatorId());
+        copy.setUserActionDate(original.getUserActionDate());
         copy.setDescription(original.getDescription());
         copy.setReplacers(original.getReplacers());
         copy.setChildItems(original.getChildItems());
