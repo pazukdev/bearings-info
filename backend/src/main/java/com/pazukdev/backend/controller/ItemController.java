@@ -30,11 +30,11 @@ public class ItemController {
         return service.findAll();
     }
 
-    @GetMapping("/{id}/{username}")
+    @GetMapping("/get/{id}/{userName}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get item")
-    public ItemView get(@PathVariable final Long id, @PathVariable final String username)  {
-        return service.createItemView(id, username);
+    public ItemView get(@PathVariable final Long id, @PathVariable final String userName)  {
+        return service.createItemView(id, userName);
     }
 
     @PostMapping("/create/{category}/{name}/{userName}")
@@ -46,20 +46,13 @@ public class ItemController {
         return service.createNewItemView(category, name, userName);
     }
 
-    @PutMapping("/{id}/{userName}")
+    @PutMapping("/update/{id}/{userName}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update item")
     public ItemView update(@PathVariable final Long id,
                            @PathVariable String userName,
                            @RequestBody final ItemView itemView) throws ProductNotFoundException {
         return service.update(id, userName, itemView);
-    }
-
-    @GetMapping("/motorcycles")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get all motorcycles")
-    public ItemView motorcycleCatalogue() {
-        return service.motorcycleCatalogue();
     }
 
 }

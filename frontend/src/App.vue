@@ -110,29 +110,29 @@
                 }
             },
 
-            refreshItem() {
+            getItemView(itemId, removeLastItemView) {
                 axios
-                    .get("backend/item/" + this.itemId + "/" + this.userName, {
+                    .get("backend/item/get/" + itemId
+                        + "/" + this.userName, {
                         headers: {
                             Authorization: this.authorization
                         }
                     })
                     .then(response => {
-                        this.$store.dispatch("removeLastItemView");
+                        if (removeLastItemView === true) {
+                            this.$store.dispatch("removeLastItemView");
+                        }
                         this.$store.dispatch("addItemView", response.data);
                     });
             },
 
+            refreshItem() {
+                this.getItemView(this.itemId, true);
+            },
+
             showMotorcycleMenu() {
-                axios
-                    .get("/backend/item/motorcycles", {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => {
-                        this.$store.dispatch("addItemView", response.data)
-                    });
+                let specialMotorcycleCatalogueItemId = -2;
+                this.getItemView(specialMotorcycleCatalogueItemId, false);
             },
 
             refreshWishList(userName) {

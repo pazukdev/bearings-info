@@ -4,14 +4,10 @@ import com.pazukdev.backend.MockData;
 import com.pazukdev.backend.dto.ManufacturerDto;
 import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.WishListDto;
-import com.pazukdev.backend.dto.product.BearingDto;
-import com.pazukdev.backend.dto.product.MotorcycleDto;
-import com.pazukdev.backend.dto.product.OilDto;
-import com.pazukdev.backend.dto.product.SealDto;
-import com.pazukdev.backend.dto.product.SparkPlugDto;
+import com.pazukdev.backend.dto.product.*;
 import com.pazukdev.backend.dto.product.unit.EngineDto;
 import com.pazukdev.backend.entity.UserEntity;
-import com.pazukdev.backend.entity.WishListEntity;
+import com.pazukdev.backend.entity.WishList;
 import com.pazukdev.backend.entity.manufacturer.ManufacturerEntity;
 import com.pazukdev.backend.entity.product.bearing.BearingEntity;
 import com.pazukdev.backend.entity.product.motorcycle.MotorcycleEntity;
@@ -90,7 +86,7 @@ public class ConverterTest {
 
     @Test
     public void wishListEntityToWishListDto() {
-        final WishListEntity entity = new WishListEntity();
+        final WishList entity = new WishList();
         final WishListDto dto = mockData.getTestContext().getWishListConverter().convertToDto(entity);
 
         assertEquals(entity.getName(), dto.getName());
@@ -99,7 +95,7 @@ public class ConverterTest {
     @Test
     public void wishListDtoToWishListEntity() {
         final WishListDto dto = new WishListDto();
-        final WishListEntity entity = mockData.getTestContext().getWishListConverter().convertToEntity(dto);
+        final WishList entity = mockData.getTestContext().getWishListConverter().convertToEntity(dto);
 
         assertEquals(entity.getName(), dto.getName());
     }

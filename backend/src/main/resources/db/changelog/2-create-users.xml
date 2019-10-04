@@ -7,12 +7,16 @@
     <changeSet id="insert_admin_wishlist" author="sviarkaltsau">
         <insert tableName="wishlist">
             <column name="id" value="1"/>
+            <column name="name" value="admin-wishlist"/>
+            <column name="status" value="active"/>
         </insert>
     </changeSet>
 
     <changeSet id="insert_user_wishlist" author="sviarkaltsau">
         <insert tableName="wishlist">
             <column name="id" value="2"/>
+            <column name="name" value="user-wishlist"/>
+            <column name="status" value="active"/>
         </insert>
     </changeSet>
 

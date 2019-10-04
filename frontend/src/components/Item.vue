@@ -1,10 +1,11 @@
 <template>
     <div>
-<!--        {{admin}}<br><br>-->
-<!--        {{text}}<br><br>-->
+        {{itemView.itemId}}<br><br>
+<!--        {{itemView.viewType}}<br><br>-->
 <!--        {{userName}}<br><br>-->
 <!--        {{"isEditMode: " + isEditMode}}<br>-->
 <!--        {{newItemCategory}}<br><br>-->
+<!--        {{itemView.wishListIds}}<br><br>-->
 <!--        {{itemView.categories}}<br><br>-->
 <!--        {{itemView.idsToRemove}}<br><br>-->
 <!--        {{itemView.header.matrix[0][1]}}<br><br>-->
@@ -22,6 +23,26 @@
 <!--        {{newItemCategory}}<br><br>-->
 <!--        {{newItemName}}<br><br>-->
 <!--        {{newItemNameMessage}}<br><br>-->
+        <table style="border-spacing: 0px; text-align: right">
+            <tbody>
+            <tr>
+                <td style="text-align: left">
+                    <button type="button" v-on:click="openWishList()">
+                        {{"Wishlist: " + itemView.wishListIds.length + " items"}}
+                    </button>
+                </td>
+                <td>
+                    {{userName}}
+                </td>
+            </tr>
+            <tr v-if="admin">
+                <td></td>
+                <td>
+                    {{"You are admin"}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
         <table>
             <tbody>
             <tr style="text-align: center">
@@ -98,9 +119,9 @@
                     </p>
                 </td>
                 <td>
-                    <input v-if="isEditMode && !itemView.itemsManagement" v-model="row[1]" type="text"/>
+                    <input v-if="isEditMode && !isItemsManagementView()" v-model="row[1]" type="text"/>
                     <p v-if="!isShowInfoButton(row[3])
-                    && (!isEditMode || (isEditMode && itemView.itemsManagement))">
+                    && (!isEditMode || (isEditMode && isItemsManagementView()))">
                         {{row[1]}}
                     </p>
                     <button v-if="isShowInfoButton(row[3])" type="button"
@@ -110,7 +131,7 @@
                     </button>
                 </td>
                 <td>
-                    <button v-if="isEditMode && !itemView.itemsManagement && row[0] !== 'Name'"
+                    <button v-if="isEditMode && !isItemsManagementView() && row[0] !== 'Name'"
                             v-model="newItemView"
                             type="button"
                             class="round-button"
@@ -124,7 +145,7 @@
                     {{newHeaderRowMessage}}
                 </td>
             </tr>
-            <tr style="text-align: left" v-if="isEditMode && !itemView.itemsManagement">
+            <tr style="text-align: left" v-if="isEditMode && !isItemsManagementView()">
                 <td>
                     <input v-model="newHeaderRow.parameter" type="text"/>
                 </td>
@@ -143,24 +164,39 @@
                 <td>
                     <button v-if="isEditMode"
                             type="button"
-                            style="width: 100%"
+                            style="width: 194px"
                             @click="cancel()">
                         {{"Cancel"}}
                     </button>
                 </td>
-                <td>
+                <td style="text-align: right">
                     <button v-if="!isEditMode"
                             type="button"
-                            style="width: 100%"
+                            style="width: 194px"
                             @click="edit()">
                         {{"Edit"}}
                     </button>
                     <button v-if="isEditMode"
                             type="button"
-                            style="width: 100%"
+                            style="width: 194px"
                             @click="save()">
                         {{"Save"}}
                     </button>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="text-align: right">
+                    <button v-if="!isInWishList(itemView.itemId) && isOrdinaryItemView() && !isEditMode"
+                            type="button"
+                            style="width: 194px"
+                            @click="addThisItemToWishList()">
+                        {{"Add to Wish List"}}
+                    </button>
+                    <p v-if="isInWishList(itemView.itemId) && isOrdinaryItemView()">
+                        {{"Item in Wish List"}}
+                    </p>
                 </td>
                 <td></td>
             </tr>
@@ -171,7 +207,7 @@
                 </td>
             </tr>
             <tr v-for="item in itemView.items.tables"
-                v-if="!isOrdinaryItemView()">
+                v-if="isMotorcycleCatalogueView()">
                 <td colspan="3">
                     <table class="get-all-table">
                         <tbody>
@@ -212,7 +248,7 @@
                     </table>
                 </td>
             </tr>
-            <tr v-if="isOrdinaryItemView()" v-for="table in itemView.partsTable.tables">
+            <tr v-if="!isMotorcycleCatalogueView()" v-for="table in itemView.partsTable.tables">
                 <td v-if="table.parts.length > 0" colspan="3">
                     <table class="get-all-table">
                         <tbody>
@@ -225,11 +261,11 @@
                         </tr>
                         <tr v-for="part in table.parts" v-if="statusActive(part)">
                             <td style="width: 120px">
-                                <p v-if="!isEditMode || (isEditMode && itemView.itemsManagement)">
+                                <p v-if="!isEditMode || (isEditMode && isItemsManagementView())">
                                     {{part.location}}
                                 </p>
                                 <input style="width: 120px"
-                                       v-if="isEditMode && !itemView.itemsManagement"
+                                       v-if="isEditMode && !isItemsManagementView()"
                                        v-model="part.location" type="text"/>
                             </td>
                             <td>
@@ -243,7 +279,7 @@
                                 <p v-if="!isEditMode
                                 && part.quantity > 0">{{part.quantity}}</p>
                                 <input style="width: 80px"
-                                       v-if="isEditMode && !itemView.itemsManagement"
+                                       v-if="isEditMode && !isItemsManagementView()"
                                        v-model="part.quantity" type="text"/>
                             </td>
                             <td>
@@ -432,6 +468,25 @@
 
         methods: {
 
+            openWishList() {
+
+            },
+
+            isInWishList(itemId) {
+                for (let i=0; i < this.itemView.wishListIds.length; i++) {
+                    if (this.itemView.wishListIds[i] === itemId) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+
+            addThisItemToWishList() {
+                this.newItemView = this.itemView;
+                this.itemView.addToWishList = true;
+                this.save();
+            },
+
             addHeaderRow() {
                 this.newHeaderRowMessage = "";
                 if (this.newLineIsEmpty()) {
@@ -514,7 +569,7 @@
 
             removePartFromList(part, array) {
                 this.removeFromArray(part, array);
-                if (this.itemView.itemsManagement) {
+                if (this.isItemsManagementView()) {
                     this.itemView.idsToRemove.push(part.itemId);
                 }
             },
@@ -554,7 +609,7 @@
             },
 
             isShowInfoButton(message) {
-                return message === 'show button' && !this.isEditMode && !this.itemView.itemsManagement;
+                return message === 'show button' && !this.isEditMode && !this.isItemsManagementView();
             },
 
             create() {
@@ -662,7 +717,7 @@
 
             save() {
                 let id;
-                if (this.itemView.itemsManagement) {
+                if (this.isItemsManagementView()) {
                     id = -1;
                 } else {
                     id = this.newItemView.itemId;
@@ -672,7 +727,7 @@
 
             update(id) {
                 axios
-                    .put("/backend/item/" + id + "/" + this.userName, this.newItemView, {
+                    .put("/backend/item/update/" + id + "/" + this.userName, this.newItemView, {
                         headers: {
                             Authorization: this.authorization
                         }
@@ -716,11 +771,15 @@
             },
 
             isOrdinaryItemView() {
-                return this.itemView.specialItemView === false;
+                return !this.isItemsManagementView() && !this.isMotorcycleCatalogueView();
             },
 
             isItemsManagementView() {
-                return this.itemView.header.name === "Item management";
+                return this.itemView.itemId === -1;
+            },
+
+            isMotorcycleCatalogueView() {
+                return this.itemView.itemId === -2;
             },
 
             notStub(name) {
@@ -746,7 +805,7 @@
             currentUserIsCreator(item) {
                 this.text = item;
                 return item.creatorName === this.userName;
-            }
+            },
         }
     }
 </script>

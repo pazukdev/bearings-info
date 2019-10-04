@@ -1,37 +1,14 @@
 <template>
     <div id="app_area">
-        <table style="border-spacing: 0px; text-align: right" v-show="isLastComponent('MotorcycleMenu')">
-            <tbody>
-            <tr>
-                <td style="text-align: left">
-                    <button type="button" v-on:click="openWishList()">
-                        {{"Wishlist: " + wishList.count + " items"}}
-                    </button>
-                </td>
-                <td>
-                    {{userName}}
-                </td>
-            </tr>
-            <tr v-if="admin">
-                <td></td>
-                <td>
-                    {{"You are admin"}}
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
         <MotorcycleMenu
                 v-show="isLastComponent('MotorcycleMenu')"
                 @select-item="selectItem"
                 @cancel="cancel"
                 @add-motorcycle="addMotorcycle"/>
 
-        <Users v-show="isLastComponent('Users')" @reopen-users="reopenUsers()"/>
+        <Users v-show="isLastComponent('Users')" @reopen-users="reopenUsers"/>
 
         <Report v-show="isLastComponent('Report')"/>
-
-        <WishList v-show="isLastComponent('WishList')" @select-item="selectItem"/>
 
         <Item v-show="isLastComponent('Item')"
               @cancel="cancel"
@@ -56,7 +33,7 @@
 
         <div v-show="isLastComponent('MotorcycleMenu')"
              style="width: 100%; text-align: center; margin-top: 60px; margin-bottom: 20px">
-            Minsk 2019
+            {{"Minsk 2019"}}
         </div>
     </div>
 </template>
@@ -67,7 +44,6 @@
     import MotorcycleMenu from "./MotorcycleMenu";
     import Report from "./Report";
     import Users from "./Users";
-    import WishList from "./WishList";
     import Item from "./Item";
 
     export default {
@@ -85,10 +61,7 @@
         created() {
             this.refresh();
             this.isAdmin();
-            this.refreshUsers();
-            this.refreshBearings();
-            this.refreshSeals();
-            this.refreshWishList(this.userName);
+            //this.refreshUsers();
         },
 
         computed: {
@@ -100,7 +73,8 @@
                 admin: state => state.dictionary.admin,
                 wishList: state => state.dictionary.wishList,
                 table: state => state.dictionary.table,
-                itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
+                itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1],
+                itemView: state => state.dictionary.itemViews[state.dictionary.itemViews.length - 1]
             })
         },
 
@@ -108,11 +82,11 @@
             MotorcycleMenu,
             Report,
             Users,
-            WishList,
             Item
         },
 
         methods: {
+
             isLastComponent(component) {
                 return this.homeComponent[this.homeComponent.length - 1] === component;
             },
@@ -126,33 +100,40 @@
                 this.switchComponent("Item");
             },
 
-            cancel(id) {
+            getItemView(itemId, removeLastItemView) {
                 axios
-                    .get("backend/item/" + this.itemId + "/" + this.userName, {
+                    .get("backend/item/get/" + itemId
+                        + "/" + this.userName, {
                         headers: {
                             Authorization: this.authorization
                         }
                     })
                     .then(response => {
-                        this.$store.dispatch("removeLastComponent");
-                        this.$store.dispatch("removeLastItemView");
+                        if (removeLastItemView === true) {
+                            this.$store.dispatch("removeLastComponent");
+                            this.$store.dispatch("removeLastItemView");
+                        }
                         this.$store.dispatch("addItemView", response.data);
                     });
+            },
 
+            getItem(id) {
+                this.getItemView(id, false);
+            },
+
+            showMotorcycleMenu() {
+                let specialMotorcycleCatalogueItemId = -2;
+                this.getItemView(specialMotorcycleCatalogueItemId, false);
+                this.switchComponent('MotorcycleMenu');
+            },
+
+            cancel(id) {
+                this.getItemView(this.itemId, true);
                 this.switchComponent("Item");
             },
 
             addMotorcycle() {
                 this.switchComponent('AddMotorcycle');
-            },
-
-            openWishList() {
-                this.switchComponent("WishList");
-            },
-
-            reopenWishList() {
-                this.refreshWishList(this.userName);
-                this.openWishList();
             },
 
             openUsers() {
@@ -164,29 +145,6 @@
                 this.openUsers();
             },
 
-            openReports() {
-                this.switchComponent('Report');
-            },
-
-            openBearings() {
-                this.switchComponent('Bearings');
-            },
-
-            reopenBearings() {
-                this.refreshBearings();
-                this.refreshWishList(this.userName);
-                this.openBearings();
-            },
-
-            openSeals() {
-                this.switchComponent('Seals')
-            },
-
-            reopenSeals() {
-                this.refreshSeals();
-                this.openSeals();
-            },
-
             reload() {
                 window.location.reload();
             },
@@ -194,43 +152,6 @@
             refresh() {
                 this.redirectToLogin();
                 this.showMotorcycleMenu();
-            },
-
-            showMotorcycleMenu() {
-                axios
-                    .get("/backend/item/motorcycles", {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => {
-                        this.$store.dispatch("addItemView", response.data)
-                    });
-                this.switchComponent('MotorcycleMenu');
-            },
-
-            refreshBearings() {
-                axios
-                    .get(`/backend/bearing/list`, {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => {
-                        this.$store.dispatch("setBearings", response.data)
-                    });
-            },
-
-            refreshSeals() {
-                axios
-                    .get(`/backend/seal/list`, {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => {
-                        this.$store.dispatch("setSeals", response.data)
-                    });
             },
 
             refreshUsers() {
@@ -245,44 +166,8 @@
                     });
             },
 
-            refreshWishList(userName) {
-                axios
-                    .get("backend/" + userName + "/categorized-wishlist", {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => {
-                        this.$store.dispatch("setWishList", response.data)
-                    })
-
-            },
-
-            refreshItems(motorcycleName) {
-                axios
-                    .get("backend/motorcycle/" + motorcycleName + "/items", {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => {
-                        this.$store.dispatch("setWishList", response.data)
-                    })
-
-            },
-
             setItem(id) {
                 this.getItem(this.itemId);
-            },
-
-            getItem(id) {
-                axios
-                    .get("backend/item/" + id + "/" + this.userName, {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => this.$store.dispatch("addItemView", response.data));
             },
 
             redirectToLogin() {

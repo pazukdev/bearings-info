@@ -58,6 +58,19 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         this.replacerConverter = replacerConverter;
     }
 
+    @Getter
+    private enum SpecialItemId {
+
+        MOTORCYCLE_CATALOGUE_VIEW(-2),
+        ITEMS_MANAGEMENT_VIEW(-1);
+
+        private final int itemId;
+
+        SpecialItemId(final int itemId) {
+            this.itemId = itemId;
+        }
+    }
+
     @Transactional
     @Override
     public Item findByName(String name) {
@@ -98,13 +111,22 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public ItemView createItemView(final Long itemId, final String username) {
-        final UserEntity currentUser = userService.findByName(username);
-        if (itemId == -1) {
-            return itemManagement(currentUser);
+    public ItemView createItemView(final Long itemId, final String userName) {
+        final UserEntity currentUser = userService.findByName(userName);
+
+        final ItemView itemView = new ItemView();
+        itemView.setItemId(itemId);
+        itemView.setWishListIds(UserUtil.collectWishListItemsIds(currentUser));
+
+        if (itemId == SpecialItemId.MOTORCYCLE_CATALOGUE_VIEW.getItemId()) {
+            return createMotorcycleCatalogueView(itemView);
         }
-        final Item item = getOne(itemId);
-        return buildItemView(item, currentUser);
+
+        if (itemId == SpecialItemId.ITEMS_MANAGEMENT_VIEW.getItemId()) {
+            return createItemsManagementView(itemView);
+        }
+
+        return createOrdinaryItemView(itemView, itemId);
     }
 
     @Transactional
@@ -165,10 +187,23 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         updateDescription(item, headerMatrixMap);
         updateParts(item, itemView);
         updateReplacers(item, itemView);
+        updateWishList(item, itemView, user);
 
         userActionRepository.save(UserActionUtil.create(user, "update", "item", item));
         itemRepository.save(item);
         return createItemView(itemId, user.getName());
+    }
+
+    private void updateWishList(final Item item, final ItemView itemView, final UserEntity currentUser) {
+        if (itemView.isAddToWishList()) {
+            addItemToWishList(item.getId(), currentUser);
+            itemView.setAddToWishList(false);
+        }
+    }
+
+    private void addItemToWishList(final Long itemId, final UserEntity currentUser) {
+        currentUser.getWishList().getItems().add(getOne(itemId));
+        userService.update(currentUser);
     }
 
     private void removeItems(final Set<Long> idsToRemove, final UserEntity user) {
@@ -405,19 +440,17 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         }
     }
 
-    public ItemView buildItemView(final Item item, final UserEntity currentUser) {
+    public ItemView createOrdinaryItemView(final ItemView itemView, final Long itemId) {
+        final Item item = getOne(itemId);
         final List<Item> allItems = findAll();
         final List<Item> sameCategoryItems = find(item.getCategory(), allItems);
 
-        final ItemView itemView = new ItemView();
+        itemView.setSearchEnabled(true);
         itemView.setCategory(item.getCategory());
-        itemView.setItemId(item.getId());
         itemView.setHeader(createHeader(item));
         itemView.setItems(createTableView(new ArrayList<>(item.getChildItems())));
         itemView.setPartsTable(createPartsTable(item));
         itemView.setReplacersTable(createReplacersTable(item));
-//        itemView.setAllItems(createItemSelects(allItems));
-//        itemView.setSameCategoryItems(createItemSelects(sameCategoryItems));
         itemView.getPossibleParts().addAll(createPossibleParts(allItems));
         itemView.getReplacers().addAll(createReplacerDtos(sameCategoryItems));
         itemView.setCreatorId(item.getCreatorId());
@@ -512,16 +545,13 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return replacersTable;
     }
 
-    public ItemView motorcycleCatalogue() {
+    public ItemView createMotorcycleCatalogueView(final ItemView itemView) {
         final List<Item> motorcycles = find("Motorcycle");
 
         final String tableName = "Motorcycle catalogue";
         List<String[]> list = new ArrayList<>();
         list.add(new String[]{"Models", String.valueOf(motorcycles.size())});
 
-        final ItemView itemView = new ItemView();
-        itemView.setSearchEnabled(false);
-        itemView.setSpecialItemView(true);
         itemView.setHeader(new TableDto(tableName, listToMatrix(list)));
         final int noMatterWhatNumber = 123;
         final TableDto motorcyclesTable = motorcyclesTable(motorcycles);
@@ -532,15 +562,13 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return itemView;
     }
 
-    public ItemView itemManagement(final UserEntity currentUser) {
+    public ItemView createItemsManagementView(final ItemView itemView) {
         final List<Item> allItems = findAll();
 
-        final String tableName = "Item management";
+        final String tableName = "Items management";
         List<String[]> list = new ArrayList<>();
         list.add(new String[]{"Items", String.valueOf(allItems.size())});
 
-        final ItemView itemView = new ItemView();
-        itemView.setItemsManagement(true);
         itemView.setHeader(new TableDto(tableName, listToMatrix(list)));
         final int noMatterWhatNumber = 123;
         final List<TableDto> tables = new ArrayList<>(Collections.singletonList(stubTable()));

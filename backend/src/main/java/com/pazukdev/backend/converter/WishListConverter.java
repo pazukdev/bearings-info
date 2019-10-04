@@ -2,7 +2,7 @@ package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.WishListDto;
-import com.pazukdev.backend.entity.WishListEntity;
+import com.pazukdev.backend.entity.WishList;
 import com.pazukdev.backend.entity.item.TransitiveItem;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @author Siarhei Sviarkaltsau
  */
 @Component
-public class WishListConverter implements EntityDtoConverter<WishListEntity, WishListDto> {
+public class WishListConverter implements EntityDtoConverter<WishList, WishListDto> {
 
     private final ModelMapper modelMapper;
 
@@ -20,21 +20,21 @@ public class WishListConverter implements EntityDtoConverter<WishListEntity, Wis
     }
 
     @Override
-    public WishListDto convertToDto(final WishListEntity wishList) {
+    public WishListDto convertToDto(final WishList wishList) {
         final WishListDto wishListDto = modelMapper.map(wishList, WishListDto.class);
-        for (final TransitiveItem item : wishList.getItems()) {
-            wishListDto.getItemIds().add(item.getId());
-        }
+//        for (final TransitiveItem item : wishList.getItems()) {
+//            wishListDto.getItemIds().add(item.getId());
+//        }
         return wishListDto;
     }
 
     @Override
-    public WishListEntity convertToEntity(final WishListDto wishListDto) {
-        final WishListEntity wishList = modelMapper.map(wishListDto, WishListEntity.class);
+    public WishList convertToEntity(final WishListDto wishListDto) {
+        final WishList wishList = modelMapper.map(wishListDto, WishList.class);
         for (final Long itemId : wishListDto.getItemIds()) {
             final TransitiveItem item = new TransitiveItem();
             item.setId(itemId);
-            wishList.getItems().add(item);
+//            wishList.getItems().add(item);
         }
         return wishList;
     }

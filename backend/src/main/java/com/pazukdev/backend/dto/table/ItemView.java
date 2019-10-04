@@ -20,10 +20,8 @@ import java.util.Set;
 public class ItemView extends AbstractDto {
 
     private boolean searchEnabled;
-    private boolean ordinaryItem;
-    private boolean specialItemView;
-    private boolean itemsManagement;
     private boolean newItem;
+    private boolean addToWishList;
     private String category;
     private TableDto header;
     private TableViewDto items;
@@ -37,5 +35,6 @@ public class ItemView extends AbstractDto {
     private Set<String> categories = new HashSet<>();
     private Set<Long> idsToRemove = new HashSet<>();
     private Long creatorId;
+    private Set<Long> wishListIds = new HashSet<>();
 
 }

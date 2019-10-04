@@ -8,7 +8,7 @@ import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.entity.UserEntity;
-import com.pazukdev.backend.entity.WishListEntity;
+import com.pazukdev.backend.entity.WishList;
 import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.util.ItemUtil;
@@ -111,33 +111,35 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     }
 
     public List<TransitiveItem> getAllItems(final String userName) {
-        final List<TransitiveItem> items = new ArrayList<>(getWishList(userName).getItems());
-        ItemUtil.sort(items);
-        return items;
+//        final List<TransitiveItem> items = new ArrayList<>(getWishList(userName).getItems());
+//        ItemUtil.sort(items);
+//        return items;
+        return null;
     }
 
-    private WishListEntity getWishList(final String userName) {
+    private WishList getWishList(final String userName) {
         return findByName(userName).getWishList();
     }
 
     public Boolean addItem(final String userName, final TransitiveItemDto transitiveItemDto) {
-        final WishListEntity wishList = getWishList(userName);
-        final TransitiveItem item = transitiveItemService.create(transitiveItemDto);
-        wishList.getItems().add(item);
-        wishListService.update(wishList);
-        return true;
+//        final WishList wishList = getWishList(userName);
+//        final TransitiveItem item = transitiveItemService.create(transitiveItemDto);
+//        wishList.getItems().add(item);
+//        wishListService.update(wishList);
+//        return true;
+        return false;
     }
 
     public Boolean removeItem(final String userName, final Long itemId) {
-        final WishListEntity wishList = getWishList(userName);
-        for (final TransitiveItem item : wishList.getItems()) {
-            if (item.getId().longValue() == itemId) {
-                wishList.getItems().remove(item);
-                wishListService.update(wishList);
-                transitiveItemService.delete(itemId);
-                return true;
-            }
-        }
+//        final WishList wishList = getWishList(userName);
+//        for (final TransitiveItem item : wishList.getItems()) {
+//            if (item.getId().longValue() == itemId) {
+//                wishList.getItems().remove(item);
+//                wishListService.update(wishList);
+//                transitiveItemService.delete(itemId);
+//                return true;
+//            }
+//        }
         return false;
     }
 
@@ -151,7 +153,7 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
             }
             dto.setPassword(passwordEncoder.encode(dto.getPassword()));
             if (create) {
-                final WishListEntity wishList = wishListService.create(new WishListDto());
+                final WishList wishList = wishListService.create(new WishListDto());
                 dto.setWishListId(wishList.getId());
                 create(dto);
             } else {
