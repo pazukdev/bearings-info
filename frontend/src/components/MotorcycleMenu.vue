@@ -1,11 +1,10 @@
 <template>
     <div>
+
         <Item @select-item="selectItem"/>
+
         <table style="text-align: center">
             <tbody>
-            <tr>
-                <td>{{"Additional"}}</td>
-            </tr>
             <tr>
                 <td>
                     <button class="content"
@@ -22,11 +21,19 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex';
     import Item from "./Item";
 
     export default {
         components: {
             Item
+        },
+
+        computed: {
+            ...mapState({
+                userName: state => state.dictionary.userName,
+                itemView: state => state.dictionary.itemViews[state.dictionary.itemViews.length - 1]
+            })
         },
 
         methods: {
@@ -35,10 +42,15 @@
                 this.$emit('select-item', id)
             },
 
+            openSpecialView(specialItemId) {
+                this.$store.dispatch("addItemId", specialItemId);
+                this.selectItem(specialItemId);
+            },
+
             openItemsManagement() {
-                let itemsManagementSpecialId = -1;
-                this.$store.dispatch("addItemId", itemsManagementSpecialId);
-                this.selectItem(itemsManagementSpecialId);
+                let itemsManagementId = -1;
+                this.openSpecialView(itemsManagementId);
+
             }
 
         }

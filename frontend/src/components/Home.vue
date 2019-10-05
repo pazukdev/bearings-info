@@ -16,15 +16,13 @@
 
         <table class="centred-table" v-show="isLastComponent('MotorcycleMenu')">
             <tbody>
-            <tr>
-                <td colspan="1">
-                    Additional
-                </td>
-            </tr>
             <tr v-if="admin">
                 <td>
-                    <button class="content" type="button" style="width: 160px" v-on:click="openUsers()">
-                        Users
+                    <button class="content"
+                            type="button"
+                            style="width: 174px"
+                            v-on:click="openUsers()">
+                        {{"Users"}}
                     </button>
                 </td>
             </tr>

@@ -1,6 +1,7 @@
 <template>
     <div>
-        {{itemView.itemId}}<br><br>
+<!--        {{itemView.idsToRemove}}<br><br>-->
+<!--        {{newItemView.itemId}}<br><br>-->
 <!--        {{itemView.viewType}}<br><br>-->
 <!--        {{userName}}<br><br>-->
 <!--        {{"isEditMode: " + isEditMode}}<br>-->
@@ -23,40 +24,55 @@
 <!--        {{newItemCategory}}<br><br>-->
 <!--        {{newItemName}}<br><br>-->
 <!--        {{newItemNameMessage}}<br><br>-->
-        <table style="border-spacing: 0px; text-align: right">
+
+        <table id="header-menu">
             <tbody>
             <tr>
-                <td style="text-align: left">
+                <td style="width: 33%">
                     <button type="button" v-on:click="openWishList()">
                         {{"Wishlist: " + itemView.wishListIds.length + " items"}}
                     </button>
                 </td>
-                <td>
-                    {{userName}}
+                <td></td>
+                <td style="width: 33%; text-align: right">
+                    <p>{{userName}}</p>
+                    <p v-if="admin">{{"You are admin"}}</p>
                 </td>
             </tr>
-            <tr v-if="admin">
+            <tr><td colspan="3"><hr></td></tr>
+            <tr>
+                <td>
+                    <button v-if="!isInWishList(itemView.itemId) && isOrdinaryItemView() && !isEditMode"
+                            type="button"
+                            style="width: 100%"
+                            @click="addThisItemToWishList()">
+                        {{"Add to Wish List"}}
+                    </button>
+                    <p v-if="isInWishList(itemView.itemId) && isOrdinaryItemView()">
+                        {{"Item in Wish List"}}
+                    </p>
+                </td>
                 <td></td>
                 <td>
-                    {{"You are admin"}}
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <table>
-            <tbody>
-            <tr style="text-align: center">
-                <td style="width: 120px"></td>
-                <td>
-                    <b>{{itemView.header.name}}</b>
-                </td>
-                <td style="width: 120px">
                     <button v-if="itemView.searchEnabled"
                             style="width: 100%"
                             type="button"
                             @click="stubMethod()">
                         {{"Google search"}}
                     </button>
+                </td>
+            </tr>
+            <tr v-if="isOrdinaryItemView()">
+                <td colspan="3"><hr></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table id="item-creation-menu">
+            <tbody>
+            <tr style="text-align: center">
+                <td colspan="3">
+                    <b>{{itemView.header.name}}</b>
                 </td>
             </tr>
             <tr>
@@ -109,11 +125,12 @@
             </tr>
             </tbody>
         </table>
-        <table style="width: 440px">
+
+        <table id="item-description">
             <tbody>
             <tr style="text-align: left"
                 v-for="row in itemView.header.matrix">
-                <td>
+                <td style="width: 50%">
                     <p>
                         {{row[0]}}
                     </p>
@@ -169,7 +186,7 @@
                         {{"Cancel"}}
                     </button>
                 </td>
-                <td style="text-align: right">
+                <td v-if="!isMotorcycleCatalogueView()" style="text-align: right">
                     <button v-if="!isEditMode"
                             type="button"
                             style="width: 194px"
@@ -185,74 +202,25 @@
                 </td>
                 <td></td>
             </tr>
-            <tr>
-                <td></td>
-                <td style="text-align: right">
-                    <button v-if="!isInWishList(itemView.itemId) && isOrdinaryItemView() && !isEditMode"
-                            type="button"
-                            style="width: 194px"
-                            @click="addThisItemToWishList()">
-                        {{"Add to Wish List"}}
-                    </button>
-                    <p v-if="isInWishList(itemView.itemId) && isOrdinaryItemView()">
-                        {{"Item in Wish List"}}
-                    </p>
-                </td>
-                <td></td>
+            <tr style="height: 26px">
+                <td colspan="3"><hr></td>
             </tr>
-            <tr style="height: 26px"><td colspan="3"></td></tr>
+            </tbody>
+        </table>
+
+        <table id="parts-table"
+        style="text-align: center">
+            <tbody>
             <tr v-if="isPartsTitleVisible()">
-                <td style="text-align: center" colspan="3">
+                <td colspan="3">
                     {{itemView.partsTable.name}}
                 </td>
             </tr>
-            <tr v-for="item in itemView.items.tables"
-                v-if="isMotorcycleCatalogueView()">
-                <td colspan="3">
-                    <table class="get-all-table">
-                        <tbody>
-                        <tr>
-                            <td style="width: 120px">
-                                <b>{{item.name}}</b>
-                            </td>
-                            <td></td>
-                            <td style="width: 80px"></td>
-                        </tr>
-                        <tr v-for="row in item.matrix">
-                            <td>
-                                {{row[0]}}
-                            </td>
-                            <td>
-                                <button type="button"
-                                        style="width: 100%"
-                                        @click="setItem(row[3])">
-                                    {{row[1]}}
-                                </button>
-                            </td>
-                            <td>
-                                {{row[2]}}
-                            </td>
-                            <td v-if="isEditMode">
-                                <button v-model="newItemView"
-                                        type="button"
-                                        class="round-button"
-                                        @click="removePartFromList(row)">
-                                    {{"-"}}
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <p></p>
-                        </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            <tr v-if="!isMotorcycleCatalogueView()" v-for="table in itemView.partsTable.tables">
+            <tr v-for="table in itemView.partsTable.tables">
                 <td v-if="table.parts.length > 0" colspan="3">
                     <table class="get-all-table">
                         <tbody>
-                        <tr v-if="arrayHaveActiveItems(table.parts)">
+                        <tr v-if="arrayHaveActiveItems(table.parts) && !isMotorcycleCatalogueView()">
                             <td style="width: 120px">
                                 <b>{{table.name}}</b>
                             </td>
@@ -340,15 +308,24 @@
                     </table>
                 </td>
             </tr>
+            <tr v-if="isReplacersTitleVisible()"><td colspan="3"><hr></td></tr>
+            </tbody>
+        </table>
+
+        <table id="replacers-table" style="text-align: center">
+            <tbody>
             <tr v-if="isReplacersTitleVisible()">
-                <td style="text-align: center" colspan="3">
+                <td colspan="3">
                     {{itemView.replacersTable.name}}
                 </td>
             </tr>
+            <tr v-if="isReplacersTitleVisible()">
+                <td colspan="3" style="height: 20px"></td>
+            </tr>
             <tr v-if="notStub(itemView.replacersTable.name) && statusActive(replacer)"
-                style="text-align: left; width: 440px"
+                style="text-align: left"
                 v-for="replacer in itemView.replacersTable.replacers">
-                <td>
+                <td style="width: 50%">
                     <p v-if="!isEditMode">{{replacer.comment}}</p>
                     <input v-if="isEditMode" v-model="replacer.comment" type="text"/>
                 </td>
@@ -394,6 +371,7 @@
                     </button>
                 </td>
             </tr>
+            <tr><td colspan="3"><hr></td></tr>
             </tbody>
         </table>
     </div>
@@ -467,10 +445,6 @@
         },
 
         methods: {
-
-            openWishList() {
-
-            },
 
             isInWishList(itemId) {
                 for (let i=0; i < this.itemView.wishListIds.length; i++) {
@@ -569,7 +543,7 @@
 
             removePartFromList(part, array) {
                 this.removeFromArray(part, array);
-                if (this.isItemsManagementView()) {
+                if (this.isItemsManagementView() || this.isWishListView()) {
                     this.itemView.idsToRemove.push(part.itemId);
                 }
             },
@@ -640,6 +614,11 @@
                 this.$store.dispatch("addItemId", id);
                 this.$emit('select-item', id);
                 this.switchEditModeOff();
+            },
+
+            openWishList() {
+                let wishListId = -3;
+                this.setItem(wishListId);
             },
 
             edit() {
@@ -716,13 +695,15 @@
             },
 
             save() {
-                let id;
-                if (this.isItemsManagementView()) {
-                    id = -1;
-                } else {
-                    id = this.newItemView.itemId;
-                }
-                this.update(id);
+                // let id;
+                // if (this.isItemsManagementView()) {
+                //     id = -1;
+                // } else if (false) {
+                //
+                // } else {
+                //     id = this.newItemView.itemId;
+                // }
+                this.update(this.newItemView.itemId);
             },
 
             update(id) {
@@ -771,7 +752,7 @@
             },
 
             isOrdinaryItemView() {
-                return !this.isItemsManagementView() && !this.isMotorcycleCatalogueView();
+                return this.itemView.itemId > 0;
             },
 
             isItemsManagementView() {
@@ -780,6 +761,10 @@
 
             isMotorcycleCatalogueView() {
                 return this.itemView.itemId === -2;
+            },
+
+            isWishListView() {
+                return this.itemView.itemId === -3;
             },
 
             notStub(name) {

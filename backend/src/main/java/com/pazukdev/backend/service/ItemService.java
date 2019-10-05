@@ -8,6 +8,7 @@ import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.*;
 import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.WishList;
 import com.pazukdev.backend.entity.item.*;
 import com.pazukdev.backend.repository.ChildItemRepository;
 import com.pazukdev.backend.repository.ItemRepository;
@@ -61,6 +62,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     @Getter
     private enum SpecialItemId {
 
+        WISH_LIST_VIEW(-3),
         MOTORCYCLE_CATALOGUE_VIEW(-2),
         ITEMS_MANAGEMENT_VIEW(-1);
 
@@ -118,6 +120,10 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         itemView.setItemId(itemId);
         itemView.setWishListIds(UserUtil.collectWishListItemsIds(currentUser));
 
+        if (itemId == SpecialItemId.WISH_LIST_VIEW.getItemId()) {
+            return createWishListView(itemView, currentUser.getWishList());
+        }
+
         if (itemId == SpecialItemId.MOTORCYCLE_CATALOGUE_VIEW.getItemId()) {
             return createMotorcycleCatalogueView(itemView);
         }
@@ -166,16 +172,36 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     @Transactional
     public ItemView update(final Long itemId, final String userName, final ItemView itemView) {
         final UserEntity user = userService.findByName(userName);
-        final boolean removeItem = itemId.equals(-1L);
+        final boolean removeItem = itemId == SpecialItemId.ITEMS_MANAGEMENT_VIEW.getItemId();
+        final boolean removeItemFromWishList = itemId == SpecialItemId.WISH_LIST_VIEW.getItemId();
+
         if (removeItem) {
             return removeItem(itemView, user);
-        } else {
-            return updateItem(itemId, itemView, user);
         }
+        if (removeItemFromWishList) {
+            return removeItemFromWishList(itemView, user);
+        }
+        return updateItem(itemId, itemView, user);
     }
 
     private ItemView removeItem(final ItemView itemView, final UserEntity user) {
         removeItems(itemView.getIdsToRemove(), user);
+        itemView.getIdsToRemove().clear();
+        return itemView;
+    }
+
+    private ItemView removeItemFromWishList(final ItemView itemView, final UserEntity user) {
+        final String actionType = "remove from wishlist";
+        final String itemType = "wishlist item";
+
+        for (final Long itemId : itemView.getIdsToRemove()) {
+            final Item item = getOne(itemId);
+            user.getWishList().getItems().remove(item);
+
+            final UserAction userAction = UserActionUtil.create(user, actionType, itemType, item);
+            userActionRepository.save(userAction);
+        }
+        userService.update(user);
         itemView.getIdsToRemove().clear();
         return itemView;
     }
@@ -545,21 +571,50 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return replacersTable;
     }
 
-    public ItemView createMotorcycleCatalogueView(final ItemView itemView) {
-        final List<Item> motorcycles = find("Motorcycle");
+    public ItemView createWishListView(final ItemView itemView, final WishList wishList) {
+        final List<Item> items = new ArrayList<>(wishList.getItems());
 
-        final String tableName = "Motorcycle catalogue";
+        final String tableName = "Your wish list";
         List<String[]> list = new ArrayList<>();
-        list.add(new String[]{"Models", String.valueOf(motorcycles.size())});
+        list.add(new String[]{"Items", String.valueOf(items.size())});
 
         itemView.setHeader(new TableDto(tableName, listToMatrix(list)));
         final int noMatterWhatNumber = 123;
-        final TableDto motorcyclesTable = motorcyclesTable(motorcycles);
-        final List<TableDto> tables = new ArrayList<>(Collections.singletonList(motorcyclesTable));
+        final List<TableDto> tables = new ArrayList<>(Collections.singletonList(stubTable()));
         itemView.setItems(new TableViewDto(noMatterWhatNumber, tables));
-        itemView.setPartsTable(stubPartsTable());
+        itemView.setPartsTable(specialItemsTable(items));
         itemView.setReplacersTable(stubReplacersTable());
+        itemView.setCategories(findAllCategories());
         return itemView;
+    }
+
+    public ItemView createPartsView(final ItemView itemView,
+                                    final Integer size,
+                                    final String tableName,
+                                    final String parameter,
+                                    final PartsTable table) {
+
+        List<String[]> list = new ArrayList<>();
+        list.add(new String[]{parameter, String.valueOf(size)});
+
+        itemView.setHeader(new TableDto(tableName, listToMatrix(list)));
+        final int noMatterWhatNumber = 123;
+        final List<TableDto> tables = new ArrayList<>(Collections.singletonList(stubTable()));
+        itemView.setItems(new TableViewDto(noMatterWhatNumber, tables));
+        itemView.setPartsTable(table);
+        itemView.setReplacersTable(stubReplacersTable());
+        itemView.setCategories(findAllCategories());
+        return itemView;
+    }
+
+    public ItemView createMotorcycleCatalogueView(final ItemView itemView) {
+        final List<Item> motorcycles = find("Motorcycle");
+        return createPartsView(
+                itemView,
+                motorcycles.size(),
+                "Motorcycle catalogue",
+                "Models",
+                motorcyclesTable(motorcycles));
     }
 
     public ItemView createItemsManagementView(final ItemView itemView) {
@@ -573,41 +628,40 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final int noMatterWhatNumber = 123;
         final List<TableDto> tables = new ArrayList<>(Collections.singletonList(stubTable()));
         itemView.setItems(new TableViewDto(noMatterWhatNumber, tables));
-        itemView.setPartsTable(itemsManagementTable());
+        itemView.setPartsTable(specialItemsTable(findAll()));
         itemView.setReplacersTable(stubReplacersTable());
         itemView.setCategories(findAllCategories());
         return itemView;
     }
 
-    public TableDto motorcyclesTable(final List<Item> motorcycles) {
-        final String tableName = "Motorcycles";
-        final List<String[]> rows = new ArrayList<>();
-        for (final Item motorcycle : motorcycles) {
-            final String[] row = {
-                    ItemUtil.getValueFromDescription(motorcycle.getDescription(), "Production"),
-                    motorcycle.getName(),
-                    ItemUtil.getValueFromDescription(motorcycle.getDescription(), "Manufacturer"),
-                    motorcycle.getId().toString(),
-                    motorcycle.getCreatorId().toString()
-            };
-            rows.add(row);
-        }
-        final String[][] rowArray = rows.toArray(new String[0][]);
-        return new TableDto(tableName, rowArray);
-    }
-
-    public PartsTable itemsManagementTable() {
+    public PartsTable motorcyclesTable(final List<Item> motorcycles) {
         final List<NestedItemDto> dtos = new ArrayList<>();
-        for (final Item item : findAll()) {
+        for (final Item item : motorcycles) {
             final String buttonText = ItemUtil.createButtonText(item);
 
             final NestedItemDto dto = new NestedItemDto();
-            //dto.setId(part.getId());
-            //dto.setName(part.getName());
             dto.setItemId(item.getId());
             dto.setItemName(item.getName());
             dto.setItemCategory(item.getCategory());
-            //dto.setQuantity(part.getQuantity());
+            dto.setButtonText(buttonText);
+            dto.setLocation(ItemUtil.getValueFromDescription(item.getDescription(), "Production"));
+            dto.setStatus(item.getStatus());
+            dto.setCreatorName(getCreatorName(item));
+
+            dtos.add(dto);
+        }
+        return PartsTable.create(dtos, findAllCategories());
+    }
+
+    public PartsTable specialItemsTable(final List<Item> items) {
+        final List<NestedItemDto> dtos = new ArrayList<>();
+        for (final Item item : items) {
+            final String buttonText = ItemUtil.createButtonText(item);
+
+            final NestedItemDto dto = new NestedItemDto();
+            dto.setItemId(item.getId());
+            dto.setItemName(item.getName());
+            dto.setItemCategory(item.getCategory());
             dto.setButtonText(buttonText);
             dto.setLocation(item.getCategory());
             dto.setStatus(item.getStatus());

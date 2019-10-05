@@ -52,7 +52,7 @@ public class UserActionUtil {
 
         userAction.setItemId(item.getId().toString());
         userAction.setItemCategory(item.getCategory());
-        userAction.setItemType("item");
+        userAction.setItemType(itemType);
 
         return userAction;
     }
