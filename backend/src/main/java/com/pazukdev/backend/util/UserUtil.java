@@ -2,6 +2,7 @@ package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.item.Item;
+import com.pazukdev.backend.service.UserService;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +15,10 @@ public class UserUtil {
             ids.add(item.getId());
         }
         return ids;
+    }
+
+    public static String getCreatorName(final Item item, final UserService userService) {
+        return userService.getOne(item.getCreatorId()).getName();
     }
 
 }

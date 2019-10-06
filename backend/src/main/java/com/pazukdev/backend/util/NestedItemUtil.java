@@ -1,8 +1,10 @@
 package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.dto.item.NestedItemDto;
+import com.pazukdev.backend.dto.item.NestedItemDtoFactory;
 import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.entity.item.Item;
+import com.pazukdev.backend.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -13,11 +15,7 @@ import java.util.stream.Collectors;
 
 public class NestedItemUtil {
 
-    public static List<NestedItemDto> prepareNestedItemDtosToConverting(final Item parentItem,
-                                                                        final List<NestedItemDto> dtos) {
-//        for (final NestedItemDto dto : dtos) {
-//            dto.setName(createName(parentItem.getName(), dto.getName()));
-//        }
+    public static List<NestedItemDto> prepareNestedItemDtosToConverting(final List<NestedItemDto> dtos) {
         correctFieldsValues(dtos);
 
         final List<NestedItemDto> hasId = new ArrayList<>();
@@ -39,7 +37,6 @@ public class NestedItemUtil {
         final Long checkingNestedItemId = checkingNestedItem.getId();
         final Long checkingNestedItemItemId = checkingNestedItem.getItemId();
         final String checkingNestedItemName = checkingNestedItem.getName();
-        //final String checkingNestedItemComment = checkingNestedItem.getComment();
 
         final Set<NestedItemDto> equalNestedItems = new HashSet<>();
         for (final NestedItemDto nestedItem : nestedItems) {
@@ -51,7 +48,6 @@ public class NestedItemUtil {
 
             final Long nestedItemItemId = nestedItem.getItemId();
             final String nestedItemName = nestedItem.getName();
-            final String nestedItemComment = nestedItem.getComment();
             if (nestedItemItemId.equals(checkingNestedItemItemId)
                     && nestedItemName.equals(checkingNestedItemName)) {
                 equalNestedItems.add(nestedItem);
@@ -142,6 +138,26 @@ public class NestedItemUtil {
             allItems.addAll(childTable.getParts());
         }
         return new ArrayList<>(allItems);
+    }
+
+    public static List<NestedItemDto> createPossibleParts(final List<Item> items, final UserService userService) {
+        final List<NestedItemDto> childItemDtos = new ArrayList<>();
+        for (final Item item : items) {
+            final String category = item.getCategory();
+            if (!CategoryUtil.isPartCategory(category)) {
+                continue;
+            }
+            childItemDtos.add(NestedItemDtoFactory.createBasicNestedItemDto(item, userService));
+        }
+        return childItemDtos;
+    }
+
+    public static List<NestedItemDto> createReplacerDtos(final List<Item> items, final UserService userService) {
+        final List<NestedItemDto> replacerDtos = new ArrayList<>();
+        for (final Item item : items) {
+            replacerDtos.add(NestedItemDtoFactory.createBasicNestedItemDto(item, userService));
+        }
+        return replacerDtos;
     }
 
 }
