@@ -1,7 +1,10 @@
-package com.pazukdev.backend.dto.table;
+package com.pazukdev.backend.dto.item;
 
 import com.pazukdev.backend.dto.AbstractDto;
-import com.pazukdev.backend.dto.item.NestedItemDto;
+import com.pazukdev.backend.dto.table.PartsTable;
+import com.pazukdev.backend.dto.table.ReplacersTable;
+import com.pazukdev.backend.dto.table.TableDto;
+import com.pazukdev.backend.dto.table.TableViewDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

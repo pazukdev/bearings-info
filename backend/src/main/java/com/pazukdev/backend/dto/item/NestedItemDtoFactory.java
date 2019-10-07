@@ -2,6 +2,7 @@ package com.pazukdev.backend.dto.item;
 
 import com.pazukdev.backend.entity.item.ChildItem;
 import com.pazukdev.backend.entity.item.Item;
+import com.pazukdev.backend.entity.item.Replacer;
 import com.pazukdev.backend.service.UserService;
 import com.pazukdev.backend.util.ItemUtil;
 import com.pazukdev.backend.util.UserUtil;
@@ -11,22 +12,41 @@ import com.pazukdev.backend.util.UserUtil;
  */
 public class NestedItemDtoFactory {
 
-    public static NestedItemDto createBasicSpecialNestedItemDto(final Item item, final UserService userService) {
-        final NestedItemDto basicNestedItemDto = createBasicNestedItemDto(item, userService);
-        basicNestedItemDto.setLocation(item.getCategory());
-        return basicNestedItemDto;
+    public static NestedItemDto createMotorcycle(final Item motorcycle, final UserService userService) {
+        final String production = ItemUtil.getValueFromDescription(motorcycle.getDescription(), "Production");
+
+        final NestedItemDto motorcycleDto = createBasicNestedItemDto(motorcycle, userService);
+        motorcycleDto.setLocation(production);
+        return motorcycleDto;
     }
 
-    public static NestedItemDto createPart(final ChildItem part, final UserService userService) {
-        final Item partItem = part.getItem();
+    public static NestedItemDto createChildItem(final ChildItem childItem, final UserService userService) {
+        final Item item = childItem.getItem();
 
-        final NestedItemDto basicNestedItemDto = createBasicNestedItemDto(partItem, userService);
-        basicNestedItemDto.setId(part.getId());
-        basicNestedItemDto.setName(part.getName());
-        basicNestedItemDto.setQuantity(part.getQuantity());
-        basicNestedItemDto.setLocation(part.getLocation());
-        basicNestedItemDto.setStatus(part.getStatus());
-        return basicNestedItemDto;
+        final NestedItemDto childItemDto = createBasicNestedItemDto(item, userService);
+        childItemDto.setId(childItem.getId());
+        childItemDto.setName(childItem.getName());
+        childItemDto.setQuantity(childItem.getQuantity());
+        childItemDto.setLocation(childItem.getLocation());
+        childItemDto.setStatus(childItem.getStatus());
+        return childItemDto;
+    }
+
+    public static NestedItemDto createReplacer(final Replacer replacer, final UserService userService) {
+        final Item item = replacer.getItem();
+
+        final NestedItemDto replacerDto = createBasicNestedItemDto(item, userService);
+        replacerDto.setId(replacer.getId());
+        replacerDto.setName(replacer.getName());
+        replacerDto.setQuantity("-");
+        replacerDto.setLocation("-");
+        return replacerDto;
+    }
+
+    public static NestedItemDto createBasicSpecialNestedItemDto(final Item item, final UserService userService) {
+        final NestedItemDto basicSpecialNestedItemDto = createBasicNestedItemDto(item, userService);
+        basicSpecialNestedItemDto.setLocation(item.getCategory());
+        return basicSpecialNestedItemDto;
     }
 
     public static NestedItemDto createBasicNestedItemDto(final Item item, final UserService userService) {

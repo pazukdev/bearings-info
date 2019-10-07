@@ -1,6 +1,6 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dto.table.ItemView;
+import com.pazukdev.backend.dto.item.ItemView;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.ItemService;

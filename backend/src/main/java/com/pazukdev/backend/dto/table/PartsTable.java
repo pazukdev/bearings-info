@@ -21,9 +21,11 @@ public class PartsTable extends AbstractDto {
     private List<NestedItemDto> parts = new ArrayList<>();
     private List<PartsTable> tables = new ArrayList<>();
 
-    public static PartsTable create(final List<NestedItemDto> nestedItems, final Set<String> partCategories) {
+    public static PartsTable create(final List<NestedItemDto> nestedItems,
+                                    final String tableName,
+                                    final Set<String> partCategories) {
         final PartsTable partsTable = new PartsTable();
-        partsTable.setName("Parts");
+        partsTable.setName(tableName);
         for (final String category : partCategories) {
             final PartsTable categoryTable = new PartsTable();
             categoryTable.setName(category);

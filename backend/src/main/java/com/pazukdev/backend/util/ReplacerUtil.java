@@ -1,14 +1,17 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.dto.item.ItemView;
+import com.pazukdev.backend.dto.item.NestedItemDto;
+import com.pazukdev.backend.dto.table.ReplacersTable;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.entity.item.Replacer;
 import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.TransitiveItemService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+
+import static com.pazukdev.backend.util.NestedItemUtil.prepareNestedItemDtosToConverting;
 
 public class ReplacerUtil {
 
@@ -44,6 +47,28 @@ public class ReplacerUtil {
         }
 
         return replacers;
+    }
+
+    public static Set<Replacer> createReplacersFromItemView(final ItemView itemView,
+                                                            final ItemService itemService) {
+        final ReplacersTable replacersTable = itemView.getReplacersTable();
+        final List<NestedItemDto> dtos = prepareNestedItemDtosToConverting(replacersTable.getReplacers());
+
+        final Set<Replacer> replacersFromItemView = new HashSet<>();
+        for (final NestedItemDto dto : dtos) {
+            final Item replacerItem = itemService.getOne(dto.getItemId());
+
+            final Replacer replacer = new Replacer();
+            replacer.setId(dto.getId());
+            replacer.setName(dto.getName());
+            replacer.setItem(replacerItem);
+            replacer.setComment(dto.getComment());
+            replacer.setStatus(dto.getStatus());
+
+            replacersFromItemView.add(replacer);
+        }
+
+        return replacersFromItemView;
     }
 
 }

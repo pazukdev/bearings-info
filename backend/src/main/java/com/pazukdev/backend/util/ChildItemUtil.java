@@ -1,14 +1,16 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.dto.item.ItemView;
+import com.pazukdev.backend.dto.item.NestedItemDto;
 import com.pazukdev.backend.entity.item.ChildItem;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.TransitiveItemService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.pazukdev.backend.util.NestedItemUtil.prepareNestedItemDtosToConverting;
 
 public class ChildItemUtil {
 
@@ -41,11 +43,34 @@ public class ChildItemUtil {
         return childItems;
     }
 
-    public static ChildItem createChildItem(final TransitiveItem parent,
-                                            final String value,
-                                            final String category,
-                                            final ItemService itemService,
-                                            final TransitiveItemService transitiveItemService) {
+    public static Set<ChildItem> createPartsFromItemView(final ItemView itemView,
+                                                         final ItemService itemService) {
+        final List<NestedItemDto> allItems = NestedItemUtil.collectAllItems(itemView.getPartsTable());
+        final List<NestedItemDto> preparedItems = prepareNestedItemDtosToConverting(allItems);
+
+        final Set<ChildItem> partsFromItemView = new HashSet<>();
+        for (final NestedItemDto nestedItem : preparedItems) {
+            final Item partItem = itemService.getOne(nestedItem.getItemId());
+
+            final ChildItem part = new ChildItem();
+            part.setId(nestedItem.getId());
+            part.setName(nestedItem.getName());
+            part.setItem(partItem);
+            part.setLocation(nestedItem.getLocation());
+            part.setQuantity(nestedItem.getQuantity());
+            part.setStatus(nestedItem.getStatus());
+
+            partsFromItemView.add(part);
+        }
+
+        return partsFromItemView;
+    }
+
+    private static ChildItem createChildItem(final TransitiveItem parent,
+                                             final String value,
+                                             final String category,
+                                             final ItemService itemService,
+                                             final TransitiveItemService transitiveItemService) {
         String name;
         String location = "";
         String quantity;

@@ -1,10 +1,12 @@
 package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.dto.item.ItemQuantity;
+import com.pazukdev.backend.dto.item.ItemView;
 import com.pazukdev.backend.dto.item.ReplacerData;
 import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.entity.item.ChildItem;
 import com.pazukdev.backend.entity.item.Item;
+import com.pazukdev.backend.entity.item.Replacer;
 import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.TransitiveItemService;
@@ -225,6 +227,116 @@ public class ItemUtil {
             }
         }
         return filteredItems;
+    }
+
+    public static void updateName(final Item item,
+                                  final Map<String, String> headerMatrixMap,
+                                  final ItemService itemService) {
+        final String oldName = item.getName();
+        final String newName = headerMatrixMap.get("Name");
+        if (newName != null && !newName.equals(oldName)) {
+            item.setName(newName);
+            applyToAllItemDescriptions(item.getCategory(), oldName, newName, itemService);
+        }
+        headerMatrixMap.remove("Name");
+    }
+
+    public static void updateDescription(final Item item,
+                                         final Map<String, String> headerMatrixMap,
+                                         final ItemService itemService) {
+        final String newDescription = ItemUtil.toDescription(headerMatrixMap);
+        applyNewDescriptionToCategory(item.getCategory(), headerMatrixMap, itemService);
+        item.setDescription(newDescription);
+    }
+
+    public static void updateParts(final Item item, final ItemView itemView, final ItemService itemService) {
+        final Set<ChildItem> oldParts = new HashSet<>(item.getChildItems());
+        final Set<ChildItem> newParts
+                = new HashSet<>(ChildItemUtil.createPartsFromItemView(itemView, itemService));
+        item.getChildItems().clear();
+        item.getChildItems().addAll(newParts);
+
+        final List<ChildItem> toSave = new ArrayList<>();
+        for (final ChildItem oldPart : oldParts) {
+            for (final ChildItem newPart : newParts) {
+                if (newPart.getName().equals(oldPart.getName())) {
+                    toSave.add(oldPart);
+                }
+            }
+        }
+        oldParts.removeAll(toSave);
+        for (final ChildItem orphan : oldParts) {
+            itemService.getChildItemRepository().deleteById(orphan.getId());
+        }
+    }
+
+    public static void updateReplacers(final Item item,
+                                       final ItemView itemView,
+                                       final ItemService itemService) {
+        final Set<Replacer> oldReplacers = new HashSet<>(item.getReplacers());
+        final Set<Replacer> newReplacers =
+                new HashSet<>(ReplacerUtil.createReplacersFromItemView(itemView, itemService));
+        item.getReplacers().clear();
+        item.getReplacers().addAll(newReplacers);
+
+        final List<Replacer> toSave = new ArrayList<>();
+        for (final Replacer oldReplacer : oldReplacers) {
+            for (final Replacer newReplacer : newReplacers) {
+                if (newReplacer.getName().equals(oldReplacer.getName())) {
+                    toSave.add(oldReplacer);
+                }
+            }
+        }
+        oldReplacers.removeAll(toSave);
+        for (final Replacer orphan : oldReplacers) {
+            itemService.getReplacerRepository().deleteById(orphan.getId());
+        }
+    }
+
+    private static void applyToAllItemDescriptions(final String updatingItemCategory,
+                                                   final String oldValue,
+                                                   final String newValue,
+                                                   final ItemService itemService) {
+        final List<Item> items = itemService.findAll();
+        final Set<String> categories = itemService.findCategories(items);
+        for (final Item item : items) {
+            final Map<String, String> descriptionMap = ItemUtil.toMap(item.getDescription());
+            for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
+                final String value = entry.getValue().split(" \\(")[0];
+                if (value.equals(oldValue)) {
+                    if (categories.contains(entry.getKey())) {
+                        if (entry.getKey().equals(updatingItemCategory)) {
+                            entry.setValue(entry.getValue().replace(oldValue, newValue));
+                        }
+                    } else {
+                        entry.setValue(entry.getValue().replace(oldValue, newValue));
+                    }
+                }
+            }
+            final String newDescription = ItemUtil.toDescription(descriptionMap);
+            item.setDescription(newDescription);
+            itemService.update(item);
+        }
+    }
+
+    private static void applyNewDescriptionToCategory(final String category,
+                                                      final Map<String, String> newDescriptionMap,
+                                                      final ItemService itemService) {
+        final List<Item> allItemsOfCategory = itemService.find(category);
+        for (final Item item : allItemsOfCategory) {
+            final Map<String, String> oldItemDescriptionMap = ItemUtil.toMap(item.getDescription());
+            final Map<String, String> newItemDescriptionMap = new HashMap<>(newDescriptionMap);
+            for (final Map.Entry<String, String> entry : newItemDescriptionMap.entrySet()) {
+                final String newParameter = entry.getKey();
+                final String value = oldItemDescriptionMap.get(newParameter);
+                if (value == null) {
+                    entry.setValue("-");
+                } else {
+                    entry.setValue(value);
+                }
+            }
+            item.setDescription(ItemUtil.toDescription(newItemDescriptionMap));
+        }
     }
 
     public static Item copy(final Item original) {
