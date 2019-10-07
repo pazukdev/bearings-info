@@ -38,6 +38,7 @@ public class NestedItemDtoFactory {
         final NestedItemDto replacerDto = createBasicNestedItemDto(item, userService);
         replacerDto.setId(replacer.getId());
         replacerDto.setName(replacer.getName());
+        replacerDto.setComment(replacer.getComment());
         replacerDto.setQuantity("-");
         replacerDto.setLocation("-");
         return replacerDto;

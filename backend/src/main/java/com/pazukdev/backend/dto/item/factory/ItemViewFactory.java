@@ -182,8 +182,8 @@ public class ItemViewFactory {
         final Map<String, String> headerMatrixMap = createHeaderMatrixMap(itemView);
         ItemUtil.updateName(item, headerMatrixMap, itemService);
         ItemUtil.updateDescription(item, headerMatrixMap, itemService);
-        ItemUtil.updateParts(item, itemView, itemService);
-        ItemUtil.updateReplacers(item, itemView, itemService);
+        ItemUtil.updateChildItems(item, itemView, itemService, user);
+        ItemUtil.updateReplacers(item, itemView, itemService, user);
         updateWishList(item, itemView, user);
 
         itemService.getUserActionRepository().save(UserActionUtil.create(user, "update", "item", item));
@@ -217,7 +217,7 @@ public class ItemViewFactory {
 
     private ItemView removeItemFromWishList(final ItemView itemView, final UserEntity user) {
         final String actionType = "remove from wishlist";
-        final String itemType = "wishlist item";
+        final String itemType = "item";
 
         for (final Long itemId : itemView.getIdsToRemove()) {
             final Item item = itemService.getOne(itemId);

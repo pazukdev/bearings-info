@@ -13,11 +13,14 @@ public class UserActionUtil {
     public static UserAction create(final UserEntity user,
                                     final String actionType,
                                     final Item item,
-                                    final ChildItem part) {
-        final String itemType = "part";
+                                    final ChildItem childItem) {
+        final String itemType = "child item";
+        final Long partId = childItem.getId();
 
         final UserAction userAction = create(user, actionType, itemType, item);
-        userAction.setParentItemId(part.getId().toString());
+        userAction.setItemId(partId != null ? partId.toString() : "-");
+        userAction.setName(createName(actionType, itemType, childItem.getName()));
+        userAction.setParentItemId(item.getId().toString());
         userAction.setItemType(itemType);
 
         return userAction;
@@ -28,9 +31,12 @@ public class UserActionUtil {
                                     final Item item,
                                     final Replacer replacer) {
         final String itemType = "replacer";
+        final Long replacerId = replacer.getId();
 
         final UserAction userAction = create(user, actionType, itemType, item);
-        userAction.setParentItemId(replacer.getId().toString());
+        userAction.setItemId(replacerId != null ? replacerId.toString() : "-");
+        userAction.setName(createName(actionType, itemType, replacer.getName()));
+        userAction.setParentItemId(item.getId().toString());
         userAction.setItemType(itemType);
 
         return userAction;

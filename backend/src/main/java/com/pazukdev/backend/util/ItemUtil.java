@@ -4,10 +4,8 @@ import com.pazukdev.backend.dto.item.ItemQuantity;
 import com.pazukdev.backend.dto.item.ItemView;
 import com.pazukdev.backend.dto.item.ReplacerData;
 import com.pazukdev.backend.dto.item.TransitiveItemDescriptionMap;
-import com.pazukdev.backend.entity.item.ChildItem;
-import com.pazukdev.backend.entity.item.Item;
-import com.pazukdev.backend.entity.item.Replacer;
-import com.pazukdev.backend.entity.item.TransitiveItem;
+import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.item.*;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.TransitiveItemService;
 import org.apache.commons.lang3.StringUtils;
@@ -249,47 +247,90 @@ public class ItemUtil {
         item.setDescription(newDescription);
     }
 
-    public static void updateParts(final Item item, final ItemView itemView, final ItemService itemService) {
-        final Set<ChildItem> oldParts = new HashSet<>(item.getChildItems());
-        final Set<ChildItem> newParts
+    public static void updateChildItems(final Item item,
+                                        final ItemView itemView,
+                                        final ItemService itemService,
+                                        final UserEntity user) {
+        final Set<ChildItem> oldChildItems = new HashSet<>(item.getChildItems());
+        final Set<ChildItem> newChildItems
                 = new HashSet<>(ChildItemUtil.createPartsFromItemView(itemView, itemService));
         item.getChildItems().clear();
-        item.getChildItems().addAll(newParts);
+        item.getChildItems().addAll(newChildItems);
+
+        for (final ChildItem childItem : newChildItems) {
+            if (childItem.getId() == null) {
+                final String actionType = "create";
+                final UserAction userAction = UserActionUtil.create(user, actionType, item, childItem);
+                itemService.getUserActionRepository().save(userAction);
+            }
+        }
 
         final List<ChildItem> toSave = new ArrayList<>();
-        for (final ChildItem oldPart : oldParts) {
-            for (final ChildItem newPart : newParts) {
-                if (newPart.getName().equals(oldPart.getName())) {
-                    toSave.add(oldPart);
+        for (final ChildItem oldChildItem : oldChildItems) {
+            for (final ChildItem newChildItem : newChildItems) {
+                if (newChildItem.getName().equals(oldChildItem.getName())) {
+                    toSave.add(oldChildItem);
+                    if (!newChildItem.getLocation().equals(oldChildItem.getLocation())
+                            || !newChildItem.getQuantity().equals(oldChildItem.getQuantity())) {
+                        final String actionType = "update";
+                        final UserAction userAction = UserActionUtil.create(user, actionType, item, oldChildItem);
+                        itemService.getUserActionRepository().save(userAction);
+                    }
                 }
             }
         }
-        oldParts.removeAll(toSave);
-        for (final ChildItem orphan : oldParts) {
+
+        oldChildItems.removeAll(toSave);
+
+        for (final ChildItem orphan : oldChildItems) {
             itemService.getChildItemRepository().deleteById(orphan.getId());
+
+            final String actionType = "delete";
+            final UserAction userAction = UserActionUtil.create(user, actionType, item, orphan);
+            itemService.getUserActionRepository().save(userAction);
         }
     }
 
     public static void updateReplacers(final Item item,
                                        final ItemView itemView,
-                                       final ItemService itemService) {
+                                       final ItemService itemService,
+                                       final UserEntity user) {
         final Set<Replacer> oldReplacers = new HashSet<>(item.getReplacers());
         final Set<Replacer> newReplacers =
                 new HashSet<>(ReplacerUtil.createReplacersFromItemView(itemView, itemService));
         item.getReplacers().clear();
         item.getReplacers().addAll(newReplacers);
 
+        for (final Replacer replacer : newReplacers) {
+            if (replacer.getId() == null) {
+                final String actionType = "create";
+                final UserAction userAction = UserActionUtil.create(user, actionType, item, replacer);
+                itemService.getUserActionRepository().save(userAction);
+            }
+        }
+
         final List<Replacer> toSave = new ArrayList<>();
         for (final Replacer oldReplacer : oldReplacers) {
             for (final Replacer newReplacer : newReplacers) {
                 if (newReplacer.getName().equals(oldReplacer.getName())) {
                     toSave.add(oldReplacer);
+                    if (!newReplacer.getComment().equals(oldReplacer.getComment())) {
+                        final String actionType = "update";
+                        final UserAction userAction = UserActionUtil.create(user, actionType, item, oldReplacer);
+                        itemService.getUserActionRepository().save(userAction);
+                    }
                 }
             }
         }
+
         oldReplacers.removeAll(toSave);
+
         for (final Replacer orphan : oldReplacers) {
             itemService.getReplacerRepository().deleteById(orphan.getId());
+
+            final String actionType = "delete";
+            final UserAction userAction = UserActionUtil.create(user, actionType, item, orphan);
+            itemService.getUserActionRepository().save(userAction);
         }
     }
 
