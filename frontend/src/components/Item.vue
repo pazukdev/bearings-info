@@ -595,7 +595,7 @@
                 } else {
                     this.clearItemCreationMessages();
                     axios
-                        .post("backend/item/create/"
+                        .post("backend/item/create-view/"
                             + this.newItemCategory
                             + "/" + this.newItemName
                             + "/" + this.userName, {
@@ -695,20 +695,12 @@
             },
 
             save() {
-                // let id;
-                // if (this.isItemsManagementView()) {
-                //     id = -1;
-                // } else if (false) {
-                //
-                // } else {
-                //     id = this.newItemView.itemId;
-                // }
                 this.update(this.newItemView.itemId);
             },
 
             update(id) {
                 axios
-                    .put("/backend/item/update/" + id + "/" + this.userName, this.newItemView, {
+                    .put("/backend/item/update-view/" + id + "/" + this.userName, this.newItemView, {
                         headers: {
                             Authorization: this.authorization
                         }

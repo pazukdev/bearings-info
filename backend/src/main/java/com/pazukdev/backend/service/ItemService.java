@@ -109,7 +109,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public ItemView update(final Long itemId, final String userName, final ItemView itemView) {
+    public ItemView updateItemView(final Long itemId, final String userName, final ItemView itemView) {
         final ItemViewFactory itemViewFactory = new ItemViewFactory(this);
         return itemViewFactory.update(itemId, userName, itemView);
     }
