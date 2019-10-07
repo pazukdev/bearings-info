@@ -29,7 +29,9 @@
             <tbody>
             <tr>
                 <td style="width: 33%">
-                    <button type="button" v-on:click="openWishList()">
+                    <button type="button"
+                            v-if="!isWishListView()"
+                            v-on:click="openWishList()">
                         {{"Wishlist: " + itemView.wishListIds.length + " items"}}
                     </button>
                 </td>
@@ -136,9 +138,9 @@
                     </p>
                 </td>
                 <td>
-                    <input v-if="isEditMode && !isItemsManagementView()" v-model="row[1]" type="text"/>
+                    <input v-if="isEditMode && isOrdinaryItemView()" v-model="row[1]" type="text"/>
                     <p v-if="!isShowInfoButton(row[3])
-                    && (!isEditMode || (isEditMode && isItemsManagementView()))">
+                    && (!isEditMode || (isEditMode && !isOrdinaryItemView()))">
                         {{row[1]}}
                     </p>
                     <button v-if="isShowInfoButton(row[3])" type="button"
@@ -148,7 +150,7 @@
                     </button>
                 </td>
                 <td>
-                    <button v-if="isEditMode && !isItemsManagementView() && row[0] !== 'Name'"
+                    <button v-if="isEditMode && isOrdinaryItemView() && row[0] !== 'Name'"
                             v-model="newItemView"
                             type="button"
                             class="round-button"
@@ -162,7 +164,7 @@
                     {{newHeaderRowMessage}}
                 </td>
             </tr>
-            <tr style="text-align: left" v-if="isEditMode && !isItemsManagementView()">
+            <tr style="text-align: left" v-if="isEditMode && isOrdinaryItemView()">
                 <td>
                     <input v-model="newHeaderRow.parameter" type="text"/>
                 </td>
@@ -229,11 +231,11 @@
                         </tr>
                         <tr v-for="part in table.parts" v-if="statusActive(part)">
                             <td style="width: 120px">
-                                <p v-if="!isEditMode || (isEditMode && isItemsManagementView())">
+                                <p v-if="!isEditMode || (isEditMode && !isOrdinaryItemView())">
                                     {{part.location}}
                                 </p>
                                 <input style="width: 120px"
-                                       v-if="isEditMode && !isItemsManagementView()"
+                                       v-if="isEditMode && isOrdinaryItemView()"
                                        v-model="part.location" type="text"/>
                             </td>
                             <td>
@@ -247,7 +249,7 @@
                                 <p v-if="!isEditMode
                                 && part.quantity > 0">{{part.quantity}}</p>
                                 <input style="width: 80px"
-                                       v-if="isEditMode && !isItemsManagementView()"
+                                       v-if="isEditMode && isOrdinaryItemView()"
                                        v-model="part.quantity" type="text"/>
                             </td>
                             <td>
@@ -268,7 +270,7 @@
                     </table>
                 </td>
             </tr>
-            <tr v-if="notStub(itemView.partsTable.name)">
+            <tr v-if="notStub(itemView.partsTable.name) && isOrdinaryItemView()">
                 <td colspan="3">
                     <table>
                         <tbody>
@@ -583,7 +585,7 @@
             },
 
             isShowInfoButton(message) {
-                return message === 'show button' && !this.isEditMode && !this.isItemsManagementView();
+                return message === 'show button' && !this.isEditMode && this.isOrdinaryItemView();
             },
 
             create() {
