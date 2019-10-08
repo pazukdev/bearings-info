@@ -1,7 +1,7 @@
 <template>
     <div>
-<!--        {{itemView.idsToRemove}}<br><br>-->
-        {{itemView.ratedItems}}<br><br>
+<!--        {{itemView.replacersTable}}<br><br>-->
+<!--        {{itemView.ratedItems}}<br><br>-->
 <!--        {{itemView.viewType}}<br><br>-->
 <!--        {{userName}}<br><br>-->
 <!--        {{"isEditMode: " + isEditMode}}<br>-->
@@ -319,36 +319,32 @@
         <table id="replacers-table" style="text-align: center">
             <tbody>
             <tr v-if="isReplacersTitleVisible()">
-                <td colspan="4">
+                <td colspan="6">
                     {{itemView.replacersTable.name}}
                 </td>
             </tr>
             <tr v-if="isReplacersTitleVisible()">
-                <td colspan="4" style="height: 20px"></td>
+                <td colspan="5" style="height: 20px"></td>
             </tr>
             <tr v-if="notStub(itemView.replacersTable.name) && statusActive(replacer)"
                 style="text-align: left"
                 v-for="replacer in itemView.replacersTable.replacers">
-                <td style="width: 50%">
+                <td style="width: 160px">
                     <p v-if="!isEditMode">{{replacer.comment}}</p>
-                    <input v-if="isEditMode" v-model="replacer.comment" type="text"/>
+                    <input style="width: 160px"
+                           v-if="isEditMode"
+                           v-model="replacer.comment"
+                           type="text"/>
                 </td>
-                <td>
+                <td style="text-align: center">
                     <button type="button"
-                            style="width: 100%"
+                            style="width: 160px"
                             @click="setItem(replacer.itemId)">
                         {{replacer.buttonText}}
                     </button>
                 </td>
-                <td>{{replacer.rating}}</td>
+                <td style="width: 30px; text-align: center">{{replacer.rating}}</td>
                 <td>
-                    <button v-if="isEditMode" v-model="newItemView"
-                            type="button"
-                            class="round-button"
-                            style="background: red"
-                            @click="removeReplacerFromList(replacer)">
-                        {{"-"}}
-                    </button>
                     <button v-if="!isEditMode && !isRated(replacer)" v-model="newItemView"
                             type="button"
                             class="round-button"
@@ -356,7 +352,7 @@
                         {{"&#x2191;"}}
                     </button>
                 </td>
-                <td>
+                <td style="text-align: right">
                     <button v-if="!isEditMode && !isRated(replacer)" v-model="newItemView"
                             type="button"
                             class="round-button"
@@ -369,19 +365,29 @@
                             @click="rateAction('cancel', replacer.itemId)">
                         {{"x"}}
                     </button>
+                    <button v-if="isEditMode" v-model="newItemView"
+                            type="button"
+                            class="round-button"
+                            style="background: red"
+                            @click="removeReplacerFromList(replacer)">
+                        {{"-"}}
+                    </button>
                 </td>
             </tr>
             <tr style="text-align: center; color: red">
-                <td colspan="3">
+                <td colspan="5">
                     {{newReplacerMessage}}
                 </td>
             </tr>
             <tr v-if="notStub(itemView.replacersTable.name) && isEditMode" style="text-align: left">
-                <td>
-                    <input v-model="newReplacer.comment" type="text"/>
+                <td style="width: 160px">
+                    <input style="width: 160px" v-model="newReplacer.comment" type="text"/>
                 </td>
-                <td>
-                    <select class="content" v-model="newReplacer" @change="replacerSelectOnChange()">
+                <td style="text-align: center">
+                    <select class="content"
+                            style="width: 160px"
+                            v-model="newReplacer"
+                            @change="replacerSelectOnChange()">
                         <option v-for="replacer in itemView.replacers"
                                 v-if="selectOptionVisible(replacer)"
                                 v-bind:value="replacer">
@@ -389,7 +395,7 @@
                         </option>
                     </select>
                 </td>
-                <td>
+                <td style="text-align: right" colspan="3">
                     <button type="button"
                             class="round-button"
                             @click="addReplacer()">
@@ -397,7 +403,7 @@
                     </button>
                 </td>
             </tr>
-            <tr><td colspan="3"><hr></td></tr>
+            <tr><td colspan="5"><hr></td></tr>
             </tbody>
         </table>
     </div>

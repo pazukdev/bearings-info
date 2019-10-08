@@ -260,7 +260,7 @@ public class ItemUtil {
         for (final ChildItem childItem : newChildItems) {
             if (childItem.getId() == null) {
                 final String actionType = "create";
-                final UserAction userAction = UserActionUtil.create(user, actionType, item, childItem);
+                final UserAction userAction = UserActionUtil.createChildItemAction(user, actionType, item, childItem);
                 itemService.getUserActionRepository().save(userAction);
             }
         }
@@ -273,7 +273,7 @@ public class ItemUtil {
                     if (!newChildItem.getLocation().equals(oldChildItem.getLocation())
                             || !newChildItem.getQuantity().equals(oldChildItem.getQuantity())) {
                         final String actionType = "update";
-                        final UserAction userAction = UserActionUtil.create(user, actionType, item, oldChildItem);
+                        final UserAction userAction = UserActionUtil.createChildItemAction(user, actionType, item, oldChildItem);
                         itemService.getUserActionRepository().save(userAction);
                     }
                 }
@@ -286,7 +286,7 @@ public class ItemUtil {
             itemService.getChildItemRepository().deleteById(orphan.getId());
 
             final String actionType = "delete";
-            final UserAction userAction = UserActionUtil.create(user, actionType, item, orphan);
+            final UserAction userAction = UserActionUtil.createChildItemAction(user, actionType, item, orphan);
             itemService.getUserActionRepository().save(userAction);
         }
     }
@@ -304,7 +304,7 @@ public class ItemUtil {
         for (final Replacer replacer : newReplacers) {
             if (replacer.getId() == null) {
                 final String actionType = "create";
-                final UserAction userAction = UserActionUtil.create(user, actionType, item, replacer);
+                final UserAction userAction = UserActionUtil.createReplacerAction(user, actionType, item, replacer);
                 itemService.getUserActionRepository().save(userAction);
             }
         }
@@ -316,7 +316,7 @@ public class ItemUtil {
                     toSave.add(oldReplacer);
                     if (!newReplacer.getComment().equals(oldReplacer.getComment())) {
                         final String actionType = "update";
-                        final UserAction userAction = UserActionUtil.create(user, actionType, item, oldReplacer);
+                        final UserAction userAction = UserActionUtil.createReplacerAction(user, actionType, item, oldReplacer);
                         itemService.getUserActionRepository().save(userAction);
                     }
                 }
@@ -329,7 +329,7 @@ public class ItemUtil {
             itemService.getReplacerRepository().deleteById(orphan.getId());
 
             final String actionType = "delete";
-            final UserAction userAction = UserActionUtil.create(user, actionType, item, orphan);
+            final UserAction userAction = UserActionUtil.createReplacerAction(user, actionType, item, orphan);
             itemService.getUserActionRepository().save(userAction);
         }
     }

@@ -10,10 +10,17 @@ import java.time.LocalDateTime;
 
 public class UserActionUtil {
 
-    public static UserAction create(final UserEntity user,
-                                    final String actionType,
-                                    final Item item,
-                                    final ChildItem childItem) {
+    public static UserAction createRateAction(final Item itemToRate, final String rateAction, final UserEntity user) {
+        final String actionType = "rate " + rateAction;
+        final String itemType = "replacer";
+
+        return create(user, actionType, itemType, itemToRate);
+    }
+
+    public static UserAction createChildItemAction(final UserEntity user,
+                                                   final String actionType,
+                                                   final Item item,
+                                                   final ChildItem childItem) {
         final String itemType = "child item";
         final Long partId = childItem.getId();
 
@@ -26,10 +33,10 @@ public class UserActionUtil {
         return userAction;
     }
 
-    public static UserAction create(final UserEntity user,
-                                    final String actionType,
-                                    final Item item,
-                                    final Replacer replacer) {
+    public static UserAction createReplacerAction(final UserEntity user,
+                                                  final String actionType,
+                                                  final Item item,
+                                                  final Replacer replacer) {
         final String itemType = "replacer";
         final Long replacerId = replacer.getId();
 
@@ -63,7 +70,7 @@ public class UserActionUtil {
         return userAction;
     }
 
-    private static String createName(final String actionType, final String itemType, final String itemName) {
+    public static String createName(final String actionType, final String itemType, final String itemName) {
         return actionType + " " + itemType + " " + itemName;
     }
 

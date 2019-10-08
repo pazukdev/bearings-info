@@ -7,10 +7,7 @@ import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class NestedItemUtil {
@@ -157,6 +154,7 @@ public class NestedItemUtil {
         for (final Item item : items) {
             replacerDtos.add(NestedItemDtoFactory.createBasicNestedItemDto(item, userService));
         }
+        replacerDtos.sort(Comparator.comparing(NestedItemDto::getRating));
         return replacerDtos;
     }
 

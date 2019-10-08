@@ -25,15 +25,13 @@ public class ItemView extends AbstractDto {
     private boolean searchEnabled;
     private boolean newItem;
     private boolean addToWishList;
-    private Rate rate;
+    private RateReplacer rate;
     private String category;
     private TableDto header;
     private TableViewDto items;
     private PartsTable partsTable;
     private ReplacersTable replacersTable;
     private Long itemId;
-//    private List<ItemSelect> allItems = new ArrayList<>();
-//    private List<ItemSelect> sameCategoryItems = new ArrayList<>();
     private List<NestedItemDto> possibleParts = new ArrayList<>();
     private List<NestedItemDto> replacers = new ArrayList<>();
     private Set<String> categories = new HashSet<>();

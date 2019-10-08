@@ -105,7 +105,7 @@ public class ItemViewFactory {
         final Item item = itemService.getOne(itemId);
         final List<Item> allItems = itemService.findAll();
         final List<Item> sameCategoryItems = itemService.find(item.getCategory(), allItems);
-        final String tableName = "Motorcycle catalogue";
+        final String tableName = "Parts";
 
         itemView.setSearchEnabled(true);
         itemView.setCategory(item.getCategory());
@@ -260,7 +260,7 @@ public class ItemViewFactory {
                     replacer.setStatus("deleted");
                     itemService.getReplacerRepository().save(replacer);
 
-                    final UserAction userAction = UserActionUtil.create(user, actionType, nestedItem, replacer);
+                    final UserAction userAction = UserActionUtil.createReplacerAction(user, actionType, nestedItem, replacer);
                     itemService.getUserActionRepository().save(userAction);
                 }
             }
@@ -271,7 +271,7 @@ public class ItemViewFactory {
                     part.setStatus("deleted");
                     itemService.getChildItemRepository().save(part);
 
-                    final UserAction userAction = UserActionUtil.create(user, actionType, nestedItem, part);
+                    final UserAction userAction = UserActionUtil.createChildItemAction(user, actionType, nestedItem, part);
                     itemService.getUserActionRepository().save(userAction);
                 }
             }

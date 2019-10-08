@@ -1,10 +1,11 @@
 package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.dto.item.ItemView;
-import com.pazukdev.backend.dto.item.Rate;
+import com.pazukdev.backend.dto.item.RateReplacer;
 import com.pazukdev.backend.entity.LikeList;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.item.Item;
+import com.pazukdev.backend.entity.item.UserAction;
 import com.pazukdev.backend.service.ItemService;
 
 public class RateUtil {
@@ -12,7 +13,7 @@ public class RateUtil {
     public static void processRateAction(final ItemView itemView,
                                          final UserEntity currentUser,
                                          final ItemService itemService) {
-        final Rate rate = itemView.getRate();
+        final RateReplacer rate = itemView.getRate();
         final Long itemId = rate.getItemId();
         final Item itemToRate = itemService.getOne(rate.getItemId());
         final String action = rate.getAction();
@@ -43,6 +44,9 @@ public class RateUtil {
         }
 
         itemService.getUserService().update(currentUser);
+
+        final UserAction rateAction = UserActionUtil.createRateAction(itemToRate, action, currentUser);
+        itemService.getUserActionRepository().save(rateAction);
     }
 
 }

@@ -66,6 +66,7 @@ public class TableUtil {
             final NestedItemDto replacerDto = createReplacer(replacer, userService);
             replacersTable.getReplacers().add(replacerDto);
         }
+        replacersTable.getReplacers().sort(Comparator.comparing(NestedItemDto::getRating));
         return replacersTable;
     }
 

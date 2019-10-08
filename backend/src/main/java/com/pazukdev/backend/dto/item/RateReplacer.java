@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author Siarhei Sviarkaltsau
  */
 @Data
-public class Rate implements Serializable {
+public class RateReplacer implements Serializable {
 
     private final static long serialVersionUID = 12343L;
 
