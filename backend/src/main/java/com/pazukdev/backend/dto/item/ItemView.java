@@ -25,6 +25,7 @@ public class ItemView extends AbstractDto {
     private boolean searchEnabled;
     private boolean newItem;
     private boolean addToWishList;
+    private Rate rate;
     private String category;
     private TableDto header;
     private TableViewDto items;
@@ -39,5 +40,6 @@ public class ItemView extends AbstractDto {
     private Set<Long> idsToRemove = new HashSet<>();
     private Long creatorId;
     private Set<Long> wishListIds = new HashSet<>();
+    private Set<Long> ratedItems = new HashSet<>();
 
 }

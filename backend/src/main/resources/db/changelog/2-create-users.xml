@@ -20,6 +20,22 @@
         </insert>
     </changeSet>
 
+    <changeSet id="insert_admin_likelist" author="sviarkaltsau">
+        <insert tableName="likelist">
+            <column name="id" value="1"/>
+            <column name="name" value="admin-likelist"/>
+            <column name="status" value="active"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_user_likelist" author="sviarkaltsau">
+        <insert tableName="likelist">
+            <column name="id" value="2"/>
+            <column name="name" value="user-likelist"/>
+            <column name="status" value="active"/>
+        </insert>
+    </changeSet>
+
     <changeSet id="insert_admin" author="sviarkaltsau">
         <insert tableName="user">
             <column name="id" value="1"/>
@@ -27,6 +43,7 @@
             <column name="password" value="$2a$10$LJDm6BOaekdsan3q3j15Q.ceRCSHHb1J8kAPqQasWZSdKoJtDAnyO"/>
             <column name="role" value="ADMIN"/>
             <column name="wishlist_id" value="1"/>
+            <column name="likelist_id" value="1"/>
         </insert>
     </changeSet>
 
@@ -37,6 +54,7 @@
             <column name="password" value="$2a$10$50E.w9jZJAIjGlsb4OU0N.wSvxrfWe.VEmiAV7.filaKuuKN.f992"/>
             <column name="role" value="USER"/>
             <column name="wishlist_id" value="2"/>
+            <column name="likelist_id" value="2"/>
         </insert>
     </changeSet>
 

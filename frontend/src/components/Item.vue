@@ -1,7 +1,7 @@
 <template>
     <div>
 <!--        {{itemView.idsToRemove}}<br><br>-->
-<!--        {{newItemView.itemId}}<br><br>-->
+        {{itemView.ratedItems}}<br><br>
 <!--        {{itemView.viewType}}<br><br>-->
 <!--        {{userName}}<br><br>-->
 <!--        {{"isEditMode: " + isEditMode}}<br>-->
@@ -154,6 +154,7 @@
                             v-model="newItemView"
                             type="button"
                             class="round-button"
+                            style="background: red"
                             @click="removeRowFromHeader(row)">
                         {{"-"}}
                     </button>
@@ -258,6 +259,7 @@
                                         v-if="isItemDeleteButtonVisibleToCurrentUser(part)"
                                         type="button"
                                         class="round-button"
+                                        style="background: red"
                                         @click="removePartFromList(part, table.parts)">
                                     {{"-"}}
                                 </button>
@@ -317,12 +319,12 @@
         <table id="replacers-table" style="text-align: center">
             <tbody>
             <tr v-if="isReplacersTitleVisible()">
-                <td colspan="3">
+                <td colspan="4">
                     {{itemView.replacersTable.name}}
                 </td>
             </tr>
             <tr v-if="isReplacersTitleVisible()">
-                <td colspan="3" style="height: 20px"></td>
+                <td colspan="4" style="height: 20px"></td>
             </tr>
             <tr v-if="notStub(itemView.replacersTable.name) && statusActive(replacer)"
                 style="text-align: left"
@@ -338,12 +340,34 @@
                         {{replacer.buttonText}}
                     </button>
                 </td>
-                <td v-if="isEditMode">
-                    <button v-model="newItemView"
+                <td>{{replacer.rating}}</td>
+                <td>
+                    <button v-if="isEditMode" v-model="newItemView"
                             type="button"
                             class="round-button"
+                            style="background: red"
                             @click="removeReplacerFromList(replacer)">
                         {{"-"}}
+                    </button>
+                    <button v-if="!isEditMode && !isRated(replacer)" v-model="newItemView"
+                            type="button"
+                            class="round-button"
+                            @click="rateAction('up', replacer.itemId)">
+                        {{"&#x2191;"}}
+                    </button>
+                </td>
+                <td>
+                    <button v-if="!isEditMode && !isRated(replacer)" v-model="newItemView"
+                            type="button"
+                            class="round-button"
+                            @click="rateAction('down', replacer.itemId)">
+                        {{" &#x2193;"}}
+                    </button>
+                    <button v-if="!isEditMode && isRated(replacer)" v-model="newItemView"
+                            type="button"
+                            class="round-button"
+                            @click="rateAction('cancel', replacer.itemId)">
+                        {{"x"}}
                     </button>
                 </td>
             </tr>
@@ -414,7 +438,8 @@
                     location: "",
                     quantity: "",
                     status: "",
-                    creatorName: ""
+                    creatorName: "",
+                    rating: ""
                 },
                 newReplacer: {
                     id: "",
@@ -428,7 +453,8 @@
                     location: "",
                     quantity: "",
                     status: "",
-                    creatorName: ""
+                    creatorName: "",
+                    rating: ""
                 }
             }
         },
@@ -448,18 +474,18 @@
 
         methods: {
 
-            isInWishList(itemId) {
-                for (let i=0; i < this.itemView.wishListIds.length; i++) {
-                    if (this.itemView.wishListIds[i] === itemId) {
-                        return true;
-                    }
-                }
-                return false;
-            },
-
             addThisItemToWishList() {
                 this.newItemView = this.itemView;
                 this.itemView.addToWishList = true;
+                this.save();
+            },
+
+            rateAction(action, itemId) {
+                this.itemView.rate = {
+                    action: action,
+                    itemId: itemId
+                };
+                this.newItemView = this.itemView;
                 this.save();
             },
 
@@ -533,6 +559,28 @@
             replacerAlreadyInList(id) {
                 for (let i=0; i < this.newItemView.replacersTable.replacers.length; i++) {
                     if (this.newItemView.replacersTable.replacers[i].itemId === id) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+
+            isInWishList(itemId) {
+                for (let i=0; i < this.itemView.wishListIds.length; i++) {
+                    if (this.itemView.wishListIds[i] === itemId) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+
+            isRated(replacer) {
+                return this.isInArray(replacer.itemId, this.itemView.ratedItems);
+            },
+
+            isInArray(id, array) {
+                for (let i=0; i < array.length; i++) {
+                    if (array[i] === id) {
                         return true;
                     }
                 }
@@ -692,7 +740,8 @@
                     location: "",
                     quantity: "",
                     status: "",
-                    creatorName: ""
+                    creatorName: "",
+                    rating: ""
                 }
             },
 

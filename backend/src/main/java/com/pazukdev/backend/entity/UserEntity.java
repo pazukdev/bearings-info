@@ -25,5 +25,8 @@ public class UserEntity extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "wishlist_id")
     private WishList wishList;
+    @ManyToOne
+    @JoinColumn(name = "likelist_id")
+    private LikeList likeList;
 
 }

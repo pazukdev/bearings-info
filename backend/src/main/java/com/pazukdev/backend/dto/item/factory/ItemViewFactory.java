@@ -63,7 +63,7 @@ public class ItemViewFactory {
             return createItemsManagementView(itemView);
         }
 
-        return createOrdinaryItemView(itemView, itemId);
+        return createOrdinaryItemView(itemView, itemId, currentUser);
     }
 
     public ItemView createNewItemView(final String category, final String name, final String userName) {
@@ -85,9 +85,9 @@ public class ItemViewFactory {
         return itemView;
     }
 
-    public ItemView update(final Long itemId,
-                           final String userName,
-                           final ItemView itemView) {
+    public ItemView updateItemView(final Long itemId,
+                                   final String userName,
+                                   final ItemView itemView) {
         final UserEntity user = itemService.getUserService().findByName(userName);
         final boolean removeItem = itemId == SpecialItemId.ITEMS_MANAGEMENT_VIEW.getItemId();
         final boolean removeItemFromWishList = itemId == SpecialItemId.WISH_LIST_VIEW.getItemId();
@@ -101,7 +101,7 @@ public class ItemViewFactory {
         return updateItem(itemId, itemView, user);
     }
 
-    private ItemView createOrdinaryItemView(final ItemView itemView, final Long itemId) {
+    private ItemView createOrdinaryItemView(final ItemView itemView, final Long itemId, final UserEntity currentUser) {
         final Item item = itemService.getOne(itemId);
         final List<Item> allItems = itemService.findAll();
         final List<Item> sameCategoryItems = itemService.find(item.getCategory(), allItems);
@@ -116,6 +116,7 @@ public class ItemViewFactory {
         itemView.getPossibleParts().addAll(NestedItemUtil.createPossibleParts(allItems, itemService.getUserService()));
         itemView.getReplacers().addAll(NestedItemUtil.createReplacerDtos(sameCategoryItems, itemService.getUserService()));
         itemView.setCreatorId(item.getCreatorId());
+        itemView.getRatedItems().addAll(UserUtil.collectRatedItemIds(currentUser));
         return itemView;
     }
 
@@ -177,30 +178,24 @@ public class ItemViewFactory {
         return itemView;
     }
 
-    private ItemView updateItem(final Long itemId, final ItemView itemView, final UserEntity user) {
+    private ItemView updateItem(final Long itemId, final ItemView itemView, final UserEntity currentUser) {
         final Item item = itemService.getOne(itemId);
+
+        if (itemView.getRate() != null) {
+            RateUtil.processRateAction(itemView, currentUser, itemService);
+            itemView.setRate(null);
+        }
+
         final Map<String, String> headerMatrixMap = createHeaderMatrixMap(itemView);
         ItemUtil.updateName(item, headerMatrixMap, itemService);
         ItemUtil.updateDescription(item, headerMatrixMap, itemService);
-        ItemUtil.updateChildItems(item, itemView, itemService, user);
-        ItemUtil.updateReplacers(item, itemView, itemService, user);
-        updateWishList(item, itemView, user);
+        ItemUtil.updateChildItems(item, itemView, itemService, currentUser);
+        ItemUtil.updateReplacers(item, itemView, itemService, currentUser);
+        ItemUtil.updateWishList(item, itemView, currentUser, itemService);
 
-        itemService.getUserActionRepository().save(UserActionUtil.create(user, "update", "item", item));
+        itemService.getUserActionRepository().save(UserActionUtil.create(currentUser, "update", "item", item));
         itemService.update(item);
-        return createItemView(itemId, user.getName());
-    }
-
-    private void updateWishList(final Item item, final ItemView itemView, final UserEntity currentUser) {
-        if (itemView.isAddToWishList()) {
-            addItemToWishList(item.getId(), currentUser);
-            itemView.setAddToWishList(false);
-        }
-    }
-
-    private void addItemToWishList(final Long itemId, final UserEntity currentUser) {
-        currentUser.getWishList().getItems().add(itemService.getOne(itemId));
-        itemService.getUserService().update(currentUser);
+        return createItemView(itemId, currentUser.getName());
     }
 
     private String createEmptyDescription(final String category) {

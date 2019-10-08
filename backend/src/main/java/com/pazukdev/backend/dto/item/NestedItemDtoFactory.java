@@ -62,6 +62,7 @@ public class NestedItemDtoFactory {
         nestedItemDto.setItemId(itemId);
         nestedItemDto.setItemName(itemName);
         nestedItemDto.setItemCategory(item.getCategory());
+        nestedItemDto.setRating(item.getRating());
         nestedItemDto.setButtonText(buttonText);
         nestedItemDto.setSelectText(selectText);
         nestedItemDto.setStatus(item.getStatus());

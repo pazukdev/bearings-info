@@ -1,5 +1,6 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.entity.LikeList;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.service.UserService;
@@ -15,6 +16,14 @@ public class UserUtil {
             ids.add(item.getId());
         }
         return ids;
+    }
+
+    public static Set<Long> collectRatedItemIds(final UserEntity user) {
+        final LikeList likeList = user.getLikeList();
+        final Set<Long> ratedItemIds = new HashSet<>();
+        ratedItemIds.addAll(ItemUtil.collectIds(likeList.getLikedItems()));
+        ratedItemIds.addAll(ItemUtil.collectIds(likeList.getDislikedItems()));
+        return ratedItemIds;
     }
 
     public static String getCreatorName(final Item item, final UserService userService) {

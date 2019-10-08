@@ -20,6 +20,7 @@ import java.util.Set;
 public class Item extends AbstractEntity {
 
     private String category;
+    private Integer rating = 0;
     @Column(name = "creator_id")
     private Long creatorId;
     @Column(name = "user_action_date")
