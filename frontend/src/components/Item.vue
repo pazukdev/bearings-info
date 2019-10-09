@@ -37,8 +37,9 @@
                 </td>
                 <td></td>
                 <td style="width: 33%; text-align: right">
-                    <p>{{userName}}</p>
-                    <p v-if="admin">{{"You are admin"}}</p>
+                    <div>{{itemView.userData.itemName}}</div>
+                    <div>{{"Rating: " + itemView.userData.rating}}</div>
+                    <div v-if="itemView.userData.comment === 'admin'">{{"You are admin"}}</div>
                 </td>
             </tr>
             <tr><td colspan="3"><hr></td></tr>

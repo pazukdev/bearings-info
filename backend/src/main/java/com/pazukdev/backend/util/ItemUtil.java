@@ -262,6 +262,7 @@ public class ItemUtil {
                 final String actionType = "create";
                 final UserAction userAction = UserActionUtil.createChildItemAction(user, actionType, item, childItem);
                 itemService.getUserActionRepository().save(userAction);
+                UserUtil.updateRatingOnPartCreation(user, itemService.getUserService());
             }
         }
 
@@ -275,6 +276,7 @@ public class ItemUtil {
                         final String actionType = "update";
                         final UserAction userAction = UserActionUtil.createChildItemAction(user, actionType, item, oldChildItem);
                         itemService.getUserActionRepository().save(userAction);
+                        UserUtil.updateRatingOnUpdate(user, itemService.getUserService());
                     }
                 }
             }
@@ -306,6 +308,7 @@ public class ItemUtil {
                 final String actionType = "create";
                 final UserAction userAction = UserActionUtil.createReplacerAction(user, actionType, item, replacer);
                 itemService.getUserActionRepository().save(userAction);
+                UserUtil.updateRatingOnReplacerCreation(user, itemService.getUserService());
             }
         }
 
@@ -318,6 +321,7 @@ public class ItemUtil {
                         final String actionType = "update";
                         final UserAction userAction = UserActionUtil.createReplacerAction(user, actionType, item, oldReplacer);
                         itemService.getUserActionRepository().save(userAction);
+                        UserUtil.updateRatingOnUpdate(user, itemService.getUserService());
                     }
                 }
             }

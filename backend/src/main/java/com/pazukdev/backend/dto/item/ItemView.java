@@ -25,6 +25,7 @@ public class ItemView extends AbstractDto {
     private boolean searchEnabled;
     private boolean newItem;
     private boolean addToWishList;
+    private NestedItemDto userData;
     private RateReplacer rate;
     private String category;
     private TableDto header;

@@ -27,13 +27,6 @@ public class MotorcycleController {
     private final MotorcycleService service;
     private final MotorcycleConverter motorcycleConverter;
 
-//    @GetMapping("/list")
-//    @ResponseStatus(HttpStatus.OK)
-//    @ApiOperation(value = "Get all motorcycles")
-//    public List<MotorcycleDto> getAll() {
-//        return motorcycleConverter.convertToDtoList(service.findAll());
-//    }
-
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get motorcycle")

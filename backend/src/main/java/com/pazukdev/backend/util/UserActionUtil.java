@@ -10,8 +10,10 @@ import java.time.LocalDateTime;
 
 public class UserActionUtil {
 
-    public static UserAction createRateAction(final Item itemToRate, final String rateAction, final UserEntity user) {
-        final String actionType = "rate " + rateAction;
+    public static UserAction createRateAction(final Item itemToRate,
+                                              final RateUtil.RateAction rateAction,
+                                              final UserEntity user) {
+        final String actionType = "rate " + rateAction.getValue();
         final String itemType = "replacer";
 
         return create(user, actionType, itemType, itemToRate);

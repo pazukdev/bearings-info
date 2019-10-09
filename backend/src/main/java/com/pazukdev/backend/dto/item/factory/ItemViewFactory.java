@@ -1,6 +1,7 @@
 package com.pazukdev.backend.dto.item.factory;
 
 import com.pazukdev.backend.dto.item.ItemView;
+import com.pazukdev.backend.dto.item.NestedItemDtoFactory;
 import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
@@ -50,6 +51,7 @@ public class ItemViewFactory {
         final ItemView itemView = new ItemView();
         itemView.setItemId(itemId);
         itemView.setWishListIds(UserUtil.collectWishListItemsIds(currentUser));
+        itemView.setUserData(NestedItemDtoFactory.createUser(currentUser));
 
         if (itemId == SpecialItemId.WISH_LIST_VIEW.getItemId()) {
             return createWishListView(itemView, wishList);
@@ -80,6 +82,7 @@ public class ItemViewFactory {
         final ItemView itemView = createItemView(item.getId(), userName);
         itemView.setNewItem(true);
 
+        UserUtil.updateRatingOnItemCreation(category, userName, itemService.getUserService());
         itemService.getUserActionRepository().save(UserActionUtil.create(creator, "create", "item", item));
 
         return itemView;
@@ -184,6 +187,7 @@ public class ItemViewFactory {
         if (itemView.getRate() != null) {
             RateUtil.processRateAction(itemView, currentUser, itemService);
             itemView.setRate(null);
+            return createItemView(itemId, currentUser.getName());
         }
 
         final Map<String, String> headerMatrixMap = createHeaderMatrixMap(itemView);
@@ -195,6 +199,7 @@ public class ItemViewFactory {
 
         itemService.getUserActionRepository().save(UserActionUtil.create(currentUser, "update", "item", item));
         itemService.update(item);
+
         return createItemView(itemId, currentUser.getName());
     }
 

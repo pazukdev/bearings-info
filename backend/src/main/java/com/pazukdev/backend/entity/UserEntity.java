@@ -17,6 +17,7 @@ import javax.persistence.*;
 @Table(name = "user")
 public class UserEntity extends AbstractEntity {
 
+    private Integer rating = 0;
     @Column(name = "password")
     private String password;
     @Column(name = "role")

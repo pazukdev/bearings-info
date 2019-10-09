@@ -1,5 +1,7 @@
 package com.pazukdev.backend.dto.item;
 
+import com.pazukdev.backend.constant.security.Role;
+import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.item.ChildItem;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.entity.item.Replacer;
@@ -11,6 +13,15 @@ import com.pazukdev.backend.util.UserUtil;
  * @author Siarhei Sviarkaltsau
  */
 public class NestedItemDtoFactory {
+
+    public static NestedItemDto createUser(final UserEntity currentUser) {
+        final NestedItemDto userData = new NestedItemDto();
+        userData.setItemId(currentUser.getId());
+        userData.setItemName(currentUser.getName());
+        userData.setRating(currentUser.getRating());
+        userData.setComment(currentUser.getRole() == Role.ADMIN ? "admin" : "user");
+        return userData;
+    }
 
     public static NestedItemDto createMotorcycle(final Item motorcycle, final UserService userService) {
         final String production = ItemUtil.getValueFromDescription(motorcycle.getDescription(), "Production");

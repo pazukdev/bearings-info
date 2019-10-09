@@ -48,6 +48,13 @@ public class UserController {
         return userConverter.convertToDto(userService.getOne(id));
     }
 
+    @GetMapping(value = "user/find-by-name/{username}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get user by username")
+    public UserDto searchByName(@PathVariable(name = "username") final String userName) {
+        return userConverter.convertToDto(userService.findByName(userName));
+    }
+
     @PostMapping("/user/create")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new User")

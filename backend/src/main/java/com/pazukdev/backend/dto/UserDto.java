@@ -15,6 +15,7 @@ public class UserDto extends AbstractDto {
 
     private final static long serialVersionUID = 12343L;
 
+    private Integer rating;
     private String password;
     private String repeatedPassword;
     @ApiModelProperty(hidden = true)
