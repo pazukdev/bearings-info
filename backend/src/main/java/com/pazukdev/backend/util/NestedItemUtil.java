@@ -154,7 +154,7 @@ public class NestedItemUtil {
         for (final Item item : items) {
             replacerDtos.add(NestedItemDtoFactory.createBasicNestedItemDto(item, userService));
         }
-        replacerDtos.sort(Comparator.comparing(NestedItemDto::getRating));
+        replacerDtos.sort(Comparator.comparing(NestedItemDto::getRating).reversed());
         return replacerDtos;
     }
 
