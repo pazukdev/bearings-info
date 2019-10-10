@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -34,13 +35,19 @@ public class PartsTable extends AbstractDto {
         for (final NestedItemDto nestedItem : nestedItems) {
             addToCategoryTable(partsTable.getTables(), nestedItem);
         }
+
+        for (final PartsTable childTable : partsTable.getTables()) {
+            childTable.getParts().sort(Comparator.comparing(NestedItemDto::getQuantity).reversed());
+        }
+
+        partsTable.getTables().sort(Comparator.comparing(PartsTable::getName));
         return partsTable;
     }
 
     public static void addToCategoryTable(final List<PartsTable> categoryTables,
                                           final NestedItemDto nestedItem) {
         for (final PartsTable categoryTable : categoryTables) {
-            if (categoryTable.getName().equals(nestedItem.getItemCategory())) {
+            if (categoryTable.getName().toLowerCase().equals(nestedItem.getItemCategory().toLowerCase())) {
                 categoryTable.getParts().add(nestedItem);
             }
         }

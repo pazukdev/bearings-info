@@ -14,12 +14,16 @@ import com.pazukdev.backend.util.UserUtil;
  */
 public class NestedItemDtoFactory {
 
-    public static NestedItemDto createUser(final UserEntity currentUser) {
+    public static NestedItemDto createUser(final UserEntity user) {
         final NestedItemDto userData = new NestedItemDto();
-        userData.setItemId(currentUser.getId());
-        userData.setItemName(currentUser.getName());
-        userData.setRating(currentUser.getRating());
-        userData.setComment(currentUser.getRole() == Role.ADMIN ? "admin" : "user");
+        userData.setItemCategory(user.getRole() == Role.ADMIN ? "Admin" : "User");
+        userData.setItemId(user.getId());
+        userData.setItemName(user.getName());
+        userData.setButtonText(user.getName());
+        userData.setRating(user.getRating());
+        userData.setComment(user.getRole() == Role.ADMIN ? "admin" : "user");
+        userData.setQuantity(user.getRating().toString());
+        userData.setStatus(user.getStatus());
         return userData;
     }
 

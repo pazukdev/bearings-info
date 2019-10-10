@@ -253,7 +253,7 @@
                                 </button>
                             </td>
                             <td>
-                                <p v-if="!isEditMode && !isMotorcycleCatalogueView()">
+                                <p v-if="!isEditMode && isShowQuantityValue()">
                                     {{part.quantity}}
                                 </p>
                                 <input style="width: 80px"
@@ -825,6 +825,10 @@
 
             isUserListView() {
                 return this.itemView.itemId === -4;
+            },
+
+            isShowQuantityValue() {
+                return this.isOrdinaryItemView() || this.isUserListView();
             },
 
             notStub(name) {

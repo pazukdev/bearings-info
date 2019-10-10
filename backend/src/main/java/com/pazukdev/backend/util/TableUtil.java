@@ -6,6 +6,7 @@ import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.dto.table.ReplacersTable;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
+import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.item.ChildItem;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.entity.item.Replacer;
@@ -39,6 +40,17 @@ public class TableUtil {
             dtos.add(motorcycleDto);
         }
         final Set<String> categories = new HashSet<>(Collections.singletonList("Motorcycle"));
+        return PartsTable.create(dtos, tableName, categories);
+    }
+
+    public static  PartsTable usersTable(final List<UserEntity> users,
+                                         final String tableName,
+                                         final String category) {
+        final List<NestedItemDto> dtos = new ArrayList<>();
+        for (final UserEntity user : users) {
+            dtos.add(createUser(user));
+        }
+        final Set<String> categories = new HashSet<>(Arrays.asList("Admin", "User"));
         return PartsTable.create(dtos, tableName, categories);
     }
 

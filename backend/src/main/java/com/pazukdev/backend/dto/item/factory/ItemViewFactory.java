@@ -32,9 +32,10 @@ public class ItemViewFactory {
     @Getter
     private enum SpecialItemId {
 
-        WISH_LIST_VIEW(-3),
+        ITEMS_MANAGEMENT_VIEW(-1),
         MOTORCYCLE_CATALOGUE_VIEW(-2),
-        ITEMS_MANAGEMENT_VIEW(-1);
+        WISH_LIST_VIEW(-3),
+        USER_LIST_VIEW(-4);
 
         private final int itemId;
 
@@ -64,6 +65,10 @@ public class ItemViewFactory {
             return createItemsManagementView(itemView);
         }
 
+        if (itemId == SpecialItemId.USER_LIST_VIEW.getItemId()) {
+            return createUsersListView(itemView);
+        }
+
         return createOrdinaryItemView(itemView, itemId, currentUser);
     }
 
@@ -91,12 +96,16 @@ public class ItemViewFactory {
         final UserEntity user = itemService.getUserService().findByName(userName);
         final boolean removeItem = itemId == SpecialItemId.ITEMS_MANAGEMENT_VIEW.getItemId();
         final boolean removeItemFromWishList = itemId == SpecialItemId.WISH_LIST_VIEW.getItemId();
+        final boolean removeUser = itemId == SpecialItemId.USER_LIST_VIEW.getItemId();
 
         if (removeItem) {
             return removeItem(itemView, user);
         }
         if (removeItemFromWishList) {
             return removeItemFromWishList(itemView, user);
+        }
+        if (removeUser) {
+            return removeUser(itemView, user);
         }
         return updateItem(itemId, itemView, user);
     }
@@ -123,14 +132,27 @@ public class ItemViewFactory {
     private ItemView createMotorcycleCatalogueView(final ItemView itemView) {
         final List<Item> motorcycles = itemService.find("Motorcycle");
         final String tableName = "Motorcycle catalogue";
-        final String countParameterName = "Models";
+        final String countParameterName = "Model";
 
-        return createPartsView(
+        return createItemsView(
                 itemView,
                 motorcycles.size(),
                 tableName,
                 countParameterName,
-                TableUtil.motorcyclesTable(motorcycles, countParameterName, itemService.getUserService()));
+                motorcyclesTable(motorcycles, countParameterName, itemService.getUserService()));
+    }
+
+    private ItemView createUsersListView(final ItemView itemView) {
+        final List<UserEntity> users = itemService.getUserService().findAll();
+        final String tableName = "Users";
+        final String countParameterName = "User";
+
+        return createItemsView(
+                itemView,
+                users.size(),
+                tableName,
+                countParameterName,
+                usersTable(users, tableName, countParameterName));
     }
 
     private ItemView createItemsManagementView(final ItemView itemView) {
@@ -138,12 +160,12 @@ public class ItemViewFactory {
         final String tableName = "Items management";
         final String countParameterName = "Items";
 
-        return createPartsView(
+        return createItemsView(
                 itemView,
                 allItems.size(),
                 tableName,
                 countParameterName,
-                TableUtil.specialItemsTable(allItems, countParameterName, itemService));
+                specialItemsTable(allItems, countParameterName, itemService));
     }
 
     private ItemView createWishListView(final ItemView itemView, final WishList wishList) {
@@ -151,15 +173,15 @@ public class ItemViewFactory {
         final String tableName = "Your Wishlist";
         final String countParameterName = "Items";
 
-        return createPartsView(
+        return createItemsView(
                 itemView,
                 allItems.size(),
                 tableName,
                 countParameterName,
-                TableUtil.specialItemsTable(allItems, countParameterName, itemService));
+                specialItemsTable(allItems, countParameterName, itemService));
     }
 
-    private ItemView createPartsView(final ItemView itemView,
+    private ItemView createItemsView(final ItemView itemView,
                                      final Integer size,
                                      final String tableName,
                                      final String parameter,
@@ -218,6 +240,12 @@ public class ItemViewFactory {
             UserActionUtil.processItemAction("remove from wishlist", item, user, itemService);
         }
         itemService.getUserService().update(user);
+        itemView.getIdsToRemove().clear();
+        return itemView;
+    }
+
+    private ItemView removeUser(final ItemView itemView, final UserEntity user) {
+        itemService.getUserService().delete(user.getId());
         itemView.getIdsToRemove().clear();
         return itemView;
     }
