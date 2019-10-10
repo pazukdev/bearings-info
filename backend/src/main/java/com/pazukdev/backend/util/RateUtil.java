@@ -30,7 +30,7 @@ public class RateUtil {
         final RateReplacer rate = itemView.getRate();
         final Long itemId = rate.getItemId();
         final Item itemToRate = itemService.getOne(rate.getItemId());
-        final RateAction rateAction = RateAction.valueOf(rate.getAction());
+        final RateAction rateAction = RateAction.valueOf(rate.getAction().toUpperCase());
         final LikeList likeList = currentUser.getLikeList();
 
         if (UserUtil.collectRatedItemIds(currentUser).contains(itemId)) {
@@ -57,7 +57,8 @@ public class RateUtil {
             itemView.getRatedItems().add(itemId);
         }
 
-        UserActionUtil.processRateItemAction(itemToRate, "rate", currentUser, itemService);
+        final String actionType = rateAction == RateAction.CANCEL ? "cancel rate" : "rate";
+        UserActionUtil.processRateItemAction(itemToRate, actionType, currentUser, itemService);
     }
 
 }

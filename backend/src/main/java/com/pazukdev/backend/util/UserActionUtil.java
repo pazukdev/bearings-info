@@ -76,7 +76,7 @@ public class UserActionUtil {
                                              final String actionType,
                                              final UserEntity user,
                                              final ItemService itemService) {
-        updateUserRating(user, "rate", null);
+        updateUserRating(user, actionType, null);
 
         final UserAction action = UserActionUtil.createRateAction(itemToRate, actionType, user);
         itemService.getUserActionRepository().save(action);
@@ -120,12 +120,9 @@ public class UserActionUtil {
     }
 
     private static UserAction createRateAction(final Item itemToRate,
-                                               String actionType,
+                                               final String actionType,
                                                final UserEntity user) {
-        actionType = "rate " + actionType;
-        final String itemType = "replacer";
-
-        return create(user, actionType, itemType, itemToRate);
+        return create(user, actionType, "replacer", itemToRate);
     }
 
     private static UserAction createChildItemAction(final UserEntity user,
@@ -161,9 +158,9 @@ public class UserActionUtil {
     }
 
     private static UserAction create(final UserEntity user,
-                                    final String actionType,
-                                    final String itemType,
-                                    final Item item) {
+                                     final String actionType,
+                                     final String itemType,
+                                     final Item item) {
         final String name = createName(actionType, itemType, item.getName());
 
         final UserAction userAction = new UserAction();
