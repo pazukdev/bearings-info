@@ -3,7 +3,6 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
-import com.pazukdev.backend.dto.WishListDto;
 import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
@@ -13,7 +12,6 @@ import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.util.ItemUtil;
 import com.pazukdev.backend.validator.CredentialsValidator;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -148,14 +146,12 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
                                                                  final boolean create) {
         final List<String> validationMessages = validateCredentials(dto, create);
         if (validationMessages.isEmpty()) {
-            if (StringUtils.isBlank(dto.getRole())) {
-                dto.setRole(Role.USER.name());
-            }
             dto.setPassword(passwordEncoder.encode(dto.getPassword()));
             if (create) {
-                final WishList wishList = wishListService.create(new WishListDto());
-                dto.setWishListId(wishList.getId());
-                create(dto);
+                final UserEntity user = new UserEntity();
+                user.setPassword(dto.getPassword());
+                user.setName(dto.getName());
+                repository.save(user);
             } else {
                 update(id, dto);
             }

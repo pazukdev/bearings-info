@@ -1,6 +1,6 @@
 <template>
     <div>
-<!--        {{itemView.replacersTable}}<br><br>-->
+<!--        {{itemView}}<br><br>-->
 <!--        {{itemView.ratedItems}}<br><br>-->
 <!--        {{itemView.viewType}}<br><br>-->
 <!--        {{userName}}<br><br>-->
@@ -241,15 +241,21 @@
                                        v-model="part.location" type="text"/>
                             </td>
                             <td>
+                                <div style="width: 146px"
+                                     v-if="isUserListView()">
+                                    {{part.buttonText}}
+                                </div>
                                 <button type="button"
                                         style="width: 146px"
+                                        v-if="!isUserListView()"
                                         @click="setItem(part.itemId)">
                                     {{part.buttonText}}
                                 </button>
                             </td>
                             <td>
-                                <p v-if="!isEditMode
-                                && part.quantity > 0">{{part.quantity}}</p>
+                                <p v-if="!isEditMode && !isMotorcycleCatalogueView()">
+                                    {{part.quantity}}
+                                </p>
                                 <input style="width: 80px"
                                        v-if="isEditMode && isOrdinaryItemView()"
                                        v-model="part.quantity" type="text"/>
@@ -815,6 +821,10 @@
 
             isWishListView() {
                 return this.itemView.itemId === -3;
+            },
+
+            isUserListView() {
+                return this.itemView.itemId === -4;
             },
 
             notStub(name) {

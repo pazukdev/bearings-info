@@ -15,11 +15,11 @@ public class UserDto extends AbstractDto {
 
     private final static long serialVersionUID = 12343L;
 
-    private Integer rating;
+    private Integer rating = 0;
     private String password;
     private String repeatedPassword;
     @ApiModelProperty(hidden = true)
-    private String role;
+    private String role = "USER";
     private Long wishListId;
 
 }

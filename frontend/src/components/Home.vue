@@ -14,20 +14,20 @@
               @cancel="cancel"
               @select-item="selectItem"/>
 
-        <table class="centred-table" v-show="isLastComponent('MotorcycleMenu')">
-            <tbody>
-            <tr v-if="admin">
-                <td>
-                    <button class="content"
-                            type="button"
-                            style="width: 174px"
-                            v-on:click="openUsers()">
-                        {{"Users"}}
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+<!--        <table class="centred-table" v-show="isLastComponent('MotorcycleMenu')">-->
+<!--            <tbody>-->
+<!--            <tr v-if="admin">-->
+<!--                <td>-->
+<!--                    <button class="content"-->
+<!--                            type="button"-->
+<!--                            style="width: 174px"-->
+<!--                            v-on:click="openUsers()">-->
+<!--                        {{"Users"}}-->
+<!--                    </button>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
 
         <div v-show="isLastComponent('MotorcycleMenu')"
              style="width: 100%; text-align: center; margin-top: 60px; margin-bottom: 20px">

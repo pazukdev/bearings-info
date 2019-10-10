@@ -22,12 +22,12 @@ public class UserEntity extends AbstractEntity {
     private String password;
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    private Role role;
-    @ManyToOne
+    private Role role = Role.USER;
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "wishlist_id")
-    private WishList wishList;
-    @ManyToOne
+    private WishList wishList = new WishList();
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "likelist_id")
-    private LikeList likeList;
+    private LikeList likeList = new LikeList();
 
 }

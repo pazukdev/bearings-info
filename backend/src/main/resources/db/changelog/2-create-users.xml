@@ -45,6 +45,7 @@
             <column name="role" value="ADMIN"/>
             <column name="wishlist_id" value="1"/>
             <column name="likelist_id" value="1"/>
+            <column name="status" value="active"/>
         </insert>
     </changeSet>
 
@@ -57,6 +58,7 @@
             <column name="role" value="USER"/>
             <column name="wishlist_id" value="2"/>
             <column name="likelist_id" value="2"/>
+            <column name="status" value="active"/>
         </insert>
     </changeSet>
 

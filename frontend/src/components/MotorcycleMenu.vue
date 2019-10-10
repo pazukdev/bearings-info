@@ -15,6 +15,16 @@
                     </button>
                 </td>
             </tr>
+            <tr v-if="admin">
+                <td>
+                    <button class="content"
+                            type="button"
+                            style="width: 174px"
+                            v-on:click="openUsersList()">
+                        {{"Users"}}
+                    </button>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -32,6 +42,7 @@
         computed: {
             ...mapState({
                 userName: state => state.dictionary.userName,
+                admin: state => state.dictionary.admin,
                 itemView: state => state.dictionary.itemViews[state.dictionary.itemViews.length - 1]
             })
         },
@@ -51,6 +62,11 @@
                 let itemsManagementId = -1;
                 this.openSpecialView(itemsManagementId);
 
+            },
+
+            openUsersList() {
+                let usersListId = -4;
+                this.openSpecialView(usersListId);
             }
 
         }
