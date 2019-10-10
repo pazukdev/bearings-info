@@ -10,7 +10,6 @@ import com.pazukdev.backend.entity.WishList;
 import com.pazukdev.backend.entity.item.ChildItem;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.entity.item.Replacer;
-import com.pazukdev.backend.entity.item.UserAction;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.util.*;
 import lombok.Data;
@@ -69,7 +68,6 @@ public class ItemViewFactory {
     }
 
     public ItemView createNewItemView(final String category, final String name, final String userName) {
-
         final UserEntity creator = itemService.getUserService().findByName(userName);
 
         final Item item = new Item();
@@ -79,12 +77,11 @@ public class ItemViewFactory {
         item.setUserActionDate(DateUtil.now());
         item.setDescription(createEmptyDescription(category));
         itemService.update(item);
+
+        UserActionUtil.processItemAction("create", item, creator, itemService);
+
         final ItemView itemView = createItemView(item.getId(), userName);
         itemView.setNewItem(true);
-
-        UserUtil.updateRatingOnItemCreation(category, userName, itemService.getUserService());
-        itemService.getUserActionRepository().save(UserActionUtil.create(creator, "create", "item", item));
-
         return itemView;
     }
 
@@ -185,7 +182,7 @@ public class ItemViewFactory {
         final Item item = itemService.getOne(itemId);
 
         if (itemView.getRate() != null) {
-            RateUtil.processRateAction(itemView, currentUser, itemService);
+            RateUtil.processRateItemAction(itemView, currentUser, itemService);
             itemView.setRate(null);
             return createItemView(itemId, currentUser.getName());
         }
@@ -197,7 +194,6 @@ public class ItemViewFactory {
         ItemUtil.updateReplacers(item, itemView, itemService, currentUser);
         ItemUtil.updateWishList(item, itemView, currentUser, itemService);
 
-        itemService.getUserActionRepository().save(UserActionUtil.create(currentUser, "update", "item", item));
         itemService.update(item);
 
         return createItemView(itemId, currentUser.getName());
@@ -216,15 +212,10 @@ public class ItemViewFactory {
     }
 
     private ItemView removeItemFromWishList(final ItemView itemView, final UserEntity user) {
-        final String actionType = "remove from wishlist";
-        final String itemType = "item";
-
         for (final Long itemId : itemView.getIdsToRemove()) {
             final Item item = itemService.getOne(itemId);
             user.getWishList().getItems().remove(item);
-
-            final UserAction userAction = UserActionUtil.create(user, actionType, itemType, item);
-            itemService.getUserActionRepository().save(userAction);
+            UserActionUtil.processItemAction("remove from wishlist", item, user, itemService);
         }
         itemService.getUserService().update(user);
         itemView.getIdsToRemove().clear();
@@ -238,35 +229,29 @@ public class ItemViewFactory {
     }
 
     private void removeItems(final Set<Long> idsToRemove, final UserEntity user) {
-        final String actionType = "delete";
         for (final Long idToRemove : idsToRemove) {
-            removeItemFromAllParentItems(idToRemove, user, actionType);
-            removeItem(itemService.getOne(idToRemove), user, actionType);
+            removeItemFromAllParentItems(idToRemove, user);
+            removeItem(itemService.getOne(idToRemove), user);
         }
     }
 
-    private void removeItem(final Item itemToRemove, final UserEntity user, final String actionType) {
+    private void removeItem(final Item itemToRemove, final UserEntity user) {
         itemToRemove.setStatus("deleted");
         itemToRemove.setUserActionDate(DateUtil.now());
         itemService.update(itemToRemove);
-
-        final String itemType = "item";
-        final UserAction userAction = UserActionUtil.create(user, actionType, itemType, itemToRemove);
-        itemService.getUserActionRepository().save(userAction);
+        UserActionUtil.processItemAction("delete", itemToRemove, user, itemService);
     }
 
-    private void removeItemFromAllParentItems(final Long idToRemove,
-                                              final UserEntity user,
-                                              final String actionType) {
+    private void removeItemFromAllParentItems(final Long idToRemove, final UserEntity user) {
+        final String actionType = "delete";
+
         for (final Item item : itemService.findAll()) {
             for (final Replacer replacer : item.getReplacers()) {
                 final Item nestedItem = replacer.getItem();
                 if (nestedItem.getId().equals(idToRemove)) {
                     replacer.setStatus("deleted");
                     itemService.getReplacerRepository().save(replacer);
-
-                    final UserAction userAction = UserActionUtil.createReplacerAction(user, actionType, nestedItem, replacer);
-                    itemService.getUserActionRepository().save(userAction);
+                    UserActionUtil.processReplacerAction(actionType, replacer, item, user, itemService);
                 }
             }
 
@@ -275,9 +260,7 @@ public class ItemViewFactory {
                 if (nestedItem.getId().equals(idToRemove)) {
                     part.setStatus("deleted");
                     itemService.getChildItemRepository().save(part);
-
-                    final UserAction userAction = UserActionUtil.createChildItemAction(user, actionType, nestedItem, part);
-                    itemService.getUserActionRepository().save(userAction);
+                    UserActionUtil.processPartAction(actionType, part, item, user, itemService);
                 }
             }
 

@@ -24,23 +24,9 @@ public class RateUtil {
         }
     }
 
-    @Getter
-    public enum ValueIncrease {
-
-        UP("up"),
-        DOWN("down"),
-        CANCEL("cancel");
-
-        private final String value;
-
-        ValueIncrease(final String value) {
-            this.value = value;
-        }
-    }
-
-    public static void processRateAction(final ItemView itemView,
-                                         final UserEntity currentUser,
-                                         final ItemService itemService) {
+    public static void processRateItemAction(final ItemView itemView,
+                                             final UserEntity currentUser,
+                                             final ItemService itemService) {
         final RateReplacer rate = itemView.getRate();
         final Long itemId = rate.getItemId();
         final Item itemToRate = itemService.getOne(rate.getItemId());
@@ -71,7 +57,7 @@ public class RateUtil {
             itemView.getRatedItems().add(itemId);
         }
 
-        UserUtil.processRateAction(itemToRate, rateAction, currentUser, itemService);
+        UserActionUtil.processRateItemAction(itemToRate, "rate", currentUser, itemService);
     }
 
 }
