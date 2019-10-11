@@ -1,6 +1,6 @@
 <template>
     <div>
-        {{itemView.idsToRemove}}<br><br>
+<!--        {{itemView.idsToRemove}}<br><br>-->
 
         <table id="header-menu">
             <tbody>
@@ -193,8 +193,25 @@
         style="text-align: center">
             <tbody>
             <tr v-if="isPartsTitleVisible()">
-                <td colspan="3">
+                <td>
                     {{itemView.partsTable.name}}
+                </td>
+            </tr>
+            <tr v-if="isShowPartsTableHeader() && isPartsTitleVisible">
+                <td>
+                    <table id="parts-header" style="text-align: center">
+                        <tbody>
+                        <tr>
+                            <td style="width: 120px">{{itemView.partsTable.header[0]}}</td>
+                            <td>{{itemView.partsTable.header[1]}}</td>
+                            <td style="width: 80px; text-align: right"
+                                v-if="itemView.partsTable.header[2] !== '-'">
+                                {{itemView.partsTable.header[2]}}
+                            </td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </td>
             </tr>
             <tr v-for="table in itemView.partsTable.tables">
@@ -207,21 +224,22 @@
                             </td>
                             <td></td>
                             <td style="width: 80px"></td>
+                            <td></td>
                         </tr>
                         <tr v-for="part in table.parts" v-if="statusActive(part)">
                             <td style="width: 120px">
                                 <p v-if="!isEditMode || (isEditMode && !isOrdinaryItemView())">
-                                    {{part.location}}
+                                    {{getFirstColumnValue(part)}}
                                 </p>
                                 <input style="width: 120px"
                                        v-if="isEditMode && isOrdinaryItemView()"
                                        v-model="part.location" type="text"/>
                             </td>
                             <td>
-                                <div style="width: 146px"
+                                <p style="width: 146px"
                                      v-if="isUserListView()">
                                     {{part.buttonText}}
-                                </div>
+                                </p>
                                 <button type="button"
                                         style="width: 146px"
                                         v-if="!isUserListView()"
@@ -237,7 +255,6 @@
                                        v-if="isEditMode && isOrdinaryItemView()"
                                        v-model="part.quantity" type="text"/>
                             </td>
-                            <td>
                             <td v-if="isEditMode && part.comment !== 'Admin'">
                                 <button v-model="newItemView"
                                         v-if="isItemDeleteButtonVisibleToCurrentUser(part)"
@@ -257,7 +274,7 @@
                 </td>
             </tr>
             <tr v-if="notStub(itemView.partsTable.name) && isOrdinaryItemView()">
-                <td colspan="3">
+                <td>
                     <table>
                         <tbody>
                         <tr style="text-align: center; color: red">
@@ -296,7 +313,7 @@
                     </table>
                 </td>
             </tr>
-            <tr v-if="isReplacersTitleVisible()"><td colspan="3"><hr></td></tr>
+            <tr v-if="isReplacersTitleVisible()"><td><hr></td></tr>
             </tbody>
         </table>
 
@@ -463,6 +480,13 @@
         },
 
         methods: {
+
+            isShowPartsTableHeader() {
+                return !(this.itemView.partsTable.header[0] === "-"
+                    && this.itemView.partsTable.header[1] === "-"
+                    && this.itemView.partsTable.header[2] === "-")
+                    && this.itemView.category !== "Motorcycle";
+            },
 
             addThisItemToWishList() {
                 this.newItemView = this.itemView;
@@ -755,7 +779,8 @@
             },
 
             isPartsTitleVisible() {
-                return (this.notStub(this.itemView.partsTable.name) && this.itemHaveActiveParts())
+                return !this.isMotorcycleCatalogueView()
+                    && (this.notStub(this.itemView.partsTable.name) && this.itemHaveActiveParts())
                     || (this.notStub(this.itemView.partsTable.name) && this.isEditMode);
             },
 
@@ -773,6 +798,15 @@
                     }
                 }
                 return false;
+            },
+
+            getFirstColumnValue(item) {
+                if (this.isUserListView()) {
+                    return item.comment;
+                } else {
+                    return item.location;
+                }
+
             },
 
             arrayHaveActiveItems(array) {

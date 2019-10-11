@@ -152,7 +152,7 @@ public class ItemViewFactory {
                 users.size(),
                 tableName,
                 countParameterName,
-                usersTable(users, tableName, countParameterName));
+                usersTable(users, tableName));
     }
 
     private ItemView createItemsManagementView(final ItemView itemView) {

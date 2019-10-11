@@ -27,8 +27,10 @@ public class TableUtil {
             final NestedItemDto itemDto = createBasicSpecialNestedItemDto(item, itemService.getUserService());
             dtos.add(itemDto);
         }
+//        final String[] header = {"Category", "Name", "-"};
+        final String[] header = null;
         final Set<String> categories = itemService.findAllCategories();
-        return PartsTable.create(dtos, tableName, categories);
+        return PartsTable.create(dtos, tableName, header, categories);
     }
 
     public static  PartsTable motorcyclesTable(final List<Item> motorcycles,
@@ -39,19 +41,19 @@ public class TableUtil {
             final NestedItemDto motorcycleDto = createMotorcycle(motorcycle, userService);
             dtos.add(motorcycleDto);
         }
+        final String[] header = {"Production", "Model", "-"};
         final Set<String> categories = new HashSet<>(Collections.singletonList("Motorcycle"));
-        return PartsTable.create(dtos, tableName, categories);
+        return PartsTable.create(dtos, tableName, header, categories);
     }
 
-    public static  PartsTable usersTable(final List<UserEntity> users,
-                                         final String tableName,
-                                         final String category) {
+    public static  PartsTable usersTable(final List<UserEntity> users, final String tableName) {
         final List<NestedItemDto> dtos = new ArrayList<>();
         for (final UserEntity user : users) {
             dtos.add(createUser(user));
         }
+        final String[] header = {"Role", "Username", "Rating"};
         final Set<String> categories = new HashSet<>(Arrays.asList("Admin", "User"));
-        return PartsTable.create(dtos, tableName, categories);
+        return PartsTable.create(dtos, tableName, header, categories);
     }
 
     public static PartsTable createPartsTable(final Item item,
@@ -66,8 +68,10 @@ public class TableUtil {
             final NestedItemDto partDto = createChildItem(part, itemService.getUserService());
             dtos.add(partDto);
         }
+        final String[] header = {"Location", "Partnumber", "Pcs/Vol"};
+        //final String[] header = null;
         final Set<String> categories = itemService.findAllPartCategories();
-        return PartsTable.create(dtos, tableName, categories);
+        return PartsTable.create(dtos, tableName, header, categories);
     }
 
     public static ReplacersTable createReplacersTable(final Item item, final UserService userService) {
