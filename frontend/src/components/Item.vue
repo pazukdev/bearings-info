@@ -1,29 +1,6 @@
 <template>
     <div>
-<!--        {{itemView}}<br><br>-->
-<!--        {{itemView.ratedItems}}<br><br>-->
-<!--        {{itemView.viewType}}<br><br>-->
-<!--        {{userName}}<br><br>-->
-<!--        {{"isEditMode: " + isEditMode}}<br>-->
-<!--        {{newItemCategory}}<br><br>-->
-<!--        {{itemView.wishListIds}}<br><br>-->
-<!--        {{itemView.categories}}<br><br>-->
-<!--        {{itemView.idsToRemove}}<br><br>-->
-<!--        {{itemView.header.matrix[0][1]}}<br><br>-->
-<!--        {{itemView.items.tables}}<br><br>-->
-<!--        {{itemView.replacersTable}}<br><br>-->
-<!--        {{itemView.partsTable}}<br><br>-->
-<!--        {{itemView.replacersTable}}<br><br>-->
-<!--        {{itemView.replacers}}<br><br>-->
-<!--        {{newItemView.partsTable}}<br><br>-->
-<!--        {{newPart}}<br><br>-->
-<!--        {{this.items}}-->
-<!--        {{newReplacer}}<br><br>-->
-<!--        {{newHeaderRow}}<br><br>-->
-<!--        {{newChildItem}}<br><br>-->
-<!--        {{newItemCategory}}<br><br>-->
-<!--        {{newItemName}}<br><br>-->
-<!--        {{newItemNameMessage}}<br><br>-->
+        {{itemView.idsToRemove}}<br><br>
 
         <table id="header-menu">
             <tbody>
@@ -39,7 +16,7 @@
                 <td style="width: 33%; text-align: right">
                     <div>{{itemView.userData.itemName}}</div>
                     <div>{{"Rating: " + itemView.userData.rating}}</div>
-                    <div v-if="itemView.userData.comment === 'admin'">{{"You are admin"}}</div>
+                    <div v-if="itemView.userData.comment === 'Admin'">{{"You are admin"}}</div>
                 </td>
             </tr>
             <tr><td colspan="3"><hr></td></tr>
@@ -261,7 +238,7 @@
                                        v-model="part.quantity" type="text"/>
                             </td>
                             <td>
-                            <td v-if="isEditMode">
+                            <td v-if="isEditMode && part.comment !== 'Admin'">
                                 <button v-model="newItemView"
                                         v-if="isItemDeleteButtonVisibleToCurrentUser(part)"
                                         type="button"
@@ -606,7 +583,7 @@
 
             removePartFromList(part, array) {
                 this.removeFromArray(part, array);
-                if (this.isItemsManagementView() || this.isWishListView()) {
+                if (this.isItemsManagementView() || this.isWishListView() || this.isUserListView()) {
                     this.itemView.idsToRemove.push(part.itemId);
                 }
             },

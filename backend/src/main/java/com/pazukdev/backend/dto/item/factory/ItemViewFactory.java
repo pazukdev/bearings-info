@@ -105,7 +105,7 @@ public class ItemViewFactory {
             return removeItemFromWishList(itemView, user);
         }
         if (removeUser) {
-            return removeUser(itemView, user);
+            return removeUsers(itemView);
         }
         return updateItem(itemId, itemView, user);
     }
@@ -244,8 +244,10 @@ public class ItemViewFactory {
         return itemView;
     }
 
-    private ItemView removeUser(final ItemView itemView, final UserEntity user) {
-        itemService.getUserService().delete(user.getId());
+    private ItemView removeUsers(final ItemView itemView) {
+        for (final Long userToRemoveId : itemView.getIdsToRemove()) {
+            itemService.getUserService().delete(userToRemoveId);
+        }
         itemView.getIdsToRemove().clear();
         return itemView;
     }

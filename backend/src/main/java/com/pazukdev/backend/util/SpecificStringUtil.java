@@ -110,7 +110,7 @@ public class SpecificStringUtil {
     }
 
     public static String capitalize(final String s) {
-        return StringUtils.capitalize(s);
+        return StringUtils.capitalize(s.toLowerCase());
     }
 
     public static String enumNameToCapitalizedLowerCaseString(final String name) {

@@ -1,12 +1,12 @@
 package com.pazukdev.backend.dto.item;
 
-import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.item.ChildItem;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.entity.item.Replacer;
 import com.pazukdev.backend.service.UserService;
 import com.pazukdev.backend.util.ItemUtil;
+import com.pazukdev.backend.util.SpecificStringUtil;
 import com.pazukdev.backend.util.UserUtil;
 
 /**
@@ -15,13 +15,15 @@ import com.pazukdev.backend.util.UserUtil;
 public class NestedItemDtoFactory {
 
     public static NestedItemDto createUser(final UserEntity user) {
+        final String role = SpecificStringUtil.capitalize(user.getRole().name());
+
         final NestedItemDto userData = new NestedItemDto();
-        userData.setItemCategory(user.getRole() == Role.ADMIN ? "Admin" : "User");
         userData.setItemId(user.getId());
         userData.setItemName(user.getName());
         userData.setButtonText(user.getName());
         userData.setRating(user.getRating());
-        userData.setComment(user.getRole() == Role.ADMIN ? "admin" : "user");
+        userData.setItemCategory(role);
+        userData.setComment(role);
         userData.setQuantity(user.getRating().toString());
         userData.setStatus(user.getStatus());
         return userData;
