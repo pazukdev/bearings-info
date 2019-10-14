@@ -25,6 +25,7 @@ public class Item extends AbstractEntity {
     private Long creatorId;
     @Column(name = "user_action_date")
     private String userActionDate;
+    private String image;
     private String description;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

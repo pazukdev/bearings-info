@@ -137,6 +137,9 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         item.getReplacers().addAll(replacers);
         item.setCreatorId(userService.getAdmin().getId());
         item.setUserActionDate(DateUtil.now());
+        if (transitiveItem.getImage() != null) {
+            item.setImage(transitiveItem.getImage());
+        }
         return item;
     }
 

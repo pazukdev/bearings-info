@@ -19,6 +19,7 @@ import javax.persistence.Table;
 public class TransitiveItem extends AbstractEntity {
 
     private String category;
+    private String image;
     private String description = "-";
     private String replacer = "-";
 

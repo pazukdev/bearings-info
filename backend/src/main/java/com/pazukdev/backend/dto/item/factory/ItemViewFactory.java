@@ -118,6 +118,7 @@ public class ItemViewFactory {
 
         itemView.setSearchEnabled(true);
         itemView.setCategory(item.getCategory());
+        itemView.setImage(ImageUtil.getImage(item));
         itemView.setHeader(createHeader(item, itemService));
         itemView.setItems(createTableView(new ArrayList<>(item.getChildItems())));
         itemView.setPartsTable(createPartsTable(item, tableName, itemService));
@@ -133,6 +134,8 @@ public class ItemViewFactory {
         final List<Item> motorcycles = itemService.find("Motorcycle");
         final String tableName = "Motorcycle catalogue";
         final String countParameterName = "Model";
+
+        itemView.setImage("common/ic_launcher.png");
 
         return createItemsView(
                 itemView,

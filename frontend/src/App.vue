@@ -232,6 +232,10 @@
         border-radius: 16px;
     }
 
+    .no-border {
+        border-spacing: 0;
+    }
+
     button {
         border-radius: 4px;
         border: none;
@@ -258,7 +262,7 @@
         text-align: left;
         margin-left:auto;
         margin-right:auto;
-        border-spacing: 10px;
+        border-spacing: 6px;
         border-collapse: separate;
     }
 

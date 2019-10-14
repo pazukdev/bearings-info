@@ -37,6 +37,7 @@ public class TransitiveItemFactory extends AbstractEntityFactory<TransitiveItem>
         super.applyCharacteristics(item, tableRow);
 
         applyCategory(item, tableRow);
+        applyImage(item, tableRow);
         applyDescription(item, tableRow);
         applyReplacers(item, tableRow);
     }
@@ -44,6 +45,10 @@ public class TransitiveItemFactory extends AbstractEntityFactory<TransitiveItem>
     private void applyCategory(final TransitiveItem item, final TableRow tableRow) {
         final String category = tableRow.getData().get("Category");
         item.setCategory(category);
+    }
+
+    private void applyImage(final TransitiveItem item, final TableRow tableRow) {
+        item.setImage(tableRow.getData().get("Image"));
     }
 
     private void applyDescription(final TransitiveItem item, final TableRow tableRow) {

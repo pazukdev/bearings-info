@@ -1,8 +1,8 @@
 <template>
     <div>
-<!--        {{itemView.idsToRemove}}<br><br>-->
+        {{file}}<br><br>
 
-        <table id="header-menu">
+        <table id="header-menu" class="no-border">
             <tbody>
             <tr>
                 <td style="width: 33%">
@@ -48,13 +48,14 @@
             </tbody>
         </table>
 
-        <table id="item-creation-menu">
+        <table id="item-creation-menu" class="no-border">
             <tbody>
             <tr style="text-align: center">
                 <td colspan="3">
                     <b>{{itemView.header.name}}</b>
                 </td>
             </tr>
+            <tr style="height: 10px"><td></td></tr>
             <tr>
                 <td colspan="3">
                     <table style="text-align: center" v-if="isItemsManagementView()">
@@ -158,6 +159,7 @@
                     </button>
                 </td>
             </tr>
+            <tr style="height: 10px"><td></td></tr>
             <tr style="text-align: left">
                 <td>
                     <button v-if="isEditMode"
@@ -186,6 +188,36 @@
             <tr style="height: 26px">
                 <td colspan="3"><hr></td>
             </tr>
+            </tbody>
+        </table>
+
+        <table id="item-image"
+               class="no-border"
+               style="text-align: center"
+        v-if="isViewWithImage()">
+            <tbody>
+            <tr v-if="imageData.length === 0">
+                <td>
+                    <img style="max-width: 100%"
+                         :src="require(`../assets//${itemView.image}`)"
+                         :alt="itemView.header.name">
+                </td>
+            </tr>
+            <tr v-if="imageData.length > 0">
+                <td>
+                    <div class="image-preview">
+                        <img class="preview" style="max-width: 100%" :src="imageData">
+                    </div>
+                </td>
+            </tr>
+            <tr v-if="isEditMode"><td>Upload another image</td></tr>
+            <tr v-if="isEditMode">
+                <td>
+                    <input type="file" @change="previewImage" accept="image/*">
+<!--                    <button @click="onUpload">Upload!</button>-->
+                </td>
+            </tr>
+            <tr><td><hr></td></tr>
             </tbody>
         </table>
 
@@ -419,6 +451,8 @@
         data() {
             return {
                 text: "",
+                file: null,
+                imageData: "",
                 isEditMode: false,
                 newItemView: "",
                 newItemCategory: "",
@@ -480,6 +514,38 @@
         },
 
         methods: {
+
+            onFileChanged (event) {
+                this.file = event.target.files[0]
+            },
+
+            onUpload() {
+                let formData = new FormData();
+                formData.append("file", this.file, this.file.name);
+                axios
+                    .put("/backend/item/file-upload/" + this.file.name, formData, {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+            },
+
+            previewImage: function(event) {
+                let input = event.target;
+                // Ensure that you have a file before attempting to read it
+                if (input.files && input.files[0]) {
+                    // create a new FileReader to read this image and convert to base64 format
+                    let reader = new FileReader();
+                    // Define a callback function to run, when FileReader finishes its job
+                    reader.onload = (e) => {
+                        // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
+                        // Read image as base64 and set to imageData
+                        this.imageData = e.target.result;
+                    };
+                    // Start the reader job - read file as a data url (base64 format)
+                    reader.readAsDataURL(input.files[0]);
+                }
+            },
 
             isShowPartsTableHeader() {
                 return !(this.itemView.partsTable.header[0] === "-"
@@ -659,7 +725,7 @@
                 } else {
                     this.clearItemCreationMessages();
                     axios
-                        .post("backend/item/create-view/"
+                        .post("/backend/item/create-view/"
                             + this.newItemCategory
                             + "/" + this.newItemName
                             + "/" + this.userName, {
@@ -707,6 +773,7 @@
                 this.clearNewReplacer();
                 this.clearAllMessages();
                 this.clearNewItemData();
+                this.imageData = "";
             },
 
             clearAllMessages() {
@@ -866,6 +933,10 @@
                 this.text = item;
                 return item.creatorName === this.userName;
             },
+
+            isViewWithImage() {
+                return this.itemView.image !== null;
+            }
         }
     }
 </script>
