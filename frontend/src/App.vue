@@ -167,7 +167,8 @@
     }
 
     #screen {
-        background-color: aliceblue;
+        background-color: #212121;
+        color: #808080;
         margin: auto;
         width: 500px;
         height: 800px;
@@ -181,6 +182,7 @@
 
     #appName {
         text-align: center;
+        color: #212121;
     }
 
     .app-bar-button {
@@ -188,7 +190,7 @@
         height: 100%;
         background: none;
         font-size: larger;
-        color: #252525
+        color: #212121
     }
 
     .centred-table {
@@ -239,7 +241,7 @@
     button {
         border-radius: 4px;
         border: none;
-        background: #929292;
+        background: #808080;
         height: 52px;
     }
 
@@ -247,6 +249,7 @@
         border-radius: 4px;
         text-indent: 10px;
         height: 36px;
+        background: #808080;
     }
 
     input {
@@ -268,6 +271,10 @@
 
     th {
         font-weight: normal;
+    }
+
+    hr {
+        background: #808080;
     }
 
 </style>
