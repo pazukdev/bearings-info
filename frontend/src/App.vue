@@ -255,7 +255,7 @@
     input {
         border-radius: 4px;
         border: none;
-        background: navajowhite;
+        background: #617D89;
         height: 36px;
         text-align: center;
     }

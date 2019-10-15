@@ -1,6 +1,7 @@
 <template>
     <div>
         {{file}}<br><br>
+        {{imageData}}<br><br>
 
         <table id="header-menu" class="no-border">
             <tbody>
@@ -213,8 +214,8 @@
             <tr v-if="isEditMode"><td>Upload another image</td></tr>
             <tr v-if="isEditMode">
                 <td>
-                    <input type="file" @change="previewImage" accept="image/*">
-<!--                    <button @click="onUpload">Upload!</button>-->
+                    <input type="file" @change="previewImage">
+                    <button @click="onUpload">Upload!</button>
                 </td>
             </tr>
             <tr><td><hr></td></tr>
@@ -515,35 +516,38 @@
 
         methods: {
 
-            onFileChanged (event) {
-                this.file = event.target.files[0]
-            },
-
             onUpload() {
-                let formData = new FormData();
-                formData.append("file", this.file, this.file.name);
+                let data = new FormData();
+                data.append("file", this.file);
                 axios
-                    .put("/backend/item/file-upload/" + this.file.name, formData, {
+                    .put("/backend/item/file-upload/" + this.itemView.itemId, data, {
                         headers: {
                             Authorization: this.authorization
                         }
                     })
             },
 
-            previewImage: function(event) {
+            onUpload1(file) {
+                let data = new FormData();
+                data.append("file", file);
+                axios
+                    .put("/backend/item/file-upload/" + this.itemView.itemId, data, {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+            },
+
+            previewImage(event) {
                 let input = event.target;
-                // Ensure that you have a file before attempting to read it
-                if (input.files && input.files[0]) {
-                    // create a new FileReader to read this image and convert to base64 format
+                this.file = input.files[0];
+                //this.onUpload1(this.file);
+                if (this.file !== null) {
                     let reader = new FileReader();
-                    // Define a callback function to run, when FileReader finishes its job
                     reader.onload = (e) => {
-                        // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
-                        // Read image as base64 and set to imageData
                         this.imageData = e.target.result;
                     };
-                    // Start the reader job - read file as a data url (base64 format)
-                    reader.readAsDataURL(input.files[0]);
+                    reader.readAsDataURL(this.file);
                 }
             },
 
@@ -926,7 +930,10 @@
             },
 
             isItemDeleteButtonVisibleToCurrentUser(item) {
-                return this.admin || this.currentUserIsCreator(item)
+                return this.admin
+                    || this.currentUserIsCreator(item)
+                    || this.isOrdinaryItemView()
+                    || this.isWishListView();
             },
 
             currentUserIsCreator(item) {
