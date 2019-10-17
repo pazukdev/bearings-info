@@ -29,7 +29,6 @@ public class ItemView extends AbstractDto {
     private NestedItemDto userData;
     private String image;
     private InputStream file;
-    private String s;
     private RateReplacer rate;
     private String category;
     private TableDto header;
@@ -42,6 +41,7 @@ public class ItemView extends AbstractDto {
     private Set<String> categories = new HashSet<>();
     private Set<Long> idsToRemove = new HashSet<>();
     private Long creatorId;
+    private String creatorName;
     private Set<Long> wishListIds = new HashSet<>();
     private Set<Long> ratedItems = new HashSet<>();
 

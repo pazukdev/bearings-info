@@ -27,6 +27,11 @@ public class UserUtil {
     }
 
     public static String getCreatorName(final Item item, final UserService userService) {
+        final Long userId = item.getCreatorId();
+        final boolean userDeleted = !userService.getRepository().existsById(userId);
+        if (userDeleted) {
+            return "deleted user";
+        }
         return userService.getOne(item.getCreatorId()).getName();
     }
 

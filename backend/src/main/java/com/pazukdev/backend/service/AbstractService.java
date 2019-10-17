@@ -3,6 +3,7 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.AbstractDto;
 import com.pazukdev.backend.entity.AbstractEntity;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import static com.pazukdev.backend.util.SpecificStringUtil.replaceBlankWithDash;
 @RequiredArgsConstructor
 public abstract class AbstractService<Entity extends AbstractEntity, Dto extends AbstractDto> {
 
+    @Getter
     protected final JpaRepository<Entity, Long> repository;
     protected final EntityDtoConverter<Entity, Dto> converter;
 

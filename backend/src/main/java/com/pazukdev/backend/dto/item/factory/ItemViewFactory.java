@@ -11,6 +11,7 @@ import com.pazukdev.backend.entity.item.ChildItem;
 import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.entity.item.Replacer;
 import com.pazukdev.backend.service.ItemService;
+import com.pazukdev.backend.service.UserService;
 import com.pazukdev.backend.util.*;
 import lombok.Data;
 import lombok.Getter;
@@ -99,7 +100,7 @@ public class ItemViewFactory {
         final boolean removeUser = itemId == SpecialItemId.USER_LIST_VIEW.getItemId();
 
         if (removeItem) {
-            return removeItem(itemView, user);
+            return removeItem(itemView, user, itemService.getUserService());
         }
         if (removeItemFromWishList) {
             return removeItemFromWishList(itemView, user);
@@ -126,6 +127,7 @@ public class ItemViewFactory {
         itemView.getPossibleParts().addAll(NestedItemUtil.createPossibleParts(allItems, itemService.getUserService()));
         itemView.getReplacers().addAll(NestedItemUtil.createReplacerDtos(sameCategoryItems, itemService.getUserService()));
         itemView.setCreatorId(item.getCreatorId());
+        itemView.setCreatorName(UserUtil.getCreatorName(item, itemService.getUserService()));
         itemView.getRatedItems().addAll(UserUtil.collectRatedItemIds(currentUser));
         return itemView;
     }
@@ -255,16 +257,20 @@ public class ItemViewFactory {
         return itemView;
     }
 
-    private ItemView removeItem(final ItemView itemView, final UserEntity user) {
-        removeItems(itemView.getIdsToRemove(), user);
+    private ItemView removeItem(final ItemView itemView, final UserEntity user, final UserService userService) {
+        removeItems(itemView.getIdsToRemove(), user, userService);
         itemView.getIdsToRemove().clear();
         return itemView;
     }
 
-    private void removeItems(final Set<Long> idsToRemove, final UserEntity user) {
+    private void removeItems(final Set<Long> idsToRemove,
+                             final UserEntity currentUser,
+                             final UserService userService) {
         for (final Long idToRemove : idsToRemove) {
-            removeItemFromAllParentItems(idToRemove, user);
-            removeItem(itemService.getOne(idToRemove), user);
+            final Item itemToRemove = itemService.getOne(idToRemove);
+            removeItemFromAllWishLists(itemToRemove, userService);
+            removeItemFromAllParentItems(idToRemove, currentUser);
+            removeItem(itemToRemove, currentUser);
         }
     }
 
@@ -273,6 +279,13 @@ public class ItemViewFactory {
         itemToRemove.setUserActionDate(DateUtil.now());
         itemService.update(itemToRemove);
         UserActionUtil.processItemAction("delete", itemToRemove, user, itemService);
+    }
+
+    private void removeItemFromAllWishLists(final Item itemToRemove, final UserService userService) {
+        for (final UserEntity user : userService.findAll()) {
+            user.getWishList().getItems().remove(itemToRemove);
+            userService.update(user);
+        }
     }
 
     private void removeItemFromAllParentItems(final Long idToRemove, final UserEntity user) {

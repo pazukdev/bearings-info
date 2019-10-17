@@ -56,6 +56,11 @@
                     <b>{{itemView.header.name}}</b>
                 </td>
             </tr>
+            <tr v-if="isOrdinaryItemView()" style="text-align: center">
+                <td colspan="3">
+                    {{"Created by " + itemView.creatorName}}
+                </td>
+            </tr>
             <tr style="height: 10px"><td></td></tr>
             <tr>
                 <td colspan="3">
