@@ -1,18 +1,19 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.dto.item.ItemView;
+import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.exception.ProductNotFoundException;
 import com.pazukdev.backend.service.ItemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -24,29 +25,38 @@ import java.io.IOException;
 @Api(tags = "Item Controller", value = "API methods for items")
 public class ItemController {
 
-    public static final String uploadingDir = "/static/";
-
-    @Autowired
-    private HttpServletRequest request;
-
     private final ItemService service;
 
-    @PutMapping("/file-upload/{fileName}")
+    @PutMapping("/file-upload/{item-id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Upload file")
-    public boolean uploadFile(@PathVariable final String fileName,
+    public boolean uploadFile(@PathVariable(name = "item-id") final Long itemId,
                               @RequestBody MultipartFile uploadedFile) throws IOException {
-        String realPathtoUploads =  request.getServletContext().getRealPath(uploadingDir);
-        if(! new File(realPathtoUploads).exists())
-        {
-            new File(realPathtoUploads).mkdir();
+
+        final String defaultPath = "frontend/src/assets/";
+        final Item item = service.getOne(itemId);
+        final String itemCategory = item.getCategory();
+        final String fileFolder = itemCategory.replaceAll(" ", "-").toLowerCase() + "/";
+        final File directory = new File(defaultPath + fileFolder);
+        if (!directory.exists()) {
+            directory.mkdir();
         }
-
-
-        String orgName = uploadedFile.getOriginalFilename();
-        String filePath = realPathtoUploads + orgName;
-        File dest = new File(filePath);
-        uploadedFile.transferTo(dest);
+        String fileName;
+        if (item.getImage() != null) {
+            fileName = item.getImage();
+        } else {
+            final String extension = FilenameUtils.getExtension(uploadedFile.getOriginalFilename());
+            fileName = itemCategory.replaceAll(" ", "_").toLowerCase()
+                    + "_"
+                    + item.getName().replaceAll(" ", "_").toLowerCase()
+                    + "." + extension;
+            item.setImage(fileName);
+            service.getRepository().save(item);
+        }
+        final String filePath = defaultPath + fileFolder + fileName;
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            fos.write(uploadedFile.getBytes());
+        }
         return true;
     }
 
