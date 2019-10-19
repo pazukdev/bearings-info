@@ -2,21 +2,14 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
-import com.pazukdev.backend.dto.TransitiveItemDto;
 import com.pazukdev.backend.dto.UserDto;
-import com.pazukdev.backend.dto.table.TableDto;
-import com.pazukdev.backend.dto.table.TableViewDto;
-import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.entity.UserEntity;
-import com.pazukdev.backend.entity.WishList;
 import com.pazukdev.backend.repository.UserRepository;
-import com.pazukdev.backend.util.ItemUtil;
 import com.pazukdev.backend.validator.CredentialsValidator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -31,19 +24,14 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
     private final PasswordEncoder passwordEncoder;
     private final CredentialsValidator credentialsValidator;
-    private final TransitiveItemService transitiveItemService;
-    private final WishListService wishListService;
 
     public UserService(final UserRepository repository,
                        final UserConverter converter,
                        final PasswordEncoder passwordEncoder,
-                       final CredentialsValidator credentialsValidator,
-                       TransitiveItemService transitiveItemService, final WishListService wishListService) {
+                       final CredentialsValidator credentialsValidator) {
         super(repository, converter);
         this.passwordEncoder = passwordEncoder;
         this.credentialsValidator = credentialsValidator;
-        this.transitiveItemService = transitiveItemService;
-        this.wishListService = wishListService;
     }
 
     @Transactional
@@ -78,72 +66,8 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         return new HashSet<>(Arrays.asList(Role.USER.name(), Role.ADMIN.name()));
     }
 
-    public TableViewDto createTableView(final String userName) {
-        return createTableView(getAllItems(userName));
-    }
-
-    public TableViewDto createTableView(final List<TransitiveItem> items) {
-        final List<TableDto> tables = new ArrayList<>();
-        for (final List<TransitiveItem> categorizedItems : ItemUtil.categorize(items)) {
-            tables.add(createTable(categorizedItems));
-        }
-        return new TableViewDto(items.size(), tables);
-    }
-
     public UserEntity getAdmin() {
         return getOne(1L);
-    }
-
-    public TableDto createTable(final String userName) {
-        return createTable(getAllItems(userName));
-    }
-
-    public TableDto createTable(final List<TransitiveItem> items) {
-        final String tableName = items.get(0).getCategory();
-        final List<String[]> rows = new ArrayList<>();
-        for (final TransitiveItem item : items) {
-            final String[] row = {
-                    item.getCategory(),
-                    item.getName(),
-                    item.getName().toString(),
-                    item.getId().toString()};
-            rows.add(row);
-        }
-        final String[][] rowArray = rows.toArray(new String[0][]);
-        return new TableDto(tableName, rowArray);
-    }
-
-    public List<TransitiveItem> getAllItems(final String userName) {
-//        final List<TransitiveItem> items = new ArrayList<>(getWishList(userName).getItems());
-//        ItemUtil.sort(items);
-//        return items;
-        return null;
-    }
-
-    private WishList getWishList(final String userName) {
-        return findByName(userName).getWishList();
-    }
-
-    public Boolean addItem(final String userName, final TransitiveItemDto transitiveItemDto) {
-//        final WishList wishList = getWishList(userName);
-//        final TransitiveItem item = transitiveItemService.create(transitiveItemDto);
-//        wishList.getItems().add(item);
-//        wishListService.update(wishList);
-//        return true;
-        return false;
-    }
-
-    public Boolean removeItem(final String userName, final Long itemId) {
-//        final WishList wishList = getWishList(userName);
-//        for (final TransitiveItem item : wishList.getItems()) {
-//            if (item.getId().longValue() == itemId) {
-//                wishList.getItems().remove(item);
-//                wishListService.update(wishList);
-//                transitiveItemService.delete(itemId);
-//                return true;
-//            }
-//        }
-        return false;
     }
 
     private List<String> createOrUpdateWithCredentialsValidation(final Long id,

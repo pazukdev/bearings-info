@@ -25,10 +25,11 @@ public class ItemUtilTest {
     public void getValueFromDescription() {
         Assert.assertEquals("{name=Bob, weight=200}", ItemUtil.toMap(description()).toString());
         Assert.assertEquals("Bob", ItemUtil.getValueFromDescription(description(), "name"));
+        Assert.assertEquals("200", ItemUtil.getValueFromDescription(description(), "weight"));
     }
 
     private String description() {
-        return "name:Bob;weight:200;";
+        return "name:Bob;;weight:200";
     }
 
 }

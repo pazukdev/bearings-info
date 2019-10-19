@@ -170,14 +170,14 @@
         background-color: #212121;
         color: #808080;
         margin: auto;
-        width: 500px;
+        width: 480px;
         height: 800px;
         overflow-y: auto;
         border-radius: 10px;
     }
 
     #screen::-webkit-scrollbar {
-        /*display: none;*/
+        display: none;
     }
 
     #appName {

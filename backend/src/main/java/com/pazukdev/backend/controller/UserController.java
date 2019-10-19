@@ -2,12 +2,9 @@ package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.UserDto;
-import com.pazukdev.backend.dto.table.TableDto;
-import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.WishList;
-import com.pazukdev.backend.repository.WishListRepository;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
 import io.swagger.annotations.Api;
@@ -38,7 +35,6 @@ public class UserController {
 
     private final UserService userService;
     private final ItemService itemService;
-    private final WishListRepository wishListRepository;
     private final UserConverter userConverter;
 
     @GetMapping("/admin/user/list")
@@ -113,20 +109,6 @@ public class UserController {
         }
     }
 
-    @PutMapping(value = "{userName}/remove-item/{itemId}")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Remove item from wish list")
-    public Boolean removeItem(@PathVariable final String userName, @PathVariable final Long itemId) {
-        return userService.removeItem(userName, itemId);
-    }
-
-    @GetMapping(value = "{userName}/wishlist")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get user wishlist")
-    public TableDto getWishList(@PathVariable final String userName) {
-        return userService.createTable(userName);
-    }
-
     @GetMapping(value = "{userName}/wishlist/{itemId}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get user wishlist")
@@ -134,17 +116,9 @@ public class UserController {
         return isItemInWishList(userName, itemService.getOne(itemId));
     }
 
-    @GetMapping(value = "{userName}/categorized-wishlist")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get user wishlist sorted by item categories")
-    public TableViewDto getCategorizedWishList(@PathVariable final String userName) {
-        return userService.createTableView(userName);
-    }
-
     private boolean isItemInWishList(final String userName, final Item item) {
         final WishList wishList = userService.findByName(userName).getWishList();
-        boolean contains = wishList.getItems().contains(item);
-        return contains;
+        return wishList.getItems().contains(item);
     }
 
 }
