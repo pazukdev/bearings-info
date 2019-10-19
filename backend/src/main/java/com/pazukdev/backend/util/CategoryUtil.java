@@ -1,6 +1,6 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.entity.item.Item;
+import com.pazukdev.backend.entity.Item;
 
 import java.util.HashSet;
 import java.util.Set;

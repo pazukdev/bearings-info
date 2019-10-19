@@ -1,21 +1,29 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.dto.item.ItemView;
-import com.pazukdev.backend.dto.item.NestedItemDto;
+import com.pazukdev.backend.dto.ItemView;
+import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.dto.table.ReplacersTable;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
+import com.pazukdev.backend.entity.ChildItem;
+import com.pazukdev.backend.entity.Item;
+import com.pazukdev.backend.entity.Replacer;
 import com.pazukdev.backend.entity.UserEntity;
-import com.pazukdev.backend.entity.item.ChildItem;
-import com.pazukdev.backend.entity.item.Item;
-import com.pazukdev.backend.entity.item.Replacer;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static com.pazukdev.backend.dto.item.NestedItemDtoFactory.*;
+import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.*;
 
 public class TableUtil {
 

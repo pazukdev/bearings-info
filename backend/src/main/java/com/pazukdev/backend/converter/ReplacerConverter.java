@@ -1,8 +1,8 @@
 package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
-import com.pazukdev.backend.dto.item.NestedItemDto;
-import com.pazukdev.backend.entity.item.Replacer;
+import com.pazukdev.backend.dto.NestedItemDto;
+import com.pazukdev.backend.entity.Replacer;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

@@ -2,8 +2,8 @@ package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.WishListDto;
+import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.entity.WishList;
-import com.pazukdev.backend.entity.item.TransitiveItem;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

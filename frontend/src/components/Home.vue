@@ -6,28 +6,9 @@
                 @cancel="cancel"
                 @add-motorcycle="addMotorcycle"/>
 
-        <Users v-show="isLastComponent('Users')" @reopen-users="reopenUsers"/>
-
-        <Report v-show="isLastComponent('Report')"/>
-
         <Item v-show="isLastComponent('Item')"
               @cancel="cancel"
               @select-item="selectItem"/>
-
-<!--        <table class="centred-table" v-show="isLastComponent('MotorcycleMenu')">-->
-<!--            <tbody>-->
-<!--            <tr v-if="admin">-->
-<!--                <td>-->
-<!--                    <button class="content"-->
-<!--                            type="button"-->
-<!--                            style="width: 174px"-->
-<!--                            v-on:click="openUsers()">-->
-<!--                        {{"Users"}}-->
-<!--                    </button>-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--            </tbody>-->
-<!--        </table>-->
 
         <div v-show="isLastComponent('MotorcycleMenu')"
              style="width: 100%; text-align: center; margin-top: 60px; margin-bottom: 20px">
@@ -40,8 +21,6 @@
     import axios from 'axios';
     import {mapState} from 'vuex';
     import MotorcycleMenu from "./MotorcycleMenu";
-    import Report from "./Report";
-    import Users from "./Users";
     import Item from "./Item";
 
     export default {
@@ -59,7 +38,6 @@
         created() {
             this.refresh();
             this.isAdmin();
-            //this.refreshUsers();
         },
 
         computed: {
@@ -78,8 +56,6 @@
 
         components: {
             MotorcycleMenu,
-            Report,
-            Users,
             Item
         },
 
@@ -134,15 +110,6 @@
                 this.switchComponent('AddMotorcycle');
             },
 
-            openUsers() {
-                this.switchComponent('Users');
-            },
-
-            reopenUsers() {
-                this.refreshUsers();
-                this.openUsers();
-            },
-
             reload() {
                 window.location.reload();
             },
@@ -150,18 +117,6 @@
             refresh() {
                 this.redirectToLogin();
                 this.showMotorcycleMenu();
-            },
-
-            refreshUsers() {
-                axios
-                    .get(`/backend/admin/user/list`, {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => {
-                        this.$store.dispatch("setUsers", response.data)
-                    });
             },
 
             setItem(id) {

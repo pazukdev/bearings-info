@@ -1,8 +1,8 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.LikeList;
 import com.pazukdev.backend.entity.UserEntity;
-import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.service.UserService;
 
 import java.util.HashSet;

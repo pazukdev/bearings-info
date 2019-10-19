@@ -2,13 +2,13 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
+import com.pazukdev.backend.dto.TransitiveItemDto;
 import com.pazukdev.backend.dto.UserDto;
-import com.pazukdev.backend.dto.item.TransitiveItemDto;
 import com.pazukdev.backend.dto.table.TableDto;
 import com.pazukdev.backend.dto.table.TableViewDto;
+import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.WishList;
-import com.pazukdev.backend.entity.item.TransitiveItem;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.util.ItemUtil;
 import com.pazukdev.backend.validator.CredentialsValidator;
@@ -16,7 +16,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Siarhei Sviarkaltsau

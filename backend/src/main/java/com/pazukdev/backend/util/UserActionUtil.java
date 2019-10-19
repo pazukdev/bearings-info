@@ -1,10 +1,10 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.entity.ChildItem;
+import com.pazukdev.backend.entity.Item;
+import com.pazukdev.backend.entity.Replacer;
+import com.pazukdev.backend.entity.UserAction;
 import com.pazukdev.backend.entity.UserEntity;
-import com.pazukdev.backend.entity.item.ChildItem;
-import com.pazukdev.backend.entity.item.Item;
-import com.pazukdev.backend.entity.item.Replacer;
-import com.pazukdev.backend.entity.item.UserAction;
 import com.pazukdev.backend.service.ItemService;
 import lombok.Getter;
 

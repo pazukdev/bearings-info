@@ -2,7 +2,7 @@ package com.pazukdev.backend.util;
 
 import com.opencsv.CSVReader;
 import com.pazukdev.backend.entity.AbstractEntity;
-import com.pazukdev.backend.entity.AbstractEntityFactory;
+import com.pazukdev.backend.entity.factory.AbstractEntityFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

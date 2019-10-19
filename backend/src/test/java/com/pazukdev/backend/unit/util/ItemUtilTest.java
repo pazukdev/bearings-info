@@ -1,7 +1,7 @@
 package com.pazukdev.backend.unit.util;
 
 import com.pazukdev.backend.MockData;
-import com.pazukdev.backend.entity.item.TransitiveItem;
+import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.util.ItemUtil;
 import org.junit.Assert;
 import org.junit.Test;

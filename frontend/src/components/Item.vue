@@ -1,7 +1,7 @@
 <template>
     <div>
-        {{file}}<br><br>
-        {{imageData}}<br><br>
+<!--        {{file}}<br><br>-->
+<!--        {{imageData}}<br><br>-->
 
         <table id="header-menu" class="no-border">
             <tbody>
@@ -104,7 +104,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2"><hr></td>
+                            <td colspan="3"><hr></td>
                         </tr>
                         </tbody>
                     </table>
@@ -506,9 +506,6 @@
             }
         },
 
-        created() {
-        },
-
         computed: {
             ...mapState({
                 authorization: state => state.dictionary.authorization,
@@ -532,21 +529,9 @@
                     })
             },
 
-            onUpload1(file) {
-                let data = new FormData();
-                data.append("file", file);
-                axios
-                    .put("/backend/item/file-upload/" + this.itemView.itemId, data, {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-            },
-
             previewImage(event) {
                 let input = event.target;
                 this.file = input.files[0];
-                //this.onUpload1(this.file);
                 if (this.file !== null) {
                     let reader = new FileReader();
                     reader.onload = (e) => {

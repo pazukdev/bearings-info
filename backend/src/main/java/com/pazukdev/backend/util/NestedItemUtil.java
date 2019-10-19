@@ -1,13 +1,17 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.dto.item.NestedItemDto;
-import com.pazukdev.backend.dto.item.NestedItemDtoFactory;
+import com.pazukdev.backend.dto.NestedItemDto;
+import com.pazukdev.backend.dto.factory.NestedItemDtoFactory;
 import com.pazukdev.backend.dto.table.PartsTable;
-import com.pazukdev.backend.entity.item.Item;
+import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class NestedItemUtil {

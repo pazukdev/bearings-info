@@ -1,10 +1,10 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.dto.item.ItemView;
-import com.pazukdev.backend.dto.item.RateReplacer;
+import com.pazukdev.backend.dto.ItemView;
+import com.pazukdev.backend.dto.RateReplacer;
+import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.LikeList;
 import com.pazukdev.backend.entity.UserEntity;
-import com.pazukdev.backend.entity.item.Item;
 import com.pazukdev.backend.service.ItemService;
 import lombok.Getter;
 

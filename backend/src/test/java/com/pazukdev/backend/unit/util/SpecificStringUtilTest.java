@@ -1,9 +1,6 @@
 package com.pazukdev.backend.unit.util;
 
-import com.pazukdev.backend.constant.bearing.BearingType;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 import static org.junit.Assert.*;
@@ -64,18 +61,6 @@ public class SpecificStringUtilTest {
 
         testString = "207; 205; 204";
         assertEquals("[207, 205, 204]", getList(testString).toString());
-    }
-
-    @Test
-    public void enumTest() {
-        assertEquals("Cylindrical roller", enumToCapitalizedLowerCaseString(BearingType.CYLINDRICAL_ROLLER));
-        assertTrue(BearingType.CYLINDRICAL_ROLLER == stringToEnum(BearingType.class, "Cylindrical roller"));
-
-        String testString = "[DEEPGROOVE, CYLINDRICAL_ROLLER, TAPERED_ROLLER]";
-        assertEquals(testString, Arrays.asList(getNames(BearingType.class)).toString());
-
-        testString = "[Deepgroove, Cylindrical roller, Tapered roller]";
-        assertEquals(testString, enumClassToCapitalizedStrings(BearingType.class).toString());
     }
 
 }

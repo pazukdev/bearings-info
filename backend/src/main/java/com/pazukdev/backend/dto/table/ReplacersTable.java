@@ -1,7 +1,7 @@
 package com.pazukdev.backend.dto.table;
 
 import com.pazukdev.backend.dto.AbstractDto;
-import com.pazukdev.backend.dto.item.NestedItemDto;
+import com.pazukdev.backend.dto.NestedItemDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

@@ -1,8 +1,8 @@
 package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.TransitiveItemConverter;
-import com.pazukdev.backend.dto.item.TransitiveItemDto;
-import com.pazukdev.backend.entity.item.TransitiveItem;
+import com.pazukdev.backend.dto.TransitiveItemDto;
+import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.repository.TransitiveItemRepository;
 import com.pazukdev.backend.util.ItemUtil;
 import lombok.Getter;

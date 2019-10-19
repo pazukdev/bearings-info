@@ -1,8 +1,8 @@
 package com.pazukdev.backend.dataloader;
 
-import com.pazukdev.backend.dto.item.ReplacerData;
-import com.pazukdev.backend.entity.item.TransitiveItem;
-import com.pazukdev.backend.entity.item.TransitiveItemFactory;
+import com.pazukdev.backend.dto.ReplacerData;
+import com.pazukdev.backend.entity.TransitiveItem;
+import com.pazukdev.backend.entity.factory.TransitiveItemFactory;
 import com.pazukdev.backend.repository.TransitiveItemRepository;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.TransitiveItemService;
