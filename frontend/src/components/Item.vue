@@ -256,7 +256,7 @@
                 <td v-if="table.parts.length > 0" colspan="3">
                     <table class="get-all-table">
                         <tbody>
-                        <tr v-if="arrayHaveActiveItems(table.parts) && !isMotorcycleCatalogueView()">
+                        <tr v-if="arrayHaveActiveItems(table.parts)">
                             <td style="width: 120px">
                                 <b>{{table.name}}</b>
                             </td>
@@ -288,6 +288,9 @@
                             <td>
                                 <p v-if="!isEditMode && isShowQuantityValue()">
                                     {{part.quantity}}
+                                </p>
+                                <p v-if="!isEditMode && isMotorcycleCatalogueView()">
+                                    {{part.comment}}
                                 </p>
                                 <input style="width: 80px"
                                        v-if="isEditMode && isOrdinaryItemView()"
