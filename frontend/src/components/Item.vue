@@ -513,7 +513,6 @@
             ...mapState({
                 authorization: state => state.dictionary.authorization,
                 userName: state => state.dictionary.userName,
-                admin: state => state.dictionary.admin,
                 itemView: state => state.dictionary.itemViews[state.dictionary.itemViews.length - 1],
                 itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
             })
@@ -720,6 +719,7 @@
                 } if (this.newItemName === "") {
                     this.newItemNameMessage = "Item name not specified"
                 } else {
+                    //this.$store.dispatch("setLoading", true);
                     this.clearItemCreationMessages();
                     axios
                         .post("/backend/item/create-view/"
@@ -738,6 +738,7 @@
             },
 
             setItem(id) {
+                this.$store.dispatch("setLoading", true);
                 this.$store.dispatch("addItemId", id);
                 this.$emit('select-item', id);
                 this.switchEditModeOff();
@@ -835,11 +836,14 @@
                         }
                     })
                     .then(() => {
-                        this.$store.dispatch("removeLastItemView");
-                        this.$store.dispatch("removeLastItemId");
-                        this.$store.dispatch("removeLastComponent");
+                        this.back();
                         this.setItem(id);
                     });
+            },
+
+            back() {
+                this.$store.dispatch("removeLastItemView");
+                this.$store.dispatch("removeLastItemId");
             },
 
             isPartsTitleVisible() {
@@ -924,7 +928,7 @@
             },
 
             isItemDeleteButtonVisibleToCurrentUser(item) {
-                return this.admin
+                return this.itemView.userData.comment === "Admin"
                     || this.currentUserIsCreator(item)
                     || this.isOrdinaryItemView()
                     || this.isWishListView();

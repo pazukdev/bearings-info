@@ -1,6 +1,6 @@
 <template id="app">
     <div id="background">
-        <div id="screen" style>
+        <div id="screen" style="text-align: center">
             <div id="app_bar" style="background-color: #617D89; height: 70px; padding: 10px">
                 <table style="text-align: center; width: 100%; height: 100%">
                     <tbody>
@@ -30,9 +30,9 @@
                     </tbody>
                 </table>
             </div>
-<!--            {{homeComponent}}<br>-->
-<!--            {{itemViews.length}}<br>-->
-<!--            {{itemIds}}-->
+            {{itemViews.length}}<br>
+            {{itemIds}}
+            {{loading}}
             <router-view style="padding: 20px"></router-view>
         </div>
     </div>
@@ -48,7 +48,7 @@
         computed: {
             ...mapState({
                 authorization: state => state.dictionary.authorization,
-                homeComponent: state => state.dictionary.homeComponent,
+                loading: state => state.dictionary.loading,
                 itemViews: state => state.dictionary.itemViews,
                 itemIds: state => state.dictionary.itemIds,
                 itemView: state => state.dictionary.itemViews[state.dictionary.itemViews.length - 1],
@@ -62,7 +62,6 @@
             logout() {
                 this.removeToken();
                 this.reload();
-                this.$store.dispatch("clearHistory");
             },
 
             removeToken() {
@@ -78,36 +77,14 @@
                 window.location.reload();
             },
 
-            getCurrentRouteName() {
-                return this.$router.currentRoute.name;
-            },
-
             isBackButtonDisplayed() {
-                return this.homeComponent.length > 1;
-            },
-
-            isBackAllowedUrl() {
-                return this.getCurrentRouteName() !== "login"
-                    && this.getCurrentRouteName() !== "home";
+                return this.itemIds.length > 1;
             },
 
             back() {
-                if (this.homeComponent[this.homeComponent.length - 1] === "Item") {
-                    this.$store.dispatch("removeLastItemView");
-                    if (this.homeComponent[this.homeComponent.length - 1] === "Item") {
-                        this.$store.dispatch("removeLastItemId");
-                        this.refreshItem();
-                    }
-
-                }
-                this.$store.dispatch("removeLastComponent");
-                if (this.itemIds.length === 0) {
-                    this.showMotorcycleMenu();
-                }
-
-                if (this.homeComponent.length === 1) {
-                    this.refreshWishList(this.userName);
-                }
+                this.$store.dispatch("removeLastItemView");
+                this.$store.dispatch("removeLastItemId");
+                this.getItemView(this.itemId, true);
             },
 
             getItemView(itemId, removeLastItemView) {
@@ -119,34 +96,12 @@
                         }
                     })
                     .then(response => {
-                        if (removeLastItemView === true) {
+                        if (removeLastItemView === true ) {
                             this.$store.dispatch("removeLastItemView");
                         }
                         this.$store.dispatch("addItemView", response.data);
                     });
-            },
-
-            refreshItem() {
-                this.getItemView(this.itemId, true);
-            },
-
-            showMotorcycleMenu() {
-                let specialMotorcycleCatalogueItemId = -2;
-                this.getItemView(specialMotorcycleCatalogueItemId, false);
-            },
-
-            refreshWishList(userName) {
-                axios
-                    .get("backend/" + userName + "/categorized-wishlist", {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => {
-                        this.$store.dispatch("setWishList", response.data)
-                    })
-
-            },
+            }
         }
     }
 </script>

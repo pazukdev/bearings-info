@@ -3,10 +3,10 @@ const state = {
     auth: false,
     login: true,
     admin: false,
+    loading: false,
     userName: "",
     authorization: "",
     incorrectCredentials: false,
-    homeComponent: [],
     motorcycles: [],
     bearings: [],
     seals: [],
@@ -34,12 +34,8 @@ const actions = {
         commit("setAdmin", context);
     },
 
-    setHomeComponent: ({commit}, context) => {
-        commit("setHomeComponent", context);
-    },
-
-    removeLastComponent: ({commit}, context) => {
-        commit("removeLastComponent", context);
+    setLoading: ({commit}, context) => {
+        commit("setLoading", context);
     },
 
     addItemView: ({commit}, context) => {
@@ -104,69 +100,42 @@ const mutations = {
         state.admin = admin === true;
     },
 
+    setLoading(state, loading) {
+        if (state.loading !== loading) {
+            state.loading = loading === true;
+        }
+    },
+
     setUserName(state, userName) {
         state.userName = userName;
     },
 
-    setHomeComponent(state, homeComponent) {
-        if (homeComponent === "Item") {
-            state.homeComponent.push(homeComponent);
-        } else if (homeComponent !== state.homeComponent[state.homeComponent.length - 1]) {
-            state.homeComponent.push(homeComponent);
-        }
-    },
-
-    removeLastComponent(state) {
-        state.homeComponent.splice(state.homeComponent.length - 1, 1);
-    },
-
     addItemView(state, itemView) {
         state.itemViews.push(itemView);
+        state.loading = false;
     },
 
     removeLastItemView(state) {
+        state.loading = true;
         state.itemViews.splice(state.itemViews.length - 1, 1);
     },
 
     removePreLastItemView(state) {
+        state.loading = true;
         state.itemViews.splice(state.itemViews.length - 2, 1);
     },
 
     addItemId(state, itemId) {
-        state.itemIds.push(itemId);
+        if (state.itemIds[state.itemIds.length - 1] !== itemId) {
+            state.itemIds.push(itemId);
+        }
+
     },
 
     removeLastItemId(state) {
         state.itemIds.splice(state.itemIds.length - 1, 1);
-    },
-
-    clearHistory(state) {
-        state.homeComponent = [];
-    },
-
-    setMotorcycles(state, motorcycles) {
-        state.motorcycles = motorcycles;
-    },
-
-    setBearings(state, bearings) {
-        state.bearings = bearings;
-    },
-
-    setSeals(state, seals) {
-        state.seals = seals;
-    },
-
-    setUsers(state, users) {
-        state.users = users;
-    },
-
-    setWishList(state, wishList) {
-        state.wishList = wishList;
-    },
-
-    setTable(state, table) {
-        state.table = table;
     }
+
 };
 
 export default {
