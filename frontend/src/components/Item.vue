@@ -286,7 +286,7 @@
                                 </button>
                             </td>
                             <td>
-                                <p v-if="!isEditMode && isShowQuantityValue()">
+                                <p v-if="isShowQuantityValue()">
                                     {{part.quantity}}
                                 </p>
                                 <p v-if="!isEditMode && isMotorcycleCatalogueView()">
@@ -903,7 +903,8 @@
             },
 
             isShowQuantityValue() {
-                return this.isOrdinaryItemView() || this.isUserListView();
+                return (!this.isEditMode && (this.isOrdinaryItemView() || this.isUserListView()))
+                    || (this.isEditMode && this.isUserListView());
             },
 
             notStub(name) {
