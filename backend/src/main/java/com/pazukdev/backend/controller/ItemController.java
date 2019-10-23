@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ import java.io.IOException;
 @RequestMapping("/item")
 @RequiredArgsConstructor
 @Api(tags = "Item Controller", value = "API methods for items")
+@CrossOrigin
 public class ItemController {
 
     private final ItemService service;
