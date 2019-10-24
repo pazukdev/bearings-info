@@ -34,6 +34,12 @@
                 {{"Item views stack length: " + itemViews.length}}<br>
                 {{"Item ids: " + itemIds}}<br>
                 {{"Is loading: " + loading}}<br>
+                {{"is admin: " + admin}}<br>
+                {{"itemView: " + itemView}}<br>
+                {{"itemId: " + itemId}}<br>
+<!--                <div v-if="itemView !== null || itemView !== undefined">-->
+<!--                    {{"itemView.itemId: " + itemView.itemId}}<br>-->
+<!--                </div>-->
             </div>
             <router-view style="padding: 20px"></router-view>
         </div>
@@ -56,7 +62,8 @@
                 itemView: state => state.dictionary.itemViews[state.dictionary.itemViews.length - 1],
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
-                itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
+                itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1],
+                admin: state => state.dictionary.admin
             })
         },
 

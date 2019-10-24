@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div style="text-align: left">
-            {{newItemCategory}}<br>
-            {{newItemName}}<br>
-        </div>
+<!--        <div style="text-align: left">-->
+<!--            {{newItemCategory}}<br>-->
+<!--            {{newItemName}}<br>-->
+<!--        </div>-->
         <table id="header-menu" class="no-border">
             <tbody>
             <tr>
@@ -870,7 +870,6 @@
                         for (let j = 0; j < table.parts.length; j++) {
                             let item = table.parts[j];
                             if (item.itemName === name) {
-                                alert(item.itemName);
                                 return true;
                             }
                         }
