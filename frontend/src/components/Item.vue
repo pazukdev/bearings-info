@@ -1,8 +1,9 @@
 <template>
     <div>
-<!--        {{file}}<br><br>-->
-<!--        {{imageData}}<br><br>-->
-
+        <div style="text-align: left">
+            {{newItemCategory}}<br>
+            {{newItemName}}<br>
+        </div>
         <table id="header-menu" class="no-border">
             <tbody>
             <tr>
@@ -93,7 +94,8 @@
                                 </datalist>
                             </td>
                             <td>
-                                <input @change="newItemNameMessage = ''" v-model="newItemName" type="text"/>
+                                <input @change="newItemNameMessage = ''"
+                                       v-model="newItemName" type="text"/>
                             </td>
                             <td>
                                 <button class="content"
@@ -717,8 +719,10 @@
                 this.clearItemCreationMessages();
                 if (this.newItemCategory === "") {
                     this.categoryMessage = "Category not specified";
-                } if (this.newItemName === "") {
+                } else if (this.newItemName === "") {
                     this.newItemNameMessage = "Item name not specified"
+                } else if (this.sameItemNameExistsInCategory(this.newItemCategory, this.newItemName)) {
+                    this.newItemNameMessage = "Item with this name already exists"
                 } else {
                     //this.$store.dispatch("setLoading", true);
                     this.clearItemCreationMessages();
@@ -857,6 +861,22 @@
                 return (this.notStub(this.itemView.replacersTable.name)
                     && this.arrayHaveActiveItems(this.itemView.replacersTable.replacers))
                 || (this.notStub(this.itemView.replacersTable.name) && this.isEditMode);
+            },
+
+            sameItemNameExistsInCategory(category, name) {
+                for (let i = 0; i < this.itemView.partsTable.tables.length; i++) {
+                    let table = this.itemView.partsTable.tables[i];
+                    if (table.name === category) {
+                        for (let j = 0; j < table.parts.length; j++) {
+                            let item = table.parts[j];
+                            if (item.itemName === name) {
+                                alert(item.itemName);
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
             },
 
             itemHaveActiveParts() {
