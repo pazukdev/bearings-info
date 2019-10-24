@@ -1,6 +1,6 @@
 <template>
     <div id="app_area">
-        <div v-if="isLoading()" style="text-align: center; margin-top: 280px">
+        <div v-if="isLoading()" style="text-align: center; margin-top: 240px">
             {{"Loading..."}}
         </div>
 

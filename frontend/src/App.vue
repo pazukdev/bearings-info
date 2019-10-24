@@ -30,9 +30,11 @@
                     </tbody>
                 </table>
             </div>
-            {{itemViews.length}}<br>
-            {{itemIds}}
-            {{loading}}
+            <div style="width: 100%; text-align: left">
+                {{"Item views stack length: " + itemViews.length}}<br>
+                {{"Item ids: " + itemIds}}<br>
+                {{"Is loading: " + loading}}<br>
+            </div>
             <router-view style="padding: 20px"></router-view>
         </div>
     </div>
@@ -78,7 +80,7 @@
             },
 
             isBackButtonDisplayed() {
-                return this.itemIds.length > 1;
+                return this.itemIds.length > 1 && !this.loading;
             },
 
             back() {

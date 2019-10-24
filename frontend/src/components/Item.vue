@@ -235,7 +235,7 @@
                     {{itemView.partsTable.name}}
                 </td>
             </tr>
-            <tr v-if="isShowPartsTableHeader() && isPartsTitleVisible">
+            <tr v-if="isShowPartsTableHeader()">
                 <td>
                     <table id="parts-header" style="text-align: center">
                         <tbody>
@@ -354,18 +354,18 @@
                     </table>
                 </td>
             </tr>
-            <tr v-if="isReplacersTitleVisible()"><td><hr></td></tr>
+            <tr v-if="isReplacersTableVisible()"><td><hr></td></tr>
             </tbody>
         </table>
 
-        <table id="replacers-table" style="text-align: center">
+        <table v-if="isReplacersTableVisible()" id="replacers-table" style="text-align: center">
             <tbody>
-            <tr v-if="isReplacersTitleVisible()">
+            <tr>
                 <td colspan="6">
                     {{itemView.replacersTable.name}}
                 </td>
             </tr>
-            <tr v-if="isReplacersTitleVisible()">
+            <tr>
                 <td colspan="5" style="height: 20px"></td>
             </tr>
             <tr v-if="notStub(itemView.replacersTable.name) && statusActive(replacer)"
@@ -547,7 +547,8 @@
                 return !(this.itemView.partsTable.header[0] === "-"
                     && this.itemView.partsTable.header[1] === "-"
                     && this.itemView.partsTable.header[2] === "-")
-                    && this.itemView.category !== "Motorcycle";
+                    && this.itemView.category !== "Motorcycle"
+                    && this.isPartsTitleVisible();
             },
 
             addThisItemToWishList() {
@@ -852,7 +853,7 @@
                     || (this.notStub(this.itemView.partsTable.name) && this.isEditMode);
             },
 
-            isReplacersTitleVisible() {
+            isReplacersTableVisible() {
                 return (this.notStub(this.itemView.replacersTable.name)
                     && this.arrayHaveActiveItems(this.itemView.replacersTable.replacers))
                 || (this.notStub(this.itemView.replacersTable.name) && this.isEditMode);
