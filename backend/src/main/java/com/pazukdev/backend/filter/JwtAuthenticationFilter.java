@@ -12,6 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(final HttpServletRequest request,
                                             final HttpServletResponse response,
                                             final FilterChain filterChain,
-                                            final Authentication authentication) {
+                                            final Authentication authentication) throws IOException {
 
         final List<String> roles = authentication.getAuthorities()
                 .stream()
@@ -63,7 +64,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .claim("roles", roles)
                 .compact();
 
-        response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
+        //response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(
+                "{\"" + SecurityConstants.TOKEN_HEADER + "\":\"" + SecurityConstants.TOKEN_PREFIX + token + "\"}"
+        );
     }
 
 }

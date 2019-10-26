@@ -100,8 +100,8 @@
                     .then(response => {
                         if (response.status === 200) {
                             this.setIncorrectCredentials(false);
-                            console.log(JSON.stringify(response));
-                            let authorization = response.headers.authorization;
+                            console.log(JSON.stringify(response.data.Authorization));
+                            let authorization = response.data.Authorization;
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", this.username);
                             this.$router.push({ path: '/'});
