@@ -1,59 +1,66 @@
 <template id="app">
     <div>
-        <table>
+        <table style="width: 100%">
             <tbody>
-            <tr class="background"><td colspan="3"></td></tr>
+            <tr class="mobile-hide" style="height: 50px"><td colspan="3"></td></tr>
             <tr>
-                <td></td>
-                <td>
-                    <div id="screen" style="text-align: center">
-                        <div id="app_bar" style="background-color: #617D89; height: 70px; padding: 10px">
-                            <table style="text-align: center; width: 100%; height: 100%">
-                                <tbody>
-                                <tr>
-                                    <td style="width: 80px">
-                                        <button
-                                                v-show="isBackButtonDisplayed()"
-                                                @click="back()"
-                                                id="back"
-                                                class="app-bar-button">
-                                            <b>Back</b>
-                                        </button>
-                                    </td>
-                                    <td id="appName" style="text-align: center; font-size: x-large">
-                                        <b>Bearings info</b>
-                                    </td>
-                                    <td style="width: 80px">
-                                        <button
-                                                v-show="isAuthorized()"
-                                                @click="logout()"
-                                                id="logout"
-                                                class="app-bar-button">
-                                            <b>Logout</b>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div style="width: 100%; text-align: left">
-                            {{"Item views stack length: " + itemViews.length}}<br>
-                            {{"Item ids: " + itemIds}}<br>
-                            {{"Is loading: " + loading}}<br>
-                            {{"authorization: " + authorization}}<br>
-                            {{"is admin: " + admin}}<br>
-                            {{"itemView: " + itemView}}<br>
-                            {{"itemId: " + itemId}}<br>
-                            <!--                <div v-if="itemView !== null || itemView !== undefined">-->
-                            <!--                    {{"itemView.itemId: " + itemView.itemId}}<br>-->
-                            <!--                </div>-->
-                        </div>
-                        <router-view style="padding: 20px"></router-view>
-                    </div>
+                <td class="mobile-hide"></td>
+                <td class="mobile-screen">
+                    <table style="height: 100%">
+                        <tbody>
+                        <tr style="background: #617D89; height: 80px">
+                            <td style="width: 80px">
+                                <button
+                                        v-show="isBackButtonDisplayed()"
+                                        @click="back()"
+                                        id="back"
+                                        class="app-bar-button">
+                                    <b>Back</b>
+                                </button>
+                            </td>
+                            <td id="appName" style="text-align: center; font-size: x-large">
+                                <b>Bearings info</b>
+                            </td>
+                            <td style="width: 80px">
+                                <button
+                                        v-show="isAuthorized()"
+                                        @click="logout()"
+                                        id="logout"
+                                        class="app-bar-button">
+                                    <b>Logout</b>
+                                </button>
+                            </td>
+                        </tr>
+<!--                        <tr>-->
+<!--                            <td colspan="3">-->
+<!--                                <div style="text-align: left">-->
+<!--                                    {{"Item views stack length: " + itemViews.length}}<br>-->
+<!--                                    {{"Item ids: " + itemIds}}<br>-->
+<!--                                    {{"Is loading: " + loading}}<br>-->
+<!--                                    {{"authorization: " + authorization}}<br>-->
+<!--                                    {{"is admin: " + admin}}<br>-->
+<!--                                    {{"itemView: " + itemView}}<br>-->
+<!--                                    {{"itemId: " + itemId}}<br>-->
+<!--                                    &lt;!&ndash;                <div v-if="itemView !== null || itemView !== undefined">&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                    {{"itemView.itemId: " + itemView.itemId}}<br>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--                                </div>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+                        <tr>
+                            <td colspan="3">
+                                <router-view style="padding: 20px"></router-view>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+<!--                    <div id="screen" style="text-align: center; width: 300px">-->
+<!--                        <div style="background-color: #617D89; height: 70px; padding: 10px">-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </td>
-                <td></td>
+                <td class="mobile-hide"></td>
             </tr>
-            <tr><td colspan="3"></td></tr>
             </tbody>
         </table>
     </div>
@@ -143,14 +150,11 @@
         padding-top: 50px;
     }
 
-    #screen {
+    .mobile-screen {
         background-color: #212121;
         color: #808080;
-        margin: auto;
         width: 480px;
         height: 800px;
-        overflow-y: auto;
-        border-radius: 10px;
     }
 
     #screen::-webkit-scrollbar {
@@ -170,43 +174,14 @@
         color: #212121
     }
 
-    .background {
+    .mobile-hide {
         background: black;
-        height: 100px;
     }
 
-    .centred-table {
-        text-align: center;
-    }
-
-    .get-all-table {
-        text-align: center;
-    }
-
-    .creation-form {
-        text-align: left;
-        border-spacing: 20px;
-        border-collapse: separate;
-    }
-
-    .content {
-        width: 100%;
-    }
-
-    .right {
-        width: 50%;
-    }
-
-    .default-width-1 {
-        width: 160px;
-    }
-
-    .default-width-2 {
-        width: 100px;
-    }
-
-    .full-width {
-        width: 100%;
+    @media only screen and (max-width: 1000px) {
+        .mobile-hide {
+            display: none;
+        }
     }
 
     .round-button {
@@ -257,6 +232,10 @@
 
     hr {
         background: #808080;
+    }
+
+    img {
+        max-width: 100%;
     }
 
 </style>

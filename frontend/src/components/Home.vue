@@ -1,5 +1,5 @@
 <template>
-    <div id="app_area">
+    <div>
         <div v-if="isLoading()" style="text-align: center; margin-top: 240px">
             {{"Loading..."}}
         </div>
@@ -12,7 +12,6 @@
                 <td>
                     <button class="content"
                             type="button"
-                            style="width: 174px"
                             v-on:click="openItemsManagement()">
                         {{"Items management"}}
                     </button>
@@ -22,7 +21,6 @@
                 <td>
                     <button class="content"
                             type="button"
-                            style="width: 174px"
                             v-on:click="openUsersList()">
                         {{"Users"}}
                     </button>
@@ -186,10 +184,6 @@
 </script>
 
 <style scoped>
-    table {
-        border-spacing: 20px;
-        border-collapse: separate;
-    }
 </style>
 
 }

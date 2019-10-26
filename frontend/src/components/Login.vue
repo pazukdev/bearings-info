@@ -37,7 +37,7 @@
             <tr>
                 <td></td>
                 <td>
-                    <button style="width: 100%;" v-on:click="performLoginPageAction">{{buttonName()}}</button>
+                    <button v-on:click="performLoginPageAction">{{buttonName()}}</button>
                 </td>
             </tr>
             <tr v-if="incorrectCredentials" class="warning-message">
@@ -100,6 +100,7 @@
                     .then(response => {
                         if (response.status === 200) {
                             this.setIncorrectCredentials(false);
+                            console.log(JSON.stringify(response));
                             let authorization = response.headers.authorization;
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", this.username);
@@ -154,10 +155,6 @@
 <style scoped>
     table {
         margin-top: 120px;
-    }
-
-    input {
-        width: 100%;
     }
 
     .warning-message {
