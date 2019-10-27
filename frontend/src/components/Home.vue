@@ -122,7 +122,6 @@
                     })
                     .then(response => {
                         if (removeLastItemView === true) {
-                            this.$store.dispatch("removeLastComponent");
                             this.$store.dispatch("removeLastItemView");
                         }
                         this.$store.dispatch("addItemView", response.data);

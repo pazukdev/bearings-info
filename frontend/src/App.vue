@@ -113,10 +113,10 @@
             back() {
                 this.$store.dispatch("removeLastItemView");
                 this.$store.dispatch("removeLastItemId");
-                this.getItemView(this.itemId, true);
+                this.getItemView(this.itemId);
             },
 
-            getItemView(itemId, removeLastItemView) {
+            getItemView(itemId) {
                 axios
                     .get("backend/item/get-view/" + itemId
                         + "/" + this.userName, {
@@ -125,9 +125,6 @@
                         }
                     })
                     .then(response => {
-                        if (removeLastItemView === true ) {
-                            this.$store.dispatch("removeLastItemView");
-                        }
                         this.$store.dispatch("addItemView", response.data);
                     });
             }
