@@ -37,7 +37,7 @@
                 <td>
                     <button v-if="itemView.searchEnabled"
                             type="button"
-                            @click="stubMethod()">
+                            @click="searchInGoogle()">
                         {{"Google search"}}
                     </button>
                 </td>
@@ -504,6 +504,11 @@
         },
 
         methods: {
+
+            searchInGoogle() {
+                let q = "buy" + this.itemView.header.name;
+                window.open('http://google.com/search?q=' + q);
+            },
 
             onUpload() {
                 let data = new FormData();
