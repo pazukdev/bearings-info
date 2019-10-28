@@ -45,7 +45,7 @@
                     Incorrect login or password !
                 </td>
             </tr>
-            <tr v-for="message in validationMessages" class="warning-message">
+            <tr v-for="message in validationMessages" v-bind="message" class="warning-message">
                 <td colspan="2">
                     {{message}}
                 </td>
@@ -100,7 +100,7 @@
                     .then(response => {
                         if (response.status === 200) {
                             this.setIncorrectCredentials(false);
-                            console.log(JSON.stringify(response.data.Authorization));
+                            //console.log(JSON.stringify(response.data.Authorization));
                             let authorization = response.data.Authorization;
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", this.username);
@@ -146,7 +146,7 @@
             },
 
             setIncorrectCredentials(incorrectCredentials) {
-                this.$store.dispatch("setIncorrectCredentials", incorrectCredentials = true);
+                this.$store.dispatch("setIncorrectCredentials", incorrectCredentials);
             }
         }
     }
