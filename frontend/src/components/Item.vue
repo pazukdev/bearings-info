@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="text-align: center">
 <!--        <div style="text-align: left">-->
 <!--            {{newItemCategory}}<br>-->
 <!--            {{newItemName}}<br>-->
@@ -50,12 +50,12 @@
 
         <table id="item-creation-menu" class="no-border">
             <tbody>
-            <tr style="text-align: center">
+            <tr>
                 <td colspan="3">
                     <b>{{itemView.header.name}}</b>
                 </td>
             </tr>
-            <tr v-if="isOrdinaryItemView()" style="text-align: center">
+            <tr v-if="isOrdinaryItemView()">
                 <td colspan="3">
                     {{"Created by " + itemView.creatorName}}
                 </td>
@@ -63,7 +63,7 @@
             <tr style="height: 10px"><td></td></tr>
             <tr>
                 <td colspan="3">
-                    <table style="text-align: center" v-if="isItemsManagementView()">
+                    <table v-if="isItemsManagementView()">
                         <tbody>
                         <tr>
                             <td colspan="3"><hr></td>
@@ -222,8 +222,7 @@
             </tbody>
         </table>
 
-        <table id="parts-table"
-        style="text-align: center">
+        <table id="parts-table">
             <tbody>
             <tr v-if="isPartsTitleVisible()">
                 <td>
@@ -232,12 +231,12 @@
             </tr>
             <tr v-if="isShowPartsTableHeader()">
                 <td>
-                    <table id="parts-header" style="text-align: center">
+                    <table id="parts-header">
                         <tbody>
                         <tr>
-                            <td>{{itemView.partsTable.header[0]}}</td>
+                            <td class="parts-left-column">{{itemView.partsTable.header[0]}}</td>
                             <td>{{itemView.partsTable.header[1]}}</td>
-                            <td style="text-align: right"
+                            <td class="parts-right-column" style="text-align: right"
                                 v-if="itemView.partsTable.header[2] !== '-'">
                                 {{itemView.partsTable.header[2]}}
                             </td>
@@ -249,25 +248,26 @@
             </tr>
             <tr v-for="table in itemView.partsTable.tables">
                 <td v-if="table.parts.length > 0" colspan="3">
-                    <table class="get-all-table">
+                    <table>
                         <tbody>
                         <tr v-if="arrayHaveActiveItems(table.parts)">
-                            <td>
+                            <td class="parts-left-column">
                                 <b>{{table.name}}</b>
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td class="parts-middle-column"></td>
+                            <td class="parts-right-column"></td>
                             <td></td>
                         </tr>
                         <tr v-for="part in table.parts" v-if="statusActive(part)">
-                            <td>
+                            <td class="parts-left-column">
                                 <p v-if="!isEditMode || (isEditMode && !isOrdinaryItemView())">
                                     {{getFirstColumnValue(part)}}
                                 </p>
-                                <input v-if="isEditMode && isOrdinaryItemView()"
+                                <input class="parts-left-column"
+                                       v-if="isEditMode && isOrdinaryItemView()"
                                        v-model="part.location" type="text"/>
                             </td>
-                            <td>
+                            <td class="parts-middle-column">
                                 <p v-if="isUserListView()">
                                     {{part.buttonText}}
                                 </p>
@@ -277,14 +277,15 @@
                                     {{part.buttonText}}
                                 </button>
                             </td>
-                            <td>
+                            <td class="parts-right-column">
                                 <p v-if="isShowQuantityValue()">
                                     {{part.quantity}}
                                 </p>
                                 <p v-if="!isEditMode && isMotorcycleCatalogueView()">
                                     {{part.comment}}
                                 </p>
-                                <input v-if="isEditMode && isOrdinaryItemView()"
+                                <input class="parts-right-column"
+                                       v-if="isEditMode && isOrdinaryItemView()"
                                        v-model="part.quantity" type="text"/>
                             </td>
                             <td v-if="isEditMode && part.comment !== 'Admin'">
@@ -316,10 +317,11 @@
                         </tr>
                         <tr v-if="isEditMode" style="text-align: left">
                             <td>
-                                <input v-model="newPart.location" type="text"/>
+                                <input class="parts-left-column" v-model="newPart.location" type="text"/>
                             </td>
                             <td>
-                                <select v-model="newPart"
+                                <select class="parts-middle-column"
+                                        v-model="newPart"
                                         @change="partSelectOnChange()">
                                     <option v-for="part in itemView.possibleParts"
                                             v-if="selectOptionVisible(part)"
@@ -329,7 +331,9 @@
                                 </select>
                             </td>
                             <td>
-                                <input v-model="newPart.quantity" type="text"/>
+                                <input style="width: 100%"
+                                       v-model="newPart.quantity"
+                                       type="text"/>
                             </td>
                             <td>
                                 <button type="button"
@@ -350,7 +354,7 @@
         <table v-if="isReplacersTableVisible()" id="replacers-table" style="text-align: center">
             <tbody>
             <tr>
-                <td colspan="6">
+                <td colspan="5">
                     {{itemView.replacersTable.name}}
                 </td>
             </tr>
@@ -953,3 +957,21 @@
         }
     }
 </script>
+
+<style>
+    #parts-table {
+
+    }
+
+    .parts-left-column {
+        width: 120px;
+    }
+
+    .parts-middle-column {
+        width: 146px;
+    }
+
+    .parts-right-column {
+        width: 80px;
+    }
+</style>
