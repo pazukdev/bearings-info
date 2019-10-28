@@ -34,7 +34,6 @@
 <!--                        <tr>-->
 <!--                            <td colspan="3">-->
 <!--                                <div style="text-align: left">-->
-<!--                                    {{"Item views stack length: " + itemViews.length}}<br>-->
 <!--                                    {{"Item ids: " + itemIds}}<br>-->
 <!--                                    {{"Is loading: " + loading}}<br>-->
 <!--                                    {{"authorization: " + authorization}}<br>-->
@@ -77,9 +76,8 @@
             ...mapState({
                 authorization: state => state.dictionary.authorization,
                 loading: state => state.dictionary.loading,
-                itemViews: state => state.dictionary.itemViews,
                 itemIds: state => state.dictionary.itemIds,
-                itemView: state => state.dictionary.itemViews[state.dictionary.itemViews.length - 1],
+                itemView: state => state.dictionary.itemView,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
                 itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1],
@@ -111,6 +109,7 @@
             },
 
             back() {
+                this.$store.dispatch("setLoading", true);
                 this.$store.dispatch("removeLastItemView");
                 this.$store.dispatch("removeLastItemId");
                 this.getItemView(this.itemId);
@@ -125,7 +124,7 @@
                         }
                     })
                     .then(response => {
-                        this.$store.dispatch("addItemView", response.data);
+                        this.$store.dispatch("setItemView", response.data);
                     });
             }
         }

@@ -4,16 +4,10 @@ const state = {
     login: true,
     admin: false,
     loading: false,
-    userName: "",
-    authorization: "",
     incorrectCredentials: false,
-    motorcycles: [],
-    bearings: [],
-    seals: [],
-    users: [],
-    wishList: "",
-    table: "",
-    itemViews: [],
+    authorization: "",
+    userName: "",
+    itemView: "",
     itemIds: []
 };
 
@@ -38,16 +32,8 @@ const actions = {
         commit("setLoading", context);
     },
 
-    addItemView: ({commit}, context) => {
-        commit("addItemView", context);
-    },
-
-    removeLastItemView: ({commit}, context) => {
-        commit("removeLastItemView", context);
-    },
-
-    removePreLastItemView: ({commit}, context) => {
-        commit("removePreLastItemView", context);
+    setItemView: ({commit}, context) => {
+        commit("setItemView", context);
     },
 
     addItemId: ({commit}, context) => {
@@ -56,34 +42,6 @@ const actions = {
 
     removeLastItemId: ({commit}, context) => {
         commit("removeLastItemId", context);
-    },
-
-    clearHistory: ({commit}, context) => {
-        commit("clearHistory", context);
-    },
-
-    setMotorcycles: ({commit}, context) => {
-        commit("setMotorcycles", context);
-    },
-
-    setBearings: ({commit}, context) => {
-        commit("setBearings", context);
-    },
-
-    setSeals: ({commit}, context) => {
-        commit("setSeals", context);
-    },
-
-    setUsers: ({commit}, context) => {
-        commit("setUsers", context);
-    },
-
-    setWishList: ({commit}, context) => {
-        commit("setWishList", context);
-    },
-
-    setTable: ({commit}, context) => {
-        commit("setTable", context);
     }
 };
 
@@ -101,28 +59,16 @@ const mutations = {
     },
 
     setLoading(state, loading) {
-        if (state.loading !== loading) {
-            state.loading = loading === true;
-        }
+        state.loading = loading === true;
     },
 
     setUserName(state, userName) {
         state.userName = userName;
     },
 
-    addItemView(state, itemView) {
-        state.itemViews.push(itemView);
+    setItemView(state, itemView) {
+        state.itemView = itemView;
         state.loading = false;
-    },
-
-    removeLastItemView(state) {
-        state.loading = true;
-        state.itemViews.splice(state.itemViews.length - 1, 1);
-    },
-
-    removePreLastItemView(state) {
-        state.loading = true;
-        state.itemViews.splice(state.itemViews.length - 2, 1);
     },
 
     addItemId(state, itemId) {

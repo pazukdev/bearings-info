@@ -498,7 +498,7 @@
             ...mapState({
                 authorization: state => state.dictionary.authorization,
                 userName: state => state.dictionary.userName,
-                itemView: state => state.dictionary.itemViews[state.dictionary.itemViews.length - 1],
+                itemView: state => state.dictionary.itemView,
                 itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
             })
         },

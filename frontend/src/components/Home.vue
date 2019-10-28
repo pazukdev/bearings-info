@@ -71,9 +71,8 @@
                 wishList: state => state.dictionary.wishList,
                 table: state => state.dictionary.table,
                 itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1],
-                itemViews: state => state.dictionary.itemViews,
-                itemIds: state => state.dictionary.itemIds,
-                itemView: state => state.dictionary.itemViews[state.dictionary.itemViews.length - 1]
+                itemView: state => state.dictionary.itemView,
+                itemIds: state => state.dictionary.itemIds
             })
         },
 
@@ -124,7 +123,7 @@
                         if (removeLastItemView === true) {
                             this.$store.dispatch("removeLastItemView");
                         }
-                        this.$store.dispatch("addItemView", response.data);
+                        this.$store.dispatch("setItemView", response.data);
                     });
             },
 
