@@ -182,6 +182,10 @@
 </script>
 
 <style scoped>
+    table {
+        border-spacing: 20px;
+        border-collapse: separate;
+    }
 </style>
 
 }
