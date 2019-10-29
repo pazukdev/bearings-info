@@ -10,8 +10,7 @@
             <tbody>
             <tr>
                 <td>
-                    <button class="content"
-                            type="button"
+                    <button type="button"
                             v-on:click="openItemsManagement()">
                         {{"Items management"}}
                     </button>
@@ -19,8 +18,7 @@
             </tr>
             <tr v-if="admin">
                 <td>
-                    <button class="content"
-                            type="button"
+                    <button type="button"
                             v-on:click="openUsersList()">
                         {{"Users"}}
                     </button>

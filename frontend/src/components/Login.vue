@@ -3,18 +3,18 @@
         <table class="creation-form">
             <tbody>
             <tr>
-                <td style="text-align: right">
+                <td id="login-or-signup-txt">
                     Please, {{buttonName().toLowerCase()}} or
                 </td>
                 <td>
-                    <button style="width: 50%" v-on:click="switchForm">{{buttonReverseName()}}</button>
+                    <button v-on:click="switchForm()">{{buttonReverseName()}}</button>
                 </td>
             </tr>
             <tr>
                 <td>
                     Login
                 </td>
-                <td class="right">
+                <td class="half-width">
                     <input type="text" name="username" v-model="username"/>
                 </td>
             </tr>
@@ -45,7 +45,7 @@
                     Incorrect login or password !
                 </td>
             </tr>
-            <tr v-for="message in validationMessages" v-bind="message" class="warning-message">
+            <tr v-for="message in validationMessages" v-bind:value="message" class="warning-message">
                 <td colspan="2">
                     {{message}}
                 </td>
@@ -157,8 +157,16 @@
         margin-top: 120px;
     }
 
+    button {
+        width: 50%;
+    }
+
     .warning-message {
         text-align: center;
         color: red;
+    }
+
+    #login-or-signup-txt {
+        text-align: right;
     }
 </style>

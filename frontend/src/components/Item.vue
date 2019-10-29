@@ -7,15 +7,16 @@
         <table id="header-menu" class="no-border">
             <tbody>
             <tr>
-                <td style="width: 33%">
+                <td class="third-part-wide">
                     <button type="button"
+                            class="full-width"
                             v-if="!isWishListView()"
                             v-on:click="openWishList()">
                         {{"Wishlist: " + itemView.wishListIds.length + " items"}}
                     </button>
                 </td>
                 <td></td>
-                <td style="width: 33%; text-align: right">
+                <td class="third-part-wide" style="text-align: right">
                     <div>{{itemView.userData.itemName}}</div>
                     <div>{{"Rating: " + itemView.userData.rating}}</div>
                     <div v-if="itemView.userData.comment === 'Admin'">{{"You are admin"}}</div>
@@ -26,7 +27,7 @@
                 <td>
                     <button v-if="!isInWishList(itemView.itemId) && isOrdinaryItemView() && !isEditMode"
                             type="button"
-                            style="width: 100%"
+                            class="full-width"
                             @click="addThisItemToWishList()">
                         {{"Add to Wish List"}}
                     </button>
@@ -37,7 +38,7 @@
                 <td></td>
                 <td>
                     <button v-if="itemView.searchEnabled"
-                            style="width: 100%"
+                            class="full-width"
                             type="button"
                             @click="searchInGoogle()">
                         {{"Google search"}}
@@ -83,7 +84,7 @@
                             <td>
                                 <input type="text"
                                        list="categories"
-                                       class="content"
+                                       class="full-width"
                                        @change="categorySelectOnChange()"
                                        v-model="newItemCategory"/>
                                 <datalist id="categories">
@@ -98,7 +99,7 @@
                                        v-model="newItemName" type="text"/>
                             </td>
                             <td>
-                                <button class="content"
+                                <button class="full-width"
                                         type="button"
                                         v-on:click="create()">
                                     {{"Create"}}
@@ -119,7 +120,7 @@
             <tbody>
             <tr style="text-align: left"
                 v-for="row in itemView.header.matrix">
-                <td style="width: 50%">
+                <td class="half-width">
                     <p>
                         {{row[0]}}
                     </p>
@@ -131,7 +132,7 @@
                         {{row[1]}}
                     </p>
                     <button v-if="isShowInfoButton(row[3])" type="button"
-                            style="width: 100%"
+                            class="full-width"
                             @click="setItem(row[2])">
                         {{row[1]}}
                     </button>
@@ -172,7 +173,7 @@
                 <td>
                     <button v-if="isEditMode"
                             type="button"
-                            style="width: 194px"
+                            class="super-wide"
                             @click="cancel()">
                         {{"Cancel"}}
                     </button>
@@ -180,13 +181,13 @@
                 <td v-if="!isMotorcycleCatalogueView()" style="text-align: right">
                     <button v-if="!isEditMode"
                             type="button"
-                            style="width: 194px"
+                            class="super-wide"
                             @click="edit()">
                         {{"Edit"}}
                     </button>
                     <button v-if="isEditMode"
                             type="button"
-                            style="width: 194px"
+                            class="super-wide"
                             @click="save()">
                         {{"Save"}}
                     </button>
@@ -221,7 +222,7 @@
             <tr v-if="isEditMode"><td>Upload another image</td></tr>
             <tr v-if="isEditMode">
                 <td>
-                    <input type="file" @change="previewImage">
+                    <input type="file" @change="previewImage"><br><br>
                     <button @click="onUpload">Upload!</button>
                 </td>
             </tr>
@@ -242,9 +243,9 @@
                     <table id="parts-header" style="text-align: center">
                         <tbody>
                         <tr>
-                            <td style="width: 120px">{{itemView.partsTable.header[0]}}</td>
+                            <td class="parts-left-column">{{itemView.partsTable.header[0]}}</td>
                             <td>{{itemView.partsTable.header[1]}}</td>
-                            <td style="width: 80px; text-align: right"
+                            <td class="parts-left-column" style="text-align: right"
                                 v-if="itemView.partsTable.header[2] !== '-'">
                                 {{itemView.partsTable.header[2]}}
                             </td>
@@ -259,29 +260,29 @@
                     <table class="get-all-table">
                         <tbody>
                         <tr v-if="arrayHaveActiveItems(table.parts)">
-                            <td style="width: 120px">
+                            <td class="parts-left-column">
                                 <b>{{table.name}}</b>
                             </td>
                             <td></td>
-                            <td style="width: 80px"></td>
+                            <td class="parts-right-column"></td>
                             <td></td>
                         </tr>
                         <tr v-for="part in table.parts" v-if="statusActive(part)">
-                            <td style="width: 120px">
+                            <td class="parts-left-column">
                                 <p v-if="!isEditMode || (isEditMode && !isOrdinaryItemView())">
                                     {{getFirstColumnValue(part)}}
                                 </p>
-                                <input style="width: 120px"
+                                <input class="parts-left-column"
                                        v-if="isEditMode && isOrdinaryItemView()"
                                        v-model="part.location" type="text"/>
                             </td>
                             <td>
-                                <p style="width: 146px"
+                                <p class="parts-middle-column"
                                    v-if="isUserListView()">
                                     {{part.buttonText}}
                                 </p>
                                 <button type="button"
-                                        style="width: 146px"
+                                        class="parts-middle-column"
                                         v-if="!isUserListView()"
                                         @click="setItem(part.itemId)">
                                     {{part.buttonText}}
@@ -294,7 +295,7 @@
                                 <p v-if="!isEditMode && isMotorcycleCatalogueView()">
                                     {{part.comment}}
                                 </p>
-                                <input style="width: 80px"
+                                <input class="parts-right-column"
                                        v-if="isEditMode && isOrdinaryItemView()"
                                        v-model="part.quantity" type="text"/>
                             </td>
@@ -327,11 +328,10 @@
                         </tr>
                         <tr v-if="isEditMode" style="text-align: left">
                             <td>
-                                <input style="width: 120px" v-model="newPart.location" type="text"/>
+                                <input class="parts-left-column" v-model="newPart.location" type="text"/>
                             </td>
                             <td>
-                                <select style="width: 146px"
-                                        class="content"
+                                <select class="parts-middle-column"
                                         v-model="newPart"
                                         @change="partSelectOnChange()">
                                     <option v-for="part in itemView.possibleParts"
@@ -373,16 +373,16 @@
             <tr v-if="notStub(itemView.replacersTable.name) && statusActive(replacer)"
                 style="text-align: left"
                 v-for="replacer in itemView.replacersTable.replacers">
-                <td style="width: 160px">
+                <td class="wide">
                     <p v-if="!isEditMode">{{replacer.comment}}</p>
-                    <input style="width: 160px"
+                    <input class="wide"
                            v-if="isEditMode"
                            v-model="replacer.comment"
                            type="text"/>
                 </td>
                 <td style="text-align: center">
                     <button type="button"
-                            style="width: 160px"
+                            class="wide"
                             @click="setItem(replacer.itemId)">
                         {{replacer.buttonText}}
                     </button>
@@ -424,12 +424,11 @@
                 </td>
             </tr>
             <tr v-if="notStub(itemView.replacersTable.name) && isEditMode" style="text-align: left">
-                <td style="width: 160px">
-                    <input style="width: 160px" v-model="newReplacer.comment" type="text"/>
+                <td class="wide">
+                    <input class="wide" v-model="newReplacer.comment" type="text"/>
                 </td>
                 <td style="text-align: center">
-                    <select class="content"
-                            style="width: 160px"
+                    <select class="wide"
                             v-model="newReplacer"
                             @change="replacerSelectOnChange()">
                         <option v-for="replacer in itemView.replacers"
@@ -986,5 +985,39 @@
 
     .parts-right-column {
         width: 80px;
+    }
+
+    .wide {
+        width: 160px;
+    }
+
+    .super-wide {
+        width: 194px;
+    }
+
+    @media only screen and (max-width: 1280px) {
+        input {
+            width: 100%;
+        }
+
+        .wide {
+            width: 100%;
+        }
+
+        .super-wide {
+            width: 100%;
+        }
+
+        .parts-left-column {
+            /*width: 33.33%;*/
+        }
+
+        .parts-middle-column {
+            /*width: 42%;*/
+        }
+
+        .parts-right-column {
+            /*width: 23%;*/
+        }
     }
 </style>

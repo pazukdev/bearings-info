@@ -1,6 +1,7 @@
 <template id="app">
-    <div id="background">
-        <div id="screen" style="text-align: center">
+    <div id="main-div">
+        <div class="mobile-hide" style="height: 1%"></div>
+        <div id="screen">
             <div id="app_bar" style="background-color: #617D89; height: 70px; padding: 10px">
                 <table style="text-align: center; width: 100%; height: 100%">
                     <tbody>
@@ -30,17 +31,17 @@
                     </tbody>
                 </table>
             </div>
-            <div style="width: 100%; text-align: left">
-<!--                {{"Item views stack length: " + itemViews.length}}<br>-->
-<!--                {{"Item ids: " + itemIds}}<br>-->
-<!--                {{"Is loading: " + loading}}<br>-->
-<!--                {{"is admin: " + admin}}<br>-->
-<!--                {{"itemView: " + itemView}}<br>-->
-<!--                {{"itemId: " + itemId}}<br>-->
-                <!--                <div v-if="itemView !== null || itemView !== undefined">-->
-                <!--                    {{"itemView.itemId: " + itemView.itemId}}<br>-->
-                <!--                </div>-->
-            </div>
+<!--            <div style="width: 100%; text-align: left">-->
+<!--                                {{"Item views stack length: " + itemViews.length}}<br>-->
+<!--                                {{"Item ids: " + itemIds}}<br>-->
+<!--                                {{"Is loading: " + loading}}<br>-->
+<!--                                {{"is admin: " + admin}}<br>-->
+<!--                                {{"itemView: " + itemView}}<br>-->
+<!--                                {{"itemId: " + itemId}}<br>-->
+<!--                                <div v-if="itemView !== null || itemView !== undefined">-->
+<!--                                    {{"itemView.itemId: " + itemView.itemId}}<br>-->
+<!--                                </div>-->
+<!--            </div>-->
             <router-view style="padding: 20px"></router-view>
         </div>
     </div>
@@ -117,14 +118,12 @@
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
+        height: 100%;
     }
 
-    #background {
-        background-color: black;
-        height: 1024px;
-        padding-top: 50px;
+    #main-div {
+        background: black;
+        height: 2000px;
     }
 
     #screen {
@@ -135,6 +134,30 @@
         height: 800px;
         overflow-y: auto;
         border-radius: 10px;
+    }
+
+    @media only screen and (max-width: 1280px) {
+        #main-div {
+            background: #212121;
+        }
+
+        .mobile-hide {
+            display: none;
+        }
+
+        #screen {
+            width: 100%;
+            height: 1024px;
+            border-radius: 0;
+        }
+
+        input {
+            width: 100%;
+        }
+
+        button {
+            width: 100%;
+        }
     }
 
     #screen::-webkit-scrollbar {
@@ -172,7 +195,7 @@
         width: 100%;
     }
 
-    .right {
+    .half-width {
         width: 50%;
     }
 
@@ -199,11 +222,16 @@
         border-spacing: 0;
     }
 
+    .third-part-wide {
+        width: 33.33%;
+    }
+
     button {
         border-radius: 4px;
         border: none;
         background: #808080;
         height: 52px;
+        width: 146px;
     }
 
     select {
