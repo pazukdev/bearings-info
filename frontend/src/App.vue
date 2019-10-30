@@ -1,6 +1,5 @@
 <template id="app">
     <div id="main-div">
-        <div class="mobile-hide" style="height: 1%"></div>
         <div id="screen">
             <div id="app_bar" style="background-color: #617D89; height: 70px; padding: 10px">
                 <table style="text-align: center; width: 100%; height: 100%">
@@ -123,32 +122,39 @@
 
     #main-div {
         background: black;
-        height: 2000px;
+        position: absolute;
+        height: 100%;
+        width: 100%;
     }
 
     #screen {
+        margin: auto;
+        overflow: auto;
         background-color: #212121;
         color: #808080;
-        margin: auto;
         width: 480px;
         height: 800px;
-        overflow-y: auto;
         border-radius: 10px;
+        position: absolute;
+        top: 0; left: 0; bottom: 0; right: 0;
+
     }
 
     @media only screen and (max-width: 1280px) {
         #main-div {
-            background: #212121;
-        }
-
-        .mobile-hide {
-            display: none;
+            background: initial;
+            position: initial;
+            height: initial;
+            width: initial;
         }
 
         #screen {
+            margin: initial;
+            border-radius: initial;
             width: 100%;
-            height: 1024px;
-            border-radius: 0;
+            height: 100%;
+            position: absolute;
+            top: initial; left: initial; bottom: initial; right: initial;
         }
 
         input {
