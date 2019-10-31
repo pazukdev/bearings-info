@@ -1,8 +1,8 @@
 <template id="app">
     <div id="main-div">
         <div id="screen">
-            <div id="app_bar" style="background-color: #617D89; height: 70px; padding: 10px">
-                <table style="text-align: center; width: 100%; height: 100%">
+            <div id="app_bar">
+                <table>
                     <tbody>
                     <tr>
                         <td style="width: 80px">
@@ -30,17 +30,16 @@
                     </tbody>
                 </table>
             </div>
-<!--            <div style="width: 100%; text-align: left">-->
-<!--                                {{"Item views stack length: " + itemViews.length}}<br>-->
-<!--                                {{"Item ids: " + itemIds}}<br>-->
-<!--                                {{"Is loading: " + loading}}<br>-->
-<!--                                {{"is admin: " + admin}}<br>-->
-<!--                                {{"itemView: " + itemView}}<br>-->
-<!--                                {{"itemId: " + itemId}}<br>-->
+            <div style="text-align: left;">
+                                {{"Item ids: " + itemIds}}<br>
+                                {{"Is loading: " + loading}}<br>
+                                {{"is admin: " + admin}}<br>
+                                {{"itemView: " + itemView}}<br>
+                                {{"itemId: " + itemId}}<br>
 <!--                                <div v-if="itemView !== null || itemView !== undefined">-->
 <!--                                    {{"itemView.itemId: " + itemView.itemId}}<br>-->
 <!--                                </div>-->
-<!--            </div>-->
+            </div>
             <router-view style="padding: 20px"></router-view>
         </div>
     </div>
@@ -117,57 +116,44 @@
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        height: 100%;
     }
 
     #main-div {
-        background: black;
-        position: absolute;
-        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 100%;
+        height: 100vh;
+        background: black;
     }
 
     #screen {
-        margin: auto;
         overflow: auto;
         background-color: #212121;
         color: #808080;
         width: 480px;
         height: 800px;
         border-radius: 10px;
-        position: absolute;
-        top: 0; left: 0; bottom: 0; right: 0;
 
     }
 
     @media only screen and (max-width: 1280px) {
-        #main-div {
-            background: initial;
-            position: initial;
-            height: initial;
-            width: initial;
-        }
-
         #screen {
-            margin: initial;
             border-radius: initial;
             width: 100%;
             height: 100%;
-            position: absolute;
-            top: initial; left: initial; bottom: initial; right: initial;
-        }
-
-        input {
-            width: 100%;
-        }
-
-        button {
-            width: 100%;
         }
     }
 
     #screen::-webkit-scrollbar {
         display: none;
+    }
+
+    #app_bar {
+        padding-top: 5px;
+        min-height: 56px;
+        max-height: 200px;
+        text-align: center;
     }
 
     #appName {
@@ -184,10 +170,6 @@
     }
 
     .centred-table {
-        text-align: center;
-    }
-
-    .get-all-table {
         text-align: center;
     }
 
@@ -217,7 +199,7 @@
         width: 100%;
     }
 
-    .round-button {
+    .round-button, .round-delete-button {
         text-align: center;
         height: 32px;
         width: 32px;
@@ -232,34 +214,33 @@
         width: 33.33%;
     }
 
-    button {
-        border-radius: 4px;
-        border: none;
-        background: #808080;
-        height: 52px;
-        width: 146px;
-    }
-
-    select {
-        border-radius: 4px;
-        text-indent: 10px;
-        height: 36px;
-        background: #808080;
-    }
-
-    input {
-        border-radius: 4px;
-        border: none;
-        background: #617D89;
-        height: 36px;
+    table, button, select, input, .round-button {
         text-align: center;
     }
 
-    table {
+    table, button, select, input {
         width: 100%;
-        text-align: left;
-        margin-left:auto;
-        margin-right:auto;
+    }
+
+    table {
+        height: 100%;
+    }
+
+    hr, button, select, input {
+        background: #808080;
+    }
+
+    input, #app_bar {
+        background: #617D89;
+    }
+
+    button, select, input {
+        border-radius: 4px;
+        border: none;
+        height: 52px;
+    }
+
+    table {
         border-spacing: 6px;
         border-collapse: separate;
     }
@@ -268,8 +249,8 @@
         font-weight: normal;
     }
 
-    hr {
-        background: #808080;
+    img {
+        max-width: 100%;
     }
 
 </style>
