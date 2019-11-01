@@ -30,7 +30,7 @@
                     </tbody>
                 </table>
             </div>
-            <div style="text-align: left;">
+            <div style="text-align: left">
                                 {{"Item ids: " + itemIds}}<br>
                                 {{"Is loading: " + loading}}<br>
                                 {{"is admin: " + admin}}<br>
@@ -169,36 +169,6 @@
         color: #212121
     }
 
-    .centred-table {
-        text-align: center;
-    }
-
-    .creation-form {
-        text-align: left;
-        border-spacing: 20px;
-        border-collapse: separate;
-    }
-
-    .content {
-        width: 100%;
-    }
-
-    .half-width {
-        width: 50%;
-    }
-
-    .default-width-1 {
-        width: 160px;
-    }
-
-    .default-width-2 {
-        width: 100px;
-    }
-
-    .full-width {
-        width: 100%;
-    }
-
     .round-button, .round-delete-button {
         text-align: center;
         height: 32px;
@@ -253,4 +223,7 @@
         max-width: 100%;
     }
 
+    .alert-message {
+        color: red;
+    }
 </style>

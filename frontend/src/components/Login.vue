@@ -1,6 +1,6 @@
 <template>
-    <div class="login">
-        <table class="creation-form">
+    <div id="login">
+        <table>
             <tbody>
             <tr>
                 <td id="login-or-signup-txt">
@@ -153,8 +153,10 @@
 </script>
 
 <style scoped>
+
     table {
-        margin-top: 120px;
+        padding-top: 50%;
+        text-align: left;
     }
 
     button {

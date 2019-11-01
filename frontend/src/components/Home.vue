@@ -1,39 +1,10 @@
 <template>
     <div>
-        <div v-if="isLoading()" style="text-align: center; padding-top: 70%">
+        <div v-if="isLoading()" style="text-align: center; padding-top: 50%">
             {{"Loading..."}}
         </div>
 
         <Item v-if="!isLoading()" @cancel="cancel" @select-item="selectItem"/>
-
-        <table style="text-align: center" v-if="isHome() && !isLoading()">
-            <tbody>
-            <tr>
-                <td>
-                    <button type="button"
-                            v-on:click="openItemsManagement()">
-                        {{"Items management"}}
-                    </button>
-                </td>
-            </tr>
-            <tr v-if="admin">
-                <td>
-                    <button type="button"
-                            v-on:click="openUsersList()">
-                        {{"Users"}}
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div style="text-align: center; margin-top: 60px; margin-bottom: 20px">
-                        {{"Minsk 2019"}}
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
     </div>
 </template>
 
@@ -62,15 +33,9 @@
         computed: {
             ...mapState({
                 authorization: state => state.dictionary.authorization,
-                incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
-                admin: state => state.dictionary.admin,
                 loading: state => state.dictionary.loading,
-                wishList: state => state.dictionary.wishList,
-                table: state => state.dictionary.table,
-                itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1],
-                itemView: state => state.dictionary.itemView,
-                itemIds: state => state.dictionary.itemIds
+                itemView: state => state.dictionary.itemView
             })
         },
 
@@ -84,29 +49,8 @@
                 return this.loading === true || this.itemView === undefined;
             },
 
-            isHome() {
-                return this.itemIds.length === 1;
-            },
-
-            openSpecialView(specialItemId) {
-                this.$store.dispatch("setLoading", true);
-                this.$store.dispatch("addItemId", specialItemId);
-                this.selectItem(specialItemId);
-            },
-
-            openItemsManagement() {
-                let itemsManagementId = -1;
-                this.openSpecialView(itemsManagementId);
-
-            },
-
-            openUsersList() {
-                let usersListId = -4;
-                this.openSpecialView(usersListId);
-            },
-
             selectItem(id) {
-                this.setItem(id);
+                this.getItemView(id, false);
             },
 
             getItemView(itemId, removeLastItemView) {
@@ -123,10 +67,6 @@
                         }
                         this.$store.dispatch("setItemView", response.data);
                     });
-            },
-
-            getItem(id) {
-                this.getItemView(id, false);
             },
 
             showMotorcycleMenu() {
@@ -146,10 +86,6 @@
             refresh() {
                 this.redirectToLogin();
                 this.showMotorcycleMenu();
-            },
-
-            setItem(id) {
-                this.getItem(this.itemId);
             },
 
             redirectToLogin() {
@@ -180,10 +116,4 @@
 </script>
 
 <style scoped>
-    table {
-        border-spacing: 20px;
-        border-collapse: separate;
-    }
 </style>
-
-}
