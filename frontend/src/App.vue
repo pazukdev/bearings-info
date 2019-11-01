@@ -31,11 +31,11 @@
                 </table>
             </div>
             <div style="text-align: left">
-                                {{"Item ids: " + itemIds}}<br>
-                                {{"Is loading: " + loading}}<br>
-                                {{"is admin: " + admin}}<br>
-                                {{"itemView: " + itemView}}<br>
-                                {{"itemId: " + itemId}}<br>
+<!--                                {{"Item ids: " + itemIds}}<br>-->
+<!--                                {{"Is loading: " + loading}}<br>-->
+<!--                                {{"is admin: " + admin}}<br>-->
+<!--                                {{"itemView: " + itemView}}<br>-->
+<!--                                {{"itemId: " + itemId}}<br>-->
 <!--                                <div v-if="itemView !== null || itemView !== undefined">-->
 <!--                                    {{"itemView.itemId: " + itemView.itemId}}<br>-->
 <!--                                </div>-->
