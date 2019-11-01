@@ -99,11 +99,13 @@
                     .post('/backend/login', credentialsUrl)
                     .then(response => {
                         if (response.status === 200) {
+                            this.$store.dispatch("setLoadingState", true);
                             this.setIncorrectCredentials(false);
-                            //console.log(JSON.stringify(response.data.Authorization));
                             let authorization = response.data.Authorization;
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", this.username);
+                            let specialMotorcycleCatalogueItemId = -2;
+                            this.$store.dispatch("addItemId", specialMotorcycleCatalogueItemId);
                             this.$router.push({ path: '/'});
                         }
                     });

@@ -31,14 +31,13 @@
                 </table>
             </div>
             <div style="text-align: left">
-<!--                                {{"Item ids: " + itemIds}}<br>-->
-<!--                                {{"Is loading: " + loading}}<br>-->
-<!--                                {{"is admin: " + admin}}<br>-->
-<!--                                {{"itemView: " + itemView}}<br>-->
-<!--                                {{"itemId: " + itemId}}<br>-->
-<!--                                <div v-if="itemView !== null || itemView !== undefined">-->
-<!--                                    {{"itemView.itemId: " + itemView.itemId}}<br>-->
-<!--                                </div>-->
+<!--                {{authorization}}<br>-->
+<!--                {{"Item ids: " + itemIds}}<br>-->
+<!--                {{"Is loading: " + loadingState}}<br>-->
+<!--                {{"is admin: " + admin}}<br>-->
+<!--                {{"itemView: " + itemView}}<br>-->
+<!--                {{"itemId: " + lastItemId}}<br>-->
+
             </div>
             <router-view style="padding: 20px"></router-view>
         </div>
@@ -55,26 +54,27 @@
         computed: {
             ...mapState({
                 authorization: state => state.dictionary.authorization,
-                loading: state => state.dictionary.loading,
+                loadingState: state => state.dictionary.loadingState,
                 itemIds: state => state.dictionary.itemIds,
                 itemView: state => state.dictionary.itemView,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
-                itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1],
+                lastItemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1],
                 admin: state => state.dictionary.admin
             })
         },
 
         methods: {
             logout() {
-                this.removeToken();
-                this.reload();
+                window.localStorage.clear();
+                this.$store.dispatch("setDefaultState");
+                this.$router.push('/login');
             },
 
-            removeToken() {
-                let token = null;
-                this.$store.dispatch("setAuthorization", token);
-            },
+            // removeToken() {
+            //     let token = null;
+            //     this.$store.dispatch("setAuthorization", token);
+            // },
 
             isAuthorized() {
                 return this.authorization !== "";
@@ -85,17 +85,17 @@
             },
 
             isBackButtonDisplayed() {
-                return this.itemIds.length > 1 && !this.loading;
+                return this.itemIds.length > 1 && !this.loadingState;
             },
 
             back() {
-                this.$store.dispatch("setLoading", true);
-                this.$store.dispatch("removeLastItemView");
+                this.$store.dispatch("setLoadingState", true);
                 this.$store.dispatch("removeLastItemId");
-                this.getItemView(this.itemId);
+                this.getItemView(this.lastItemId);
             },
 
             getItemView(itemId) {
+                console.log("000000000");
                 axios
                     .get("backend/item/get-view/" + itemId
                         + "/" + this.userName, {
@@ -104,7 +104,13 @@
                         }
                     })
                     .then(response => {
+                        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         this.$store.dispatch("setItemView", response.data);
+                        this.$store.dispatch("setLoadingState", false);
+                    })
+                    .catch(error => {
+                        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        this.$store.dispatch("setLoadingState", false);
                     });
             }
         }

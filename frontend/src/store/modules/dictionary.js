@@ -1,9 +1,5 @@
-
 const state = {
-    auth: false,
-    login: true,
-    admin: false,
-    loading: false,
+    loadingState: false,
     incorrectCredentials: false,
     authorization: "",
     userName: "",
@@ -12,6 +8,10 @@ const state = {
 };
 
 const actions = {
+    setDefaultState: ({commit}, context) => {
+        commit("setDefaultState", context);
+    },
+
     setAuthorization: ({commit}, context) => {
         commit("setAuthorization", context);
     },
@@ -24,12 +24,8 @@ const actions = {
         commit("setUserName", context);
     },
 
-    setAdmin: ({commit}, context) => {
-        commit("setAdmin", context);
-    },
-
-    setLoading: ({commit}, context) => {
-        commit("setLoading", context);
+    setLoadingState: ({commit}, context) => {
+        commit("setLoadingState", context);
     },
 
     setItemView: ({commit}, context) => {
@@ -46,6 +42,15 @@ const actions = {
 };
 
 const mutations = {
+    setDefaultState(state) {
+        state.loadingState = false;
+        state.incorrectCredentials = false;
+        state.authorization = "";
+        state.userName = "";
+        state.itemView = "";
+        state.itemIds = [];
+    },
+
     setAuthorization(state, authorization) {
         state.authorization = authorization;
     },
@@ -54,12 +59,8 @@ const mutations = {
         state.incorrectCredentials = incorrectCredentials === true;
     },
 
-    setAdmin(state, admin) {
-        state.admin = admin === true;
-    },
-
-    setLoading(state, loading) {
-        state.loading = loading === true;
+    setLoadingState(state, loadingState) {
+        state.loadingState = loadingState === true;
     },
 
     setUserName(state, userName) {
@@ -68,7 +69,6 @@ const mutations = {
 
     setItemView(state, itemView) {
         state.itemView = itemView;
-        state.loading = false;
     },
 
     addItemId(state, itemId) {
@@ -81,7 +81,6 @@ const mutations = {
     removeLastItemId(state) {
         state.itemIds.splice(state.itemIds.length - 1, 1);
     }
-
 };
 
 export default {

@@ -547,7 +547,7 @@
                 userName: state => state.dictionary.userName,
                 itemView: state => state.dictionary.itemView,
                 itemIds: state => state.dictionary.itemIds,
-                itemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
+                lastItemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
             })
         },
 
@@ -572,10 +572,13 @@
             },
 
             setItem(id) {
-                this.$store.dispatch("setLoading", true);
+                console.log("11111111");
+                this.$store.dispatch("setLoadingState", true);
                 this.$store.dispatch("addItemId", id);
-                this.$emit('select-item', id);
                 this.switchEditModeOff();
+                this.$emit('select-item', id);
+                // window.location.reload();
+
             },
 
             searchInGoogle() {
@@ -781,7 +784,7 @@
                 } else if (this.sameItemNameExistsInCategory(this.newItemCategory, this.newItemName)) {
                     this.newItemNameMessage = "Item with this name already exists"
                 } else {
-                    //this.$store.dispatch("setLoading", true);
+                    this.$store.dispatch("setLoadingState", true);
                     this.clearItemCreationMessages();
                     axios
                         .post("/backend/item/create-view/"
@@ -794,9 +797,26 @@
                         })
                         .then(response => {
                             let newItemView = response.data;
-                            this.setItem(newItemView.itemId);
+                            this.$store.dispatch("addItemId", newItemView.itemId);
+                            this.$store.dispatch("setItemView", newItemView);
+                            this.$store.dispatch("setLoadingState", false);
                         });
                 }
+            },
+
+            update(id) {
+                this.$store.dispatch("setLoadingState", true);
+                axios
+                    .put("/backend/item/update-view/" + id + "/" + this.userName, this.newItemView, {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => {
+                        let newItemView = response.data;
+                        this.$store.dispatch("setItemView", newItemView);
+                        this.$store.dispatch("setLoadingState", false);
+                    });
             },
 
             openWishList() {
@@ -810,7 +830,7 @@
             },
 
             cancel() {
-                let id = this.itemId;
+                let id = this.lastItemId;
                 this.$emit('cancel', id);
                 this.switchEditModeOff();
             },
@@ -881,24 +901,6 @@
 
             save() {
                 this.update(this.newItemView.itemId);
-            },
-
-            update(id) {
-                axios
-                    .put("/backend/item/update-view/" + id + "/" + this.userName, this.newItemView, {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(() => {
-                        this.back();
-                        this.setItem(id);
-                    });
-            },
-
-            back() {
-                this.$store.dispatch("removeLastItemView");
-                this.$store.dispatch("removeLastItemId");
             },
 
             isPartsTitleVisible() {

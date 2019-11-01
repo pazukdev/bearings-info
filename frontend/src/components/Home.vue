@@ -3,7 +3,6 @@
         <div v-if="isLoading()" style="text-align: center; padding-top: 50%">
             {{"Loading..."}}
         </div>
-
         <Item v-if="!isLoading()" @cancel="cancel" @select-item="selectItem"/>
     </div>
 </template>
@@ -27,15 +26,15 @@
 
         created() {
             this.refresh();
-            this.isAdmin();
         },
 
         computed: {
             ...mapState({
                 authorization: state => state.dictionary.authorization,
                 userName: state => state.dictionary.userName,
-                loading: state => state.dictionary.loading,
-                itemView: state => state.dictionary.itemView
+                loadingState: state => state.dictionary.loadingState,
+                itemView: state => state.dictionary.itemView,
+                lastItemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
             })
         },
 
@@ -44,16 +43,20 @@
         },
 
         methods: {
-
             isLoading() {
-                return this.loading === true || this.itemView === undefined;
+                return this.loadingState === true || this.itemView === undefined;
             },
 
             selectItem(id) {
                 this.getItemView(id, false);
             },
 
+            setView(itemView) {
+
+            },
+
             getItemView(itemId, removeLastItemView) {
+                console.log("22222");
                 axios
                     .get("/backend/item/get-view/" + itemId
                         + "/" + this.userName, {
@@ -62,30 +65,20 @@
                         }
                     })
                     .then(response => {
-                        if (removeLastItemView === true) {
-                            this.$store.dispatch("removeLastItemView");
-                        }
+                        console.log("33333333333");
                         this.$store.dispatch("setItemView", response.data);
+                        this.$store.dispatch("setLoadingState", false);
+
                     });
             },
 
-            showMotorcycleMenu() {
-                let specialMotorcycleCatalogueItemId = -2;
-                this.$store.dispatch("addItemId", specialMotorcycleCatalogueItemId);
-                this.getItemView(specialMotorcycleCatalogueItemId, false);
-            },
-
             cancel(id) {
-                this.getItemView(this.itemId, true);
-            },
-
-            reload() {
-                window.location.reload();
+                this.getItemView(this.lastItemId, true);
             },
 
             refresh() {
                 this.redirectToLogin();
-                this.showMotorcycleMenu();
+                this.selectItem(this.lastItemId);
             },
 
             redirectToLogin() {
@@ -100,16 +93,7 @@
 
             isAuthorized() {
                 return this.authorization !== "";
-            },
-
-            isAdmin() {
-                let jwtData = this.authorization.split('.')[1];
-                let decodedJwtJsonData = window.atob(jwtData);
-                let decodedJwtData = JSON.parse(decodedJwtJsonData);
-                let isAdmin = decodedJwtData.roles[0] === "ROLE_ADMIN";
-                this.$store.dispatch("setAdmin", isAdmin);
             }
-
         }
     }
 
