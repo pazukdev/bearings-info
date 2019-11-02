@@ -32,12 +32,11 @@
             </div>
             <div style="text-align: left">
 <!--                {{authorization}}<br>-->
-<!--                {{"Item ids: " + itemIds}}<br>-->
-<!--                {{"Is loading: " + loadingState}}<br>-->
+                {{"Item ids: " + itemIds}}<br>
+                {{"Is loading: " + loadingState}}<br>
 <!--                {{"is admin: " + admin}}<br>-->
 <!--                {{"itemView: " + itemView}}<br>-->
-<!--                {{"itemId: " + lastItemId}}<br>-->
-
+                {{"itemId: " + lastItemId}}<br>
             </div>
             <router-view style="padding: 20px"></router-view>
         </div>
@@ -71,17 +70,8 @@
                 this.$router.push('/login');
             },
 
-            // removeToken() {
-            //     let token = null;
-            //     this.$store.dispatch("setAuthorization", token);
-            // },
-
             isAuthorized() {
                 return this.authorization !== "";
-            },
-
-            reload() {
-                window.location.reload();
             },
 
             isBackButtonDisplayed() {
@@ -89,13 +79,12 @@
             },
 
             back() {
-                this.$store.dispatch("setLoadingState", true);
                 this.$store.dispatch("removeLastItemId");
                 this.getItemView(this.lastItemId);
             },
 
             getItemView(itemId) {
-                console.log("000000000");
+                this.$store.dispatch("setLoadingState", true);
                 axios
                     .get("backend/item/get-view/" + itemId
                         + "/" + this.userName, {
@@ -104,13 +93,9 @@
                         }
                     })
                     .then(response => {
-                        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         this.$store.dispatch("setItemView", response.data);
                         this.$store.dispatch("setLoadingState", false);
-                    })
-                    .catch(error => {
-                        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                        this.$store.dispatch("setLoadingState", false);
+                        console.log("ItemView of item id=" + itemId + " is displayed")
                     });
             }
         }

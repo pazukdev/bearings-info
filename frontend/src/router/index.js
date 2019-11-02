@@ -1,6 +1,6 @@
 import VueRouter from 'vue-router';
 import Vue from "vue";
-import Home from "../components/Home";
+import Item from "../components/Item";
 import Login from "../components/Login";
 import store from "../store";
 
@@ -8,7 +8,7 @@ Vue.use(VueRouter);
 
 const router = new VueRouter({
     routes: [
-        {path: '/', name: 'home', component: Home, meta: { requiresAuth: true }},
+        {path: '/', name: 'item', component: Item, meta: { requiresAuth: true }},
         {path: '/login', name: 'login', component: Login}
     ]
 });
