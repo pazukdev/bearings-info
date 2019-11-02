@@ -143,7 +143,7 @@
                         </p>
                         <button v-if="isShowInfoButton(row[3])"
                                 type="button"
-                                @click="setItem(row[2])">
+                                @click="getItemView(row[2])">
                             {{row[1]}}
                         </button>
                     </td>
@@ -287,7 +287,7 @@
                                     </p>
                                     <button type="button"
                                             v-if="!isUserListView()"
-                                            @click="setItem(part.itemId)">
+                                            @click="getItemView(part.itemId)">
                                         {{part.buttonText}}
                                     </button>
                                 </td>
@@ -382,7 +382,7 @@
                     </td>
                     <td class="three-column-table-middle-column">
                         <button type="button"
-                                @click="setItem(replacer.itemId)">
+                                @click="getItemView(replacer.itemId)">
                             {{replacer.buttonText}}
                         </button>
                     </td>
@@ -559,13 +559,12 @@
         },
 
         created() {
-            this.switchEditModeOff();
             this.refresh();
         },
 
         methods: {
             refresh() {
-                this.redirectToLogin();
+                //this.redirectToLogin();
                 this.getItemView(this.lastItemId);
             },
 
@@ -680,28 +679,18 @@
 
             openWishList() {
                 let wishListId = -3;
-                this.setItem(wishListId);
+                this.getItemView(wishListId);
             },
 
             openItemsManagement() {
                 let itemsManagementId = -1;
-                this.setItem(itemsManagementId);
+                this.getItemView(itemsManagementId);
 
             },
 
             openUsersList() {
                 let usersListId = -4;
-                this.setItem(usersListId);
-            },
-
-            setItem(id) {
-                // this.$store.dispatch("setLoadingState", true);
-                // this.$store.dispatch("addItemId", id);
-                // this.switchEditModeOff();
-                this.getItemView(id);
-                // this.$emit('select-item', id);
-                // window.location.reload();
-
+                this.getItemView(usersListId);
             },
 
             searchInGoogle() {
