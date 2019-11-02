@@ -1,4 +1,5 @@
 const state = {
+    basicUrl: "backend",
     loadingState: false,
     incorrectCredentials: false,
     authorization: "",
@@ -10,6 +11,10 @@ const state = {
 const actions = {
     setDefaultState: ({commit}, context) => {
         commit("setDefaultState", context);
+    },
+
+    setBasicUrl: ({commit}, context) => {
+        commit("setBasicUrl", context);
     },
 
     setAuthorization: ({commit}, context) => {
@@ -43,12 +48,17 @@ const actions = {
 
 const mutations = {
     setDefaultState(state) {
+        state.basicUrl = "backend";
         state.loadingState = false;
         state.incorrectCredentials = false;
         state.authorization = "";
         state.userName = "";
         state.itemView = "";
         state.itemIds = [];
+    },
+
+    setBasicUrl(state, basicUrl) {
+        state.basicUrl = basicUrl;
     },
 
     setAuthorization(state, authorization) {

@@ -70,13 +70,29 @@
             };
         },
 
+        created() {
+            this.setBasicUrl();
+        },
+
         computed: {
             ...mapState({
+                basicUrl: state => state.dictionary.basicUrl,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials
             })
         },
 
         methods: {
+            setBasicUrl() {
+                let hostname = window.location.hostname;
+                let basicUrl;
+                if (hostname === "localhost") {
+                    basicUrl = "backend";
+                } else {
+                    basicUrl = "https://bearings-info.herokuapp.com";
+                }
+                this.$store.dispatch("setBasicUrl", basicUrl);
+            },
+
             performLoginPageAction() {
                 if (this.isLogin) {
                     this.login();
@@ -96,7 +112,7 @@
             login() {
                 let credentialsUrl ="username=" + this.username + "&" + "password=" + this.password;
                 axios
-                    .post('/backend/login', credentialsUrl)
+                    .post(this.basicUrl + "/login", credentialsUrl)
                     .then(response => {
                         if (response.status === 200) {
                             this.$store.dispatch("setLoadingState", true);
@@ -123,7 +139,7 @@
                     repeatedPassword: this.repeatedPassword
                 };
                 axios
-                    .post("/backend/user/create", newUser)
+                    .post(this.basicUrl + "/user/create", newUser)
                     .then(response => {this.loginIfValid(response.data, newUser.name)});
             },
 

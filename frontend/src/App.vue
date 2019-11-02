@@ -31,6 +31,7 @@
                 </table>
             </div>
             <div style="text-align: left">
+<!--                {{"basicUrl: " + basicUrl}}<br>-->
 <!--                {{authorization}}<br>-->
 <!--                {{"Item ids: " + itemIds}}<br>-->
 <!--                {{"Is loading: " + loadingState}}<br>-->
@@ -52,6 +53,7 @@
 
         computed: {
             ...mapState({
+                basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
                 loadingState: state => state.dictionary.loadingState,
                 itemIds: state => state.dictionary.itemIds,
@@ -86,8 +88,7 @@
             getItemView(itemId) {
                 this.$store.dispatch("setLoadingState", true);
                 axios
-                    .get("backend/item/get-view/" + itemId
-                        + "/" + this.userName, {
+                    .get(this.basicUrl + "/item/get-view/" + itemId + "/" + this.userName, {
                         headers: {
                             Authorization: this.authorization
                         }

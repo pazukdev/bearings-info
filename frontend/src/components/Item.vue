@@ -548,6 +548,7 @@
 
         computed: {
             ...mapState({
+                basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
                 userName: state => state.dictionary.userName,
                 loadingState: state => state.dictionary.loadingState,
@@ -572,8 +573,7 @@
                 this.$store.dispatch("setLoadingState", true);
                 this.switchEditModeOff();
                 axios
-                    .get("/backend/item/get-view/" + itemId
-                        + "/" + this.userName, {
+                    .get(this.basicUrl + "/item/get-view/" + itemId + "/" + this.userName, {
                         headers: {
                             Authorization: this.authorization
                         }
@@ -597,7 +597,7 @@
                     this.$store.dispatch("setLoadingState", true);
                     this.clearItemCreationMessages();
                     axios
-                        .post("/backend/item/create-view/"
+                        .post(this.basicUrl + "/item/create-view/"
                             + this.newItemCategory
                             + "/" + this.newItemName
                             + "/" + this.userName, {
@@ -617,7 +617,7 @@
                 this.$store.dispatch("setLoadingState", true);
                 this.switchEditModeOff();
                 axios
-                    .put("/backend/item/update-view/" + itemId + "/" + this.userName, this.newItemView, {
+                    .put(this.basicUrl + "/item/update-view/" + itemId + "/" + this.userName, this.newItemView, {
                         headers: {
                             Authorization: this.authorization
                         }
@@ -633,7 +633,7 @@
                 let data = new FormData();
                 data.append("file", this.file);
                 axios
-                    .put("/backend/item/file-upload/" + this.itemView.itemId, data, {
+                    .put(this.basicUrl + "/item/file-upload/" + this.itemView.itemId, data, {
                         headers: {
                             Authorization: this.authorization
                         }
