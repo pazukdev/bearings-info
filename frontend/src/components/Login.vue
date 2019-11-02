@@ -93,7 +93,6 @@
             },
 
             login() {
-                this.setIncorrectCredentials(true);
                 let credentialsUrl ="username=" + this.username + "&" + "password=" + this.password;
                 axios
                     .post('/backend/login', credentialsUrl)
@@ -107,8 +106,12 @@
                             let specialMotorcycleCatalogueItemId = -2;
                             this.$store.dispatch("addItemId", specialMotorcycleCatalogueItemId);
                             this.$router.push({ path: '/'});
+                            console.log("logged in as " + this.username)
                         }
-                    });
+                    })
+                    .catch(error => {
+                    this.setIncorrectCredentials(true);
+                });
             },
 
             signUp() {
@@ -149,6 +152,7 @@
 
             setIncorrectCredentials(incorrectCredentials) {
                 this.$store.dispatch("setIncorrectCredentials", incorrectCredentials);
+                console.log("login failed: " + incorrectCredentials);
             }
         }
     }

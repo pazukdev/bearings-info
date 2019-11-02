@@ -32,11 +32,11 @@
             </div>
             <div style="text-align: left">
 <!--                {{authorization}}<br>-->
-                {{"Item ids: " + itemIds}}<br>
-                {{"Is loading: " + loadingState}}<br>
+<!--                {{"Item ids: " + itemIds}}<br>-->
+<!--                {{"Is loading: " + loadingState}}<br>-->
 <!--                {{"is admin: " + admin}}<br>-->
 <!--                {{"itemView: " + itemView}}<br>-->
-                {{"itemId: " + lastItemId}}<br>
+<!--                {{"itemId: " + lastItemId}}<br>-->
             </div>
             <router-view style="padding: 20px"></router-view>
         </div>
@@ -65,9 +65,9 @@
 
         methods: {
             logout() {
-                window.localStorage.clear();
                 this.$store.dispatch("setDefaultState");
                 this.$router.push('/login');
+                console.log("logout");
             },
 
             isAuthorized() {
@@ -93,10 +93,21 @@
                         }
                     })
                     .then(response => {
-                        this.$store.dispatch("setItemView", response.data);
-                        this.$store.dispatch("setLoadingState", false);
-                        console.log("ItemView of item id=" + itemId + " is displayed")
+                        let previousItemView = response.data;
+                        this.dispatchView(previousItemView);
+                        this.logEvent("back button taped: item view displayed: item", previousItemView);
                     });
+            },
+
+            dispatchView(itemView) {
+                this.$store.dispatch("setItemView", itemView);
+                this.$store.dispatch("setLoadingState", false);
+            },
+
+            logEvent(event, itemView) {
+                console.log(event + ": "
+                    + "id=" + itemView.itemId
+                    + "; name=" + itemView.header.name);
             }
         }
     }

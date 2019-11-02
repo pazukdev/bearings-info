@@ -570,7 +570,6 @@
 
             getItemView(itemId) {
                 this.$store.dispatch("setLoadingState", true);
-                this.$store.dispatch("addItemId", itemId);
                 this.switchEditModeOff();
                 axios
                     .get("/backend/item/get-view/" + itemId
@@ -580,9 +579,9 @@
                         }
                     })
                     .then(response => {
-                        this.$store.dispatch("setItemView", response.data);
-                        this.$store.dispatch("setLoadingState", false);
-                        console.log("ItemView of item id=" + itemId + " is displayed");
+                        let itemView = response.data;
+                        this.dispatchView(itemView);
+                        this.logEvent("item view displayed: item", itemView);
                     });
             },
 
@@ -608,9 +607,8 @@
                         })
                         .then(response => {
                             let newItemView = response.data;
-                            this.$store.dispatch("addItemId", newItemView.itemId);
-                            this.$store.dispatch("setItemView", newItemView);
-                            this.$store.dispatch("setLoadingState", false);
+                            this.dispatchView(newItemView);
+                            this.logEvent("a new item created", newItemView);
                         });
                 }
             },
@@ -625,9 +623,9 @@
                         }
                     })
                     .then(response => {
-                        let newItemView = response.data;
-                        this.$store.dispatch("setItemView", newItemView);
-                        this.$store.dispatch("setLoadingState", false);
+                        let updatedItemView = response.data;
+                        this.dispatchView(updatedItemView);
+                        this.logEvent("item updated", updatedItemView);
                     });
             },
 
@@ -640,6 +638,18 @@
                             Authorization: this.authorization
                         }
                     })
+            },
+
+            dispatchView(itemView) {
+                this.$store.dispatch("addItemId", itemView.itemId);
+                this.$store.dispatch("setItemView", itemView);
+                this.$store.dispatch("setLoadingState", false);
+            },
+
+            logEvent(event, itemView) {
+                console.log(event + ": "
+                    + "id=" + itemView.itemId
+                    + "; name=" + itemView.header.name);
             },
 
             isLoading() {
