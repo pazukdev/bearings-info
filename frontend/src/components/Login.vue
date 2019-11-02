@@ -37,12 +37,12 @@
             <tr>
                 <td></td>
                 <td>
-                    <button v-on:click="performLoginPageAction">{{buttonName()}}</button>
+                    <button v-on:click="performLoginPageAction()">{{buttonName()}}</button>
                 </td>
             </tr>
             <tr v-if="incorrectCredentials" class="warning-message">
                 <td colspan="2">
-                    Incorrect login or password !
+                    {{getIncorrectLoginOrPasswordMessage()}}
                 </td>
             </tr>
             <tr v-for="message in validationMessages" v-bind:value="message" class="warning-message">
@@ -85,9 +85,10 @@
                 }
             },
 
-            loginIfValid(validationMessage) {
-                this.validationMessages = validationMessage;
+            loginIfValid(validationMessages, newUserName) {
+                this.validationMessages = validationMessages;
                 if (this.validationMessages.length === 0) {
+                    console.log("a new user created: " + newUserName);
                     this.login();
                 }
             },
@@ -109,9 +110,10 @@
                             console.log("logged in as " + this.username)
                         }
                     })
-                    .catch(error => {
-                    this.setIncorrectCredentials(true);
-                });
+                    .catch(error =>{
+                        this.setIncorrectCredentials(true);
+                        console.log("login failed: " + this.getIncorrectLoginOrPasswordMessage());
+                    });
             },
 
             signUp() {
@@ -122,7 +124,7 @@
                 };
                 axios
                     .post("/backend/user/create", newUser)
-                    .then(response =>  this.loginIfValid(response.data));
+                    .then(response => {this.loginIfValid(response.data, newUser.name)});
             },
 
             switchForm() {
@@ -152,14 +154,16 @@
 
             setIncorrectCredentials(incorrectCredentials) {
                 this.$store.dispatch("setIncorrectCredentials", incorrectCredentials);
-                console.log("login failed: " + incorrectCredentials);
+            },
+
+            getIncorrectLoginOrPasswordMessage() {
+                return "Incorrect login or password !";
             }
         }
     }
 </script>
 
 <style scoped>
-
     table {
         padding-top: 50%;
         text-align: left;
