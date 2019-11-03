@@ -4,36 +4,37 @@
             {{"Loading..."}}
         </div>
         <div v-if="!isLoading()">
-            <!--        <div style="text-align: left">-->
-            <!--            {{newItemCategory}}<br>-->
-            <!--            {{newItemName}}<br>-->
-            <!--        </div>-->
+<!--                    <div style="text-align: left">-->
+<!--                        {{itemView.userData.comment}}<br>-->
+<!--                        {{isGuest()}}<br>-->
+<!--                    </div>-->
             <table id="header-menu">
                 <tbody>
                 <tr>
                     <td class="third-part-wide">
                         <button type="button"
-                                v-if="!isWishListView()"
+                                v-if="!isWishListView() && !isGuest()"
                                 v-on:click="openWishList()">
                             {{"Wishlist: " + itemView.wishListIds.length + " items"}}
                         </button>
                     </td>
                     <td></td>
                     <td class="third-part-wide" style="text-align: right">
-                        <div>{{itemView.userData.itemName}}</div>
-                        <div>{{"Rating: " + itemView.userData.rating}}</div>
+                        <div v-if="!isGuest()">{{itemView.userData.itemName}}</div>
+                        <div v-if="!isGuest()">{{"Rating: " + itemView.userData.rating}}</div>
                         <div v-if="isAdmin()">{{"You are admin"}}</div>
+                        <div v-if="isGuest()">{{"You are guest"}}</div>
                     </td>
                 </tr>
                 <tr><td colspan="3"><hr></td></tr>
                 <tr>
                     <td>
-                        <button v-if="!isInWishList(itemView.itemId) && isOrdinaryItemView() && !isEditMode"
+                        <button v-if="isAddToWishlistButtonVisible()"
                                 type="button"
                                 @click="addThisItemToWishList()">
                             {{"Add to Wish List"}}
                         </button>
-                        <p v-if="isInWishList(itemView.itemId) && isOrdinaryItemView()">
+                        <p v-if="isInWishList(itemView.itemId) && isOrdinaryItemView() && !isGuest()">
                             {{"Item in Wish List"}}
                         </p>
                     </td>
@@ -186,7 +187,7 @@
                             {{"Cancel"}}
                         </button>
                     </td>
-                    <td v-if="!isMotorcycleCatalogueView()" style="text-align: right">
+                    <td v-if="isEditButtonVisible()" style="text-align: right">
                         <button v-if="!isEditMode"
                                 type="button"
                                 @click="edit()">
@@ -388,7 +389,7 @@
                     </td>
                     <td class="three-column-table-right-column">{{replacer.rating}}</td>
                     <td>
-                        <button v-if="!isEditMode && !isRated(replacer)" v-model="newItemView"
+                        <button v-if="isRateButtonVisible(replacer)" v-model="newItemView"
                                 type="button"
                                 class="round-button"
                                 @click="rateAction('up', replacer.itemId)">
@@ -396,13 +397,13 @@
                         </button>
                     </td>
                     <td>
-                        <button v-if="!isEditMode && !isRated(replacer)" v-model="newItemView"
+                        <button v-if="isRateButtonVisible(replacer)" v-model="newItemView"
                                 type="button"
                                 class="round-button"
                                 @click="rateAction('down', replacer.itemId)">
                             {{" &#x2193;"}}
                         </button>
-                        <button v-if="!isEditMode && isRated(replacer)" v-model="newItemView"
+                        <button v-if="isUnrateButtonVisible(replacer)" v-model="newItemView"
                                 type="button"
                                 class="round-button"
                                 @click="rateAction('cancel', replacer.itemId)">
@@ -450,7 +451,7 @@
                 </tbody>
             </table>
 
-            <table id="additional-menu" v-if="isHome()">
+            <table id="additional-menu" v-if="isAdditionalMenuDisplayed()">
                 <tbody>
                 <tr><td colspan="3">{{"Additional menu"}}</td></tr>
                 <tr>
@@ -559,13 +560,45 @@
         },
 
         created() {
-            this.refresh();
+            this.setBasicUrl();
+            if (!this.isAuthorized()) {
+                this.loginAsGuest();
+            } else {
+                this.getItemView(this.lastItemId);
+            }
         },
 
         methods: {
-            refresh() {
-                //this.redirectToLogin();
-                this.getItemView(this.lastItemId);
+            setBasicUrl() {
+                let hostname = window.location.hostname;
+                let basicUrl;
+                if (hostname === "localhost") {
+                    basicUrl = "backend";
+                } else {
+                    basicUrl = "https://bearings-info.herokuapp.com";
+                }
+                this.$store.dispatch("setBasicUrl", basicUrl);
+            },
+
+            loginAsGuest() {
+                let username = "guest";
+                let password = "user";
+                let credentialsUrl ="username=" + username + "&" + "password=" + password;
+                axios
+                    .post(this.basicUrl + "/login", credentialsUrl)
+                    .then(response => {
+                        if (response.status === 200) {
+                            this.$store.dispatch("setLoadingState", true);
+                            let authorization = response.data.Authorization;
+                            this.$store.dispatch("setAuthorization", authorization);
+                            this.$store.dispatch("setUserName", username);
+                            console.log("logged in as " + username);
+                            this.getItemView(this.lastItemId);
+                        }
+                    })
+                    .catch(error => {
+                        console.log("login as " + username + " failed");
+                    });
             },
 
             getItemView(itemId) {
@@ -669,12 +702,20 @@
                 return this.authorization !== "";
             },
 
+            isAdditionalMenuDisplayed() {
+                return this.isHome() && !this.isGuest();
+            },
+
             isHome() {
                 return this.itemIds.length === 1;
             },
 
             isAdmin() {
-                return this.itemView.userData.comment === 'Admin'
+                return this.itemView.userData.comment === "Admin";
+            },
+
+            isGuest() {
+                return this.itemView.userData.comment === "Guest" && this.userName === "guest";
             },
 
             openWishList() {
@@ -716,6 +757,13 @@
                     && this.itemView.partsTable.header[2] === "-")
                     && this.itemView.category !== "Motorcycle"
                     && this.isPartsTitleVisible();
+            },
+
+            isAddToWishlistButtonVisible() {
+                return !this.isInWishList(this.itemView.itemId)
+                    && this.isOrdinaryItemView()
+                    && !this.isEditMode
+                    && !this.isGuest();
             },
 
             addThisItemToWishList() {
@@ -816,6 +864,14 @@
                     }
                 }
                 return false;
+            },
+
+            isRateButtonVisible(replacer) {
+                return !this.isEditMode && !this.isRated(replacer) && !this.isGuest();
+            },
+
+            isUnrateButtonVisible(replacer) {
+                return !this.isEditMode && this.isRated(replacer) && !this.isGuest();
             },
 
             isRated(replacer) {
@@ -1015,6 +1071,10 @@
 
             isItemsManagementView() {
                 return this.itemView.itemId === -1;
+            },
+
+            isEditButtonVisible() {
+                return !this.isMotorcycleCatalogueView() && !this.isGuest();
             },
 
             isMotorcycleCatalogueView() {

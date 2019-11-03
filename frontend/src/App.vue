@@ -19,11 +19,18 @@
                         </td>
                         <td style="width: 80px">
                             <button
-                                    v-show="isAuthorized()"
+                                    v-show="!isGuest() && isAuthorized()"
                                     @click="logout()"
                                     id="logout"
                                     class="app-bar-button">
                                 <b>Logout</b>
+                            </button>
+                            <button
+                                    v-show="isGuest()"
+                                    @click="openLoginForm()"
+                                    id="login"
+                                    class="app-bar-button">
+                                <b>Login</b>
                             </button>
                         </td>
                     </tr>
@@ -32,10 +39,10 @@
             </div>
             <div style="text-align: left">
 <!--                {{"basicUrl: " + basicUrl}}<br>-->
-<!--                {{authorization}}<br>-->
+<!--                {{"userName: " + userName}}<br>-->
+<!--                {{"authorization: " + authorization}}<br>-->
 <!--                {{"Item ids: " + itemIds}}<br>-->
 <!--                {{"Is loading: " + loadingState}}<br>-->
-<!--                {{"is admin: " + admin}}<br>-->
 <!--                {{"itemView: " + itemView}}<br>-->
 <!--                {{"itemId: " + lastItemId}}<br>-->
             </div>
@@ -60,16 +67,47 @@
                 itemView: state => state.dictionary.itemView,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
-                lastItemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1],
-                admin: state => state.dictionary.admin
+                lastItemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
             })
         },
 
         methods: {
+            isGuest() {
+                return this.isAuthorized() && this.userName === "guest";
+            },
+
+            loginAsGuest() {
+                let username = "guest";
+                let password = "guest";
+                let credentialsUrl ="username=" + username + "&" + "password=" + password;
+                axios
+                    .post(this.basicUrl + "/login", credentialsUrl)
+                    .then(response => {
+                        if (response.status === 200) {
+                            this.$store.dispatch("setLoadingState", true);
+                            let authorization = response.data.Authorization;
+                            this.$store.dispatch("setAuthorization", authorization);
+                            this.$store.dispatch("setUserName", username);
+                            console.log("logged in as " + username);
+                            this.getItemView(this.lastItemId);
+                        }
+                    })
+                    .catch(error => {
+                        console.log("login as " + username + " failed");
+                    });
+            },
+
             logout() {
                 this.$store.dispatch("setDefaultState");
-                this.$router.push('/login');
+                this.$router.push('/');
                 console.log("logout");
+                this.loginAsGuest();
+            },
+
+            openLoginForm() {
+                this.$store.dispatch("setDefaultState");
+                this.$router.push('/login');
+                console.log("login form opened");
             },
 
             isAuthorized() {
@@ -81,6 +119,7 @@
             },
 
             back() {
+                console.log("back button taped");
                 this.$store.dispatch("removeLastItemId");
                 this.getItemView(this.lastItemId);
             },
@@ -96,7 +135,7 @@
                     .then(response => {
                         let previousItemView = response.data;
                         this.dispatchView(previousItemView);
-                        this.logEvent("back button taped: item view displayed: item", previousItemView);
+                        this.logEvent("item view displayed: item", previousItemView);
                     });
             },
 

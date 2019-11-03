@@ -1,5 +1,8 @@
 <template>
     <div id="login">
+        <div style="text-align: right">
+            <button style="width: initial" v-on:click="loginAsGuest()">{{"Continue as guest"}}</button>
+        </div>
         <table>
             <tbody>
             <tr>
@@ -70,10 +73,6 @@
             };
         },
 
-        created() {
-            this.setBasicUrl();
-        },
-
         computed: {
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
@@ -82,17 +81,6 @@
         },
 
         methods: {
-            setBasicUrl() {
-                let hostname = window.location.hostname;
-                let basicUrl;
-                if (hostname === "localhost") {
-                    basicUrl = "backend";
-                } else {
-                    basicUrl = "https://bearings-info.herokuapp.com";
-                }
-                this.$store.dispatch("setBasicUrl", basicUrl);
-            },
-
             performLoginPageAction() {
                 if (this.isLogin) {
                     this.login();
@@ -109,6 +97,12 @@
                 }
             },
 
+            loginAsGuest() {
+                this.username = "guest";
+                this.password = "guest";
+                this.login();
+            },
+
             login() {
                 let credentialsUrl ="username=" + this.username + "&" + "password=" + this.password;
                 axios
@@ -120,13 +114,11 @@
                             let authorization = response.data.Authorization;
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", this.username);
-                            let specialMotorcycleCatalogueItemId = -2;
-                            this.$store.dispatch("addItemId", specialMotorcycleCatalogueItemId);
                             this.$router.push({ path: '/'});
-                            console.log("logged in as " + this.username)
+                            console.log("logged in as " + this.username);
                         }
                     })
-                    .catch(error =>{
+                    .catch(error => {
                         this.setIncorrectCredentials(true);
                         console.log("login failed: " + this.getIncorrectLoginOrPasswordMessage());
                     });

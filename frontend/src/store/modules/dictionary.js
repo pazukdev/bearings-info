@@ -5,7 +5,7 @@ const state = {
     authorization: "",
     userName: "",
     itemView: "",
-    itemIds: []
+    itemIds: [-2]
 };
 
 const actions = {
@@ -54,7 +54,7 @@ const mutations = {
         state.authorization = "";
         state.userName = "";
         state.itemView = "";
-        state.itemIds = [];
+        state.itemIds = [-2];
     },
 
     setBasicUrl(state, basicUrl) {
