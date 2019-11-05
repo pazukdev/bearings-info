@@ -21,66 +21,44 @@ public class ImgUtil {
         final String itemCategory = item.getCategory();
         String imgName;
         String imgPath;
-        BufferedImage img = null;
+        BufferedImage img;
         if (item.getImage() != null) {
             imgName = item.getImage();
-            imgPath = getImgPath(imgName, itemCategory);
+            imgPath = getImgFullPath(imgName, itemCategory);
             try {
                 img = getImg(imgPath);
             } catch (IOException e1) {
-                e1.printStackTrace();
-                imgName = getCategoryDefaultImgName(itemCategory);
-                imgPath = getImgPath(imgName, itemCategory);
-                try {
-                    img = getImg(imgPath);
-                } catch (IOException e2) {
-                    e2.printStackTrace();
-                    try {
-                        img = getImg(imgPath);
-                    } catch (IOException e3) {
-                        e3.printStackTrace();
-                        imgName = getItemDefaultImgName();
-                        imgPath = IMG_DIRECTORY_PATH + "common/" + imgName;
-                        try {
-                            img = getImg(imgPath);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            return "-";
-                        }
-                    }
-                }
+                img = getImgIfItemHasNoSpecificImg(itemCategory);
             }
         } else {
-            imgName = getCategoryDefaultImgName(itemCategory);
-            imgPath = getImgPath(imgName, itemCategory);
-            try {
-                img = getImg(imgPath);
-            } catch (IOException e2) {
-                e2.printStackTrace();
-                try {
-                    img = getImg(imgPath);
-                } catch (IOException e3) {
-                    e3.printStackTrace();
-                    imgName = getItemDefaultImgName();
-                    imgPath = IMG_DIRECTORY_PATH + "common/" + imgName;
-                    try {
-                        img = getImg(imgPath);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return "-";
-                    }
-                }
-            }
+            img = getImgIfItemHasNoSpecificImg(itemCategory);
         }
         return createBase64ImgData(img);
     }
 
-    private static String getCategoryDefaultImgName(final String itemCategory) {
-        return itemCategory.toLowerCase().replaceAll(" ", "_") + "_default.png";
-    }
+    private static BufferedImage getImgIfItemHasNoSpecificImg(final String itemCategory) {
+        String imgName = getCategoryDefaultImgName(itemCategory);
+        String imgPath = getImgFullPath(imgName, itemCategory);
 
-    private static String getItemDefaultImgName() {
-        return "default_image_small.png";
+        BufferedImage img = null;
+        try {
+            img = getImg(imgPath);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            try {
+                img = getImg(imgPath);
+            } catch (IOException e2) {
+                e2.printStackTrace();
+                imgName = getItemDefaultImgName();
+                imgPath = IMG_DIRECTORY_PATH + "common/" + imgName;
+                try {
+                    img = getImg(imgPath);
+                } catch (IOException e3) {
+                    e3.printStackTrace();
+                }
+            }
+        }
+        return img;
     }
 
     public static BufferedImage getImg(String imgPath) throws IOException {
@@ -91,12 +69,13 @@ public class ImgUtil {
     public static void createImgFileInFileSystem(final String base64Data, final Item item) throws IOException {
         final String itemCategory = item.getCategory();
         final String imgName = getImgName(itemCategory, item.getName());
-        createDirectory(imgName, itemCategory);
+
+        createCategoryDirectoryIfNotExists(itemCategory);
 
         byte[] decodedBytes = Base64.getDecoder().decode(base64Data.split(",")[1]);
         final ByteArrayInputStream bis = new ByteArrayInputStream(decodedBytes);
         BufferedImage img = ImageIO.read(bis);
-        final String imgPath = getImgPath(imgName, itemCategory);
+        final String imgPath = getImgFullPath(imgName, itemCategory);
         final File file = new File(imgPath);
         ImageIO.write(img, IMG_EXTENSION, file);
     }
@@ -111,24 +90,6 @@ public class ImgUtil {
         return IMG_DATA_METADATA + DatatypeConverter.printBase64Binary(baos.toByteArray());
     }
 
-    private static String getImgPath(final String imgName, final String itemCategory) {
-        return IMG_DIRECTORY_PATH + itemCategory.toLowerCase().replaceAll(" ", "_") + "/" + imgName;
-    }
-
-    public static String getImgName(final String itemCategory, final String itemName) {
-        return itemCategory.replaceAll(" ", "_").toLowerCase()
-                + "_" + itemName.replaceAll(" ", "_").toLowerCase()
-                + "." + IMG_EXTENSION;
-    }
-
-    private static void createDirectory(final String imgName, final String itemCategory) {
-        final String path = IMG_DIRECTORY_PATH + itemCategory.toLowerCase().replaceAll(" ", "_");
-        final File directory = new File(path);
-        if (!directory.exists()) {
-            directory.mkdir();
-        }
-    }
-
     public static String getAppImgData() {
         final String imgPath = IMG_DIRECTORY_PATH + "common/ic_launcher.png";
         try {
@@ -137,6 +98,37 @@ public class ImgUtil {
         } catch (IOException e) {
             return "-";
         }
+    }
+
+    public static String getImgName(final String itemCategory, final String itemName) {
+        return toPath(itemCategory) + "_" + toPath(itemName) + "." + IMG_EXTENSION;
+    }
+
+    private static void createCategoryDirectoryIfNotExists(final String itemCategory) {
+        final File directory = new File(getCategoryDirectoryPath(itemCategory));
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+    }
+
+    private static String getImgFullPath(final String imgName, final String itemCategory) {
+        return getCategoryDirectoryPath(itemCategory) + "/" + imgName;
+    }
+
+    private static String getCategoryDirectoryPath(final String itemCategory) {
+        return IMG_DIRECTORY_PATH + toPath(itemCategory);
+    }
+
+    private static String getCategoryDefaultImgName(final String itemCategory) {
+        return toPath(itemCategory) + "_default.png";
+    }
+
+    private static String toPath(final String name) {
+        return name.replaceAll(" ", "_").toLowerCase();
+    }
+
+    private static String getItemDefaultImgName() {
+        return "default_image_small.png";
     }
 
 }
