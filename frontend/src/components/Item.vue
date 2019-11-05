@@ -5,9 +5,9 @@
         </div>
         <div v-if="!isLoading()">
                     <div style="text-align: left">
-                        {{"itemView.imgData: " + itemView.imgData}}<br>
-                        {{"imgData: " + imgData}}<br>
-                        {{"newItemView.imageData: " + this.newItemView.imgData}}<br>
+<!--                        {{"itemView.imgData: " + itemView.imgData}}<br>-->
+<!--                        {{"imgData: " + imgData}}<br>-->
+<!--                        {{"newItemView.imageData: " + this.newItemView.imgData}}<br>-->
                     </div>
             <table id="header-menu">
                 <tbody>
@@ -211,12 +211,6 @@
             <table id="item-image"
                    v-if="isViewWithImage()">
                 <tbody>
-<!--                <tr v-if="itemView.imageData === 'zzz'">-->
-<!--                    <td>-->
-<!--                        <img :src="require(`../assets//${itemView.image}`)"-->
-<!--                             :alt="itemView.header.name">-->
-<!--                    </td>-->
-<!--                </tr>-->
                 <tr v-if="itemView.imgData !== '-'">
                     <td>
                         <div class="image-preview">
@@ -224,10 +218,25 @@
                         </div>
                     </td>
                 </tr>
-                <tr v-if="isEditMode"><td>Upload another image</td></tr>
                 <tr v-if="isEditMode">
                     <td>
-                        <input type="file" @change="previewImage"><br><br>
+                        <br>
+                        Upload another image<br>
+                        Accepts .png images only<br>
+                        Size limit: 2MB<br>
+                        <br>
+                    </td>
+                </tr>
+                <tr v-if="isEditMode" class="alert-message">
+                    <td>
+                        {{fileUploadMessage}}
+                    </td>
+                </tr>
+                <tr v-if="isEditMode">
+                    <td>
+                        <input type="file" accept="image/png"
+                               style="color: black"
+                               @change="previewImage"><br><br>
 <!--                        <button @click="onUpload">Upload!</button>-->
                     </td>
                 </tr>
@@ -510,6 +519,7 @@
                 newReplacerMessage: "",
                 categoryMessage: "",
                 newItemNameMessage: "",
+                fileUploadMessage: "",
                 actionType: "",
                 newHeaderRow: {
                     parameter: "",
@@ -756,6 +766,11 @@
                 let input = event.target;
                 let file = input.files[0];
                 if (file !== null) {
+                    if (file.size > 2097152) {
+                        this.fileUploadMessage = "Image is too big! Size limit is 2MB";
+                        return;
+                    }
+                    this.fileUploadMessage = "";
                     let reader = new FileReader();
                     reader.onload = (e) => {
                         this.itemView.imgData = e.target.result;
@@ -972,6 +987,7 @@
                 this.newHeaderRowMessage = "";
                 this.newPartMessage = "";
                 this.newReplacerMessage = "";
+                this.fileUploadMessage = "";
                 this.clearItemCreationMessages();
             },
 

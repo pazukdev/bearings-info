@@ -245,8 +245,10 @@ public class ItemUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        final String imgName = ImgUtil.getImgName(item.getCategory(), item.getName());
-        item.setImage(imgName);
+        if (ImgUtil.isPngFile(base64Data)) {
+            final String imgName = ImgUtil.getImgName(item.getCategory(), item.getName());
+            item.setImage(imgName);
+        }
     }
 
     public static void updateDescription(final Item item,

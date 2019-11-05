@@ -14,7 +14,7 @@ import java.util.Base64;
 public class ImgUtil {
 
     public static final String IMG_DIRECTORY_PATH = "backend/src/img/";
-    private static final String IMG_EXTENSION = "png";
+    private static final String PNG_EXTENSION = "png";
     private static final String IMG_DATA_METADATA = "data:image/png;base64,";
 
     public static String getItemImgData(final Item item) {
@@ -77,13 +77,13 @@ public class ImgUtil {
         BufferedImage img = ImageIO.read(bis);
         final String imgPath = getImgFullPath(imgName, itemCategory);
         final File file = new File(imgPath);
-        ImageIO.write(img, IMG_EXTENSION, file);
+        ImageIO.write(img, PNG_EXTENSION, file);
     }
 
     public static String createBase64ImgData(final BufferedImage img) {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-            ImageIO.write(img, IMG_EXTENSION, baos);
+            ImageIO.write(img, PNG_EXTENSION, baos);
         } catch (IOException e) {
             return "-";
         }
@@ -101,7 +101,11 @@ public class ImgUtil {
     }
 
     public static String getImgName(final String itemCategory, final String itemName) {
-        return toPath(itemCategory) + "_" + toPath(itemName) + "." + IMG_EXTENSION;
+        return toPath(itemCategory) + "_" + toPath(itemName) + "." + PNG_EXTENSION;
+    }
+
+    public static boolean isPngFile(final String base64Data) {
+        return getBase64DataFileExtension(base64Data).equals(PNG_EXTENSION);
     }
 
     private static void createCategoryDirectoryIfNotExists(final String itemCategory) {
@@ -129,6 +133,10 @@ public class ImgUtil {
 
     private static String getItemDefaultImgName() {
         return "default_image_small.png";
+    }
+
+    private static String getBase64DataFileExtension(final String base64Data) {
+        return base64Data.split(";")[0].split("/")[1];
     }
 
 }
