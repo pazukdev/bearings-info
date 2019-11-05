@@ -4,23 +4,13 @@ import com.pazukdev.backend.dto.ItemQuantity;
 import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.dto.ReplacerData;
 import com.pazukdev.backend.dto.TransitiveItemDescriptionMap;
-import com.pazukdev.backend.entity.ChildItem;
-import com.pazukdev.backend.entity.Item;
-import com.pazukdev.backend.entity.Replacer;
-import com.pazukdev.backend.entity.TransitiveItem;
-import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.TransitiveItemService;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -247,6 +237,17 @@ public class ItemUtil {
             applyToAllItemDescriptions(item.getCategory(), oldName, newName, itemService);
         }
         headerMatrixMap.remove("Name");
+    }
+
+    public static void updateImg(final String base64Data, final Item item) {
+        try {
+            ImgUtil.createImgFileInFileSystem(base64Data, item);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        final String imgName = ImgUtil.getImgName(item.getCategory(), item.getName());
+        final ItemImg img = ImgUtil.createItemImg(base64Data, imgName);
+        item.setImage(img);
     }
 
     public static void updateDescription(final Item item,

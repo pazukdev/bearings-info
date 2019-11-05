@@ -5,6 +5,17 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+    <changeSet id="create_item_img_table" author="sviarkaltsau">
+        <createTable tableName="item_img">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
+            <column name="img_data" type="LONGBLOB"/>
+        </createTable>
+    </changeSet>
+
     <changeSet id="create_transitive_item_table" author="sviarkaltsau">
         <createTable tableName="transitive_item">
             <column name="id" type="bigint" autoIncrement="true">
@@ -26,7 +37,7 @@
             </column>
             <column name="name" type="varchar(255)"/>
             <column name="category" type="varchar(255)"/>
-            <column name="image" type="varchar(255)"/>
+            <column name="image_id" type="bigint"/>
             <column name="rating" type="int"/>
             <column name="status" type="varchar(255)"/>
             <column name="creator_id" type="bigint"/>
