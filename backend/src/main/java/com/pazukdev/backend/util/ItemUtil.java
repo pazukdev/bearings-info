@@ -246,8 +246,7 @@ public class ItemUtil {
             e.printStackTrace();
         }
         final String imgName = ImgUtil.getImgName(item.getCategory(), item.getName());
-        final ItemImg img = ImgUtil.createItemImg(base64Data, imgName);
-        item.setImage(img);
+        item.setImage(imgName);
     }
 
     public static void updateDescription(final Item item,

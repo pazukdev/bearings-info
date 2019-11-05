@@ -131,11 +131,7 @@ public class ItemViewFactory {
         final String tableName = "Motorcycle catalogue";
         final String countParameterName = "Model";
 
-        try {
-            itemView.setImgData(ImgUtil.createBase64ImgData("common/ic_launcher.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        itemView.setImgData(ImgUtil.getAppImgData());
 
         return createItemsView(
                 itemView,

@@ -3,490 +3,490 @@
         <div v-if="isLoading()" style="text-align: center; padding-top: 50%">
             {{"Loading..."}}
         </div>
-        {{itemView}}
-<!--        <div v-if="!isLoading()">-->
-<!--                    <div style="text-align: left">-->
-<!--                        {{"imageData: " + imgData}}<br>-->
-<!--                        {{"newItemView.imageData: " + this.newItemView.imgData}}<br>-->
-<!--                    </div>-->
-<!--            <table id="header-menu">-->
-<!--                <tbody>-->
-<!--                <tr>-->
-<!--                    <td class="third-part-wide">-->
-<!--                        <button type="button"-->
-<!--                                v-if="!isWishListView() && !isGuest()"-->
-<!--                                v-on:click="openWishList()">-->
-<!--                            {{"Wishlist: " + itemView.wishListIds.length + " items"}}-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                    <td></td>-->
-<!--                    <td class="third-part-wide" style="text-align: right">-->
-<!--                        <div v-if="!isGuest()">{{itemView.userData.itemName}}</div>-->
-<!--                        <div v-if="!isGuest()">{{"Rating: " + itemView.userData.rating}}</div>-->
-<!--                        <div v-if="isAdmin()">{{"You are admin"}}</div>-->
-<!--                        <div v-if="isGuest()">{{"You are guest"}}</div>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr><td colspan="3"><hr></td></tr>-->
-<!--                <tr>-->
-<!--                    <td>-->
-<!--                        <button v-if="isAddToWishlistButtonVisible()"-->
-<!--                                type="button"-->
-<!--                                @click="addThisItemToWishList()">-->
-<!--                            {{"Add to Wish List"}}-->
-<!--                        </button>-->
-<!--                        <p v-if="isInWishList(itemView.itemId) && isOrdinaryItemView() && !isGuest()">-->
-<!--                            {{"Item in Wish List"}}-->
-<!--                        </p>-->
-<!--                    </td>-->
-<!--                    <td></td>-->
-<!--                    <td>-->
-<!--                        <button v-if="itemView.searchEnabled"-->
-<!--                                type="button"-->
-<!--                                @click="searchInGoogle()">-->
-<!--                            {{"Google search"}}-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr v-if="isOrdinaryItemView()">-->
-<!--                    <td colspan="3"><hr></td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
+        <div v-if="!isLoading()">
+                    <div style="text-align: left">
+                        {{"itemView.imgData: " + itemView.imgData}}<br>
+                        {{"imgData: " + imgData}}<br>
+                        {{"newItemView.imageData: " + this.newItemView.imgData}}<br>
+                    </div>
+            <table id="header-menu">
+                <tbody>
+                <tr>
+                    <td class="third-part-wide">
+                        <button type="button"
+                                v-if="!isWishListView() && !isGuest()"
+                                v-on:click="openWishList()">
+                            {{"Wishlist: " + itemView.wishListIds.length + " items"}}
+                        </button>
+                    </td>
+                    <td></td>
+                    <td class="third-part-wide" style="text-align: right">
+                        <div v-if="!isGuest()">{{itemView.userData.itemName}}</div>
+                        <div v-if="!isGuest()">{{"Rating: " + itemView.userData.rating}}</div>
+                        <div v-if="isAdmin()">{{"You are admin"}}</div>
+                        <div v-if="isGuest()">{{"You are guest"}}</div>
+                    </td>
+                </tr>
+                <tr><td colspan="3"><hr></td></tr>
+                <tr>
+                    <td>
+                        <button v-if="isAddToWishlistButtonVisible()"
+                                type="button"
+                                @click="addThisItemToWishList()">
+                            {{"Add to Wish List"}}
+                        </button>
+                        <p v-if="isInWishList(itemView.itemId) && isOrdinaryItemView() && !isGuest()">
+                            {{"Item in Wish List"}}
+                        </p>
+                    </td>
+                    <td></td>
+                    <td>
+                        <button v-if="itemView.searchEnabled"
+                                type="button"
+                                @click="searchInGoogle()">
+                            {{"Google search"}}
+                        </button>
+                    </td>
+                </tr>
+                <tr v-if="isOrdinaryItemView()">
+                    <td colspan="3"><hr></td>
+                </tr>
+                </tbody>
+            </table>
 
-<!--            <table id="item-creation-menu">-->
-<!--                <tbody>-->
-<!--                <tr>-->
-<!--                    <td colspan="3">-->
-<!--                        <b>{{itemView.header.name}}</b>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr v-if="isOrdinaryItemView()">-->
-<!--                    <td colspan="3">-->
-<!--                        {{"Created by " + itemView.creatorName}}-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr style="height: 10px"><td></td></tr>-->
-<!--                <tr v-if="isItemsManagementView()">-->
-<!--                    <td colspan="3">-->
-<!--                        <table>-->
-<!--                            <tbody>-->
-<!--                            <tr>-->
-<!--                                <td colspan="2"><hr></td>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <td colspan="2">{{"Create new item"}}</td>-->
-<!--                            </tr>-->
-<!--                            <tr style="color: red">-->
-<!--                                <td colspan="2">{{categoryMessage}}</td>-->
-<!--                            </tr>-->
-<!--                            <tr style="color: red">-->
-<!--                                <td colspan="2">{{newItemNameMessage}}</td>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <td class="two-columns-table-left-column">-->
-<!--                                    {{"Category"}}-->
-<!--                                </td>-->
-<!--                                <td class="two-column-table-right-column">-->
-<!--                                    {{"Name"}}-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <td>-->
-<!--                                    <input type="text"-->
-<!--                                           list="categories"-->
-<!--                                           @change="categorySelectOnChange()"-->
-<!--                                           v-model="newItemCategory"/>-->
-<!--                                    <datalist id="categories">-->
-<!--                                        <option v-for="category in itemView.categories"-->
-<!--                                                v-bind:value="category">-->
-<!--                                            {{category}}-->
-<!--                                        </option>-->
-<!--                                    </datalist>-->
-<!--                                </td>-->
-<!--                                <td>-->
-<!--                                    <input @change="newItemNameMessage = ''"-->
-<!--                                           v-model="newItemName"-->
-<!--                                           type="text"/>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <td colspan="2">-->
-<!--                                    <button type="button"-->
-<!--                                            v-on:click="create()">-->
-<!--                                        {{"Create"}}-->
-<!--                                    </button>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <td colspan="2"><hr></td>-->
-<!--                            </tr>-->
-<!--                            </tbody>-->
-<!--                        </table>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
+            <table id="item-creation-menu">
+                <tbody>
+                <tr>
+                    <td colspan="3">
+                        <b>{{itemView.header.name}}</b>
+                    </td>
+                </tr>
+                <tr v-if="isOrdinaryItemView()">
+                    <td colspan="3">
+                        {{"Created by " + itemView.creatorName}}
+                    </td>
+                </tr>
+                <tr style="height: 10px"><td></td></tr>
+                <tr v-if="isItemsManagementView()">
+                    <td colspan="3">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td colspan="2"><hr></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">{{"Create new item"}}</td>
+                            </tr>
+                            <tr style="color: red">
+                                <td colspan="2">{{categoryMessage}}</td>
+                            </tr>
+                            <tr style="color: red">
+                                <td colspan="2">{{newItemNameMessage}}</td>
+                            </tr>
+                            <tr>
+                                <td class="two-columns-table-left-column">
+                                    {{"Category"}}
+                                </td>
+                                <td class="two-column-table-right-column">
+                                    {{"Name"}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text"
+                                           list="categories"
+                                           @change="categorySelectOnChange()"
+                                           v-model="newItemCategory"/>
+                                    <datalist id="categories">
+                                        <option v-for="category in itemView.categories"
+                                                v-bind:value="category">
+                                            {{category}}
+                                        </option>
+                                    </datalist>
+                                </td>
+                                <td>
+                                    <input @change="newItemNameMessage = ''"
+                                           v-model="newItemName"
+                                           type="text"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button type="button"
+                                            v-on:click="create()">
+                                        {{"Create"}}
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><hr></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
-<!--            <table id="item-description">-->
-<!--                <tbody>-->
-<!--                <tr style="text-align: left"-->
-<!--                    v-for="row in itemView.header.matrix">-->
-<!--                    <td class="two-columns-table-left-column">-->
-<!--                        <p>-->
-<!--                            {{row[0]}}-->
-<!--                        </p>-->
-<!--                    </td>-->
-<!--                    <td class="two-column-table-right-column">-->
-<!--                        <input v-if="isEditMode && isOrdinaryItemView()" v-model="row[1]" type="text"/>-->
-<!--                        <p v-if="!isShowInfoButton(row[3])-->
-<!--                    && (!isEditMode || (isEditMode && !isOrdinaryItemView()))">-->
-<!--                            {{row[1]}}-->
-<!--                        </p>-->
-<!--                        <button v-if="isShowInfoButton(row[3])"-->
-<!--                                type="button"-->
-<!--                                @click="getItemView(row[2])">-->
-<!--                            {{row[1]}}-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                    <td>-->
-<!--                        <button v-if="isEditMode && isOrdinaryItemView() && row[0] !== 'Name'"-->
-<!--                                v-model="newItemView"-->
-<!--                                type="button"-->
-<!--                                class="round-delete-button"-->
-<!--                                @click="removeRowFromHeader(row)">-->
-<!--                            {{"-"}}-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td colspan="3" class="alert-message">-->
-<!--                        {{newHeaderRowMessage}}-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr v-if="isEditMode && isOrdinaryItemView()">-->
-<!--                    <td>-->
-<!--                        <input v-model="newHeaderRow.parameter" type="text"/>-->
-<!--                    </td>-->
-<!--                    <td>-->
-<!--                        <input v-model="newHeaderRow.value" type="text"/>-->
-<!--                    </td>-->
-<!--                    <td>-->
-<!--                        <button type="button"-->
-<!--                                class="round-button"-->
-<!--                                @click="addHeaderRow()">-->
-<!--                            {{"+"}}-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr style="height: 10px"><td></td></tr>-->
-<!--                <tr>-->
-<!--                    <td>-->
-<!--                        <button v-if="isEditMode"-->
-<!--                                type="button"-->
-<!--                                @click="cancel()">-->
-<!--                            {{"Cancel"}}-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                    <td v-if="isEditButtonVisible()" style="text-align: right">-->
-<!--                        <button v-if="!isEditMode"-->
-<!--                                type="button"-->
-<!--                                @click="edit()">-->
-<!--                            {{"Edit"}}-->
-<!--                        </button>-->
-<!--                        <button v-if="isEditMode"-->
-<!--                                type="button"-->
-<!--                                @click="save()">-->
-<!--                            {{"Save"}}-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                    <td></td>-->
-<!--                </tr>-->
-<!--                <tr style="height: 26px">-->
-<!--                    <td colspan="3"><hr></td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
+            <table id="item-description">
+                <tbody>
+                <tr style="text-align: left"
+                    v-for="row in itemView.header.matrix">
+                    <td class="two-columns-table-left-column">
+                        <p>
+                            {{row[0]}}
+                        </p>
+                    </td>
+                    <td class="two-column-table-right-column">
+                        <input v-if="isEditMode && isOrdinaryItemView()" v-model="row[1]" type="text"/>
+                        <p v-if="!isShowInfoButton(row[3])
+                    && (!isEditMode || (isEditMode && !isOrdinaryItemView()))">
+                            {{row[1]}}
+                        </p>
+                        <button v-if="isShowInfoButton(row[3])"
+                                type="button"
+                                @click="getItemView(row[2])">
+                            {{row[1]}}
+                        </button>
+                    </td>
+                    <td>
+                        <button v-if="isEditMode && isOrdinaryItemView() && row[0] !== 'Name'"
+                                v-model="newItemView"
+                                type="button"
+                                class="round-delete-button"
+                                @click="removeRowFromHeader(row)">
+                            {{"-"}}
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="alert-message">
+                        {{newHeaderRowMessage}}
+                    </td>
+                </tr>
+                <tr v-if="isEditMode && isOrdinaryItemView()">
+                    <td>
+                        <input v-model="newHeaderRow.parameter" type="text"/>
+                    </td>
+                    <td>
+                        <input v-model="newHeaderRow.value" type="text"/>
+                    </td>
+                    <td>
+                        <button type="button"
+                                class="round-button"
+                                @click="addHeaderRow()">
+                            {{"+"}}
+                        </button>
+                    </td>
+                </tr>
+                <tr style="height: 10px"><td></td></tr>
+                <tr>
+                    <td>
+                        <button v-if="isEditMode"
+                                type="button"
+                                @click="cancel()">
+                            {{"Cancel"}}
+                        </button>
+                    </td>
+                    <td v-if="isEditButtonVisible()" style="text-align: right">
+                        <button v-if="!isEditMode"
+                                type="button"
+                                @click="edit()">
+                            {{"Edit"}}
+                        </button>
+                        <button v-if="isEditMode"
+                                type="button"
+                                @click="save()">
+                            {{"Save"}}
+                        </button>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr style="height: 26px">
+                    <td colspan="3"><hr></td>
+                </tr>
+                </tbody>
+            </table>
 
-<!--            <table id="item-image"-->
-<!--                   v-if="isViewWithImage()">-->
-<!--                <tbody>-->
-<!--&lt;!&ndash;                <tr v-if="itemView.imageData === 'zzz'">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <td>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <img :src="require(`../assets//${itemView.image}`)"&ndash;&gt;-->
-<!--&lt;!&ndash;                             :alt="itemView.header.name">&ndash;&gt;-->
-<!--&lt;!&ndash;                    </td>&ndash;&gt;-->
-<!--&lt;!&ndash;                </tr>&ndash;&gt;-->
-<!--                <tr v-if="itemView.imgData.length > 0">-->
+            <table id="item-image"
+                   v-if="isViewWithImage()">
+                <tbody>
+<!--                <tr v-if="itemView.imageData === 'zzz'">-->
 <!--                    <td>-->
-<!--                        <div class="image-preview">-->
-<!--                            <img class="preview" :src="itemView.imgData" @change="previewImage">-->
-<!--                        </div>-->
+<!--                        <img :src="require(`../assets//${itemView.image}`)"-->
+<!--                             :alt="itemView.header.name">-->
 <!--                    </td>-->
 <!--                </tr>-->
-<!--                <tr v-if="isEditMode"><td>Upload another image</td></tr>-->
-<!--                <tr v-if="isEditMode">-->
-<!--                    <td>-->
-<!--                        <input type="file" @change="previewImage"><br><br>-->
-<!--&lt;!&ndash;                        <button @click="onUpload">Upload!</button>&ndash;&gt;-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr><td><hr></td></tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
+                <tr v-if="itemView.imgData !== '-'">
+                    <td>
+                        <div class="image-preview">
+                            <img class="preview" :src="itemView.imgData" @change="previewImage">
+                        </div>
+                    </td>
+                </tr>
+                <tr v-if="isEditMode"><td>Upload another image</td></tr>
+                <tr v-if="isEditMode">
+                    <td>
+                        <input type="file" @change="previewImage"><br><br>
+<!--                        <button @click="onUpload">Upload!</button>-->
+                    </td>
+                </tr>
+                <tr><td><hr></td></tr>
+                </tbody>
+            </table>
 
-<!--            <table id="parts-table">-->
-<!--                <tbody>-->
-<!--                <tr v-if="isPartsTitleVisible()">-->
-<!--                    <td>-->
-<!--                        {{itemView.partsTable.name}}-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr v-if="isShowPartsTableHeader()">-->
-<!--                    <td>-->
-<!--                        <table id="parts-header">-->
-<!--                            <tbody>-->
-<!--                            <tr>-->
-<!--                                <td class="three-column-table-left-column">-->
-<!--                                    {{itemView.partsTable.header[0]}}-->
-<!--                                </td>-->
-<!--                                <td class="three-column-table-middle-column">-->
-<!--                                    {{itemView.partsTable.header[1]}}-->
-<!--                                </td>-->
-<!--                                <td class="three-column-table-right-column" v-if="itemView.partsTable.header[2] !== '-'">-->
-<!--                                    {{itemView.partsTable.header[2]}}-->
-<!--                                </td>-->
-<!--                                <td class="three-column-table-button-column"></td>-->
-<!--                            </tr>-->
-<!--                            </tbody>-->
-<!--                        </table>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr v-for="table in itemView.partsTable.tables">-->
-<!--                    <td v-if="table.parts.length > 0" colspan="3">-->
-<!--                        <table id="get-all-table">-->
-<!--                            <tbody>-->
-<!--                            <tr v-if="arrayHaveActiveItems(table.parts)">-->
-<!--                                <td class="three-column-table-left-column">-->
-<!--                                    <b>{{table.name}}</b>-->
-<!--                                </td>-->
-<!--                                <td class="three-column-table-middle-column"></td>-->
-<!--                                <td class="three-column-table-right-column"></td>-->
-<!--                                <td class="three-column-table-button-column"></td>-->
-<!--                            </tr>-->
-<!--                            <tr v-for="part in table.parts" v-if="statusActive(part)">-->
-<!--                                <td class="three-column-table-left-column">-->
-<!--                                    <p class="three-column-table-left-column-text"-->
-<!--                                       v-if="!isEditMode || (isEditMode && !isOrdinaryItemView())">-->
-<!--                                        {{getFirstColumnValue(part)}}-->
-<!--                                    </p>-->
-<!--                                    <input v-if="isEditMode && isOrdinaryItemView()"-->
-<!--                                           v-model="part.location" type="text"/>-->
-<!--                                </td>-->
-<!--                                <td class="three-column-table-middle-column">-->
-<!--                                    <p v-if="isUserListView()">-->
-<!--                                        {{part.buttonText}}-->
-<!--                                    </p>-->
-<!--                                    <button type="button"-->
-<!--                                            v-if="!isUserListView()"-->
-<!--                                            @click="getItemView(part.itemId)">-->
-<!--                                        {{part.buttonText}}-->
-<!--                                    </button>-->
-<!--                                </td>-->
-<!--                                <td class="three-column-table-right-column">-->
-<!--                                    <div v-if="isShowQuantityValue()" class="parts-right-column-text">-->
-<!--                                        {{part.quantity}}-->
-<!--                                    </div>-->
-<!--                                    <div v-if="!isEditMode && isMotorcycleCatalogueView()" class="parts-right-column-text">-->
-<!--                                        {{part.comment}}-->
-<!--                                    </div>-->
-<!--                                    <input v-if="isEditMode && isOrdinaryItemView()"-->
-<!--                                           v-model="part.quantity" type="text"/>-->
-<!--                                </td>-->
-<!--                                <td class="three-column-table-button-column" v-if="isEditMode && part.comment !== 'Admin'">-->
-<!--                                    <button v-model="newItemView"-->
-<!--                                            v-if="isItemDeleteButtonVisibleToCurrentUser(part)"-->
-<!--                                            type="button"-->
-<!--                                            class="round-button"-->
-<!--                                            style="background: red"-->
-<!--                                            @click="removePartFromList(part, table.parts)">-->
-<!--                                        {{"-"}}-->
-<!--                                    </button>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <p></p>-->
-<!--                            </tr>-->
-<!--                            </tbody>-->
-<!--                        </table>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr v-if="notStub(itemView.partsTable.name) && isOrdinaryItemView()">-->
-<!--                    <td>-->
-<!--                        <table>-->
-<!--                            <tbody>-->
-<!--                            <tr style="text-align: center; color: red">-->
-<!--                                <td colspan="3">-->
-<!--                                    {{newPartMessage}}-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            <tr v-if="isEditMode" style="text-align: left">-->
-<!--                                <td class="three-column-table-left-column">-->
-<!--                                    <input v-model="newPart.location" type="text"/>-->
-<!--                                </td>-->
-<!--                                <td class="three-column-table-middle-column">-->
-<!--                                    <select v-model="newPart"-->
-<!--                                            @change="partSelectOnChange()">-->
-<!--                                        <option v-for="part in itemView.possibleParts"-->
-<!--                                                v-if="selectOptionVisible(part)"-->
-<!--                                                v-bind:value="part">-->
-<!--                                            {{part.selectText}}-->
-<!--                                        </option>-->
-<!--                                    </select>-->
-<!--                                </td>-->
-<!--                                <td class="three-column-table-right-column">-->
-<!--                                    <input type="text" v-model="newPart.quantity"/>-->
-<!--                                </td>-->
-<!--                                <td class="three-column-table-button-column">-->
-<!--                                    <button type="button"-->
-<!--                                            class="round-button"-->
-<!--                                            @click="addPart()">-->
-<!--                                        {{"+"}}-->
-<!--                                    </button>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            </tbody>-->
-<!--                        </table>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr v-if="isReplacersTableVisible()"><td><hr></td></tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
+            <table id="parts-table">
+                <tbody>
+                <tr v-if="isPartsTitleVisible()">
+                    <td>
+                        {{itemView.partsTable.name}}
+                    </td>
+                </tr>
+                <tr v-if="isShowPartsTableHeader()">
+                    <td>
+                        <table id="parts-header">
+                            <tbody>
+                            <tr>
+                                <td class="three-column-table-left-column">
+                                    {{itemView.partsTable.header[0]}}
+                                </td>
+                                <td class="three-column-table-middle-column">
+                                    {{itemView.partsTable.header[1]}}
+                                </td>
+                                <td class="three-column-table-right-column" v-if="itemView.partsTable.header[2] !== '-'">
+                                    {{itemView.partsTable.header[2]}}
+                                </td>
+                                <td class="three-column-table-button-column"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr v-for="table in itemView.partsTable.tables">
+                    <td v-if="table.parts.length > 0" colspan="3">
+                        <table id="get-all-table">
+                            <tbody>
+                            <tr v-if="arrayHaveActiveItems(table.parts)">
+                                <td class="three-column-table-left-column">
+                                    <b>{{table.name}}</b>
+                                </td>
+                                <td class="three-column-table-middle-column"></td>
+                                <td class="three-column-table-right-column"></td>
+                                <td class="three-column-table-button-column"></td>
+                            </tr>
+                            <tr v-for="part in table.parts" v-if="statusActive(part)">
+                                <td class="three-column-table-left-column">
+                                    <p class="three-column-table-left-column-text"
+                                       v-if="!isEditMode || (isEditMode && !isOrdinaryItemView())">
+                                        {{getFirstColumnValue(part)}}
+                                    </p>
+                                    <input v-if="isEditMode && isOrdinaryItemView()"
+                                           v-model="part.location" type="text"/>
+                                </td>
+                                <td class="three-column-table-middle-column">
+                                    <p v-if="isUserListView()">
+                                        {{part.buttonText}}
+                                    </p>
+                                    <button type="button"
+                                            v-if="!isUserListView()"
+                                            @click="getItemView(part.itemId)">
+                                        {{part.buttonText}}
+                                    </button>
+                                </td>
+                                <td class="three-column-table-right-column">
+                                    <div v-if="isShowQuantityValue()" class="parts-right-column-text">
+                                        {{part.quantity}}
+                                    </div>
+                                    <div v-if="!isEditMode && isMotorcycleCatalogueView()" class="parts-right-column-text">
+                                        {{part.comment}}
+                                    </div>
+                                    <input v-if="isEditMode && isOrdinaryItemView()"
+                                           v-model="part.quantity" type="text"/>
+                                </td>
+                                <td class="three-column-table-button-column" v-if="isEditMode && part.comment !== 'Admin'">
+                                    <button v-model="newItemView"
+                                            v-if="isItemDeleteButtonVisibleToCurrentUser(part)"
+                                            type="button"
+                                            class="round-button"
+                                            style="background: red"
+                                            @click="removePartFromList(part, table.parts)">
+                                        {{"-"}}
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <p></p>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr v-if="notStub(itemView.partsTable.name) && isOrdinaryItemView()">
+                    <td>
+                        <table>
+                            <tbody>
+                            <tr style="text-align: center; color: red">
+                                <td colspan="3">
+                                    {{newPartMessage}}
+                                </td>
+                            </tr>
+                            <tr v-if="isEditMode" style="text-align: left">
+                                <td class="three-column-table-left-column">
+                                    <input v-model="newPart.location" type="text"/>
+                                </td>
+                                <td class="three-column-table-middle-column">
+                                    <select v-model="newPart"
+                                            @change="partSelectOnChange()">
+                                        <option v-for="part in itemView.possibleParts"
+                                                v-if="selectOptionVisible(part)"
+                                                v-bind:value="part">
+                                            {{part.selectText}}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td class="three-column-table-right-column">
+                                    <input type="text" v-model="newPart.quantity"/>
+                                </td>
+                                <td class="three-column-table-button-column">
+                                    <button type="button"
+                                            class="round-button"
+                                            @click="addPart()">
+                                        {{"+"}}
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr v-if="isReplacersTableVisible()"><td><hr></td></tr>
+                </tbody>
+            </table>
 
-<!--            <table v-if="isReplacersTableVisible()" id="replacers-table" style="text-align: center">-->
-<!--                <tbody>-->
-<!--                <tr>-->
-<!--                    <td colspan="6">-->
-<!--                        {{itemView.replacersTable.name}}-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td colspan="5" style="height: 20px"></td>-->
-<!--                </tr>-->
-<!--                <tr v-if="notStub(itemView.replacersTable.name) && statusActive(replacer)"-->
-<!--                    style="text-align: left"-->
-<!--                    v-for="replacer in itemView.replacersTable.replacers">-->
-<!--                    <td class="three-column-table-left-column">-->
-<!--                        <p v-if="!isEditMode">{{replacer.comment}}</p>-->
-<!--                        <input v-if="isEditMode"-->
-<!--                               v-model="replacer.comment"-->
-<!--                               type="text"/>-->
-<!--                    </td>-->
-<!--                    <td class="three-column-table-middle-column">-->
-<!--                        <button type="button"-->
-<!--                                @click="getItemView(replacer.itemId)">-->
-<!--                            {{replacer.buttonText}}-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                    <td class="three-column-table-right-column">{{replacer.rating}}</td>-->
-<!--                    <td>-->
-<!--                        <button v-if="isRateButtonVisible(replacer)" v-model="newItemView"-->
-<!--                                type="button"-->
-<!--                                class="round-button"-->
-<!--                                @click="rateAction('up', replacer.itemId)">-->
-<!--                            {{"&#x2191;"}}-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                    <td>-->
-<!--                        <button v-if="isRateButtonVisible(replacer)" v-model="newItemView"-->
-<!--                                type="button"-->
-<!--                                class="round-button"-->
-<!--                                @click="rateAction('down', replacer.itemId)">-->
-<!--                            {{" &#x2193;"}}-->
-<!--                        </button>-->
-<!--                        <button v-if="isUnrateButtonVisible(replacer)" v-model="newItemView"-->
-<!--                                type="button"-->
-<!--                                class="round-button"-->
-<!--                                @click="rateAction('cancel', replacer.itemId)">-->
-<!--                            {{"x"}}-->
-<!--                        </button>-->
-<!--                        <button v-if="isEditMode" v-model="newItemView"-->
-<!--                                type="button"-->
-<!--                                class="round-button"-->
-<!--                                style="background: red"-->
-<!--                                @click="removeReplacerFromList(replacer)">-->
-<!--                            {{"-"}}-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr style="color: red">-->
-<!--                    <td colspan="5">-->
-<!--                        {{newReplacerMessage}}-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr v-if="notStub(itemView.replacersTable.name) && isEditMode">-->
-<!--                    <td>-->
-<!--                        <input v-model="newReplacer.comment" type="text"/>-->
-<!--                    </td>-->
-<!--                    <td>-->
-<!--                        <select v-model="newReplacer"-->
-<!--                                @change="replacerSelectOnChange()">-->
-<!--                            <option v-for="replacer in itemView.replacers"-->
-<!--                                    v-if="selectOptionVisible(replacer)"-->
-<!--                                    v-bind:value="replacer">-->
-<!--                                {{replacer.selectText}}-->
-<!--                            </option>-->
-<!--                        </select>-->
-<!--                    </td>-->
-<!--                    <td></td>-->
-<!--                    <td></td>-->
-<!--                    <td>-->
-<!--                        <button type="button"-->
-<!--                                class="round-button"-->
-<!--                                @click="addReplacer()">-->
-<!--                            {{"+"}}-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr><td colspan="5"><hr></td></tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
+            <table v-if="isReplacersTableVisible()" id="replacers-table" style="text-align: center">
+                <tbody>
+                <tr>
+                    <td colspan="6">
+                        {{itemView.replacersTable.name}}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5" style="height: 20px"></td>
+                </tr>
+                <tr v-if="notStub(itemView.replacersTable.name) && statusActive(replacer)"
+                    style="text-align: left"
+                    v-for="replacer in itemView.replacersTable.replacers">
+                    <td class="three-column-table-left-column">
+                        <p v-if="!isEditMode">{{replacer.comment}}</p>
+                        <input v-if="isEditMode"
+                               v-model="replacer.comment"
+                               type="text"/>
+                    </td>
+                    <td class="three-column-table-middle-column">
+                        <button type="button"
+                                @click="getItemView(replacer.itemId)">
+                            {{replacer.buttonText}}
+                        </button>
+                    </td>
+                    <td class="three-column-table-right-column">{{replacer.rating}}</td>
+                    <td>
+                        <button v-if="isRateButtonVisible(replacer)" v-model="newItemView"
+                                type="button"
+                                class="round-button"
+                                @click="rateAction('up', replacer.itemId)">
+                            {{"&#x2191;"}}
+                        </button>
+                    </td>
+                    <td>
+                        <button v-if="isRateButtonVisible(replacer)" v-model="newItemView"
+                                type="button"
+                                class="round-button"
+                                @click="rateAction('down', replacer.itemId)">
+                            {{" &#x2193;"}}
+                        </button>
+                        <button v-if="isUnrateButtonVisible(replacer)" v-model="newItemView"
+                                type="button"
+                                class="round-button"
+                                @click="rateAction('cancel', replacer.itemId)">
+                            {{"x"}}
+                        </button>
+                        <button v-if="isEditMode" v-model="newItemView"
+                                type="button"
+                                class="round-button"
+                                style="background: red"
+                                @click="removeReplacerFromList(replacer)">
+                            {{"-"}}
+                        </button>
+                    </td>
+                </tr>
+                <tr style="color: red">
+                    <td colspan="5">
+                        {{newReplacerMessage}}
+                    </td>
+                </tr>
+                <tr v-if="notStub(itemView.replacersTable.name) && isEditMode">
+                    <td>
+                        <input v-model="newReplacer.comment" type="text"/>
+                    </td>
+                    <td>
+                        <select v-model="newReplacer"
+                                @change="replacerSelectOnChange()">
+                            <option v-for="replacer in itemView.replacers"
+                                    v-if="selectOptionVisible(replacer)"
+                                    v-bind:value="replacer">
+                                {{replacer.selectText}}
+                            </option>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <button type="button"
+                                class="round-button"
+                                @click="addReplacer()">
+                            {{"+"}}
+                        </button>
+                    </td>
+                </tr>
+                <tr><td colspan="5"><hr></td></tr>
+                </tbody>
+            </table>
 
-<!--            <table id="additional-menu" v-if="isAdditionalMenuDisplayed()">-->
-<!--                <tbody>-->
-<!--                <tr><td colspan="3">{{"Additional menu"}}</td></tr>-->
-<!--                <tr>-->
-<!--                    <td class="three-column-table-left-column"></td>-->
-<!--                    <td class="three-column-table-middle-column">-->
-<!--                        <button type="button"-->
-<!--                                v-on:click="openItemsManagement()">-->
-<!--                            {{"Items management"}}-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                    <td class="three-column-table-right-column"></td>-->
-<!--                    <td class="three-column-table-button-column"></td>-->
-<!--                </tr>-->
-<!--                <tr v-if="isAdmin()">-->
-<!--                    <td></td>-->
-<!--                    <td>-->
-<!--                        <button type="button"-->
-<!--                                v-on:click="openUsersList()">-->
-<!--                            {{"Users"}}-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                    <td></td>-->
-<!--                    <td></td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td colspan="3">-->
-<!--                        <div style="text-align: center; margin-top: 60px; margin-bottom: 20px">-->
-<!--                            {{"Minsk 2019"}}-->
-<!--                        </div>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
-<!--        </div>-->
+            <table id="additional-menu" v-if="isAdditionalMenuDisplayed()">
+                <tbody>
+                <tr><td colspan="3">{{"Additional menu"}}</td></tr>
+                <tr>
+                    <td class="three-column-table-left-column"></td>
+                    <td class="three-column-table-middle-column">
+                        <button type="button"
+                                v-on:click="openItemsManagement()">
+                            {{"Items management"}}
+                        </button>
+                    </td>
+                    <td class="three-column-table-right-column"></td>
+                    <td class="three-column-table-button-column"></td>
+                </tr>
+                <tr v-if="isAdmin()">
+                    <td></td>
+                    <td>
+                        <button type="button"
+                                v-on:click="openUsersList()">
+                            {{"Users"}}
+                        </button>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div style="text-align: center; margin-top: 60px; margin-bottom: 20px">
+                            {{"Minsk 2019"}}
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 

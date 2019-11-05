@@ -25,9 +25,7 @@ public class Item extends AbstractEntity {
     @Column(name = "user_action_date")
     private String userActionDate;
     private String description;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
-    private ItemImg image;
+    private String image;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
