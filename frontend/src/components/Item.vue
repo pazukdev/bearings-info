@@ -5,9 +5,7 @@
         </div>
         <div v-if="!isLoading()">
                     <div style="text-align: left">
-<!--                        {{"itemView.imgData: " + itemView.imgData}}<br>-->
-<!--                        {{"imgData: " + imgData}}<br>-->
-<!--                        {{"newItemView.imageData: " + this.newItemView.imgData}}<br>-->
+<!--                        {{getItemId()}}-->
                     </div>
             <table id="header-menu">
                 <tbody>
@@ -145,7 +143,7 @@
                         </p>
                         <button v-if="isShowInfoButton(row[3])"
                                 type="button"
-                                @click="getItemView(row[2])">
+                                @click="navigateToItem(row[2])">
                             {{row[1]}}
                         </button>
                     </td>
@@ -208,10 +206,9 @@
                 </tbody>
             </table>
 
-            <table id="item-image"
-                   v-if="isViewWithImage()">
+            <table id="item-image" v-if="isViewWithImage()">
                 <tbody>
-                <tr v-if="itemView.imgData !== '-'">
+                <tr>
                     <td>
                         <div class="image-preview">
                             <img class="preview" :src="itemView.imgData" @change="previewImage">
@@ -297,7 +294,7 @@
                                     </p>
                                     <button type="button"
                                             v-if="!isUserListView()"
-                                            @click="getItemView(part.itemId)">
+                                            @click="navigateToItem(part.itemId)">
                                         {{part.buttonText}}
                                     </button>
                                 </td>
@@ -392,7 +389,7 @@
                     </td>
                     <td class="three-column-table-middle-column">
                         <button type="button"
-                                @click="getItemView(replacer.itemId)">
+                                @click="navigateToItem(replacer.itemId)">
                             {{replacer.buttonText}}
                         </button>
                     </td>
@@ -507,7 +504,6 @@
         data() {
             return {
                 text: "",
-                // file: "",
                 imgData: "",
                 isEditMode: false,
                 newItemView: "",
@@ -564,9 +560,12 @@
                 userName: state => state.dictionary.userName,
                 loadingState: state => state.dictionary.loadingState,
                 itemView: state => state.dictionary.itemView,
-                itemIds: state => state.dictionary.itemIds,
-                lastItemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
+                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId
             })
+        },
+
+        watch: {
+            '$route': 'getItemViewByUrl'
         },
 
         created() {
@@ -574,11 +573,26 @@
             if (!this.isAuthorized()) {
                 this.loginAsGuest();
             } else {
-                this.getItemView(this.lastItemId);
+                this.getItemViewByUrl();
             }
         },
 
         methods: {
+            getItemId() {
+                return this.$route.params.item_id;
+            },
+
+            getItemViewByUrl() {
+                let item_id = this.$route.params.item_id;
+                console.log("1");
+                if (item_id === null || item_id === "") {
+                    console.log("2");
+                    item_id = this.motorcycleCatalogueId.toString();
+                }
+                console.log("getItemViewByUrl(): " + item_id);
+                this.getItemView(item_id);
+            },
+
             setBasicUrl() {
                 let hostname = window.location.hostname;
                 let basicUrl;
@@ -603,12 +617,23 @@
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", username);
                             console.log("logged in as " + username);
-                            this.getItemView(this.lastItemId);
                         }
                     })
                     .catch(error => {
                         console.log("login as " + username + " failed");
                     });
+            },
+
+            pushTo(itemId) {
+                this.$router.push({ path: `/item/${itemId}` });
+            },
+
+            pushToHome() {
+                this.pushTo(this.motorcycleCatalogueId.toString());
+            },
+
+            navigateToItem(itemId) {
+                this.pushTo(itemId);
             },
 
             getItemView(itemId) {
@@ -649,6 +674,7 @@
                         })
                         .then(response => {
                             let newItemView = response.data;
+                            this.pushTo(newItemView.itemId);
                             this.dispatchView(newItemView);
                             this.logEvent("a new item created", newItemView);
                         });
@@ -672,7 +698,6 @@
             },
 
             dispatchView(itemView) {
-                this.$store.dispatch("addItemId", itemView.itemId);
                 this.$store.dispatch("setItemView", itemView);
                 this.$store.dispatch("setLoadingState", false);
             },
@@ -692,11 +717,11 @@
             },
 
             isAdditionalMenuDisplayed() {
-                return this.isHome() && !this.isGuest();
+                return this.isHomePage() && !this.isGuest();
             },
 
-            isHome() {
-                return this.itemIds.length === 1;
+            isHomePage() {
+                return this.isMotorcycleCatalogueView();
             },
 
             isAdmin() {
@@ -709,18 +734,21 @@
 
             openWishList() {
                 let wishListId = -3;
-                this.getItemView(wishListId);
+                // this.getItemView(wishListId);
+                this.navigateToItem(wishListId);
             },
 
             openItemsManagement() {
                 let itemsManagementId = -1;
-                this.getItemView(itemsManagementId);
+                //this.getItemView(itemsManagementId);
+                this.navigateToItem(itemsManagementId);
 
             },
 
             openUsersList() {
                 let usersListId = -4;
-                this.getItemView(usersListId);
+                // this.getItemView(usersListId);
+                this.navigateToItem(usersListId);
             },
 
             searchInGoogle() {
@@ -932,7 +960,8 @@
             },
 
             cancel() {
-                this.getItemView(this.lastItemId);
+                this.getItemViewByUrl();
+                // this.getItemView(this.lastItemId);
             },
 
             switchEditModeOff() {
@@ -1072,7 +1101,7 @@
             },
 
             isMotorcycleCatalogueView() {
-                return this.itemView.itemId === -2;
+                return this.itemView.itemId === this.motorcycleCatalogueId;
             },
 
             isWishListView() {
@@ -1117,8 +1146,7 @@
             },
 
             isViewWithImage() {
-                // return this.itemView.image !== null;
-                return true;
+                return this.itemView.imgData !== '-';
             }
         }
     }

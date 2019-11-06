@@ -38,14 +38,17 @@
                 </table>
             </div>
             <div style="text-align: left">
+<!--                {{isHomePage()}}<br>-->
+<!--                {{motorcycleCatalogueId}}<br>-->
+<!--                {{this.$route.params.item_id}}<br>-->
 <!--                {{"basicUrl: " + basicUrl}}<br>-->
 <!--                {{"userName: " + userName}}<br>-->
 <!--                {{"authorization: " + authorization}}<br>-->
-<!--                {{"Item ids: " + itemIds}}<br>-->
 <!--                {{"Is loading: " + loadingState}}<br>-->
 <!--                {{"itemView: " + itemView}}<br>-->
-<!--                {{"itemId: " + lastItemId}}<br>-->
             </div>
+<!--            <router-link to="/">Home</router-link>-->
+<!--            <router-link to="/199">199</router-link>-->
             <router-view style="padding: 20px"></router-view>
         </div>
     </div>
@@ -63,17 +66,37 @@
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
                 loadingState: state => state.dictionary.loadingState,
-                itemIds: state => state.dictionary.itemIds,
                 itemView: state => state.dictionary.itemView,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
-                lastItemId: state => state.dictionary.itemIds[state.dictionary.itemIds.length - 1]
+                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId
             })
         },
 
         methods: {
+            gt() {
+                return window.location.pathname;
+            },
+
+            isLoginPage() {
+                return false;
+                // return window.location.href === "login";
+            },
+
             isGuest() {
                 return this.isAuthorized() && this.userName === "guest";
+            },
+
+            pushTo(itemId) {
+                this.$router.push({ path: `/item/${itemId}` });
+            },
+
+            pushToHome() {
+                this.pushTo(this.motorcycleCatalogueId);
+            },
+
+            pushToLoginForm() {
+                this.$router.push({ path: '/login'});
             },
 
             loginAsGuest() {
@@ -89,7 +112,7 @@
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", username);
                             console.log("logged in as " + username);
-                            this.getItemView(this.lastItemId);
+                            this.pushToHome();
                         }
                     })
                     .catch(error => {
@@ -98,15 +121,16 @@
             },
 
             logout() {
+                this.pushToLoginForm();
                 this.$store.dispatch("setDefaultState");
-                this.$router.push('/');
                 console.log("logout");
                 this.loginAsGuest();
             },
 
             openLoginForm() {
+                this.pushToLoginForm();
                 this.$store.dispatch("setDefaultState");
-                this.$router.push('/login');
+                console.log("logout");
                 console.log("login form opened");
             },
 
@@ -115,39 +139,16 @@
             },
 
             isBackButtonDisplayed() {
-                return this.itemIds.length > 1 && !this.loadingState;
+                return !this.isLoginPage() && !this.isHomePage() && !this.loadingState;
+            },
+
+            isHomePage() {
+                return this.$route.params.item_id === this.motorcycleCatalogueId.toString();
             },
 
             back() {
                 console.log("back button taped");
-                this.$store.dispatch("removeLastItemId");
-                this.getItemView(this.lastItemId);
-            },
-
-            getItemView(itemId) {
-                this.$store.dispatch("setLoadingState", true);
-                axios
-                    .get(this.basicUrl + "/item/get-view/" + itemId + "/" + this.userName, {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => {
-                        let previousItemView = response.data;
-                        this.dispatchView(previousItemView);
-                        this.logEvent("item view displayed: item", previousItemView);
-                    });
-            },
-
-            dispatchView(itemView) {
-                this.$store.dispatch("setItemView", itemView);
-                this.$store.dispatch("setLoadingState", false);
-            },
-
-            logEvent(event, itemView) {
-                console.log(event + ": "
-                    + "id=" + itemView.itemId
-                    + "; name=" + itemView.header.name);
+                window.history.back();
             }
         }
     }

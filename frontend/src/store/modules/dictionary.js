@@ -2,10 +2,13 @@ const state = {
     basicUrl: "backend",
     loadingState: false,
     incorrectCredentials: false,
+    itemsManagementId: -1,
+    motorcycleCatalogueId: -2,
+    wishlist: -3,
+    userListId: -4,
     authorization: "",
     userName: "",
-    itemView: "",
-    itemIds: [-2]
+    itemView: ""
 };
 
 const actions = {
@@ -35,14 +38,6 @@ const actions = {
 
     setItemView: ({commit}, context) => {
         commit("setItemView", context);
-    },
-
-    addItemId: ({commit}, context) => {
-        commit("addItemId", context);
-    },
-
-    removeLastItemId: ({commit}, context) => {
-        commit("removeLastItemId", context);
     }
 };
 
@@ -54,7 +49,6 @@ const mutations = {
         state.authorization = "";
         state.userName = "";
         state.itemView = "";
-        state.itemIds = [-2];
     },
 
     setBasicUrl(state, basicUrl) {
@@ -79,17 +73,6 @@ const mutations = {
 
     setItemView(state, itemView) {
         state.itemView = itemView;
-    },
-
-    addItemId(state, itemId) {
-        if (state.itemIds[state.itemIds.length - 1] !== itemId) {
-            state.itemIds.push(itemId);
-        }
-
-    },
-
-    removeLastItemId(state) {
-        state.itemIds.splice(state.itemIds.length - 1, 1);
     }
 };
 

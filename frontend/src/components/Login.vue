@@ -76,7 +76,8 @@
         computed: {
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
-                incorrectCredentials: state => state.dictionary.incorrectCredentials
+                incorrectCredentials: state => state.dictionary.incorrectCredentials,
+                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId
             })
         },
 
@@ -114,7 +115,7 @@
                             let authorization = response.data.Authorization;
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", this.username);
-                            this.$router.push({ path: '/'});
+                            this.$router.push({ path: `/item/${this.motorcycleCatalogueId}` });
                             console.log("logged in as " + this.username);
                         }
                     })
