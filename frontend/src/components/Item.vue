@@ -237,7 +237,6 @@
                         <input type="file" accept="image/png"
                                style="color: black"
                                @change="previewImage"><br><br>
-<!--                        <button @click="onUpload">Upload!</button>-->
                     </td>
                 </tr>
                 <tr><td><hr></td></tr>
@@ -672,29 +671,6 @@
                     });
             },
 
-            onUpload() {
-                // let data = new FormData();
-                // data.append("file", this.file);
-                // axios
-                //     .put(this.basicUrl + "/item/file-upload/" + this.itemView.itemId, data, {
-                //         headers: {
-                //             'Content-Type' : 'image/png',
-                //             Authorization: this.authorization
-                //         }
-                //     });
-
-                // axios
-                //     .post(this.basicUrl + "/item/file-upload/"
-                //         + this.itemView.itemId
-                //         + this.imageData.toString(), {
-                //         headers: {
-                //             Authorization: this.authorization
-                //         }
-                //     });
-
-                // this.newItemView.newImageUrl = this.imageData.toString();
-            },
-
             dispatchView(itemView) {
                 this.$store.dispatch("addItemId", itemView.itemId);
                 this.$store.dispatch("setItemView", itemView);
@@ -709,16 +685,6 @@
 
             isLoading() {
                 return this.loadingState === true;
-            },
-
-            redirectToLogin() {
-                if (!this.isAuthorized()) {
-                    this.goToLogin();
-                }
-            },
-
-            goToLogin() {
-                this.$router.push({ path: '/login'});
             },
 
             isAuthorized() {
