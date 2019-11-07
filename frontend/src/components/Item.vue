@@ -4,55 +4,24 @@
             {{"Loading..."}}
         </div>
         <div v-if="!isLoading()">
-                    <div style="text-align: left">
-<!--                        {{motorcycleCatalogueId}}-->
-<!--                        {{wishlistId}}-->
-<!--                        {{userlistId}}-->
-                    </div>
-            <table id="header-menu">
-                <tbody>
-                <tr>
-                    <td class="third-part-wide">
-                        <button type="button"
-                                v-if="!isWishListView() && !isGuest()"
-                                v-on:click="openWishList()">
-                            {{"Wishlist: " + itemView.wishListIds.length + " items"}}
-                        </button>
-                    </td>
-                    <td></td>
-                    <td class="third-part-wide" style="text-align: right">
-                        <div v-if="!isGuest()">{{itemView.userData.itemName}}</div>
-                        <div v-if="!isGuest()">{{"Rating: " + itemView.userData.rating}}</div>
-                        <div v-if="isAdmin()">{{"You are admin"}}</div>
-                        <div v-if="isGuest()">{{"You are guest"}}</div>
-                    </td>
-                </tr>
-                <tr><td colspan="3"><hr></td></tr>
-                <tr>
-                    <td>
-                        <button v-if="isAddToWishlistButtonVisible()"
-                                type="button"
-                                @click="addThisItemToWishList()">
-                            {{"Add to Wish List"}}
-                        </button>
-                        <p v-if="isInWishList(itemView.itemId) && isOrdinaryItemView() && !isGuest()">
-                            {{"Item in Wish List"}}
-                        </p>
-                    </td>
-                    <td></td>
-                    <td>
-                        <button v-if="itemView.searchEnabled"
-                                type="button"
-                                @click="searchInGoogle()">
-                            {{"Google search"}}
-                        </button>
-                    </td>
-                </tr>
-                <tr v-if="isOrdinaryItemView()">
-                    <td colspan="3"><hr></td>
-                </tr>
-                </tbody>
-            </table>
+<!--            <div style="text-align: left">-->
+<!--                {{motorcycleCatalogueId}}-->
+<!--                {{wishlistId}}-->
+<!--                {{userlistId}}-->
+<!--            </div>                    -->
+
+            <HeaderMenu v-bind:user-data="itemView.userData"
+                        v-bind:guest="isGuest()"
+                        v-bind:admin="isAdmin()"
+                        v-bind:wish-list-view="isWishListView()"
+                        v-bind:items-count-in-wishlist="itemView.wishListIds.length"
+                        v-bind:add-to-wishlist-button-visible="isAddToWishlistButtonVisible()"
+                        v-bind:item-in-wishlist-text-visible="isItemInWishListTextVisible()"
+                        v-bind:search-enabled="isSearchEnabled()"
+                        v-bind:show-bottom-hr="isOrdinaryItemView()"
+                        v-bind:item-name-for-search-in-google="getItemNameForSearchInGoogle()"
+                        @open-wish-list="openWishList"
+                        @add-item-to-wishlist="addThisItemToWishList()"></HeaderMenu>
 
             <table id="item-creation-menu">
                 <tbody>
@@ -500,8 +469,13 @@
 <script>
     import axios from 'axios';
     import {mapState} from 'vuex';
+    import HeaderMenu from "./HeaderMenu";
 
     export default {
+
+        components: {
+            HeaderMenu
+        },
 
         data() {
             return {
@@ -775,9 +749,8 @@
                 this.navigateToItem(usersListId);
             },
 
-            searchInGoogle() {
-                let q = "buy " + this.itemView.header.name;
-                window.open('http://google.com/search?q=' + q);
+            getItemNameForSearchInGoogle() {
+                return this.itemView.header.name;
             },
 
             previewImage(event) {
@@ -810,6 +783,10 @@
                     && this.isOrdinaryItemView()
                     && !this.isEditMode
                     && !this.isGuest();
+            },
+
+            isItemInWishListTextVisible() {
+                return this.isInWishList(this.itemView.itemId) && this.isOrdinaryItemView() && !this.isGuest();
             },
 
             addThisItemToWishList() {
@@ -1141,6 +1118,10 @@
                     || (this.isEditMode && this.isUserListView());
             },
 
+            isSearchEnabled() {
+                return this.itemView.searchEnabled;
+            },
+
             notStub(name) {
                 return name !== "stub";
             },
@@ -1176,8 +1157,8 @@
     }
 </script>
 
-<style scoped>
-    #header-menu, #item-creation-menu, #item-image {
+<style>
+    #item-creation-menu, #item-image {
         border-spacing: 0;
     }
 
