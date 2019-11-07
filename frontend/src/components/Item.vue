@@ -5,7 +5,9 @@
         </div>
         <div v-if="!isLoading()">
                     <div style="text-align: left">
-<!--                        {{getItemId()}}-->
+<!--                        {{motorcycleCatalogueId}}-->
+<!--                        {{wishlistId}}-->
+<!--                        {{userlistId}}-->
                     </div>
             <table id="header-menu">
                 <tbody>
@@ -560,7 +562,10 @@
                 userName: state => state.dictionary.userName,
                 loadingState: state => state.dictionary.loadingState,
                 itemView: state => state.dictionary.itemView,
-                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId
+                itemsManagementId: state => state.dictionary.itemsManagementId,
+                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId,
+                wishlistId: state => state.dictionary.wishlistId,
+                userlistId: state => state.dictionary.userlistId
             })
         },
 
@@ -569,12 +574,7 @@
         },
 
         created() {
-            this.setBasicUrl();
-            if (!this.isAuthorized()) {
-                this.loginAsGuest();
-            } else {
-                this.getItemViewByUrl();
-            }
+            this.getItemViewByUrl();
         },
 
         methods: {
@@ -582,26 +582,49 @@
                 return this.$route.params.item_id;
             },
 
+            getUserRole() {
+                return this.itemView.userData.comment;
+            },
+
             getItemViewByUrl() {
-                let item_id = this.$route.params.item_id;
-                console.log("1");
-                if (item_id === null || item_id === "") {
-                    console.log("2");
-                    item_id = this.motorcycleCatalogueId.toString();
+                let item_id = this.processItemId(this.$route.params.item_id);
+
+                if (item_id === "redirect to login") {
+                    console.log("/" + this.$route.params.item_id
+                        + " url is forbidden for user with role " + this.getUserRole());
+                    console.log("redirected to login");
+                    this.pushToLoginForm();
+                    return;
                 }
+
                 console.log("getItemViewByUrl(): " + item_id);
                 this.getItemView(item_id);
             },
 
-            setBasicUrl() {
-                let hostname = window.location.hostname;
-                let basicUrl;
-                if (hostname === "localhost") {
-                    basicUrl = "backend";
-                } else {
-                    basicUrl = "https://bearings-info.herokuapp.com";
+            processItemId(itemId) {
+                if (itemId === "items_management") {
+                    return  this.itemsManagementId.toString();
                 }
-                this.$store.dispatch("setBasicUrl", basicUrl);
+                if (itemId === "home") {
+                    return this.motorcycleCatalogueId.toString();
+                }
+                if (itemId === "wishlist") {
+                    if (!this.isAuthorized() || this.isGuest()) {
+                        return "redirect to login";
+                    }
+                    return this.wishlistId.toString();
+                }
+                if (itemId === "users") {
+                    if (!this.isAuthorized() || this.isGuest()) {
+                        return "redirect to login";
+                    }
+                    return  this.userlistId.toString();
+                }
+                return itemId;
+            },
+
+            pushToLoginForm() {
+                this.$router.push({ path: '/login'});
             },
 
             loginAsGuest() {
@@ -625,7 +648,7 @@
             },
 
             pushTo(itemId) {
-                this.$router.push({ path: `/item/${itemId}` });
+                this.$router.push({ path: `/item/id/${itemId}` });
             },
 
             pushToHome() {
@@ -649,7 +672,8 @@
                         let itemView = response.data;
                         this.dispatchView(itemView);
                         this.logEvent("item view displayed: item", itemView);
-                    });
+                    })
+                    .catch(err => {console.log("error on getItemView(itemId) method executing")});
             },
 
             create() {

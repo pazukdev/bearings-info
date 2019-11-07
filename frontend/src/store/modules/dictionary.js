@@ -4,8 +4,8 @@ const state = {
     incorrectCredentials: false,
     itemsManagementId: -1,
     motorcycleCatalogueId: -2,
-    wishlist: -3,
-    userListId: -4,
+    wishlistId: -3,
+    userlistId: -4,
     authorization: "",
     userName: "",
     itemView: ""

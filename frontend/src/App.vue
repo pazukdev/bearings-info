@@ -38,8 +38,6 @@
                 </table>
             </div>
             <div style="text-align: left">
-<!--                {{isHomePage()}}<br>-->
-<!--                {{motorcycleCatalogueId}}<br>-->
 <!--                {{this.$route.params.item_id}}<br>-->
 <!--                {{"basicUrl: " + basicUrl}}<br>-->
 <!--                {{"userName: " + userName}}<br>-->
@@ -73,14 +71,23 @@
             })
         },
 
-        methods: {
-            gt() {
-                return window.location.pathname;
-            },
+        created() {
+            this.setBasicUrl();
+            if (!this.isAuthorized()) {
+                this.loginAsGuest();
+            }
+        },
 
-            isLoginPage() {
-                return false;
-                // return window.location.href === "login";
+        methods: {
+            setBasicUrl() {
+                let hostname = window.location.hostname;
+                let basicUrl;
+                if (hostname === "localhost") {
+                    basicUrl = "backend";
+                } else {
+                    basicUrl = "https://bearings-info.herokuapp.com";
+                }
+                this.$store.dispatch("setBasicUrl", basicUrl);
             },
 
             isGuest() {
@@ -88,7 +95,7 @@
             },
 
             pushTo(itemId) {
-                this.$router.push({ path: `/item/${itemId}` });
+                this.$router.push({ path: `/item/id/${itemId}` });
             },
 
             pushToHome() {
@@ -122,14 +129,14 @@
 
             logout() {
                 this.pushToLoginForm();
-                this.$store.dispatch("setDefaultState");
+                // this.$store.dispatch("setDefaultState");
                 console.log("logout");
                 this.loginAsGuest();
             },
 
             openLoginForm() {
                 this.pushToLoginForm();
-                this.$store.dispatch("setDefaultState");
+                // this.$store.dispatch("setDefaultState");
                 console.log("logout");
                 console.log("login form opened");
             },
@@ -142,8 +149,13 @@
                 return !this.isLoginPage() && !this.isHomePage() && !this.loadingState;
             },
 
+            isLoginPage() {
+                return window.location.href.includes("login");
+            },
+
             isHomePage() {
-                return this.$route.params.item_id === this.motorcycleCatalogueId.toString();
+                return this.$route.params.item_id === this.motorcycleCatalogueId.toString()
+                    || this.$route.params.item_id === "home";
             },
 
             back() {

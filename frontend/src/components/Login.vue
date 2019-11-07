@@ -115,7 +115,7 @@
                             let authorization = response.data.Authorization;
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", this.username);
-                            this.$router.push({ path: `/item/${this.motorcycleCatalogueId}` });
+                            this.$router.push({ path: `/item/id/${this.motorcycleCatalogueId}` });
                             console.log("logged in as " + this.username);
                         }
                     })
