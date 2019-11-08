@@ -35,7 +35,7 @@
                     <button v-if="searchEnabled"
                             type="button"
                             @click="searchInGoogle()">
-                        {{"Google search"}}
+                        {{"Google"}}
                     </button>
                 </td>
             </tr>

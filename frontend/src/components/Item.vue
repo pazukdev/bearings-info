@@ -21,7 +21,7 @@
                         v-bind:show-bottom-hr="isOrdinaryItemView()"
                         v-bind:item-name-for-search-in-google="getItemNameForSearchInGoogle()"
                         @open-wish-list="openWishList"
-                        @add-item-to-wishlist="addThisItemToWishList()"></HeaderMenu>
+                        @add-item-to-wishlist="addThisItemToWishList"></HeaderMenu>
 
             <table id="item-creation-menu">
                 <tbody>

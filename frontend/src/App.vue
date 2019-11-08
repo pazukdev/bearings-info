@@ -1,43 +1,14 @@
 <template id="app">
     <div id="main-div">
         <div id="screen">
-            <div id="app_bar">
-                <table>
-                    <tbody>
-                    <tr>
-                        <td style="width: 80px">
-                            <button
-                                    v-show="isBackButtonDisplayed()"
-                                    @click="back()"
-                                    id="back"
-                                    class="app-bar-button">
-                                <b>Back</b>
-                            </button>
-                        </td>
-                        <td id="appName" style="text-align: center; font-size: x-large">
-                            <b>Bearings info</b>
-                        </td>
-                        <td style="width: 80px">
-                            <button
-                                    v-show="!isGuest() && isAuthorized()"
-                                    @click="logout()"
-                                    id="logout"
-                                    class="app-bar-button">
-                                <b>Logout</b>
-                            </button>
-                            <button
-                                    v-show="isGuest()"
-                                    @click="openLoginForm()"
-                                    id="login"
-                                    class="app-bar-button">
-                                <b>Login</b>
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            <AppBar v-bind:back-button-displayed="isBackButtonDisplayed()"
+                    v-bind:login-button-displayed="isLoginButtonDisplayed()"
+                    v-bind:logout-button-displayed="isLogoutButtonDisplayed()"
+                    @logout="logout"
+                    @open-login-form="openLoginForm"></AppBar>
             <div style="text-align: left">
+<!--                {{$i18n.locale}}<br>-->
+<!--                {{$t('language')}}<br>-->
 <!--                {{this.$route.params.item_id}}<br>-->
 <!--                {{"basicUrl: " + basicUrl}}<br>-->
 <!--                {{"userName: " + userName}}<br>-->
@@ -45,8 +16,6 @@
 <!--                {{"Is loading: " + loadingState}}<br>-->
 <!--                {{"itemView: " + itemView}}<br>-->
             </div>
-<!--            <router-link to="/">Home</router-link>-->
-<!--            <router-link to="/199">199</router-link>-->
             <router-view style="padding: 20px"></router-view>
         </div>
     </div>
@@ -55,9 +24,12 @@
 <script>
     import axios from 'axios';
     import {mapState} from 'vuex';
+    import AppBar from "./components/AppBar";
 
     export default {
         name: 'app',
+
+        components: {AppBar},
 
         computed: {
             ...mapState({
@@ -149,6 +121,14 @@
                 return !this.isLoginPage() && !this.isHomePage() && !this.loadingState;
             },
 
+            isLogoutButtonDisplayed() {
+                return !this.isGuest() && this.isAuthorized();
+            },
+
+            isLoginButtonDisplayed() {
+                return this.isGuest() && !this.isLoginPage();
+            },
+
             isLoginPage() {
                 return window.location.href.includes("login");
             },
@@ -156,11 +136,6 @@
             isHomePage() {
                 return this.$route.params.item_id === this.motorcycleCatalogueId.toString()
                     || this.$route.params.item_id === "home";
-            },
-
-            back() {
-                console.log("back button taped");
-                window.history.back();
             }
         }
     }
@@ -202,26 +177,6 @@
 
     #screen::-webkit-scrollbar {
         display: none;
-    }
-
-    #app_bar {
-        padding-top: 5px;
-        min-height: 56px;
-        max-height: 200px;
-        text-align: center;
-    }
-
-    #appName {
-        text-align: center;
-        color: #212121;
-    }
-
-    .app-bar-button {
-        width: 100%;
-        height: 100%;
-        background: none;
-        font-size: larger;
-        color: #212121
     }
 
     .round-button, .round-delete-button {
