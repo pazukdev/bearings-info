@@ -656,7 +656,8 @@
                     this.categoryMessage = "Category not specified";
                 } else if (this.newItemName === "") {
                     this.newItemNameMessage = "Item name not specified"
-                } else if (this.sameItemNameExistsInCategory(this.newItemCategory, this.newItemName)) {
+                } else if (false) {
+                    //this.sameItemNameExistsInCategory(this.newItemCategory, this.newItemName)
                     this.newItemNameMessage = "Item with this name already exists"
                 } else {
                     this.$store.dispatch("setLoadingState", true);
@@ -665,7 +666,8 @@
                         .post(this.basicUrl + "/item/create-view/"
                             + this.newItemCategory
                             + "/" + this.newItemName
-                            + "/" + this.userName, {
+                            + "/" + this.userName
+                            + "/" + this.$i18n.locale, {
                             headers: {
                                 Authorization: this.authorization
                             }

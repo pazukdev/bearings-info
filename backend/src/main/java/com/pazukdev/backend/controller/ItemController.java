@@ -29,13 +29,14 @@ public class ItemController {
         return service.createItemView(id, userName);
     }
 
-    @PostMapping("/create-view/{category}/{name}/{userName}")
+    @PostMapping("/create-view/{category}/{name}/{userName}/{userLanguage}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new item")
     public ItemView createView(@PathVariable final String category,
                                @PathVariable final String name,
-                               @PathVariable String userName) {
-        return service.createNewItemView(category, name, userName);
+                               @PathVariable final String userName,
+                               @PathVariable final String userLanguage) {
+        return service.createNewItemView(category, name, userName, userLanguage);
     }
 
     @PutMapping("/update-view/{id}/{userName}")

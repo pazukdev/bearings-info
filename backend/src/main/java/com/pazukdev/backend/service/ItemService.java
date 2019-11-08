@@ -104,9 +104,15 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     @Transactional
     public ItemView createNewItemView(final String category,
                                       final String name,
-                                      final String userName) {
+                                      final String userName,
+                                      final String userLanguage) {
         final ItemViewFactory itemViewFactory = new ItemViewFactory(this);
-        return itemViewFactory.createNewItemView(category, name, userName);
+        try {
+            return itemViewFactory.createNewItemView(category, name, userName, userLanguage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Transactional

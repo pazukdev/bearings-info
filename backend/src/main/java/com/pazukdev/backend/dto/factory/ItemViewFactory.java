@@ -12,6 +12,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static com.pazukdev.backend.util.TableUtil.*;
@@ -67,8 +71,26 @@ public class ItemViewFactory {
         return createOrdinaryItemView(itemView, itemId, currentUser);
     }
 
-    public ItemView createNewItemView(final String category, final String name, final String userName) {
+    public ItemView createNewItemView(final String category,
+                                      String name,
+                                      final String userName,
+                                      final String userLanguage) throws Exception {
         final UserEntity creator = itemService.getUserService().findByName(userName);
+
+        if (!userLanguage.equals("en")) {
+            Translator http = new Translator();
+            String englishName = http.callUrlAndParseResult(userLanguage, "en", name);
+
+            final String line = userLanguage + ";" + englishName + ";" + name;
+            final String filePath = "backend/src/language/language.txt";
+            Path path = Paths.get(filePath);
+            final Set<String> fileContent = new HashSet<>(Files.readAllLines(path, StandardCharsets.UTF_8));
+            fileContent.add(line);
+            final List<String> sortedFileContent = new ArrayList<>(fileContent);
+            sortedFileContent.sort(String::compareTo);
+            Files.write(path, sortedFileContent, StandardCharsets.UTF_8);
+            name = englishName;
+        }
 
         final Item item = new Item();
         item.setName(name);
