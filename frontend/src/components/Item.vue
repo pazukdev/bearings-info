@@ -539,7 +539,8 @@
                 itemsManagementId: state => state.dictionary.itemsManagementId,
                 motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId,
                 wishlistId: state => state.dictionary.wishlistId,
-                userlistId: state => state.dictionary.userlistId
+                userlistId: state => state.dictionary.userlistId,
+                appLanguage: state => state.dictionary.appLanguage
             })
         },
 
@@ -561,6 +562,7 @@
             },
 
             getItemViewByUrl() {
+                this.$i18n.locale = this.appLanguage;
                 let item_id = this.processItemId(this.$route.params.item_id);
 
                 if (item_id === "redirect to login") {
@@ -598,7 +600,7 @@
             },
 
             pushToLoginForm() {
-                this.$router.push({ path: '/login'});
+                this.$router.push({ path: `/login/${this.appLanguage}` });
             },
 
             loginAsGuest() {
@@ -622,7 +624,7 @@
             },
 
             pushTo(itemId) {
-                this.$router.push({ path: `/item/id/${itemId}` });
+                this.$router.push({ path: `/item/id/${itemId}/${this.appLanguage}` });
             },
 
             pushToHome() {
@@ -633,11 +635,19 @@
                 this.pushTo(itemId);
             },
 
+            getLanguage() {
+                return this.appLanguage;
+            },
+
             getItemView(itemId) {
                 this.$store.dispatch("setLoadingState", true);
                 this.switchEditModeOff();
                 axios
-                    .get(this.basicUrl + "/item/get-view/" + itemId + "/" + this.userName, {
+                    .get(this.basicUrl
+                        + "/" + "item/get-view"
+                        + "/" + itemId
+                        + "/" + this.userName
+                        + "/" + this.getLanguage(), {
                         headers: {
                             Authorization: this.authorization
                         }
@@ -663,11 +673,12 @@
                     this.$store.dispatch("setLoadingState", true);
                     this.clearItemCreationMessages();
                     axios
-                        .post(this.basicUrl + "/item/create-view/"
-                            + this.newItemCategory
+                        .post(this.basicUrl
+                            + "/" + "item/create-view"
+                            + "/" + this.newItemCategory
                             + "/" + this.newItemName
                             + "/" + this.userName
-                            + "/" + this.$i18n.locale, {
+                            + "/" + this.getLanguage(), {
                             headers: {
                                 Authorization: this.authorization
                             }
@@ -685,7 +696,12 @@
                 this.$store.dispatch("setLoadingState", true);
                 this.switchEditModeOff();
                 axios
-                    .put(this.basicUrl + "/item/update-view/" + itemId + "/" + this.userName, this.newItemView, {
+                    .put(this.basicUrl
+                        + "/" + "item/update-view"
+                        + "/" + itemId
+                        + "/" + this.userName
+                        + "/" + this.getLanguage(),
+                        this.newItemView, {
                         headers: {
                             Authorization: this.authorization
                         }

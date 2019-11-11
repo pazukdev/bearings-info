@@ -4,12 +4,17 @@
             <AppBar v-bind:back-button-displayed="isBackButtonDisplayed()"
                     v-bind:login-button-displayed="isLoginButtonDisplayed()"
                     v-bind:logout-button-displayed="isLogoutButtonDisplayed()"
+                    v-bind:language-select-displayed="isLanguageSelectDisplayed()"
+                    v-bind:language="appLanguage"
                     @logout="logout"
+                    @select-language="selectLanguage"
                     @open-login-form="openLoginForm"></AppBar>
             <div style="text-align: left">
-<!--                {{$i18n.locale}}<br>-->
+                {{"store: " + appLanguage}}<br>
+                {{"i18n: " + $i18n.locale}}<br>
 <!--                {{$t('language')}}<br>-->
-<!--                {{this.$route.params.item_id}}<br>-->
+                {{this.$route.params.item_id}}<br>
+                {{this.$route.params.lang}}<br>
 <!--                {{"basicUrl: " + basicUrl}}<br>-->
 <!--                {{"userName: " + userName}}<br>-->
 <!--                {{"authorization: " + authorization}}<br>-->
@@ -39,7 +44,8 @@
                 itemView: state => state.dictionary.itemView,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
-                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId
+                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId,
+                appLanguage: state => state.dictionary.appLanguage
             })
         },
 
@@ -62,12 +68,17 @@
                 this.$store.dispatch("setBasicUrl", basicUrl);
             },
 
+            selectLanguage(language) {
+                this.$store.dispatch("setAppLanguage", language);
+                this.$router.push({ path: this.$router.currentRoute.path.replace(/\/[^\/]*$/, "/" + language) });
+            },
+
             isGuest() {
                 return this.isAuthorized() && this.userName === "guest";
             },
 
             pushTo(itemId) {
-                this.$router.push({ path: `/item/id/${itemId}` });
+                this.$router.push({ path: `/item/id/${itemId}/${this.appLanguage}` });
             },
 
             pushToHome() {
@@ -75,7 +86,7 @@
             },
 
             pushToLoginForm() {
-                this.$router.push({ path: '/login'});
+                this.$router.push({ path: `/login/${this.appLanguage}` });
             },
 
             loginAsGuest() {
@@ -129,6 +140,11 @@
                 return this.isGuest() && !this.isLoginPage();
             },
 
+            isLanguageSelectDisplayed() {
+                // return !this.isLoginPage();
+                return true;
+            },
+
             isLoginPage() {
                 return window.location.href.includes("login");
             },
@@ -176,7 +192,7 @@
     }
 
     #screen::-webkit-scrollbar {
-        display: none;
+        /*display: none;*/
     }
 
     .round-button, .round-delete-button {

@@ -77,7 +77,8 @@
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
-                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId
+                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId,
+                appLanguage: state => state.dictionary.appLanguage
             })
         },
 
@@ -115,7 +116,7 @@
                             let authorization = response.data.Authorization;
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", this.username);
-                            this.$router.push({ path: `/item/id/${this.motorcycleCatalogueId}` });
+                            this.pushToHome();
                             console.log("logged in as " + this.username);
                         }
                     })
@@ -123,6 +124,10 @@
                         this.setIncorrectCredentials(true);
                         console.log("login failed: " + this.getIncorrectLoginOrPasswordMessage());
                     });
+            },
+
+            pushToHome() {
+                this.$router.push({ path: `/item/id/${this.motorcycleCatalogueId}/${this.appLanguage}` });
             },
 
             signUp() {

@@ -1,5 +1,6 @@
 const state = {
     basicUrl: "backend",
+    appLanguage: "en",
     loadingState: false,
     incorrectCredentials: false,
     itemsManagementId: -1,
@@ -18,6 +19,10 @@ const actions = {
 
     setBasicUrl: ({commit}, context) => {
         commit("setBasicUrl", context);
+    },
+
+    setAppLanguage: ({commit}, context) => {
+        commit("setAppLanguage", context);
     },
 
     setAuthorization: ({commit}, context) => {
@@ -44,11 +49,16 @@ const actions = {
 const mutations = {
     setDefaultState(state) {
         state.basicUrl = "backend";
+        state.appLanguage = "en";
         state.loadingState = false;
         state.incorrectCredentials = false;
         state.authorization = "";
         state.userName = "";
         state.itemView = "";
+    },
+
+    setAppLanguage(state, appLanguage) {
+        state.appLanguage = appLanguage;
     },
 
     setBasicUrl(state, basicUrl) {

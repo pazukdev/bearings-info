@@ -1,5 +1,9 @@
 <template>
     <div id="app_bar">
+        <div style="color: black">
+            {{"prop: " + language}}<br>
+            {{"data: " + newLanguage}}<br>
+        </div>
         <table>
             <tbody>
             <tr>
@@ -17,8 +21,12 @@
                     <b>Bearings info</b>
                 </td>
                 <td class="app-bar-middle-side-column">
-                    <select v-model="$i18n.locale">
-                        <option v-for="(lang, i) in languages" :key="`Lang${i}`" :value="lang">{{ lang }}</option>
+                    <select v-if="languageSelectDisplayed"
+                            v-model="newLanguage"
+                            @change="selectLanguage()">
+                        <option v-for="lang in languages" :value="lang">
+                            {{lang}}
+                        </option>
                     </select>
                 </td>
                 <td class="app-bar-side-column">
@@ -44,22 +52,37 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex';
+
     export default {
         name: 'AppBar.vue',
 
         props: {
             backButtonDisplayed: Boolean,
             logoutButtonDisplayed: Boolean,
-            loginButtonDisplayed: Boolean
+            loginButtonDisplayed: Boolean,
+            languageSelectDisplayed: Boolean,
+            language: String
+        },
+
+        computed: {
+            ...mapState({
+                appLanguage: state => state.dictionary.appLanguage
+            })
         },
 
         data() {
             return {
-                languages: ["en", "ru"]
+                languages: ["en", "ru"],
+                newLanguage: this.language
             }
         },
 
         methods: {
+            selectLanguage() {
+                this.$emit("select-language", this.newLanguage);
+            },
+
             logout() {
                 this.$emit("logout");
             },
