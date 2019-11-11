@@ -1,20 +1,19 @@
 <template id="app">
     <div id="main-div">
         <div id="screen">
-            <AppBar v-bind:back-button-displayed="isBackButtonDisplayed()"
-                    v-bind:login-button-displayed="isLoginButtonDisplayed()"
-                    v-bind:logout-button-displayed="isLogoutButtonDisplayed()"
-                    v-bind:language-select-displayed="isLanguageSelectDisplayed()"
-                    v-bind:language="appLanguage"
+            <AppBar :back-button-displayed="isBackButtonDisplayed()"
+                    :login-button-displayed="isLoginButtonDisplayed()"
+                    :logout-button-displayed="isLogoutButtonDisplayed()"
+                    :language-select-displayed="isLanguageSelectDisplayed()"
+                    :language="appLanguage"
                     @logout="logout"
                     @select-language="selectLanguage"
                     @open-login-form="openLoginForm"></AppBar>
             <div style="text-align: left">
-                {{"store: " + appLanguage}}<br>
-                {{"i18n: " + $i18n.locale}}<br>
-<!--                {{$t('language')}}<br>-->
-                {{this.$route.params.item_id}}<br>
-                {{this.$route.params.lang}}<br>
+<!--                {{"store: " + appLanguage}}<br>-->
+<!--                {{"i18n: " + $i18n.locale}}<br>-->
+<!--                {{this.$route.params.item_id}}<br>-->
+<!--                {{this.$route.params.lang}}<br>-->
 <!--                {{"basicUrl: " + basicUrl}}<br>-->
 <!--                {{"userName: " + userName}}<br>-->
 <!--                {{"authorization: " + authorization}}<br>-->

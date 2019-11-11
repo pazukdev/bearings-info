@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="isLoading()" style="text-align: center; padding-top: 50%">
-            {{"Loading..."}}
+            {{$t("loading") + "..."}}
         </div>
         <div v-if="!isLoading()">
 <!--            <div style="text-align: left">-->
@@ -32,7 +32,7 @@
                 </tr>
                 <tr v-if="isOrdinaryItemView()">
                     <td colspan="3">
-                        {{"Created by " + itemView.creatorName}}
+                        {{$t("createdBy") + " " + itemView.creatorName}}
                     </td>
                 </tr>
                 <tr style="height: 10px"><td></td></tr>
@@ -44,7 +44,7 @@
                                 <td colspan="2"><hr></td>
                             </tr>
                             <tr>
-                                <td colspan="2">{{"Create new item"}}</td>
+                                <td colspan="2">{{$t("createNewItem")}}</td>
                             </tr>
                             <tr style="color: red">
                                 <td colspan="2">{{categoryMessage}}</td>
@@ -54,10 +54,10 @@
                             </tr>
                             <tr>
                                 <td class="two-columns-table-left-column">
-                                    {{"Category"}}
+                                    {{$t("category")}}
                                 </td>
                                 <td class="two-column-table-right-column">
-                                    {{"Name"}}
+                                    {{$t("name")}}
                                 </td>
                             </tr>
                             <tr>
@@ -83,7 +83,7 @@
                                 <td colspan="2">
                                     <button type="button"
                                             v-on:click="create()">
-                                        {{"Create"}}
+                                        {{$t("create")}}
                                     </button>
                                 </td>
                             </tr>
@@ -154,19 +154,19 @@
                         <button v-if="isEditMode"
                                 type="button"
                                 @click="cancel()">
-                            {{"Cancel"}}
+                            {{$t("cancel")}}
                         </button>
                     </td>
                     <td v-if="isEditButtonVisible()" style="text-align: right">
                         <button v-if="!isEditMode"
                                 type="button"
                                 @click="edit()">
-                            {{"Edit"}}
+                            {{$t("edit")}}
                         </button>
                         <button v-if="isEditMode"
                                 type="button"
                                 @click="save()">
-                            {{"Save"}}
+                            {{$t("save")}}
                         </button>
                     </td>
                     <td></td>
@@ -430,13 +430,13 @@
 
             <table id="additional-menu" v-if="isAdditionalMenuDisplayed()">
                 <tbody>
-                <tr><td colspan="3">{{"Additional menu"}}</td></tr>
+                <tr><td colspan="3">{{$t("additionalMenu")}}</td></tr>
                 <tr>
                     <td class="three-column-table-left-column"></td>
                     <td class="three-column-table-middle-column">
                         <button type="button"
                                 v-on:click="openItemsManagement()">
-                            {{"Items management"}}
+                            {{$t("itemsManagement")}}
                         </button>
                     </td>
                     <td class="three-column-table-right-column"></td>
@@ -447,7 +447,7 @@
                     <td>
                         <button type="button"
                                 v-on:click="openUsersList()">
-                            {{"Users"}}
+                            {{$t("users")}}
                         </button>
                     </td>
                     <td></td>

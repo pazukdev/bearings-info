@@ -1,9 +1,9 @@
 <template>
     <div id="app_bar">
-        <div style="color: black">
-            {{"prop: " + language}}<br>
-            {{"data: " + newLanguage}}<br>
-        </div>
+<!--        <div style="color: black">-->
+<!--            {{"prop: " + language}}<br>-->
+<!--            {{"data: " + newLanguage}}<br>-->
+<!--        </div>-->
         <table>
             <tbody>
             <tr>
@@ -13,7 +13,7 @@
                             @click="back()"
                             id="back"
                             class="app-bar-button">
-                        <b>Back</b>
+                        <b>{{$t('back')}}</b>
                     </button>
                 </td>
                 <td class="app-bar-middle-side-column"></td>
@@ -35,14 +35,14 @@
                             @click="logout()"
                             id="logout"
                             class="app-bar-button">
-                        <b>Logout</b>
+                        <b>{{$t('logout')}}</b>
                     </button>
                     <button
                             v-show="loginButtonDisplayed"
                             @click="openLoginForm()"
                             id="login"
                             class="app-bar-button">
-                        <b>Login</b>
+                        <b>{{$t('loginButton')}}</b>
                     </button>
                 </td>
             </tr>

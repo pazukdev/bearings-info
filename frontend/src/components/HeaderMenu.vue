@@ -7,15 +7,15 @@
                     <button type="button"
                             v-if="isShowWishlistButton()"
                             v-on:click="openWishlist()">
-                        {{"Wishlist: " + itemsCountInWishlist + " items"}}
+                        {{$t("wishlist") + ": " + itemsCountInWishlist + " " + $t("itemsPcs")}}
                     </button>
                 </td>
                 <td></td>
                 <td class="third-part-wide" style="text-align: right">
                     <div v-if="!guest">{{userData.itemName}}</div>
-                    <div v-if="!guest">{{"Rating: " + userData.rating}}</div>
-                    <div v-if="admin">{{"You are admin"}}</div>
-                    <div v-if="guest">{{"You are guest"}}</div>
+                    <div v-if="!guest">{{$t("rating") + ": " + userData.rating}}</div>
+                    <div v-if="admin">{{$t("youAreAdmin")}}</div>
+                    <div v-if="guest">{{$t('youAreGuest')}}</div>
                 </td>
             </tr>
             <tr><td colspan="3"><hr></td></tr>
@@ -24,10 +24,10 @@
                     <button v-if="addToWishlistButtonVisible"
                             type="button"
                             @click="addItemToWishlist()">
-                        {{"Add to Wish List"}}
+                        {{$t("addToWishList")}}
                     </button>
                     <p v-if="itemInWishlistTextVisible">
-                        {{"Item in Wish List"}}
+                        {{$t("itemInWishList")}}
                     </p>
                 </td>
                 <td></td>
