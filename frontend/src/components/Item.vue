@@ -562,7 +562,13 @@
             },
 
             getItemViewByUrl() {
+                if (this.$route.params.lang !== this.appLanguage) {
+                    this.$router.replace({
+                        path: this.$router.currentRoute.path.replace(/\/[^\/]*$/, "/" + this.appLanguage)
+                    });
+                }
                 this.$i18n.locale = this.appLanguage;
+
                 let item_id = this.processItemId(this.$route.params.item_id);
 
                 if (item_id === "redirect to login") {
