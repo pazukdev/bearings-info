@@ -13,14 +13,7 @@ import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.*;
 
@@ -28,6 +21,7 @@ public class TableUtil {
 
     public static PartsTable specialItemsTable(final List<Item> items,
                                                final String tableName,
+                                               final String language,
                                                final ItemService itemService) {
         final List<NestedItemDto> dtos = new ArrayList<>();
         for (final Item item : items) {
@@ -37,11 +31,12 @@ public class TableUtil {
 //        final String[] header = {"Category", "Name", "-"};
         final String[] header = null;
         final Set<String> categories = itemService.findAllCategories();
-        return PartsTable.create(dtos, tableName, header, categories);
+        return PartsTable.create(dtos, tableName, header, categories, language);
     }
 
     public static  PartsTable motorcyclesTable(final List<Item> motorcycles,
                                                final String tableName,
+                                               final String language,
                                                final UserService userService) {
         final List<NestedItemDto> dtos = new ArrayList<>();
         final Set<String> categories = new HashSet<>();
@@ -52,21 +47,24 @@ public class TableUtil {
         }
 
         final String[] header = {"Production", "Model", "Manufacturer"};
-        return PartsTable.create(dtos, tableName, header, categories);
+        return PartsTable.create(dtos, tableName, header, categories, language);
     }
 
-    public static  PartsTable usersTable(final List<UserEntity> users, final String tableName) {
+    public static  PartsTable usersTable(final List<UserEntity> users,
+                                         final String tableName,
+                                         final String language) {
         final List<NestedItemDto> dtos = new ArrayList<>();
         for (final UserEntity user : users) {
             dtos.add(createUser(user));
         }
         final String[] header = {"Role", "Username", "Rating"};
         final Set<String> categories = new HashSet<>(Arrays.asList("Admin", "User"));
-        return PartsTable.create(dtos, tableName, header, categories);
+        return PartsTable.create(dtos, tableName, header, categories, language);
     }
 
     public static PartsTable createPartsTable(final Item item,
                                               final String tableName,
+                                              final String language,
                                               final ItemService itemService) {
         if (!CategoryUtil.itemIsAbleToContainParts(item)) {
             return stubPartsTable();
@@ -80,7 +78,7 @@ public class TableUtil {
         final String[] header = {"Location", "Partnumber", "Pcs/Vol"};
         //final String[] header = null;
         final Set<String> categories = itemService.findAllPartCategories();
-        return PartsTable.create(dtos, tableName, header, categories);
+        return PartsTable.create(dtos, tableName, header, categories, language);
     }
 
     public static ReplacersTable createReplacersTable(final Item item, final UserService userService) {
@@ -105,19 +103,27 @@ public class TableUtil {
         return new TableDto("stub", new String[][]{{""}});
     }
 
-    public static TableViewDto createTableView(final List<ChildItem> childItems) {
+    public static TableViewDto createTableView(final List<ChildItem> childItems, final String language) {
         final List<TableDto> tables = new ArrayList<>();
         for (final List<ChildItem> categorizedChildItems : ItemUtil.categorizeChildItems(childItems)) {
-            tables.add(createTable(categorizedChildItems));
+            tables.add(createTable(categorizedChildItems, language));
         }
         return new TableViewDto(childItems.size(), tables);
     }
 
-    public static TableDto createHeader(final Item item, final ItemService itemService) {
+    public static TableDto createHeader(final Item item,
+                                        final String itemCategoryInUserLanguage,
+                                        final String language,
+                                        final ItemService itemService) {
+//        final String nameParameter = translateFromEnglish("Name", language);
+        final String nameParameter = "Name";
+//        final String itemName = translateFromEnglish(item.getName(), language);
+        final String itemName = item.getName();
+        final String tableName = itemCategoryInUserLanguage + " " + itemName;
+
         final List<String[]> list = new ArrayList<>();
-        list.add(new String[]{"Name", item.getName()});
-        final String tableName = item.getCategory().replace(" (i)", "") + " " + item.getName();
-        return createTable(tableName, ItemUtil.toMap(item.getDescription()), list, itemService);
+        list.add(new String[]{nameParameter, itemName});
+        return createTable(tableName, ItemUtil.toMap(item.getDescription()), list, language, itemService);
     }
 
     public static String[][] listToMatrix(List<String[]> list) {
@@ -148,10 +154,11 @@ public class TableUtil {
     private static TableDto createTable(final String tableName,
                                         final Map<String, String> descriptionMap,
                                         final List<String[]> list,
+                                        final String language,
                                         final ItemService itemService) {
         for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
-            final String parameter = entry.getKey();
-            final String value = entry.getValue();
+            String parameter = entry.getKey();
+            String value = entry.getValue();
             String itemId = "no id";
             String message = "";
             final Item foundItem = itemService.find(parameter, value);
@@ -159,29 +166,45 @@ public class TableUtil {
                 itemId = foundItem.getId().toString();
                 message = "show button";
             }
+//            parameter = translateFromEnglish(parameter, language);
+//            value = translateFromEnglish(value, language);
             list.add(new String[]{parameter, value, itemId, message});
         }
         return new TableDto(tableName, listToMatrix(list));
     }
 
-    private static TableDto createTable(final List<ChildItem> childItems) {
-        final String tableName = childItems.get(0).getItem().getCategory();
+    private static TableDto createTable(final List<ChildItem> childItems, final String language) {
+        String tableName = childItems.get(0).getItem().getCategory();
+//        tableName = translateFromEnglish(tableName, language);
+
         final List<String[]> rows = new ArrayList<>();
         for (final ChildItem childItem : childItems) {
             final Item item = childItem.getItem();
-            final String[] row = {
-                    childItem.getLocation(),
-                    item.getCategory().equals("Seal")
-                            ? ItemUtil.getValueFromDescription(item.getDescription(), "Size, mm")
-                            : item.getName(),
-                    childItem.getQuantity() != null ? childItem.getQuantity() : "0",
-                    item.getId().toString()
-            };
 
+            String location = childItem.getLocation();
+            String buttonText = getButtonTextForPartsTable(item);
+            String quantityData = getQuantityData(childItem.getQuantity());
+            String itemId = item.getId().toString();
+
+//            location = translateFromEnglish(location, language);
+//            buttonText = translateFromEnglish(buttonText, language);
+//            quantityData = translateFromEnglish(quantityData, language);
+
+            final String[] row = {location, buttonText, quantityData, itemId};
             rows.add(row);
         }
         final String[][] rowArray = rows.toArray(new String[0][]);
         return new TableDto(tableName, rowArray);
+    }
+
+    private static String getButtonTextForPartsTable(final Item item) {
+        return item.getCategory().equals("Seal")
+                ? ItemUtil.getValueFromDescription(item.getDescription(), "Size, mm")
+                : item.getName();
+    }
+
+    private static String getQuantityData(final String childItemQuantity) {
+        return childItemQuantity != null ? childItemQuantity : "0";
     }
 
 }

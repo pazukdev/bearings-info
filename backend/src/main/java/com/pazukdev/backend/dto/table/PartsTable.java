@@ -26,13 +26,19 @@ public class PartsTable extends AbstractDto {
 
     public static PartsTable create(final List<NestedItemDto> nestedItems,
                                     final String tableName,
-                                    final String[] header,
-                                    final Set<String> partCategories) {
+                                    String[] header,
+                                    final Set<String> partCategories,
+                                    final String userLanguage) {
+//        if (header != null) {
+//            header = TranslatorUtil.translate(header, "en", userLanguage);
+//        }
+
         final PartsTable partsTable = new PartsTable();
         partsTable.setName(tableName);
         if (header != null) {
             partsTable.setHeader(header);
         }
+
         for (final String category : partCategories) {
             final PartsTable categoryTable = new PartsTable();
             categoryTable.setName(category);
@@ -47,8 +53,15 @@ public class PartsTable extends AbstractDto {
             childTable.getParts().sort(Comparator.comparing(NestedItemDto::getQuantity).reversed());
         }
 
+//        translate(partsTable, userLanguage);
         sortChildTables(partsTable);
         return partsTable;
+    }
+
+    private static void translate(final PartsTable partsTable, final String languageTo) {
+        for (final PartsTable childTable : partsTable.getTables()) {
+            // some implementation here
+        }
     }
 
     private static void setTableWeight(final PartsTable categoryTable, final String category) {

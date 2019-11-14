@@ -13,7 +13,7 @@ const router = new VueRouter({
         { path: '/item', redirect: { path: '/item/id/home/en' }},
         { path: '/item/id', redirect: { path: '/item/id/home/en' }},
         // redirect to named urls
-        { path: '/item/id/-1/en', redirect: { name: '/item/id/items_management/en' }},
+        { path: '/item/id/-1/en', redirect: { path: '/item/id/items_management/en' }},
         { path: '/item/id/-2/en', redirect: { path: '/item/id/home/en' }},
         { path: '/item/id/-3/en', redirect: { path: '/item/id/wishlist/en' }},
         { path: '/item/id/-4/en', redirect: { path: '/item/id/users/en' }},

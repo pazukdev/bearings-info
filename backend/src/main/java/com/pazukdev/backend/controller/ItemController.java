@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -22,30 +20,33 @@ public class ItemController {
 
     private final ItemService service;
 
-    @GetMapping("/get-view/{id}/{userName}")
+    @GetMapping("/get-view/{id}/{userName}/{language}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get item")
-    public ItemView getView(@PathVariable final Long id, @PathVariable final String userName)  {
-        return service.createItemView(id, userName);
+    public ItemView getView(@PathVariable final Long id,
+                            @PathVariable final String userName,
+                            @PathVariable final String language)  {
+        return service.createItemView(id, userName, language);
     }
 
-    @PostMapping("/create-view/{category}/{name}/{userName}/{userLanguage}")
+    @PostMapping("/create-view/{category}/{name}/{userName}/{language}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new item")
     public ItemView createView(@PathVariable final String category,
                                @PathVariable final String name,
                                @PathVariable final String userName,
-                               @PathVariable final String userLanguage) {
-        return service.createNewItemView(category, name, userName, userLanguage);
+                               @PathVariable final String language) {
+        return service.createNewItemView(category, name, userName, language);
     }
 
-    @PutMapping("/update-view/{id}/{userName}")
+    @PutMapping("/update-view/{id}/{userName}/{language}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update item")
     public ItemView updateView(@PathVariable final Long id,
                                @PathVariable String userName,
-                               @RequestBody final ItemView itemView) throws IOException {
-        return service.updateItemView(id, userName, itemView);
+                               @PathVariable String language,
+                               @RequestBody final ItemView itemView) {
+        return service.updateItemView(id, userName, language, itemView);
     }
 
 }

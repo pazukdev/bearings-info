@@ -1,6 +1,0 @@
-ru;rabbit;кролик
-ru;rat;крыса
-ru;rat;крыса1
-ru;translated name;123
-ru;Привет;змея
-ru;नमस्ते;жук

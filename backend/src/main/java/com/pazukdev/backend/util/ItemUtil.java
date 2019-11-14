@@ -228,15 +228,15 @@ public class ItemUtil {
     }
 
     public static void updateName(final Item item,
-                                  final Map<String, String> headerMatrixMap,
+                                  final Map<String, String> headerMatrixMapInEnglish,
                                   final ItemService itemService) {
         final String oldName = item.getName();
-        final String newName = headerMatrixMap.get("Name");
+        final String newName = headerMatrixMapInEnglish.get("Name");
         if (newName != null && !newName.equals(oldName)) {
             item.setName(newName);
             applyToAllItemDescriptions(item.getCategory(), oldName, newName, itemService);
         }
-        headerMatrixMap.remove("Name");
+        headerMatrixMapInEnglish.remove("Name");
     }
 
     public static void updateImg(final String base64Data, final Item item) {
@@ -252,10 +252,10 @@ public class ItemUtil {
     }
 
     public static void updateDescription(final Item item,
-                                         final Map<String, String> headerMatrixMap,
+                                         final Map<String, String> headerMatrixMapInEnglish,
                                          final ItemService itemService) {
-        final String newDescription = ItemUtil.toDescription(headerMatrixMap);
-        applyNewDescriptionToCategory(item.getCategory(), headerMatrixMap, itemService);
+        final String newDescription = ItemUtil.toDescription(headerMatrixMapInEnglish);
+        applyNewDescriptionToCategory(item.getCategory(), headerMatrixMapInEnglish, itemService);
         item.setDescription(newDescription);
     }
 
