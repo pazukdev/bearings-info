@@ -1,8 +1,8 @@
 package com.pazukdev.backend.dto;
 
+import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.dto.table.ReplacersTable;
-import com.pazukdev.backend.dto.table.TableDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -30,7 +30,7 @@ public class ItemView extends AbstractDto {
     private InputStream file;
     private RateReplacer rate;
     private String category;
-    private TableDto header;
+    private HeaderTable header;
     private PartsTable partsTable;
     private ReplacersTable replacersTable;
     private Long itemId;
@@ -42,5 +42,6 @@ public class ItemView extends AbstractDto {
     private String creatorName;
     private Set<Long> wishListIds = new HashSet<>();
     private Set<Long> ratedItems = new HashSet<>();
+    private ItemView oldItemViewInEnglish;
 
 }

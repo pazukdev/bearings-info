@@ -2,10 +2,10 @@ package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.dto.NestedItemDto;
+import com.pazukdev.backend.dto.table.HeaderTable;
+import com.pazukdev.backend.dto.table.HeaderTableRow;
 import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.dto.table.ReplacersTable;
-import com.pazukdev.backend.dto.table.TableDto;
-import com.pazukdev.backend.dto.table.TableViewDto;
 import com.pazukdev.backend.entity.ChildItem;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.Replacer;
@@ -67,7 +67,7 @@ public class TableUtil {
                                               final String language,
                                               final ItemService itemService) {
         if (!CategoryUtil.itemIsAbleToContainParts(item)) {
-            return stubPartsTable();
+            return PartsTable.createStub();
         }
         final List<NestedItemDto> dtos = new ArrayList<>();
         final List<ChildItem> parts = new ArrayList<>(item.getChildItems());
@@ -93,69 +93,43 @@ public class TableUtil {
         return replacersTable;
     }
 
-    public static ReplacersTable stubReplacersTable() {
-        final ReplacersTable replacersTable = new ReplacersTable();
-        replacersTable.setName("stub");
-        return replacersTable;
-    }
+//    public static TableViewDto createTableView(final List<ChildItem> childItems, final String language) {
+//        final List<HeaderTable> tables = new ArrayList<>();
+//        for (final List<ChildItem> categorizedChildItems : ItemUtil.categorizeChildItems(childItems)) {
+//            tables.add(createTable(categorizedChildItems, language));
+//        }
+//        return new TableViewDto(childItems.size(), tables);
+//    }
 
-    public static TableDto stubTable() {
-        return new TableDto("stub", new String[][]{{""}});
-    }
-
-    public static TableViewDto createTableView(final List<ChildItem> childItems, final String language) {
-        final List<TableDto> tables = new ArrayList<>();
-        for (final List<ChildItem> categorizedChildItems : ItemUtil.categorizeChildItems(childItems)) {
-            tables.add(createTable(categorizedChildItems, language));
-        }
-        return new TableViewDto(childItems.size(), tables);
-    }
-
-    public static TableDto createHeader(final Item item,
-                                        final String itemCategoryInUserLanguage,
-                                        final String language,
-                                        final ItemService itemService) {
+    public static HeaderTable createHeader(final Item item,
+                                           final String itemCategoryInUserLanguage,
+                                           final String language,
+                                           final ItemService itemService) {
 //        final String nameParameter = translateFromEnglish("Name", language);
         final String nameParameter = "Name";
 //        final String itemName = translateFromEnglish(item.getName(), language);
         final String itemName = item.getName();
         final String tableName = itemCategoryInUserLanguage + " " + itemName;
 
-        final List<String[]> list = new ArrayList<>();
-        list.add(new String[]{nameParameter, itemName});
-        return createTable(tableName, ItemUtil.toMap(item.getDescription()), list, language, itemService);
-    }
-
-    public static String[][] listToMatrix(List<String[]> list) {
-        int j = 0;
-        String[][] matrix = new String[list.size()][];
-        for (String[] s : list) {
-            matrix[j++] = s;
-        }
-        return matrix;
+        final List<HeaderTableRow> headerTableRows = new ArrayList<>();
+        headerTableRows.add(HeaderTableRow.create(nameParameter, itemName));
+        return createTable(tableName, ItemUtil.toMap(item.getDescription()), headerTableRows, language, itemService);
     }
 
     public static Map<String, String> createHeaderMatrixMap(final ItemView itemView) {
-        final TableDto header = itemView.getHeader();
-        final String[][] headerMatrix = header.getMatrix();
+        final HeaderTable header = itemView.getHeader();
         final Map<String, String> headerMatrixMap = new HashMap<>();
-        for (final String[] row : headerMatrix) {
-            headerMatrixMap.put(row[0], row[1]);
+        for (final HeaderTableRow row : header.getRows()) {
+            headerMatrixMap.put(row.getParameter(), row.getValue());
         }
         return headerMatrixMap;
     }
 
-    private static PartsTable stubPartsTable() {
-        final PartsTable partsTable = new PartsTable();
-        partsTable.setName("stub");
-        return partsTable;
-    }
-
-    private static TableDto createTable(final String tableName,
-                                        final Map<String, String> descriptionMap,
-                                        final List<String[]> list,
-                                        final String language,
-                                        final ItemService itemService) {
+    private static HeaderTable createTable(final String tableName,
+                                           final Map<String, String> descriptionMap,
+                                           final List<HeaderTableRow> headerTableRows,
+                                           final String language,
+                                           final ItemService itemService) {
         for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
             String parameter = entry.getKey();
             String value = entry.getValue();
@@ -168,43 +142,15 @@ public class TableUtil {
             }
 //            parameter = translateFromEnglish(parameter, language);
 //            value = translateFromEnglish(value, language);
-            list.add(new String[]{parameter, value, itemId, message});
+
+            final HeaderTableRow row = new HeaderTableRow();
+            row.setParameter(parameter);
+            row.setValue(value);
+            row.setItemId(itemId);
+            row.setMessage(message);
+            headerTableRows.add(row);
         }
-        return new TableDto(tableName, listToMatrix(list));
-    }
-
-    private static TableDto createTable(final List<ChildItem> childItems, final String language) {
-        String tableName = childItems.get(0).getItem().getCategory();
-//        tableName = translateFromEnglish(tableName, language);
-
-        final List<String[]> rows = new ArrayList<>();
-        for (final ChildItem childItem : childItems) {
-            final Item item = childItem.getItem();
-
-            String location = childItem.getLocation();
-            String buttonText = getButtonTextForPartsTable(item);
-            String quantityData = getQuantityData(childItem.getQuantity());
-            String itemId = item.getId().toString();
-
-//            location = translateFromEnglish(location, language);
-//            buttonText = translateFromEnglish(buttonText, language);
-//            quantityData = translateFromEnglish(quantityData, language);
-
-            final String[] row = {location, buttonText, quantityData, itemId};
-            rows.add(row);
-        }
-        final String[][] rowArray = rows.toArray(new String[0][]);
-        return new TableDto(tableName, rowArray);
-    }
-
-    private static String getButtonTextForPartsTable(final Item item) {
-        return item.getCategory().equals("Seal")
-                ? ItemUtil.getValueFromDescription(item.getDescription(), "Size, mm")
-                : item.getName();
-    }
-
-    private static String getQuantityData(final String childItemQuantity) {
-        return childItemQuantity != null ? childItemQuantity : "0";
+        return HeaderTable.create(tableName, headerTableRows);
     }
 
 }

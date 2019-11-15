@@ -1,8 +1,10 @@
 package com.pazukdev.backend.dto.factory;
 
 import com.pazukdev.backend.dto.ItemView;
+import com.pazukdev.backend.dto.table.HeaderTable;
+import com.pazukdev.backend.dto.table.HeaderTableRow;
 import com.pazukdev.backend.dto.table.PartsTable;
-import com.pazukdev.backend.dto.table.TableDto;
+import com.pazukdev.backend.dto.table.ReplacersTable;
 import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
@@ -66,7 +68,9 @@ public class ItemViewFactory {
             itemView = createOrdinaryItemView(basicItemView, itemId, currentUser, userLanguage);
         }
 
-        translate("en", userLanguage, itemView, false);
+        if (!userLanguage.equals("en")) {
+            translate("en", userLanguage, itemView, false);
+        }
         return itemView;
     }
 
@@ -86,8 +90,10 @@ public class ItemViewFactory {
                                final String userLanguage) {
         final UserEntity creator = itemService.getUserService().findByName(userName);
 
-        name = translate(userLanguage, "en", name, true);
-        category = translate(userLanguage, "en", category, true);
+        if (!userLanguage.equals("en")) {
+            name = translate(userLanguage, "en", name, true);
+            category = translate(userLanguage, "en", category, true);
+        }
 
         final Item item = new Item();
         item.setName(name);
@@ -97,7 +103,6 @@ public class ItemViewFactory {
         item.setDescription(createEmptyDescription(category));
         itemService.update(item);
         UserActionUtil.processItemAction("create", item, creator, itemService);
-//        translate(userLanguage, "en", item, true);
         return item;
     }
 
@@ -129,8 +134,6 @@ public class ItemViewFactory {
         final Item item = itemService.getOne(itemId);
         final List<Item> allItems = itemService.findAll();
         final List<Item> sameCategoryItems = itemService.find(item.getCategory(), allItems);
-//        final String tableName = translateFromEnglish("Parts", language);
-//        final String itemCategory = translateFromEnglish(item.getCategory(), language);
         final String tableName = "Parts";
         final String itemCategory = item.getCategory();
 
@@ -160,8 +163,7 @@ public class ItemViewFactory {
                 motorcycles.size(),
                 tableName,
                 countParameterName,
-                motorcyclesTable(motorcycles, countParameterName, language, itemService.getUserService()),
-                language);
+                motorcyclesTable(motorcycles, countParameterName, language, itemService.getUserService()));
     }
 
     private ItemView createUsersListView(final ItemView itemView, final String language) {
@@ -174,8 +176,7 @@ public class ItemViewFactory {
                 users.size(),
                 tableName,
                 countParameterName,
-                usersTable(users, tableName, language),
-                language);
+                usersTable(users, tableName, language));
     }
 
     private ItemView createItemsManagementView(final ItemView itemView, final String language) {
@@ -188,8 +189,7 @@ public class ItemViewFactory {
                 allItems.size(),
                 tableName,
                 countParameterName,
-                specialItemsTable(allItems, countParameterName, language, itemService),
-                language);
+                specialItemsTable(allItems, countParameterName, language, itemService));
     }
 
     private ItemView createWishListView(final ItemView itemView, final WishList wishList, final String language) {
@@ -202,31 +202,25 @@ public class ItemViewFactory {
                 allItems.size(),
                 tableName,
                 countParameterName,
-                specialItemsTable(allItems, countParameterName, language, itemService),
-                language);
+                specialItemsTable(allItems, countParameterName, language, itemService));
     }
 
     private ItemView createItemsView(final ItemView itemView,
                                      final Integer size,
                                      String tableName,
                                      String parameter,
-                                     final PartsTable table,
-                                     final String language) {
-
-//        tableName = translateFromEnglish(tableName, language);
-//        parameter = translateFromEnglish(parameter, language);
-
-        List<String[]> list = new ArrayList<>();
-        list.add(new String[]{parameter, String.valueOf(size)});
-        final TableDto header = new TableDto(tableName, listToMatrix(list));
+                                     final PartsTable table) {
+        final HeaderTableRow row = new HeaderTableRow();
+        row.setParameter(parameter);
+        row.setValue(String.valueOf(size));
+        final HeaderTable header = HeaderTable.createSingleRowTable(tableName, row);
         final Set<String> categories = itemService.findAllCategories();
-//        final List<String> translatedCategories = new ArrayList<>(translateFromEnglish(categories, language));
         final List<String> translatedCategories = new ArrayList<>(categories);
         translatedCategories.sort(String::compareTo);
 
         itemView.setHeader(header);
         itemView.setPartsTable(table);
-        itemView.setReplacersTable(stubReplacersTable());
+        itemView.setReplacersTable(ReplacersTable.createStub());
         itemView.setCategories(translatedCategories);
         return itemView;
     }
@@ -235,7 +229,7 @@ public class ItemViewFactory {
                                 final ItemView itemView,
                                 final UserEntity currentUser,
                                 final String userLanguage) {
-        translate(userLanguage, "en", itemView, true);
+
         final Item item = itemService.getOne(itemId);
 
         if (itemView.getRate() != null) {
@@ -247,8 +241,14 @@ public class ItemViewFactory {
         if (itemView.isAddToWishList()) {
             ItemUtil.updateWishList(item, itemView, currentUser, itemService);
         } else {
+            final ItemView oldItemViewInEnglish;
+            if (!userLanguage.equals("en")) {
+                oldItemViewInEnglish = createItemView(itemId, currentUser.getName(), "en");
+                oldItemViewInEnglish.setImgData("-");
+                itemView.setOldItemViewInEnglish(oldItemViewInEnglish);
+            }
+
             final Map<String, String> headerMatrixMap = createHeaderMatrixMap(itemView);
-//            translate(headerMatrixMap, userLanguage, "en");
 
             ItemUtil.updateName(item, headerMatrixMap, itemService);
             ItemUtil.updateDescription(item, headerMatrixMap, itemService);

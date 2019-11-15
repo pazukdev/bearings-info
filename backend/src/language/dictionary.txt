@@ -1,36 +1,45 @@
+ru;120 km / h;120 км/ч
 ru;Bearing;Подшипник
 ru;Created by;Добавлено пользователем
+ru;Dnepr MT-9;Днепр МТ-9
 ru;Edit;Редактировать
 ru;Engine;Двигатель
 ru;Final drive;Редуктор
+ru;Frame and wheels;Frame and wheels
 ru;Fuel capacity, l;Объем бензобака, л
-ru;Gas tank volume, l;Объем бензобака, л
-ru;Height;Height
+ru;G-11A;Г-11А
+ru;Gearbox;Gearbox
+ru;Generator;Generator
+ru;IMZ / KMZ;ИМЗ / КМЗ
 ru;IMZ 8103;ИМЗ 8103
 ru;IMZ;ИМЗ
-ru;KMZ 1;КМЗ 1
-ru;KMZ 3;КМЗ 3
 ru;KMZ;КМЗ
-ru;Motorcycle KMZ 3;Мотоцикл КМЗ 3
 ru;Location;Расположение
+ru;Lock ring;Lock ring
 ru;Manufacturer;Производитель
 ru;Max speed, km/h;Макс. скорость, км/ч
-ru;Max. ;Макс. скорость, км/ч
 ru;Model;Модель
+ru;Motorcycle Cat;Motorcycle Cat1
+ru;Motorcycle KMZ 3;Мотоцикл КМЗ 3
+ru;Motorcycle Ural M67;Мотоцикл Урал М67
 ru;Motorcycle catalogue;Модельный ряд
 ru;Motorcycle;Мотоцикл
-ru;Motorcycle Ural M67;Мотоцикл Урал М67
 ru;Name;Название
+ru;Oil;Oil
 ru;Partnumber;Наименование
 ru;Parts;Агрегаты и детали
 ru;Pcs/Vol;Кол-во/объем
 ru;Production;Годы пр-ва
 ru;Rating;Рейтинг
 ru;Role;Роль
-ru;Title;Название
+ru;Screw;Screw
+ru;Seal;Seal
+ru;Sidecar reduction drive;Sidecar reduction drive
+ru;Spark plug;Spark plug
+ru;Universal joint cross;Universal joint cross
+ru;Universal joint;Universal joint
 ru;Username;Имя пользователя
 ru;Weight, kg;Вес, кг
+ru;Wheel;Wheel
 ru;Width;Ширина
 ru;Years of production;Годы пр-ва
-ru;IMZ / KMZ;ИМЗ / КМЗ
-ru;Dnepr MT-9;Днепр МТ-9

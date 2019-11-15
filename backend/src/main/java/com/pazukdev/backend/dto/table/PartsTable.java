@@ -24,6 +24,12 @@ public class PartsTable extends AbstractDto {
     private List<NestedItemDto> parts = new ArrayList<>();
     private List<PartsTable> tables = new ArrayList<>();
 
+    public static PartsTable createStub() {
+        final PartsTable partsTable = new PartsTable();
+        partsTable.setName("stub");
+        return partsTable;
+    }
+
     public static PartsTable create(final List<NestedItemDto> nestedItems,
                                     final String tableName,
                                     String[] header,

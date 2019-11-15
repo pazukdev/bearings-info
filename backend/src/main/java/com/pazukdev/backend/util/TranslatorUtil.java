@@ -2,10 +2,10 @@ package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.dto.NestedItemDto;
+import com.pazukdev.backend.dto.table.HeaderTable;
+import com.pazukdev.backend.dto.table.HeaderTableRow;
 import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.dto.table.ReplacersTable;
-import com.pazukdev.backend.dto.table.TableDto;
-import com.pazukdev.backend.entity.Item;
 import org.json.JSONArray;
 
 import java.io.BufferedReader;
@@ -31,15 +31,15 @@ public class TranslatorUtil {
                                  final String languageTo,
                                  final ItemView itemView,
                                  final boolean addToDictionary) {
-        String category = itemView.getCategory();
-        TableDto header = itemView.getHeader();
+//        String category = itemView.getCategory();
+        HeaderTable header = itemView.getHeader();
         final PartsTable partsTable = itemView.getPartsTable();
         final ReplacersTable replacersTable = itemView.getReplacersTable();
         final List<NestedItemDto> possibleParts = itemView.getPossibleParts();
         final List<NestedItemDto> replacers = itemView.getReplacers();
         final List<String> categories = itemView.getCategories();
 
-        category = translate(languageFrom, languageTo, category, addToDictionary);
+//        category = translate(languageFrom, languageTo, category, addToDictionary);
         header = translate(languageFrom, languageTo, header, addToDictionary);
         translate(languageFrom, languageTo, partsTable, addToDictionary);
         translate(languageFrom, languageTo, categories, addToDictionary);
@@ -52,24 +52,27 @@ public class TranslatorUtil {
         String s = "s";
     }
 
-    public static void translate(final String languageFrom,
-                                 final String languageTo,
-                                 final Item item,
-                                 final boolean addToDictionary) {
-        item.setName(translate(languageFrom, languageTo, item.getName(), addToDictionary));
-        item.setCategory(translate(languageFrom, languageTo, item.getCategory(), addToDictionary));
-    }
+//    public static void translate(final String languageFrom,
+//                                 final String languageTo,
+//                                 final Item item,
+//                                 final boolean addToDictionary) {
+//        item.setName(translate(languageFrom, languageTo, item.getName(), addToDictionary));
+//        item.setCategory(translate(languageFrom, languageTo, item.getCategory(), addToDictionary));
+//    }
 
-    private static TableDto translate(final String languageFrom,
-                                     final String languageTo,
-                                     final TableDto tableDto,
-                                     final boolean addToDictionary) {
-        String name = translate(languageFrom, languageTo, tableDto.getName(), addToDictionary);
-        final String[][] matrix = tableDto.getMatrix();
-        for (int i = 0; i < matrix.length; i++) {
-            translate(languageFrom, languageTo, matrix[i], addToDictionary);
+    private static HeaderTable translate(final String languageFrom,
+                                         final String languageTo,
+                                         final HeaderTable headerTable,
+                                         final boolean addToDictionary) {
+        String name = translate(languageFrom, languageTo, headerTable.getName(), addToDictionary);
+        headerTable.setName(name);
+
+        for (final HeaderTableRow row : headerTable.getRows()) {
+            row.setParameter(translate(languageFrom, languageTo, row.getParameter(), addToDictionary));
+            row.setValue(translate(languageFrom, languageTo, row.getValue(), addToDictionary));
         }
-        return new TableDto(name, matrix);
+
+        return headerTable;
     }
 
     private static void translate(final String languageFrom,
@@ -88,18 +91,18 @@ public class TranslatorUtil {
     }
 
     private static void translateNestedItemDtoList(final String languageFrom,
-                                                  final String languageTo,
-                                                  final List<NestedItemDto> dtos,
-                                                  final boolean addToDictionary) {
+                                                   final String languageTo,
+                                                   final List<NestedItemDto> dtos,
+                                                   final boolean addToDictionary) {
         for (final NestedItemDto dto : dtos) {
             translate(languageFrom, languageTo, dto, addToDictionary);
         }
     }
 
     private static void translate(final String languageFrom,
-                                 final String languageTo,
-                                 final NestedItemDto dto,
-                                 final boolean addToDictionary) {
+                                  final String languageTo,
+                                  final NestedItemDto dto,
+                                  final boolean addToDictionary) {
         dto.setName(translate(languageFrom, languageTo, dto.getName(), addToDictionary));
         dto.setItemCategory(translate(languageFrom, languageTo, dto.getItemCategory(), addToDictionary));
         dto.setButtonText(translate(languageFrom, languageTo, dto.getButtonText(), addToDictionary));
@@ -107,9 +110,9 @@ public class TranslatorUtil {
     }
 
     private static void translate(final String languageFrom,
-                                 final String languageTo,
-                                 final Map<String, String> map,
-                                 final boolean addToDictionary) {
+                                  final String languageTo,
+                                  final Map<String, String> map,
+                                  final boolean addToDictionary) {
         final Map<String, String> copy = new HashMap<>(map);
         map.clear();
         for (final Map.Entry<String, String> entry : copy.entrySet()) {
@@ -120,9 +123,9 @@ public class TranslatorUtil {
     }
 
     private static void translate(final String languageFrom,
-                                 final String languageTo,
-                                 final List<String> list,
-                                 final boolean addToDictionary) {
+                                  final String languageTo,
+                                  final List<String> list,
+                                  final boolean addToDictionary) {
         final List<String> copy = new ArrayList<>(list);
         list.clear();
         for (final String s : copy) {
@@ -131,9 +134,9 @@ public class TranslatorUtil {
     }
 
     private static void translate(final String languageFrom,
-                                 final String languageTo,
-                                 final String[] array,
-                                 final boolean addToDictionary) {
+                                  final String languageTo,
+                                  final String[] array,
+                                  final boolean addToDictionary) {
         if (array == null) {
             return;
         }
@@ -150,10 +153,7 @@ public class TranslatorUtil {
         if (text == null) {
             return null;
         }
-        if (text.equals("-")) {
-            return "-";
-        }
-        if (text.contains(".png")) {
+        if (text.equals("-") || text.equals("no id") || text.equals("") || text.contains(".png")) {
             return text;
         }
         if (languageFrom.equals(languageTo)) {
@@ -167,12 +167,12 @@ public class TranslatorUtil {
         }
     }
 
-    private static String translateFromEnglish(final String languageTo, final String s) {
-        String translated = getValueFromDictionary(s, languageTo);
+    private static String translateFromEnglish(final String languageTo, final String text) {
+        String translated = getValueFromDictionary(text, languageTo);
         if (translated != null) {
             return translated;
         } else {
-            return s;
+            return text;
         }
     }
 

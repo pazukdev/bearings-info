@@ -395,18 +395,6 @@ public class ItemUtil {
         }
     }
 
-    public static Item copy(final Item original) {
-        final Item copy = new Item();
-        copy.setName(original.getName());
-        copy.setCategory(original.getCategory());
-        copy.setCreatorId(original.getCreatorId());
-        copy.setUserActionDate(original.getUserActionDate());
-        copy.setDescription(original.getDescription());
-        copy.setReplacers(original.getReplacers());
-        copy.setChildItems(original.getChildItems());
-        return copy;
-    }
-
     public static Set<Long> collectIds(final Set<Item> items) {
         final Set<Long> ids = new HashSet<>();
         for (final Item item : items) {

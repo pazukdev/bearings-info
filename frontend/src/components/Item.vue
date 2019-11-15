@@ -4,11 +4,10 @@
             {{$t("loading") + "..."}}
         </div>
         <div v-if="!isLoading()">
-<!--            <div style="text-align: left">-->
-<!--                {{motorcycleCatalogueId}}-->
-<!--                {{wishlistId}}-->
-<!--                {{userlistId}}-->
-<!--            </div>                    -->
+            <div style="text-align: left">
+                {{itemView.header}}<br><br>
+                {{newHeaderRow}}<br><br>
+            </div>
 
             <HeaderMenu v-bind:user-data="itemView.userData"
                         v-bind:guest="isGuest()"
@@ -100,26 +99,26 @@
             <table id="item-description">
                 <tbody>
                 <tr style="text-align: left"
-                    v-for="row in itemView.header.matrix">
+                    v-for="row in itemView.header.rows">
                     <td class="two-columns-table-left-column">
                         <p>
-                            {{row[0]}}
+                            {{row.parameter}}
                         </p>
                     </td>
                     <td class="two-column-table-right-column">
-                        <input v-if="isEditMode && isOrdinaryItemView()" v-model="row[1]" type="text"/>
-                        <p v-if="!isShowInfoButton(row[3])
+                        <input v-if="isEditMode && isOrdinaryItemView()" v-model="row.value" type="text"/>
+                        <p v-if="!isShowInfoButton(row.message)
                     && (!isEditMode || (isEditMode && !isOrdinaryItemView()))">
-                            {{row[1]}}
+                            {{row.value}}
                         </p>
-                        <button v-if="isShowInfoButton(row[3])"
+                        <button v-if="isShowInfoButton(row.message)"
                                 type="button"
-                                @click="navigateToItem(row[2])">
-                            {{row[1]}}
+                                @click="navigateToItem(row.itemId)">
+                            {{row.value}}
                         </button>
                     </td>
                     <td>
-                        <button v-if="isEditMode && isOrdinaryItemView() && row[0] !== 'Name'"
+                        <button v-if="isEditMode && isOrdinaryItemView() && row.parameter !== 'Name'"
                                 v-model="newItemView"
                                 type="button"
                                 class="round-delete-button"
@@ -493,8 +492,13 @@
                 fileUploadMessage: "",
                 actionType: "",
                 newHeaderRow: {
+                    id: "",
+                    name: "",
+                    status: "",
                     parameter: "",
-                    value: ""
+                    value: "",
+                    itemId: "",
+                    message: ""
                 },
                 newPart: {
                     id: "",
@@ -835,8 +839,8 @@
                 } else if (this.rowAlreadyInList(this.newHeaderRow.parameter)) {
                     this.newHeaderRowMessage = "Parameter already exists"
                 } else {
-                    let row = [this.newHeaderRow.parameter, this.newHeaderRow.value];
-                    this.newItemView.header.matrix.push(row);
+                    this.newHeaderRow.status = "added";
+                    this.newItemView.header.rows.push(this.newHeaderRow);
                     this.clearNewHeaderRow();
                 }
             },
@@ -870,7 +874,7 @@
             },
 
             getItemName() {
-                return this.itemView.header.matrix[0][1];
+                return this.itemView.header.rows[0].parameter;
             },
 
             newLineIsEmpty() {
@@ -878,8 +882,8 @@
             },
 
             rowAlreadyInList(parameter) {
-                for (let i=0; i < this.newItemView.header.matrix.length; i++) {
-                    if (this.newItemView.header.matrix[i][0] === parameter) {
+                for (let i=0; i < this.newItemView.header.rows.length; i++) {
+                    if (this.newItemView.header.rows[i].parameter === parameter) {
                         return true;
                     }
                 }
@@ -935,7 +939,7 @@
             },
 
             removeRowFromHeader(row) {
-                this.removeFromArray(row, this.newItemView.header.matrix);
+                this.removeFromArray(row, this.newItemView.header.rows);
             },
 
             removePartFromList(part, array) {
@@ -1023,8 +1027,13 @@
 
             clearNewHeaderRow() {
                 this.newHeaderRow = {
+                    id: "",
+                    name: "",
+                    status: "",
                     parameter: "",
-                    value: ""
+                    value: "",
+                    itemId: "",
+                    message: ""
                 };
             },
 
