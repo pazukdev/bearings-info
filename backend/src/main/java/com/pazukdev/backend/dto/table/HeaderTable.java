@@ -21,7 +21,7 @@ public class HeaderTable extends AbstractDto {
     private List<HeaderTableRow> rows;
 
     public static HeaderTable createStubTable() {
-        final HeaderTableRow row = HeaderTableRow.create("", "");
+        final HeaderTableRow row = HeaderTableRow.create("-", "-", "-");
         final HeaderTable headerTable = new HeaderTable();
         headerTable.setName("stub");
         headerTable.setRows(new ArrayList<>(Collections.singletonList(row)));

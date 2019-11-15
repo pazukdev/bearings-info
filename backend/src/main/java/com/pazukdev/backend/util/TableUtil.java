@@ -1,6 +1,5 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.HeaderTableRow;
@@ -103,54 +102,28 @@ public class TableUtil {
 
     public static HeaderTable createHeader(final Item item,
                                            final String itemCategoryInUserLanguage,
-                                           final String language,
                                            final ItemService itemService) {
-//        final String nameParameter = translateFromEnglish("Name", language);
         final String nameParameter = "Name";
-//        final String itemName = translateFromEnglish(item.getName(), language);
         final String itemName = item.getName();
         final String tableName = itemCategoryInUserLanguage + " " + itemName;
 
-        final List<HeaderTableRow> headerTableRows = new ArrayList<>();
-        headerTableRows.add(HeaderTableRow.create(nameParameter, itemName));
-        return createTable(tableName, ItemUtil.toMap(item.getDescription()), headerTableRows, language, itemService);
-    }
-
-    public static Map<String, String> createHeaderMatrixMap(final ItemView itemView) {
-        final HeaderTable header = itemView.getHeader();
-        final Map<String, String> headerMatrixMap = new HashMap<>();
-        for (final HeaderTableRow row : header.getRows()) {
-            headerMatrixMap.put(row.getParameter(), row.getValue());
-        }
-        return headerMatrixMap;
+        final List<HeaderTableRow> rows = ItemDescriptionUtil.toHeaderRows(item.getDescription());
+        rows.add(HeaderTableRow.create(nameParameter, itemName, "-"));
+        return createTable(tableName, rows, itemService);
     }
 
     private static HeaderTable createTable(final String tableName,
-                                           final Map<String, String> descriptionMap,
-                                           final List<HeaderTableRow> headerTableRows,
-                                           final String language,
+                                           final List<HeaderTableRow> rows,
                                            final ItemService itemService) {
-        for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
-            String parameter = entry.getKey();
-            String value = entry.getValue();
-            String itemId = "no id";
-            String message = "";
-            final Item foundItem = itemService.find(parameter, value);
+        for (final HeaderTableRow row : rows) {
+            row.setItemId("no id");
+            final Item foundItem = itemService.find(row.getParameter(), row.getValue());
             if (foundItem != null) {
-                itemId = foundItem.getId().toString();
-                message = "show button";
+                row.setItemId(foundItem.getId().toString());
+                row.setMessage("show button");
             }
-//            parameter = translateFromEnglish(parameter, language);
-//            value = translateFromEnglish(value, language);
-
-            final HeaderTableRow row = new HeaderTableRow();
-            row.setParameter(parameter);
-            row.setValue(value);
-            row.setItemId(itemId);
-            row.setMessage(message);
-            headerTableRows.add(row);
         }
-        return HeaderTable.create(tableName, headerTableRows);
+        return HeaderTable.create(tableName, rows);
     }
 
 }

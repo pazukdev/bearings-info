@@ -4,10 +4,10 @@
             {{$t("loading") + "..."}}
         </div>
         <div v-if="!isLoading()">
-            <div style="text-align: left">
-                {{itemView.header}}<br><br>
-                {{newHeaderRow}}<br><br>
-            </div>
+<!--            <div style="text-align: left">-->
+<!--                {{itemView.header}}<br><br>-->
+<!--                {{newHeaderRow}}<br><br>-->
+<!--            </div>-->
 
             <HeaderMenu v-bind:user-data="itemView.userData"
                         v-bind:guest="isGuest()"
