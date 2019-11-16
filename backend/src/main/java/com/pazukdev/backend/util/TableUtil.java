@@ -92,14 +92,6 @@ public class TableUtil {
         return replacersTable;
     }
 
-//    public static TableViewDto createTableView(final List<ChildItem> childItems, final String language) {
-//        final List<HeaderTable> tables = new ArrayList<>();
-//        for (final List<ChildItem> categorizedChildItems : ItemUtil.categorizeChildItems(childItems)) {
-//            tables.add(createTable(categorizedChildItems, language));
-//        }
-//        return new TableViewDto(childItems.size(), tables);
-//    }
-
     public static HeaderTable createHeader(final Item item,
                                            final String itemCategoryInUserLanguage,
                                            final ItemService itemService) {
@@ -107,23 +99,40 @@ public class TableUtil {
         final String itemName = item.getName();
         final String tableName = itemCategoryInUserLanguage + " " + itemName;
 
-        final List<HeaderTableRow> rows = ItemDescriptionUtil.toHeaderRows(item.getDescription());
-        rows.add(HeaderTableRow.create(nameParameter, itemName, "-"));
-        return createTable(tableName, rows, itemService);
+        final List<HeaderTableRow> headerTableRows = new ArrayList<>();
+        headerTableRows.add(HeaderTableRow.create(nameParameter, itemName));
+        return createTable(tableName, ItemUtil.toMap(item.getDescription()), headerTableRows, itemService);
     }
 
     private static HeaderTable createTable(final String tableName,
-                                           final List<HeaderTableRow> rows,
+                                           final Map<String, String> descriptionMap,
+                                           final List<HeaderTableRow> headerTableRows,
                                            final ItemService itemService) {
-        for (final HeaderTableRow row : rows) {
-            row.setItemId("no id");
-            final Item foundItem = itemService.find(row.getParameter(), row.getValue());
+        for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
+            String parameter = entry.getKey();
+            String value = entry.getValue();
+            String itemId = "no id";
+            String message = "";
+            final Item foundItem = itemService.find(parameter, value);
             if (foundItem != null) {
-                row.setItemId(foundItem.getId().toString());
-                row.setMessage("show button");
+                itemId = foundItem.getId().toString();
+                message = "show button";
             }
+
+            final HeaderTableRow row = HeaderTableRow.create(parameter, value);
+            row.setItemId(itemId);
+            row.setMessage(message);
+            headerTableRows.add(row);
         }
-        return HeaderTable.create(tableName, rows);
+        return HeaderTable.create(tableName, headerTableRows);
+    }
+
+    public static Map<String, String> createHeaderMap(final HeaderTable header) {
+        final Map<String, String> map = new HashMap<>();
+        for (final HeaderTableRow row : header.getRows()) {
+            map.put(row.getParameter(), row.getValue());
+        }
+        return map;
     }
 
 }

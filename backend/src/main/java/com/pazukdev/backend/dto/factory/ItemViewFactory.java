@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.pazukdev.backend.util.NestedItemUtil.createPossibleParts;
@@ -99,7 +100,7 @@ public class ItemViewFactory {
         item.setCategory(category);
         item.setCreatorId(creator.getId());
         item.setUserActionDate(DateUtil.now());
-        item.setDescription(ItemDescriptionUtil.createEmptyDescription(category, itemService));
+        item.setDescription(createEmptyDescription(category));
         itemService.update(item);
         UserActionUtil.processItemAction("create", item, creator, itemService);
         return item;
@@ -209,7 +210,7 @@ public class ItemViewFactory {
                                      String tableName,
                                      String parameter,
                                      final PartsTable table) {
-        final HeaderTableRow row = HeaderTableRow.create(parameter, String.valueOf(size), "-");
+        final HeaderTableRow row = HeaderTableRow.create(parameter, String.valueOf(size));
         final HeaderTable header = HeaderTable.createSingleRowTable(tableName, row);
         final Set<String> categories = itemService.findAllCategories();
         final List<String> translatedCategories = new ArrayList<>(categories);
@@ -245,10 +246,10 @@ public class ItemViewFactory {
                 itemView.setOldItemViewInEnglish(oldItemViewInEnglish);
             }
 
-            final List<HeaderTableRow> rows = itemView.getHeader().getRows();
+            final Map<String, String> headerMap = TableUtil.createHeaderMap(itemView.getHeader());
 
-            ItemUtil.updateName(item, rows, itemService);
-            ItemUtil.updateDescription(item, rows, itemService);
+            ItemUtil.updateName(item, headerMap, itemService);
+            ItemUtil.updateDescription(item, headerMap, itemService);
             ItemUtil.updateImg(itemView.getImgData(), item);
             ItemUtil.updateChildItems(item, itemView, itemService, currentUser);
             ItemUtil.updateReplacers(item, itemView, itemService, currentUser);
@@ -256,6 +257,18 @@ public class ItemViewFactory {
 
         itemService.update(item);
         return createItemView(itemId, currentUser.getName(), userLanguage);
+    }
+
+    private String createEmptyDescription(final String category) {
+        final List<Item> items = itemService.find(category);
+        if (items.isEmpty()) {
+            return "";
+        }
+        final Map<String, String> descriptionMap = ItemUtil.toMap(items.get(0).getDescription());
+        for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
+            entry.setValue("-");
+        }
+        return ItemUtil.toDescription(descriptionMap);
     }
 
     private ItemView removeItemFromWishList(final ItemView itemView, final UserEntity user) {
