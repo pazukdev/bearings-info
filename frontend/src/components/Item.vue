@@ -4,21 +4,21 @@
             {{$t("loading") + "..."}}
         </div>
         <div v-if="!isLoading()">
-            <div style="text-align: left">
-                {{itemView.header}}<br><br>
-                {{newHeaderRow}}<br><br>
-            </div>
+<!--            <div style="text-align: left">-->
+<!--                {{itemView.header}}<br><br>-->
+<!--                {{newHeaderRow}}<br><br>-->
+<!--            </div>-->
 
-            <HeaderMenu v-bind:user-data="itemView.userData"
-                        v-bind:guest="isGuest()"
-                        v-bind:admin="isAdmin()"
-                        v-bind:wish-list-view="isWishListView()"
-                        v-bind:items-count-in-wishlist="itemView.wishListIds.length"
-                        v-bind:add-to-wishlist-button-visible="isAddToWishlistButtonVisible()"
-                        v-bind:item-in-wishlist-text-visible="isItemInWishListTextVisible()"
-                        v-bind:search-enabled="isSearchEnabled()"
-                        v-bind:show-bottom-hr="isOrdinaryItemView()"
-                        v-bind:item-name-for-search-in-google="getItemNameForSearchInGoogle()"
+            <HeaderMenu :user-data="itemView.userData"
+                        :guest="isGuest()"
+                        :admin="isAdmin()"
+                        :wish-list-view="isWishListView()"
+                        :items-count-in-wishlist="itemView.wishListIds.length"
+                        :add-to-wishlist-button-visible="isAddToWishlistButtonVisible()"
+                        :item-in-wishlist-text-visible="isItemInWishListTextVisible()"
+                        :search-enabled="isSearchEnabled()"
+                        :show-bottom-hr="isOrdinaryItemView()"
+                        :item-name-for-search-in-google="getItemNameForSearchInGoogle()"
                         @open-wish-list="openWishList"
                         @add-item-to-wishlist="addThisItemToWishList"></HeaderMenu>
 
