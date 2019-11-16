@@ -11,16 +11,18 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor(access = AccessLevel.NONE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HeaderTableRow extends AbstractDto {
 
-    private String parameter;
-    private String value;
-    private String itemId;
-    private String message;
+    private String uuid;
+    private String parameter = "-";
+    private String value = "-";
+    private String itemId = "-";
+    private String message = "-";
 
-    public static HeaderTableRow create(final String parameter, final String value) {
+    public static HeaderTableRow create(final String parameter, final String value, final String uuid) {
         final HeaderTableRow headerTableRow = new HeaderTableRow();
+        headerTableRow.setUuid(uuid);
         headerTableRow.setName(parameter);
         headerTableRow.setParameter(parameter);
         headerTableRow.setValue(value);
