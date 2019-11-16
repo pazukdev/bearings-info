@@ -234,8 +234,17 @@ public class ItemUtil {
         description.remove("Name");
     }
 
-    public static void updateImg(final String base64Data, final Item item) {
+    public static void updateImg(final ItemView itemView, final Item item) {
+        if (itemView.getMessages().contains("img removed")) {
+            item.setImage(null);
+            return;
+        } else if (!itemView.getMessages().contains("img uploaded")) {
+            return;
+        }
+
+        String base64Data = null;
         try {
+            base64Data = itemView.getImgData();
             ImgUtil.createImgFileInFileSystem(base64Data, item);
         } catch (IOException e) {
             e.printStackTrace();

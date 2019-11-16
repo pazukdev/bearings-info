@@ -250,7 +250,7 @@ public class ItemViewFactory {
 
             ItemUtil.updateName(item, headerMap, itemService);
             ItemUtil.updateDescription(item, headerMap, itemService);
-            ItemUtil.updateImg(itemView.getImgData(), item);
+            ItemUtil.updateImg(itemView, item);
             ItemUtil.updateChildItems(item, itemView, itemService, currentUser);
             ItemUtil.updateReplacers(item, itemView, itemService, currentUser);
         }

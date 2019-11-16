@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,9 +24,9 @@ public class ItemView extends AbstractDto {
     private boolean newItem;
     private boolean addToWishList;
     private boolean hardDelete = false;
+    private List<String> messages = new ArrayList<>();
     private NestedItemDto userData;
     private String imgData = "-";
-    private InputStream file;
     private RateReplacer rate;
     private String category;
     private HeaderTable header;

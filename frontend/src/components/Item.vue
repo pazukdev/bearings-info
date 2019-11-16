@@ -4,10 +4,9 @@
             {{$t("loading") + "..."}}
         </div>
         <div v-if="!isLoading()">
-<!--            <div style="text-align: left">-->
-<!--                {{itemView.header}}<br><br>-->
-<!--                {{newHeaderRow}}<br><br>-->
-<!--            </div>-->
+            <div style="text-align: left">
+                {{itemView.messages}}<br><br>
+            </div>
 
             <HeaderMenu :user-data="itemView.userData"
                         :guest="isGuest()"
@@ -119,7 +118,7 @@
                     </td>
                     <td>
                         <button v-if="isEditMode && isOrdinaryItemView() && row.parameter !== 'Name'"
-                                v-model="newItemView"
+                                v-model="itemView"
                                 type="button"
                                 class="round-delete-button"
                                 @click="removeRowFromHeader(row)">
@@ -178,11 +177,18 @@
 
             <table id="item-image" v-if="isViewWithImage()">
                 <tbody>
-                <tr>
+                <tr v-if="!isInArray('imgView removed', itemView.messages)">
                     <td>
                         <div class="image-preview">
-                            <img class="preview" :src="itemView.imgData" @change="previewImage">
+                            <imgView class="preview" :src="itemView.imgData">
                         </div>
+                    </td>
+                </tr>
+                <tr v-if="isEditMode && !isInArray('imgView removed', itemView.messages)">
+                    <td>
+                        <button type="button" @click="removeImg()">
+                            {{"Remove image"}}
+                        </button>
                     </td>
                 </tr>
                 <tr v-if="isEditMode">
@@ -279,7 +285,7 @@
                                            v-model="part.quantity" type="text"/>
                                 </td>
                                 <td class="three-column-table-button-column" v-if="isEditMode && part.comment !== 'Admin'">
-                                    <button v-model="newItemView"
+                                    <button v-model="itemView"
                                             v-if="isItemDeleteButtonVisibleToCurrentUser(part)"
                                             type="button"
                                             class="round-button"
@@ -365,7 +371,7 @@
                     </td>
                     <td class="three-column-table-right-column">{{replacer.rating}}</td>
                     <td>
-                        <button v-if="isRateButtonVisible(replacer)" v-model="newItemView"
+                        <button v-if="isRateButtonVisible(replacer)" v-model="itemView"
                                 type="button"
                                 class="round-button"
                                 @click="rateAction('up', replacer.itemId)">
@@ -373,19 +379,19 @@
                         </button>
                     </td>
                     <td>
-                        <button v-if="isRateButtonVisible(replacer)" v-model="newItemView"
+                        <button v-if="isRateButtonVisible(replacer)" v-model="itemView"
                                 type="button"
                                 class="round-button"
                                 @click="rateAction('down', replacer.itemId)">
                             {{" &#x2193;"}}
                         </button>
-                        <button v-if="isUnrateButtonVisible(replacer)" v-model="newItemView"
+                        <button v-if="isUnrateButtonVisible(replacer)" v-model="itemView"
                                 type="button"
                                 class="round-button"
                                 @click="rateAction('cancel', replacer.itemId)">
                             {{"x"}}
                         </button>
-                        <button v-if="isEditMode" v-model="newItemView"
+                        <button v-if="isEditMode" v-model="itemView"
                                 type="button"
                                 class="round-button"
                                 style="background: red"
@@ -481,7 +487,6 @@
                 text: "",
                 imgData: "",
                 isEditMode: false,
-                newItemView: "",
                 newItemCategory: "",
                 newItemName: "",
                 newHeaderRowMessage: "",
@@ -711,7 +716,7 @@
                         + "/" + itemId
                         + "/" + this.userName
                         + "/" + this.getLanguage(),
-                        this.newItemView, {
+                        this.itemView, {
                         headers: {
                             Authorization: this.authorization
                         }
@@ -790,12 +795,18 @@
                         return;
                     }
                     this.fileUploadMessage = "";
+                    this.removeFromArray("imgView removed", this.itemView.messages);
+                    this.itemView.messages.push("imgView uploaded");
                     let reader = new FileReader();
                     reader.onload = (e) => {
                         this.itemView.imgData = e.target.result;
                     };
                     reader.readAsDataURL(file);
                 }
+            },
+
+            removeImg() {
+                this.itemView.messages.push("imgView removed");
             },
 
             isShowPartsTableHeader() {
@@ -818,7 +829,6 @@
             },
 
             addThisItemToWishList() {
-                this.newItemView = this.itemView;
                 this.itemView.addToWishList = true;
                 this.save();
             },
@@ -828,7 +838,6 @@
                     action: action,
                     itemId: itemId
                 };
-                this.newItemView = this.itemView;
                 this.save();
             },
 
@@ -840,7 +849,7 @@
                     this.newHeaderRowMessage = "Parameter already exists"
                 } else {
                     this.newHeaderRow.status = "added";
-                    this.newItemView.header.rows.push(this.newHeaderRow);
+                    this.itemView.header.rows.push(this.newHeaderRow);
                     this.clearNewHeaderRow();
                 }
             },
@@ -868,7 +877,7 @@
                 if (this.replacerAlreadyInList(this.newReplacer.itemId)) {
                     this.newReplacerMessage = "Replacer already in list";
                 } else {
-                    this.newItemView.replacersTable.replacers.push(this.newReplacer);
+                    this.itemView.replacersTable.replacers.push(this.newReplacer);
                     this.clearNewReplacer();
                 }
             },
@@ -882,8 +891,8 @@
             },
 
             rowAlreadyInList(parameter) {
-                for (let i=0; i < this.newItemView.header.rows.length; i++) {
-                    if (this.newItemView.header.rows[i].parameter === parameter) {
+                for (let i=0; i < this.itemView.header.rows.length; i++) {
+                    if (this.itemView.header.rows[i].parameter === parameter) {
                         return true;
                     }
                 }
@@ -900,8 +909,8 @@
             },
 
             replacerAlreadyInList(id) {
-                for (let i=0; i < this.newItemView.replacersTable.replacers.length; i++) {
-                    if (this.newItemView.replacersTable.replacers[i].itemId === id) {
+                for (let i=0; i < this.itemView.replacersTable.replacers.length; i++) {
+                    if (this.itemView.replacersTable.replacers[i].itemId === id) {
                         return true;
                     }
                 }
@@ -929,9 +938,9 @@
                 return this.isInArray(replacer.itemId, this.itemView.ratedItems);
             },
 
-            isInArray(id, array) {
+            isInArray(element, array) {
                 for (let i=0; i < array.length; i++) {
-                    if (array[i] === id) {
+                    if (array[i] === element) {
                         return true;
                     }
                 }
@@ -939,7 +948,7 @@
             },
 
             removeRowFromHeader(row) {
-                this.removeFromArray(row, this.newItemView.header.rows);
+                this.removeFromArray(row, this.itemView.header.rows);
             },
 
             removePartFromList(part, array) {
@@ -950,7 +959,7 @@
             },
 
             removeReplacerFromList(replacer) {
-                this.removeFromArray(replacer, this.newItemView.replacersTable.replacers);
+                this.removeFromArray(replacer, this.itemView.replacersTable.replacers);
             },
 
             removeFromArray(element, array) {
@@ -958,12 +967,12 @@
             },
 
             getTable(category) {
-                for (let i=0; i < this.newItemView.partsTable.tables.length; i++) {
-                    if (this.newItemView.partsTable.tables[i].name === category) {
-                        return this.newItemView.partsTable.tables[i];
+                for (let i=0; i < this.itemView.partsTable.tables.length; i++) {
+                    if (this.itemView.partsTable.tables[i].name === category) {
+                        return this.itemView.partsTable.tables[i];
                     }
                 }
-                return this.newItemView.partsTable;
+                return this.itemView.partsTable;
             },
 
             partSelectOnChange() {
@@ -985,7 +994,6 @@
 
             edit() {
                 this.isEditMode = true;
-                this.newItemView = this.itemView;
             },
 
             cancel() {
@@ -1064,7 +1072,7 @@
             },
 
             save() {
-                this.update(this.newItemView.itemId);
+                this.update(this.itemView.itemId);
             },
 
             isPartsTitleVisible() {
