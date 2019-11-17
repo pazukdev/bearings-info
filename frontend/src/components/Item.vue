@@ -177,14 +177,14 @@
 
             <table id="item-image" v-if="isViewWithImage()">
                 <tbody>
-                <tr v-if="!isInArray('imgView removed', itemView.messages)">
+                <tr v-if="!messagesContain('img removed')">
                     <td>
                         <div class="image-preview">
-                            <imgView class="preview" :src="itemView.imgData">
+                            <img class="preview" :src="itemView.imgData">
                         </div>
                     </td>
                 </tr>
-                <tr v-if="isEditMode && !isInArray('imgView removed', itemView.messages)">
+                <tr v-if="isEditMode && itemView.defaultImg && !messagesContain('img removed')">
                     <td>
                         <button type="button" @click="removeImg()">
                             {{"Remove image"}}
@@ -681,8 +681,7 @@
                     this.categoryMessage = "Category not specified";
                 } else if (this.newItemName === "") {
                     this.newItemNameMessage = "Item name not specified"
-                } else if (false) {
-                    //this.sameItemNameExistsInCategory(this.newItemCategory, this.newItemName)
+                } else if (this.sameItemNameExistsInCategory(this.newItemCategory, this.newItemName)) {
                     this.newItemNameMessage = "Item with this name already exists"
                 } else {
                     this.$store.dispatch("setLoadingState", true);
@@ -795,8 +794,8 @@
                         return;
                     }
                     this.fileUploadMessage = "";
-                    this.removeFromArray("imgView removed", this.itemView.messages);
-                    this.itemView.messages.push("imgView uploaded");
+                    this.removeFromArray("img removed", this.itemView.messages);
+                    this.itemView.messages.push("img uploaded");
                     let reader = new FileReader();
                     reader.onload = (e) => {
                         this.itemView.imgData = e.target.result;
@@ -806,7 +805,7 @@
             },
 
             removeImg() {
-                this.itemView.messages.push("imgView removed");
+                this.itemView.messages.push("img removed");
             },
 
             isShowPartsTableHeader() {
@@ -1193,6 +1192,10 @@
 
             isViewWithImage() {
                 return this.itemView.imgData !== '-';
+            },
+
+            messagesContain(message) {
+                return this.isInArray(message, this.itemView.messages);
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.pazukdev.backend.dto.factory;
 
+import com.pazukdev.backend.dto.ImgViewData;
 import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.HeaderTableRow;
@@ -136,10 +137,12 @@ public class ItemViewFactory {
         final List<Item> sameCategoryItems = itemService.find(item.getCategory(), allItems);
         final String tableName = "Parts";
         final String itemCategory = item.getCategory();
+        final ImgViewData imgViewData = ImgUtil.getImgViewData(item);
 
         itemView.setSearchEnabled(true);
         itemView.setCategory(itemCategory);
-        itemView.setImgData(ImgUtil.getItemImgData(item));
+        itemView.setDefaultImg(imgViewData.isDefaultImg());
+        itemView.setImgData(imgViewData.getImgData());
         itemView.setHeader(createHeader(item, itemCategory, itemService));
         itemView.setPartsTable(createPartsTable(item, tableName, language, itemService));
         itemView.setReplacersTable(createReplacersTable(item, itemService.getUserService()));

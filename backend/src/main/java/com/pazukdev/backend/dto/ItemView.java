@@ -24,6 +24,7 @@ public class ItemView extends AbstractDto {
     private boolean newItem;
     private boolean addToWishList;
     private boolean hardDelete = false;
+    private boolean defaultImg = true;
     private List<String> messages = new ArrayList<>();
     private NestedItemDto userData;
     private String imgData = "-";
