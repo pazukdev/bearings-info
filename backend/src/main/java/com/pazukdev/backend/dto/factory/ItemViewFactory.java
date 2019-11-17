@@ -1,6 +1,7 @@
 package com.pazukdev.backend.dto.factory;
 
 import com.pazukdev.backend.dto.ImgViewData;
+import com.pazukdev.backend.dto.ItemData;
 import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.HeaderTableRow;
@@ -22,6 +23,7 @@ import static com.pazukdev.backend.util.NestedItemUtil.createPossibleParts;
 import static com.pazukdev.backend.util.NestedItemUtil.createReplacerDtos;
 import static com.pazukdev.backend.util.TableUtil.*;
 import static com.pazukdev.backend.util.TranslatorUtil.translate;
+import static com.pazukdev.backend.util.TranslatorUtil.translateToEnglish;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -75,7 +77,7 @@ public class ItemViewFactory {
         return itemView;
     }
 
-    public ItemView createNewItemView(String category,
+    public ItemView createNewItemView(ItemData category,
                                       String name,
                                       final String userName,
                                       final String userLanguage) {
@@ -86,14 +88,17 @@ public class ItemViewFactory {
     }
 
     private Item createNewItem(String name,
-                               String category,
+                               final ItemData categoryData,
                                final String userName,
                                final String userLanguage) {
         final UserEntity creator = itemService.getUserService().findByName(userName);
 
+        String category;
         if (!userLanguage.equals("en")) {
             name = translate(userLanguage, "en", name, true);
-            category = translate(userLanguage, "en", category, true);
+            category = translateToEnglish(userLanguage, categoryData);
+        } else {
+            category = categoryData.getName();
         }
 
         final Item item = new Item();
@@ -215,14 +220,12 @@ public class ItemViewFactory {
                                      final PartsTable table) {
         final HeaderTableRow row = HeaderTableRow.create(parameter, String.valueOf(size));
         final HeaderTable header = HeaderTable.createSingleRowTable(tableName, row);
-        final Set<String> categories = itemService.findAllCategories();
-        final List<String> translatedCategories = new ArrayList<>(categories);
-        translatedCategories.sort(String::compareTo);
+        final List<ItemData> categories = ItemData.findAllCategories(itemService);
 
         itemView.setHeader(header);
         itemView.setPartsTable(table);
         itemView.setReplacersTable(ReplacersTable.createStub());
-        itemView.setCategories(translatedCategories);
+        itemView.setAllCategories(categories);
         return itemView;
     }
 

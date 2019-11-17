@@ -4,9 +4,9 @@
             {{$t("loading") + "..."}}
         </div>
         <div v-if="!isLoading()">
-            <div style="text-align: left">
-                {{itemView.messages}}<br><br>
-            </div>
+<!--            <div style="text-align: left">-->
+<!--                {{itemView.messages}}<br><br>-->
+<!--            </div>-->
 
             <HeaderMenu :user-data="itemView.userData"
                         :guest="isGuest()"
@@ -63,11 +63,11 @@
                                     <input type="text"
                                            list="categories"
                                            @change="categorySelectOnChange()"
-                                           v-model="newItemCategory"/>
+                                           v-model="newItemCategory.localizedName"/>
                                     <datalist id="categories">
-                                        <option v-for="category in itemView.categories"
-                                                v-bind:value="category">
-                                            {{category}}
+                                        <option v-for="categoryData in itemView.allCategories"
+                                                v-bind:value="categoryData">
+                                            {{categoryData.localizedName}}
                                         </option>
                                     </datalist>
                                 </td>
@@ -186,7 +186,7 @@
                 </tr>
                 <tr v-if="isEditMode && itemView.defaultImg && !messagesContain('img removed')">
                     <td>
-                        <button type="button" @click="removeImg()">
+                        <button type="button" @click="removeImg()" style="width: initial; background: red">
                             {{"Remove image"}}
                         </button>
                     </td>
@@ -487,7 +487,10 @@
                 text: "",
                 imgData: "",
                 isEditMode: false,
-                newItemCategory: "",
+                newItemCategory: {
+                    name: "",
+                    localizedName: ""
+                },
                 newItemName: "",
                 newHeaderRowMessage: "",
                 newPartMessage: "",

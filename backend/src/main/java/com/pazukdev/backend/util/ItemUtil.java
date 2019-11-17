@@ -405,7 +405,6 @@ public class ItemUtil {
             ids.add(item.getId());
         }
         return ids;
-
     }
 
 }

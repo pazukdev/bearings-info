@@ -1,5 +1,6 @@
 package com.pazukdev.backend.controller;
 
+import com.pazukdev.backend.dto.ItemData;
 import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.service.ItemService;
 import io.swagger.annotations.Api;
@@ -23,29 +24,29 @@ public class ItemController {
     @GetMapping("/get-view/{id}/{userName}/{language}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get item")
-    public ItemView getView(@PathVariable final Long id,
-                            @PathVariable final String userName,
-                            @PathVariable final String language)  {
+    public ItemView get(@PathVariable final Long id,
+                        @PathVariable final String userName,
+                        @PathVariable final String language)  {
         return service.createItemView(id, userName, language);
     }
 
-    @PostMapping("/create-view/{category}/{name}/{userName}/{language}")
+    @PostMapping("/create-view/{name}/{userName}/{language}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new item")
-    public ItemView createView(@PathVariable final String category,
-                               @PathVariable final String name,
-                               @PathVariable final String userName,
-                               @PathVariable final String language) {
+    public ItemView create(@PathVariable final String name,
+                           @PathVariable final String userName,
+                           @PathVariable final String language,
+                           @RequestBody final ItemData category) {
         return service.createNewItemView(category, name, userName, language);
     }
 
     @PutMapping("/update-view/{id}/{userName}/{language}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update item")
-    public ItemView updateView(@PathVariable final Long id,
-                               @PathVariable String userName,
-                               @PathVariable String language,
-                               @RequestBody final ItemView itemView) {
+    public ItemView update(@PathVariable final Long id,
+                           @PathVariable String userName,
+                           @PathVariable String language,
+                           @RequestBody final ItemView itemView) {
         return service.updateItemView(id, userName, language, itemView);
     }
 

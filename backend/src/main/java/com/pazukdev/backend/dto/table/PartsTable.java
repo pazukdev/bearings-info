@@ -35,9 +35,6 @@ public class PartsTable extends AbstractDto {
                                     String[] header,
                                     final Set<String> partCategories,
                                     final String userLanguage) {
-//        if (header != null) {
-//            header = TranslatorUtil.translate(header, "en", userLanguage);
-//        }
 
         final PartsTable partsTable = new PartsTable();
         partsTable.setName(tableName);

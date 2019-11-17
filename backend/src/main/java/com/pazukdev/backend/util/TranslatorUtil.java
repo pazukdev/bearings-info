@@ -1,5 +1,6 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.dto.ItemData;
 import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
@@ -37,17 +38,26 @@ public class TranslatorUtil {
         final ReplacersTable replacersTable = itemView.getReplacersTable();
         final List<NestedItemDto> possibleParts = itemView.getPossibleParts();
         final List<NestedItemDto> replacers = itemView.getReplacers();
-        final List<String> categories = itemView.getCategories();
+        final List<ItemData> categories = itemView.getAllCategories();
 
 //        category = translate(languageFrom, languageTo, category, addToDictionary);
         header = translate(languageFrom, languageTo, header, addToDictionary);
         translate(languageFrom, languageTo, partsTable, addToDictionary);
-        translate(languageFrom, languageTo, categories, addToDictionary);
 
         //itemView.setCategory(category);
         itemView.setHeader(header);
         itemView.setPartsTable(partsTable);
-        itemView.setCategories(categories);
+
+        if (!languageTo.equals("en")) {
+            for (final ItemData categoryData : categories) {
+                final String localizedName = getValueFromDictionary(categoryData.getName(), languageTo);
+                if (localizedName != null) {
+                    categoryData.setLocalizedName(localizedName);
+                }
+            }
+        }
+        categories.sort(Comparator.comparing(ItemData::getLocalizedName));
+        itemView.setAllCategories(categories);
 
         String s = "s";
     }
@@ -161,18 +171,14 @@ public class TranslatorUtil {
         }
 
         if (languageFrom.equals("en")) {
-            return translateFromEnglish(languageTo, text);
+            String translated = getValueFromDictionary(text, languageTo);
+            if (translated != null) {
+                return translated;
+            } else {
+                return text;
+            }
         } else {
             return translateToEnglish(languageFrom, text, addToDictionary);
-        }
-    }
-
-    private static String translateFromEnglish(final String languageTo, final String text) {
-        String translated = getValueFromDictionary(text, languageTo);
-        if (translated != null) {
-            return translated;
-        } else {
-            return text;
         }
     }
 
@@ -204,6 +210,25 @@ public class TranslatorUtil {
             }
         }
         return translated;
+    }
+
+    public static String translateToEnglish(final String languageFrom, final ItemData itemData) {
+        String nameInEnglish = itemData.getName();
+        if (nameInEnglish != null) {
+            return nameInEnglish;
+        } else {
+            final String localizedName = itemData.getLocalizedName();
+            nameInEnglish = getValueFromDictionary(localizedName, languageFrom);
+            if (nameInEnglish == null) {
+                try {
+                    nameInEnglish = translateWithGoogle(languageFrom, "en", localizedName);
+                    addToDictionary(localizedName, nameInEnglish, languageFrom);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return nameInEnglish;
     }
 
     public static boolean isInEnglish(final String text) {
