@@ -2,7 +2,6 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.converter.ReplacerConverter;
-import com.pazukdev.backend.dto.ItemData;
 import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.dto.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.dto.TransitiveItemDto;
@@ -102,7 +101,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public ItemView createNewItemView(final ItemData category,
+    public ItemView createNewItemView(final String category,
                                       final String name,
                                       final String userName,
                                       final String userLanguage) {

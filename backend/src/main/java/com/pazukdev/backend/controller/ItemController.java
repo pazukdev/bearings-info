@@ -1,6 +1,5 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dto.ItemData;
 import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.service.ItemService;
 import io.swagger.annotations.Api;
@@ -30,13 +29,13 @@ public class ItemController {
         return service.createItemView(id, userName, language);
     }
 
-    @PostMapping("/create-view/{name}/{userName}/{language}")
+    @PostMapping("/create-view/{category}/{name}/{userName}/{language}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new item")
-    public ItemView create(@PathVariable final String name,
+    public ItemView create(@PathVariable final String category,
+                           @PathVariable final String name,
                            @PathVariable final String userName,
-                           @PathVariable final String language,
-                           @RequestBody final ItemData category) {
+                           @PathVariable final String language) {
         return service.createNewItemView(category, name, userName, language);
     }
 

@@ -1,11 +1,10 @@
-ru;120 km / h;120 км/ч
 ru;Bearing;Подшипник
 ru;Created by;Добавлено пользователем
 ru;Dnepr MT-9;Днепр МТ-9
 ru;Edit;Редактировать
 ru;Engine;Двигатель
 ru;Final drive;Редуктор
-ru;Frame and wheels;Frame and wheels
+ru;Front fork;Передняя вилка
 ru;Fuel capacity, l;Объем бензобака, л
 ru;G-11A;Г-11А
 ru;Gearbox;Gearbox
@@ -15,7 +14,8 @@ ru;IMZ 8103;ИМЗ 8103
 ru;IMZ;ИМЗ
 ru;KMZ;КМЗ
 ru;Location;Расположение
-ru;Lock ring;Lock ring
+ru;M63 Ural-2; М63 Урал-2
+ru;MG-10;МГ-10
 ru;Manufacturer;Производитель
 ru;Max speed, km/h;Макс. скорость, км/ч
 ru;Model;Модель
@@ -25,19 +25,17 @@ ru;Motorcycle Ural M67;Мотоцикл Урал М67
 ru;Motorcycle catalogue;Модельный ряд
 ru;Motorcycle;Мотоцикл
 ru;Name;Название
-ru;Oil;Oil
 ru;Partnumber;Наименование
 ru;Parts;Агрегаты и детали
 ru;Pcs/Vol;Кол-во/объем
+ru;Pendulum type;Маятникового типа
 ru;Production;Годы пр-ва
 ru;Rating;Рейтинг
+ru;Rear suspension;Задняя подвеска
 ru;Role;Роль
-ru;Screw;Screw
-ru;Seal;Seal
-ru;Sidecar reduction drive;Sidecar reduction drive
-ru;Spark plug;Spark plug
-ru;Universal joint cross;Universal joint cross
-ru;Universal joint;Universal joint
+ru;Telescopic;Телескопическая
+ru;Ural M-63;Урал М-63
+ru;Ural M63;Урал М63
 ru;Username;Имя пользователя
 ru;Weight, kg;Вес, кг
 ru;Wheel;Wheel

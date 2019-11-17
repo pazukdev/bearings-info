@@ -36,7 +36,7 @@ public class ItemView extends AbstractDto {
     private Long itemId;
     private List<NestedItemDto> possibleParts = new ArrayList<>();
     private List<NestedItemDto> replacers = new ArrayList<>();
-    private List<ItemData> allCategories = new ArrayList<>();
+    private List<String> allCategories = new ArrayList<>();
     private Set<Long> idsToRemove = new HashSet<>();
     private Long creatorId;
     private String creatorName;

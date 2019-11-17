@@ -38,25 +38,18 @@ public class TranslatorUtil {
         final ReplacersTable replacersTable = itemView.getReplacersTable();
         final List<NestedItemDto> possibleParts = itemView.getPossibleParts();
         final List<NestedItemDto> replacers = itemView.getReplacers();
-        final List<ItemData> categories = itemView.getAllCategories();
+        final List<String> categories = itemView.getAllCategories();
 
 //        category = translate(languageFrom, languageTo, category, addToDictionary);
         header = translate(languageFrom, languageTo, header, addToDictionary);
         translate(languageFrom, languageTo, partsTable, addToDictionary);
+        translate(languageFrom, languageTo, categories, addToDictionary);
 
         //itemView.setCategory(category);
         itemView.setHeader(header);
         itemView.setPartsTable(partsTable);
 
-        if (!languageTo.equals("en")) {
-            for (final ItemData categoryData : categories) {
-                final String localizedName = getValueFromDictionary(categoryData.getName(), languageTo);
-                if (localizedName != null) {
-                    categoryData.setLocalizedName(localizedName);
-                }
-            }
-        }
-        categories.sort(Comparator.comparing(ItemData::getLocalizedName));
+        categories.sort(String::compareTo);
         itemView.setAllCategories(categories);
 
         String s = "s";
@@ -185,6 +178,13 @@ public class TranslatorUtil {
     private static String translateToEnglish(final String languageFrom,
                                              final String text,
                                              final boolean addToDictionary) {
+        if (languageFrom.equals("ru") && !containsCyrillic(text)) {
+            return text;
+        }
+
+        if (text.matches("[0-9]+")) {
+            return text;
+        }
 
         String translated = getValueFromDictionary(text, "en");
         if (translated != null) {

@@ -1,7 +1,6 @@
 package com.pazukdev.backend.dto.factory;
 
 import com.pazukdev.backend.dto.ImgViewData;
-import com.pazukdev.backend.dto.ItemData;
 import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.HeaderTableRow;
@@ -23,7 +22,6 @@ import static com.pazukdev.backend.util.NestedItemUtil.createPossibleParts;
 import static com.pazukdev.backend.util.NestedItemUtil.createReplacerDtos;
 import static com.pazukdev.backend.util.TableUtil.*;
 import static com.pazukdev.backend.util.TranslatorUtil.translate;
-import static com.pazukdev.backend.util.TranslatorUtil.translateToEnglish;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -77,8 +75,8 @@ public class ItemViewFactory {
         return itemView;
     }
 
-    public ItemView createNewItemView(ItemData category,
-                                      String name,
+    public ItemView createNewItemView(final String category,
+                                      final String name,
                                       final String userName,
                                       final String userLanguage) {
         final Item item = createNewItem(name, category, userName, userLanguage);
@@ -88,17 +86,14 @@ public class ItemViewFactory {
     }
 
     private Item createNewItem(String name,
-                               final ItemData categoryData,
+                               String category,
                                final String userName,
                                final String userLanguage) {
         final UserEntity creator = itemService.getUserService().findByName(userName);
 
-        String category;
         if (!userLanguage.equals("en")) {
             name = translate(userLanguage, "en", name, true);
-            category = translateToEnglish(userLanguage, categoryData);
-        } else {
-            category = categoryData.getName();
+            category = translate(userLanguage, "en", category, true);
         }
 
         final Item item = new Item();
@@ -220,7 +215,7 @@ public class ItemViewFactory {
                                      final PartsTable table) {
         final HeaderTableRow row = HeaderTableRow.create(parameter, String.valueOf(size));
         final HeaderTable header = HeaderTable.createSingleRowTable(tableName, row);
-        final List<ItemData> categories = ItemData.findAllCategories(itemService);
+        final List<String> categories = new ArrayList<>(itemService.findAllCategories());
 
         itemView.setHeader(header);
         itemView.setPartsTable(table);
@@ -245,11 +240,15 @@ public class ItemViewFactory {
         if (itemView.isAddToWishList()) {
             ItemUtil.updateWishList(item, itemView, currentUser, itemService);
         } else {
-            final ItemView oldItemViewInEnglish;
+//            final ItemView oldItemViewInEnglish;
+//            if (!userLanguage.equals("en")) {
+//                oldItemViewInEnglish = createItemView(itemId, currentUser.getName(), "en");
+//                oldItemViewInEnglish.setImgData("-");
+//                itemView.setOldItemViewInEnglish(oldItemViewInEnglish);
+//            }
+
             if (!userLanguage.equals("en")) {
-                oldItemViewInEnglish = createItemView(itemId, currentUser.getName(), "en");
-                oldItemViewInEnglish.setImgData("-");
-                itemView.setOldItemViewInEnglish(oldItemViewInEnglish);
+                translate(userLanguage, "en", itemView, true);
             }
 
             final Map<String, String> headerMap = TableUtil.createHeaderMap(itemView.getHeader());

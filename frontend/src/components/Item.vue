@@ -63,11 +63,11 @@
                                     <input type="text"
                                            list="categories"
                                            @change="categorySelectOnChange()"
-                                           v-model="newItemCategory.localizedName"/>
+                                           v-model="newItemCategory"/>
                                     <datalist id="categories">
-                                        <option v-for="categoryData in itemView.allCategories"
-                                                v-bind:value="categoryData">
-                                            {{categoryData.localizedName}}
+                                        <option v-for="category in itemView.allCategories"
+                                                v-bind:value="category">
+                                            {{category}}
                                         </option>
                                     </datalist>
                                 </td>
@@ -487,10 +487,7 @@
                 text: "",
                 imgData: "",
                 isEditMode: false,
-                newItemCategory: {
-                    name: "",
-                    localizedName: ""
-                },
+                newItemCategory: "",
                 newItemName: "",
                 newHeaderRowMessage: "",
                 newPartMessage: "",
