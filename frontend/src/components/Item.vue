@@ -5,7 +5,7 @@
         </div>
         <div v-if="!isLoading()">
             <div style="text-align: left">
-                {{itemView.partsTable.tables[0]}}<br><br>
+<!--                {{itemView.partsTable.tables[0]}}<br><br>-->
 <!--                {{itemView.replacersTable}}<br><br>-->
 <!--                {{itemView.possibleParts}}<br><br>-->
             </div>
@@ -222,7 +222,7 @@
                 <tbody>
                 <tr v-if="isPartsTitleVisible()">
                     <td>
-                        {{itemView.partsTable.name}}
+                        {{itemView.partsTable.localizedName}}
                     </td>
                 </tr>
                 <tr v-if="isShowPartsTableHeader()">
@@ -281,7 +281,7 @@
                                         {{part.quantity}}
                                     </div>
                                     <div v-if="!isEditMode && isMotorcycleCatalogueView()" class="parts-right-column-text">
-                                        {{part.comment}}
+                                        {{part.localizedComment}}
                                     </div>
                                     <input v-if="isEditMode && isOrdinaryItemView()"
                                            v-model="part.quantity" type="text"/>
@@ -350,7 +350,7 @@
                 <tbody>
                 <tr>
                     <td colspan="6">
-                        {{itemView.replacersTable.name}}
+                        {{itemView.replacersTable.localizedName}}
                     </td>
                 </tr>
                 <tr>
@@ -501,6 +501,7 @@
                 newHeaderRow: {
                     id: "",
                     name: "",
+                    localizedName: "",
                     status: "",
                     parameter: "",
                     value: "",
@@ -510,12 +511,14 @@
                 newPart: {
                     id: "",
                     name: "",
+                    localizedName: "",
                     itemId: "",
                     itemName: "",
                     itemCategory: "",
                     buttonText: "",
                     selectText: "",
                     comment: "",
+                    localizedComment: "",
                     location: "",
                     quantity: "",
                     status: "",
@@ -525,12 +528,14 @@
                 newReplacer: {
                     id: "",
                     name: "",
+                    localizedName: "",
                     itemId: "",
                     itemName: "",
                     itemCategory: "",
                     buttonText: "",
                     selectText: "",
                     comment: "",
+                    localizedComment: "",
                     location: "",
                     quantity: "",
                     status: "",

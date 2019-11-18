@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class TranslationUtilTest {
 
@@ -33,6 +35,25 @@ public class TranslationUtilTest {
     @Test
     public void test3() {
         System.out.println(TranslatorUtil.isInEnglish("abц"));
+    }
+
+    @Test
+    public void test4() {
+        String text = "a b c";
+        String textToSearchInDictionary = "b";
+        List<String> textAsList = Arrays.asList(text.split("b"));
+        String textBefore = "";
+        String textAfter = "";
+
+        if (text.contains(" " + textToSearchInDictionary)) {
+            textBefore = textAsList.get(0).trim();
+        }
+        if (text.contains(textToSearchInDictionary + " ")) {
+            textAfter = textAsList.get(textAsList.size() - 1).trim();
+        }
+
+        System.out.println(textBefore);
+        System.out.println(textAfter);
     }
 
     @Test

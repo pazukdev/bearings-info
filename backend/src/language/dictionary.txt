@@ -9,8 +9,8 @@ ru;Final drive;Редуктор
 ru;Front fork;Передняя вилка
 ru;Fuel capacity, l;Объем бензобака, л
 ru;G-11A;Г-11А
-ru;Gearbox;Gearbox
-ru;Generator;Generator
+ru;Gearbox;Коробка передач
+ru;Generator;Генератор
 ru;IMZ / KMZ;ИМЗ / КМЗ
 ru;IMZ 8103;ИМЗ 8103
 ru;IMZ;ИМЗ
@@ -26,8 +26,6 @@ ru;MT-9 type engine;Двигатель MT-9 type
 ru;Manufacturer;Производитель
 ru;Max speed, km/h;Макс. скорость, км/ч
 ru;Model;Модель
-ru;Motorcycle Cat;Motorcycle Cat1
-ru;Motorcycle KMZ 3;Мотоцикл КМЗ 3
 ru;Motorcycle M63 Ural-2;Мотоцикл  М63 Урал-2
 ru;Motorcycle M66;Мотоцикл M66
 ru;Motorcycle Ural M67;Мотоцикл Урал М67
@@ -36,6 +34,7 @@ ru;Motorcycle;Мотоцикл
 ru;Name;Название
 ru;Partnumber;Наименование
 ru;Parts;Агрегаты и детали
+ru;Replacers;Заменители
 ru;Pcs/Vol;Кол-во/объем
 ru;Pendulum type;Маятникового типа
 ru;Production;Годы пр-ва
@@ -43,11 +42,13 @@ ru;Rating;Рейтинг
 ru;Rear suspension;Задняя подвеска
 ru;Role;Роль
 ru;Telescopic;Телескопическая
-ru;Title - 207;Название - 207
 ru;Ural M-63;Урал М-63
 ru;Ural M63;Урал М63
 ru;Username;Имя пользователя
 ru;Weight, kg;Вес, кг
-ru;Wheel;Wheel
+ru;Wheel;Колесо
 ru;Width;Ширина
 ru;Years of production;Годы пр-ва
+ru;- 20W-50 Synthetic;- 20W-50 Синтетика
+ru;- Gear oil for gearbox;- Трансмиссионное масло для КПП
+ru;- IMZ M-72N;ИМЗ М-72Н

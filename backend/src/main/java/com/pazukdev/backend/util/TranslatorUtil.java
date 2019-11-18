@@ -46,16 +46,17 @@ public class TranslatorUtil {
         header = translate(languageFrom, languageTo, header, addToDictionary, itemService);
         translate(languageFrom, languageTo, partsTable, addToDictionary, itemService);
         translateNestedItemDtoList(languageFrom, languageTo, possibleParts, addToDictionary, itemService);
+        translateNestedItemDtoList(languageFrom, languageTo, replacers, addToDictionary, itemService);
         translate(languageFrom, languageTo, categories, addToDictionary, itemService);
+        translate(languageFrom, languageTo, replacersTable, addToDictionary, itemService);
 
         //itemView.setCategory(category);
         itemView.setHeader(header);
         itemView.setPartsTable(partsTable);
-
-        categories.sort(String::compareTo);
+        itemView.setReplacersTable(replacersTable);
+        itemView.setPossibleParts(possibleParts);
+        itemView.setReplacers(replacers);
         itemView.setAllCategories(categories);
-
-        String s = "s";
     }
 
 //    public static void translate(final String languageFrom,
@@ -99,6 +100,16 @@ public class TranslatorUtil {
         }
     }
 
+    private static void translate(final String languageFrom,
+                                  final String languageTo,
+                                  final ReplacersTable replacersTable,
+                                  final boolean addToDictionary,
+                                  final ItemService itemService) {
+        replacersTable.setLocalizedName(translate(languageFrom, languageTo, replacersTable.getName(), addToDictionary, false, itemService));
+        final List<NestedItemDto> replacers = replacersTable.getReplacers();
+        translateNestedItemDtoList(languageFrom, languageTo, replacers, addToDictionary, itemService);
+    }
+
     private static void translateNestedItemDtoList(final String languageFrom,
                                                    final String languageTo,
                                                    final List<NestedItemDto> dtos,
@@ -107,6 +118,7 @@ public class TranslatorUtil {
         for (final NestedItemDto dto : dtos) {
             translate(languageFrom, languageTo, dto, addToDictionary, itemService);
         }
+        dtos.sort(Comparator.comparing(NestedItemDto::getSelectText));
     }
 
     private static void translate(final String languageFrom,
@@ -119,6 +131,7 @@ public class TranslatorUtil {
         dto.setButtonText(translate(languageFrom, languageTo, dto.getButtonText(), addToDictionary, true, itemService));
         dto.setSelectText(translate(languageFrom, languageTo, dto.getSelectText(), addToDictionary, true, itemService));
         dto.setLocation(translate(languageFrom, languageTo, dto.getLocation(), addToDictionary, false, itemService));
+        dto.setLocalizedComment(translate(languageFrom, languageTo, dto.getComment(), addToDictionary, true, itemService));
     }
 
     private static void translate(final String languageFrom,
@@ -145,6 +158,7 @@ public class TranslatorUtil {
         for (final String s : copy) {
             list.add(translate(languageFrom, languageTo, s, addToDictionary, false, itemService));
         }
+        list.sort(String::compareTo);
     }
 
     private static void translate(final String languageFrom,
@@ -164,7 +178,7 @@ public class TranslatorUtil {
                                    final String languageTo,
                                    final String text,
                                    final boolean addToDictionary,
-                                   final boolean cleverTranslate,
+                                   final boolean parseBeforeTranslate,
                                    final ItemService itemService) {
 
         if (text == null) {
@@ -178,8 +192,8 @@ public class TranslatorUtil {
         }
 
         if (languageFrom.equals("en")) {
-            if (cleverTranslate) {
-                final String translated = cleverTranslate(languageTo, text, itemService);
+            if (parseBeforeTranslate) {
+                final String translated = parseAndTranslate(languageTo, text, itemService);
                 if (!translated.equals("")) {
                     return translated;
                 }
@@ -233,55 +247,72 @@ public class TranslatorUtil {
         return translated;
     }
 
-    private static String cleverTranslate(final String languageTo,
-                                          final String text,
-                                          final ItemService itemService) {
+    private static String parseAndTranslate(final String languageTo,
+                                            final String text,
+                                            final ItemService itemService) {
+        if (true) { // parsing is turned off
+            return "";
+        }
+        
         if (text.equals("Motorcycle catalogue")) {
             return "";
         }
         String translated = "";
-        for (final String category : itemService.findAllCategories()) {
-            if (text.contains(category + " ")) {
-                String notCategoryTextPart = new ArrayList<>(Arrays.asList(text.split(category + " "))).get(1);
-                String translatedCategory = getValueFromDictionary(category, languageTo);
-                String translatedNotCategoryTextPart = getValueFromDictionary(notCategoryTextPart, languageTo);
-                if (translatedCategory != null) {
-                    translated += translatedCategory;
+
+        for (final String textToSearchInDictionary : getCheckList(itemService)) {
+            if (!text.contains(textToSearchInDictionary)) {
+                continue;
+            }
+
+            String foundInDictionary = getValueFromDictionary(textToSearchInDictionary, languageTo);
+            if (foundInDictionary == null) {
+                foundInDictionary = textToSearchInDictionary;
+            }
+
+            if (text.trim().equals(textToSearchInDictionary)) {
+                return foundInDictionary;
+            }
+
+            final List<String> textAsList = Arrays.asList(text.split(textToSearchInDictionary));
+            String textBefore = "";
+            String textAfter = "";
+
+            if (text.contains(" " + textToSearchInDictionary)) {
+                textBefore = textAsList.get(0).trim();
+            }
+            if (text.contains(textToSearchInDictionary + " ")) {
+                textAfter = textAsList.get(textAsList.size() - 1).trim();
+            }
+
+            if (!textBefore.equals("")) {
+                textBefore = getValueFromDictionary(textBefore.trim(), languageTo);
+                if (textBefore == null) {
+                    textBefore = "";
                 } else {
-                    translated += category;
-                }
-                translated += " ";
-                if (translatedNotCategoryTextPart != null) {
-                    translated += translatedNotCategoryTextPart;
-                } else {
-                    translated += notCategoryTextPart;
-                }
-            } else if (text.contains(" " + category + " ")) {
-                String notCategoryTextPart0 = new ArrayList<>(Arrays.asList(text.split(" " + category + " "))).get(0);
-                String notCategoryTextPart2 = new ArrayList<>(Arrays.asList(text.split(" " + category + " "))).get(2);
-                String translatedCategory = getValueFromDictionary(category, languageTo);
-                String translatedNotCategoryTextPart0 = getValueFromDictionary(notCategoryTextPart0, languageTo);
-                String translatedNotCategoryTextPart2 = getValueFromDictionary(notCategoryTextPart2, languageTo);
-                if (translatedNotCategoryTextPart0 != null) {
-                    translated += translatedNotCategoryTextPart0;
-                } else {
-                    translated += notCategoryTextPart0;
-                }
-                translated += " ";
-                if (translatedCategory != null) {
-                    translated += translatedCategory;
-                } else {
-                    translated += category;
-                }
-                translated += " ";
-                if (translatedNotCategoryTextPart2 != null) {
-                    translated += translatedNotCategoryTextPart2;
-                } else {
-                    translated += notCategoryTextPart2;
+                    textBefore = textBefore + " ";
                 }
             }
+            if (!textAfter.equals("")) {
+                textAfter = getValueFromDictionary(textAfter.trim(), languageTo);
+                if (textAfter == null) {
+                    textAfter = "";
+                } else {
+                    textAfter = " " + textAfter;
+                }
+            }
+
+            translated = textBefore + foundInDictionary + textAfter;
         }
+
         return translated;
+    }
+
+    private static List<String> getCheckList(final ItemService itemService) {
+        final List<String> checkList = new ArrayList<>(itemService.findAllCategories());
+//        checkList.add("USSR");
+//        checkList.add("IMZ");
+//        checkList.add("KMZ");
+        return checkList;
     }
 
     public static String translateToEnglish(final String languageFrom, final ItemData itemData) {
@@ -335,6 +366,7 @@ public class TranslatorUtil {
     }
 
     private static String getValueFromDictionary(String value, final String language) {
+        value = value.trim();
         final Set<String> lines = FileUtil.getTxtFileLines(FileUtil.getDictionaryFilePath());
         for (final String line : lines) {
             if (language.equals("en")) {
