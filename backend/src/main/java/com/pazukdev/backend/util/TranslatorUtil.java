@@ -108,6 +108,7 @@ public class TranslatorUtil {
         replacersTable.setLocalizedName(translate(languageFrom, languageTo, replacersTable.getName(), addToDictionary, false, itemService));
         final List<NestedItemDto> replacers = replacersTable.getReplacers();
         translateNestedItemDtoList(languageFrom, languageTo, replacers, addToDictionary, itemService);
+        replacers.sort(Comparator.comparing(NestedItemDto::getRating).reversed());
     }
 
     private static void translateNestedItemDtoList(final String languageFrom,

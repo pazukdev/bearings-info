@@ -1,5 +1,4 @@
 ru;- Gear oil for gearbox;- Трансмиссионное масло для КПП
-ru;- KMZ M-72N;- КМЗ М-72Н
 ru;Bearing;Подшипник
 ru;Created by;Добавлено пользователем
 ru;Dnepr MT-9;Днепр МТ-9
@@ -18,6 +17,8 @@ ru;IMZ 8103;ИМЗ 8103
 ru;IMZ;ИМЗ
 ru;K-750 type engine;Двигатель K-750 type
 ru;K-750M type engine;Двигатель K-750M type
+ru;KMZ M-72N;КМЗ М-72Н
+ru;M-72N;М-72Н
 ru;KMZ;КМЗ
 ru;Location;Расположение
 ru;M63 Ural-2; М63 Урал-2
