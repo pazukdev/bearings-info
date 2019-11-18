@@ -7,6 +7,7 @@ import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.HeaderTableRow;
 import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.dto.table.ReplacersTable;
+import com.pazukdev.backend.service.ItemService;
 import org.json.JSONArray;
 
 import java.io.BufferedReader;
@@ -31,7 +32,8 @@ public class TranslatorUtil {
     public static void translate(final String languageFrom,
                                  final String languageTo,
                                  final ItemView itemView,
-                                 final boolean addToDictionary) {
+                                 final boolean addToDictionary,
+                                 final ItemService itemService) {
 //        String category = itemView.getCategory();
         HeaderTable header = itemView.getHeader();
         final PartsTable partsTable = itemView.getPartsTable();
@@ -41,9 +43,10 @@ public class TranslatorUtil {
         final List<String> categories = itemView.getAllCategories();
 
 //        category = translate(languageFrom, languageTo, category, addToDictionary);
-        header = translate(languageFrom, languageTo, header, addToDictionary);
-        translate(languageFrom, languageTo, partsTable, addToDictionary);
-        translate(languageFrom, languageTo, categories, addToDictionary);
+        header = translate(languageFrom, languageTo, header, addToDictionary, itemService);
+        translate(languageFrom, languageTo, partsTable, addToDictionary, itemService);
+        translateNestedItemDtoList(languageFrom, languageTo, possibleParts, addToDictionary, itemService);
+        translate(languageFrom, languageTo, categories, addToDictionary, itemService);
 
         //itemView.setCategory(category);
         itemView.setHeader(header);
@@ -66,61 +69,68 @@ public class TranslatorUtil {
     private static HeaderTable translate(final String languageFrom,
                                          final String languageTo,
                                          final HeaderTable headerTable,
-                                         final boolean addToDictionary) {
-        String name = translate(languageFrom, languageTo, headerTable.getName(), addToDictionary);
+                                         final boolean addToDictionary,
+                                         final ItemService itemService) {
+        String name = headerTable.getName();
+        name = translate(languageFrom, languageTo, name, addToDictionary, true, itemService);
         headerTable.setName(name);
 
         for (final HeaderTableRow row : headerTable.getRows()) {
-            row.setParameter(translate(languageFrom, languageTo, row.getParameter(), addToDictionary));
-            row.setValue(translate(languageFrom, languageTo, row.getValue(), addToDictionary));
+            row.setParameter(translate(languageFrom, languageTo, row.getParameter(), addToDictionary, false, itemService));
+            row.setValue(translate(languageFrom, languageTo, row.getValue(), addToDictionary, false, itemService));
         }
 
         return headerTable;
     }
 
     private static void translate(final String languageFrom,
-                                 final String languageTo,
-                                 final PartsTable partsTable,
-                                 final boolean addToDictionary) {
-        partsTable.setName(translate(languageFrom, languageTo, partsTable.getName(), addToDictionary));
+                                  final String languageTo,
+                                  final PartsTable partsTable,
+                                  final boolean addToDictionary,
+                                  final ItemService itemService) {
+        partsTable.setLocalizedName(translate(languageFrom, languageTo, partsTable.getName(), addToDictionary, false, itemService));
         String[] header = partsTable.getHeader();
-        translate(languageFrom, languageTo, header, addToDictionary);
+        translate(languageFrom, languageTo, header, addToDictionary, itemService);
         List<NestedItemDto> dtos = partsTable.getParts();
-        translateNestedItemDtoList(languageFrom, languageTo, dtos, addToDictionary);
+        translateNestedItemDtoList(languageFrom, languageTo, dtos, addToDictionary, itemService);
 
         for (final PartsTable child : partsTable.getTables()) {
-            translate(languageFrom, languageTo, child, addToDictionary);
+            translate(languageFrom, languageTo, child, addToDictionary, itemService);
         }
     }
 
     private static void translateNestedItemDtoList(final String languageFrom,
                                                    final String languageTo,
                                                    final List<NestedItemDto> dtos,
-                                                   final boolean addToDictionary) {
+                                                   final boolean addToDictionary,
+                                                   final ItemService itemService) {
         for (final NestedItemDto dto : dtos) {
-            translate(languageFrom, languageTo, dto, addToDictionary);
+            translate(languageFrom, languageTo, dto, addToDictionary, itemService);
         }
     }
 
     private static void translate(final String languageFrom,
                                   final String languageTo,
                                   final NestedItemDto dto,
-                                  final boolean addToDictionary) {
-        dto.setName(translate(languageFrom, languageTo, dto.getName(), addToDictionary));
-        dto.setItemCategory(translate(languageFrom, languageTo, dto.getItemCategory(), addToDictionary));
-        dto.setButtonText(translate(languageFrom, languageTo, dto.getButtonText(), addToDictionary));
-        dto.setLocation(translate(languageFrom, languageTo, dto.getLocation(), addToDictionary));
+                                  final boolean addToDictionary,
+                                  final ItemService itemService) {
+//        dto.setLocalizedName(translate(languageFrom, languageTo, dto.getName(), addToDictionary, false, itemService));
+//        dto.setItemCategory(translate(languageFrom, languageTo, dto.getItemCategory(), addToDictionary, false, itemService));
+        dto.setButtonText(translate(languageFrom, languageTo, dto.getButtonText(), addToDictionary, true, itemService));
+        dto.setSelectText(translate(languageFrom, languageTo, dto.getSelectText(), addToDictionary, true, itemService));
+        dto.setLocation(translate(languageFrom, languageTo, dto.getLocation(), addToDictionary, false, itemService));
     }
 
     private static void translate(final String languageFrom,
                                   final String languageTo,
                                   final Map<String, String> map,
-                                  final boolean addToDictionary) {
+                                  final boolean addToDictionary,
+                                  final ItemService itemService) {
         final Map<String, String> copy = new HashMap<>(map);
         map.clear();
         for (final Map.Entry<String, String> entry : copy.entrySet()) {
-            final String key = translate(languageFrom, languageTo, entry.getKey(), addToDictionary);
-            final String value = translate(languageFrom, languageTo, entry.getValue(), addToDictionary);
+            final String key = translate(languageFrom, languageTo, entry.getKey(), addToDictionary, false, itemService);
+            final String value = translate(languageFrom, languageTo, entry.getValue(), addToDictionary, false, itemService);
             map.put(key, value);
         }
     }
@@ -128,30 +138,34 @@ public class TranslatorUtil {
     private static void translate(final String languageFrom,
                                   final String languageTo,
                                   final List<String> list,
-                                  final boolean addToDictionary) {
+                                  final boolean addToDictionary,
+                                  final ItemService itemService) {
         final List<String> copy = new ArrayList<>(list);
         list.clear();
         for (final String s : copy) {
-            list.add(translate(languageFrom, languageTo, s, addToDictionary));
+            list.add(translate(languageFrom, languageTo, s, addToDictionary, false, itemService));
         }
     }
 
     private static void translate(final String languageFrom,
                                   final String languageTo,
                                   final String[] array,
-                                  final boolean addToDictionary) {
+                                  final boolean addToDictionary,
+                                  final ItemService itemService) {
         if (array == null) {
             return;
         }
         for (int i = 0; i < array.length; i++) {
-            array[i] = translate(languageFrom, languageTo, array[i], addToDictionary);
+            array[i] = translate(languageFrom, languageTo, array[i], addToDictionary, false, itemService);
         }
     }
 
     public static String translate(final String languageFrom,
                                    final String languageTo,
                                    final String text,
-                                   final boolean addToDictionary) {
+                                   final boolean addToDictionary,
+                                   final boolean cleverTranslate,
+                                   final ItemService itemService) {
 
         if (text == null) {
             return null;
@@ -164,7 +178,14 @@ public class TranslatorUtil {
         }
 
         if (languageFrom.equals("en")) {
-            String translated = getValueFromDictionary(text, languageTo);
+            if (cleverTranslate) {
+                final String translated = cleverTranslate(languageTo, text, itemService);
+                if (!translated.equals("")) {
+                    return translated;
+                }
+            }
+
+            final String translated = getValueFromDictionary(text, languageTo);
             if (translated != null) {
                 return translated;
             } else {
@@ -207,6 +228,57 @@ public class TranslatorUtil {
                 }
             } catch (final IOException e1) {
                 return text;
+            }
+        }
+        return translated;
+    }
+
+    private static String cleverTranslate(final String languageTo,
+                                          final String text,
+                                          final ItemService itemService) {
+        if (text.equals("Motorcycle catalogue")) {
+            return "";
+        }
+        String translated = "";
+        for (final String category : itemService.findAllCategories()) {
+            if (text.contains(category + " ")) {
+                String notCategoryTextPart = new ArrayList<>(Arrays.asList(text.split(category + " "))).get(1);
+                String translatedCategory = getValueFromDictionary(category, languageTo);
+                String translatedNotCategoryTextPart = getValueFromDictionary(notCategoryTextPart, languageTo);
+                if (translatedCategory != null) {
+                    translated += translatedCategory;
+                } else {
+                    translated += category;
+                }
+                translated += " ";
+                if (translatedNotCategoryTextPart != null) {
+                    translated += translatedNotCategoryTextPart;
+                } else {
+                    translated += notCategoryTextPart;
+                }
+            } else if (text.contains(" " + category + " ")) {
+                String notCategoryTextPart0 = new ArrayList<>(Arrays.asList(text.split(" " + category + " "))).get(0);
+                String notCategoryTextPart2 = new ArrayList<>(Arrays.asList(text.split(" " + category + " "))).get(2);
+                String translatedCategory = getValueFromDictionary(category, languageTo);
+                String translatedNotCategoryTextPart0 = getValueFromDictionary(notCategoryTextPart0, languageTo);
+                String translatedNotCategoryTextPart2 = getValueFromDictionary(notCategoryTextPart2, languageTo);
+                if (translatedNotCategoryTextPart0 != null) {
+                    translated += translatedNotCategoryTextPart0;
+                } else {
+                    translated += notCategoryTextPart0;
+                }
+                translated += " ";
+                if (translatedCategory != null) {
+                    translated += translatedCategory;
+                } else {
+                    translated += category;
+                }
+                translated += " ";
+                if (translatedNotCategoryTextPart2 != null) {
+                    translated += translatedNotCategoryTextPart2;
+                } else {
+                    translated += notCategoryTextPart2;
+                }
             }
         }
         return translated;

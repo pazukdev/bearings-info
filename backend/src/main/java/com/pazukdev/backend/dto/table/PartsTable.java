@@ -38,6 +38,7 @@ public class PartsTable extends AbstractDto {
 
         final PartsTable partsTable = new PartsTable();
         partsTable.setName(tableName);
+
         if (header != null) {
             partsTable.setHeader(header);
         }

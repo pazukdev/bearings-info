@@ -4,9 +4,11 @@
             {{$t("loading") + "..."}}
         </div>
         <div v-if="!isLoading()">
-<!--            <div style="text-align: left">-->
-<!--                {{itemView.messages}}<br><br>-->
-<!--            </div>-->
+            <div style="text-align: left">
+                {{itemView.partsTable.tables[0]}}<br><br>
+<!--                {{itemView.replacersTable}}<br><br>-->
+<!--                {{itemView.possibleParts}}<br><br>-->
+            </div>
 
             <HeaderMenu :user-data="itemView.userData"
                         :guest="isGuest()"
@@ -249,7 +251,7 @@
                             <tbody>
                             <tr v-if="arrayHaveActiveItems(table.parts)">
                                 <td class="three-column-table-left-column">
-                                    <b>{{table.name}}</b>
+                                    <b>{{table.localizedName}}</b>
                                 </td>
                                 <td class="three-column-table-middle-column"></td>
                                 <td class="three-column-table-right-column"></td>

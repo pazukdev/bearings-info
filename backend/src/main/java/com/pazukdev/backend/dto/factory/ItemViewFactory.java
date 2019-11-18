@@ -70,7 +70,7 @@ public class ItemViewFactory {
         }
 
         if (!userLanguage.equals("en")) {
-            translate("en", userLanguage, itemView, false);
+            translate("en", userLanguage, itemView, false, itemService);
         }
         return itemView;
     }
@@ -92,8 +92,8 @@ public class ItemViewFactory {
         final UserEntity creator = itemService.getUserService().findByName(userName);
 
         if (!userLanguage.equals("en")) {
-            name = translate(userLanguage, "en", name, true);
-            category = translate(userLanguage, "en", category, true);
+            name = translate(userLanguage, "en", name, true, false, itemService);
+            category = translate(userLanguage, "en", category, true, false, itemService);
         }
 
         final Item item = new Item();
@@ -248,7 +248,7 @@ public class ItemViewFactory {
 //            }
 
             if (!userLanguage.equals("en")) {
-                translate(userLanguage, "en", itemView, true);
+                translate(userLanguage, "en", itemView, true, itemService);
             }
 
             final Map<String, String> headerMap = TableUtil.createHeaderMap(itemView.getHeader());
