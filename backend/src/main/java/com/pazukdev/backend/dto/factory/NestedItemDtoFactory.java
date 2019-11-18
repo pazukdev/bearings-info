@@ -92,8 +92,6 @@ public class NestedItemDtoFactory {
         nestedItemDto.setStatus(item.getStatus());
         nestedItemDto.setCreatorName(UserUtil.getCreatorName(item, userService));
         return nestedItemDto;
-
-
     }
 
 }
