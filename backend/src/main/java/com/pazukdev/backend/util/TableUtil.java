@@ -92,36 +92,34 @@ public class TableUtil {
         return replacersTable;
     }
 
-    public static HeaderTable createHeader(final Item item,
-                                           final String itemCategoryInUserLanguage,
-                                           final ItemService itemService) {
-        final String nameParameter = "Name";
+    public static HeaderTable createHeader(final Item item, final ItemService itemService) {
         final String itemName = item.getName();
-        final String tableName = itemCategoryInUserLanguage + " " + itemName;
+        final String itemCategory = item.getCategory();
+        final String tableName = itemCategory + " " + itemName;
+        final Map<String, String> description = ItemUtil.toMap(item.getDescription());
 
         final List<HeaderTableRow> headerTableRows = new ArrayList<>();
-        headerTableRows.add(HeaderTableRow.create(nameParameter, itemName));
-        return createTable(tableName, ItemUtil.toMap(item.getDescription()), headerTableRows, itemService);
+        headerTableRows.add(HeaderTableRow.create("Name", itemName, itemCategory));
+        return createTable(tableName, description, headerTableRows, itemCategory, itemService);
     }
 
     private static HeaderTable createTable(final String tableName,
                                            final Map<String, String> descriptionMap,
                                            final List<HeaderTableRow> headerTableRows,
+                                           final String itemCategory,
                                            final ItemService itemService) {
         for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
             String parameter = entry.getKey();
             String value = entry.getValue();
             String itemId = "no id";
-            String message = "";
+
             final Item foundItem = itemService.find(parameter, value);
             if (foundItem != null) {
                 itemId = foundItem.getId().toString();
-                message = "show button";
             }
 
-            final HeaderTableRow row = HeaderTableRow.create(parameter, value);
+            final HeaderTableRow row = HeaderTableRow.create(parameter, value, itemCategory);
             row.setItemId(itemId);
-            row.setMessage(message);
             headerTableRows.add(row);
         }
         return HeaderTable.create(tableName, headerTableRows);

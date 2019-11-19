@@ -143,7 +143,7 @@ public class ItemViewFactory {
         itemView.setCategory(itemCategory);
         itemView.setDefaultImg(imgViewData.isDefaultImg());
         itemView.setImgData(imgViewData.getImgData());
-        itemView.setHeader(createHeader(item, itemCategory, itemService));
+        itemView.setHeader(createHeader(item, itemService));
         itemView.setPartsTable(createPartsTable(item, tableName, language, itemService));
         itemView.setReplacersTable(createReplacersTable(item, itemService.getUserService()));
         itemView.getPossibleParts().addAll(createPossibleParts(allItems, itemService.getUserService()));
@@ -213,7 +213,8 @@ public class ItemViewFactory {
                                      String tableName,
                                      String parameter,
                                      final PartsTable table) {
-        final HeaderTableRow row = HeaderTableRow.create(parameter, String.valueOf(size));
+        final String itemCategory = "-";
+        final HeaderTableRow row = HeaderTableRow.create(parameter, String.valueOf(size), itemCategory);
         final HeaderTable header = HeaderTable.createSingleRowTable(tableName, row);
         final List<String> categories = new ArrayList<>(itemService.findAllCategories());
 

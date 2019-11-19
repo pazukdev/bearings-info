@@ -119,7 +119,7 @@
                         </button>
                     </td>
                     <td>
-                        <button v-if="isEditMode && isOrdinaryItemView() && row.parameter !== 'Name'"
+                        <button v-if="isRemoveHeaderRowButtonVisible(row.deletable)"
                                 v-model="itemView"
                                 type="button"
                                 class="round-delete-button"
@@ -1203,6 +1203,10 @@
 
             messagesContain(message) {
                 return this.isInArray(message, this.itemView.messages);
+            },
+
+            isRemoveHeaderRowButtonVisible(deletable) {
+                return this.isEditMode && this.isOrdinaryItemView() && deletable;
             }
         }
     }
