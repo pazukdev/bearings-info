@@ -177,7 +177,7 @@ public class TranslatorUtil {
 
     public static String translate(final String languageFrom,
                                    final String languageTo,
-                                   final String text,
+                                   String text,
                                    final boolean addToDictionary,
                                    final boolean parseBeforeTranslate,
                                    final ItemService itemService) {
@@ -185,6 +185,9 @@ public class TranslatorUtil {
         if (text == null) {
             return null;
         }
+
+        text = text.trim();
+
         if (text.equals("-") || text.equals("no id") || text.equals("") || text.contains(".png")) {
             return text;
         }
@@ -228,7 +231,7 @@ public class TranslatorUtil {
         }
 
         try {
-            translated = translateWithGoogle(languageFrom, "en", text);
+            translated = translateWithGoogle(languageFrom, "en", text).trim();
             if (translated.equals(text)) {
                 return text;
             }

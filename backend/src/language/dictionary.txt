@@ -21,9 +21,10 @@ ru;KMZ M-72N;КМЗ М-72Н
 ru;KMZ;КМЗ
 ru;Location;Расположение
 ru;M-72N;М-72Н
-ru;M63 Ural-2; М63 Урал-2
-ru;M66 Ural-3; М66 Урал-3
+ru;M63 Ural-2;М63 Урал-2
+ru;M66 Ural-3;М66 Урал-3
 ru;M66 engine;Двигатель M66
+ru;M66;М66
 ru;M67 type engine;Двигатель M67 type
 ru;MG-10;МГ-10
 ru;MT-9 type engine;Двигатель MT-9 type
@@ -53,4 +54,3 @@ ru;Username;Имя пользователя
 ru;Weight, kg;Вес, кг
 ru;Wheel;Колесо
 ru;Width;Ширина
-ru;Years of production;Годы пр-ва
