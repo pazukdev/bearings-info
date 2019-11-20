@@ -43,13 +43,13 @@ public class ItemViewFactory {
         ItemView itemView;
 
         if (itemId == WISH_LIST_VIEW.getItemId()) {
-            itemView = createWishListView(basicItemView, wishList, userLanguage);
+            itemView = createWishListView(basicItemView, wishList);
         } else if (itemId == MOTORCYCLE_CATALOGUE_VIEW.getItemId()) {
-            itemView = createMotorcycleCatalogueView(basicItemView, userLanguage);
+            itemView = createMotorcycleCatalogueView(basicItemView);
         } else if (itemId == ITEMS_MANAGEMENT_VIEW.getItemId()) {
-            itemView = createItemsManagementView(basicItemView, userLanguage);
+            itemView = createItemsManagementView(basicItemView);
         } else if (itemId == USER_LIST_VIEW.getItemId()) {
-            itemView = createUsersListView(basicItemView, userLanguage);
+            itemView = createUsersListView(basicItemView);
         } else {
             itemView = createOrdinaryItemView(basicItemView, itemId, currentUser, userLanguage);
         }
@@ -129,7 +129,7 @@ public class ItemViewFactory {
         itemView.setDefaultImg(imgViewData.isDefaultImg());
         itemView.setImgData(imgViewData.getImgData());
         itemView.setHeader(createHeader(item, itemService));
-        itemView.setPartsTable(createPartsTable(item, tableName, language, itemService));
+        itemView.setPartsTable(createPartsTable(item, tableName, itemService));
         itemView.setReplacersTable(createReplacersTable(item, itemService.getUserService()));
         itemView.getPossibleParts().addAll(createPossibleParts(allItems, itemService.getUserService()));
         itemView.getReplacers().addAll(createReplacerDtos(sameCategoryItems, itemService.getUserService()));
@@ -139,7 +139,7 @@ public class ItemViewFactory {
         return itemView;
     }
 
-    private ItemView createMotorcycleCatalogueView(final ItemView itemView, final String language) {
+    private ItemView createMotorcycleCatalogueView(final ItemView itemView) {
         final List<Item> motorcycles = itemService.find("Motorcycle");
         final String tableName = "Motorcycle catalogue";
         final String countParameterName = "Model";
@@ -151,10 +151,10 @@ public class ItemViewFactory {
                 motorcycles.size(),
                 tableName,
                 countParameterName,
-                motorcyclesTable(motorcycles, countParameterName, language, itemService.getUserService()));
+                motorcyclesTable(motorcycles, countParameterName, itemService.getUserService()));
     }
 
-    private ItemView createUsersListView(final ItemView itemView, final String language) {
+    private ItemView createUsersListView(final ItemView itemView) {
         final List<UserEntity> users = itemService.getUserService().findAll();
         final String tableName = "Users";
         final String countParameterName = "User";
@@ -164,10 +164,10 @@ public class ItemViewFactory {
                 users.size(),
                 tableName,
                 countParameterName,
-                usersTable(users, tableName, language));
+                usersTable(users, tableName));
     }
 
-    private ItemView createItemsManagementView(final ItemView itemView, final String language) {
+    private ItemView createItemsManagementView(final ItemView itemView) {
         final List<Item> allItems = itemService.findAll();
         final String tableName = "Items management";
         final String countParameterName = "Items";
@@ -177,10 +177,10 @@ public class ItemViewFactory {
                 allItems.size(),
                 tableName,
                 countParameterName,
-                specialItemsTable(allItems, countParameterName, language, itemService));
+                specialItemsTable(allItems, countParameterName, itemService));
     }
 
-    private ItemView createWishListView(final ItemView itemView, final WishList wishList, final String language) {
+    private ItemView createWishListView(final ItemView itemView, final WishList wishList) {
         final List<Item> allItems = new ArrayList<>(wishList.getItems());
         String tableName = "Your Wishlist";
         String countParameterName = "Items";
@@ -190,7 +190,7 @@ public class ItemViewFactory {
                 allItems.size(),
                 tableName,
                 countParameterName,
-                specialItemsTable(allItems, countParameterName, language, itemService));
+                specialItemsTable(allItems, countParameterName, itemService));
     }
 
     private ItemView createItemsView(final ItemView itemView,

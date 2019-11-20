@@ -5,7 +5,7 @@
         </div>
         <div v-if="!isLoading()">
             <div style="text-align: left">
-<!--                {{itemView.partsTable.tables[0]}}<br><br>-->
+<!--                {{itemView.partsTable}}<br><br>-->
 <!--                {{itemView.replacersTable}}<br><br>-->
 <!--                {{itemView.possibleParts}}<br><br>-->
             </div>
@@ -245,63 +245,58 @@
                         </table>
                     </td>
                 </tr>
-                <tr v-for="table in itemView.partsTable.tables">
-                    <td v-if="table.parts.length > 0" colspan="3">
-                        <table id="get-all-table">
-                            <tbody>
-                            <tr v-if="arrayHaveActiveItems(table.parts)">
-                                <td class="three-column-table-left-column">
-                                    <b>{{table.localizedName}}</b>
-                                </td>
-                                <td class="three-column-table-middle-column"></td>
-                                <td class="three-column-table-right-column"></td>
-                                <td class="three-column-table-button-column"></td>
-                            </tr>
-                            <tr v-for="part in table.parts" v-if="statusActive(part)">
-                                <td class="three-column-table-left-column">
-                                    <p class="three-column-table-left-column-text"
-                                       v-if="!isEditMode || (isEditMode && !isOrdinaryItemView())">
-                                        {{getFirstColumnValue(part)}}
-                                    </p>
-                                    <input v-if="isEditMode && isOrdinaryItemView()"
-                                           v-model="part.location" type="text"/>
-                                </td>
-                                <td class="three-column-table-middle-column">
-                                    <p v-if="isUserListView()">
-                                        {{part.buttonText}}
-                                    </p>
-                                    <button type="button"
-                                            v-if="!isUserListView()"
-                                            @click="navigateToItem(part.itemId)">
-                                        {{part.buttonText}}
-                                    </button>
-                                </td>
-                                <td class="three-column-table-right-column">
-                                    <div v-if="isShowQuantityValue()" class="parts-right-column-text">
-                                        {{part.quantity}}
-                                    </div>
-                                    <div v-if="!isEditMode && isMotorcycleCatalogueView()" class="parts-right-column-text">
-                                        {{part.localizedComment}}
-                                    </div>
-                                    <input v-if="isEditMode && isOrdinaryItemView()"
-                                           v-model="part.quantity" type="text"/>
-                                </td>
-                                <td class="three-column-table-button-column" v-if="isEditMode && part.comment !== 'Admin'">
-                                    <button v-model="itemView"
-                                            v-if="isItemDeleteButtonVisibleToCurrentUser(part)"
-                                            type="button"
-                                            class="round-button"
-                                            style="background: red"
-                                            @click="removePartFromList(part, table.parts)">
-                                        {{"-"}}
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <p></p>
-                            </tr>
-                            </tbody>
-                        </table>
+                <tr v-for="table in itemView.partsTable.tables" v-if="arrayHaveActiveItems(table.parts)">
+                    <td colspan="3">
+                        <details>
+                            <summary style="text-align: left"><b>{{table.localizedName}}</b></summary>
+                            <table id="get-all-table">
+                                <tbody>
+                                <tr v-for="part in table.parts" v-if="statusActive(part)">
+                                    <td class="three-column-table-left-column">
+                                        <p class="three-column-table-left-column-text"
+                                           v-if="!isEditMode || (isEditMode && !isOrdinaryItemView())">
+                                            {{getFirstColumnValue(part)}}
+                                        </p>
+                                        <input v-if="isEditMode && isOrdinaryItemView()"
+                                               v-model="part.location" type="text"/>
+                                    </td>
+                                    <td class="three-column-table-middle-column">
+                                        <p v-if="isUserListView()">
+                                            {{part.buttonText}}
+                                        </p>
+                                        <button type="button"
+                                                v-if="!isUserListView()"
+                                                @click="navigateToItem(part.itemId)">
+                                            {{part.buttonText}}
+                                        </button>
+                                    </td>
+                                    <td class="three-column-table-right-column">
+                                        <div v-if="isShowQuantityValue()" class="parts-right-column-text">
+                                            {{part.quantity}}
+                                        </div>
+                                        <div v-if="!isEditMode && isMotorcycleCatalogueView()" class="parts-right-column-text">
+                                            {{part.localizedComment}}
+                                        </div>
+                                        <input v-if="isEditMode && isOrdinaryItemView()"
+                                               v-model="part.quantity" type="text"/>
+                                    </td>
+                                    <td class="three-column-table-button-column" v-if="isEditMode && part.comment !== 'Admin'">
+                                        <button v-model="itemView"
+                                                v-if="isItemDeleteButtonVisibleToCurrentUser(part)"
+                                                type="button"
+                                                class="round-button"
+                                                style="background: red"
+                                                @click="removePartFromList(part, table.parts)">
+                                            {{"-"}}
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <p></p>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </details>
                     </td>
                 </tr>
                 <tr v-if="notStub(itemView.partsTable.name) && isOrdinaryItemView()">

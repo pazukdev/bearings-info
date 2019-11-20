@@ -23,6 +23,7 @@ public class PartsTable extends AbstractDto {
     private Integer weight = 0;
     private List<NestedItemDto> parts = new ArrayList<>();
     private List<PartsTable> tables = new ArrayList<>();
+    private boolean opened = false;
 
     public static PartsTable createStub() {
         final PartsTable partsTable = new PartsTable();
@@ -32,9 +33,8 @@ public class PartsTable extends AbstractDto {
 
     public static PartsTable create(final List<NestedItemDto> nestedItems,
                                     final String tableName,
-                                    String[] header,
-                                    final Set<String> partCategories,
-                                    final String userLanguage) {
+                                    final String[] header,
+                                    final Set<String> partCategories) {
 
         final PartsTable partsTable = new PartsTable();
         partsTable.setName(tableName);
@@ -43,10 +43,12 @@ public class PartsTable extends AbstractDto {
             partsTable.setHeader(header);
         }
 
-        for (final String category : partCategories) {
+        for (final String partCategory : partCategories) {
             final PartsTable categoryTable = new PartsTable();
-            categoryTable.setName(category);
-            setTableWeight(categoryTable, category);
+            categoryTable.setName(partCategory);
+            setTableWeight(categoryTable, partCategory);
+            categoryTable.setOpened(categoryTable.getWeight() > 0);
+
             partsTable.getTables().add(categoryTable);
         }
         for (final NestedItemDto nestedItem : nestedItems) {
@@ -68,15 +70,21 @@ public class PartsTable extends AbstractDto {
         }
     }
 
-    private static void setTableWeight(final PartsTable categoryTable, final String category) {
-        if (category.equals("IMZ")) {
-            categoryTable.setWeight(1);
+    private static void setTableWeight(final PartsTable categoryTable, final String partCategory) {
+        if (partCategory.toLowerCase().equals("kmz")) {
+            categoryTable.setWeight(10);
         }
-        if (category.equals("IMZ / KMZ")) {
-            categoryTable.setWeight(2);
+        if (partCategory.toLowerCase().contains("kmz") && partCategory.toLowerCase().contains("imz")) {
+            categoryTable.setWeight(9);
         }
-        if (category.equals("KMZ")) {
-            categoryTable.setWeight(3);
+        if (partCategory.toLowerCase().equals("imz")) {
+            categoryTable.setWeight(8);
+        }
+        if (partCategory.toLowerCase().equals("bmw")) {
+            categoryTable.setWeight(7);
+        }
+        if (partCategory.toLowerCase().equals("zundapp")) {
+            categoryTable.setWeight(6);
         }
     }
 
@@ -84,7 +92,7 @@ public class PartsTable extends AbstractDto {
         final List<PartsTable> zeroWeight = collectTablesWithZeroWeight(parentTable);
         zeroWeight.sort(Comparator.comparing(PartsTable::getName));
         parentTable.getTables().removeAll(zeroWeight);
-        parentTable.getTables().sort(Comparator.comparing(PartsTable::getWeight));
+        parentTable.getTables().sort(Comparator.comparing(PartsTable::getWeight).reversed());
         parentTable.getTables().addAll(zeroWeight);
     }
 

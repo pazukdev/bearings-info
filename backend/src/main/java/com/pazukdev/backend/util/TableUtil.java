@@ -20,7 +20,6 @@ public class TableUtil {
 
     public static PartsTable specialItemsTable(final List<Item> items,
                                                final String tableName,
-                                               final String language,
                                                final ItemService itemService) {
         final List<NestedItemDto> dtos = new ArrayList<>();
         for (final Item item : items) {
@@ -30,12 +29,11 @@ public class TableUtil {
 //        final String[] header = {"Category", "Name", "-"};
         final String[] header = null;
         final Set<String> categories = itemService.findAllCategories();
-        return PartsTable.create(dtos, tableName, header, categories, language);
+        return PartsTable.create(dtos, tableName, header, categories);
     }
 
     public static  PartsTable motorcyclesTable(final List<Item> motorcycles,
                                                final String tableName,
-                                               final String language,
                                                final UserService userService) {
         final List<NestedItemDto> dtos = new ArrayList<>();
         final Set<String> categories = new HashSet<>();
@@ -46,24 +44,21 @@ public class TableUtil {
         }
 
         final String[] header = {"Production", "Model", "Manufacturer"};
-        return PartsTable.create(dtos, tableName, header, categories, language);
+        return PartsTable.create(dtos, tableName, header, categories);
     }
 
-    public static  PartsTable usersTable(final List<UserEntity> users,
-                                         final String tableName,
-                                         final String language) {
+    public static  PartsTable usersTable(final List<UserEntity> users, final String tableName) {
         final List<NestedItemDto> dtos = new ArrayList<>();
         for (final UserEntity user : users) {
             dtos.add(createUser(user));
         }
         final String[] header = {"Role", "Username", "Rating"};
-        final Set<String> categories = new HashSet<>(Arrays.asList("Admin", "User"));
-        return PartsTable.create(dtos, tableName, header, categories, language);
+        final Set<String> partCategories = new HashSet<>(Arrays.asList("Admin", "User"));
+        return PartsTable.create(dtos, tableName, header, partCategories);
     }
 
     public static PartsTable createPartsTable(final Item item,
                                               final String tableName,
-                                              final String language,
                                               final ItemService itemService) {
         if (!CategoryUtil.itemIsAbleToContainParts(item)) {
             return PartsTable.createStub();
@@ -77,7 +72,7 @@ public class TableUtil {
         final String[] header = {"Location", "Partnumber", "Pcs/Vol"};
         //final String[] header = null;
         final Set<String> categories = itemService.findAllPartCategories();
-        return PartsTable.create(dtos, tableName, header, categories, language);
+        return PartsTable.create(dtos, tableName, header, categories);
     }
 
     public static ReplacersTable createReplacersTable(final Item item, final UserService userService) {
@@ -135,6 +130,24 @@ public class TableUtil {
             map.put(row.getParameter(), row.getValue());
         }
         return map;
+    }
+
+    private static boolean isBoxer(final Item motorcycle) {
+        final String description = motorcycle.getDescription().toLowerCase();
+        final String type = ItemUtil.getValueFromDescription(description, "type");
+        final String manufacturer = ItemUtil.getValueFromDescription(description, "manufacturer");
+        final String name = motorcycle.getName().toLowerCase();
+
+        if (type != null && type.equals("boxer")) {
+            return true;
+        } else if (manufacturer != null) {
+            if (manufacturer.contains("imz") || manufacturer.contains("kmz")
+                    || (manufacturer.equals("bmw") && name.equals("r75"))
+                    || (manufacturer.equals("zundapp") && name.equals("ks750"))) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
