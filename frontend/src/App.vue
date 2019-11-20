@@ -232,7 +232,15 @@
     button, select, input {
         border-radius: 4px;
         border: none;
+    }
+
+    select, input {
         height: 52px;
+    }
+
+    button {
+        min-height: 52px;
+        max-height: 92px;
     }
 
     table {
