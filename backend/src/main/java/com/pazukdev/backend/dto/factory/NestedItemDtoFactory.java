@@ -35,7 +35,7 @@ public class NestedItemDtoFactory {
     public static NestedItemDto createMotorcycle(final Item motorcycle, final UserService userService) {
         final String description = motorcycle.getDescription();
         final String production = getValueFromDescription(description, "Production");
-        final String manufacturer = getValueFromDescription(description, "Manufacturer").toUpperCase();
+        final String manufacturer = getValueFromDescription(description, "Manufacturer");
 
         final NestedItemDto motorcycleDto = createBasicNestedItemDto(motorcycle, userService);
         motorcycleDto.setLocation(production);

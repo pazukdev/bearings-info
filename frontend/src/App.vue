@@ -198,6 +198,8 @@
         text-align: center;
         height: 32px;
         width: 32px;
+        min-height: initial;
+        max-height: initial;
         border-radius: 16px;
     }
 
