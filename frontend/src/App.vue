@@ -10,8 +10,8 @@
                     @select-language="selectLanguage"
                     @open-login-form="openLoginForm"></AppBar>
             <div style="text-align: left">
-                {{"store: " + appLanguage}}<br>
-                {{"i18n: " + $i18n.locale}}<br>
+<!--                {{"store: " + appLanguage}}<br>-->
+<!--                {{"i18n: " + $i18n.locale}}<br>-->
 <!--                {{this.$route.params.item_id}}<br>-->
 <!--                {{this.$route.params.lang}}<br>-->
 <!--                {{"basicUrl: " + basicUrl}}<br>-->

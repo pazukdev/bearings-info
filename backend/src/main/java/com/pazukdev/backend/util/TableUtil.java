@@ -95,12 +95,16 @@ public class TableUtil {
     public static HeaderTable createHeader(final Item item, final ItemService itemService) {
         final String itemName = item.getName();
         final String itemCategory = item.getCategory();
-        final String tableName = itemCategory + " " + itemName;
+        final String tableName = getHeaderTableName(itemCategory, itemName);
         final Map<String, String> description = ItemUtil.toMap(item.getDescription());
 
         final List<HeaderTableRow> headerTableRows = new ArrayList<>();
         headerTableRows.add(HeaderTableRow.create("Name", itemName, itemCategory));
         return createTable(tableName, description, headerTableRows, itemCategory, itemService);
+    }
+
+    public static String getHeaderTableName(final String itemCategory, final String itemName) {
+        return itemCategory + " " + itemName;
     }
 
     private static HeaderTable createTable(final String tableName,

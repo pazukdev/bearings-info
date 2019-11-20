@@ -1,5 +1,6 @@
 package com.pazukdev.backend.unit.util;
 
+import com.pazukdev.backend.util.ItemUtil;
 import com.pazukdev.backend.util.TranslatorUtil;
 import org.apache.tika.langdetect.OptimaizeLangDetector;
 import org.apache.tika.language.detect.LanguageDetector;
@@ -9,6 +10,7 @@ import org.json.JSONException;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,6 +56,11 @@ public class TranslationUtilTest {
 
         System.out.println(textBefore);
         System.out.println(textAfter);
+    }
+
+    @Test
+    public void test5() {
+        System.out.println(new ArrayList<>(Arrays.asList(ItemUtil.SpecialItemId.values())));
     }
 
     @Test

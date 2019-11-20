@@ -10,7 +10,6 @@ import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
 import com.pazukdev.backend.util.*;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.pazukdev.backend.util.ItemUtil.SpecialItemId.*;
 import static com.pazukdev.backend.util.NestedItemUtil.createPossibleParts;
 import static com.pazukdev.backend.util.NestedItemUtil.createReplacerDtos;
 import static com.pazukdev.backend.util.TableUtil.*;
@@ -31,21 +31,6 @@ public class ItemViewFactory {
 
     private final ItemService itemService;
 
-    @Getter
-    private enum SpecialItemId {
-
-        ITEMS_MANAGEMENT_VIEW(-1),
-        MOTORCYCLE_CATALOGUE_VIEW(-2),
-        WISH_LIST_VIEW(-3),
-        USER_LIST_VIEW(-4);
-
-        private final int itemId;
-
-        SpecialItemId(final int itemId) {
-            this.itemId = itemId;
-        }
-    }
-
     public ItemView createItemView(final Long itemId, final String userName, final String userLanguage) {
         final UserEntity currentUser = itemService.getUserService().findByName(userName);
         final WishList wishList = currentUser.getWishList();
@@ -57,13 +42,13 @@ public class ItemViewFactory {
 
         ItemView itemView;
 
-        if (itemId == SpecialItemId.WISH_LIST_VIEW.getItemId()) {
+        if (itemId == WISH_LIST_VIEW.getItemId()) {
             itemView = createWishListView(basicItemView, wishList, userLanguage);
-        } else if (itemId == SpecialItemId.MOTORCYCLE_CATALOGUE_VIEW.getItemId()) {
+        } else if (itemId == MOTORCYCLE_CATALOGUE_VIEW.getItemId()) {
             itemView = createMotorcycleCatalogueView(basicItemView, userLanguage);
-        } else if (itemId == SpecialItemId.ITEMS_MANAGEMENT_VIEW.getItemId()) {
+        } else if (itemId == ITEMS_MANAGEMENT_VIEW.getItemId()) {
             itemView = createItemsManagementView(basicItemView, userLanguage);
-        } else if (itemId == SpecialItemId.USER_LIST_VIEW.getItemId()) {
+        } else if (itemId == USER_LIST_VIEW.getItemId()) {
             itemView = createUsersListView(basicItemView, userLanguage);
         } else {
             itemView = createOrdinaryItemView(basicItemView, itemId, currentUser, userLanguage);
@@ -112,9 +97,9 @@ public class ItemViewFactory {
                                    final String userLanguage,
                                    final ItemView itemView) {
         final UserEntity user = itemService.getUserService().findByName(userName);
-        final boolean removeItem = itemId == SpecialItemId.ITEMS_MANAGEMENT_VIEW.getItemId();
-        final boolean removeItemFromWishList = itemId == SpecialItemId.WISH_LIST_VIEW.getItemId();
-        final boolean removeUser = itemId == SpecialItemId.USER_LIST_VIEW.getItemId();
+        final boolean removeItem = itemId == ITEMS_MANAGEMENT_VIEW.getItemId();
+        final boolean removeItemFromWishList = itemId == WISH_LIST_VIEW.getItemId();
+        final boolean removeUser = itemId == USER_LIST_VIEW.getItemId();
 
         if (removeItem) {
             return removeItem(itemView, user, itemService.getUserService(), itemView.isHardDelete());

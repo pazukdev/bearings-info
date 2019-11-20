@@ -7,6 +7,7 @@ import com.pazukdev.backend.dto.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.TransitiveItemService;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -17,6 +18,21 @@ import java.util.stream.Collectors;
  * @author Siarhei Sviarkaltsau
  */
 public class ItemUtil {
+
+    @Getter
+    public enum SpecialItemId {
+
+        ITEMS_MANAGEMENT_VIEW(-1),
+        MOTORCYCLE_CATALOGUE_VIEW(-2),
+        WISH_LIST_VIEW(-3),
+        USER_LIST_VIEW(-4);
+
+        private final int itemId;
+
+        SpecialItemId(final int itemId) {
+            this.itemId = itemId;
+        }
+    }
 
     public static void sort(final List<TransitiveItem> items) {
         items.sort(Comparator.comparing(TransitiveItem::getCategory));
@@ -405,6 +421,10 @@ public class ItemUtil {
             ids.add(item.getId());
         }
         return ids;
+    }
+
+    public static boolean isSpecialItem(final Long itemId) {
+        return itemId != null && itemId < 0;
     }
 
 }

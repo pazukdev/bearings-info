@@ -31,9 +31,6 @@ ru;MT-9 type engine;Двигатель MT-9 type
 ru;Manufacturer;Производитель
 ru;Max speed, km/h;Макс. скорость, км/ч
 ru;Model;Модель
-ru;Motorcycle M63 Ural-2;Мотоцикл  М63 Урал-2
-ru;Motorcycle M66;Мотоцикл M66
-ru;Motorcycle Ural M67;Мотоцикл Урал М67
 ru;Motorcycle catalogue;Модельный ряд
 ru;Motorcycle;Мотоцикл
 ru;Name;Название
