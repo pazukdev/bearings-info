@@ -20,7 +20,7 @@
             </tr>
             <tr>
                 <td>
-                    {{$t('login')}}
+                    {{"E-mail"}}
                 </td>
                 <td>
                     <input type="text" name="username" v-model="username"/>
@@ -71,7 +71,7 @@
         data() {
             return {
                 isLogin: true,
-                username: "admin",
+                username: "pazuk1985@gmail.com",
                 password: "admin",
                 repeatedPassword: "",
                 validationMessages: []
