@@ -35,7 +35,6 @@ public class TranslatorUtil {
                                  final ItemView itemView,
                                  final boolean addToDictionary,
                                  final ItemService itemService) {
-//        String category = itemView.getCategory();
         HeaderTable header = itemView.getHeader();
         final PartsTable partsTable = itemView.getPartsTable();
         final ReplacersTable replacersTable = itemView.getReplacersTable();
@@ -43,15 +42,13 @@ public class TranslatorUtil {
         final List<NestedItemDto> replacers = itemView.getReplacers();
         final List<String> categories = itemView.getAllCategories();
 
-//        category = translate(languageFrom, languageTo, category, addToDictionary);
         header = translate(languageFrom, languageTo, header, addToDictionary, itemView.getItemId(), itemService);
         translate(languageFrom, languageTo, partsTable, addToDictionary, itemService);
+        translate(languageFrom, languageTo, replacersTable, addToDictionary, itemService);
         translateNestedItemDtoList(languageFrom, languageTo, possibleParts, addToDictionary, itemService);
         translateNestedItemDtoList(languageFrom, languageTo, replacers, addToDictionary, itemService);
         translate(languageFrom, languageTo, categories, addToDictionary, itemService);
-        translate(languageFrom, languageTo, replacersTable, addToDictionary, itemService);
 
-        //itemView.setCategory(category);
         itemView.setHeader(header);
         itemView.setPartsTable(partsTable);
         itemView.setReplacersTable(replacersTable);
@@ -59,14 +56,6 @@ public class TranslatorUtil {
         itemView.setReplacers(replacers);
         itemView.setAllCategories(categories);
     }
-
-//    public static void translate(final String languageFrom,
-//                                 final String languageTo,
-//                                 final Item item,
-//                                 final boolean addToDictionary) {
-//        item.setName(translate(languageFrom, languageTo, item.getName(), addToDictionary));
-//        item.setCategory(translate(languageFrom, languageTo, item.getCategory(), addToDictionary));
-//    }
 
     private static HeaderTable translate(final String languageFrom,
                                          final String languageTo,
@@ -115,6 +104,9 @@ public class TranslatorUtil {
         for (final PartsTable child : partsTable.getTables()) {
             translate(languageFrom, languageTo, child, addToDictionary, itemService);
         }
+
+        PartsTable.sortItemsInChildTables(partsTable);
+        PartsTable.sortChildTables(partsTable);
     }
 
     private static void translate(final String languageFrom,

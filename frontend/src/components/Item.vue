@@ -5,7 +5,7 @@
         </div>
         <div v-if="!isLoading()">
             <div style="text-align: left">
-<!--                {{itemView.partsTable}}<br><br>-->
+                {{itemView.partsTable.tables}}<br><br>
 <!--                {{itemView.replacersTable}}<br><br>-->
 <!--                {{itemView.possibleParts}}<br><br>-->
             </div>
@@ -247,7 +247,7 @@
                 </tr>
                 <tr v-for="table in itemView.partsTable.tables" v-if="arrayHaveActiveItems(table.parts)">
                     <td colspan="3">
-                        <details>
+                        <v-details v-model="table.opened">
                             <summary style="text-align: left"><b>{{table.localizedName}}</b></summary>
                             <table id="get-all-table">
                                 <tbody>
@@ -296,7 +296,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                        </details>
+                        </v-details>
                     </td>
                 </tr>
                 <tr v-if="notStub(itemView.partsTable.name) && isOrdinaryItemView()">

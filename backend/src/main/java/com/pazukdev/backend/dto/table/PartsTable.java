@@ -23,7 +23,7 @@ public class PartsTable extends AbstractDto {
     private Integer weight = 0;
     private List<NestedItemDto> parts = new ArrayList<>();
     private List<PartsTable> tables = new ArrayList<>();
-    private boolean opened = false;
+    private boolean opened = true;
 
     public static PartsTable createStub() {
         final PartsTable partsTable = new PartsTable();
@@ -47,27 +47,29 @@ public class PartsTable extends AbstractDto {
             final PartsTable categoryTable = new PartsTable();
             categoryTable.setName(partCategory);
             setTableWeight(categoryTable, partCategory);
-            categoryTable.setOpened(categoryTable.getWeight() > 0);
-
             partsTable.getTables().add(categoryTable);
         }
         for (final NestedItemDto nestedItem : nestedItems) {
             addToCategoryTable(partsTable.getTables(), nestedItem);
         }
 
-        for (final PartsTable childTable : partsTable.getTables()) {
-            childTable.getParts().sort(Comparator.comparing(NestedItemDto::getQuantity).reversed());
-        }
-
-//        translate(partsTable, userLanguage);
+        sortItemsInChildTables(partsTable);
         sortChildTables(partsTable);
         return partsTable;
     }
 
-    private static void translate(final PartsTable partsTable, final String languageTo) {
-        for (final PartsTable childTable : partsTable.getTables()) {
-            // some implementation here
+    public static void sortItemsInChildTables(final PartsTable parent) {
+        for (final PartsTable childTable : parent.getTables()) {
+            childTable.getParts().sort(Comparator
+                    .comparing(NestedItemDto::getLocation)
+                    .thenComparing(NestedItemDto::getButtonText));
         }
+    }
+
+    public static void sortChildTables(final PartsTable parent) {
+        parent.getTables().sort(Comparator
+                .comparing(PartsTable::getWeight).reversed()
+                .thenComparing(PartsTable::getLocalizedName));
     }
 
     private static void setTableWeight(final PartsTable categoryTable, final String partCategory) {
@@ -86,14 +88,6 @@ public class PartsTable extends AbstractDto {
         if (partCategory.toLowerCase().equals("zundapp")) {
             categoryTable.setWeight(6);
         }
-    }
-
-    private static void sortChildTables(final PartsTable parentTable) {
-        final List<PartsTable> zeroWeight = collectTablesWithZeroWeight(parentTable);
-        zeroWeight.sort(Comparator.comparing(PartsTable::getName));
-        parentTable.getTables().removeAll(zeroWeight);
-        parentTable.getTables().sort(Comparator.comparing(PartsTable::getWeight).reversed());
-        parentTable.getTables().addAll(zeroWeight);
     }
 
     private static List<PartsTable> collectTablesWithZeroWeight(final PartsTable parentTable) {

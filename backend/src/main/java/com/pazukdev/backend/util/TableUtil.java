@@ -29,7 +29,13 @@ public class TableUtil {
 //        final String[] header = {"Category", "Name", "-"};
         final String[] header = null;
         final Set<String> categories = itemService.findAllCategories();
-        return PartsTable.create(dtos, tableName, header, categories);
+        final PartsTable partsTable =  PartsTable.create(dtos, tableName, header, categories);
+
+        for (final PartsTable childTable : partsTable.getTables()) {
+            childTable.setOpened(false);
+        }
+
+        return partsTable;
     }
 
     public static  PartsTable motorcyclesTable(final List<Item> motorcycles,
@@ -44,7 +50,13 @@ public class TableUtil {
         }
 
         final String[] header = {"Production", "Model", "Manufacturer"};
-        return PartsTable.create(dtos, tableName, header, categories);
+        final PartsTable partsTable =  PartsTable.create(dtos, tableName, header, categories);
+
+        for (final PartsTable child : partsTable.getTables()) {
+            child.setOpened(child.getWeight() > 7);
+        }
+
+        return partsTable;
     }
 
     public static  PartsTable usersTable(final List<UserEntity> users, final String tableName) {
@@ -54,7 +66,11 @@ public class TableUtil {
         }
         final String[] header = {"Role", "Username", "Rating"};
         final Set<String> partCategories = new HashSet<>(Arrays.asList("Admin", "User"));
-        return PartsTable.create(dtos, tableName, header, partCategories);
+        final PartsTable partsTable =  PartsTable.create(dtos, tableName, header, partCategories);
+        for (final PartsTable child : partsTable.getTables()) {
+            child.getParts().sort(Comparator.comparing(NestedItemDto::getQuantity));
+        }
+        return partsTable;
     }
 
     public static PartsTable createPartsTable(final Item item,
