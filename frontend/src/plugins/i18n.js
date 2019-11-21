@@ -38,7 +38,8 @@ export const i18n = new VueI18n({
             createNewItem: "Create new item",
             additionalMenu: "Menu",
             itemsManagement: "Items management",
-            users: "Users"
+            users: "Users",
+            buy: "buy"
         },
         ru: {
             language: "Русский язык",
@@ -71,7 +72,8 @@ export const i18n = new VueI18n({
             createNewItem: "Добавить новый объект",
             additionalMenu: "Меню",
             itemsManagement: "Управление деталями",
-            users: "Пользователи"
+            users: "Пользователи",
+            buy: "купить"
         }
     }
 });

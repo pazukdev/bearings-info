@@ -66,7 +66,7 @@
 
         methods: {
             searchInGoogle() {
-                let q = "buy " + this.itemNameForSearchInGoogle;
+                let q = this.$t("buy") + " " + this.itemNameForSearchInGoogle.toLowerCase();
                 window.open('http://google.com/search?q=' + q);
             },
 
