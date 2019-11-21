@@ -23,7 +23,7 @@ public class TableUtil {
                                                final ItemService itemService) {
         final List<NestedItemDto> dtos = new ArrayList<>();
         for (final Item item : items) {
-            final NestedItemDto itemDto = createBasicSpecialNestedItemDto(item, itemService.getUserService());
+            final NestedItemDto itemDto = createItemForItemsManagement(item, itemService.getUserService());
             dtos.add(itemDto);
         }
 //        final String[] header = {"Category", "Name", "-"};

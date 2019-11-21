@@ -62,6 +62,7 @@ public class PartsTable extends AbstractDto {
         for (final PartsTable childTable : parent.getTables()) {
             childTable.getParts().sort(Comparator
                     .comparing(NestedItemDto::getLocation)
+                    .thenComparing(NestedItemDto::getLocalizedComment)
                     .thenComparing(NestedItemDto::getButtonText));
         }
     }

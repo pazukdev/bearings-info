@@ -5,7 +5,7 @@
         </div>
         <div v-if="!isLoading()">
             <div style="text-align: left">
-                {{itemView.partsTable.tables}}<br><br>
+<!--                {{itemView.partsTable.tables}}<br><br>-->
 <!--                {{itemView.replacersTable}}<br><br>-->
 <!--                {{itemView.possibleParts}}<br><br>-->
             </div>
@@ -274,7 +274,8 @@
                                         <div v-if="isShowQuantityValue()" class="parts-right-column-text">
                                             {{part.quantity}}
                                         </div>
-                                        <div v-if="!isEditMode && isMotorcycleCatalogueView()" class="parts-right-column-text">
+                                        <div v-if="isMotorcycleCatalogueView() || isItemsManagementView()"
+                                             class="parts-right-column-text">
                                             {{part.localizedComment}}
                                         </div>
                                         <input v-if="isEditMode && isOrdinaryItemView()"
