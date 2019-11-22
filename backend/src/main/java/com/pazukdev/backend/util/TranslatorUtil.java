@@ -29,6 +29,7 @@ import java.util.*;
 public class TranslatorUtil {
     
     private static String EN = "en";
+    private static String DICTIONARY_SEPARATOR = "=";
 
     public static void translate(final String languageFrom,
                                  final String languageTo,
@@ -383,12 +384,12 @@ public class TranslatorUtil {
         final Set<String> lines = FileUtil.getTxtFileLines(FileUtil.getDictionaryFilePath());
         for (final String line : lines) {
             if (language.equals("en")) {
-                if (line.split(";")[2].equals(value)) {
-                    return line.split(";")[1];
+                if (line.split(DICTIONARY_SEPARATOR)[2].equals(value)) {
+                    return line.split(DICTIONARY_SEPARATOR)[1];
                 }
             } else {
-                if (line.contains(language + ";" + value + ";")) {
-                    final String translated = line.split(";")[2];
+                if (line.contains(language + DICTIONARY_SEPARATOR + value + DICTIONARY_SEPARATOR)) {
+                    final String translated = line.split(DICTIONARY_SEPARATOR)[2];
                     if (translationResultIsBroken(translated)) {
                         return null;
                     }
@@ -427,8 +428,8 @@ public class TranslatorUtil {
                                                final String valueInDefaultLanguage,
                                                final String valueInSpecifiedLanguage) {
         return languageCode
-                + ";" + valueInDefaultLanguage
-                + ";" + valueInSpecifiedLanguage;
+                + DICTIONARY_SEPARATOR + valueInDefaultLanguage
+                + DICTIONARY_SEPARATOR + valueInSpecifiedLanguage;
     }
 
     private static String translateWithGoogle(final String languageFrom,

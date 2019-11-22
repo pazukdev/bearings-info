@@ -28,7 +28,7 @@
                 <td></td>
                 <td>
                     <button type="button"
-                            v-on:click="downloadDictionary()">
+                            v-on:click="downloadDictionary">
                         {{"Download dictionary"}}
                     </button>
                 </td>
@@ -39,10 +39,9 @@
                 <td></td>
                 <td>
                     <input type="file"
-                           style="color: black"
-                           @change="uploadDictionary()">
+                           @change="uploadDictionary">
                 </td>
-                <td></td>
+                <td>{{uploadMessage}}</td>
                 <td></td>
             </tr>
             </tbody>
@@ -51,11 +50,20 @@
 </template>
 
 <script>
+    import axios from "axios";
+
     export default {
         name: "Menu.vue",
 
         props: {
-            admin: Boolean
+            admin: Boolean,
+            basicUrl: String
+        },
+
+        data() {
+            return {
+                uploadMessage: ""
+            }
         },
 
         methods: {
@@ -68,14 +76,45 @@
             },
 
             downloadDictionary() {
-                this.$emit("download-dictionary");
+                axios
+                    .get(this.basicUrl + "/item/translation-download")
+                    .then(response => {
+                        console.log(response);
+                        window.open(response.data, 'neuesDokument');
+                    });
             },
 
-            uploadDictionary() {
-                this.$emit("upload-dictionary");
-            }
+            uploadDictionary(event) {
+                console.log("Upload started");
+                let input = event.target;
+                let file = input.files[0];
+                if (file !== null) {
+                    let reader = new FileReader();
+                    reader.readAsText(file);
+                    reader.onload = (e) => {
+                        let message = {
+                            text: e.target.result
+                        };
+                        axios
+                            .post(this.basicUrl + "/item/translation-upload", message)
+                            .then(response => {
+                                this.uploadMessage = "Dictionary uploaded";
+                                console.log(this.uploadMessage);
+                            })
+                            .catch(exception => {
+                                this.uploadMessage = "Uploaded failed";
+                                console.log(this.uploadMessage);
+                            });
+
+                    };
+                }
+            },
         }
     }
 </script>
 
-<style></style>
+<style scoped>
+    input {
+        color: black;
+    }
+</style>

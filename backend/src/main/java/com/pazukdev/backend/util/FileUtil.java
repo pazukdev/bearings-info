@@ -28,7 +28,11 @@ public class FileUtil {
     }
 
     public static void createDictionaryFileInFileSystem(final String base64Data) throws IOException {
-        Files.write(getDictionaryFilePath(), Base64.getDecoder().decode(base64Data.getBytes(StandardCharsets.UTF_8)));
+        createDictionaryFileInFileSystem(Base64.getDecoder().decode(base64Data.getBytes(StandardCharsets.UTF_8)));
+    }
+
+    public static void createDictionaryFileInFileSystem(final byte[] text) throws IOException {
+        Files.write(getDictionaryFilePath(), text);
     }
 
     public static String getDictionaryFilePathString() {

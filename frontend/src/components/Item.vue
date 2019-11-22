@@ -434,8 +434,7 @@
             <details v-if="isAdditionalMenuDisplayed()">
                 <summary id="menu-summary">{{$t("menu")}}</summary>
                 <Menu :admin="isAdmin()"
-                      @download-dictionary="downloadDictionary"
-                      @upload-dictionary="uploadDictionary"
+                      :basic-url="basicUrl"
                       @open-items-management="openItemsManagement"
                       @open-users-list="openUsersList"></Menu>
             </details>
@@ -708,29 +707,6 @@
                         this.dispatchView(updatedItemView);
                         this.logEvent("item updated", updatedItemView);
                     });
-            },
-
-            downloadDictionary() {
-                axios
-                    .get(this.basicUrl + "/item/translation-download")
-                    .then(response => {
-                        console.log(response);
-                        window.open(response.data, 'neuesDokument');
-                    });
-            },
-
-            uploadDictionary(event) {
-                let input = event.target;
-                let file = input.files[0];
-                if (file !== null) {
-                    let reader = new FileReader();
-                    reader.readAsText(file);
-                    reader.onload = (e) => {
-                        let base64data = e.target.result;
-                        console.log(e);
-                        axios.post(this.basicUrl + "/item/translation-upload/" + base64data);
-                    };
-                }
             },
 
             dispatchView(itemView) {

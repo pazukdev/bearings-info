@@ -1,6 +1,7 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.dto.ItemView;
+import com.pazukdev.backend.dto.Message;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.util.FileUtil;
 import io.swagger.annotations.Api;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 /**
@@ -65,10 +67,9 @@ public class ItemController {
         response.flushBuffer();
     }
 
-    @RequestMapping(value = "/translation-upload/{base64Data}", method = RequestMethod.POST)
-    public void getFile(@PathVariable final String base64Data) throws IOException {
-        System.out.println(base64Data);
-//        FileUtil.createDictionaryFileInFileSystem(base64Data);
+    @RequestMapping(value = "/translation-upload", method = RequestMethod.POST)
+    public void getFile(@RequestBody final Message message) throws IOException {
+        FileUtil.createDictionaryFileInFileSystem(message.getText().getBytes(StandardCharsets.UTF_8));
     }
 
 }
