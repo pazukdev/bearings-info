@@ -2,11 +2,18 @@ package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.service.ItemService;
+import com.pazukdev.backend.util.FileUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -47,6 +54,18 @@ public class ItemController {
                            @PathVariable String language,
                            @RequestBody final ItemView itemView) {
         return service.updateItemView(id, userName, language, itemView);
+    }
+
+    @RequestMapping(value = "/translation-download", method = RequestMethod.GET)
+    public void getFile(final HttpServletResponse response) throws IOException {
+        final InputStream inputStream = Files.newInputStream(FileUtil.getDictionaryFilePath());
+        IOUtils.copy(inputStream, response.getOutputStream());
+        response.flushBuffer();
+    }
+
+    @RequestMapping(value = "/translation-upload/{base64Data}", method = RequestMethod.POST)
+    public void getFile(@PathVariable final String base64Data) throws IOException {
+        FileUtil.createDictionaryFileInFileSystem(base64Data);
     }
 
 }

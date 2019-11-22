@@ -456,6 +456,28 @@
                     <td></td>
                     <td></td>
                 </tr>
+                <tr v-if="isAdmin()">
+                    <td></td>
+                    <td>
+<!--                        <button type="button"-->
+<!--                                v-on:click="downloadDictionary()">-->
+<!--                            {{"Download dictionary"}}-->
+<!--                        </button>-->
+                        <a href="path_to_file" download="proposed_file_name">Download</a>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr v-if="isAdmin()">
+                    <td></td>
+                    <td>
+                        <input type="file"
+                               style="color: black"
+                               @change="uploadDictionary">
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
                 <tr>
                     <td colspan="3">
                         <div style="text-align: center; margin-top: 60px; margin-bottom: 20px">
@@ -728,6 +750,22 @@
                         this.dispatchView(updatedItemView);
                         this.logEvent("item updated", updatedItemView);
                     });
+            },
+
+            downloadDictionary() {
+                axios.get(this.basicUrl + "/item/translation-download");
+            },
+
+            uploadDictionary(event) {
+                let input = event.target;
+                let file = input.files[0];
+                if (file !== null) {
+                    let reader = new FileReader();
+                    reader.onload = (e) => {
+                        let base64data = e.target.result;
+                        axios.post(this.basicUrl + "/item/translation-upload/" + base64data);
+                    };
+                }
             },
 
             dispatchView(itemView) {

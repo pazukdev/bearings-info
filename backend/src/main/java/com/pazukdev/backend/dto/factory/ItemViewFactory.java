@@ -226,13 +226,6 @@ public class ItemViewFactory {
         if (itemView.isAddToWishList()) {
             ItemUtil.updateWishList(item, itemView, currentUser, itemService);
         } else {
-//            final ItemView oldItemViewInEnglish;
-//            if (!userLanguage.equals("en")) {
-//                oldItemViewInEnglish = createItemView(itemId, currentUser.getName(), "en");
-//                oldItemViewInEnglish.setImgData("-");
-//                itemView.setOldItemViewInEnglish(oldItemViewInEnglish);
-//            }
-
             if (!userLanguage.equals("en")) {
                 translate(userLanguage, "en", itemView, true, itemService);
             }

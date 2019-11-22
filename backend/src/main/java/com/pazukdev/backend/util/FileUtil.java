@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,7 +24,15 @@ public class FileUtil {
 
     public static Path getDictionaryFilePath() {
 //        return new PathFinder().getDictionaryFilePath();
-        return Paths.get(BASIC_DIRECTORY + "language/dictionary.txt");
+        return Paths.get(getDictionaryFilePathString());
+    }
+
+    public static void createDictionaryFileInFileSystem(final String base64Data) throws IOException {
+        Files.write(getDictionaryFilePath(), Base64.getDecoder().decode(base64Data.getBytes(StandardCharsets.UTF_8)));
+    }
+
+    public static String getDictionaryFilePathString() {
+        return BASIC_DIRECTORY + "language/dictionary.txt";
     }
 
 }
