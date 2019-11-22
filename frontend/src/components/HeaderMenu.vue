@@ -49,7 +49,7 @@
 
 <script>
     export default {
-        name: "TableView.vue",
+        name: "HeaderMenu.vue",
 
         props: {
             userData: Object,

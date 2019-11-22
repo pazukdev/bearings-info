@@ -248,7 +248,7 @@
                 <tr v-for="table in itemView.partsTable.tables" v-if="arrayHaveActiveItems(table.parts)">
                     <td colspan="3">
                         <v-details v-model="table.opened">
-                            <summary style="text-align: left"><b>{{table.localizedName}}</b></summary>
+                            <summary><b>{{table.localizedName}}</b></summary>
                             <table id="get-all-table">
                                 <tbody>
                                 <tr v-for="part in table.parts" v-if="statusActive(part)">
@@ -431,62 +431,18 @@
                 </tbody>
             </table>
 
-            <table id="additional-menu" v-if="isAdditionalMenuDisplayed()">
-                <tbody>
-                <tr><td colspan="3">{{$t("additionalMenu")}}</td></tr>
-                <tr>
-                    <td class="three-column-table-left-column"></td>
-                    <td class="three-column-table-middle-column">
-                        <button type="button"
-                                v-on:click="openItemsManagement()">
-                            {{$t("itemsManagement")}}
-                        </button>
-                    </td>
-                    <td class="three-column-table-right-column"></td>
-                    <td class="three-column-table-button-column"></td>
-                </tr>
-                <tr v-if="isAdmin()">
-                    <td></td>
-                    <td>
-                        <button type="button"
-                                v-on:click="openUsersList()">
-                            {{$t("users")}}
-                        </button>
-                    </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr v-if="isAdmin()">
-                    <td></td>
-                    <td>
-<!--                        <button type="button"-->
-<!--                                v-on:click="downloadDictionary()">-->
-<!--                            {{"Download dictionary"}}-->
-<!--                        </button>-->
-                        <a href="path_to_file" download="proposed_file_name">Download</a>
-                    </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr v-if="isAdmin()">
-                    <td></td>
-                    <td>
-                        <input type="file"
-                               style="color: black"
-                               @change="uploadDictionary">
-                    </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <div style="text-align: center; margin-top: 60px; margin-bottom: 20px">
-                            {{"Minsk 2019"}}
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <details v-if="isAdditionalMenuDisplayed()">
+                <summary id="menu-summary">{{$t("menu")}}</summary>
+                <Menu :admin="isAdmin()"
+                      @download-dictionary="downloadDictionary"
+                      @upload-dictionary="uploadDictionary"
+                      @open-items-management="openItemsManagement"
+                      @open-users-list="openUsersList"></Menu>
+            </details>
+
+            <div id="place-of-creation">
+                {{"Minsk 2019"}}
+            </div>
         </div>
     </div>
 </template>
@@ -495,11 +451,13 @@
     import axios from 'axios';
     import {mapState} from 'vuex';
     import HeaderMenu from "./HeaderMenu";
+    import Menu from "./Menu";
 
     export default {
 
         components: {
-            HeaderMenu
+            HeaderMenu,
+            Menu
         },
 
         data() {
@@ -753,7 +711,12 @@
             },
 
             downloadDictionary() {
-                axios.get(this.basicUrl + "/item/translation-download");
+                axios
+                    .get(this.basicUrl + "/item/translation-download")
+                    .then(response => {
+                        console.log(response);
+                        window.open(response.data, 'neuesDokument');
+                    });
             },
 
             uploadDictionary(event) {
@@ -761,8 +724,10 @@
                 let file = input.files[0];
                 if (file !== null) {
                     let reader = new FileReader();
+                    reader.readAsText(file);
                     reader.onload = (e) => {
                         let base64data = e.target.result;
+                        console.log(e);
                         axios.post(this.basicUrl + "/item/translation-upload/" + base64data);
                     };
                 }
@@ -1247,10 +1212,6 @@
 </script>
 
 <style>
-    #item-creation-menu, #item-image {
-        border-spacing: 0;
-    }
-
     .two-columns-table-left-column {
         width: 50%;
     }
@@ -1276,5 +1237,21 @@
 
     .round-delete-button {
         background: red;
+    }
+
+    #item-creation-menu, #item-image {
+        border-spacing: 0;
+    }
+
+    #menu-summary {
+        text-align: center;
+        font-weight: bold;
+        font-size: large;
+    }
+
+    #place-of-creation {
+        text-align: center;
+        margin-top: 60px;
+        margin-bottom: 20px;
     }
 </style>

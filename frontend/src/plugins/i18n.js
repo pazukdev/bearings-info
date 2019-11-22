@@ -36,7 +36,7 @@ export const i18n = new VueI18n({
             category: "Category",
             name: "Name",
             createNewItem: "Create new item",
-            additionalMenu: "Menu",
+            menu: "Menu",
             itemsManagement: "Items management",
             users: "Users",
             buy: "buy"
@@ -70,7 +70,7 @@ export const i18n = new VueI18n({
             category: "Категория",
             name: "Наименование",
             createNewItem: "Добавить новый объект",
-            additionalMenu: "Меню",
+            menu: "Меню",
             itemsManagement: "Управление деталями",
             users: "Пользователи",
             buy: "купить"

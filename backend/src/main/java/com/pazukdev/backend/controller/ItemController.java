@@ -60,12 +60,15 @@ public class ItemController {
     public void getFile(final HttpServletResponse response) throws IOException {
         final InputStream inputStream = Files.newInputStream(FileUtil.getDictionaryFilePath());
         IOUtils.copy(inputStream, response.getOutputStream());
+        response.setContentType("text/plain");
+        response.setHeader("Content-Disposition", "attachment;filename=dictionary.txt");
         response.flushBuffer();
     }
 
     @RequestMapping(value = "/translation-upload/{base64Data}", method = RequestMethod.POST)
     public void getFile(@PathVariable final String base64Data) throws IOException {
-        FileUtil.createDictionaryFileInFileSystem(base64Data);
+        System.out.println(base64Data);
+//        FileUtil.createDictionaryFileInFileSystem(base64Data);
     }
 
 }

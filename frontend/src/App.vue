@@ -258,6 +258,10 @@
         max-width: 100%;
     }
 
+    summary {
+        text-align: left;
+    }
+
     .alert-message {
         color: red;
     }
