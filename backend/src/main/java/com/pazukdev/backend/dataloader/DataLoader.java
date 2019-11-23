@@ -51,6 +51,7 @@ public class DataLoader implements ApplicationRunner {
     private void createDefaultUsers() {
         createUser(Role.GUEST, "guest", "$2a$10$unchbvwqbdJHEaRU/zT03emzPvORNIDnVYXgWUh8tN8G2WlcnPH6y");
         createUser(Role.ADMIN, "pazuk1985@gmail.com", "$2a$10$LJDm6BOaekdsan3q3j15Q.ceRCSHHb1J8kAPqQasWZSdKoJtDAnyO");
+        createUser(Role.ADMIN, "dominator", "$2a$10$mRsNu6BVh3YAm1vKWwsbz.AlOUqzoi0eW9TAcV5AysIciUyusnxrm");
         createUser(Role.USER, "user", "$2a$10$50E.w9jZJAIjGlsb4OU0N.wSvxrfWe.VEmiAV7.filaKuuKN.f992");
     }
 
