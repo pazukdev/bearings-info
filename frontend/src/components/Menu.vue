@@ -80,7 +80,7 @@
 
             downloadDictionary() {
                 axios
-                    .get(this.basicUrl + "/item/translation-download")
+                    .get(this.basicUrl + "/file/dictionary/download")
                     .then(response => {
                         console.log(response);
                     });
@@ -98,7 +98,7 @@
                             text: e.target.result
                         };
                         axios
-                            .post(this.basicUrl + "/item/translation-upload", message)
+                            .put(this.basicUrl + "/file/dictionary/upload", message)
                             .then(response => {
                                 this.uploadMessage = "Dictionary uploaded";
                                 console.log(this.uploadMessage);
