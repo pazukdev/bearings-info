@@ -29,7 +29,7 @@
                 <td>
                     <button type="button"
                             v-on:click="downloadDictionary">
-                        {{"Download dictionary"}}
+                        {{$t("downloadDictionary")}}
                     </button>
                 </td>
                 <td></td>
@@ -38,8 +38,10 @@
             <tr v-if="admin">
                 <td></td>
                 <td>
-                    <input type="file"
-                           @change="uploadDictionary">
+                    <label class="custom-file-upload">
+                        {{$t("uploadDictionary")}}
+                        <input type="file" required @change="uploadDictionary"/>
+                    </label>
                 </td>
                 <td>{{uploadMessage}}</td>
                 <td></td>
@@ -100,6 +102,9 @@
                             .then(response => {
                                 this.uploadMessage = "Dictionary uploaded";
                                 console.log(this.uploadMessage);
+                                if (this.$i18n.locale !== "en") {
+                                    window.location.reload();
+                                }
                             })
                             .catch(exception => {
                                 this.uploadMessage = "Uploaded failed";
@@ -114,7 +119,15 @@
 </script>
 
 <style scoped>
-    input {
-        color: black;
+    input[type="file"] {
+        display: none;
+    }
+
+    .custom-file-upload {
+        background: #808080;
+        border-radius: 4px;
+        border: none;
+        width: 100%;
+        cursor: pointer;
     }
 </style>

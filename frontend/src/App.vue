@@ -240,9 +240,10 @@
         height: 52px;
     }
 
-    button {
+    button, label {
         min-height: 52px;
         max-height: 92px;
+        color: #050505;
     }
 
     table {

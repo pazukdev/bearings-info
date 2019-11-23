@@ -39,7 +39,9 @@ export const i18n = new VueI18n({
             menu: "Menu",
             itemsManagement: "Items management",
             users: "Users",
-            buy: "buy"
+            buy: "buy",
+            downloadDictionary: "Download dictionary",
+            uploadDictionary: "Upload dictionary"
         },
         ru: {
             language: "Русский язык",
@@ -73,7 +75,9 @@ export const i18n = new VueI18n({
             menu: "Меню",
             itemsManagement: "Управление деталями",
             users: "Пользователи",
-            buy: "купить"
+            buy: "купить",
+            downloadDictionary: "Скачать словарь",
+            uploadDictionary: "Загрузить словарь"
         }
     }
 });
