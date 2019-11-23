@@ -28,6 +28,7 @@
                 <td></td>
                 <td>
                     <button type="button"
+                            content=""
                             v-on:click="downloadDictionary">
                         {{$t("downloadDictionary")}}
                     </button>
@@ -40,7 +41,7 @@
                 <td>
                     <label class="custom-file-upload">
                         {{$t("uploadDictionary")}}
-                        <input type="file" required @change="uploadDictionary"/>
+                        <input type="file" accept="text/plain" @change="uploadDictionary"/>
                     </label>
                 </td>
                 <td>{{uploadMessage}}</td>
@@ -82,7 +83,6 @@
                     .get(this.basicUrl + "/item/translation-download")
                     .then(response => {
                         console.log(response);
-                        window.open(response.data, 'neuesDokument');
                     });
             },
 

@@ -188,7 +188,7 @@
                 </tr>
                 <tr v-if="isEditMode && itemView.defaultImg && !messagesContain('img removed')">
                     <td>
-                        <button type="button" @click="removeImg()" style="width: initial; background: red">
+                        <button id="remove-img-button" type="button" @click="removeImg()">
                             {{"Remove image"}}
                         </button>
                     </td>
@@ -1229,5 +1229,10 @@
         text-align: center;
         margin-top: 60px;
         margin-bottom: 20px;
+    }
+
+    #remove-img-button {
+        width: initial;
+        background: red
     }
 </style>
