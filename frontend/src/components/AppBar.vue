@@ -16,7 +16,9 @@
                         {{$t('back')}}
                     </button>
                 </td>
-                <td class="app-bar-middle-side-column"></td>
+                <td class="app-bar-middle-side-column">
+                    {{"v 2.0"}}
+                </td>
                 <td id="appName">
                     {{"Soviet boxers seals & bearings"}}
                 </td>
@@ -100,6 +102,12 @@
 </script>
 
 <style scoped>
+    table, select, .app-bar-button {
+        color: #212121;
+        font-weight: bold;
+        text-align: center;
+    }
+
     select {
         width: initial;
         height: initial;
@@ -125,13 +133,9 @@
         padding-top: 5px;
         min-height: 56px;
         max-height: 200px;
-        text-align: center;
     }
 
     #appName, .app-bar-button {
-        text-align: center;
-        color: #212121;
         font-size: large;
-        font-weight: bold;
     }
 </style>
