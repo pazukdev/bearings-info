@@ -126,7 +126,7 @@ public class TableUtil {
         for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
             String parameter = entry.getKey();
             String value = entry.getValue();
-            String itemId = "no id";
+            String itemId = "-";
 
             final Item foundItem = itemService.find(parameter, value);
             if (foundItem != null) {

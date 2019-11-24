@@ -5,7 +5,7 @@
         </div>
         <div v-if="!isLoading()">
             <div style="text-align: left">
-<!--                {{itemView.partsTable.tables}}<br><br>-->
+<!--                {{itemView.header.rows}}<br><br>-->
 <!--                {{itemView.replacersTable}}<br><br>-->
 <!--                {{itemView.wishListIds.length}}<br><br>-->
             </div>
@@ -108,11 +108,11 @@
                     </td>
                     <td class="two-column-table-right-column">
                         <input v-if="isEditMode && isOrdinaryItemView()" v-model="row.value" type="text"/>
-                        <p v-if="!isShowInfoButton(row.message)
+                        <p v-if="!isShowInfoButton(row)
                     && (!isEditMode || (isEditMode && !isOrdinaryItemView()))">
                             {{row.value}}
                         </p>
-                        <button v-if="isShowInfoButton(row.message)"
+                        <button v-if="isShowInfoButton(row)"
                                 type="button"
                                 @click="navigateToItem(row.itemId)">
                             {{row.value}}
@@ -969,8 +969,8 @@
                 this.categoryMessage = "";
             },
 
-            isShowInfoButton(message) {
-                return message === 'show button' && !this.isEditMode && this.isOrdinaryItemView();
+            isShowInfoButton(row) {
+                return row.itemId !== "-" && !this.isEditMode && this.isOrdinaryItemView();
             },
 
             edit() {
