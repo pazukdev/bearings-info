@@ -7,7 +7,7 @@
             <div style="text-align: left">
 <!--                {{itemView.partsTable.tables}}<br><br>-->
 <!--                {{itemView.replacersTable}}<br><br>-->
-<!--                {{itemView.possibleParts}}<br><br>-->
+<!--                {{itemView.wishListIds.length}}<br><br>-->
             </div>
 
             <HeaderMenu :user-data="itemView.userData"
