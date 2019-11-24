@@ -182,33 +182,16 @@
 
     }
 
+    #screen::-webkit-scrollbar {
+        display: none;
+    }
+
     @media only screen and (max-width: 1280px) {
         #screen {
             border-radius: initial;
             width: 100%;
             height: 100%;
         }
-    }
-
-    #screen::-webkit-scrollbar {
-        display: none;
-    }
-
-    .round-button, .round-delete-button {
-        text-align: center;
-        height: 32px;
-        width: 32px;
-        min-height: initial;
-        max-height: initial;
-        border-radius: 16px;
-    }
-
-    .no-border {
-        border-spacing: 0;
-    }
-
-    .third-part-wide {
-        width: 33.33%;
     }
 
     table, button, select, input, .round-button {
@@ -261,6 +244,23 @@
 
     summary {
         text-align: left;
+    }
+
+    .round-button, .round-delete-button {
+        text-align: center;
+        height: 32px;
+        width: 32px;
+        min-height: initial;
+        max-height: initial;
+        border-radius: 16px;
+    }
+
+    .no-border {
+        border-spacing: 0;
+    }
+
+    .third-part-wide {
+        width: 33.33%;
     }
 
     .alert-message {

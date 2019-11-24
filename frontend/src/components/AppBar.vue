@@ -13,12 +13,12 @@
                             @click="back()"
                             id="back"
                             class="app-bar-button">
-                        <b>{{$t('back')}}</b>
+                        {{$t('back')}}
                     </button>
                 </td>
                 <td class="app-bar-middle-side-column"></td>
                 <td id="appName">
-                    <b>Bearings info</b>
+                    {{"Soviet boxers seals & bearings"}}
                 </td>
                 <td class="app-bar-middle-side-column">
                     <select v-if="languageSelectDisplayed"
@@ -35,14 +35,14 @@
                             @click="logout()"
                             id="logout"
                             class="app-bar-button">
-                        <b>{{$t('logout')}}</b>
+                        {{$t('logout')}}
                     </button>
                     <button
                             v-show="loginButtonDisplayed"
                             @click="openLoginForm()"
                             id="login"
                             class="app-bar-button">
-                        <b>{{$t('loginButton')}}</b>
+                        {{$t('loginButton')}}
                     </button>
                 </td>
             </tr>
@@ -119,8 +119,6 @@
         width: 100%;
         height: 100%;
         background: none;
-        font-size: larger;
-        color: #212121
     }
 
     #app_bar {
@@ -130,9 +128,10 @@
         text-align: center;
     }
 
-    #appName {
+    #appName, .app-bar-button {
         text-align: center;
         color: #212121;
-        font-size: x-large;
+        font-size: large;
+        font-weight: bold;
     }
 </style>
