@@ -1,8 +1,13 @@
 ru=- Gear oil for gearbox=- Трансмиссионное масло для КПП
+ru=AL-5=АЛ-5
 ru=Bearing=Подшипник
+ru=BrAZHMC 10-3-1.5=БрАЖМц 10-3-1.5
+ru=BrOF10=БрОФ10
+ru=Bronze=Бронза
 ru=Carburetor=Карбюратор
 ru=Created by=Добавлено пользователем
 ru=Dnepr MT-9=Днепр МТ-9
+ru=Duralumin=Дюраль
 ru=Eccentric inner flat snap rings=Эксцентричные внутренние плоские пружинные кольца
 ru=Edit=Редактировать
 ru=Engine M-72 type=Двигатель M-72 type
@@ -56,17 +61,13 @@ ru=Rating=Рейтинг
 ru=Rear suspension=Задняя подвеска
 ru=Replacers=Заменители
 ru=Role=Роль
+ru=SHH-15=ШХ-15
+ru=Cage=Сепаратор
 ru=Telescopic=Телескопическая
+ru=USSR=СССР
 ru=Ural M-63=Урал М-63
 ru=Ural M63=Урал М63
-ru=SHH-15=ШХ-15
 ru=Username=Имя пользователя
 ru=Weight, kg=Вес, кг
 ru=Wheel=Колесо
 ru=Width=Ширина
-ru=AL-5=АЛ-5
-ru=BrAZHMC 10-3-1.5=БрАЖМц 10-3-1.5
-ru=BrOF10=БрОФ10
-ru=Duralumin=Дюраль
-ru=Bronze=Бронза
-ru=USSR=СССР
