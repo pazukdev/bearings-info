@@ -182,7 +182,7 @@
                 <tr v-if="!messagesContain('img removed')">
                     <td>
                         <div class="image-preview">
-                            <img class="preview" :src="itemView.imgData">
+                            <img class="preview" :src="itemView.imgData" alt="Item image">
                         </div>
                     </td>
                 </tr>
