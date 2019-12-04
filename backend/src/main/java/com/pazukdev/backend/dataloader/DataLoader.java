@@ -17,6 +17,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -93,20 +94,33 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void createStubReplacers(final TransitiveItem item) {
+        final String category = item.getCategory();
+        final Map<String, String> descriptionMap = ItemUtil.toMap(item.getDescription());
         final List<ReplacerData> replacersData = ItemUtil.parseReplacersSourceString(item.getReplacer());
+
         for (final ReplacerData replacerData : replacersData) {
-            final TransitiveItem replacer = transitiveItemService.find(item.getCategory(), replacerData.getName());
+            final TransitiveItem replacer = transitiveItemService.find(category, replacerData.getName());
             if (replacer == null) {
                 final TransitiveItem stubReplacer = new TransitiveItem();
                 stubReplacer.setName(replacerData.getName());
                 stubReplacer.setReplacer("-");
-                stubReplacer.setDescription(item.getDescription());
-                stubReplacer.setCategory(item.getCategory());
+                stubReplacer.setCategory(category);
                 stubReplacer.setImage("-");
-                final String category = stubReplacer.getCategory();
-                if (category != null && category.toLowerCase().equals("bearing")) {
+                if (category != null && category.equalsIgnoreCase("bearing")) {
                     BearingUtil.setBearingEnclosure(stubReplacer);
                 }
+
+                if (descriptionMap.get("Standard") != null) {
+                    descriptionMap.put("Standard", "-");
+                }
+                if (descriptionMap.get("Material") != null) {
+                    descriptionMap.put("Material", "-");
+                }
+                if (descriptionMap.get("Screw class") != null) {
+                    descriptionMap.put("Screw class", "-");
+                }
+
+                stubReplacer.setDescription(ItemUtil.toDescription(descriptionMap));
                 transitiveItemService.getTransitiveItemRepository().save(stubReplacer);
             }
         }
