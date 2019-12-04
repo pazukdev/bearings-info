@@ -138,6 +138,10 @@ public class SpecificStringUtil {
         return s.contains(" ") || !s.equals(s.toLowerCase());
     }
 
+    public static List<String> toList(final String s) {
+        return new ArrayList<>(Arrays.asList(s.split("")));
+    }
+
     private static Integer getInteger(final String source, final Position position, final Separator separator) {
         return getInteger(getString(source, position, separator));
     }

@@ -3,7 +3,7 @@ package com.pazukdev.backend.entity.factory;
 import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.service.TransitiveItemService;
 import com.pazukdev.backend.tablemodel.TableRow;
-import com.pazukdev.backend.util.CSVFileUtil;
+import com.pazukdev.backend.util.FileUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -28,8 +28,8 @@ public class TransitiveItemFactory extends AbstractEntityFactory<TransitiveItem>
             Arrays.asList("name", "category", "replacer", "image"));
 
     @Override
-    protected String getCSVFilePath() {
-        return CSVFileUtil.filePath("item");
+    protected String[] getCSVFilesPaths() {
+        return FileUtil.getCSVFilesPaths();
     }
 
     @Override

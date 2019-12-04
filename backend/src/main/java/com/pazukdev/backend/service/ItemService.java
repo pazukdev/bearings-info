@@ -129,8 +129,10 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     public Item create(final TransitiveItem transitiveItem) {
-        final TransitiveItemDescriptionMap descriptionMap
-                = createDescriptionMap(transitiveItem, transitiveItemService);
+        if (transitiveItem.getName().equals("12204")) {
+            boolean b = true;
+        }
+        final TransitiveItemDescriptionMap descriptionMap = createDescriptionMap(transitiveItem, transitiveItemService);
         final Map<String, String> items = descriptionMap.getItems();
         final List<ChildItem> childItems
                 = ChildItemUtil.createParts(transitiveItem, items, this, transitiveItemService);
@@ -141,7 +143,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         item.setName(transitiveItem.getName());
         item.setCategory(transitiveItem.getCategory().replace(" (i)", ""));
         item.setStatus("active");
-        item.setDescription(createItemDescription(transitiveItem));
+        item.setDescription(createItemDescription(descriptionMap));
         item.getChildItems().addAll(childItems);
         item.getReplacers().addAll(replacers);
         item.setCreatorId(userService.getAdmin().getId());
@@ -166,8 +168,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return CategoryUtil.filterPartCategories(findAllCategories());
     }
 
-    private String createItemDescription(final TransitiveItem transitiveItem) {
-        final TransitiveItemDescriptionMap descriptionMap = createDescriptionMap(transitiveItem, transitiveItemService);
+    private String createItemDescription(final TransitiveItemDescriptionMap descriptionMap) {
         descriptionMap.getItems().clear();
         return ItemUtil.toDescription(descriptionMap);
     }

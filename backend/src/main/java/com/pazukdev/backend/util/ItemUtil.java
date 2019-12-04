@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.pazukdev.backend.util.BearingUtil.isBearingRollingElementSpecifiedAsParameter;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -122,8 +124,8 @@ public class ItemUtil {
 
     public static String toDescription(final TransitiveItemDescriptionMap descriptionMap) {
         final String description
-                = toDescription(descriptionMap.getCharacteristics())
-                + toDescription(descriptionMap.getSelectableCharacteristics())
+                = toDescription(descriptionMap.getParameters())
+                + toDescription(descriptionMap.getSelectableParameters())
                 + toDescription(descriptionMap.getItems());
         return SpecificStringUtil.replaceBlankWithDash(description);
     }
@@ -149,19 +151,38 @@ public class ItemUtil {
             final String parameter = StringUtils.trim(entry.getKey());
             final String value = StringUtils.trim(entry.getValue());
             if (isInfoItem(parameter, service)) {
-                itemDescriptionMap.getSelectableCharacteristics().put(parameter, value);
-            } else if (isLinkToItem(parameter, service)) {
+                itemDescriptionMap.getSelectableParameters().put(parameter, value);
+            } else if (isPart(parameter, value, item.getCategory(), service)) {
                 itemDescriptionMap.getItems().put(parameter, value);
             } else {
-                itemDescriptionMap.getCharacteristics().put(parameter, value);
+                itemDescriptionMap.getParameters().put(parameter, value);
             }
         }
         return itemDescriptionMap;
     }
 
-    public static boolean isLinkToItem(final String parameter, final TransitiveItemService service) {
-        return !isInfoItem(parameter, service) && service.find(parameter).size() > 0;
+    public static boolean isPart(final String parameter,
+                                 final String value,
+                                 final String category,
+                                 final TransitiveItemService service) {
+
+        if (isInfoItem(parameter, service)) {
+            return false;
+        }
+        return service.find(parameter, getItemName(category, value)) != null;
+
     }
+
+     public static String getItemName(final String category,  String value) {
+         if (category.toLowerCase().equals("bearing") && isBearingRollingElementSpecifiedAsParameter(value)) {
+             return null;
+         }
+         if (SpecificStringUtil.containsParentheses(value)) {
+             return SpecificStringUtil.getStringBeforeParentheses(value);
+         } else {
+             return value;
+         }
+     }
 
     public static boolean isInfoItem(final String parameter, final TransitiveItemService service) {
         return service.find(parameter + " (i)").size() > 0;

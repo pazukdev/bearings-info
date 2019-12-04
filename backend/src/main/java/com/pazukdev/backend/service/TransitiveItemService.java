@@ -59,6 +59,9 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
 
     @Transactional
     public TransitiveItem find(final String category, final String name) {
+        if (category == null || name == null) {
+            return null;
+        }
         for (final TransitiveItem item : find(category)) {
             if (item.getName().equals(name)) {
                 return item;

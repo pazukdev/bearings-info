@@ -8,6 +8,7 @@ import com.pazukdev.backend.entity.factory.TransitiveItemFactory;
 import com.pazukdev.backend.repository.TransitiveItemRepository;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.TransitiveItemService;
+import com.pazukdev.backend.util.BearingUtil;
 import com.pazukdev.backend.util.ItemUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -101,6 +102,11 @@ public class DataLoader implements ApplicationRunner {
                 stubReplacer.setReplacer("-");
                 stubReplacer.setDescription(item.getDescription());
                 stubReplacer.setCategory(item.getCategory());
+                stubReplacer.setImage("-");
+                final String category = stubReplacer.getCategory();
+                if (category != null && category.toLowerCase().equals("bearing")) {
+                    BearingUtil.setBearingEnclosure(stubReplacer);
+                }
                 transitiveItemService.getTransitiveItemRepository().save(stubReplacer);
             }
         }

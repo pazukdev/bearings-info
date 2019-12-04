@@ -8,11 +8,7 @@ import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.TransitiveItemService;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.pazukdev.backend.util.NestedItemUtil.prepareNestedItemDtosToConverting;
 
@@ -23,23 +19,21 @@ public class ChildItemUtil {
                                               final ItemService itemService,
                                               final TransitiveItemService transitiveItemService) {
         final List<ChildItem> childItems = new ArrayList<>();
-        for (final Map.Entry entry : childItemsDescription.entrySet()) {
-            final String category = entry.getKey().toString();
-            if (entry.getValue().toString().contains(";")) {
-                final String[] names = entry.getValue().toString().split("; ");
+        for (final Map.Entry<String, String> entry : childItemsDescription.entrySet()) {
+            final String category = entry.getKey();
+            if (entry.getValue().contains(";")) {
+                final String[] names = entry.getValue().split("; ");
                 for (final String name : names) {
-                    final ChildItem childItem
-                            = createChildItem(parent, name, category, itemService, transitiveItemService);
-                    if (childItem != null) {
-                        childItems.add(childItem);
+                    final ChildItem child = createChild(parent, name, category, itemService, transitiveItemService);
+                    if (child != null) {
+                        childItems.add(child);
                     }
                 }
             } else {
-                final String name = entry.getValue().toString();
-                final ChildItem childItem
-                        = createChildItem(parent, name, category, itemService, transitiveItemService);
-                if (childItem != null) {
-                    childItems.add(childItem);
+                final String name = entry.getValue();
+                final ChildItem child = createChild(parent, name, category, itemService, transitiveItemService);
+                if (child != null) {
+                    childItems.add(child);
                 }
             }
         }
@@ -70,18 +64,22 @@ public class ChildItemUtil {
         return partsFromItemView;
     }
 
-    private static ChildItem createChildItem(final TransitiveItem parent,
-                                             final String value,
-                                             final String category,
-                                             final ItemService itemService,
-                                             final TransitiveItemService transitiveItemService) {
+    private static ChildItem createChild(final TransitiveItem parent,
+                                         final String value,
+                                         final String category,
+                                         final ItemService itemService,
+                                         final TransitiveItemService transitiveItemService) {
         String name;
         String location = "";
         String quantity;
-        if (SpecificStringUtil.containsParentheses(value)) {
-            name = SpecificStringUtil.getStringBeforeParentheses(value);
+        if (SpecificStringUtil.containsParentheses(value) && ItemUtil.getItemName(category, value) != null) {
+            name = ItemUtil.getItemName(category, value);
             String additionalData = SpecificStringUtil.getStringBetweenParentheses(value);
-            location = additionalData.contains(" - ") ? additionalData.split(" - ")[0] : "-";
+            try {
+                location = additionalData.contains(" - ") ? additionalData.split(" - ")[0] : "-";
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
             quantity = additionalData.contains(" - ") ? additionalData.split(" - ")[1] : additionalData;
         } else {
             name = value;
