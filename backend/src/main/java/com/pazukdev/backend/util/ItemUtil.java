@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.pazukdev.backend.util.BearingUtil.isBearingRollingElementSpecifiedAsParameter;
-
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -152,7 +150,7 @@ public class ItemUtil {
             final String value = StringUtils.trim(entry.getValue());
             if (isInfoItem(parameter, service)) {
                 itemDescriptionMap.getSelectableParameters().put(parameter, value);
-            } else if (isPart(parameter, value, item.getCategory(), service)) {
+            } else if (isPart(parameter, service)) {
                 itemDescriptionMap.getItems().put(parameter, value);
             } else {
                 itemDescriptionMap.getParameters().put(parameter, value);
@@ -161,28 +159,12 @@ public class ItemUtil {
         return itemDescriptionMap;
     }
 
-    public static boolean isPart(final String parameter,
-                                 final String value,
-                                 final String category,
-                                 final TransitiveItemService service) {
-
+    public static boolean isPart(final String parameter, final TransitiveItemService service) {
         if (isInfoItem(parameter, service)) {
             return false;
         }
-        return service.find(parameter, getItemName(category, value)) != null;
-
+        return service.find(parameter).size() > 0;
     }
-
-     public static String getItemName(final String category,  String value) {
-         if (category.toLowerCase().equals("bearing") && isBearingRollingElementSpecifiedAsParameter(value)) {
-             return null;
-         }
-         if (SpecificStringUtil.containsParentheses(value)) {
-             return SpecificStringUtil.getStringBeforeParentheses(value);
-         } else {
-             return value;
-         }
-     }
 
     public static boolean isInfoItem(final String parameter, final TransitiveItemService service) {
         return service.find(parameter + " (i)").size() > 0;

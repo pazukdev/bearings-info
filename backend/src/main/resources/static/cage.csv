@@ -1,5 +1,9 @@
-Category:,Cage,,,,
-Name,"Size, mm","Rollers, pcs",Standard,Material,Replacer
-7201208,-,12,-,Duralumin,-
-6601208,-,18,-,Duralumin,-
-6601208,-,18,-,Duralumin,-
+Category:,Cage,,,,,
+Name,Type,"Size, mm","Rollers, pcs",Standard,Material,Replacer
+Cage,-,-,-,-,-,-
+7201208,Duralumin cage,-,12,-,Duralumin,-
+6601208,Duralumin cage,-,18,-,Duralumin,-
+6601208,Duralumin cage,-,18,-,Duralumin,-
+Sheet metal cage,Sheet metal cage,-,-,-,Steel,-
+Solid brass cage,Solid brass cage,-,-,-,Brass,-
+Solid polyamide snap cage,"Solid polyamide snap cage, ball guided",-,-,-,Polyamide,-

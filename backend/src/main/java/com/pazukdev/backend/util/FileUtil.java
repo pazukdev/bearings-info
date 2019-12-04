@@ -39,7 +39,10 @@ public class FileUtil {
                 "universal_joint_cross",
                 "rolling_element",
                 "cage",
-                "bearing"
+                "bearing",
+                "universal_joint",
+                "wheel",
+                "frame_and_wheels"
         };
         final List<String> paths = new ArrayList<>();
         for (final String fileName : fileNames) {

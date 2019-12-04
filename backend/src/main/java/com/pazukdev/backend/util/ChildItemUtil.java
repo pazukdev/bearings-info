@@ -72,13 +72,13 @@ public class ChildItemUtil {
         String name;
         String location = "";
         String quantity;
-        if (SpecificStringUtil.containsParentheses(value) && ItemUtil.getItemName(category, value) != null) {
-            name = ItemUtil.getItemName(category, value);
+        if (SpecificStringUtil.containsParentheses(value)) {
+            name = SpecificStringUtil.getStringBeforeParentheses(value);
             String additionalData = SpecificStringUtil.getStringBetweenParentheses(value);
             try {
                 location = additionalData.contains(" - ") ? additionalData.split(" - ")[0] : "-";
-            } catch (NullPointerException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                String s = null;
             }
             quantity = additionalData.contains(" - ") ? additionalData.split(" - ")[1] : additionalData;
         } else {

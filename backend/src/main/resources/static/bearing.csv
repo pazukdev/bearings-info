@@ -4,7 +4,7 @@ Name,Type,Rolling element,Enclosure,Rolling row,Cage,"Size, mm",Static load rati
 822907,Cylindrical roller,7201209 (12),Open,Single row,7201208 (1),36x50x15,-,-,-,USSR,-,-,-,bearing_822907.png
 42209l,Cylindrical roller,Roller (16),Open,Single row,Solid brass cage,45x85x19,-,-,-,USSR,-,-,NJ209,bearing_42209l.png
 864708 DM,Cylindrical roller,6601209 (18),Open,Single row,6601208 (1),40x50x17,-,-,-,USSR,-,-,K40x50x17,bearing_864708_dm.png
-K40x50x17,Cylindrical roller,Roller (18),Open,Single row,With cage,40x50x17,Cor 30200,Cr 39200,DIN 5405-1,INA,-,-,-,bearing_k40x50x17.png
+K40x50x17,Cylindrical roller,Roller (18),Open,Single row,Cage,40x50x17,Cor 30200,Cr 39200,DIN 5405-1,INA,-,-,-,bearing_k40x50x17.png
 18,Deepgroove,Ball (7),Open,Single row,Sheet metal cage,8x22x7,-,-,-,USSR,-,-,608; 608-2RS; 608-ZZ,bearing_18.png
 200,Deepgroove,Ball (6),Open,Single row,Sheet metal cage,10x30x9,-,-,-,USSR,-,-,6200; 6200 - 2RS; 6200-ZZ,-
 201,Deepgroove,Ball (7),Open,Single row,Sheet metal cage,12x32x10,-,-,-,USSR,-,-,6201; 6201-2RS; 6201-ZZ,-
@@ -12,22 +12,22 @@ K40x50x17,Cylindrical roller,Roller (18),Open,Single row,With cage,40x50x17,Cor 
 205,Deepgroove,Ball (9),Open,Single row,Sheet metal cage,25x52x15,-,-,-,USSR,-,-,6205,bearing_205.png
 207,Deepgroove,Ball (9),Open,Single row,Sheet metal cage,35x72x17,-,-,-,USSR,-,-,6207; 6207M,bearing_207.png
 209,Deepgroove,Ball (9),Open,Single row,Sheet metal cage,45x85x19,-,-,-,USSR,-,-,6209,bearing_209.png
-303,Deepgroove,Ball (-),Open,Single row,Sheet metal cage,17x47x14,-,-,-,USSR,-,-,6303,-
-304,Deepgroove,Ball (-),Open,Single row,Sheet metal cage,20x52x15,-,-,-,USSR,-,-,6304,-
-180503,Deepgroove,Ball (-),Sealed,Single row,-,17x40x16,-,-,-,USSR,-,-,62203-ZZ,-
-3086304 L,Deepgroove,Ball (-),Open,2 row,Solid brass cage,20x52x22.22,-,-,-,USSR,-,-,5304; 3304; 3304B TVH; BMW 07119982468,bearing_3086304_l.png
-3304B TVH,Deepgroove,Ball (-),Open,2 row,"Solid polyamide Snap cage, ball guided",20x52x22.22,-,-,-,FAG,-,-,-,bearing_3304b_tvh.png
+303,Deepgroove,Ball (no data),Open,Single row,Sheet metal cage,17x47x14,-,-,-,USSR,-,-,6303,-
+304,Deepgroove,Ball (no data),Open,Single row,Sheet metal cage,20x52x15,-,-,-,USSR,-,-,6304,-
+180503,Deepgroove,Ball (no data),Sealed,Single row,-,17x40x16,-,-,-,USSR,-,-,62203-ZZ,-
+3086304 L,Deepgroove,Ball (no data),Open,2 row,Solid brass cage,20x52x22.22,-,-,-,USSR,-,-,5304; 3304; 3304B TVH; BMW 07119982468,bearing_3086304_l.png
+3304B TVH,Deepgroove,Ball (no data),Open,2 row,"Solid polyamide Snap cage, ball guided",20x52x22.22,-,-,-,FAG,-,-,-,bearing_3304b_tvh.png
 6207M,Deepgroove,Ball (9),Open,Single row,Solid brass cage,35x72x17,-,-,-,SLF,-,-,-,bearing_6207m.png
-7000105,Deepgroove,Ball (-),Open,Single row,-,25x47x8,-,-,-,USSR,-,-,16005,-
-110,Deepgroove,Ball (-),Open,Single row,-,50x80x16,-,-,-,USSR,-,-,6010,-
+7000105,Deepgroove,Ball (no data),Open,Single row,-,25x47x8,-,-,-,USSR,-,-,16005,-
+110,Deepgroove,Ball (no data),Open,Single row,-,50x80x16,-,-,-,USSR,-,-,6010,-
 407-1004058-A,Half-bearing,-,-,-,-,47.975-48.000 (diameter of con rod big end journal),-,-,-,USSR,-,Common use: Car Moskvitch-408,-,bearing_407-1004058_a.png
 Half-bearing 7205238/39,Half-bearing,-,-,-,-,-,-,-,-,USSR,Bronze,-,Needle 3x15.8 45 pcs kit,-
-Needle 3x15.8 45 pcs kit,"Kit, Needle",Needle (45),-,-,-,-,-,-,-,-,-,-,-,-
-874901,Needle,Needle (-),Open,Single row,-,13x32x20,-,-,-,USSR,-,-,-,-
+Needle 3x15.8 45 pcs kit,"Kit, Needle",Needle 3x15.8 (45),-,-,-,-,-,-,-,-,-,-,-,-
+874901,Needle,Needle (no data),Open,Single row,-,13x32x20,-,-,-,USSR,-,-,-,-
 7201107,Plain,-,-,-,-,20x26x19.5,-,-,-,USSR,BrAZHMC 10-3-1.5,-,-,-
 7201404,Plain,-,-,-,-,-,-,-,-,USSR,BrAZHMC 10-3-1.5; AL-5,-,-,bearing_7201404.png
 7201234-A,Plain,-,-,-,-,21x23.5x25,-,-,-,USSR,BrOF10,-,-,bearing_7201234-a.png
 7204,Tapered roller,Tapered roller (12),Open,Single row,Sheet metal cage,20x47x15.3,-,-,-,USSR,-,-,30204,-
-SSW055,Tapered roller,Tapered roller (-),-,Single row,Sheet metal cage,34x51x12.1,-,-,-,USSR,-,-,-,-
-948066,Thrust,Ball (-),Open,Single row,-,6x22.7x5.5,-,-,-,USSR,-,-,AXK0619NF,-
-7787007,Thrust,Ball (-),-,Single row,-,34x51x12.1,-,-,-,USSR,-,-,SSW055,-
+SSW055,Tapered roller,Tapered roller (no data),-,Single row,Sheet metal cage,34x51x12.1,-,-,-,USSR,-,-,-,-
+948066,Thrust,Ball (no data),Open,Single row,-,6x22.7x5.5,-,-,-,USSR,-,-,AXK0619NF,-
+7787007,Thrust,Ball (no data),-,Single row,-,34x51x12.1,-,-,-,USSR,-,-,SSW055,-
