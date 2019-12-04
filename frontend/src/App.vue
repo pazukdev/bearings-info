@@ -183,7 +183,7 @@
     }
 
     #screen::-webkit-scrollbar {
-        display: none;
+        /*display: none;*/
     }
 
     @media only screen and (max-width: 1280px) {

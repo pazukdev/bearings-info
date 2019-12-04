@@ -1,9 +1,6 @@
 package com.pazukdev.backend.unit.factory;
 
-import com.pazukdev.backend.tablemodel.TableModel;
 import com.pazukdev.backend.tablemodel.TableModelFactory;
-import com.pazukdev.backend.tablemodel.TableRow;
-import com.pazukdev.backend.util.CSVFileUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -18,15 +15,15 @@ import java.util.List;
 @RunWith(MockitoJUnitRunner.class)
 public class EntityFactoryTest {
 
-    @Test
-    public void createTableModelFromItemSourceFile() {
-        final TableModelFactory factory = TableModelFactory.create();
-        final String filePath = CSVFileUtil.filePath("item");
-        final TableModel tableModel = factory.createTableModel(filePath);
-        for (TableRow tableRow : tableModel.getTableRows()) {
-            System.out.println(tableRow);
-        }
-    }
+//    @Test
+//    public void createTableModelFromItemSourceFile() {
+//        final TableModelFactory factory = TableModelFactory.create();
+//        final String filePath = CSVFileUtil.filePath("item");
+//        final TableModel tableModel = factory.createTableModel(filePath);
+//        for (TableRow tableRow : tableModel.getTableRows()) {
+//            System.out.println(tableRow);
+//        }
+//    }
 
     @Test
     public void removeEmptyFromFileLines() {
