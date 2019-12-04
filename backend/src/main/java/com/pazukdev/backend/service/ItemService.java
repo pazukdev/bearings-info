@@ -91,6 +91,9 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     public Item saveAsItem(final TransitiveItem transitiveItem) {
         final Item item = getOrCreate(transitiveItem);
         item.setName(replaceBlankWithDash(item.getName()));
+        if (item.getImage() == null) {
+            item.setImage("-");
+        }
         return repository.save(item);
     }
 
@@ -124,8 +127,14 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     public Item getOrCreate(final TransitiveItem transitiveItem) {
-        final Item item = find(transitiveItem.getCategory(), transitiveItem.getName());
-        return item != null ? item : create(transitiveItem);
+        try {
+            final Item item = find(transitiveItem.getCategory(), transitiveItem.getName());
+            return item != null ? item : create(transitiveItem);
+        } catch (Exception e) {
+            e.printStackTrace();
+            e = null;
+            return null;
+        }
     }
 
     public Item create(final TransitiveItem transitiveItem) {
