@@ -31,7 +31,12 @@ public class FileUtil {
         final String[] fileNames = {
                 "standard",
                 "material",
+                "screw",
                 "oil",
+                "seal",
+                "spark_plug",
+                "lock_ring",
+                "universal_joint_cross",
                 "rolling_element",
                 "cage",
                 "bearing"
