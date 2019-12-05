@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import dictionary from './modules/dictionary'
+import dictionary from '../modules/dictionary'
 import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);

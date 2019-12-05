@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import router from "./router";
+import router from "./plugins/router";
 import App from './App.vue'
-import store from "./store";
+import store from "./plugins/store";
 import {i18n} from "./plugins/i18n";
 import VueDetails from 'vue-details';
 
