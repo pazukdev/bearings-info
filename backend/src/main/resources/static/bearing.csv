@@ -30,10 +30,11 @@ Name,Type,Rolling element,Enclosure,Rolling row,Cage,"Size, mm",Static load rati
 6207M,Deepgroove,Ball (9),Open,Single row,Solid brass cage,35x72x17,-,-,-,SLF,-,-,-,bearing_6207m.png
 7201234-A,Plain,-,-,-,-,21x23.5x25,-,-,-,USSR,BrOF10,-,-,bearing_7201234-a.png
 864708 DM,Cylindrical roller,6601209 (18),Open,Single row,6601208 (1),40x50x17,-,-,-,USSR,-,-,K40x50x17,bearing_864708_dm.png
-904700US17,Needle,Needle (-),-,-,-,10x19x9,-,-,-,USSR,-,-,-,bearing_904700US17.png
+904700US17,Needle,Needle (no data),-,-,-,10x19x9,-,-,-,USSR,-,-,-,bearing_904700US17.png
 AXK0619NF,Thrust,Roller (no data),Open,Single row,-,-,-,-,-,-,-,-,-,-
 Half-bearing 7205238/39,Half-bearing,-,-,-,-,-,-,-,-,USSR,Bronze,-,Needle 3x15.8 45 pcs kit,-
 K40x50x17,Cylindrical roller,Roller (18),Open,Single row,Cage,40x50x17,Cor 30200,Cr 39200,DIN 5405-1,INA,-,-,-,bearing_k40x50x17.png
+Needle 2.5x10 120 pcs kit,"Kit, Needle",Needle 2.5x10 (120),-,-,-,-,-,-,-,-,-,-,-,-
 Needle 3x15.8 45 pcs kit,"Kit, Needle",Needle 3x15.8 (45),-,-,-,-,-,-,-,-,-,-,-,-
 Needle 3x15.8 90 pcs kit,"Kit, Needle",Needle 3x15.8 (90),-,-,-,-,-,-,-,-,-,-,-,-
 SSW055,Tapered roller,Tapered roller (no data),-,Single row,Sheet metal cage,34x51x12.1,-,-,-,-,-,-,-,-

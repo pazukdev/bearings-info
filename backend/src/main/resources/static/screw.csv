@@ -1,3 +1,5 @@
-Category:,Screw,,,,,
-Name,"Dimensions, mm",Standard,Material,Screw class,Replacer
-M10x1.5x18,M10x1.5x18,GOST 1490-80,-,4.8 or higher,DIN 963; DIN 7991
+Category:,Screw,,,,,,
+Name,"Dimensions, mm",Standard,Material,Screw class,Manufacturer,Replacer,Image
+M10x1.5x18,M10x1.5x18,GOST 1490-80,-,4.8 or higher,USSR,DIN 963; DIN 7991,screw_din_7991.png
+DIN 963,M10x1.5x18,-,-,4.8 or higher,-,DIN 7991,-
+DIN 7991,M10x1.5x18,DIN 7991,-,4.8 or higher,-,DIN 963,screw_m10x1.5x18.png

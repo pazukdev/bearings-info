@@ -31,6 +31,7 @@ public class FileUtil {
         final String[] fileNames = {
                 "standard",
                 "material",
+                "washer",
                 "screw",
                 "oil",
                 "seal",

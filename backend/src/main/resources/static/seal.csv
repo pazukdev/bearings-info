@@ -22,11 +22,14 @@ Category:,Seal,,,,,
 20x40x5.5,12014346B,Corteco,-,-,-,-
 22x40x12,43605,Erling,Left,-,-,-
 22x40x12,22x40x12,USSR,Left,-,43605,-
-24x38x7/7.8,19017089,Corteco,Left,-,-,-
-24x38x8,5306127,USSR,Left,-,19017089,-
+24x38x7/7.8,19017089,Corteco,Without direction,NBR,-,-
+24x38x8,5306127,USSR,Without direction,-,19017089,-
+24x38x8,6206006,USSR,Without direction,-,19017089,-
+24x38x8,6206162-10,USSR,Without direction,-,19017089,-
+24x38x8,75006350,USSR,Without direction,-,19017089,-
 31.4x45.1x8,7204152,USSR,Without direction,-,NJ416; 19036883B; 19016668B,-
 31x45x7,7204151,USSR,Without direction,-,NJ416; 19036883B; 19016668B,-
-32x45x6,19036883B,Corteco,Right,FPM,-,
+32x45x6,19036883B,Corteco,Right,FPM,-,-
 32x45x8,NJ416,Payen,-,NBR,-,-
 32x45x8,19016668B,Corteco,Right,ACM,-,-
 33x49.3x8,7205334,USSR,Without direction,-,19036249B,-
@@ -46,13 +49,11 @@ Category:,Seal,,,,,
 35x48x7,880636841,Jp Group,Right,-,-,-
 36x48x10,12000792B,Corteco,Right,ACM,-,-
 36x48x8,7204157,USSR,Right,-,12000792B; 2012018755,-
-4.4x10x10.3x8,MT803605,USSR,-,Oil-resistant rubber,-,seal_mt803605.png
-4.5 mm thickness,7204142,USSR,Without direction,Felt,-,-
-4.5 mm thickness,7204116,USSR,Without direction,Felt,-,-
+4.4x10.3x8,MT803605,USSR,-,Oil-resistant rubber,-,seal_mt803605.png
 43.5x93x11,7205113,USSR,Without direction,Oil-resistant rubber,BMW 26113004370; BMW 2061660070; Seal 43.5x93x11 Moto Boxer; 45x58x7; 19016629B; 12013433B; 19019079B; 19033642B; 12017052B; 01035171B; 12012810B; 12017270B; 01031705B; 12036368B; 12012128B,seal_7205113.png
-43.5x93x11,BMW 26113004370,BMW,Without direction,-,7205113; BMW 2061660070; Seal 43.5x93x11 Moto Boxer,seal_bmw_26113004370.png
-43.5x93x11,BMW 2061660070,BMW,Without direction,-,BMW 26113004370; 7205113; Seal 43.5x93x11 Moto Boxer,seal_bmw_2061660070.png
-43.5x93x11,Seal 43.5x93x11 Moto Boxer,Moto Boxer,Without direction,FPM,BMW 26113004370; BMW 2061660070; 7205113,seal_seal_43.5x93x11_moto_boxer.png
+43.5x93x11,BMW 26113004370,BMW,Without direction,-,-,seal_bmw_26113004370.png
+43.5x93x11,BMW 2061660070,BMW,Without direction,-,-,seal_bmw_2061660070.png
+43.5x93x11,Seal 43.5x93x11 Moto Boxer,Moto Boxer,Without direction,FPM,-,seal_seal_43.5x93x11_moto_boxer.png
 44.45x60.33x9.5,12012128B,Corteco,-,-,-,-
 44.45x60x7,01031705B,Corteco,-,-,-,-
 44.47x60x8,12036368B,Corteco,-,-,-,-
@@ -76,13 +77,16 @@ Category:,Seal,,,,,
 50x70x9,7201191,USSR,-,-,12011238B; 01019463B; 01032639B; 12000520B; 19019529B; 12014726B; T1086,-
 50x70x9,7201025,USSR,-,-,12011238B; 01019463B; 01032639B; 12000520B; 19019529B; 12014726B; T1086,-
 50x70x9.5/11.5,19019529B,Corteco,-,NBR,-,-
-51x58x3.5,5308159,USSR,-,Oil-resistant rubber,-,-
+51x58x3.5,5308159,USSR,-,Oil-resistant rubber,-,seal_5308159.png
+51x59.5x5,75008159,USSR,-,Oil-resistant rubber,-,-
 51x59.5x5,IMZ-8.101-08159,USSR,-,Oil-resistant rubber,-,-
 59.7x85x12,MT801190,USSR,-,-,01002867B; 12015893B; 12015894B; 12011193B,-
 60x85x13,01002867B,Corteco,-,-,-,-
 60x85x8,12015893B,Corteco,-,-,-,-
 60x85x8,12015894B,Corteco,-,-,-,-
 60x85x8,12011193B,Corteco,-,-,-,-
+Felt seal 4.5 mm thickness,7204142,USSR,-,Felt,-,-
+Felt seal 4.5 mm thickness,7204116,USSR,-,Felt,-,-
 Felt seal 4mm thickness,7206114,USSR,-,Felt,-,-
 Felt seal 6mm thickness,5308156,USSR,-,Felt,-,-
 Felt seal ring,Felt seal ring,USSR,-,Felt,-,-
