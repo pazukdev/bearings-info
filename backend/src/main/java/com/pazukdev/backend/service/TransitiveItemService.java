@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -38,6 +39,20 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
         return null;
     }
 
+    private boolean isSealSize(final String value) {
+        final List<String> dimensions = new ArrayList<>(Arrays.asList(value.split("x")));
+        if (value.length() < 2) {
+            return false;
+        }
+        try {
+            Integer.valueOf(dimensions.get(0));
+            Integer.valueOf(dimensions.get(1));
+        } catch (final Exception e) {
+            return false;
+        }
+        return true;
+    }
+
     private List<TransitiveItem> filter(final List<TransitiveItem> items,
                                         final String parameter,
                                         final String searchingValue) {
@@ -62,6 +77,11 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
         if (category == null || name == null) {
             return null;
         }
+
+        if (category.equalsIgnoreCase("seal") && isSealSize(name)) {
+            return getUssrSealBySize(name);
+        }
+
         for (final TransitiveItem item : find(category)) {
             if (item.getName().equals(name)) {
                 return item;

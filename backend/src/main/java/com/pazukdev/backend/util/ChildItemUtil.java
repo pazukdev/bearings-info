@@ -11,6 +11,7 @@ import com.pazukdev.backend.service.TransitiveItemService;
 import java.util.*;
 
 import static com.pazukdev.backend.util.NestedItemUtil.prepareNestedItemDtosToConverting;
+import static com.pazukdev.backend.util.SpecificStringUtil.*;
 
 public class ChildItemUtil {
 
@@ -72,26 +73,20 @@ public class ChildItemUtil {
         String name;
         String location = "";
         String quantity;
-        if (SpecificStringUtil.containsParentheses(value)) {
-            name = SpecificStringUtil.getStringBeforeParentheses(value);
-            String additionalData = SpecificStringUtil.getStringBetweenParentheses(value);
-            try {
-                location = additionalData.contains(" - ") ? additionalData.split(" - ")[0] : "-";
-            } catch (Exception e) {
-                String s = null;
-            }
+        if (containsParentheses(value)) {
+            name = getStringBeforeParentheses(value);
+            String additionalData = getStringBetweenParentheses(value);
+            location = additionalData.contains(" - ") ? additionalData.split(" - ")[0] : "-";
             quantity = additionalData.contains(" - ") ? additionalData.split(" - ")[1] : additionalData;
         } else {
             name = value;
             location = "-";
             quantity = category.equals("Spark plug") ? "2" : "1";
         }
-        final TransitiveItem oldChild = category.equals("Seal")
-                ? transitiveItemService.getUssrSealBySize(name)
-                : transitiveItemService.find(category, name);
 
+        final TransitiveItem oldChild = transitiveItemService.find(category, name);
         if (oldChild != null) {
-            Item child = itemService.getOrCreate(oldChild);
+            final Item child = itemService.getOrCreate(oldChild);
 
             final ChildItem childItem = new ChildItem();
             childItem.setName(parent.getName() + " - " + name);

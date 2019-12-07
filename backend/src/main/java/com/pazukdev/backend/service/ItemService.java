@@ -14,14 +14,18 @@ import com.pazukdev.backend.repository.ChildItemRepository;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.repository.ReplacerRepository;
 import com.pazukdev.backend.repository.UserActionRepository;
-import com.pazukdev.backend.util.*;
+import com.pazukdev.backend.util.CategoryUtil;
+import com.pazukdev.backend.util.DateUtil;
+import com.pazukdev.backend.util.ItemUtil;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+import static com.pazukdev.backend.util.ChildItemUtil.createParts;
 import static com.pazukdev.backend.util.ItemUtil.createDescriptionMap;
+import static com.pazukdev.backend.util.ReplacerUtil.createReplacers;
 import static com.pazukdev.backend.util.SpecificStringUtil.replaceBlankWithDash;
 
 /**
@@ -138,15 +142,10 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     public Item create(final TransitiveItem transitiveItem) {
-        if (transitiveItem.getName().equals("12204")) {
-            boolean b = true;
-        }
         final TransitiveItemDescriptionMap descriptionMap = createDescriptionMap(transitiveItem, transitiveItemService);
         final Map<String, String> items = descriptionMap.getItems();
-        final List<ChildItem> childItems
-                = ChildItemUtil.createParts(transitiveItem, items, this, transitiveItemService);
-        final List<Replacer> replacers
-                = ReplacerUtil.createReplacers(transitiveItem, this, transitiveItemService);
+        final List<ChildItem> childItems = createParts(transitiveItem, items, this, transitiveItemService);
+        final List<Replacer> replacers = createReplacers(transitiveItem, this, transitiveItemService);
 
         final Item item = new Item();
         item.setName(transitiveItem.getName());
