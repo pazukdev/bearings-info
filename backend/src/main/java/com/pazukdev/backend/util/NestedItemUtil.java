@@ -145,7 +145,7 @@ public class NestedItemUtil {
                 continue;
             }
             final NestedItemDto dto = NestedItemDtoFactory.createBasicNestedItemDto(item, userService);
-            dto.setSelectText(item.getCategory() + " " + dto.getButtonText());
+            dto.setSelectText(category + " " + dto.getSelectText());
             childItemDtos.add(dto);
         }
         return childItemDtos;
