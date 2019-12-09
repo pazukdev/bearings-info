@@ -110,18 +110,18 @@ public class DataLoader implements ApplicationRunner {
                     BearingUtil.setBearingEnclosure(stubReplacer);
                 }
 
-                if (descriptionMap.get("Standard") != null) {
-                    descriptionMap.put("Standard", "-");
-                }
-                if (descriptionMap.get("Material") != null) {
-                    descriptionMap.put("Material", "-");
-                }
-                if (descriptionMap.get("Screw class") != null) {
-                    descriptionMap.put("Screw class", "-");
-                }
+                removeValues(descriptionMap, "Manufacturer", "Standard", "Material", "Screw class");
 
                 stubReplacer.setDescription(ItemUtil.toDescription(descriptionMap));
                 transitiveItemService.getTransitiveItemRepository().save(stubReplacer);
+            }
+        }
+    }
+
+    private void removeValues(final Map<String, String> descriptionMap, final String... keys) {
+        for (final String key : keys) {
+            if (descriptionMap.get(key) != null) {
+                descriptionMap.put(key, "-");
             }
         }
     }
