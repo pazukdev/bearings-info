@@ -131,14 +131,8 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     public Item getOrCreate(final TransitiveItem transitiveItem) {
-        try {
-            final Item item = find(transitiveItem.getCategory(), transitiveItem.getName());
-            return item != null ? item : create(transitiveItem);
-        } catch (Exception e) {
-            e.printStackTrace();
-            e = null;
-            return null;
-        }
+        final Item item = find(transitiveItem.getCategory(), transitiveItem.getName());
+        return item != null ? item : create(transitiveItem);
     }
 
     public Item create(final TransitiveItem transitiveItem) {

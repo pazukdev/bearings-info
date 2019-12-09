@@ -71,3 +71,6 @@ ru=Username=Имя пользователя
 ru=Weight, kg=Вес, кг
 ru=Wheel=Колесо
 ru=Width=Ширина
+ru=USSR 110=СССР 110
+ru=USSR 200=СССР 200
+

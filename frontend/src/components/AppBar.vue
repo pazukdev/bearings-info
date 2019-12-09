@@ -1,8 +1,7 @@
 <template>
     <div id="app_bar">
 <!--        <div style="color: black">-->
-<!--            {{"prop: " + language}}<br>-->
-<!--            {{"data: " + newLanguage}}<br>-->
+<!--            {{appLanguage}}<br>-->
 <!--        </div>-->
         <table>
             <tbody>

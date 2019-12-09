@@ -1,7 +1,5 @@
 <template>
     <div>
-        {{newItem.itemId}}<br>
-        {{newItem.comment}}
         <table>
             <tbody>
             <tr>
@@ -14,7 +12,9 @@
                     <input v-model="newItem.comment" type="text"/>
                 </td>
                 <td>
-                    <ItemSelect :items="possibleItems"
+                    <ItemSelect :parent-item-id="parentItemId"
+                                :items="items"
+                                :possible-items="possibleItems"
                                 @on-change="onChange"/>
                 </td>
                 <td></td>
@@ -29,6 +29,7 @@
             </tr>
             </tbody>
         </table>
+        <hr>
     </div>
 </template>
 
@@ -43,6 +44,7 @@
         },
 
         props: {
+            parentItemId: Number,
             parentItemName: String,
             isEditMode: Boolean,
             notStub: Boolean,
@@ -64,24 +66,11 @@
             addItem() {
                 this.message = "";
                 this.newItem.name = this.parentItemName + this.newItem.name;
-                if (this.itemAlreadyInList(this.newItem.itemId)) {
-                    this.message = "Item already in list";
-                } else {
-                    let e = this.replacer ? "add-replacer" : "add-part";
-                    this.$emit(e, this.newItem);
-                    this.newItem = {
-                        comment: ""
-                    }
+                let e = this.replacer ? "add-replacer" : "add-part";
+                this.$emit(e, this.newItem);
+                this.newItem = {
+                    comment: ""
                 }
-            },
-
-            itemAlreadyInList(id) {
-                for (let i=0; i < this.items.length; i++) {
-                    if (this.items[i].itemId === id) {
-                        return true;
-                    }
-                }
-                return false;
             },
 
             onChange(selectedItem) {

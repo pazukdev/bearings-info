@@ -398,18 +398,18 @@
                         </button>
                     </td>
                 </tr>
-                <tr><td colspan="5"><hr></td></tr>
                 </tbody>
             </table>
 
-            <AddReplacerForm :parent-item-name="getItemName()"
-                             :is-edit-mode="isEditMode"
-                             :not-stub="notStub(itemView.replacersTable.name)"
-                             :replacer="true"
-                             :items="itemView.replacersTable.replacers"
-                             :possible-items="itemView.replacers"
-                             @replacer-select-on-change="replacerSelectOnChange"
-                             @add-replacer="addReplacer"/>
+            <AddItemForm :parent-item-id="itemView.itemId"
+                         :parent-item-name="getItemName()"
+                         :is-edit-mode="isEditMode"
+                         :not-stub="notStub(itemView.replacersTable.name)"
+                         :replacer="true"
+                         :items="itemView.replacersTable.replacers"
+                         :possible-items="itemView.replacers"
+                         @replacer-select-on-change="replacerSelectOnChange"
+                         @add-replacer="addReplacer"/>
 
             <details v-if="isAdditionalMenuDisplayed()" open>
                 <summary id="menu-summary">{{$t("menu")}}</summary>
@@ -431,14 +431,14 @@
     import {mapState} from 'vuex';
     import HeaderMenu from "./HeaderMenu";
     import Menu from "./Menu";
-    import AddReplacerForm from "./AddItemForm";
+    import AddItemForm from "./AddItemForm";
 
     export default {
 
         components: {
             HeaderMenu,
             Menu,
-            AddReplacerForm
+            AddItemForm
         },
 
         data() {
