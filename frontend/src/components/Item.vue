@@ -338,78 +338,20 @@
                         </table>
                     </td>
                 </tr>
-                <tr v-if="isReplacersTableVisible()"><td><hr></td></tr>
                 </tbody>
             </table>
 
-            <table v-if="isReplacersTableVisible()" id="replacers-table" style="text-align: center">
-                <tbody>
-                <tr>
-                    <td colspan="6">
-                        {{itemView.replacersTable.localizedName}}
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="5" style="height: 20px"></td>
-                </tr>
-                <tr v-if="notStub(itemView.replacersTable.name) && statusActive(replacer)"
-                    style="text-align: left"
-                    v-for="replacer in itemView.replacersTable.replacers">
-                    <td class="three-column-table-left-column">
-                        <p v-if="!isEditMode">{{replacer.comment}}</p>
-                        <input v-if="isEditMode"
-                               v-model="replacer.comment"
-                               type="text"/>
-                    </td>
-                    <td class="three-column-table-middle-column">
-                        <button type="button"
-                                @click="navigateToItem(replacer.itemId)">
-                            {{replacer.buttonText}}
-                        </button>
-                    </td>
-                    <td class="three-column-table-right-column">{{replacer.rating}}</td>
-                    <td>
-                        <button v-if="isRateButtonVisible(replacer)" v-model="itemView"
-                                type="button"
-                                class="round-button"
-                                @click="rateAction('up', replacer.itemId)">
-                            {{"&#x2191;"}}
-                        </button>
-                    </td>
-                    <td>
-                        <button v-if="isRateButtonVisible(replacer)" v-model="itemView"
-                                type="button"
-                                class="round-button"
-                                @click="rateAction('down', replacer.itemId)">
-                            {{" &#x2193;"}}
-                        </button>
-                        <button v-if="isUnrateButtonVisible(replacer)" v-model="itemView"
-                                type="button"
-                                class="round-button"
-                                @click="rateAction('cancel', replacer.itemId)">
-                            {{"x"}}
-                        </button>
-                        <button v-if="isEditMode" v-model="itemView"
-                                type="button"
-                                class="round-button"
-                                style="background: red"
-                                @click="removeReplacerFromList(replacer)">
-                            {{"-"}}
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <AddItemForm :parent-item-id="itemView.itemId"
-                         :parent-item-name="getItemName()"
-                         :is-edit-mode="isEditMode"
-                         :not-stub="notStub(itemView.replacersTable.name)"
-                         :replacer="true"
-                         :items="itemView.replacersTable.replacers"
-                         :possible-items="itemView.replacers"
-                         @replacer-select-on-change="replacerSelectOnChange"
-                         @add-replacer="addReplacer"/>
+            <ReplacersSection :replacers-table-visible="isReplacersTableVisible()"
+                              :parent-item-id="itemView.itemId"
+                              :parent-item-name="itemView.itemName"
+                              :edit-mode="isEditMode"
+                              :not-stub="notStub(itemView.replacersTable.name)"
+                              :replacers-table="itemView.replacersTable"
+                              :possible-replacers="itemView.replacers"
+                              :rated-items="itemView.ratedItems"
+                              @navigate-to-item="navigateToItem"
+                              @replacer-select-on-change="replacerSelectOnChange"
+                              @add-replacer="addReplacer"/>
 
             <details v-if="isAdditionalMenuDisplayed()" open>
                 <summary id="menu-summary">{{$t("menu")}}</summary>
@@ -431,14 +373,14 @@
     import {mapState} from 'vuex';
     import HeaderMenu from "./HeaderMenu";
     import Menu from "./Menu";
-    import AddItemForm from "./AddItemForm";
+    import ReplacersSection from "./ReplacersSection";
 
     export default {
 
         components: {
             HeaderMenu,
             Menu,
-            AddItemForm
+            ReplacersSection
         },
 
         data() {
@@ -852,18 +794,6 @@
                 return false;
             },
 
-            isRateButtonVisible(replacer) {
-                return !this.isEditMode && !this.isRated(replacer) && !this.isGuest();
-            },
-
-            isUnrateButtonVisible(replacer) {
-                return !this.isEditMode && this.isRated(replacer) && !this.isGuest();
-            },
-
-            isRated(replacer) {
-                return this.isInArray(replacer.itemId, this.itemView.ratedItems);
-            },
-
             isInArray(element, array) {
                 for (let i=0; i < array.length; i++) {
                     if (array[i] === element) {
@@ -1087,7 +1017,11 @@
             },
 
             statusActive(item) {
-                return item.status === "active";
+                return this.statusIsActive(item.status);
+            },
+
+            statusIsActive(status) {
+                return status === "active";
             },
 
             isNotThisItem(item) {

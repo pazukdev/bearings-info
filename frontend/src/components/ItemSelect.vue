@@ -2,8 +2,7 @@
     <div>
         <select v-model="selectedItem"
                 @change="onChange">
-            <option v-for="item in collection"
-                    v-if="selectOptionVisible(item)"
+            <option v-for="item in sortPossibleItems()"
                     :value="item">
                 {{item.selectText}}
             </option>
@@ -22,8 +21,17 @@
         },
 
         computed: {
-            collection() {
-                return this.possibleItems.sort((a, b) => (a.selectText > b.selectText) ? 1 : -1);
+            sortedPossibleItems() {
+                let possibleItems = [];
+                for (let i=0; i < this.possibleItems.length; i++) {
+                    let item = this.possibleItems[i];
+                    if (this.isNotThisItem(item.itemId)
+                        && !this.itemIsAlreadyInList(item.itemId)
+                        && this.statusIsActive(item.status)) {
+                        possibleItems.push(item);
+                    }
+                }
+                return possibleItems.sort((a, b) => (a.selectText > b.selectText) ? 1 : -1);
             }
         },
 
@@ -35,23 +43,22 @@
         },
 
         methods: {
-            sort() {
-                let list = this.possibleItems;
-                list.sort((a, b) => (a.color > b.color) ? 1 : -1);
-                // array.sort((a, b) => (a.manufacturer > b.manufacturer)
-                //     ? 1
-                //     : (a.manufacturer === b.manufacturer) ? ((a.size > b.size) ? 1 : -1) : -1 )
-                return list;
+            sortPossibleItems() {
+                let possibleItems = [];
+                for (let i=0; i < this.possibleItems.length; i++) {
+                    let item = this.possibleItems[i];
+                    if (this.isNotThisItem(item.itemId)
+                        && !this.itemIsAlreadyInList(item.itemId)
+                        && this.statusIsActive(item.status)) {
+                        possibleItems.push(item);
+                    }
+                }
+                this.$emit("show-add-form", possibleItems.length > 0);
+                return possibleItems.sort((a, b) => (a.selectText > b.selectText) ? 1 : -1);
             },
 
             onChange() {
-                this.$emit("on-change", this.selectedItem)
-            },
-
-            selectOptionVisible(option) {
-                return this.isNotThisItem(option.itemId)
-                    && !this.itemIsAlreadyInList(option.itemId)
-                    && this.statusIsActive(option.status);
+                this.$emit("on-change", this.selectedItem);
             },
 
             isNotThisItem(itemId) {
@@ -68,7 +75,7 @@
             },
 
             statusIsActive(status) {
-                return status === "active";
+                return this.$parent.statusIsActive(status);
             }
         }
     }

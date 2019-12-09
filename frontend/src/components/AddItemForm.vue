@@ -1,13 +1,12 @@
 <template>
     <div>
-        <table>
+        <p v-if="!showForm"
+           style="text-align: center; margin-top: 16px">
+            {{getMessage()}}
+        </p>
+        <table v-if="showForm">
             <tbody>
-            <tr>
-                <td class="alert-message" colspan="5">
-                    {{message}}
-                </td>
-            </tr>
-            <tr v-if="notStub && isEditMode">
+            <tr v-if="notStub && editMode">
                 <td>
                     <input v-model="newItem.comment" type="text"/>
                 </td>
@@ -15,6 +14,7 @@
                     <ItemSelect :parent-item-id="parentItemId"
                                 :items="items"
                                 :possible-items="possibleItems"
+                                @show-add-form="showAddForm"
                                 @on-change="onChange"/>
                 </td>
                 <td></td>
@@ -46,11 +46,12 @@
         props: {
             parentItemId: Number,
             parentItemName: String,
-            isEditMode: Boolean,
+            editMode: Boolean,
             notStub: Boolean,
             replacer: Boolean,
             items: Array,
-            possibleItems: Array
+            possibleItems: Array,
+            showForm: Boolean
         },
 
         data() {
@@ -63,11 +64,19 @@
         },
 
         methods: {
+            showAddForm(show) {
+                this.$parent.showAddForm(show);
+            },
+
+            getMessage() {
+                return this.replacer ? "No replacers found" : "No parts found";
+            },
+
             addItem() {
                 this.message = "";
                 this.newItem.name = this.parentItemName + this.newItem.name;
                 let e = this.replacer ? "add-replacer" : "add-part";
-                this.$emit(e, this.newItem);
+                this.$emit(e, e, this.newItem);
                 this.newItem = {
                     comment: ""
                 }
@@ -77,6 +86,10 @@
                 this.message = "";
                 this.newItem = selectedItem;
                 this.$emit("replacer-select-on-change")
+            },
+
+            statusIsActive(status) {
+                return this.$parent.statusIsActive(status);
             }
 
         }
