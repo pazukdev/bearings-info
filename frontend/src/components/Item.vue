@@ -398,45 +398,25 @@
                         </button>
                     </td>
                 </tr>
-                <tr style="color: red">
-                    <td colspan="5">
-                        {{newReplacerMessage}}
-                    </td>
-                </tr>
-                <tr v-if="notStub(itemView.replacersTable.name) && isEditMode">
-                    <td>
-                        <input v-model="newReplacer.comment" type="text"/>
-                    </td>
-                    <td>
-                        <select v-model="newReplacer"
-                                @change="replacerSelectOnChange()">
-                            <option v-for="replacer in itemView.replacers"
-                                    v-if="selectOptionVisible(replacer)"
-                                    v-bind:value="replacer">
-                                {{replacer.selectText}}
-                            </option>
-                        </select>
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <button type="button"
-                                class="round-button"
-                                @click="addReplacer()">
-                            {{"+"}}
-                        </button>
-                    </td>
-                </tr>
                 <tr><td colspan="5"><hr></td></tr>
                 </tbody>
             </table>
 
-            <details v-if="isAdditionalMenuDisplayed()">
+            <AddReplacerForm :parent-item-name="getItemName()"
+                             :is-edit-mode="isEditMode"
+                             :not-stub="notStub(itemView.replacersTable.name)"
+                             :replacer="true"
+                             :items="itemView.replacersTable.replacers"
+                             :possible-items="itemView.replacers"
+                             @replacer-select-on-change="replacerSelectOnChange"
+                             @add-replacer="addReplacer"/>
+
+            <details v-if="isAdditionalMenuDisplayed()" open>
                 <summary id="menu-summary">{{$t("menu")}}</summary>
                 <Menu :admin="isAdmin()"
                       :basic-url="basicUrl"
                       @open-items-management="openItemsManagement"
-                      @open-users-list="openUsersList"></Menu>
+                      @open-users-list="openUsersList"/>
             </details>
 
             <div id="place-of-creation">
@@ -451,12 +431,14 @@
     import {mapState} from 'vuex';
     import HeaderMenu from "./HeaderMenu";
     import Menu from "./Menu";
+    import AddReplacerForm from "./AddItemForm";
 
     export default {
 
         components: {
             HeaderMenu,
-            Menu
+            Menu,
+            AddReplacerForm
         },
 
         data() {
@@ -468,7 +450,6 @@
                 newItemName: "",
                 newHeaderRowMessage: "",
                 newPartMessage: "",
-                newReplacerMessage: "",
                 categoryMessage: "",
                 newItemNameMessage: "",
                 fileUploadMessage: "",
@@ -484,23 +465,6 @@
                     message: ""
                 },
                 newPart: {
-                    id: "",
-                    name: "",
-                    localizedName: "",
-                    itemId: "",
-                    itemName: "",
-                    itemCategory: "",
-                    buttonText: "",
-                    selectText: "",
-                    comment: "",
-                    localizedComment: "",
-                    location: "",
-                    quantity: "",
-                    status: "",
-                    creatorName: "",
-                    rating: ""
-                },
-                newReplacer: {
                     id: "",
                     name: "",
                     localizedName: "",
@@ -746,20 +710,17 @@
 
             openWishList() {
                 let wishListId = -3;
-                // this.getItemView(wishListId);
                 this.navigateToItem(wishListId);
             },
 
             openItemsManagement() {
                 let itemsManagementId = -1;
-                //this.getItemView(itemsManagementId);
                 this.navigateToItem(itemsManagementId);
 
             },
 
             openUsersList() {
                 let usersListId = -4;
-                // this.getItemView(usersListId);
                 this.navigateToItem(usersListId);
             },
 
@@ -852,15 +813,8 @@
                 }
             },
 
-            addReplacer() {
-                this.newReplacerMessage = "";
-                this.newReplacer.name = this.getItemName() + this.newReplacer.name;
-                if (this.replacerAlreadyInList(this.newReplacer.itemId)) {
-                    this.newReplacerMessage = "Replacer already in list";
-                } else {
-                    this.itemView.replacersTable.replacers.push(this.newReplacer);
-                    this.clearNewReplacer();
-                }
+            addReplacer(newReplacer) {
+                this.itemView.replacersTable.replacers.push(newReplacer);
             },
 
             getItemName() {
@@ -883,15 +837,6 @@
             childItemAlreadyInList(id, table) {
                 for (let i=0; i < table.parts.length; i++) {
                     if (table.parts[i].itemId === id) {
-                        return true;
-                    }
-                }
-                return false;
-            },
-
-            replacerAlreadyInList(id) {
-                for (let i=0; i < this.itemView.replacersTable.replacers.length; i++) {
-                    if (this.itemView.replacersTable.replacers[i].itemId === id) {
                         return true;
                     }
                 }
@@ -961,7 +906,6 @@
             },
 
             replacerSelectOnChange() {
-                this.newReplacerMessage = "";
                 this.categoryMessage = "";
             },
 
@@ -979,7 +923,6 @@
 
             cancel() {
                 this.getItemViewByUrl();
-                // this.getItemView(this.lastItemId);
             },
 
             switchEditModeOff() {
@@ -990,7 +933,6 @@
             clearAllEditData() {
                 this.clearNewHeaderRow();
                 this.clearNewPart();
-                this.clearNewReplacer();
                 this.clearAllMessages();
                 this.clearNewItemData();
                 this.imgData = "";
@@ -1028,10 +970,6 @@
 
             clearNewPart() {
                 this.newPart = this.clearItem();
-            },
-
-            clearNewReplacer() {
-                this.newReplacer = this.clearItem();
             },
 
             clearItem() {
