@@ -5,7 +5,7 @@
             <tbody>
             <tr v-if="notStub && statusIsActive(replacer.status)"
                 style="text-align: left"
-                v-for="replacer in replacersTable.replacers">
+                v-for="replacer in sortedReplacers">
                 <td class="bordered">
                     <table>
                         <tbody>
@@ -52,8 +52,7 @@
                         <tr>
                             <td colspan="4">
                                 <p style="text-align: left" v-if="!editMode">{{replacer.comment}}</p>
-                                <textarea v-if="editMode"
-                                          v-model="replacer.comment"/>
+                                <textarea v-if="editMode" v-model="replacer.comment"/>
                             </td>
                         </tr>
                         </tbody>
@@ -66,6 +65,9 @@
 </template>
 
 <script>
+    import axios from "axios";
+    import {mapState} from "vuex";
+
     export default {
         name: "ReplacersTable",
 
@@ -74,6 +76,19 @@
             editMode: Boolean,
             notStub: Boolean,
             ratedItems: Array
+        },
+
+        computed: {
+            ...mapState({
+                basicUrl: state => state.dictionary.basicUrl,
+                authorization: state => state.dictionary.authorization,
+                userName: state => state.dictionary.userName
+            }),
+
+            sortedReplacers() {
+                let replacers = this.replacersTable.replacers;
+                return replacers.sort((a, b) => (a.rating < b.rating) ? 1 : -1);
+            }
         },
 
         methods: {
@@ -96,9 +111,26 @@
             rate(action, itemId) {
                 let rate = {
                     action: action,
-                    itemId: itemId
+                    itemId: itemId,
+                    ratedItems: this.ratedItems,
+                    replacers: this.replacersTable.replacers
                 };
-                this.$emit("rate", rate);
+                axios
+                    .put(this.basicUrl
+                        + "/" + "item/rate-replacer"
+                        + "/" + this.userName,
+                        rate, {
+                            headers: {
+                                Authorization: this.authorization
+                            }
+                        })
+                    .then(response => {
+                        this.$emit("update-replacers", response.data);
+                        console.log("Replacer rate action performed: "
+                            + "user name: " + this.userName
+                            + ", action: " + rate.action
+                            + ", item id: " + rate.itemId);
+                    });
             },
 
             removeReplacerFromList(replacer) {

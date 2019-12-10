@@ -28,7 +28,6 @@ public class ItemView extends AbstractDto {
     private List<String> messages = new ArrayList<>();
     private NestedItemDto userData;
     private String imgData = "-";
-    private RateReplacer rate;
     private String category;
     private HeaderTable header;
     private PartsTable partsTable;

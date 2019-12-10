@@ -5,6 +5,7 @@
                         :edit-mode="editMode"
                         :not-stub="notStub"
                         :rated-items="ratedItems"
+                        @update-replacers="updateReplacers"
                         @navigate-to-item="navigateToItem"/>
 
         <AddItemForm v-if="editMode"
@@ -51,6 +52,10 @@
         },
 
         methods: {
+            updateReplacers(rateReplacer) {
+                this.$emit("update-replacers", rateReplacer);
+            },
+
             showAddForm(show) {
                 this.showForm = show === true;
             },

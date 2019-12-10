@@ -3,13 +3,11 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.converter.ReplacerConverter;
 import com.pazukdev.backend.dto.ItemView;
+import com.pazukdev.backend.dto.RateReplacer;
 import com.pazukdev.backend.dto.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.dto.TransitiveItemDto;
 import com.pazukdev.backend.dto.factory.ItemViewFactory;
-import com.pazukdev.backend.entity.ChildItem;
-import com.pazukdev.backend.entity.Item;
-import com.pazukdev.backend.entity.Replacer;
-import com.pazukdev.backend.entity.TransitiveItem;
+import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.repository.ChildItemRepository;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.repository.ReplacerRepository;
@@ -17,6 +15,7 @@ import com.pazukdev.backend.repository.UserActionRepository;
 import com.pazukdev.backend.util.CategoryUtil;
 import com.pazukdev.backend.util.DateUtil;
 import com.pazukdev.backend.util.ItemUtil;
+import com.pazukdev.backend.util.RateUtil;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -128,6 +127,12 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                                    final ItemView itemView) {
         final ItemViewFactory itemViewFactory = new ItemViewFactory(this);
         return itemViewFactory.updateItemView(itemId, userName, language, itemView);
+    }
+
+    @Transactional
+    public RateReplacer rateReplacer(final String userName, final RateReplacer rate) {
+        final UserEntity user = userService.findByName(userName);
+        return RateUtil.rateReplacer(rate, user, this);
     }
 
     public Item getOrCreate(final TransitiveItem transitiveItem) {

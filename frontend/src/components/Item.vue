@@ -349,6 +349,7 @@
                               :replacers-table="itemView.replacersTable"
                               :possible-replacers="itemView.replacers"
                               :rated-items="itemView.ratedItems"
+                              @update-replacers="updateReplacers"
                               @navigate-to-item="navigateToItem"
                               @replacer-select-on-change="replacerSelectOnChange"
                               @add-replacer="addReplacer"/>
@@ -613,6 +614,11 @@
                         this.dispatchView(updatedItemView);
                         this.logEvent("item updated", updatedItemView);
                     });
+            },
+
+            updateReplacers(rateReplacer) {
+                this.itemView.ratedItems = rateReplacer.ratedItems;
+                this.itemView.replacersTable.replacers = rateReplacer.replacers;
             },
 
             dispatchView(itemView) {

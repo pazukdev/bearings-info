@@ -1,6 +1,7 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.dto.ItemView;
+import com.pazukdev.backend.dto.RateReplacer;
 import com.pazukdev.backend.service.ItemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,6 +48,13 @@ public class ItemController {
                            @PathVariable String language,
                            @RequestBody final ItemView itemView) {
         return service.updateItemView(id, userName, language, itemView);
+    }
+
+    @PutMapping("/rate-replacer/{userName}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Rate replacer")
+    public RateReplacer rateReplacer(@PathVariable final String userName, @RequestBody final RateReplacer rate) {
+        return service.rateReplacer(userName, rate);
     }
 
 }
