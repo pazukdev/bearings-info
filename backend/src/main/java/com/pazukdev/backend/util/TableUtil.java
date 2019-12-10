@@ -66,11 +66,7 @@ public class TableUtil {
         }
         final String[] header = {"Role", "Username", "Rating"};
         final Set<String> partCategories = new HashSet<>(Arrays.asList("Admin", "User"));
-        final PartsTable partsTable =  PartsTable.create(dtos, tableName, header, partCategories);
-        for (final PartsTable child : partsTable.getTables()) {
-            child.getParts().sort(Comparator.comparing(NestedItemDto::getQuantity));
-        }
-        return partsTable;
+        return PartsTable.create(dtos, tableName, header, partCategories);
     }
 
     public static PartsTable createPartsTable(final Item item,
@@ -99,7 +95,6 @@ public class TableUtil {
             final NestedItemDto replacerDto = createReplacer(replacer, userService);
             replacersTable.getReplacers().add(replacerDto);
         }
-        replacersTable.getReplacers().sort(Comparator.comparing(NestedItemDto::getRating).reversed());
         return replacersTable;
     }
 

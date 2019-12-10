@@ -105,9 +105,6 @@ public class TranslatorUtil {
         for (final PartsTable child : partsTable.getTables()) {
             translate(languageFrom, languageTo, child, addToDictionary, itemService);
         }
-
-        PartsTable.sortItemsInChildTables(partsTable);
-        PartsTable.sortChildTables(partsTable);
     }
 
     private static void translate(final String languageFrom,
@@ -118,7 +115,6 @@ public class TranslatorUtil {
         replacersTable.setLocalizedName(translate(languageFrom, languageTo, replacersTable.getName(), addToDictionary, false, itemService));
         final List<NestedItemDto> replacers = replacersTable.getReplacers();
         translateNestedItemDtoList(languageFrom, languageTo, replacers, addToDictionary, itemService);
-        replacers.sort(Comparator.comparing(NestedItemDto::getRating).reversed());
     }
 
     private static void translateNestedItemDtoList(final String languageFrom,
@@ -129,7 +125,6 @@ public class TranslatorUtil {
         for (final NestedItemDto dto : dtos) {
             translate(languageFrom, languageTo, dto, addToDictionary, itemService);
         }
-        dtos.sort(Comparator.comparing(NestedItemDto::getSelectText));
     }
 
     private static void translate(final String languageFrom,

@@ -51,7 +51,7 @@ public class ItemViewFactory {
         } else if (itemId == USER_LIST_VIEW.getItemId()) {
             itemView = createUsersListView(basicItemView);
         } else {
-            itemView = createOrdinaryItemView(basicItemView, itemId, currentUser, userLanguage);
+            itemView = createOrdinaryItemView(basicItemView, itemId, currentUser);
         }
 
         if (!userLanguage.equals("en")) {
@@ -115,8 +115,7 @@ public class ItemViewFactory {
 
     private ItemView createOrdinaryItemView(final ItemView itemView,
                                             final Long itemId,
-                                            final UserEntity currentUser,
-                                            final String language) {
+                                            final UserEntity currentUser) {
         final Item item = itemService.getOne(itemId);
         final List<Item> allItems = itemService.findAll();
         final List<Item> sameCategoryItems = itemService.find(item.getCategory(), allItems);
