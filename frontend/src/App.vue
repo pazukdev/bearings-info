@@ -157,13 +157,14 @@
 </script>
 
 <style>
-    #app {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+    * {
+        margin: auto;
     }
 
     #main-div {
+        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -198,7 +199,7 @@
         text-align: center;
     }
 
-    table, button, select, input {
+    table, button, select, input, textarea {
         width: 100%;
     }
 
@@ -210,11 +211,11 @@
         background: #808080;
     }
 
-    input, #app_bar {
+    input, textarea, #app_bar {
         background: #617D89;
     }
 
-    button, select, input {
+    button, select, input, textarea {
         border-radius: 4px;
         border: none;
     }
@@ -231,7 +232,7 @@
 
     table {
         border-spacing: 6px;
-        border-collapse: separate;
+        border-collapse: initial;
     }
 
     th {
@@ -246,6 +247,14 @@
         text-align: left;
     }
 
+    p, input, textarea {
+        margin: auto;
+    }
+
+    textarea {
+        /*resize: none;*/
+    }
+
     .round-button, .round-delete-button {
         text-align: center;
         height: 32px;
@@ -253,6 +262,12 @@
         min-height: initial;
         max-height: initial;
         border-radius: 16px;
+    }
+
+    .bordered {
+        border: 1px solid;
+        border-radius: 6px;
+        padding: 6px;
     }
 
     .no-border {

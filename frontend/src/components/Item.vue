@@ -1060,6 +1060,14 @@
 </script>
 
 <style>
+    .not-symmetrical-left {
+        width: 80%;
+    }
+
+    .not-symmetrical-right {
+        width: 20%;
+    }
+
     .two-columns-table-left-column {
         width: 50%;
     }

@@ -1,6 +1,5 @@
 <template>
     <div>
-        <div>{{showForm}}</div>
         <ReplacersTable v-if="replacersTableVisible"
                         :replacers-table="replacersTable"
                         :edit-mode="editMode"
@@ -8,7 +7,8 @@
                         :rated-items="ratedItems"
                         @navigate-to-item="navigateToItem"/>
 
-        <AddItemForm :parent-item-id="parentItemId"
+        <AddItemForm v-if="editMode"
+                     :parent-item-id="parentItemId"
                      :parent-item-name="parentItemName"
                      :edit-mode="editMode"
                      :not-stub="notStub"
@@ -88,5 +88,4 @@
 </script>
 
 <style scoped>
-
 </style>

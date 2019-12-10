@@ -1,24 +1,20 @@
 <template>
-    <div>
-        <p v-if="!showForm"
-           style="text-align: center; margin-top: 16px">
+    <div id="add-item-form">
+        <p>{{getTitle()}}</p>
+        <p v-if="!showForm">
             {{getMessage()}}
         </p>
-        <table v-if="showForm">
+        <table v-if="showForm" class="bordered">
             <tbody>
             <tr v-if="notStub && editMode">
-                <td>
-                    <input v-model="newItem.comment" type="text"/>
-                </td>
-                <td>
+                <td class="not-symmetrical-left">
                     <ItemSelect :parent-item-id="parentItemId"
                                 :items="items"
                                 :possible-items="possibleItems"
                                 @show-add-form="showAddForm"
                                 @on-change="onChange"/>
                 </td>
-                <td></td>
-                <td></td>
+                <td class="not-symmetrical-right"/>
                 <td>
                     <button type="button"
                             class="round-button"
@@ -27,9 +23,13 @@
                     </button>
                 </td>
             </tr>
+            <tr>
+                <td colspan="3">
+                    <textarea v-model="newItem.comment"/>
+                </td>
+            </tr>
             </tbody>
         </table>
-        <hr>
     </div>
 </template>
 
@@ -68,6 +68,10 @@
                 this.$parent.showAddForm(show);
             },
 
+            getTitle() {
+                return this.replacer ? "Add replacer" : "Add part";
+            },
+
             getMessage() {
                 return this.replacer ? "No replacers found" : "No parts found";
             },
@@ -97,5 +101,15 @@
 </script>
 
 <style scoped>
+    .three-column-table-left-column, .three-column-table-middle-column {
+        width: 46%;
+    }
 
+    #add-item-form {
+    }
+
+    p {
+        text-align: center;
+        margin-top: 10px;
+    }
 </style>
