@@ -19,7 +19,7 @@
                             <td class="not-symmetrical-right">
                                 {{replacer.rating}}
                             </td>
-                            <td>
+                            <td style="min-width: 32px">
                                 <button v-if="isRateButtonVisible(replacer)"
                                         type="button"
                                         class="round-button"
@@ -87,7 +87,7 @@
 
             sortedReplacers() {
                 let replacers = this.replacersTable.replacers;
-                return replacers.sort((a, b) => (a.rating < b.rating) ? 1 : -1);
+                return replacers.sort((a,b) => (a.rating < b.rating) ? 1 : -1);
             }
         },
 

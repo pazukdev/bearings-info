@@ -216,12 +216,6 @@ public class ItemViewFactory {
 
         final Item item = itemService.getOne(itemId);
 
-//        if (itemView.getRate() != null) {
-//            RateUtil.processRateItemAction(itemView, currentUser, itemService);
-//            itemView.setRate(null);
-//            return createItemView(itemId, currentUser.getName(), userLanguage);
-//        }
-
         if (itemView.isAddToWishList()) {
             ItemUtil.updateWishList(item, itemView, currentUser, itemService);
         } else {
