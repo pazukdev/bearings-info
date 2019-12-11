@@ -97,7 +97,7 @@
 
         methods: {
             onUrlChange() {
-                this.$i18n.locale = this.appLanguage;
+                this.$i18n.locale = this.appLanguage.toString();
             },
 
             performLoginPageAction() {
@@ -144,7 +144,7 @@
             },
 
             pushToHome() {
-                this.$router.push({ path: `/item/id/${this.motorcycleCatalogueId}/${this.appLanguage}` });
+                this.$router.push({ name: "home" });
             },
 
             signUp() {

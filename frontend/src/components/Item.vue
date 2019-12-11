@@ -354,17 +354,6 @@
                               @replacer-select-on-change="replacerSelectOnChange"
                               @add-replacer="addReplacer"/>
 
-            <details v-if="isAdditionalMenuDisplayed()" open>
-                <summary id="menu-summary">{{$t("menu")}}</summary>
-                <Menu :admin="isAdmin()"
-                      :basic-url="basicUrl"
-                      @open-items-management="openItemsManagement"
-                      @open-users-list="openUsersList"/>
-            </details>
-
-            <div id="place-of-creation">
-                {{"Minsk 2019"}}
-            </div>
         </div>
     </div>
 </template>
@@ -373,14 +362,12 @@
     import axios from 'axios';
     import {mapState} from 'vuex';
     import HeaderMenu from "./HeaderMenu";
-    import Menu from "./Menu";
     import ReplacersSection from "./ReplacersSection";
 
     export default {
 
         components: {
             HeaderMenu,
-            Menu,
             ReplacersSection
         },
 
@@ -465,7 +452,7 @@
                         path: this.$router.currentRoute.path.replace(/\/[^\/]*$/, "/" + this.appLanguage)
                     });
                 }
-                this.$i18n.locale = this.appLanguage;
+                this.$i18n.locale = this.appLanguage.toString();
 
                 let item_id = this.processItemId(this.$route.params.item_id);
 
@@ -560,6 +547,7 @@
                         let itemView = response.data;
                         this.dispatchView(itemView);
                         this.logEvent("item view displayed: item", itemView);
+                        this.$emit("set-admin", this.isAdmin());
                     })
                     .catch(err => {console.log("error on getItemView(itemId) method executing")});
             },
@@ -653,23 +641,12 @@
             },
 
             isGuest() {
-                return this.itemView.userData.comment === "Guest" && this.userName === "guest";
+                return this.itemView.userData.comment === "Guest" && this.userName.toString() === "guest";
             },
 
             openWishList() {
                 let wishListId = -3;
                 this.navigateToItem(wishListId);
-            },
-
-            openItemsManagement() {
-                let itemsManagementId = -1;
-                this.navigateToItem(itemsManagementId);
-
-            },
-
-            openUsersList() {
-                let usersListId = -4;
-                this.navigateToItem(usersListId);
             },
 
             getItemNameForSearchInGoogle() {

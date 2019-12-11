@@ -8,7 +8,7 @@
                     :language="appLanguage"
                     @logout="logout"
                     @select-language="selectLanguage"
-                    @open-login-form="openLoginForm"></AppBar>
+                    @open-login-form="openLoginForm"/>
             <div style="text-align: left">
 <!--                {{"store: " + appLanguage}}<br>-->
 <!--                {{"i18n: " + $i18n.locale}}<br>-->
@@ -20,7 +20,7 @@
 <!--                {{"Is loading: " + loadingState}}<br>-->
 <!--                {{"itemView: " + itemView}}<br>-->
             </div>
-            <router-view style="padding: 20px"></router-view>
+            <router-view style="padding: 20px"/>
         </div>
     </div>
 </template>
@@ -29,11 +29,15 @@
     import axios from 'axios';
     import {mapState} from 'vuex';
     import AppBar from "./components/AppBar";
+    import Home from "./components/Home";
 
     export default {
         name: 'app',
 
-        components: {AppBar},
+        components: {
+            AppBar,
+            Home
+        },
 
         computed: {
             ...mapState({
@@ -73,7 +77,7 @@
             },
 
             isGuest() {
-                return this.isAuthorized() && this.userName === "guest";
+                return this.isAuthorized() && this.userName.toString() === "guest";
             },
 
             pushTo(itemId) {
@@ -124,7 +128,7 @@
             },
 
             isAuthorized() {
-                return this.authorization !== "";
+                return this.authorization.toString() !== "";
             },
 
             isBackButtonDisplayed() {
@@ -149,8 +153,7 @@
             },
 
             isHomePage() {
-                return this.$route.params.item_id === this.motorcycleCatalogueId.toString()
-                    || this.$route.params.item_id === "home";
+                return this.$route.name === "home";
             }
         }
     }
