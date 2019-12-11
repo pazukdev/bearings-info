@@ -4,12 +4,6 @@
             {{$t("loading") + "..."}}
         </div>
         <div v-if="!isLoading()">
-            <div style="text-align: left">
-<!--                {{itemView.header.rows}}<br><br>-->
-<!--                {{itemView.replacersTable}}<br><br>-->
-<!--                {{itemView.wishListIds.length}}<br><br>-->
-            </div>
-
             <HeaderMenu :user-data="itemView.userData"
                         :guest="isGuest()"
                         :admin="isAdmin()"
@@ -23,79 +17,10 @@
                         @open-wish-list="openWishList"
                         @add-item-to-wishlist="addThisItemToWishList"></HeaderMenu>
 
-            <table id="item-creation-menu">
-                <tbody>
-                <tr>
-                    <td colspan="3">
-                        <b>{{itemView.header.name}}</b>
-                    </td>
-                </tr>
-                <tr v-if="isOrdinaryItemView()">
-                    <td colspan="3">
-                        {{$t("createdBy") + " " + itemView.creatorName}}
-                    </td>
-                </tr>
-                <tr style="height: 10px"><td></td></tr>
-                <tr v-if="isItemsManagementView()">
-                    <td colspan="3">
-                        <table>
-                            <tbody>
-                            <tr>
-                                <td colspan="2"><hr></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">{{$t("createNewItem")}}</td>
-                            </tr>
-                            <tr style="color: red">
-                                <td colspan="2">{{categoryMessage}}</td>
-                            </tr>
-                            <tr style="color: red">
-                                <td colspan="2">{{newItemNameMessage}}</td>
-                            </tr>
-                            <tr>
-                                <td class="two-columns-table-left-column">
-                                    {{$t("category")}}
-                                </td>
-                                <td class="two-column-table-right-column">
-                                    {{$t("name")}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="text"
-                                           list="categories"
-                                           @change="categorySelectOnChange()"
-                                           v-model="newItemCategory"/>
-                                    <datalist id="categories">
-                                        <option v-for="category in itemView.allCategories"
-                                                v-bind:value="category">
-                                            {{category}}
-                                        </option>
-                                    </datalist>
-                                </td>
-                                <td>
-                                    <input @change="newItemNameMessage = ''"
-                                           v-model="newItemName"
-                                           type="text"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <button type="button"
-                                            v-on:click="create()">
-                                        {{$t("create")}}
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><hr></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div>
+                <p><b>{{itemView.header.name}}</b></p>
+                <p>{{$t("createdBy") + " " + itemView.creatorName}}</p>
+            </div>
 
             <table id="item-description">
                 <tbody>
@@ -552,37 +477,6 @@
                     .catch(err => {console.log("error on getItemView(itemId) method executing")});
             },
 
-            create() {
-                this.clearItemCreationMessages();
-                if (this.newItemCategory === "") {
-                    this.categoryMessage = "Category not specified";
-                } else if (this.newItemName === "") {
-                    this.newItemNameMessage = "Item name not specified"
-                } else if (this.sameItemNameExistsInCategory(this.newItemCategory, this.newItemName)) {
-                    this.newItemNameMessage = "Item with this name already exists"
-                } else {
-                    this.$store.dispatch("setLoadingState", true);
-                    this.clearItemCreationMessages();
-                    axios
-                        .post(this.basicUrl
-                            + "/" + "item/create-view"
-                            + "/" + this.newItemCategory
-                            + "/" + this.newItemName
-                            + "/" + this.userName
-                            + "/" + this.getLanguage(), {
-                            headers: {
-                                Authorization: this.authorization
-                            }
-                        })
-                        .then(response => {
-                            let newItemView = response.data;
-                            this.pushTo(newItemView.itemId);
-                            this.dispatchView(newItemView);
-                            this.logEvent("a new item created", newItemView);
-                        });
-                }
-            },
-
             update(itemId) {
                 this.$store.dispatch("setLoadingState", true);
                 this.switchEditModeOff();
@@ -822,10 +716,6 @@
                 this.categoryMessage = "";
             },
 
-            categorySelectOnChange() {
-                this.categoryMessage = "";
-            },
-
             isShowInfoButton(row) {
                 return row.itemId !== "-" && !this.isEditMode && this.isOrdinaryItemView();
             },
@@ -859,13 +749,8 @@
                 this.clearItemCreationMessages();
             },
 
-            clearItemCreationMessages() {
-                this.categoryMessage = "";
-                this.newItemNameMessage = "";
-            },
-
             clearNewItemData() {
-                this.newItemCategory = "";
+                // this.newItemCategory = "";
                 this.newItemName = "";
             },
 
@@ -917,21 +802,6 @@
                 return (this.notStub(this.itemView.replacersTable.name)
                     && this.arrayHaveActiveItems(this.itemView.replacersTable.replacers))
                 || (this.notStub(this.itemView.replacersTable.name) && this.isEditMode);
-            },
-
-            sameItemNameExistsInCategory(category, name) {
-                for (let i = 0; i < this.itemView.partsTable.tables.length; i++) {
-                    let table = this.itemView.partsTable.tables[i];
-                    if (table.name === category) {
-                        for (let j = 0; j < table.parts.length; j++) {
-                            let item = table.parts[j];
-                            if (item.itemName === name) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-                return false;
             },
 
             itemHaveActiveParts() {
