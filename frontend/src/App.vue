@@ -80,16 +80,16 @@
                 return this.isAuthorized() && this.userName.toString() === "guest";
             },
 
-            pushTo(itemId) {
-                this.$router.push({ path: `/item/id/${itemId}/${this.appLanguage}` });
-            },
+            // pushTo(itemId) {
+            //     this.$router.push({ path: `/item/id/${itemId}/${this.appLanguage}` });
+            // },
 
             pushToHome() {
-                this.pushTo(this.motorcycleCatalogueId);
+                this.$router.push({ name: "home" });
             },
 
             pushToLoginForm() {
-                this.$router.push({ path: `/login/${this.appLanguage}` });
+                this.$router.push({ name: "login" });
             },
 
             loginAsGuest() {

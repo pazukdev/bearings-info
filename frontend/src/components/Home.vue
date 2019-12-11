@@ -1,5 +1,7 @@
 <template>
     <div>
+        <MotorcycleCatalogue/>
+
         <details open>
             <summary id="menu-summary">{{$t("menu")}}</summary>
             <Menu :admin="true"
@@ -17,18 +19,24 @@
 <script>
     import {mapState} from "vuex";
     import Menu from "./Menu";
+    import MotorcycleCatalogue from "./MotorcycleCatalogue";
+    import axios from "axios";
 
     export default {
         name: "Home",
 
         components: {
+            MotorcycleCatalogue,
             Menu
         },
 
         computed: {
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
-                appLanguage: state => state.dictionary.appLanguage
+                authorization: state => state.dictionary.authorization,
+                userName: state => state.dictionary.userName,
+                appLanguage: state => state.dictionary.appLanguage,
+                itemView: state => state.dictionary.itemView
             })
         },
 
@@ -40,6 +48,7 @@
 
         created() {
             this.onUrlChange();
+            this.getMotorcycleCatalogueItemView();
         },
 
         watch: {
@@ -51,8 +60,43 @@
                 this.$i18n.locale = this.appLanguage.toString();
             },
 
-            setAdmin(admin) {
-                return this.admin = admin;
+            getMotorcycleCatalogueItemView() {
+                // if (this.$route.params.lang !== this.appLanguage.toString()) {
+                //     this.$router.replace({
+                //         path: this.$router.currentRoute.path.replace(/\/[^\/]*$/, "/" + this.appLanguage)
+                //     });
+                // }
+                // this.$i18n.locale = this.appLanguage.toString();
+
+                // this.$store.dispatch("setLoadingState", true);
+                axios
+                    .get(this.basicUrl
+                        + "/" + "item"
+                        + "/" + "get-home-view"
+                        + "/" + this.userName
+                        + "/" + this.$i18n.locale, {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => {
+                        let itemView = response.data;
+                        this.dispatchView(itemView);
+                        console.log("home item view displayed");
+                    });
+            },
+
+            dispatchView(itemView) {
+                this.$store.dispatch("setItemView", itemView);
+                this.$store.dispatch("setLoadingState", false);
+            },
+
+            logEvent(event, itemId, name) {
+                console.log(event + ": " + "id=" + itemId + "; name=" + name);
+            },
+
+            isAdmin() {
+                return this.itemView.userData.comment === "Admin";
             },
 
             openItemsManagement() {

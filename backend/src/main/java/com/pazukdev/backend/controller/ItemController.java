@@ -30,6 +30,13 @@ public class ItemController {
         return service.createItemView(id, userName, language);
     }
 
+    @GetMapping("/get-home-view/{userName}/{language}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get home view")
+    public ItemView getHomeView(@PathVariable final String userName, @PathVariable final String language)  {
+        return service.createHomeView(userName, language);
+    }
+
     @PostMapping("/create-view/{category}/{name}/{userName}/{language}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new item")

@@ -1,17 +1,17 @@
 <template>
     <div>
-        <Item/>
+        <ItemList :motorcycle-catalogue-view="true"/>
     </div>
 </template>
 
 <script>
-    import Item from "./Item";
+    import ItemList from "./ItemList";
 
     export default {
         name: "MotorcycleCatalogue",
         
         components: {
-            Item
+            ItemList
         }
     }
 </script>

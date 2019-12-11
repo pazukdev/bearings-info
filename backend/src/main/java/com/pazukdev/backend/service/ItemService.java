@@ -101,6 +101,12 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
+    public ItemView createHomeView(final String userName, final String language) {
+        final ItemViewFactory itemViewFactory = new ItemViewFactory(this);
+        return itemViewFactory.createHomeView(userName, language);
+    }
+
+    @Transactional
     public ItemView createItemView(final Long itemId, final String userName, final String language) {
         final ItemViewFactory itemViewFactory = new ItemViewFactory(this);
         return itemViewFactory.createItemView(itemId, userName, language);

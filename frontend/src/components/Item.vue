@@ -4,267 +4,18 @@
             {{$t("loading") + "..."}}
         </div>
         <div v-if="!isLoading()">
-            <HeaderMenu :user-data="itemView.userData"
-                        :guest="isGuest()"
-                        :admin="isAdmin()"
-                        :wish-list-view="isWishListView()"
-                        :items-count-in-wishlist="itemView.wishListIds.length"
-                        :add-to-wishlist-button-visible="isAddToWishlistButtonVisible()"
-                        :item-in-wishlist-text-visible="isItemInWishListTextVisible()"
-                        :search-enabled="isSearchEnabled()"
-                        :show-bottom-hr="isOrdinaryItemView()"
-                        :item-name-for-search-in-google="getItemNameForSearchInGoogle()"
-                        @open-wish-list="openWishList"
-                        @add-item-to-wishlist="addThisItemToWishList"></HeaderMenu>
-
-            <div>
-                <p><b>{{itemView.header.name}}</b></p>
-                <p>{{$t("createdBy") + " " + itemView.creatorName}}</p>
-            </div>
-
-            <table id="item-description">
-                <tbody>
-                <tr style="text-align: left"
-                    v-for="row in itemView.header.rows">
-                    <td class="two-columns-table-left-column">
-                        <p>
-                            {{row.parameter}}
-                        </p>
-                    </td>
-                    <td class="two-column-table-right-column">
-                        <input v-if="isEditMode && isOrdinaryItemView()" v-model="row.value" type="text"/>
-                        <p v-if="!isShowInfoButton(row)
-                    && (!isEditMode || (isEditMode && !isOrdinaryItemView()))">
-                            {{row.value}}
-                        </p>
-                        <button v-if="isShowInfoButton(row)"
-                                type="button"
-                                @click="navigateToItem(row.itemId)">
-                            {{row.value}}
-                        </button>
-                    </td>
-                    <td>
-                        <button v-if="isRemoveHeaderRowButtonVisible(row.deletable)"
-                                v-model="itemView"
-                                type="button"
-                                class="round-delete-button"
-                                @click="removeRowFromHeader(row)">
-                            {{"-"}}
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3" class="alert-message">
-                        {{newHeaderRowMessage}}
-                    </td>
-                </tr>
-                <tr v-if="isEditMode && isOrdinaryItemView()">
-                    <td>
-                        <input v-model="newHeaderRow.parameter" type="text"/>
-                    </td>
-                    <td>
-                        <input v-model="newHeaderRow.value" type="text"/>
-                    </td>
-                    <td>
-                        <button type="button"
-                                class="round-button"
-                                @click="addHeaderRow()">
-                            {{"+"}}
-                        </button>
-                    </td>
-                </tr>
-                <tr style="height: 10px"><td></td></tr>
-                <tr>
-                    <td>
-                        <button v-if="isEditMode"
-                                type="button"
-                                @click="cancel()">
-                            {{$t("cancel")}}
-                        </button>
-                    </td>
-                    <td v-if="isEditButtonVisible()" style="text-align: right">
-                        <button v-if="!isEditMode"
-                                type="button"
-                                @click="edit()">
-                            {{$t("edit")}}
-                        </button>
-                        <button v-if="isEditMode"
-                                type="button"
-                                @click="save()">
-                            {{$t("save")}}
-                        </button>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr style="height: 26px">
-                    <td colspan="3"><hr></td>
-                </tr>
-                </tbody>
-            </table>
-
-            <table id="item-image" v-if="isViewWithImage()">
-                <tbody>
-                <tr v-if="!messagesContain('img removed')">
-                    <td>
-                        <div class="image-preview">
-                            <img class="preview" :src="itemView.imgData" alt="Item image">
-                        </div>
-                    </td>
-                </tr>
-                <tr v-if="isEditMode && itemView.defaultImg && !messagesContain('img removed')">
-                    <td>
-                        <button id="remove-img-button" type="button" @click="removeImg()">
-                            {{"Remove image"}}
-                        </button>
-                    </td>
-                </tr>
-                <tr v-if="isEditMode">
-                    <td>
-                        <br>
-                        Upload another image<br>
-                        Accepts .png images only<br>
-                        Size limit: 2MB<br>
-                        <br>
-                    </td>
-                </tr>
-                <tr v-if="isEditMode" class="alert-message">
-                    <td>
-                        {{fileUploadMessage}}
-                    </td>
-                </tr>
-                <tr v-if="isEditMode">
-                    <td>
-                        <input type="file" accept="image/png"
-                               style="color: black"
-                               @change="previewImage"><br><br>
-                    </td>
-                </tr>
-                <tr><td><hr></td></tr>
-                </tbody>
-            </table>
-
-            <table id="parts-table">
-                <tbody>
-                <tr v-if="isPartsTitleVisible()">
-                    <td>
-                        {{itemView.partsTable.localizedName}}
-                    </td>
-                </tr>
-                <tr v-if="isShowPartsTableHeader()">
-                    <td>
-                        <table id="parts-header">
-                            <tbody>
-                            <tr>
-                                <td class="three-column-table-left-column">
-                                    {{itemView.partsTable.header[0]}}
-                                </td>
-                                <td class="three-column-table-middle-column">
-                                    {{itemView.partsTable.header[1]}}
-                                </td>
-                                <td class="three-column-table-right-column" v-if="itemView.partsTable.header[2] !== '-'">
-                                    {{itemView.partsTable.header[2]}}
-                                </td>
-                                <td class="three-column-table-button-column"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                <tr v-for="table in itemView.partsTable.tables" v-if="arrayHaveActiveItems(table.parts)">
-                    <td colspan="3">
-                        <v-details v-model="table.opened">
-                            <summary><b>{{table.localizedName}}</b></summary>
-                            <table id="get-all-table">
-                                <tbody>
-                                <tr v-for="part in table.parts" v-if="statusActive(part)">
-                                    <td class="three-column-table-left-column">
-                                        <p class="three-column-table-left-column-text"
-                                           v-if="!isEditMode || (isEditMode && !isOrdinaryItemView())">
-                                            {{getFirstColumnValue(part)}}
-                                        </p>
-                                        <input v-if="isEditMode && isOrdinaryItemView()"
-                                               v-model="part.location" type="text"/>
-                                    </td>
-                                    <td class="three-column-table-middle-column">
-                                        <p v-if="isUserListView()">
-                                            {{part.buttonText}}
-                                        </p>
-                                        <button type="button"
-                                                v-if="!isUserListView()"
-                                                @click="navigateToItem(part.itemId)">
-                                            {{part.buttonText}}
-                                        </button>
-                                    </td>
-                                    <td class="three-column-table-right-column">
-                                        <div v-if="isShowQuantityValue()" class="parts-right-column-text">
-                                            {{part.quantity}}
-                                        </div>
-                                        <div v-if="isMotorcycleCatalogueView() || isItemsManagementView()"
-                                             class="parts-right-column-text">
-                                            {{part.localizedComment}}
-                                        </div>
-                                        <input v-if="isEditMode && isOrdinaryItemView()"
-                                               v-model="part.quantity" type="text"/>
-                                    </td>
-                                    <td class="three-column-table-button-column" v-if="isEditMode && part.comment !== 'Admin'">
-                                        <button v-model="itemView"
-                                                v-if="isItemDeleteButtonVisibleToCurrentUser(part)"
-                                                type="button"
-                                                class="round-button"
-                                                style="background: red"
-                                                @click="removePartFromList(part, table.parts)">
-                                            {{"-"}}
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <p></p>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </v-details>
-                    </td>
-                </tr>
-                <tr v-if="notStub(itemView.partsTable.name) && isOrdinaryItemView()">
-                    <td>
-                        <table>
-                            <tbody>
-                            <tr style="text-align: center; color: red">
-                                <td colspan="3">
-                                    {{newPartMessage}}
-                                </td>
-                            </tr>
-                            <tr v-if="isEditMode" style="text-align: left">
-                                <td class="three-column-table-left-column">
-                                    <input v-model="newPart.location" type="text"/>
-                                </td>
-                                <td class="three-column-table-middle-column">
-                                    <select v-model="newPart"
-                                            @change="partSelectOnChange()">
-                                        <option v-for="part in itemView.possibleParts"
-                                                v-if="selectOptionVisible(part)"
-                                                v-bind:value="part">
-                                            {{part.selectText}}
-                                        </option>
-                                    </select>
-                                </td>
-                                <td class="three-column-table-right-column">
-                                    <input type="text" v-model="newPart.quantity"/>
-                                </td>
-                                <td class="three-column-table-button-column">
-                                    <button type="button"
-                                            class="round-button"
-                                            @click="addPart()">
-                                        {{"+"}}
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+<!--            <HeaderMenu :user-data="itemView.userData"-->
+<!--                        :guest="isGuest()"-->
+<!--                        :admin="isAdmin()"-->
+<!--                        :wish-list-view="isWishListView()"-->
+<!--                        :items-count-in-wishlist="itemView.wishListIds.length"-->
+<!--                        :add-to-wishlist-button-visible="isAddToWishlistButtonVisible()"-->
+<!--                        :item-in-wishlist-text-visible="isItemInWishListTextVisible()"-->
+<!--                        :search-enabled="isSearchEnabled()"-->
+<!--                        :show-bottom-hr="isOrdinaryItemView()"-->
+<!--                        :item-name-for-search-in-google="getItemNameForSearchInGoogle()"-->
+<!--                        @open-wish-list="openWishList"-->
+<!--                        @add-item-to-wishlist="addThisItemToWishList"/>-->
 
             <ReplacersSection :replacers-table-visible="isReplacersTableVisible()"
                               :parent-item-id="itemView.itemId"
@@ -749,6 +500,11 @@
                 this.clearItemCreationMessages();
             },
 
+            clearItemCreationMessages() {
+                this.categoryMessage = "";
+                this.newItemNameMessage = "";
+            },
+
             clearNewItemData() {
                 // this.newItemCategory = "";
                 this.newItemName = "";
@@ -789,7 +545,8 @@
             },
 
             save() {
-                this.update(this.itemView.itemId);
+                console.log("2222222222222222");
+                // this.update(this.itemView.itemId);
             },
 
             isPartsTitleVisible() {

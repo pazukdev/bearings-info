@@ -31,6 +31,22 @@ public class ItemViewFactory {
 
     private final ItemService itemService;
 
+    public ItemView createHomeView(final String userName, final String userLanguage) {
+        final UserEntity currentUser = itemService.getUserService().findByName(userName);
+
+        final ItemView basicItemView = new ItemView();
+//        basicItemView.setItemId(itemId);
+        basicItemView.setWishListIds(UserUtil.collectWishListItemsIds(currentUser));
+        basicItemView.setUserData(NestedItemDtoFactory.createUser(currentUser));
+
+        final ItemView itemView = createMotorcycleCatalogueView(basicItemView);
+
+        if (!userLanguage.equals("en")) {
+            translate("en", userLanguage, itemView, false, itemService);
+        }
+        return itemView;
+    }
+
     public ItemView createItemView(final Long itemId, final String userName, final String userLanguage) {
         final UserEntity currentUser = itemService.getUserService().findByName(userName);
         final WishList wishList = currentUser.getWishList();
