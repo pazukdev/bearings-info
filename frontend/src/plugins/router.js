@@ -3,6 +3,7 @@ import Vue from "vue";
 import Home from "../components/Home";
 import Item from "../components/Item";
 import Login from "../components/Login";
+import ItemsManagement from "../components/ItemsManagement";
 
 Vue.use(VueRouter);
 
@@ -20,7 +21,8 @@ const router = new VueRouter({
         // urls to components binding
         { path: '/home/:lang', name: 'home', component: Home, meta: { requiresAuth: true }},
         { path: '/item/id/:item_id/:lang', name: 'item', component: Item, meta: { requiresAuth: true }},
-        { path: '/login/:lang', name: 'login', component: Login }
+        { path: '/login/:lang', name: 'login', component: Login },
+        { path: '/items_management/:lang', name: 'items_management', component: ItemsManagement, meta: { requiresAuth: true }},
     ]
 });
 

@@ -48,7 +48,6 @@
 
         created() {
             this.onUrlChange();
-            this.getMotorcycleCatalogueItemView();
         },
 
         watch: {
@@ -57,16 +56,25 @@
 
         methods: {
             onUrlChange() {
-                this.$i18n.locale = this.appLanguage.toString();
+                this.getMotorcycleCatalogueItemView();
+            },
+
+            setLocale() {
+                let language = this.appLanguage.toString();
+                if (this.$route.params.lang !== language) {
+                    this.changeLanguageInUrl(language);
+                }
+                this.$i18n.locale = language;
+            },
+
+            changeLanguageInUrl(language) {
+                this.$router.replace({
+                    path: this.$router.currentRoute.path.replace(/\/[^/]*$/, "/" + language)
+                });
             },
 
             getMotorcycleCatalogueItemView() {
-                // if (this.$route.params.lang !== this.appLanguage.toString()) {
-                //     this.$router.replace({
-                //         path: this.$router.currentRoute.path.replace(/\/[^\/]*$/, "/" + this.appLanguage)
-                //     });
-                // }
-                // this.$i18n.locale = this.appLanguage.toString();
+                this.setLocale();
 
                 // this.$store.dispatch("setLoadingState", true);
                 axios
@@ -82,7 +90,7 @@
                     .then(response => {
                         let itemView = response.data;
                         this.dispatchView(itemView);
-                        console.log("home item view displayed");
+                        console.log("home displayed");
                     });
             },
 
@@ -100,8 +108,7 @@
             },
 
             openItemsManagement() {
-                let itemsManagementId = -1;
-                this.pushTo(itemsManagementId);
+                this.$router.push({ name: "items_management" });
 
             },
 

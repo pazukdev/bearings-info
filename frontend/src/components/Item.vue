@@ -1,34 +1,47 @@
 <template>
     <div>
+        {{editMode}}
         <div v-if="isLoading()" style="text-align: center; padding-top: 50%">
             {{$t("loading") + "..."}}
         </div>
         <div v-if="!isLoading()">
-<!--            <HeaderMenu :user-data="itemView.userData"-->
-<!--                        :guest="isGuest()"-->
-<!--                        :admin="isAdmin()"-->
-<!--                        :wish-list-view="isWishListView()"-->
-<!--                        :items-count-in-wishlist="itemView.wishListIds.length"-->
-<!--                        :add-to-wishlist-button-visible="isAddToWishlistButtonVisible()"-->
-<!--                        :item-in-wishlist-text-visible="isItemInWishListTextVisible()"-->
-<!--                        :search-enabled="isSearchEnabled()"-->
-<!--                        :show-bottom-hr="isOrdinaryItemView()"-->
-<!--                        :item-name-for-search-in-google="getItemNameForSearchInGoogle()"-->
-<!--                        @open-wish-list="openWishList"-->
-<!--                        @add-item-to-wishlist="addThisItemToWishList"/>-->
+            <HeaderMenu :user-data="itemView.userData"
+                        :guest="isGuest()"
+                        :admin="isAdmin()"
+                        :wish-list-view="isWishListView()"
+                        :items-count-in-wishlist="itemView.wishListIds.length"
+                        :add-to-wishlist-button-visible="isAddToWishlistButtonVisible()"
+                        :item-in-wishlist-text-visible="isItemInWishListTextVisible()"
+                        :search-enabled="isSearchEnabled()"
+                        :show-bottom-hr="isOrdinaryItemView()"
+                        :item-name-for-search-in-google="getItemNameForSearchInGoogle()"
+                        @open-wish-list="openWishList"
+                        @add-item-to-wishlist="addThisItemToWishList"/>
+
+            <EditPanel :edit-mode="editMode" @cancel="cancel" @edit="edit" @save="save"/>
+
+            <PartsSection :replacers-table-visible="isReplacersTableVisible()"
+                          :parent-item-id="itemView.itemId"
+                              :parent-item-name="itemView.itemName"
+                              :edit-mode="editMode"
+                              :not-stub="notStub(itemView.replacersTable.name)"
+                              :replacers-table="itemView.replacersTable"
+                              :possible-replacers="itemView.replacers"
+                              :rated-items="itemView.ratedItems"
+                              @update-replacers="updateReplacers"
+                              @navigate-to-item="navigateToItem"/>
 
             <ReplacersSection :replacers-table-visible="isReplacersTableVisible()"
                               :parent-item-id="itemView.itemId"
                               :parent-item-name="itemView.itemName"
-                              :edit-mode="isEditMode"
+                              :edit-mode="editMode"
                               :not-stub="notStub(itemView.replacersTable.name)"
                               :replacers-table="itemView.replacersTable"
                               :possible-replacers="itemView.replacers"
                               :rated-items="itemView.ratedItems"
                               @update-replacers="updateReplacers"
                               @navigate-to-item="navigateToItem"
-                              @replacer-select-on-change="replacerSelectOnChange"
-                              @add-replacer="addReplacer"/>
+                              @select-on-change="selectOnChange"/>
 
         </div>
     </div>
@@ -38,12 +51,16 @@
     import axios from 'axios';
     import {mapState} from 'vuex';
     import HeaderMenu from "./HeaderMenu";
+    import EditPanel from "./EditPanel";
+    import PartsSection from "./PartsSection";
     import ReplacersSection from "./ReplacersSection";
 
     export default {
 
         components: {
             HeaderMenu,
+            EditPanel,
+            PartsSection,
             ReplacersSection
         },
 
@@ -51,7 +68,7 @@
             return {
                 text: "",
                 imgData: "",
-                isEditMode: false,
+                editMode: false,
                 newItemCategory: "",
                 newItemName: "",
                 newHeaderRowMessage: "",
@@ -123,7 +140,7 @@
             },
 
             getItemViewByUrl() {
-                if (this.$route.params.lang !== this.appLanguage) {
+                if (this.$route.params.lang !== this.appLanguage.toString()) {
                     this.$router.replace({
                         path: this.$router.currentRoute.path.replace(/\/[^\/]*$/, "/" + this.appLanguage)
                     });
@@ -167,7 +184,7 @@
             },
 
             pushToLoginForm() {
-                this.$router.push({ path: `/login/${this.appLanguage}` });
+                this.$router.push({ name: `login` });
             },
 
             loginAsGuest() {
@@ -321,18 +338,10 @@
                 this.itemView.messages.push("img removed");
             },
 
-            isShowPartsTableHeader() {
-                return !(this.itemView.partsTable.header[0] === "-"
-                    && this.itemView.partsTable.header[1] === "-"
-                    && this.itemView.partsTable.header[2] === "-")
-                    && this.itemView.category !== "Motorcycle"
-                    && this.isPartsTitleVisible();
-            },
-
             isAddToWishlistButtonVisible() {
                 return !this.isInWishList(this.itemView.itemId)
                     && this.isOrdinaryItemView()
-                    && !this.isEditMode
+                    && !this.editMode
                     && !this.isGuest();
             },
 
@@ -366,27 +375,6 @@
                 }
             },
 
-            addPart() {
-                this.newPartMessage = "";
-                this.newPart.name = this.getItemName() + this.newPart.name;
-                let category = this.newPart.itemCategory;
-                let targetTable = this.getTable(category);
-                if (this.childItemAlreadyInList(this.newPart.itemId, targetTable)) {
-                    this.newPartMessage = "Part already in list";
-                } else if (this.newPart.quantity === "0") {
-                    this.newPartMessage = "Quantity shouldn't be zero";
-                } else if (this.newPart.quantity.includes("-")) {
-                    this.newPartMessage = "Quantity shouldn't include - character";
-                } else {
-                    targetTable.parts.push(this.newPart);
-                    this.clearNewPart();
-                }
-            },
-
-            addReplacer(newReplacer) {
-                this.itemView.replacersTable.replacers.push(newReplacer);
-            },
-
             getItemName() {
                 return this.itemView.header.rows[0].parameter;
             },
@@ -398,15 +386,6 @@
             rowAlreadyInList(parameter) {
                 for (let i=0; i < this.itemView.header.rows.length; i++) {
                     if (this.itemView.header.rows[i].parameter === parameter) {
-                        return true;
-                    }
-                }
-                return false;
-            },
-
-            childItemAlreadyInList(id, table) {
-                for (let i=0; i < table.parts.length; i++) {
-                    if (table.parts[i].itemId === id) {
                         return true;
                     }
                 }
@@ -450,29 +429,16 @@
                 array.splice(array.indexOf(element), 1)
             },
 
-            getTable(category) {
-                for (let i=0; i < this.itemView.partsTable.tables.length; i++) {
-                    if (this.itemView.partsTable.tables[i].name === category) {
-                        return this.itemView.partsTable.tables[i];
-                    }
-                }
-                return this.itemView.partsTable;
-            },
-
-            partSelectOnChange() {
-                this.newPartMessage = "";
-            },
-
-            replacerSelectOnChange() {
+            selectOnChange() {
                 this.categoryMessage = "";
             },
 
             isShowInfoButton(row) {
-                return row.itemId !== "-" && !this.isEditMode && this.isOrdinaryItemView();
+                return row.itemId !== "-" && !this.editMode && this.isOrdinaryItemView();
             },
 
             edit() {
-                this.isEditMode = true;
+                this.editMode = true;
             },
 
             cancel() {
@@ -480,13 +446,12 @@
             },
 
             switchEditModeOff() {
-                this.isEditMode = false;
+                this.editMode = false;
                 this.clearAllEditData();
             },
 
             clearAllEditData() {
                 this.clearNewHeaderRow();
-                this.clearNewPart();
                 this.clearAllMessages();
                 this.clearNewItemData();
                 this.imgData = "";
@@ -522,53 +487,20 @@
                 };
             },
 
-            clearNewPart() {
-                this.newPart = this.clearItem();
-            },
-
-            clearItem() {
-                return  {
-                    id: "",
-                    name: "",
-                    itemId: "",
-                    itemName: "",
-                    itemCategory: "",
-                    buttonText: "",
-                    selectText: "",
-                    comment: "",
-                    location: "",
-                    quantity: "",
-                    status: "",
-                    creatorName: "",
-                    rating: ""
-                }
-            },
-
             save() {
-                console.log("2222222222222222");
-                // this.update(this.itemView.itemId);
+                this.update(this.itemView.itemId);
             },
 
             isPartsTitleVisible() {
                 return !this.isMotorcycleCatalogueView()
                     && (this.notStub(this.itemView.partsTable.name) && this.itemHaveActiveParts())
-                    || (this.notStub(this.itemView.partsTable.name) && this.isEditMode);
+                    || (this.notStub(this.itemView.partsTable.name) && this.editMode);
             },
 
             isReplacersTableVisible() {
                 return (this.notStub(this.itemView.replacersTable.name)
                     && this.arrayHaveActiveItems(this.itemView.replacersTable.replacers))
-                || (this.notStub(this.itemView.replacersTable.name) && this.isEditMode);
-            },
-
-            itemHaveActiveParts() {
-                for (let i = 0; i < this.itemView.partsTable.tables.length; i++) {
-                    let table = this.itemView.partsTable.tables[i];
-                    if (this.arrayHaveActiveItems(table.parts)) {
-                        return true;
-                    }
-                }
-                return false;
+                || (this.notStub(this.itemView.replacersTable.name) && this.editMode);
             },
 
             getFirstColumnValue(item) {
@@ -582,7 +514,7 @@
 
             arrayHaveActiveItems(array) {
                 for (let i=0; i < array.length; i++) {
-                    if (this.statusActive(array[i])) {
+                    if (this.statusIsActive(array[i].status)) {
                         return true;
                     }
                 }
@@ -614,8 +546,8 @@
             },
 
             isShowQuantityValue() {
-                return (!this.isEditMode && (this.isOrdinaryItemView() || this.isUserListView()))
-                    || (this.isEditMode && this.isUserListView());
+                return (!this.editMode && (this.isOrdinaryItemView() || this.isUserListView()))
+                    || (this.editMode && this.isUserListView());
             },
 
             isSearchEnabled() {
@@ -663,7 +595,7 @@
             },
 
             isRemoveHeaderRowButtonVisible(deletable) {
-                return this.isEditMode && this.isOrdinaryItemView() && deletable;
+                return this.editMode && this.isOrdinaryItemView() && deletable;
             }
         }
     }

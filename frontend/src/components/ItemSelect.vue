@@ -1,37 +1,33 @@
 <template>
     <div>
+<!--        {{itemView.possibleReplacers[0]}}<br><br>-->
+<!--        {{itemView.replacersTable.replacers[0]}}-->
         <select v-model="selectedItem"
                 @change="onChange">
-            <option v-for="item in sortPossibleItems()"
-                    :value="item">
-                {{item.selectText}}
+            <option v-for="item in actualPossibleItemsList" :value="item">
+                {{item.localizedSelectText}}
             </option>
         </select>
     </div>
 </template>
 
 <script>
+    import {mapState} from "vuex";
+
     export default {
         name: "ItemSelect",
 
         props: {
-            parentItemId: Number,
-            items: Array,
-            possibleItems: Array
+            replacer: Boolean
         },
 
         computed: {
-            sortedPossibleItems() {
-                let possibleItems = [];
-                for (let i=0; i < this.possibleItems.length; i++) {
-                    let item = this.possibleItems[i];
-                    if (this.isNotThisItem(item.itemId)
-                        && !this.itemIsAlreadyInList(item.itemId)
-                        && this.statusIsActive(item.status)) {
-                        possibleItems.push(item);
-                    }
-                }
-                return possibleItems.sort((a, b) => (a.selectText > b.selectText) ? 1 : -1);
+            ...mapState({
+                itemView: state => state.dictionary.itemView
+            }),
+
+            actualPossibleItemsList() {
+                return this.getActualPossibleItemsList();
             }
         },
 
@@ -43,39 +39,40 @@
         },
 
         methods: {
-            sortPossibleItems() {
-                let possibleItems = [];
-                for (let i=0; i < this.possibleItems.length; i++) {
-                    let item = this.possibleItems[i];
-                    if (this.isNotThisItem(item.itemId)
-                        && !this.itemIsAlreadyInList(item.itemId)
-                        && this.statusIsActive(item.status)) {
-                        possibleItems.push(item);
+            getActualPossibleItemsList() {
+                let possibleItems;
+                let items;
+                if (this.replacer) {
+                    possibleItems =  this.itemView.possibleReplacers;
+                    items = this.itemView.replacersTable.replacers;
+                } else {
+                    possibleItems = this.itemView.possibleParts;
+                    items = this.itemView.partsTable.parts;
+                }
+
+                let actualPossibleItems = [];
+                for (let i=0; i < possibleItems.length; i++) {
+                    if (!this.isInList(possibleItems[i], items)) {
+                        actualPossibleItems.push(possibleItems[i]);
                     }
                 }
-                this.$emit("show-add-form", possibleItems.length > 0);
-                return possibleItems.sort((a, b) => (a.selectText > b.selectText) ? 1 : -1);
+
+                let showForm = actualPossibleItems.length > 0;
+                this.$emit("show-add-form", showForm);
+                return actualPossibleItems;
             },
 
-            onChange() {
-                this.$emit("on-change", this.selectedItem);
-            },
-
-            isNotThisItem(itemId) {
-                return itemId !== this.parentItemId;
-            },
-
-            itemIsAlreadyInList(itemId) {
-                for (let i=0; i < this.items.length; i++) {
-                    if (this.items[i].itemId === itemId) {
+            isInList(item, list) {
+                for (let i=0; i < list.length; i++) {
+                    if (list[i].itemId === item.itemId) {
                         return true;
                     }
                 }
                 return false;
             },
 
-            statusIsActive(status) {
-                return this.$parent.statusIsActive(status);
+            onChange() {
+                this.$emit("on-change", this.selectedItem);
             }
         }
     }

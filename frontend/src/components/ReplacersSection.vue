@@ -1,5 +1,6 @@
 <template>
     <div>
+        {{editMode}}
         <ReplacersTable v-if="replacersTableVisible"
                         :replacers-table="replacersTable"
                         :edit-mode="editMode"
@@ -9,16 +10,10 @@
                         @navigate-to-item="navigateToItem"/>
 
         <AddItemForm v-if="editMode"
-                     :parent-item-id="parentItemId"
-                     :parent-item-name="parentItemName"
                      :edit-mode="editMode"
-                     :not-stub="notStub"
-                     :replacer="true"
-                     :items="replacersTable.replacers"
-                     :possible-items="possibleReplacers"
                      :show-form="showForm"
-                     @replacer-select-on-change="replacerSelectOnChange"
-                     @add-replacer="addReplacer"/>
+                     :replacer="true"
+                     @select-on-change="selectOnChange"/>
     </div>
 </template>
 
@@ -72,16 +67,17 @@
                 return this.$parent.isGuest();
             },
 
-            replacerSelectOnChange() {
-                this.$emit("replacer-select-on-change");
+            selectOnChange() {
+                this.$emit("select-on-change");
             },
 
             addReplacer(event, newReplacer) {
                 this.$emit(event, newReplacer);
             },
 
-            removeReplacerFromList(replacer) {
-                this.$parent.removeFromArray(replacer, this.replacersTable.replacers);
+            removeItem(item) {
+                let array = this.replacersTable.replacers;
+                this.$parent.removeFromArray(item, array);
                 this.showForm = true;
             },
 

@@ -44,7 +44,7 @@
                                         type="button"
                                         class="round-button"
                                         style="background: red"
-                                        @click="removeReplacerFromList(replacer)">
+                                        @click="removeItem(replacer)">
                                     {{"-"}}
                                 </button>
                             </td>
@@ -133,8 +133,8 @@
                     });
             },
 
-            removeReplacerFromList(replacer) {
-                this.$parent.removeReplacerFromList(replacer);
+            removeItem(item) {
+                this.$parent.removeItem(item);
             },
 
             statusIsActive(status) {

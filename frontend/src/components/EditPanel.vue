@@ -1,16 +1,17 @@
 <template>
-    <div>
-        <table>
+    <div style="margin: 0; padding: 0">
+        {{editMode}}
+        <table style="margin: 0; padding: 0; border-collapse: initial; border-spacing: initial">
             <tbody>
             <tr>
-                <td>
+                <td style="width: 50%">
                     <button v-if="editMode"
                             type="button"
                             @click="cancel()">
                         {{$t("cancel")}}
                     </button>
                 </td>
-                <td style="text-align: right">
+                <td style="width: 50%; text-align: right">
                     <button v-if="!editMode"
                             type="button"
                             @click="edit()">
@@ -33,10 +34,8 @@
     export default {
         name: "EditPanel",
 
-        data() {
-            return {
-                editMode: false
-            }
+        props: {
+            editMode: Boolean
         },
 
         methods: {
@@ -45,8 +44,7 @@
             },
 
             edit() {
-                this.editMode = true;
-                this.$emit("edit", this.editMode);
+                this.$emit("edit", false);
             },
 
             save() {

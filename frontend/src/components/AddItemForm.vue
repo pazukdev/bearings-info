@@ -1,18 +1,17 @@
 <template>
     <div id="add-item-form">
-        <p>{{getTitle()}}</p>
-        <p v-if="!showForm">
-            {{getMessage()}}
+        {{newItem}}
+        <p>{{title}}</p>
+        <p v-if="message !== ''" class="alert-message">
+            {{message}}
         </p>
         <table v-if="showForm" class="bordered">
-            <tbody>
-            <tr v-if="notStub && editMode">
+            <tbody v-if="replacer">
+            <tr v-if="editMode">
                 <td class="not-symmetrical-left">
-                    <ItemSelect :parent-item-id="parentItemId"
-                                :items="items"
-                                :possible-items="possibleItems"
+                    <ItemSelect :replacer="replacer"
                                 @show-add-form="showAddForm"
-                                @on-change="onChange"/>
+                                @on-change="selectOnChange"/>
                 </td>
                 <td class="not-symmetrical-right"/>
                 <td>
@@ -29,12 +28,36 @@
                 </td>
             </tr>
             </tbody>
+
+            <tbody v-if="!replacer">
+            <tr v-if="editMode">
+                <td class="three-column-table-left-column">
+                    <input v-model="newItem.location" type="text"/>
+                </td>
+                <td class="three-column-table-middle-column">
+                    <ItemSelect :replacer="replacer"
+                                @show-add-form="showAddForm"
+                                @on-change="selectOnChange"/>
+                </td>
+                <td class="three-column-table-right-column">
+                    <input v-model="newItem.quantity" type="text"/>
+                </td>
+                <td>
+                    <button type="button"
+                            class="round-button"
+                            @click="addItem">
+                        {{"+"}}
+                    </button>
+                </td>
+            </tr>
+            </tbody>
         </table>
     </div>
 </template>
 
 <script>
     import ItemSelect from "./ItemSelect";
+    import {mapState} from "vuex";
 
     export default {
         name: "AddReplacerForm",
@@ -44,14 +67,35 @@
         },
 
         props: {
-            parentItemId: Number,
-            parentItemName: String,
             editMode: Boolean,
-            notStub: Boolean,
             replacer: Boolean,
-            items: Array,
-            possibleItems: Array,
             showForm: Boolean
+        },
+
+        computed: {
+            ...mapState({
+                itemView: state => state.dictionary.itemView
+            }),
+
+            possibleItems() {
+                if (this.replacer) {
+                    return this.itemView.possibleReplacers;
+                } else {
+                    return this.itemView.possibleParts;
+                }
+            },
+
+            items() {
+                if (this.replacer) {
+                    return this.itemView.replacersTable.replacers;
+                } else {
+                    return this.itemView.partsTable.parts;
+                }
+            },
+
+            title() {
+                return this.replacer ? "Add replacer" : "Add part";
+            }
         },
 
         data() {
@@ -65,35 +109,36 @@
 
         methods: {
             showAddForm(show) {
+                this.message = "";
+                if (!show) {
+                    this.message = this.replacer ? "No replacers found" : "No parts found";
+                }
                 this.$parent.showAddForm(show);
-            },
-
-            getTitle() {
-                return this.replacer ? "Add replacer" : "Add part";
-            },
-
-            getMessage() {
-                return this.replacer ? "No replacers found" : "No parts found";
             },
 
             addItem() {
                 this.message = "";
                 this.newItem.name = this.parentItemName + this.newItem.name;
-                let e = this.replacer ? "add-replacer" : "add-part";
-                this.$emit(e, e, this.newItem);
+                if (!this.replacer) {
+                    if (this.newItem.quantity === "0") {
+                        this.message = "Quantity shouldn't be zero";
+                    } else if (this.newItem.quantity === "-") {
+                        this.message = "Quantity shouldn't contain -";
+                    }
+                }
+                if (this.message !== "") {
+                    return;
+                }
+                this.items.push(this.newItem);
                 this.newItem = {
                     comment: ""
                 }
             },
 
-            onChange(selectedItem) {
+            selectOnChange(selectedItem) {
                 this.message = "";
                 this.newItem = selectedItem;
-                this.$emit("replacer-select-on-change")
-            },
-
-            statusIsActive(status) {
-                return this.$parent.statusIsActive(status);
+                this.$emit("select-on-change")
             }
 
         }
