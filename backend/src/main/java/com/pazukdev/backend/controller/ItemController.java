@@ -33,8 +33,15 @@ public class ItemController {
     @GetMapping("/get-home-view/{userName}/{language}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get home view")
-    public ItemView getHomeView(@PathVariable final String userName, @PathVariable final String language)  {
+    public ItemView getHomeView(@PathVariable final String userName, @PathVariable final String language) {
         return service.createHomeView(userName, language);
+    }
+
+    @GetMapping("/get-items-management-view/{userName}/{language}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get items management view")
+    public ItemView getItemsManagementView(@PathVariable final String userName, @PathVariable final String language) {
+        return service.createItemsManagementView(userName, language);
     }
 
     @PostMapping("/create-view/{category}/{name}/{userName}/{language}")

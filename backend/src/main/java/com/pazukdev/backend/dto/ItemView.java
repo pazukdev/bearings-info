@@ -25,22 +25,22 @@ public class ItemView extends AbstractDto {
     private boolean addToWishList;
     private boolean hardDelete = false;
     private boolean defaultImg = true;
-    private List<String> messages = new ArrayList<>();
+    private Long itemId;
+    private String category;
     private NestedItemDto userData;
     private String imgData = "-";
-    private String category;
     private HeaderTable header;
     private PartsTable partsTable;
     private ReplacersTable replacersTable;
-    private Long itemId;
     private List<NestedItemDto> possibleParts = new ArrayList<>();
-    private List<NestedItemDto> replacers = new ArrayList<>();
+    private List<NestedItemDto> possibleReplacers = new ArrayList<>();
     private List<String> allCategories = new ArrayList<>();
     private Set<Long> idsToRemove = new HashSet<>();
+    private List<String> messages = new ArrayList<>();
     private Long creatorId;
     private String creatorName;
     private Set<Long> wishListIds = new HashSet<>();
     private Set<Long> ratedItems = new HashSet<>();
-    private ItemView oldItemViewInEnglish;
+//    private ItemView oldItemViewInEnglish;
 
 }

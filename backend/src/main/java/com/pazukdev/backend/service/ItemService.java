@@ -102,14 +102,17 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     @Transactional
     public ItemView createHomeView(final String userName, final String language) {
-        final ItemViewFactory itemViewFactory = new ItemViewFactory(this);
-        return itemViewFactory.createHomeView(userName, language);
+        return createNewItemViewFactory().createHomeView(userName, language);
+    }
+
+    @Transactional
+    public ItemView createItemsManagementView(final String userName, final String language) {
+        return createNewItemViewFactory().createItemsManagementView(userName, language);
     }
 
     @Transactional
     public ItemView createItemView(final Long itemId, final String userName, final String language) {
-        final ItemViewFactory itemViewFactory = new ItemViewFactory(this);
-        return itemViewFactory.createItemView(itemId, userName, language);
+        return createNewItemViewFactory().createItemView(itemId, userName, language);
     }
 
     @Transactional
@@ -184,6 +187,10 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     private String createItemDescription(final TransitiveItemDescriptionMap descriptionMap) {
         descriptionMap.getItems().clear();
         return ItemUtil.toDescription(descriptionMap);
+    }
+
+    private ItemViewFactory createNewItemViewFactory() {
+        return new ItemViewFactory(this);
     }
 
 }

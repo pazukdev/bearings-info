@@ -17,6 +17,7 @@ public class NestedItemDto extends AbstractDto {
     private String itemCategory = "-";
     private String buttonText = "-";
     private String selectText = "-";
+    private String localizedSelectText = "-";
     private String comment = "-";
     private String localizedComment = "-";
     private String location = "-";
@@ -24,7 +25,12 @@ public class NestedItemDto extends AbstractDto {
     private String creatorName;
     private Integer rating = 0;
 
-    public void setComment(String comment) {
+    public void setSelectText(final String selectText) {
+        this.selectText = selectText;
+        this.localizedSelectText = selectText;
+    }
+
+    public void setComment(final String comment) {
         this.comment = comment;
         this.localizedComment = comment;
     }

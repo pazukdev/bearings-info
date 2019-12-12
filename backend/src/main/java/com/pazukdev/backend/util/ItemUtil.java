@@ -22,14 +22,14 @@ public class ItemUtil {
     @Getter
     public enum SpecialItemId {
 
-        ITEMS_MANAGEMENT_VIEW(-1),
-        MOTORCYCLE_CATALOGUE_VIEW(-2),
-        WISH_LIST_VIEW(-3),
-        USER_LIST_VIEW(-4);
+        ITEMS_MANAGEMENT_VIEW(-1L),
+        MOTORCYCLE_CATALOGUE_VIEW(-2L),
+        WISH_LIST_VIEW(-3L),
+        USER_LIST_VIEW(-4L);
 
-        private final int itemId;
+        private final Long itemId;
 
-        SpecialItemId(final int itemId) {
+        SpecialItemId(final Long itemId) {
             this.itemId = itemId;
         }
     }

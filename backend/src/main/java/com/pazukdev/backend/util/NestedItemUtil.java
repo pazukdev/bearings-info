@@ -130,11 +130,7 @@ public class NestedItemUtil {
     }
 
     public static List<NestedItemDto> collectAllItems(final PartsTable partsTable) {
-        final Set<NestedItemDto> allItems = new HashSet<>(partsTable.getParts());
-        for (final PartsTable childTable : partsTable.getTables()) {
-            allItems.addAll(childTable.getParts());
-        }
-        return new ArrayList<>(allItems);
+        return partsTable.getParts();
     }
 
     public static List<NestedItemDto> createPossibleParts(final List<Item> items, final UserService userService) {

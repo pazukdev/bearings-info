@@ -32,19 +32,19 @@ public class ItemViewFactory {
     private final ItemService itemService;
 
     public ItemView createHomeView(final String userName, final String userLanguage) {
-        final UserEntity currentUser = itemService.getUserService().findByName(userName);
+        return createItemView(MOTORCYCLE_CATALOGUE_VIEW.getItemId(), userName, userLanguage);
+    }
 
-        final ItemView basicItemView = new ItemView();
-//        basicItemView.setItemId(itemId);
-        basicItemView.setWishListIds(UserUtil.collectWishListItemsIds(currentUser));
-        basicItemView.setUserData(NestedItemDtoFactory.createUser(currentUser));
+    public ItemView createItemsManagementView(final String userName, final String userLanguage) {
+        return createItemView(ITEMS_MANAGEMENT_VIEW.getItemId(), userName, userLanguage);
+    }
 
-        final ItemView itemView = createMotorcycleCatalogueView(basicItemView);
+    public ItemView createWishlistView(final String userName, final String userLanguage) {
+        return createItemView(WISH_LIST_VIEW.getItemId(), userName, userLanguage);
+    }
 
-        if (!userLanguage.equals("en")) {
-            translate("en", userLanguage, itemView, false, itemService);
-        }
-        return itemView;
+    public ItemView createUserListView(final String userName, final String userLanguage) {
+        return createItemView(USER_LIST_VIEW.getItemId(), userName, userLanguage);
     }
 
     public ItemView createItemView(final Long itemId, final String userName, final String userLanguage) {
@@ -58,13 +58,13 @@ public class ItemViewFactory {
 
         ItemView itemView;
 
-        if (itemId == WISH_LIST_VIEW.getItemId()) {
+        if (itemId.equals(WISH_LIST_VIEW.getItemId())) {
             itemView = createWishListView(basicItemView, wishList);
-        } else if (itemId == MOTORCYCLE_CATALOGUE_VIEW.getItemId()) {
+        } else if (itemId.equals(MOTORCYCLE_CATALOGUE_VIEW.getItemId())) {
             itemView = createMotorcycleCatalogueView(basicItemView);
-        } else if (itemId == ITEMS_MANAGEMENT_VIEW.getItemId()) {
+        } else if (itemId.equals(ITEMS_MANAGEMENT_VIEW.getItemId())) {
             itemView = createItemsManagementView(basicItemView);
-        } else if (itemId == USER_LIST_VIEW.getItemId()) {
+        } else if (itemId.equals(USER_LIST_VIEW.getItemId())) {
             itemView = createUsersListView(basicItemView);
         } else {
             itemView = createOrdinaryItemView(basicItemView, itemId, currentUser);
@@ -147,7 +147,7 @@ public class ItemViewFactory {
         itemView.setPartsTable(createPartsTable(item, tableName, itemService));
         itemView.setReplacersTable(createReplacersTable(item, itemService.getUserService()));
         itemView.getPossibleParts().addAll(createPossibleParts(allItems, itemService.getUserService()));
-        itemView.getReplacers().addAll(createReplacerDtos(sameCategoryItems, itemService.getUserService()));
+        itemView.getPossibleReplacers().addAll(createReplacerDtos(sameCategoryItems, itemService.getUserService()));
         itemView.setCreatorId(item.getCreatorId());
         itemView.setCreatorName(UserUtil.getCreatorName(item, itemService.getUserService()));
         itemView.getRatedItems().addAll(UserUtil.collectRatedItemIds(currentUser));

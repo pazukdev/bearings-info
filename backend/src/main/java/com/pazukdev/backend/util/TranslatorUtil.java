@@ -40,7 +40,7 @@ public class TranslatorUtil {
         final PartsTable partsTable = itemView.getPartsTable();
         final ReplacersTable replacersTable = itemView.getReplacersTable();
         final List<NestedItemDto> possibleParts = itemView.getPossibleParts();
-        final List<NestedItemDto> replacers = itemView.getReplacers();
+        final List<NestedItemDto> replacers = itemView.getPossibleReplacers();
         final List<String> categories = itemView.getAllCategories();
 
         header = translate(languageFrom, languageTo, header, addToDictionary, itemView.getItemId(), itemService);
@@ -54,7 +54,7 @@ public class TranslatorUtil {
         itemView.setPartsTable(partsTable);
         itemView.setReplacersTable(replacersTable);
         itemView.setPossibleParts(possibleParts);
-        itemView.setReplacers(replacers);
+        itemView.setPossibleReplacers(replacers);
         itemView.setAllCategories(categories);
     }
 
@@ -101,10 +101,6 @@ public class TranslatorUtil {
         translate(languageFrom, languageTo, header, addToDictionary, itemService);
         List<NestedItemDto> dtos = partsTable.getParts();
         translateNestedItemDtoList(languageFrom, languageTo, dtos, addToDictionary, itemService);
-
-        for (final PartsTable child : partsTable.getTables()) {
-            translate(languageFrom, languageTo, child, addToDictionary, itemService);
-        }
     }
 
     private static void translate(final String languageFrom,
