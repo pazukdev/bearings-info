@@ -28,11 +28,11 @@
                     </table>
                 </td>
             </tr>
-            <tr v-for="table in sortTables()">
+            <tr v-for="table in itemsListAsTables">
                 <td colspan="3">
                     <details open>
                         <summary><b>{{table.name}}</b></summary>
-                        <table id="get-all-table">
+                        <table>
                             <tbody>
                             <tr v-for="item in table.items">
                                 <td class="three-column-table-left-column">
@@ -67,6 +67,11 @@
                     </details>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <AddItemForm v-if="editMode" :edit-mode="editMode"/>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -75,75 +80,43 @@
 <script>
     import {mapState} from "vuex";
     import ButtonNavigateToItem from "./ButtonNavigateToItem";
+    import shared from "../shared";
+    import AddItemForm from "./AddItemForm";
 
     export default {
         name: "PartsTable",
-        components: {ButtonNavigateToItem},
+
+        components: {
+            ButtonNavigateToItem,
+            AddItemForm
+        },
+
         props: {
             editMode: Boolean
         },
 
         computed: {
             ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                userName: state => state.dictionary.userName,
-                loadingState: state => state.dictionary.loadingState,
-                itemView: state => state.dictionary.itemView,
-                itemsManagementId: state => state.dictionary.itemsManagementId,
-                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId,
-                wishlistId: state => state.dictionary.wishlistId,
-                userlistId: state => state.dictionary.userlistId,
-                appLanguage: state => state.dictionary.appLanguage
-            })
+                itemView: state => state.dictionary.itemView
+            }),
+
+            itemsListAsTables() {
+                return shared.itemsListToTables(this.itemView.partsTable.parts);
+            }
+        },
+
+        data() {
+            return {
+                message: "",
+                newItem: {
+                    comment: ""
+                }
+            }
         },
 
         methods: {
-            sortTables() {
-                let categories = [];
-                let parts = this.itemView.partsTable.parts;
-                for (let i = 0; i < parts.length; i++) {
-                    let category = parts[i].itemCategory;
-                    if (!this.$parent.isInArray(category, categories)) {
-                        categories.push(category);
-                    }
-                }
-
-                let nestedTables = [];
-                for (let i = 0; i < categories.length; i++) {
-                    let category = categories[i];
-
-                    let nestedTable = {
-                        name: category,
-                        items: []
-                    };
-
-                    for (let i = 0; i < parts.length; i++) {
-                        let item = parts[i];
-                        if (item.itemCategory === category) {
-                            nestedTable.items.push(item);
-                        }
-                    }
-
-                    nestedTables.push(nestedTable);
-                }
-
-                return nestedTables;
-            },
-
             isPartsTitleVisible() {
-                return true;
-                // return this.editMode;
-            },
-
-            itemHaveActiveParts() {
-                for (let i = 0; i < this.itemView.partsTable.tables.length; i++) {
-                    let table = this.itemView.partsTable.tables[i];
-                    if (this.arrayHaveActiveItems(table.parts)) {
-                        return true;
-                    }
-                }
-                return false;
+                return this.itemView.partsTable.parts.length > 0 || this.editMode;
             },
 
             isShowPartsTableHeader() {
@@ -153,25 +126,27 @@
                     && this.isPartsTitleVisible();
             },
 
-            arrayHaveActiveItems(parts) {
-                return this.$parent.arrayHaveActiveItems(parts);
-            },
-
-            statusIsActive(status) {
-                return this.$parent.statusIsActive(status);
-            },
-
             isShowQuantityValue() {
                 return !this.editMode;
             },
 
-            removeItem(item, array) {
-                this.$parent.removeItem(item, array);
+            removeItem(item) {
+                shared.removeFromArray(item, this.itemView.partsTable.parts);
+                this.$emit("set-show-form-true");
             }
         }
     }
 </script>
 
 <style scoped>
+    table, tr {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
 
+    * {
+        margin: 0;
+        padding: 0;
+    }
 </style>

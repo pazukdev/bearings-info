@@ -31,17 +31,17 @@
                               @update-replacers="updateReplacers"
                               @navigate-to-item="navigateToItem"/>
 
-            <ReplacersSection :replacers-table-visible="isReplacersTableVisible()"
-                              :parent-item-id="itemView.itemId"
-                              :parent-item-name="itemView.itemName"
-                              :edit-mode="editMode"
-                              :not-stub="notStub(itemView.replacersTable.name)"
-                              :replacers-table="itemView.replacersTable"
-                              :possible-replacers="itemView.replacers"
-                              :rated-items="itemView.ratedItems"
-                              @update-replacers="updateReplacers"
-                              @navigate-to-item="navigateToItem"
-                              @select-on-change="selectOnChange"/>
+<!--            <ReplacersSection :replacers-table-visible="isReplacersTableVisible()"-->
+<!--                              :parent-item-id="itemView.itemId"-->
+<!--                              :parent-item-name="itemView.itemName"-->
+<!--                              :edit-mode="editMode"-->
+<!--                              :not-stub="notStub(itemView.replacersTable.name)"-->
+<!--                              :replacers-table="itemView.replacersTable"-->
+<!--                              :possible-replacers="itemView.replacers"-->
+<!--                              :rated-items="itemView.ratedItems"-->
+<!--                              @update-replacers="updateReplacers"-->
+<!--                              @navigate-to-item="navigateToItem"-->
+<!--                              @select-on-change="selectOnChange"/>-->
 
         </div>
     </div>
@@ -54,6 +54,7 @@
     import EditPanel from "./EditPanel";
     import PartsSection from "./PartsSection";
     import ReplacersSection from "./ReplacersSection";
+    import shared from "../shared";
 
     export default {
 
@@ -426,7 +427,7 @@
             },
 
             removeFromArray(element, array) {
-                array.splice(array.indexOf(element), 1)
+                shared.removeFromArray(element, array);
             },
 
             selectOnChange() {
@@ -563,7 +564,7 @@
             },
 
             statusIsActive(status) {
-                return status === "active";
+                return shared.statusIsActive(status);
             },
 
             isNotThisItem(item) {

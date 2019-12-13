@@ -1,7 +1,5 @@
 <template>
     <div>
-<!--        {{itemView.possibleReplacers[0]}}<br><br>-->
-<!--        {{itemView.replacersTable.replacers[0]}}-->
         <select v-model="selectedItem"
                 @change="onChange">
             <option v-for="item in actualPossibleItemsList" :value="item">
