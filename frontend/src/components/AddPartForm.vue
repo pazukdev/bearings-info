@@ -70,7 +70,7 @@
                 message: "",
                 item: "",
                 itemLocation: "",
-                itemQuantity: ""
+                itemQuantity: 1
             }
         },
 
@@ -100,7 +100,7 @@
 
                 this.item = "";
                 this.itemLocation = "";
-                this.itemQuantity = "";
+                this.itemQuantity = 1;
             },
 
             itemSelectOnChange(selectedItem) {
