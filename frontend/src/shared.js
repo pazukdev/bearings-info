@@ -47,5 +47,13 @@ export default {
         }
 
         return nestedTables;
+    },
+
+    isGuest(userData, userName) {
+        return userData.comment === "Guest" && userName.toString() === "guest";
+    },
+
+    messageIsEmpty(message) {
+        return message === "";
     }
 }

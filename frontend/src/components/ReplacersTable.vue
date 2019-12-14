@@ -1,58 +1,54 @@
 <template>
     <div>
-        <p style="text-align: center">{{replacersTable.localizedName}}</p>
+        <p style="text-align: center">{{itemView.replacersTable.localizedName}}</p>
         <table id="replacers-table" style="text-align: center">
             <tbody>
-            <tr v-if="notStub && statusIsActive(replacer.status)"
-                style="text-align: left"
-                v-for="replacer in sortedReplacers">
+            <tr style="text-align: left"
+                v-for="item in sortedReplacers">
                 <td class="bordered">
                     <table>
                         <tbody>
                         <tr>
                             <td class="not-symmetrical-left">
-                                <button type="button"
-                                        @click="navigateToItem(replacer.itemId)">
-                                    {{replacer.buttonText}}
-                                </button>
+                                <ButtonNavigateToItem :part="item"/>
                             </td>
                             <td class="not-symmetrical-right">
-                                {{replacer.rating}}
+                                {{item.rating}}
                             </td>
                             <td style="min-width: 32px">
-                                <button v-if="isRateButtonVisible(replacer)"
+                                <button v-if="isRateButtonVisible(item)"
                                         type="button"
                                         class="round-button"
-                                        @click="rate('up', replacer.itemId)">
+                                        @click="rate('up', item.itemId)">
                                     {{"&#x2191;"}}
                                 </button>
                             </td>
                             <td>
-                                <button v-if="isRateButtonVisible(replacer)"
+                                <button v-if="isRateButtonVisible(item)"
                                         type="button"
                                         class="round-button"
-                                        @click="rate('down', replacer.itemId)">
+                                        @click="rate('down', item.itemId)">
                                     {{" &#x2193;"}}
                                 </button>
-                                <button v-if="isUnrateButtonVisible(replacer)"
+                                <button v-if="isUnrateButtonVisible(item)"
                                         type="button"
                                         class="round-button"
-                                        @click="rate('cancel', replacer.itemId)">
+                                        @click="rate('cancel', item.itemId)">
                                     {{"x"}}
                                 </button>
                                 <button v-if="editMode"
                                         type="button"
                                         class="round-button"
                                         style="background: red"
-                                        @click="removeItem(replacer)">
+                                        @click="removeItem(item)">
                                     {{"-"}}
                                 </button>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="4">
-                                <p style="text-align: left" v-if="!editMode">{{replacer.comment}}</p>
-                                <textarea v-if="editMode" v-model="replacer.comment"/>
+                                <p style="text-align: left" v-if="!editMode">{{item.comment}}</p>
+                                <textarea v-if="editMode" v-model="item.comment"/>
                             </td>
                         </tr>
                         </tbody>
@@ -67,53 +63,64 @@
 <script>
     import axios from "axios";
     import {mapState} from "vuex";
+    import shared from "../shared";
+    import ButtonNavigateToItem from "./ButtonNavigateToItem";
 
     export default {
         name: "ReplacersTable",
 
+        components: {
+            ButtonNavigateToItem
+        },
+
         props: {
-            replacersTable: Object,
-            editMode: Boolean,
-            notStub: Boolean,
-            ratedItems: Array
+            editMode: Boolean
         },
 
         computed: {
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
-                userName: state => state.dictionary.userName
+                userName: state => state.dictionary.userName,
+                itemView: state => state.dictionary.itemView
             }),
 
             sortedReplacers() {
-                let replacers = this.replacersTable.replacers;
-                return replacers.sort((a,b) => (a.rating < b.rating) ? 1 : -1);
+                return this.getReplacers().sort((a,b) => (a.rating < b.rating) ? 1 : -1);
             }
         },
 
         methods: {
-            navigateToItem(itemId) {
-                this.$emit("navigate-to-item", itemId);
+            getReplacers() {
+                return this.itemView.replacersTable.replacers;
             },
 
-            isRateButtonVisible(replacer) {
-                return !this.editMode && !this.isRated(replacer) && !this.$parent.isGuest();
+            getRatedItems() {
+                return this.itemView.ratedItems;
             },
 
-            isUnrateButtonVisible(replacer) {
-                return !this.editMode && this.isRated(replacer) && !this.$parent.isGuest();
+            isRateButtonVisible(item) {
+                return !this.editMode && !this.isRated(item) && !this.isGuest();
             },
 
-            isRated(replacer) {
-                return this.$parent.isInArray(replacer.itemId, this.ratedItems);
+            isUnrateButtonVisible(item) {
+                return !this.editMode && this.isRated(item) && !this.isGuest();
+            },
+
+            isRated(item) {
+                return shared.isInArray(item, this.getRatedItems());
+            },
+
+            isGuest() {
+                return shared.isGuest(this.itemView.userData, this.userName);
             },
 
             rate(action, itemId) {
                 let rate = {
                     action: action,
                     itemId: itemId,
-                    ratedItems: this.ratedItems,
-                    replacers: this.replacersTable.replacers
+                    ratedItems: this.getRatedItems(),
+                    replacers: this.getReplacers()
                 };
                 axios
                     .put(this.basicUrl
@@ -125,7 +132,9 @@
                             }
                         })
                     .then(response => {
-                        this.$emit("update-replacers", response.data);
+                        let rateReplacer = response.data;
+                        this.getRatedItems = rateReplacer.ratedItems;
+                        this.getReplacers = rateReplacer.replacers;
                         console.log("Replacer rate action performed: "
                             + "user name: " + this.userName
                             + ", action: " + rate.action
@@ -134,11 +143,8 @@
             },
 
             removeItem(item) {
-                this.$parent.removeItem(item);
-            },
-
-            statusIsActive(status) {
-                return this.$parent.statusIsActive(status);
+                shared.removeFromArray(item, this.getReplacers());
+                this.$emit("show-add-form");
             }
         }
     }

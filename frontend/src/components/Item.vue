@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{editMode}}
         <div v-if="isLoading()" style="text-align: center; padding-top: 50%">
             {{$t("loading") + "..."}}
         </div>
@@ -19,30 +18,8 @@
                         @add-item-to-wishlist="addThisItemToWishList"/>
 
             <EditPanel :edit-mode="editMode" @cancel="cancel" @edit="edit" @save="save"/>
-
-            <PartsSection :replacers-table-visible="isReplacersTableVisible()"
-                          :parent-item-id="itemView.itemId"
-                              :parent-item-name="itemView.itemName"
-                              :edit-mode="editMode"
-                              :not-stub="notStub(itemView.replacersTable.name)"
-                              :replacers-table="itemView.replacersTable"
-                              :possible-replacers="itemView.replacers"
-                              :rated-items="itemView.ratedItems"
-                              @update-replacers="updateReplacers"
-                              @navigate-to-item="navigateToItem"/>
-
-<!--            <ReplacersSection :replacers-table-visible="isReplacersTableVisible()"-->
-<!--                              :parent-item-id="itemView.itemId"-->
-<!--                              :parent-item-name="itemView.itemName"-->
-<!--                              :edit-mode="editMode"-->
-<!--                              :not-stub="notStub(itemView.replacersTable.name)"-->
-<!--                              :replacers-table="itemView.replacersTable"-->
-<!--                              :possible-replacers="itemView.replacers"-->
-<!--                              :rated-items="itemView.ratedItems"-->
-<!--                              @update-replacers="updateReplacers"-->
-<!--                              @navigate-to-item="navigateToItem"-->
-<!--                              @select-on-change="selectOnChange"/>-->
-
+            <PartsSection :edit-mode="editMode"/>
+            <ReplacersSection :edit-mode="editMode"/>
         </div>
     </div>
 </template>
@@ -267,11 +244,6 @@
                     });
             },
 
-            updateReplacers(rateReplacer) {
-                this.itemView.ratedItems = rateReplacer.ratedItems;
-                this.itemView.replacersTable.replacers = rateReplacer.replacers;
-            },
-
             dispatchView(itemView) {
                 this.$store.dispatch("setItemView", itemView);
                 this.$store.dispatch("setLoadingState", false);
@@ -304,7 +276,7 @@
             },
 
             isGuest() {
-                return this.itemView.userData.comment === "Guest" && this.userName.toString() === "guest";
+                return shared.isGuest(this.itemView.userData, this.userName);
             },
 
             openWishList() {

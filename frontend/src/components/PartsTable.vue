@@ -69,7 +69,7 @@
             </tr>
             <tr>
                 <td>
-                    <AddItemForm v-if="editMode" :edit-mode="editMode"/>
+                    <AddPartForm :edit-mode="editMode" :show-form="showForm" @hide-add-form="hideAddForm"/>
                 </td>
             </tr>
             </tbody>
@@ -81,18 +81,19 @@
     import {mapState} from "vuex";
     import ButtonNavigateToItem from "./ButtonNavigateToItem";
     import shared from "../shared";
-    import AddItemForm from "./AddItemForm";
+    import AddPartForm from "./AddPartForm";
 
     export default {
         name: "PartsTable",
 
         components: {
             ButtonNavigateToItem,
-            AddItemForm
+            AddPartForm
         },
 
         props: {
-            editMode: Boolean
+            editMode: Boolean,
+            showForm: Boolean
         },
 
         computed: {
@@ -130,9 +131,13 @@
                 return !this.editMode;
             },
 
+            hideAddForm() {
+                this.$emit("hide-add-form");
+            },
+
             removeItem(item) {
                 shared.removeFromArray(item, this.itemView.partsTable.parts);
-                this.$emit("set-show-form-true");
+                this.$emit("show-add-form");
             }
         }
     }

@@ -1,6 +1,7 @@
 <template>
     <div>
-        <PartsTable :edit-mode="editMode"/>
+        <PartsTable :edit-mode="editMode" :show-form="showForm"
+                    @show-add-form="showAddForm" @hide-add-form="hideAddForm"/>
     </div>
 </template>
 
@@ -16,6 +17,22 @@
 
         props: {
             editMode: Boolean
+        },
+
+        data() {
+            return {
+                showForm: true
+            }
+        },
+
+        methods: {
+            showAddForm() {
+                this.showForm = true;
+            },
+
+            hideAddForm() {
+                this.showForm = false;
+            }
         }
     }
 </script>

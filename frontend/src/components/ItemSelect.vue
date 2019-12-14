@@ -55,8 +55,10 @@
                     }
                 }
 
-                let showForm = actualPossibleItems.length > 0;
-                this.$emit("show-add-form", showForm);
+                if (actualPossibleItems.length < 1){
+                    this.$emit("hide-add-form");
+                }
+
                 return actualPossibleItems;
             },
 

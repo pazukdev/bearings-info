@@ -1,30 +1,30 @@
 <template>
     <div>
         <div v-if="editMode">
-            <p>{{"Add replacer"}}</p>
+            <p>{{"Add part"}}</p>
             <p v-if="showMessage" class="alert-message">
                 {{message}}
             </p>
-            <table v-if="showAddForm" class="bordered">
+            <table v-if="showAddForm">
                 <tbody>
                 <tr>
-                    <td class="not-symmetrical-left">
-                        <ItemSelect :replacer="true"
+                    <td class="three-column-table-left-column">
+                        <input v-model="newItem.location" type="text"/>
+                    </td>
+                    <td class="three-column-table-middle-column">
+                        <ItemSelect :replacer="false"
                                     @hide-add-form="hideAddForm"
                                     @on-change="itemSelectOnChange"/>
                     </td>
-                    <td class="not-symmetrical-right"/>
-                    <td>
+                    <td class="three-column-table-right-column">
+                        <input v-model="newItem.quantity" type="text"/>
+                    </td>
+                    <td class="three-column-table-button-column">
                         <button type="button"
                                 class="round-button"
                                 @click="addItem">
                             {{"+"}}
                         </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <textarea v-model="comment"/>
                     </td>
                 </tr>
                 </tbody>
@@ -39,7 +39,7 @@
     import shared from "../shared";
 
     export default {
-        name: "AddReplacerForm",
+        name: "AddPartForm",
 
         components: {
             ItemSelect
@@ -52,12 +52,8 @@
 
         computed: {
             ...mapState({
-                itemView: state => state.dictionary.itemView,
+                itemView: state => state.dictionary.itemView
             }),
-
-            message() {
-                return this.showForm ? "" : "No possible replacers found";
-            },
 
             showMessage() {
                 return !shared.messageIsEmpty(this.message);
@@ -70,24 +66,33 @@
 
         data() {
             return {
-                newItem: "",
-                comment: ""
+                message: "",
+                newItem: ""
             }
         },
 
         methods: {
             hideAddForm() {
                 this.$emit("hide-add-form");
+                this.message = "No parts found";
             },
 
             addItem() {
+                this.message = "";
                 this.newItem.name = this.parentItemName + this.newItem.name;
-                this.newItem.comment = this.comment;
-                this.itemView.replacersTable.replacers.push(this.newItem);
-                this.comment = "";
+                if (this.newItem.quantity === "0") {
+                    this.message = "Quantity shouldn't be zero";
+                } else if (this.newItem.quantity === "-") {
+                    this.message = "Quantity shouldn't contain -";
+                }
+                if (this.message !== "") {
+                    return;
+                }
+                this.itemView.partsTable.parts.push(this.newItem);
             },
 
             itemSelectOnChange(selectedItem) {
+                this.message = "";
                 this.newItem = selectedItem;
             }
 
@@ -96,15 +101,19 @@
 </script>
 
 <style scoped>
-    .three-column-table-left-column, .three-column-table-middle-column {
-        width: 46%;
-    }
-
-    #add-item-form {
-    }
-
     p {
         text-align: center;
         margin-top: 10px;
+    }
+
+    table, tr {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
     }
 </style>

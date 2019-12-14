@@ -1,6 +1,5 @@
 <template>
     <div style="margin: 0; padding: 0">
-        {{editMode}}
         <table style="margin: 0; padding: 0; border-collapse: initial; border-spacing: initial">
             <tbody>
             <tr>
