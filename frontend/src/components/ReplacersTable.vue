@@ -1,5 +1,7 @@
 <template>
     <div>
+<!--        {{getReplacers()[0]}}<br><br>-->
+<!--        {{getRatedItemsIds()}}-->
         <p style="text-align: center">{{itemView.replacersTable.localizedName}}</p>
         <table id="replacers-table" style="text-align: center">
             <tbody>
@@ -96,7 +98,7 @@
                 return this.itemView.replacersTable.replacers;
             },
 
-            getRatedItems() {
+            getRatedItemsIds() {
                 return this.itemView.ratedItems;
             },
 
@@ -109,7 +111,7 @@
             },
 
             isRated(item) {
-                return shared.isInArray(item, this.getRatedItems());
+                return shared.isInArray(item.itemId, this.getRatedItemsIds());
             },
 
             isGuest() {
@@ -120,7 +122,7 @@
                 let rate = {
                     action: action,
                     itemId: itemId,
-                    ratedItems: this.getRatedItems(),
+                    ratedItems: this.getRatedItemsIds(),
                     replacers: this.getReplacers()
                 };
                 axios
@@ -134,8 +136,10 @@
                         })
                     .then(response => {
                         let rateReplacer = response.data;
-                        this.getRatedItems = rateReplacer.ratedItems;
-                        this.getReplacers = rateReplacer.replacers;
+
+
+                        this.itemView.ratedItems = rateReplacer.ratedItems;
+                        this.itemView.replacersTable.replacers = rateReplacer.replacers;
                         console.log("Replacer rate action performed: "
                             + "user name: " + this.userName
                             + ", action: " + rate.action
