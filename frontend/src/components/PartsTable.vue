@@ -82,6 +82,7 @@
     import ButtonNavigateToItem from "./ButtonNavigateToItem";
     import shared from "../shared";
     import AddPartForm from "./AddPartForm";
+    import itemViewUtil from "../itemViewUtil";
 
     export default {
         name: "PartsTable",
@@ -102,7 +103,7 @@
             }),
 
             itemsListAsTables() {
-                return shared.itemsListToTables(this.itemView.partsTable.parts);
+                return itemViewUtil.itemsListToTables(this.itemView.partsTable.parts);
             }
         },
 

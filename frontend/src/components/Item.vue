@@ -32,6 +32,7 @@
     import PartsSection from "./PartsSection";
     import ReplacersSection from "./ReplacersSection";
     import shared from "../shared";
+    import itemViewUtil from "../itemViewUtil";
 
     export default {
 
@@ -276,7 +277,7 @@
             },
 
             isGuest() {
-                return shared.isGuest(this.itemView.userData, this.userName);
+                return itemViewUtil.isGuest(this.itemView, this.userName);
             },
 
             openWishList() {

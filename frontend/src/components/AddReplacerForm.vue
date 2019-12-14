@@ -24,7 +24,7 @@
                 </tr>
                 <tr>
                     <td colspan="3">
-                        <textarea v-model="comment"/>
+                        <textarea v-model="itemComment"/>
                     </td>
                 </tr>
                 </tbody>
@@ -37,6 +37,7 @@
     import ItemSelect from "./ItemSelect";
     import {mapState} from "vuex";
     import shared from "../shared";
+    import itemViewUtil from "../itemViewUtil";
 
     export default {
         name: "AddReplacerForm",
@@ -70,8 +71,8 @@
 
         data() {
             return {
-                newItem: "",
-                comment: ""
+                item: "",
+                itemComment: ""
             }
         },
 
@@ -81,14 +82,18 @@
             },
 
             addItem() {
-                this.newItem.name = this.parentItemName + this.newItem.name;
-                this.newItem.comment = this.comment;
-                this.itemView.replacersTable.replacers.push(this.newItem);
-                this.comment = "";
+                this.item.name = itemViewUtil.getItemName(this.itemView) + this.item.name;
+                this.item.comment = this.itemComment;
+
+                let newItem = this.item;
+                this.itemView.replacersTable.replacers.push(newItem);
+
+                this.item = "";
+                this.itemComment = "";
             },
 
             itemSelectOnChange(selectedItem) {
-                this.newItem = selectedItem;
+                this.item = selectedItem;
             }
 
         }

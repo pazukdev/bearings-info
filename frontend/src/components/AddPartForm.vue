@@ -9,7 +9,7 @@
                 <tbody>
                 <tr>
                     <td class="three-column-table-left-column">
-                        <input v-model="newItem.location" type="text"/>
+                        <input v-model="itemLocation" type="text"/>
                     </td>
                     <td class="three-column-table-middle-column">
                         <ItemSelect :replacer="false"
@@ -17,7 +17,7 @@
                                     @on-change="itemSelectOnChange"/>
                     </td>
                     <td class="three-column-table-right-column">
-                        <input v-model="newItem.quantity" type="text"/>
+                        <input v-model="itemQuantity" type="text"/>
                     </td>
                     <td class="three-column-table-button-column">
                         <button type="button"
@@ -37,6 +37,7 @@
     import ItemSelect from "./ItemSelect";
     import {mapState} from "vuex";
     import shared from "../shared";
+    import itemViewUtil from "../itemViewUtil";
 
     export default {
         name: "AddPartForm",
@@ -67,7 +68,9 @@
         data() {
             return {
                 message: "",
-                newItem: ""
+                item: "",
+                itemLocation: "",
+                itemQuantity: ""
             }
         },
 
@@ -79,21 +82,30 @@
 
             addItem() {
                 this.message = "";
-                this.newItem.name = this.parentItemName + this.newItem.name;
-                if (this.newItem.quantity === "0") {
+                if (this.itemQuantity === "0") {
                     this.message = "Quantity shouldn't be zero";
-                } else if (this.newItem.quantity === "-") {
+                } else if (this.itemQuantity === "-") {
                     this.message = "Quantity shouldn't contain -";
                 }
                 if (this.message !== "") {
                     return;
                 }
-                this.itemView.partsTable.parts.push(this.newItem);
+
+                this.item.name = itemViewUtil.getItemName(this.itemView) + this.item.name;
+                this.item.location = this.itemLocation;
+                this.item.quantity = this.itemQuantity;
+
+                let newItem = this.item;
+                this.itemView.partsTable.parts.push(newItem);
+
+                this.item = "";
+                this.itemLocation = "";
+                this.itemQuantity = "";
             },
 
             itemSelectOnChange(selectedItem) {
                 this.message = "";
-                this.newItem = selectedItem;
+                this.item = selectedItem;
             }
 
         }

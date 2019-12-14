@@ -8,6 +8,10 @@ export default {
         return false;
     },
 
+    messageIsEmpty(message) {
+        return message === "";
+    },
+
     statusIsActive(status) {
         return status === "active";
     },
@@ -16,44 +20,4 @@ export default {
         array.splice(array.indexOf(element), 1);
     },
 
-
-
-    itemsListToTables(items) {
-        let categories = [];
-        for (let i = 0; i < items.length; i++) {
-            let category = items[i].itemCategory;
-            if (!this.isInArray(category, categories)) {
-                categories.push(category);
-            }
-        }
-
-        let nestedTables = [];
-        for (let i = 0; i < categories.length; i++) {
-            let category = categories[i];
-
-            let nestedTable = {
-                name: category,
-                items: []
-            };
-
-            for (let i = 0; i < items.length; i++) {
-                let item = items[i];
-                if (item.itemCategory === category) {
-                    nestedTable.items.push(item);
-                }
-            }
-
-            nestedTables.push(nestedTable);
-        }
-
-        return nestedTables;
-    },
-
-    isGuest(userData, userName) {
-        return userData.comment === "Guest" && userName.toString() === "guest";
-    },
-
-    messageIsEmpty(message) {
-        return message === "";
-    }
 }

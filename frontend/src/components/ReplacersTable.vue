@@ -65,6 +65,7 @@
     import {mapState} from "vuex";
     import shared from "../shared";
     import ButtonNavigateToItem from "./ButtonNavigateToItem";
+    import itemViewUtil from "../itemViewUtil";
 
     export default {
         name: "ReplacersTable",
@@ -112,7 +113,7 @@
             },
 
             isGuest() {
-                return shared.isGuest(this.itemView.userData, this.userName);
+                return itemViewUtil.isGuest(this.itemView, this.userName);
             },
 
             rate(action, itemId) {
