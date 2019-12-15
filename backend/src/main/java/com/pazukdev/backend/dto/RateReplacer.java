@@ -4,7 +4,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -16,7 +15,7 @@ public class RateReplacer implements Serializable {
 
     private String action;
     private Long itemId;
-    private Set<Long> ratedItems;
+    private LikeListDto likeList;
     private List<NestedItemDto> replacers;
 
 }

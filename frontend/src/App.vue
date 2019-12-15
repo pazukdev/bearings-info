@@ -284,4 +284,12 @@
     .alert-message {
         color: red;
     }
+
+    .selected {
+        background: #617D89;
+    }
+
+    .red-background {
+        background: red;
+    }
 </style>

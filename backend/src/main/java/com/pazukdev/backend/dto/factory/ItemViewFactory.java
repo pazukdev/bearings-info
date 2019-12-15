@@ -150,7 +150,7 @@ public class ItemViewFactory {
         itemView.getPossibleReplacers().addAll(createReplacerDtos(sameCategoryItems, itemService.getUserService()));
         itemView.setCreatorId(item.getCreatorId());
         itemView.setCreatorName(UserUtil.getCreatorName(item, itemService.getUserService()));
-        itemView.getRatedItems().addAll(UserUtil.collectRatedItemIds(currentUser));
+        itemView.setLikeList(UserUtil.createLikeListDto(currentUser));
         return itemView;
     }
 

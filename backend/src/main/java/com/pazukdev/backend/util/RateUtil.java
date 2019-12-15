@@ -35,16 +35,13 @@ public class RateUtil {
         final RateAction rateAction = RateAction.valueOf(rate.getAction().toUpperCase());
         final LikeList likeList = currentUser.getLikeList();
 
-        if (UserUtil.collectRatedItemIds(currentUser).contains(itemId)) {
-            if (rateAction == RateAction.CANCEL) {
-                if (likeList.getLikedItems().contains(itemToRate)) {
-                    likeList.getLikedItems().remove(itemToRate);
-                    itemToRate.setRating(itemToRate.getRating() - 1);
-                } else {
-                    likeList.getDislikedItems().remove(itemToRate);
-                    itemToRate.setRating(itemToRate.getRating() + 1);
-                }
-                rate.getRatedItems().remove(itemId);
+        if (rateAction == RateAction.CANCEL) {
+            if (likeList.getLikedItems().contains(itemToRate)) {
+                likeList.getLikedItems().remove(itemToRate);
+                itemToRate.setRating(itemToRate.getRating() - 1);
+            } else {
+                likeList.getDislikedItems().remove(itemToRate);
+                itemToRate.setRating(itemToRate.getRating() + 1);
             }
         } else {
             if (rateAction == RateAction.UP) {
@@ -56,7 +53,6 @@ public class RateUtil {
                 itemService.update(itemToRate);
                 currentUser.getLikeList().getDislikedItems().add(itemToRate);
             }
-            rate.getRatedItems().add(itemId);
         }
 
         final String actionType = rateAction == RateAction.CANCEL ? "cancel rate" : "rate";
@@ -67,6 +63,8 @@ public class RateUtil {
                 replacer.setRating(itemToRate.getRating());
             }
         }
+
+        rate.setLikeList(UserUtil.createLikeListDto(currentUser));
         return rate;
     }
 

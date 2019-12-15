@@ -17,7 +17,13 @@
                             <td class="not-symmetrical-right">
                                 {{item.rating}}
                             </td>
-                            <td style="min-width: 32px">
+                            <td>
+                                <button v-if="isLiked(item)"
+                                        type="button"
+                                        class="round-button selected"
+                                        @click="doNothing">
+                                    {{"&#x2191;"}}
+                                </button>
                                 <button v-if="isRateButtonVisible(item)"
                                         type="button"
                                         class="round-button"
@@ -26,22 +32,29 @@
                                 </button>
                             </td>
                             <td>
+                                <button v-if="isDisliked(item)"
+                                        type="button"
+                                        class="round-button selected"
+                                        @click="rate('down', item.itemId)">
+                                    {{"&#x2193;"}}
+                                </button>
                                 <button v-if="isRateButtonVisible(item)"
                                         type="button"
                                         class="round-button"
                                         @click="rate('down', item.itemId)">
-                                    {{" &#x2193;"}}
+                                    {{"&#x2193;"}}
                                 </button>
+                            </td>
+                            <td>
                                 <button v-if="isUnrateButtonVisible(item)"
                                         type="button"
-                                        class="round-button"
+                                        class="round-button red-background"
                                         @click="rate('cancel', item.itemId)">
                                     {{"x"}}
                                 </button>
                                 <button v-if="editMode"
                                         type="button"
-                                        class="round-button"
-                                        style="background: red"
+                                        class="round-button red-background"
                                         @click="removeItem(item)">
                                     {{"-"}}
                                 </button>
@@ -94,12 +107,18 @@
         },
 
         methods: {
+            doNothing() {},
+
             getReplacers() {
                 return this.itemView.replacersTable.replacers;
             },
 
-            getRatedItemsIds() {
-                return this.itemView.ratedItems;
+            getLikedItemsIds() {
+                return this.itemView.likeList.likedItemsIds;
+            },
+
+            getDislikedItemsIds() {
+                return this.itemView.likeList.dislikedItemsIds;
             },
 
             isRateButtonVisible(item) {
@@ -111,7 +130,15 @@
             },
 
             isRated(item) {
-                return shared.isInArray(item.itemId, this.getRatedItemsIds());
+                return this.isLiked(item) || this.isDisliked(item);
+            },
+
+            isLiked(item) {
+                return  shared.isInArray(item.itemId, this.getLikedItemsIds());
+            },
+
+            isDisliked(item) {
+                return shared.isInArray(item.itemId, this.getDislikedItemsIds());
             },
 
             isGuest() {
@@ -122,7 +149,7 @@
                 let rate = {
                     action: action,
                     itemId: itemId,
-                    ratedItems: this.getRatedItemsIds(),
+                    likeList: this.itemView.likeList,
                     replacers: this.getReplacers()
                 };
                 axios
@@ -136,9 +163,7 @@
                         })
                     .then(response => {
                         let rateReplacer = response.data;
-
-
-                        this.itemView.ratedItems = rateReplacer.ratedItems;
+                        this.itemView.likeList = rateReplacer.likeList;
                         this.itemView.replacersTable.replacers = rateReplacer.replacers;
                         console.log("Replacer rate action performed: "
                             + "user name: " + this.userName
