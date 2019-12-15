@@ -18,31 +18,33 @@
                                 {{item.rating}}
                             </td>
                             <td>
-                                <button v-if="isLiked(item)"
+                                <button v-if="isLikedIndicatorVisible(item)"
                                         type="button"
                                         class="round-button selected"
-                                        @click="doNothing">
-                                    {{"&#x2191;"}}
+                                        @click="doNothing()">
+                                    {{"&#128077;"}}
                                 </button>
                                 <button v-if="isRateButtonVisible(item)"
                                         type="button"
                                         class="round-button"
+                                        style="background: none"
                                         @click="rate('up', item.itemId)">
-                                    {{"&#x2191;"}}
+                                    {{"&#128077;"}}
                                 </button>
                             </td>
                             <td>
-                                <button v-if="isDisliked(item)"
+                                <button v-if="isDislikedIndicatorVisible(item)"
                                         type="button"
-                                        class="round-button selected"
+                                        class="round-button"
                                         @click="rate('down', item.itemId)">
-                                    {{"&#x2193;"}}
+                                    {{"&#128078;"}}
                                 </button>
                                 <button v-if="isRateButtonVisible(item)"
                                         type="button"
                                         class="round-button"
+                                        style="background: none"
                                         @click="rate('down', item.itemId)">
-                                    {{"&#x2193;"}}
+                                    {{"&#128078;"}}
                                 </button>
                             </td>
                             <td>
@@ -133,12 +135,20 @@
                 return this.isLiked(item) || this.isDisliked(item);
             },
 
+            isLikedIndicatorVisible(item) {
+                return !this.editMode && this.isLiked(item);
+            },
+
+            isDislikedIndicatorVisible(item) {
+                return !this.editMode && this.isDisliked(item);
+            },
+
             isLiked(item) {
-                return  shared.isInArray(item.itemId, this.getLikedItemsIds());
+                return shared.isInArray(item.itemId, this.getLikedItemsIds());
             },
 
             isDisliked(item) {
-                return shared.isInArray(item.itemId, this.getDislikedItemsIds());
+                return !this.editMode && shared.isInArray(item.itemId, this.getDislikedItemsIds());
             },
 
             isGuest() {
