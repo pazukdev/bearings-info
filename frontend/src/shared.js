@@ -20,4 +20,8 @@ export default {
         array.splice(array.indexOf(element), 1);
     },
 
+    isNestedItemsTitleVisible(nestedItemsList, editMode) {
+        return nestedItemsList.length > 0 || editMode;
+    },
+
 }

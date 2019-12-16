@@ -1,6 +1,6 @@
 <template>
-    <div style="margin: 0; padding: 0">
-        <table style="margin: 0; padding: 0; border-collapse: initial; border-spacing: initial">
+    <div>
+        <table>
             <tbody>
             <tr>
                 <td style="width: 50%">

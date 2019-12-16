@@ -292,4 +292,8 @@
     .red-background {
         background: red;
     }
+
+    .title {
+        text-align: center;
+    }
 </style>

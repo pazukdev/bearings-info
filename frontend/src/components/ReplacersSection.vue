@@ -28,10 +28,6 @@
         },
 
         methods: {
-            // updateReplacers(rateReplacer) {
-            //     this.$emit("update-replacers", rateReplacer);
-            // },
-
             showAddForm() {
                 this.showForm = true;
             },

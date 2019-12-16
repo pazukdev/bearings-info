@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p style="text-align: center">{{itemView.replacersTable.localizedName}}</p>
+        <NestedItemsTableTitle :edit-mode="editMode" :replacers="true" :table="itemView.replacersTable"/>
         <table id="replacers-table" style="text-align: center">
             <tbody>
             <tr style="text-align: left"
@@ -76,12 +76,14 @@
     import shared from "../shared";
     import ButtonNavigateToItem from "./ButtonNavigateToItem";
     import itemViewUtil from "../itemViewUtil";
+    import NestedItemsTableTitle from "./NestedItemsTableTitle";
 
     export default {
         name: "ReplacersTable",
 
         components: {
-            ButtonNavigateToItem
+            ButtonNavigateToItem,
+            NestedItemsTableTitle
         },
 
         props: {
@@ -102,8 +104,6 @@
         },
 
         methods: {
-            doNothing() {},
-
             getReplacers() {
                 return this.itemView.replacersTable.replacers;
             },

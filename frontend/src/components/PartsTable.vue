@@ -1,12 +1,8 @@
 <template>
     <div>
+        <NestedItemsTableTitle :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
         <table id="parts-table">
             <tbody>
-            <tr v-if="isPartsTitleVisible()">
-                <td>
-                    {{itemView.partsTable.localizedName}}
-                </td>
-            </tr>
             <tr v-if="isShowPartsTableHeader()">
                 <td>
                     <table id="parts-header">
@@ -82,11 +78,13 @@
     import shared from "../shared";
     import AddPartForm from "./AddPartForm";
     import itemViewUtil from "../itemViewUtil";
+    import NestedItemsTableTitle from "./NestedItemsTableTitle";
 
     export default {
         name: "PartsTable",
 
         components: {
+            NestedItemsTableTitle,
             ButtonNavigateToItem,
             AddPartForm
         },
@@ -109,22 +107,20 @@
         data() {
             return {
                 message: "",
-                newItem: {
-                    comment: ""
-                }
+                titleVisible: ""
             }
         },
 
         methods: {
-            isPartsTitleVisible() {
-                return this.itemView.partsTable.parts.length > 0 || this.editMode;
+            isTitleVisible() {
+                return shared.isNestedItemsTitleVisible(this.itemView.partsTable.parts, this.editMode);
             },
 
             isShowPartsTableHeader() {
                 return !(this.itemView.partsTable.header[0] === "-"
                     && this.itemView.partsTable.header[1] === "-"
                     && this.itemView.partsTable.header[2] === "-")
-                    && this.isPartsTitleVisible();
+                    && this.isTitleVisible();
             },
 
             isShowQuantityValue() {

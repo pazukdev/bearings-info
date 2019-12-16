@@ -41,4 +41,8 @@ export default {
     getItemName(itemView) {
         return itemView.header.rows[0].value;
     },
+
+    getTitle(table) {
+        return table.localizedName;
+    }
 }
