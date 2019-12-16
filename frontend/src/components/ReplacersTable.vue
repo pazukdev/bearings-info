@@ -20,8 +20,8 @@
                             <td>
                                 <button v-if="isLikedIndicatorVisible(item)"
                                         type="button"
-                                        class="round-button selected"
-                                        @click="doNothing()">
+                                        class="round-button"
+                                        @click="rate('cancel', item.itemId)">
                                     {{"&#128077;"}}
                                 </button>
                                 <button v-if="isRateButtonVisible(item)"
@@ -36,7 +36,7 @@
                                 <button v-if="isDislikedIndicatorVisible(item)"
                                         type="button"
                                         class="round-button"
-                                        @click="rate('down', item.itemId)">
+                                        @click="rate('cancel', item.itemId)">
                                     {{"&#128078;"}}
                                 </button>
                                 <button v-if="isRateButtonVisible(item)"
@@ -48,12 +48,7 @@
                                 </button>
                             </td>
                             <td>
-                                <button v-if="isUnrateButtonVisible(item)"
-                                        type="button"
-                                        class="round-button red-background"
-                                        @click="rate('cancel', item.itemId)">
-                                    {{"x"}}
-                                </button>
+                                <div style="width: 32px" v-if="isUnrateButtonVisible(item)"/>
                                 <button v-if="editMode"
                                         type="button"
                                         class="round-button red-background"
