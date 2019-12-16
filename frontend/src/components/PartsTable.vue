@@ -1,6 +1,5 @@
 <template>
     <div>
-<!--        {{itemView.partsTable.parts}}-->
         <table id="parts-table">
             <tbody>
             <tr v-if="isPartsTitleVisible()">

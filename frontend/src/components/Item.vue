@@ -17,6 +17,7 @@
                         @open-wish-list="openWishList"
                         @add-item-to-wishlist="addThisItemToWishList"/>
 
+            <ItemDescription :edit-mode="editMode"/>
             <EditPanel :edit-mode="editMode" @cancel="cancel" @edit="edit" @save="save"/>
             <PartsSection :edit-mode="editMode"/>
             <ReplacersSection :edit-mode="editMode"/>
@@ -28,6 +29,7 @@
     import axios from 'axios';
     import {mapState} from 'vuex';
     import HeaderMenu from "./HeaderMenu";
+    import ItemDescription from "./ItemDescription";
     import EditPanel from "./EditPanel";
     import PartsSection from "./PartsSection";
     import ReplacersSection from "./ReplacersSection";
@@ -38,6 +40,7 @@
 
         components: {
             HeaderMenu,
+            ItemDescription,
             EditPanel,
             PartsSection,
             ReplacersSection
@@ -50,39 +53,9 @@
                 editMode: false,
                 newItemCategory: "",
                 newItemName: "",
-                newHeaderRowMessage: "",
-                newPartMessage: "",
                 categoryMessage: "",
-                newItemNameMessage: "",
                 fileUploadMessage: "",
-                actionType: "",
-                newHeaderRow: {
-                    id: "",
-                    name: "",
-                    localizedName: "",
-                    status: "",
-                    parameter: "",
-                    value: "",
-                    itemId: "",
-                    message: ""
-                },
-                newPart: {
-                    id: "",
-                    name: "",
-                    localizedName: "",
-                    itemId: "",
-                    itemName: "",
-                    itemCategory: "",
-                    buttonText: "",
-                    selectText: "",
-                    comment: "",
-                    localizedComment: "",
-                    location: "",
-                    quantity: "",
-                    status: "",
-                    creatorName: "",
-                    rating: ""
-                }
+                actionType: ""
             }
         },
 
@@ -336,34 +309,8 @@
                 this.save();
             },
 
-            addHeaderRow() {
-                this.newHeaderRowMessage = "";
-                if (this.newLineIsEmpty()) {
-                    this.newHeaderRowMessage = "Parameter and value fields shouldn't be empty"
-                } else if (this.rowAlreadyInList(this.newHeaderRow.parameter)) {
-                    this.newHeaderRowMessage = "Parameter already exists"
-                } else {
-                    this.newHeaderRow.status = "added";
-                    this.itemView.header.rows.push(this.newHeaderRow);
-                    this.clearNewHeaderRow();
-                }
-            },
-
             getItemName() {
                 return this.itemView.header.rows[0].parameter;
-            },
-
-            newLineIsEmpty() {
-                return this.newHeaderRow.parameter === "" || this.newHeaderRow.value === "";
-            },
-
-            rowAlreadyInList(parameter) {
-                for (let i=0; i < this.itemView.header.rows.length; i++) {
-                    if (this.itemView.header.rows[i].parameter === parameter) {
-                        return true;
-                    }
-                }
-                return false;
             },
 
             isInWishList(itemId) {
@@ -382,10 +329,6 @@
                     }
                 }
                 return false;
-            },
-
-            removeRowFromHeader(row) {
-                this.removeFromArray(row, this.itemView.header.rows);
             },
 
             removePartFromList(part, array) {
@@ -407,10 +350,6 @@
                 this.categoryMessage = "";
             },
 
-            isShowInfoButton(row) {
-                return row.itemId !== "-" && !this.editMode && this.isOrdinaryItemView();
-            },
-
             edit() {
                 this.editMode = true;
             },
@@ -425,40 +364,22 @@
             },
 
             clearAllEditData() {
-                this.clearNewHeaderRow();
                 this.clearAllMessages();
                 this.clearNewItemData();
                 this.imgData = "";
             },
 
             clearAllMessages() {
-                this.newHeaderRowMessage = "";
-                this.newPartMessage = "";
-                this.newReplacerMessage = "";
                 this.fileUploadMessage = "";
                 this.clearItemCreationMessages();
             },
 
             clearItemCreationMessages() {
                 this.categoryMessage = "";
-                this.newItemNameMessage = "";
             },
 
             clearNewItemData() {
-                // this.newItemCategory = "";
                 this.newItemName = "";
-            },
-
-            clearNewHeaderRow() {
-                this.newHeaderRow = {
-                    id: "",
-                    name: "",
-                    status: "",
-                    parameter: "",
-                    value: "",
-                    itemId: "",
-                    message: ""
-                };
             },
 
             save() {
@@ -528,22 +449,6 @@
                 return this.itemView.searchEnabled;
             },
 
-            notStub(name) {
-                return name !== "stub";
-            },
-
-            statusActive(item) {
-                return this.statusIsActive(item.status);
-            },
-
-            statusIsActive(status) {
-                return shared.statusIsActive(status);
-            },
-
-            isNotThisItem(item) {
-                return item.itemId !== this.itemView.itemId;
-            },
-
             selectOptionVisible(option) {
                 return this.statusActive(option) && this.isNotThisItem(option);
             },
@@ -566,10 +471,6 @@
 
             messagesContain(message) {
                 return this.isInArray(message, this.itemView.messages);
-            },
-
-            isRemoveHeaderRowButtonVisible(deletable) {
-                return this.editMode && this.isOrdinaryItemView() && deletable;
             }
         }
     }

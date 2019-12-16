@@ -3,49 +3,44 @@
         <EditPanel @cancel="cancel" @edit="edit" @save="save"/>
 
         <table>
-            <tr v-for="table in itemView.partsTable.tables" v-if="arrayHaveActiveItems(table.parts)">
-                <td colspan="3">
+            <tr v-for="table in getItemsListAsTables()">
+                <td>
                     <v-details v-model="table.opened">
-                        <summary><b>{{table.localizedName}}</b></summary>
+                        <summary><b>{{table.name}}</b></summary>
                         <table id="get-all-table">
                             <tbody>
-                            <tr v-for="part in table.parts" v-if="statusIsActive(part.status)">
+                            <tr v-for="item in table.items">
                                 <td class="three-column-table-left-column">
                                     <p class="three-column-table-left-column-text"
-                                       v-if="!editMode || (editMode && !ordinaryItemView)">
-                                        {{getFirstColumnValue(part)}}
+                                       v-if="!editMode">
+                                        {{getFirstColumnValue(item)}}
                                     </p>
                                     <input v-if="editMode && ordinaryItemView"
-                                           v-model="part.location" type="text"/>
+                                           v-model="item.location" type="text"/>
                                 </td>
                                 <td class="three-column-table-middle-column">
                                     <p v-if="userListView">
-                                        {{part.buttonText}}
+                                        {{item.buttonText}}
                                     </p>
-                                    <button type="button"
-                                            v-if="!userListView"
-                                            @click="navigateToItem(part.itemId)">
-                                        {{part.buttonText}}
-                                    </button>
+                                    <ButtonNavigateToItem v-if="!userListView" :part="item"/>
                                 </td>
                                 <td class="three-column-table-right-column">
                                     <div v-if="showQuantityValue" class="parts-right-column-text">
-                                        {{part.quantity}}
+                                        {{item.quantity}}
                                     </div>
                                     <div v-if="motorcycleCatalogueView || itemsManagementView"
                                          class="parts-right-column-text">
-                                        {{part.localizedComment}}
+                                        {{item.localizedComment}}
                                     </div>
                                     <input v-if="editMode && ordinaryItemView"
-                                           v-model="part.quantity" type="text"/>
+                                           v-model="item.quantity" type="text"/>
                                 </td>
-                                <td class="three-column-table-button-column" v-if="editMode && part.comment !== 'Admin'">
-                                    <button v-model="itemView"
-                                            v-if="isItemDeleteButtonVisibleToCurrentUser(part)"
+                                <td class="three-column-table-button-column" v-if="editMode && item.comment !== 'Admin'">
+                                    <button v-if="isItemDeleteButtonVisibleToCurrentUser(item)"
                                             type="button"
                                             class="round-button"
                                             style="background: red"
-                                            @click="removePartFromList(part, table.parts)">
+                                            @click="removeItem(item)">
                                         {{"-"}}
                                     </button>
                                 </td>
@@ -65,12 +60,16 @@
 <script>
     import {mapState} from "vuex";
     import EditPanel from "./EditPanel";
+    import itemViewUtil from "../itemViewUtil";
+    import shared from "../shared";
+    import ButtonNavigateToItem from "./ButtonNavigateToItem";
 
     export default {
         name: "ItemList",
 
         components: {
-            EditPanel
+            EditPanel,
+            ButtonNavigateToItem
         },
 
         props: {
@@ -84,16 +83,7 @@
 
         computed: {
             ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                userName: state => state.dictionary.userName,
-                loadingState: state => state.dictionary.loadingState,
-                itemView: state => state.dictionary.itemView,
-                itemsManagementId: state => state.dictionary.itemsManagementId,
-                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId,
-                wishlistId: state => state.dictionary.wishlistId,
-                userlistId: state => state.dictionary.userlistId,
-                appLanguage: state => state.dictionary.appLanguage
+                itemView: state => state.dictionary.itemView
             })
         },
 
@@ -104,17 +94,8 @@
         },
 
         methods: {
-            arrayHaveActiveItems(array) {
-                for (let i=0; i < array.length; i++) {
-                    if (this.statusIsActive(array[i].status)) {
-                        return true;
-                    }
-                }
-                return false;
-            },
-
-            statusIsActive(status) {
-                return status === "active";
+            getItemsListAsTables() {
+                return itemViewUtil.itemsListToTables(this.itemView.partsTable.parts);
             },
 
             cancel() {
@@ -146,21 +127,13 @@
                 this.$router.push({ path: `/item/id/${itemId}/:lang` });
             },
 
-            removePartFromList(part, array) {
-                this.removeFromArray(part, array);
-                if (this.itemsManagementView || this.wishListView || this.userListView) {
-                    this.itemView.idsToRemove.push(part.itemId);
-                }
-            },
-
-            removeFromArray(element, array) {
-                array.splice(array.indexOf(element), 1);
+            removeItem(item) {
+                shared.removeFromArray(item, this.itemView.partsTable.parts);
             },
 
             isItemDeleteButtonVisibleToCurrentUser(item) {
                 return this.itemView.userData.comment === "Admin"
                     || this.currentUserIsCreator(item)
-                    || this.ordinaryItemView
                     || this.wishListView;
             },
 

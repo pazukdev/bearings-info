@@ -1,7 +1,5 @@
 <template>
     <div>
-<!--        {{getReplacers()[0]}}<br><br>-->
-<!--        {{getRatedItemsIds()}}-->
         <p style="text-align: center">{{itemView.replacersTable.localizedName}}</p>
         <table id="replacers-table" style="text-align: center">
             <tbody>

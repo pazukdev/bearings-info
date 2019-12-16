@@ -1,8 +1,9 @@
 <template>
     <div>
-        <div>
+        <div style="text-align: center">
             <p><b>{{itemView.header.name}}</b></p>
             <p>{{$t("createdBy") + " " + itemView.creatorName}}</p>
+            <br>
         </div>
 
         <table id="item-description">
@@ -15,16 +16,13 @@
                     </p>
                 </td>
                 <td class="two-column-table-right-column">
-                    <input v-if="isEditMode && isOrdinaryItemView()" v-model="row.value" type="text"/>
-                    <p v-if="!isShowInfoButton(row)
-                    && (!isEditMode || (isEditMode && !isOrdinaryItemView()))">
+                    <input v-if="editMode" v-model="row.value" type="text"/>
+                    <p v-if="!isShowInfoButton(row.itemId) && !editMode">
                         {{row.value}}
                     </p>
-                    <button v-if="isShowInfoButton(row)"
-                            type="button"
-                            @click="navigateToItem(row.itemId)">
-                        {{row.value}}
-                    </button>
+                    <ButtonNavigateToItem v-if="isShowInfoButton(row.itemId)"
+                                          :part="row"
+                                          :info-button="true"/>
                 </td>
                 <td>
                     <button v-if="isRemoveHeaderRowButtonVisible(row.deletable)"
@@ -41,12 +39,12 @@
                     {{newHeaderRowMessage}}
                 </td>
             </tr>
-            <tr v-if="isEditMode && isOrdinaryItemView()">
+            <tr v-if="editMode">
                 <td>
-                    <input v-model="newHeaderRow.parameter" type="text"/>
+                    <input v-model="parameter" type="text"/>
                 </td>
                 <td>
-                    <input v-model="newHeaderRow.value" type="text"/>
+                    <input v-model="value" type="text"/>
                 </td>
                 <td>
                     <button type="button"
@@ -56,18 +54,88 @@
                     </button>
                 </td>
             </tr>
-            <tr style="height: 10px"><td></td></tr>
-            <tr style="height: 26px">
-                <td colspan="3"><hr></td>
-            </tr>
             </tbody>
         </table>
+        <hr>
     </div>
 </template>
 
 <script>
+    import {mapState} from "vuex";
+    import shared from "../shared";
+    import ButtonNavigateToItem from "./ButtonNavigateToItem";
+
     export default {
-        name: "ItemDescription"
+        name: "ItemDescription",
+
+        components: {
+            ButtonNavigateToItem
+        },
+        
+        props: {
+            editMode: Boolean
+        },
+        
+        computed: {
+            ...mapState({
+                itemView: state => state.dictionary.itemView
+            }),
+        },
+
+        data() {
+            return {
+                newHeaderRowMessage: "",
+                parameter: "",
+                value: ""
+            }
+        },
+
+        methods: {
+            addHeaderRow() {
+                this.newHeaderRowMessage = "";
+                if (this.newLineIsEmpty(this.parameter, this.value)) {
+                    this.newHeaderRowMessage = "Parameter and value fields shouldn't be empty"
+                } else if (this.rowIsInList(this.parameter)) {
+                    this.newHeaderRowMessage = "Parameter already exists"
+                } else {
+                    let newHeaderRow = {
+                        id: "",
+                        name: "",
+                        localizedName: "",
+                        status: "added",
+                        parameter: this.parameter,
+                        value: this.value,
+                        itemId: "",
+                        message: ""
+                    };
+
+                    this.itemView.header.rows.push(newHeaderRow);
+
+                    this.parameter = "";
+                    this.value = "";
+                }
+            },
+
+            newLineIsEmpty(parameter, value) {
+                return parameter === "" || value === "";
+            },
+
+            rowIsInList(parameter) {
+                return shared.isInArray(parameter, this.itemView.header.rows);
+            },
+
+            isShowInfoButton(itemId) {
+                return itemId !== "-" && !this.editMode;
+            },
+
+            isRemoveHeaderRowButtonVisible(deletable) {
+                return this.editMode && deletable;
+            },
+
+            removeRowFromHeader(row) {
+                shared.removeFromArray(row, this.itemView.header.rows);
+            },
+        }
     }
 </script>
 

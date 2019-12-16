@@ -1,8 +1,14 @@
 <template>
     <div>
-        <button type="button"
+        <button v-if="!infoButton"
+                type="button"
                 @click="pushTo(part.itemId)">
             {{part.buttonText}}
+        </button>
+        <button v-if="infoButton"
+                type="button"
+                @click="pushTo(part.itemId)">
+            {{part.value}}
         </button>
     </div>
 </template>
@@ -14,7 +20,8 @@
         name: "ButtonNavigateToItem",
 
         props: {
-            part: Object
+            part: Object,
+            infoButton: Boolean
         },
 
         computed: {
