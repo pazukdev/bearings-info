@@ -17,7 +17,8 @@
 <!--                {{"basicUrl: " + basicUrl}}<br>-->
 <!--                {{"userName: " + userName}}<br>-->
 <!--                {{"authorization: " + authorization}}<br>-->
-<!--                {{"Is loading: " + loadingState}}<br>-->
+                {{"loadingState: " + loadingState}}<br>
+                {{"editMode: " + editMode}}<br>
 <!--                {{"itemView: " + itemView}}<br>-->
             </div>
             <router-view style="padding: 20px"/>
@@ -46,17 +47,13 @@
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
                 loadingState: state => state.dictionary.loadingState,
+                editMode: state => state.dictionary.editMode,
                 itemView: state => state.dictionary.itemView,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
                 motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId,
                 appLanguage: state => state.dictionary.appLanguage
             })
-        },
-
-        data() {
-            return {
-            }
         },
 
         created() {
@@ -117,14 +114,12 @@
 
             logout() {
                 this.pushToLoginForm();
-                // this.$store.dispatch("setDefaultState");
                 console.log("logout");
                 this.loginAsGuest();
             },
 
             openLoginForm() {
                 this.pushToLoginForm();
-                // this.$store.dispatch("setDefaultState");
                 console.log("logout");
                 console.log("login form opened");
             },

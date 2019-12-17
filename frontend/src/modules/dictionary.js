@@ -1,6 +1,7 @@
 const state = {
     basicUrl: "backend",
     appLanguage: "en",
+    editMode: false,
     loadingState: false,
     incorrectCredentials: false,
     itemsManagementId: -1,
@@ -13,16 +14,16 @@ const state = {
 };
 
 const actions = {
-    setDefaultState: ({commit}, context) => {
-        commit("setDefaultState", context);
-    },
-
     setBasicUrl: ({commit}, context) => {
         commit("setBasicUrl", context);
     },
 
     setAppLanguage: ({commit}, context) => {
         commit("setAppLanguage", context);
+    },
+
+    setEditMode: ({commit}, context) => {
+        commit("setEditMode", context);
     },
 
     setAuthorization: ({commit}, context) => {
@@ -47,22 +48,16 @@ const actions = {
 };
 
 const mutations = {
-    setDefaultState(state) {
-        state.basicUrl = "backend";
-        state.appLanguage = "en";
-        state.loadingState = false;
-        state.incorrectCredentials = false;
-        state.authorization = "";
-        state.userName = "";
-        state.itemView = "";
-    },
-
     setAppLanguage(state, appLanguage) {
         state.appLanguage = appLanguage;
     },
 
     setBasicUrl(state, basicUrl) {
         state.basicUrl = basicUrl;
+    },
+
+    setEditMode(state, editMode) {
+        state.editMode = editMode === true;
     },
 
     setAuthorization(state, authorization) {

@@ -1,4 +1,5 @@
 import shared from "./shared";
+import storeUtil from "./storeUtil";
 
 export default {
     itemsListToTables(items) {
@@ -38,6 +39,10 @@ export default {
         return itemView.userData.comment === "Guest" && userName.toString() === "guest";
     },
 
+    isAdmin(itemView) {
+        return itemView.userData.comment === "Admin";
+    },
+
     getItemName(itemView) {
         return itemView.header.rows[0].value;
     },
@@ -48,10 +53,6 @@ export default {
 
     dispatchView(store, itemView) {
         store.dispatch("setItemView", itemView);
-        store.dispatch("setLoadingState", false);
-    },
-
-    setLoadingStateTrue(store) {
-        store.dispatch("setLoadingState", true);
+        storeUtil.setLoadingState(store, false);
     }
 }

@@ -30,27 +30,32 @@
 </template>
 
 <script>
-    import itemViewUtil from "../itemViewUtil";
+    import storeUtil from "../storeUtil";
+    import {mapState} from "vuex";
 
     export default {
         name: "EditPanel",
 
-        props: {
-            editMode: Boolean
+        computed: {
+            ...mapState({
+                userName: state => state.dictionary.userName,
+                editMode: state => state.dictionary.editMode
+            })
         },
 
         methods: {
             cancel() {
-                // this.$emit("cancel");
+                storeUtil.setEditMode(this.$store, false);
                 this.$router.go();
             },
 
             edit() {
-                this.$emit("edit", false);
+                storeUtil.setEditMode(this.$store, true);
             },
 
             save() {
-                itemViewUtil.setLoadingStateTrue(this.$store);
+                storeUtil.setLoadingState(this.$store, true);
+                storeUtil.setEditMode(this.$store, false);
                 this.$emit("save");
             }
         }
