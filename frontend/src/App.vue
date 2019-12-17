@@ -30,11 +30,13 @@
     import {mapState} from 'vuex';
     import AppBar from "./components/AppBar";
     import Home from "./components/Home";
+    import LoadingScreen from "./components/LoadingScreen";
 
     export default {
         name: 'app',
 
         components: {
+            LoadingScreen,
             AppBar,
             Home
         },
@@ -50,6 +52,11 @@
                 motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId,
                 appLanguage: state => state.dictionary.appLanguage
             })
+        },
+
+        data() {
+            return {
+            }
         },
 
         created() {
@@ -80,10 +87,6 @@
                 return this.isAuthorized() && this.userName.toString() === "guest";
             },
 
-            // pushTo(itemId) {
-            //     this.$router.push({ path: `/item/id/${itemId}/${this.appLanguage}` });
-            // },
-
             pushToHome() {
                 this.$router.push({ name: "home" });
             },
@@ -100,7 +103,6 @@
                     .post(this.basicUrl + "/login", credentialsUrl)
                     .then(response => {
                         if (response.status === 200) {
-                            this.$store.dispatch("setLoadingState", true);
                             let authorization = response.data.Authorization;
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", username);

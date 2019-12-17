@@ -1,9 +1,7 @@
 <template>
     <div>
-        <div v-if="isLoading()" style="text-align: center; padding-top: 50%">
-            {{$t("loading") + "..."}}
-        </div>
-        <div v-if="!isLoading()">
+        <LoadingScreen v-if="this.loadingState"/>
+        <div v-else>
             <HeaderMenu :user-data="itemView.userData"
                         :guest="isGuest()"
                         :admin="isAdmin()"
@@ -35,10 +33,12 @@
     import ReplacersSection from "./ReplacersSection";
     import shared from "../shared";
     import itemViewUtil from "../itemViewUtil";
+    import LoadingScreen from "./LoadingScreen";
 
     export default {
 
         components: {
+            LoadingScreen,
             HeaderMenu,
             ItemDescription,
             EditPanel,
@@ -147,7 +147,6 @@
                     .post(this.basicUrl + "/login", credentialsUrl)
                     .then(response => {
                         if (response.status === 200) {
-                            this.$store.dispatch("setLoadingState", true);
                             let authorization = response.data.Authorization;
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", username);
@@ -176,7 +175,6 @@
             },
 
             getItemView(itemId) {
-                this.$store.dispatch("setLoadingState", true);
                 this.switchEditModeOff();
                 axios
                     .get(this.basicUrl
@@ -193,12 +191,10 @@
                         this.dispatchView(itemView);
                         this.logEvent("item view displayed: item", itemView);
                         this.$emit("set-admin", this.isAdmin());
-                    })
-                    .catch(err => {console.log("error on getItemView(itemId) method executing")});
+                    });
             },
 
             update(itemId) {
-                this.$store.dispatch("setLoadingState", true);
                 this.switchEditModeOff();
                 axios
                     .put(this.basicUrl
@@ -219,18 +215,13 @@
             },
 
             dispatchView(itemView) {
-                this.$store.dispatch("setItemView", itemView);
-                this.$store.dispatch("setLoadingState", false);
+                itemViewUtil.dispatchView(this.$store, itemView);
             },
 
             logEvent(event, itemView) {
                 console.log(event + ": "
                     + "id=" + itemView.itemId
                     + "; name=" + itemView.header.name);
-            },
-
-            isLoading() {
-                return this.loadingState === true;
             },
 
             isAuthorized() {

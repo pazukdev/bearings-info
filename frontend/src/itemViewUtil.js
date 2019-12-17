@@ -44,5 +44,14 @@ export default {
 
     getTitle(table) {
         return table.localizedName;
+    },
+
+    dispatchView(store, itemView) {
+        store.dispatch("setItemView", itemView);
+        store.dispatch("setLoadingState", false);
+    },
+
+    setLoadingStateTrue(store) {
+        store.dispatch("setLoadingState", true);
     }
 }

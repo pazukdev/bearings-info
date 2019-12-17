@@ -30,6 +30,8 @@
 </template>
 
 <script>
+    import itemViewUtil from "../itemViewUtil";
+
     export default {
         name: "EditPanel",
 
@@ -39,7 +41,8 @@
 
         methods: {
             cancel() {
-                this.$emit("cancel");
+                // this.$emit("cancel");
+                this.$router.go();
             },
 
             edit() {
@@ -47,6 +50,7 @@
             },
 
             save() {
+                itemViewUtil.setLoadingStateTrue(this.$store);
                 this.$emit("save");
             }
         }

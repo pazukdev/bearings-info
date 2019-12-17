@@ -128,7 +128,6 @@
                     .post(this.basicUrl + "/login", credentialsUrl)
                     .then(response => {
                         if (response.status === 200) {
-                            this.$store.dispatch("setLoadingState", true);
                             this.setIncorrectCredentials(false);
                             let authorization = response.data.Authorization;
                             this.$store.dispatch("setAuthorization", authorization);

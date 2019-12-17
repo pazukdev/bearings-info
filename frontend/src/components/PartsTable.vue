@@ -117,10 +117,11 @@
             },
 
             isShowPartsTableHeader() {
-                return !(this.itemView.partsTable.header[0] === "-"
-                    && this.itemView.partsTable.header[1] === "-"
-                    && this.itemView.partsTable.header[2] === "-")
-                    && this.isTitleVisible();
+                let header = this.itemView.partsTable.header;
+                if (header === null || !this.isTitleVisible()) {
+                    return false;
+                }
+                return !shared.isInArray("-", header);
             },
 
             isShowQuantityValue() {

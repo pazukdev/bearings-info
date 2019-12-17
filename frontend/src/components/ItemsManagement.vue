@@ -1,6 +1,7 @@
 <template>
     <div>
-        <ItemList :items-management-view="true"/>
+        <LoadingScreen v-if="this.loadingState"/>
+        <ItemList v-else :items-management-view="true"/>
     </div>
 </template>
 
@@ -8,11 +9,13 @@
     import ItemList from "./ItemList";
     import axios from "axios";
     import {mapState} from "vuex";
+    import LoadingScreen from "./LoadingScreen";
 
     export default {
         name: "ItemsManagement",
 
         components: {
+            LoadingScreen,
             ItemList
         },
 
@@ -22,7 +25,8 @@
                 authorization: state => state.dictionary.authorization,
                 userName: state => state.dictionary.userName,
                 appLanguage: state => state.dictionary.appLanguage,
-                itemView: state => state.dictionary.itemView
+                itemView: state => state.dictionary.itemView,
+                loadingState: state => state.dictionary.loadingState
             })
         },
 

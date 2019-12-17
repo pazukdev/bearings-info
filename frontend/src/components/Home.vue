@@ -1,17 +1,20 @@
 <template>
     <div>
-        <MotorcycleCatalogue/>
+        <LoadingScreen v-if="this.loadingState"/>
+        <div v-else>
+            <MotorcycleCatalogue/>
 
-        <details open>
-            <summary id="menu-summary">{{$t("menu")}}</summary>
-            <Menu :admin="true"
-                  :basic-url="basicUrl"
-                  @open-items-management="openItemsManagement"
-                  @open-users-list="openUsersList"/>
-        </details>
+            <details open>
+                <summary id="menu-summary">{{$t("menu")}}</summary>
+                <Menu :admin="true"
+                      :basic-url="basicUrl"
+                      @open-items-management="openItemsManagement"
+                      @open-users-list="openUsersList"/>
+            </details>
 
-        <div id="place-of-creation">
-            {{"Minsk 2019"}}
+            <div id="place-of-creation">
+                {{"Minsk 2019"}}
+            </div>
         </div>
     </div>
 </template>
@@ -21,11 +24,13 @@
     import Menu from "./Menu";
     import MotorcycleCatalogue from "./MotorcycleCatalogue";
     import axios from "axios";
+    import LoadingScreen from "./LoadingScreen";
 
     export default {
         name: "Home",
 
         components: {
+            LoadingScreen,
             MotorcycleCatalogue,
             Menu
         },
@@ -36,7 +41,8 @@
                 authorization: state => state.dictionary.authorization,
                 userName: state => state.dictionary.userName,
                 appLanguage: state => state.dictionary.appLanguage,
-                itemView: state => state.dictionary.itemView
+                itemView: state => state.dictionary.itemView,
+                loadingState: state => state.dictionary.loadingState
             })
         },
 

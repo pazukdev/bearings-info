@@ -4,6 +4,7 @@ import Home from "../components/Home";
 import Item from "../components/Item";
 import Login from "../components/Login";
 import ItemsManagement from "../components/ItemsManagement";
+import store from "./store";
 
 Vue.use(VueRouter);
 
@@ -24,6 +25,14 @@ const router = new VueRouter({
         { path: '/login/:lang', name: 'login', component: Login },
         { path: '/items_management/:lang', name: 'items_management', component: ItemsManagement, meta: { requiresAuth: true }},
     ]
+});
+
+router.beforeResolve((to, from, next) => {
+    store.dispatch("setLoadingState", true);
+    next();
+});
+
+router.afterEach((to, from) => {
 });
 
 export default router;
