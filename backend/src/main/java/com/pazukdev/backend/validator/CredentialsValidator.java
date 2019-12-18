@@ -1,6 +1,6 @@
 package com.pazukdev.backend.validator;
 
-import com.pazukdev.backend.dto.UserDto;
+import com.pazukdev.backend.dto.user.UserDto;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Component;

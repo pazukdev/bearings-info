@@ -2,7 +2,7 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
-import com.pazukdev.backend.dto.UserDto;
+import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.validator.CredentialsValidator;

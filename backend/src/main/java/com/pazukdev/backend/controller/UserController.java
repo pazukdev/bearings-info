@@ -1,7 +1,8 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.converter.UserConverter;
-import com.pazukdev.backend.dto.UserDto;
+import com.pazukdev.backend.dto.user.UserDto;
+import com.pazukdev.backend.dto.user.UserView;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.WishList;
@@ -12,15 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityExistsException;
 import java.util.List;
@@ -49,8 +42,15 @@ public class UserController {
     @GetMapping("/admin/user/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get User. Admins-only permitted")
-    public UserDto get(@PathVariable("id") Long id) {
+    public UserDto get(@PathVariable("id") final Long id) {
         return userConverter.convertToDto(userService.getOne(id));
+    }
+
+    @GetMapping("/user/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get public user data")
+    public UserView getUserView(@PathVariable("id") final Long id) {
+        return userConverter.convertToUserView(userService.getOne(id));
     }
 
     @GetMapping(value = "user/find-by-name/{username}")
