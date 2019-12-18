@@ -81,10 +81,10 @@
                 this.setLocale();
                 axios
                     .get(this.basicUrl
-                        + "/" + "item"
-                        + "/" + "get-home-view"
+                        + "/" + "item/view"
+                        + "/" + "home"
                         + "/" + this.userName
-                        + "/" + this.$i18n.locale, {
+                        + "/" + this.appLanguage.toString(), {
                         headers: {
                             Authorization: this.authorization
                         }

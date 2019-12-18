@@ -17,7 +17,8 @@ export default {
 
             let nestedTable = {
                 name: category,
-                items: []
+                items: [],
+                opened: true
             };
 
             for (let i = 0; i < items.length; i++) {

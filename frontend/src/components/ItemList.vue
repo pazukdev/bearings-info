@@ -1,11 +1,11 @@
 <template>
     <div>
-        <EditPanel/>
+        <EditPanel v-if="!motorcycleCatalogueView" @save="save"/>
         <table>
             <tr v-for="table in getItemsListAsTables()">
                 <td>
                     <v-details v-model="table.opened">
-                        {{table.items[0]}}
+<!--                        {{table.items[0]}}-->
                         <summary><b>{{table.name}}</b></summary>
                         <table id="get-all-table">
                             <tbody>
@@ -43,8 +43,9 @@
     import EditPanel from "./EditPanel";
     import itemViewUtil from "../itemViewUtil";
     import shared from "../shared";
-    import ButtonNavigateToItem from "./ButtonNavigateToItem";
+    import ButtonNavigateToItem from "./button/ButtonNavigateToItem";
     import ButtonDelete from "./button/ButtonDelete";
+    import axios from "axios";
 
     export default {
         name: "ItemList",
@@ -56,7 +57,6 @@
         },
 
         props: {
-            ordinaryItemView: Boolean,
             motorcycleCatalogueView: Boolean,
             userListView: Boolean,
             itemsManagementView: Boolean,
@@ -65,14 +65,24 @@
 
         computed: {
             ...mapState({
+                basicUrl: state => state.dictionary.basicUrl,
+                authorization: state => state.dictionary.authorization,
+                userName: state => state.dictionary.userName,
                 itemView: state => state.dictionary.itemView,
-                editMode: state => state.dictionary.editMode
+                editMode: state => state.dictionary.editMode,
+                appLanguage: state => state.dictionary.appLanguage
             })
         },
 
         methods: {
             getItemsListAsTables() {
-                return itemViewUtil.itemsListToTables(this.itemView.partsTable.parts);
+                let tables = itemViewUtil.itemsListToTables(this.itemView.partsTable.parts);
+                if (this.itemsManagementView) {
+                    for (let i = 0; i < tables.length; i++) {
+                        tables[i].opened = false;
+                    }
+                }
+                return tables;
             },
 
             edit(editMode) {
@@ -94,6 +104,31 @@
 
             removeItem(item) {
                 shared.removeFromArray(item, this.itemView.partsTable.parts);
+                this.itemView.idsToRemove.push(item.itemId);
+            },
+
+            save() {
+                this.update(this.itemView.itemId);
+            },
+
+            update(itemId) {
+                axios
+                    .put(this.basicUrl.toString()
+                        + "/" + "item"
+                        + "/" + "update"
+                        + "/" + itemId
+                        + "/" + this.userName.toString()
+                        + "/" + this.appLanguage.toString(),
+                        this.itemView, {
+                            headers: {
+                                Authorization: this.authorization
+                            }
+                        })
+                    .then(response => {
+                        let updatedItemView = response.data;
+                        itemViewUtil.dispatchView(this.$store, updatedItemView);
+                        console.log("item updated");
+                    });
             }
         }
     }

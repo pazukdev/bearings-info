@@ -4,7 +4,7 @@
         <table id="replacers-table" style="text-align: center">
             <tbody>
             <tr style="text-align: left"
-                v-for="item in sortedReplacers">
+                v-for="item in sortedReplacers()">
                 <td class="bordered">
                     <table>
                         <tbody>
@@ -47,12 +47,7 @@
                             </td>
                             <td>
                                 <div style="width: 32px" v-if="isUnrateButtonVisible(item)"/>
-                                <button v-if="editMode"
-                                        type="button"
-                                        class="round-button red-background"
-                                        @click="removeItem(item)">
-                                    {{"-"}}
-                                </button>
+                                <ButtonDelete :item="item" @remove-item="removeItem"/>
                             </td>
                         </tr>
                         <tr>
@@ -74,20 +69,18 @@
     import axios from "axios";
     import {mapState} from "vuex";
     import shared from "../shared";
-    import ButtonNavigateToItem from "./ButtonNavigateToItem";
+    import ButtonNavigateToItem from "./button/ButtonNavigateToItem";
     import itemViewUtil from "../itemViewUtil";
     import NestedItemsTableTitle from "./NestedItemsTableTitle";
+    import ButtonDelete from "./button/ButtonDelete";
 
     export default {
         name: "ReplacersTable",
 
         components: {
+            ButtonDelete,
             ButtonNavigateToItem,
             NestedItemsTableTitle
-        },
-
-        props: {
-            editMode: Boolean
         },
 
         computed: {
@@ -95,15 +88,16 @@
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
                 userName: state => state.dictionary.userName,
+                editMode: state => state.dictionary.editMode,
                 itemView: state => state.dictionary.itemView
-            }),
-
-            sortedReplacers() {
-                return this.getReplacers().sort((a,b) => (a.rating < b.rating) ? 1 : -1);
-            }
+            })
         },
 
         methods: {
+            sortedReplacers() {
+                return this.getReplacers().slice().sort((a,b) => (a.rating < b.rating) ? 1 : -1);
+            },
+
             getReplacers() {
                 return this.itemView.replacersTable.replacers;
             },
@@ -117,11 +111,19 @@
             },
 
             isRateButtonVisible(item) {
-                return !this.editMode && !this.isRated(item) && !this.isGuest();
+                if (this.editMode || this.isGuest()) {
+                    return false;
+                } else {
+                    return !this.isRated(item);
+                }
             },
 
             isUnrateButtonVisible(item) {
-                return !this.editMode && this.isRated(item) && !this.isGuest();
+                if (this.editMode || this.isGuest()) {
+                    return false;
+                } else {
+                    return this.isRated(item);
+                }
             },
 
             isRated(item) {
@@ -157,7 +159,7 @@
                 };
                 axios
                     .put(this.basicUrl
-                        + "/" + "item/rate-replacer"
+                        + "/" + "replacer/rate"
                         + "/" + this.userName,
                         rate, {
                             headers: {

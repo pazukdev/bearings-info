@@ -32,12 +32,12 @@
 
         methods: {
             isRendered(item) {
-                return this.editMode
-                    && (
-                        itemViewUtil.isAdmin(this.itemView)
-                        || this.currentUserIsCreator(item)
-                        || this.wishlistView
-                    );
+                if (!this.editMode || item.deletable === false) {
+                    return false;
+                }
+                return itemViewUtil.isAdmin(this.itemView)
+                    || this.currentUserIsCreator(item)
+                    || this.wishlistView;
             },
 
             currentUserIsCreator(item) {

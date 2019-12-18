@@ -10,7 +10,7 @@
     import PartsTable from "./PartsTable";
 
     export default {
-        name: "ReplacersSection",
+        name: "PartsSection",
 
         components: {
             PartsTable

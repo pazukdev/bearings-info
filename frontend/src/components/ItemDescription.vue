@@ -25,13 +25,7 @@
                                           :info-button="true"/>
                 </td>
                 <td>
-                    <button v-if="isRemoveHeaderRowButtonVisible(row.deletable)"
-                            v-model="itemView"
-                            type="button"
-                            class="round-delete-button"
-                            @click="removeRowFromHeader(row)">
-                        {{"-"}}
-                    </button>
+                    <ButtonDelete :item="row" @remove-item="removeItem"/>
                 </td>
             </tr>
             <tr>
@@ -63,12 +57,14 @@
 <script>
     import {mapState} from "vuex";
     import shared from "../shared";
-    import ButtonNavigateToItem from "./ButtonNavigateToItem";
+    import ButtonNavigateToItem from "./button/ButtonNavigateToItem";
+    import ButtonDelete from "./button/ButtonDelete";
 
     export default {
         name: "ItemDescription",
 
         components: {
+            ButtonDelete,
             ButtonNavigateToItem
         },
         
@@ -129,7 +125,7 @@
                 return this.editMode && deletable;
             },
 
-            removeRowFromHeader(row) {
+            removeItem(row) {
                 shared.removeFromArray(row, this.itemView.header.rows);
             },
         }

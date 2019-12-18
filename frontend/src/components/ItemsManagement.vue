@@ -40,7 +40,8 @@
                 axios
                     .get(this.basicUrl
                         + "/" + "item"
-                        + "/" + "get-items-management-view"
+                        + "/" + "view"
+                        + "/" + "items-management"
                         + "/" + this.userName
                         + "/" + this.$i18n.locale, {
                         headers: {

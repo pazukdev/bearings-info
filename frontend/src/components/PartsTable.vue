@@ -47,14 +47,8 @@
                                     </div>
                                     <input v-if="editMode" v-model="item.quantity" type="text"/>
                                 </td>
-                                <td class="three-column-table-button-column" v-if="editMode">
-                                    <button v-model="itemView"
-                                            type="button"
-                                            class="round-button"
-                                            style="background: red"
-                                            @click="removeItem(item, table.items)">
-                                        {{"-"}}
-                                    </button>
+                                <td class="three-column-table-button-column">
+                                    <ButtonDelete :item="item" @remove-item="removeItem"/>
                                 </td>
                             </tr>
                             </tbody>
@@ -74,16 +68,18 @@
 
 <script>
     import {mapState} from "vuex";
-    import ButtonNavigateToItem from "./ButtonNavigateToItem";
+    import ButtonNavigateToItem from "./button/ButtonNavigateToItem";
     import shared from "../shared";
     import AddPartForm from "./AddPartForm";
     import itemViewUtil from "../itemViewUtil";
     import NestedItemsTableTitle from "./NestedItemsTableTitle";
+    import ButtonDelete from "./button/ButtonDelete";
 
     export default {
         name: "PartsTable",
 
         components: {
+            ButtonDelete,
             NestedItemsTableTitle,
             ButtonNavigateToItem,
             AddPartForm

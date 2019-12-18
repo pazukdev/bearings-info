@@ -8,6 +8,7 @@
     import axios from "axios";
     import {mapState} from "vuex";
     import storeUtil from "../storeUtil";
+    import routerUtil from "../routerUtil";
 
     export default {
         name: "User",
@@ -33,8 +34,9 @@
             getView() {
                 axios
                     .get(this.basicUrl
+                        + "/" + "view"
                         + "/" + "user"
-                        + "/" + this.$route.params.id, {
+                        + "/" + routerUtil.getId(this.$route), {
                         headers: {
                             Authorization: this.authorization
                         }

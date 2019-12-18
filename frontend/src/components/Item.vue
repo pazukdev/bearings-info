@@ -2,21 +2,9 @@
     <div>
         <LoadingScreen v-if="this.loadingState"/>
         <div v-else>
-            <HeaderMenu :user-data="itemView.userData"
-                        :guest="isGuest()"
-                        :admin="isAdmin()"
-                        :wish-list-view="isWishListView()"
-                        :items-count-in-wishlist="itemView.wishListIds.length"
-                        :add-to-wishlist-button-visible="isAddToWishlistButtonVisible()"
-                        :item-in-wishlist-text-visible="isItemInWishListTextVisible()"
-                        :search-enabled="isSearchEnabled()"
-                        :show-bottom-hr="isOrdinaryItemView()"
-                        :item-name-for-search-in-google="getItemNameForSearchInGoogle()"
-                        @open-wish-list="openWishList"
-                        @add-item-to-wishlist="addThisItemToWishList"/>
-
+            <HeaderMenu @save="save"/>
             <ItemDescription/>
-            <EditPanel/>
+            <EditPanel @save="save"/>
             <PartsSection/>
             <ReplacersSection/>
         </div>
@@ -31,7 +19,6 @@
     import EditPanel from "./EditPanel";
     import PartsSection from "./PartsSection";
     import ReplacersSection from "./ReplacersSection";
-    import shared from "../shared";
     import itemViewUtil from "../itemViewUtil";
     import LoadingScreen from "./LoadingScreen";
     import routerUtil from "../routerUtil";
@@ -112,12 +99,6 @@
             },
 
             processItemId(itemId) {
-                if (itemId === "items_management") {
-                    return  this.itemsManagementId.toString();
-                }
-                if (itemId === "home") {
-                    return this.motorcycleCatalogueId.toString();
-                }
                 if (itemId === "wishlist") {
                     if (!this.isAuthorized() || this.isGuest()) {
                         return "redirect to login";
@@ -157,7 +138,7 @@
             },
 
             pushTo(id) {
-                let lang = this.appLanguage.toString();
+                let lang = this.getLanguage();
                 this.$router.push({ name: "item", params: {id, lang} });
             },
 
@@ -170,14 +151,16 @@
             },
 
             getLanguage() {
-                return this.appLanguage;
+                return this.appLanguage.toString();
             },
 
             getItemView(itemId) {
-                this.switchEditModeOff();
+                // this.switchEditModeOff();
                 axios
                     .get(this.basicUrl
-                        + "/" + "item/get-view"
+                        + "/" + "item"
+                        + "/" + "view"
+                        + "/" + "item"
                         + "/" + itemId
                         + "/" + this.userName
                         + "/" + this.getLanguage(), {
@@ -194,10 +177,11 @@
             },
 
             update(itemId) {
-                this.switchEditModeOff();
+                // this.switchEditModeOff();
                 axios
                     .put(this.basicUrl
-                        + "/" + "item/update-view"
+                        + "/" + "item"
+                        + "/" + "update"
                         + "/" + itemId
                         + "/" + this.userName
                         + "/" + this.getLanguage(),
@@ -243,15 +227,6 @@
                 return itemViewUtil.isGuest(this.itemView, this.userName);
             },
 
-            openWishList() {
-                let wishListId = -3;
-                this.navigateToItem(wishListId);
-            },
-
-            getItemNameForSearchInGoogle() {
-                return this.itemView.header.name;
-            },
-
             previewImage(event) {
                 let input = event.target;
                 let file = input.files[0];
@@ -274,189 +249,148 @@
             removeImg() {
                 this.itemView.messages.push("img removed");
             },
+            //
+            // rateAction(action, itemId) {
+            //     this.itemView.rate = {
+            //         action: action,
+            //         itemId: itemId
+            //     };
+            //     this.save();
+            // },
+            //
+            // getItemName() {
+            //     return this.itemView.header.rows[0].parameter;
+            // },
+            //
+            // isInArray(element, array) {
+            //     for (let i=0; i < array.length; i++) {
+            //         if (array[i] === element) {
+            //             return true;
+            //         }
+            //     }
+            //     return false;
+            // },
+            // removeReplacerFromList(replacer) {
+            //     this.removeFromArray(replacer, this.itemView.replacersTable.replacers);
+            // },
+            //
+            // removeFromArray(element, array) {
+            //     shared.removeFromArray(element, array);
+            // },
+            //
+            // selectOnChange() {
+            //     this.categoryMessage = "";
+            // },
+            //
+            // edit() {
+            //     this.editMode = true;
+            // },
 
-            isAddToWishlistButtonVisible() {
-                return !this.isInWishList(this.itemView.itemId)
-                    && this.isOrdinaryItemView()
-                    && !this.editMode
-                    && !this.isGuest();
-            },
+            // cancel() {
+            //     this.getItemViewByUrl();
+            // },
 
-            isItemInWishListTextVisible() {
-                return this.isInWishList(this.itemView.itemId) && this.isOrdinaryItemView() && !this.isGuest();
-            },
+            // switchEditModeOff() {
+            //     this.editMode = false;
+            //     this.clearAllEditData();
+            // },
 
-            addThisItemToWishList() {
-                this.itemView.addToWishList = true;
-                this.save();
-            },
+            // clearAllEditData() {
+            //     this.clearAllMessages();
+            //     this.clearNewItemData();
+            //     this.imgData = "";
+            // },
 
-            rateAction(action, itemId) {
-                this.itemView.rate = {
-                    action: action,
-                    itemId: itemId
-                };
-                this.save();
-            },
-
-            getItemName() {
-                return this.itemView.header.rows[0].parameter;
-            },
-
-            isInWishList(itemId) {
-                for (let i=0; i < this.itemView.wishListIds.length; i++) {
-                    if (this.itemView.wishListIds[i] === itemId) {
-                        return true;
-                    }
-                }
-                return false;
-            },
-
-            isInArray(element, array) {
-                for (let i=0; i < array.length; i++) {
-                    if (array[i] === element) {
-                        return true;
-                    }
-                }
-                return false;
-            },
-
-            removePartFromList(part, array) {
-                this.removeFromArray(part, array);
-                if (this.isItemsManagementView() || this.isWishListView() || this.isUserListView()) {
-                    this.itemView.idsToRemove.push(part.itemId);
-                }
-            },
-
-            removeReplacerFromList(replacer) {
-                this.removeFromArray(replacer, this.itemView.replacersTable.replacers);
-            },
-
-            removeFromArray(element, array) {
-                shared.removeFromArray(element, array);
-            },
-
-            selectOnChange() {
-                this.categoryMessage = "";
-            },
-
-            edit() {
-                this.editMode = true;
-            },
-
-            cancel() {
-                this.getItemViewByUrl();
-            },
-
-            switchEditModeOff() {
-                this.editMode = false;
-                this.clearAllEditData();
-            },
-
-            clearAllEditData() {
-                this.clearAllMessages();
-                this.clearNewItemData();
-                this.imgData = "";
-            },
-
-            clearAllMessages() {
-                this.fileUploadMessage = "";
-                this.clearItemCreationMessages();
-            },
-
-            clearItemCreationMessages() {
-                this.categoryMessage = "";
-            },
-
-            clearNewItemData() {
-                this.newItemName = "";
-            },
+            // clearAllMessages() {
+            //     this.fileUploadMessage = "";
+            //     this.clearItemCreationMessages();
+            // },
+            //
+            // clearItemCreationMessages() {
+            //     this.categoryMessage = "";
+            // },
+            //
+            // clearNewItemData() {
+            //     this.newItemName = "";
+            // },
 
             save() {
                 this.update(this.itemView.itemId);
             },
 
-            isPartsTitleVisible() {
-                return !this.isMotorcycleCatalogueView()
-                    && (this.notStub(this.itemView.partsTable.name) && this.itemHaveActiveParts())
-                    || (this.notStub(this.itemView.partsTable.name) && this.editMode);
-            },
-
-            isReplacersTableVisible() {
-                return (this.notStub(this.itemView.replacersTable.name)
-                    && this.arrayHaveActiveItems(this.itemView.replacersTable.replacers))
-                || (this.notStub(this.itemView.replacersTable.name) && this.editMode);
-            },
-
-            getFirstColumnValue(item) {
-                if (this.isUserListView()) {
-                    return item.comment;
-                } else {
-                    return item.location;
-                }
-
-            },
-
-            arrayHaveActiveItems(array) {
-                for (let i=0; i < array.length; i++) {
-                    if (this.statusIsActive(array[i].status)) {
-                        return true;
-                    }
-                }
-                return false;
-            },
-
-            isOrdinaryItemView() {
-                return this.itemView.itemId > 0;
-            },
-
-            isItemsManagementView() {
-                return this.itemView.itemId === -1;
-            },
-
-            isEditButtonVisible() {
-                return !this.isMotorcycleCatalogueView() && !this.isGuest();
-            },
-
-            isMotorcycleCatalogueView() {
-                return this.itemView.itemId === this.motorcycleCatalogueId;
-            },
-
-            isWishListView() {
-                return this.itemView.itemId === -3;
-            },
-
-            isUserListView() {
-                return this.itemView.itemId === -4;
-            },
-
-            isShowQuantityValue() {
-                return (!this.editMode && (this.isOrdinaryItemView() || this.isUserListView()))
-                    || (this.editMode && this.isUserListView());
-            },
-
-            isSearchEnabled() {
-                return this.itemView.searchEnabled;
-            },
-
-            // selectOptionVisible(option) {
-            //     return this.statusActive(option) && this.isNotThisItem(option);
+            // isPartsTitleVisible() {
+            //     return !this.isMotorcycleCatalogueView()
+            //         && (this.notStub(this.itemView.partsTable.name) && this.itemHaveActiveParts())
+            //         || (this.notStub(this.itemView.partsTable.name) && this.editMode);
+            // },
+            //
+            // isReplacersTableVisible() {
+            //     return (this.notStub(this.itemView.replacersTable.name)
+            //         && this.arrayHaveActiveItems(this.itemView.replacersTable.replacers))
+            //     || (this.notStub(this.itemView.replacersTable.name) && this.editMode);
+            // },
+            //
+            // getFirstColumnValue(item) {
+            //     if (this.isUserListView()) {
+            //         return item.comment;
+            //     } else {
+            //         return item.location;
+            //     }
+            //
             // },
 
-            isItemDeleteButtonVisibleToCurrentUser(item) {
-                return this.itemView.userData.comment === "Admin"
-                    || this.currentUserIsCreator(item)
-                    || this.isOrdinaryItemView()
-                    || this.isWishListView();
-            },
+            // arrayHaveActiveItems(array) {
+            //     for (let i=0; i < array.length; i++) {
+            //         if (this.statusIsActive(array[i].status)) {
+            //             return true;
+            //         }
+            //     }
+            //     return false;
+            // },
+            //
+            // isOrdinaryItemView() {
+            //     return this.itemView.itemId > 0;
+            // },
+            //
+            // isItemsManagementView() {
+            //     return this.itemView.itemId === -1;
+            // },
+            //
+            // isEditButtonVisible() {
+            //     return !this.isMotorcycleCatalogueView() && !this.isGuest();
+            // },
+
+            // isMotorcycleCatalogueView() {
+            //     return this.itemView.itemId === this.motorcycleCatalogueId;
+            // },
+            //
+            // isWishListView() {
+            //     return this.itemView.itemId === -3;
+            // },
+            //
+            // isUserListView() {
+            //     return this.itemView.itemId === -4;
+            // },
+            //
+            // isShowQuantityValue() {
+            //     return (!this.editMode && (this.isOrdinaryItemView() || this.isUserListView()))
+            //         || (this.editMode && this.isUserListView());
+            // },
+
+            // isItemDeleteButtonVisibleToCurrentUser(item) {
+            //     return this.itemView.userData.comment === "Admin"
+            //         || this.currentUserIsCreator(item)
+            //         || this.isOrdinaryItemView()
+            //         || this.isWishListView();
+            // },
 
             isViewWithImage() {
                 return this.itemView.imgData !== '-';
             },
 
-            messagesContain(message) {
-                return this.isInArray(message, this.itemView.messages);
-            }
+            // messagesContain(message) {
+            //     return this.isInArray(message, this.itemView.messages);
+            // }
         }
     }
 </script>
