@@ -40,6 +40,7 @@ public class NestedItemDtoFactory {
         motorcycleDto.setLocation(production);
         motorcycleDto.setComment(manufacturer);
         motorcycleDto.setItemCategory(manufacturer);
+        motorcycleDto.setDeletable(false);
         return motorcycleDto;
     }
 

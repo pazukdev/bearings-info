@@ -1,6 +1,8 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.converter.UserConverter;
+import com.pazukdev.backend.dto.ItemView;
+import com.pazukdev.backend.dto.factory.ItemViewFactory;
 import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.dto.user.UserView;
 import com.pazukdev.backend.entity.Item;
@@ -46,11 +48,25 @@ public class UserController {
         return userConverter.convertToDto(userService.getOne(id));
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/view/user/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get public user data")
     public UserView getUserView(@PathVariable("id") final Long id) {
         return userConverter.convertToUserView(userService.getOne(id));
+    }
+
+    @GetMapping("/view/user/list/{userName}/{language}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get user list view")
+    public ItemView getUserListView(@PathVariable final String userName, @PathVariable final String language) {
+        return new ItemViewFactory(itemService).createUserListView(userName, language);
+    }
+
+    @GetMapping("/view/wishlist/{userName}/{language}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get user wishlist view")
+    public ItemView getWishlistView(@PathVariable final String userName, @PathVariable final String language) {
+        return itemService.createWishlistView(userName, language);
     }
 
     @GetMapping(value = "user/find-by-name/{username}")

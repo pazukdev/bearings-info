@@ -111,6 +111,11 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
+    public ItemView createWishlistView(final String userName, final String language) {
+        return createNewItemViewFactory().createWishlistView(userName, language);
+    }
+
+    @Transactional
     public ItemView createItemView(final Long itemId, final String userName, final String language) {
         return createNewItemViewFactory().createItemView(itemId, userName, language);
     }
