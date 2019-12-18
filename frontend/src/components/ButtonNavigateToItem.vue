@@ -26,12 +26,13 @@
         },
 
         methods: {
-            pushTo(itemId) {
+            pushTo(id) {
                 let lang = this.appLanguage.toString();
+                console.log(this.user + " " + id + " " + lang);
                 if (this.user) {
-                    this.$router.push({ path: `/user/id/${itemId}/${lang}` });
+                    this.$router.push({ name: "user", params: {id, lang} });
                 } else {
-                    this.$router.push({ path: `/item/id/${itemId}/${lang}` });
+                    this.$router.push({ name: "item", params: {id, lang} });
                 }
             },
 

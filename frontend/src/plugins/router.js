@@ -23,10 +23,10 @@ const router = new VueRouter({
         { path: '/item/id/-4/en', redirect: { path: '/item/id/users/en' }},
         // urls to components binding
         { path: '/home/:lang', name: 'home', component: Home, meta: { requiresAuth: true }},
-        { path: '/item/id/:item_id/:lang', name: 'item', component: Item, meta: { requiresAuth: true }},
+        { path: '/item/id/:id/:lang', name: 'item', component: Item, meta: { requiresAuth: true }},
+        { path: '/user/id/:id/:lang', name: 'user', component: User, meta: { requiresAuth: true }},
         { path: '/login/:lang', name: 'login', component: Login },
         { path: '/user_list/:lang', name: 'user_list', component: UserList },
-        { path: '/user/id/:id/:lang', name: 'user', component: User },
         {
             path: '/items_management/:lang',
             name: 'items_management',

@@ -34,6 +34,7 @@
     import shared from "../shared";
     import itemViewUtil from "../itemViewUtil";
     import LoadingScreen from "./LoadingScreen";
+    import routerUtil from "../routerUtil";
 
     export default {
 
@@ -81,7 +82,7 @@
 
         methods: {
             getItemId() {
-                return this.$route.params.item_id;
+                return routerUtil.getId(this.$route);
             },
 
             getUserRole() {
@@ -96,18 +97,18 @@
                 }
                 this.$i18n.locale = this.appLanguage.toString();
 
-                let item_id = this.processItemId(this.$route.params.item_id);
+                let id = this.processItemId(this.getItemId());
 
-                if (item_id === "redirect to login") {
-                    console.log("/" + this.$route.params.item_id
+                if (id === "redirect to login") {
+                    console.log("/" + this.getItemId()
                         + " url is forbidden for user with role " + this.getUserRole());
                     console.log("redirected to login");
                     this.pushToLoginForm();
                     return;
                 }
 
-                console.log("getItemViewByUrl(): " + item_id);
-                this.getItemView(item_id);
+                console.log("getItemViewByUrl(): " + id);
+                this.getItemView(id);
             },
 
             processItemId(itemId) {
@@ -155,8 +156,9 @@
                     });
             },
 
-            pushTo(itemId) {
-                this.$router.push({ path: `/item/id/${itemId}/${this.appLanguage}` });
+            pushTo(id) {
+                let lang = this.appLanguage.toString();
+                this.$router.push({ name: "item", params: {id, lang} });
             },
 
             pushToHome() {
