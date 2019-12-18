@@ -18,7 +18,7 @@
 <!--                {{"userName: " + userName}}<br>-->
 <!--                {{"authorization: " + authorization}}<br>-->
                 {{"loadingState: " + loadingState}}<br>
-                {{"editMode: " + editMode}}<br>
+<!--                {{"editMode: " + editMode}}<br>-->
 <!--                {{"itemView: " + itemView}}<br>-->
             </div>
             <router-view style="padding: 20px"/>

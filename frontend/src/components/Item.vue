@@ -15,10 +15,10 @@
                         @open-wish-list="openWishList"
                         @add-item-to-wishlist="addThisItemToWishList"/>
 
-            <ItemDescription :edit-mode="editMode"/>
-            <EditPanel :edit-mode="editMode" @cancel="cancel" @edit="edit" @save="save"/>
-            <PartsSection :edit-mode="editMode"/>
-            <ReplacersSection :edit-mode="editMode"/>
+            <ItemDescription/>
+            <EditPanel/>
+            <PartsSection/>
+            <ReplacersSection/>
         </div>
     </div>
 </template>
@@ -48,14 +48,11 @@
 
         data() {
             return {
-                text: "",
                 imgData: "",
-                editMode: false,
                 newItemCategory: "",
                 newItemName: "",
                 categoryMessage: "",
-                fileUploadMessage: "",
-                actionType: ""
+                fileUploadMessage: ""
             }
         },
 
@@ -440,20 +437,15 @@
                 return this.itemView.searchEnabled;
             },
 
-            selectOptionVisible(option) {
-                return this.statusActive(option) && this.isNotThisItem(option);
-            },
+            // selectOptionVisible(option) {
+            //     return this.statusActive(option) && this.isNotThisItem(option);
+            // },
 
             isItemDeleteButtonVisibleToCurrentUser(item) {
                 return this.itemView.userData.comment === "Admin"
                     || this.currentUserIsCreator(item)
                     || this.isOrdinaryItemView()
                     || this.isWishListView();
-            },
-
-            currentUserIsCreator(item) {
-                this.text = item;
-                return item.creatorName === this.userName;
             },
 
             isViewWithImage() {

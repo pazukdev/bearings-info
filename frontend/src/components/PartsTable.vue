@@ -64,7 +64,7 @@
             </tr>
             <tr>
                 <td>
-                    <AddPartForm :edit-mode="editMode" :show-form="showForm" @hide-add-form="hideAddForm"/>
+                    <AddPartForm :show-form="showForm" @hide-add-form="hideAddForm"/>
                 </td>
             </tr>
             </tbody>
@@ -90,13 +90,13 @@
         },
 
         props: {
-            editMode: Boolean,
             showForm: Boolean
         },
 
         computed: {
             ...mapState({
-                itemView: state => state.dictionary.itemView
+                itemView: state => state.dictionary.itemView,
+                editMode: state => state.dictionary.editMode
             }),
 
             itemsListAsTables() {

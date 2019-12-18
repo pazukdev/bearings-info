@@ -47,13 +47,13 @@
         },
 
         props: {
-            editMode: Boolean,
             showForm: Boolean
         },
 
         computed: {
             ...mapState({
                 itemView: state => state.dictionary.itemView,
+                editMode: state => state.dictionary.editMode
             }),
 
             message() {

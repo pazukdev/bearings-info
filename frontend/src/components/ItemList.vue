@@ -1,52 +1,33 @@
 <template>
     <div>
-        <EditPanel @cancel="cancel" @edit="edit" @save="save"/>
-
+        <EditPanel/>
         <table>
             <tr v-for="table in getItemsListAsTables()">
                 <td>
                     <v-details v-model="table.opened">
+                        {{table.items[0]}}
                         <summary><b>{{table.name}}</b></summary>
                         <table id="get-all-table">
                             <tbody>
                             <tr v-for="item in table.items">
                                 <td class="three-column-table-left-column">
-                                    <p class="three-column-table-left-column-text"
-                                       v-if="!editMode">
+                                    <p class="three-column-table-left-column-text">
                                         {{getFirstColumnValue(item)}}
                                     </p>
-                                    <input v-if="editMode && ordinaryItemView"
-                                           v-model="item.location" type="text"/>
                                 </td>
                                 <td class="three-column-table-middle-column">
-                                    <p v-if="userListView">
-                                        {{item.buttonText}}
-                                    </p>
-                                    <ButtonNavigateToItem v-if="!userListView" :part="item"/>
+                                    <ButtonNavigateToItem :part="item" :user="userListView"/>
                                 </td>
                                 <td class="three-column-table-right-column">
-                                    <div v-if="showQuantityValue" class="parts-right-column-text">
-                                        {{item.quantity}}
-                                    </div>
-                                    <div v-if="motorcycleCatalogueView || itemsManagementView"
-                                         class="parts-right-column-text">
+                                    <div class="parts-right-column-text">
                                         {{item.localizedComment}}
                                     </div>
-                                    <input v-if="editMode && ordinaryItemView"
-                                           v-model="item.quantity" type="text"/>
                                 </td>
-                                <td class="three-column-table-button-column" v-if="editMode && item.comment !== 'Admin'">
-                                    <button v-if="isItemDeleteButtonVisibleToCurrentUser(item)"
-                                            type="button"
-                                            class="round-button"
-                                            style="background: red"
-                                            @click="removeItem(item)">
-                                        {{"-"}}
-                                    </button>
+                                <td class="three-column-table-button-column">
+                                    <ButtonDelete :item="item"
+                                                  :wishlist-view="wishlistView"
+                                                  @remove-item="removeItem"/>
                                 </td>
-                            </tr>
-                            <tr>
-                                <p></p>
                             </tr>
                             </tbody>
                         </table>
@@ -63,11 +44,13 @@
     import itemViewUtil from "../itemViewUtil";
     import shared from "../shared";
     import ButtonNavigateToItem from "./ButtonNavigateToItem";
+    import ButtonDelete from "./button/ButtonDelete";
 
     export default {
         name: "ItemList",
 
         components: {
+            ButtonDelete,
             EditPanel,
             ButtonNavigateToItem
         },
@@ -77,20 +60,14 @@
             motorcycleCatalogueView: Boolean,
             userListView: Boolean,
             itemsManagementView: Boolean,
-            wishlistView: Boolean,
-            showQuantityValue: Boolean
+            wishlistView: Boolean
         },
 
         computed: {
             ...mapState({
-                itemView: state => state.dictionary.itemView
+                itemView: state => state.dictionary.itemView,
+                editMode: state => state.dictionary.editMode
             })
-        },
-
-        data() {
-            return {
-                editMode: false
-            }
         },
 
         methods: {
@@ -98,16 +75,8 @@
                 return itemViewUtil.itemsListToTables(this.itemView.partsTable.parts);
             },
 
-            cancel() {
-                this.editMode = false;
-            },
-
             edit(editMode) {
                 this.editMode = editMode === true;
-            },
-
-            save() {
-                this.editMode = false;
             },
 
             getFirstColumnValue(item) {
@@ -123,24 +92,9 @@
                 this.pushTo(itemId);
             },
 
-            pushTo(itemId) {
-                this.$router.push({ path: `/item/id/${itemId}/:lang` });
-            },
-
             removeItem(item) {
                 shared.removeFromArray(item, this.itemView.partsTable.parts);
-            },
-
-            isItemDeleteButtonVisibleToCurrentUser(item) {
-                return this.itemView.userData.comment === "Admin"
-                    || this.currentUserIsCreator(item)
-                    || this.wishListView;
-            },
-
-            currentUserIsCreator(item) {
-                this.text = item;
-                return item.creatorName === this.userName;
-            },
+            }
         }
     }
 </script>

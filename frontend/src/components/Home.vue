@@ -6,10 +6,7 @@
 
             <details open>
                 <summary id="menu-summary">{{$t("menu")}}</summary>
-                <Menu :admin="true"
-                      :basic-url="basicUrl"
-                      @open-items-management="openItemsManagement"
-                      @open-users-list="openUsersList"/>
+                <Menu :admin="true" :basic-url="basicUrl"/>
             </details>
 
             <div id="place-of-creation">
@@ -25,6 +22,7 @@
     import MotorcycleCatalogue from "./MotorcycleCatalogue";
     import axios from "axios";
     import LoadingScreen from "./LoadingScreen";
+    import itemViewUtil from "../itemViewUtil";
 
     export default {
         name: "Home",
@@ -81,8 +79,6 @@
 
             getMotorcycleCatalogueItemView() {
                 this.setLocale();
-
-                // this.$store.dispatch("setLoadingState", true);
                 axios
                     .get(this.basicUrl
                         + "/" + "item"
@@ -95,14 +91,9 @@
                     })
                     .then(response => {
                         let itemView = response.data;
-                        this.dispatchView(itemView);
+                        itemViewUtil.dispatchView(this.$store, itemView);
                         console.log("home displayed");
                     });
-            },
-
-            dispatchView(itemView) {
-                this.$store.dispatch("setItemView", itemView);
-                this.$store.dispatch("setLoadingState", false);
             },
 
             logEvent(event, itemId, name) {
@@ -110,21 +101,7 @@
             },
 
             isAdmin() {
-                return this.itemView.userData.comment === "Admin";
-            },
-
-            openItemsManagement() {
-                this.$router.push({ name: "items_management" });
-
-            },
-
-            openUsersList() {
-                let usersListId = -4;
-                this.pushTo(usersListId);
-            },
-
-            pushTo(itemId) {
-                this.$router.push({ path: `/item/id/${itemId}/:lang` });
+                return itemViewUtil.isAdmin(this.itemView);
             }
         }
     }

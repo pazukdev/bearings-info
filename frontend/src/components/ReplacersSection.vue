@@ -1,7 +1,7 @@
 <template>
     <div>
-        <ReplacersTable :edit-mode="editMode" @show-add-form="showAddForm"/>
-        <AddReplacerForm :edit-mode="editMode" :show-form="showForm" @hide-add-form="hideAddForm"/>
+        <ReplacersTable @show-add-form="showAddForm"/>
+        <AddReplacerForm :show-form="showForm" @hide-add-form="hideAddForm"/>
     </div>
 </template>
 
@@ -15,10 +15,6 @@
         components: {
             ReplacersTable,
             AddReplacerForm
-        },
-
-        props: {
-            editMode: Boolean
         },
 
         data() {

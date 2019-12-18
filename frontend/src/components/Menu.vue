@@ -3,15 +3,15 @@
         <table id="additional-menu">
             <tbody>
             <tr>
-                <td class="three-column-table-left-column"></td>
+                <td class="three-column-table-left-column"/>
                 <td class="three-column-table-middle-column">
                     <button type="button"
                             v-on:click="openItemsManagement()">
                         {{$t("itemsManagement")}}
                     </button>
                 </td>
-                <td class="three-column-table-right-column"></td>
-                <td class="three-column-table-button-column"></td>
+                <td class="three-column-table-right-column"/>
+                <td class="three-column-table-button-column"/>
             </tr>
             <tr v-if="admin">
                 <td></td>
@@ -71,11 +71,11 @@
 
         methods: {
             openItemsManagement() {
-                this.$emit("open-items-management");
+                this.$router.push({ name: "items_management" });
             },
 
             openUsersList() {
-                this.$emit("open-users-list");
+                this.$router.push({ name: "user_list" });
             },
 
             downloadDictionary() {

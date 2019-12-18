@@ -1,7 +1,8 @@
 <template>
     <div>
-        <PartsTable :edit-mode="editMode" :show-form="showForm"
-                    @show-add-form="showAddForm" @hide-add-form="hideAddForm"/>
+        <PartsTable :show-form="showForm"
+                    @show-add-form="showAddForm"
+                    @hide-add-form="hideAddForm"/>
     </div>
 </template>
 
@@ -13,10 +14,6 @@
 
         components: {
             PartsTable
-        },
-
-        props: {
-            editMode: Boolean
         },
 
         data() {

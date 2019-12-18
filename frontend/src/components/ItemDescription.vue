@@ -72,13 +72,10 @@
             ButtonNavigateToItem
         },
         
-        props: {
-            editMode: Boolean
-        },
-        
         computed: {
             ...mapState({
-                itemView: state => state.dictionary.itemView
+                itemView: state => state.dictionary.itemView,
+                editMode: state => state.dictionary.editMode
             }),
         },
 

@@ -1,14 +1,8 @@
 <template>
     <div>
-        <button v-if="!infoButton"
-                type="button"
+        <button type="button"
                 @click="pushTo(part.itemId)">
-            {{part.buttonText}}
-        </button>
-        <button v-if="infoButton"
-                type="button"
-                @click="pushTo(part.itemId)">
-            {{part.value}}
+            {{getText(part)}}
         </button>
     </div>
 </template>
@@ -21,7 +15,8 @@
 
         props: {
             part: Object,
-            infoButton: Boolean
+            infoButton: Boolean,
+            user: Boolean
         },
 
         computed: {
@@ -32,7 +27,20 @@
 
         methods: {
             pushTo(itemId) {
-                this.$router.push({ path: `/item/id/${itemId}/${this.appLanguage}` });
+                let lang = this.appLanguage.toString();
+                if (this.user) {
+                    this.$router.push({ path: `/user/id/${itemId}/${lang}` });
+                } else {
+                    this.$router.push({ path: `/item/id/${itemId}/${lang}` });
+                }
+            },
+
+            getText(item) {
+                if (this.infoButton) {
+                    return item.value;
+                } else {
+                    return item.buttonText;
+                }
             }
         }
     }
