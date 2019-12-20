@@ -68,11 +68,11 @@
 <script>
     import axios from "axios";
     import {mapState} from "vuex";
-    import shared from "../shared";
-    import ButtonNavigateToItem from "./button/ButtonNavigateToItem";
-    import itemViewUtil from "../itemViewUtil";
-    import NestedItemsTableTitle from "./NestedItemsTableTitle";
-    import ButtonDelete from "./button/ButtonDelete";
+    import shared from "../../util/shared";
+    import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
+    import itemViewUtil from "../../util/itemViewUtil";
+    import NestedItemsTableTitle from "../NestedItemsTableTitle";
+    import ButtonDelete from "../element/button/ButtonDelete";
 
     export default {
         name: "ReplacersTable",

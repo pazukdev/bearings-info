@@ -10,8 +10,8 @@
 </template>
 
 <script>
-    import shared from "../shared";
-    import itemViewUtil from "../itemViewUtil";
+    import shared from "../util/shared";
+    import itemViewUtil from "../util/itemViewUtil";
 
     export default {
         name: "NestedItemsTableTitle",

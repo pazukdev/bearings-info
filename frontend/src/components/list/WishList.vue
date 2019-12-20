@@ -1,24 +1,20 @@
 <template>
     <div>
         <LoadingScreen v-if="this.loadingState"/>
-        <ItemList v-else :items-management-view="true"/>
+        <ItemList v-else :wishlist-view="true"/>
     </div>
 </template>
 
 <script>
     import ItemList from "./ItemList";
-    import axios from "axios";
+    import LoadingScreen from "../special/LoadingScreen";
     import {mapState} from "vuex";
-    import LoadingScreen from "./LoadingScreen";
-    import itemViewUtil from "../itemViewUtil";
+    import axios from "axios";
+    import itemViewUtil from "../../util/itemViewUtil";
 
     export default {
-        name: "ItemsManagement",
-
-        components: {
-            LoadingScreen,
-            ItemList
-        },
+        name: "WishList",
+        components: {ItemList, LoadingScreen},
 
         computed: {
             ...mapState({
@@ -39,20 +35,19 @@
             getView() {
                 axios
                     .get(this.basicUrl
-                        + "/" + "item"
                         + "/" + "view"
-                        + "/" + "items-management"
+                        + "/" + "wishlist"
                         + "/" + this.userName
-                        + "/" + this.$i18n.locale, {
+                        + "/" + this.appLanguage.toString(), {
                         headers: {
                             Authorization: this.authorization
                         }
                     })
                     .then(response => {
                         itemViewUtil.dispatchView(this.$store, response.data);
-                        console.log("items management displayed");
+                        console.log("user wishlist rendered");
                     });
-            }
+            },
         }
     }
 </script>

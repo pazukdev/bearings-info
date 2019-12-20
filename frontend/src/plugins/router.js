@@ -1,13 +1,13 @@
 import VueRouter from 'vue-router';
 import Vue from "vue";
-import Home from "../components/Home";
+import Home from "../components/router/Home";
 import User from "../components/User";
-import Item from "../components/Item";
-import Login from "../components/Login";
-import ItemsManagement from "../components/ItemsManagement";
+import Item from "../components/router/Item";
+import Login from "../components/router/Login";
+import ItemsManagement from "../components/router/ItemsManagement";
 import store from "./store";
-import UserList from "../components/UserList";
-import WishList from "../components/WishList";
+import UserList from "../components/list/UserList";
+import WishList from "../components/list/WishList";
 
 Vue.use(VueRouter);
 

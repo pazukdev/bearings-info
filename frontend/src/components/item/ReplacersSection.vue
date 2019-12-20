@@ -7,7 +7,7 @@
 
 <script>
     import ReplacersTable from "./ReplacersTable";
-    import AddReplacerForm from "./AddReplacerForm";
+    import AddReplacerForm from "../form/AddReplacerForm";
 
     export default {
         name: "ReplacersSection",

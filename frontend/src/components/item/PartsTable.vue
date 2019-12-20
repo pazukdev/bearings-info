@@ -68,12 +68,12 @@
 
 <script>
     import {mapState} from "vuex";
-    import ButtonNavigateToItem from "./button/ButtonNavigateToItem";
-    import shared from "../shared";
-    import AddPartForm from "./AddPartForm";
-    import itemViewUtil from "../itemViewUtil";
-    import NestedItemsTableTitle from "./NestedItemsTableTitle";
-    import ButtonDelete from "./button/ButtonDelete";
+    import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
+    import shared from "../../util/shared";
+    import AddPartForm from "../form/AddPartForm";
+    import itemViewUtil from "../../util/itemViewUtil";
+    import NestedItemsTableTitle from "../NestedItemsTableTitle";
+    import ButtonDelete from "../element/button/ButtonDelete";
 
     export default {
         name: "PartsTable",

@@ -39,13 +39,13 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
-    import EditPanel from "./EditPanel";
-    import itemViewUtil from "../itemViewUtil";
-    import shared from "../shared";
-    import ButtonNavigateToItem from "./button/ButtonNavigateToItem";
-    import ButtonDelete from "./button/ButtonDelete";
     import axios from "axios";
+    import {mapState} from "vuex";
+    import EditPanel from "../menu/EditPanel";
+    import itemViewUtil from "../../util/itemViewUtil";
+    import shared from "../../util/shared";
+    import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
+    import ButtonDelete from "../element/button/ButtonDelete";
 
     export default {
         name: "ItemList",

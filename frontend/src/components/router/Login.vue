@@ -82,7 +82,6 @@
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
-                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId,
                 appLanguage: state => state.dictionary.appLanguage
             })
         },

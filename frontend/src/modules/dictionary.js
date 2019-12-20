@@ -4,10 +4,6 @@ const state = {
     editMode: false,
     loadingState: false,
     incorrectCredentials: false,
-    itemsManagementId: -1,
-    motorcycleCatalogueId: -2,
-    wishlistId: -3,
-    userlistId: -4,
     authorization: "",
     userName: "",
     itemView: ""

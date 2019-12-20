@@ -22,8 +22,7 @@
                     {{"Soviet boxers seals & bearings"}}
                 </td>
                 <td class="app-bar-middle-side-column">
-                    <select v-if="languageSelectDisplayed"
-                            v-model="newLanguage"
+                    <select v-model="newLanguage"
                             @change="selectLanguage()">
                         <option v-for="lang in languages" :value="lang">
                             {{lang}}
@@ -56,13 +55,12 @@
     import {mapState} from 'vuex';
 
     export default {
-        name: 'AppBar.vue',
+        name: 'AppBar',
 
         props: {
             backButtonDisplayed: Boolean,
             logoutButtonDisplayed: Boolean,
             loginButtonDisplayed: Boolean,
-            languageSelectDisplayed: Boolean,
             language: String
         },
 

@@ -1,24 +1,7 @@
 <template>
     <div>
-        <table id="header-menu">
+        <table>
             <tbody>
-            <tr>
-                <td class="third-part-wide">
-                    <button type="button"
-                            v-if="!isGuest()"
-                            @click="openWishlist()">
-                        {{getWishListButtonText()}}
-                    </button>
-                </td>
-                <td></td>
-                <td class="third-part-wide" style="text-align: right">
-                    <div v-if="!isGuest()">{{itemView.userData.itemName}}</div>
-                    <div v-if="!isGuest()">{{$t("rating") + ": " + itemView.userData.rating}}</div>
-                    <div v-if="isAdmin()">{{$t("youAreAdmin")}}</div>
-                    <div v-if="isGuest()">{{$t('youAreGuest')}}</div>
-                </td>
-            </tr>
-            <tr><td colspan="3"><hr></td></tr>
             <tr>
                 <td>
                     <button v-if="isAddToWishListButtonRendered()"
@@ -39,29 +22,20 @@
                     </button>
                 </td>
             </tr>
-            <tr v-if="showBottomHr">
-                <td colspan="3"><hr></td>
-            </tr>
             </tbody>
         </table>
+        <hr>
     </div>
 </template>
 
 <script>
     import {mapState} from "vuex";
-    import itemViewUtil from "../itemViewUtil";
-    import shared from "../shared";
-    import storeUtil from "../storeUtil";
+    import storeUtil from "../../util/storeUtil";
+    import shared from "../../util/shared";
+    import itemViewUtil from "../../util/itemViewUtil";
 
     export default {
-        name: "HeaderMenu.vue", // rename & divide into 2 components
-
-        props: {
-            itemInWishlistTextVisible: Boolean,
-            searchEnabled: Boolean,
-            showBottomHr: Boolean,
-            itemsCountInWishlist: Number
-        },
+        name: "ItemMenu",
 
         computed: {
             ...mapState({
@@ -69,13 +43,7 @@
                 authorization: state => state.dictionary.authorization,
                 userName: state => state.dictionary.userName,
                 editMode: state => state.dictionary.editMode,
-                loadingState: state => state.dictionary.loadingState,
                 itemView: state => state.dictionary.itemView,
-                itemsManagementId: state => state.dictionary.itemsManagementId,
-                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId,
-                wishlistId: state => state.dictionary.wishlistId,
-                userlistId: state => state.dictionary.userlistId,
-                appLanguage: state => state.dictionary.appLanguage
             })
         },
 
@@ -84,14 +52,6 @@
                 let itemName = this.itemView.header.name.toLowerCase();
                 let q = this.$t("buy") + " " + itemName;
                 window.open('http://google.com/search?q=' + q);
-            },
-
-            openWishlist() {
-                this.$router.push({name: "wish_list"});
-            },
-
-            getWishListButtonText() {
-                return this.$t("wishlist") + ": " + this.getItemsCount() + " " + this.$t("itemsPcs");
             },
 
             addItemToWishList() { // make it easier
@@ -116,14 +76,6 @@
 
             isGuest() {
                 return itemViewUtil.isGuest(this.itemView, this.userName.toString());
-            },
-
-            isAdmin() {
-                return itemViewUtil.isAdmin(this.itemView);
-            },
-
-            getItemsCount() {
-                return this.itemView.wishListIds.length;
             },
 
             isSearchEnabled() {

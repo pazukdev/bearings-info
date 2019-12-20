@@ -6,25 +6,14 @@
                 <td class="three-column-table-left-column"/>
                 <td class="three-column-table-middle-column">
                     <button type="button"
-                            v-on:click="openItemsManagement()">
-                        {{$t("itemsManagement")}}
+                            v-on:click="openUsersList()">
+                        {{$t("users")}}
                     </button>
                 </td>
                 <td class="three-column-table-right-column"/>
                 <td class="three-column-table-button-column"/>
             </tr>
-            <tr v-if="admin">
-                <td></td>
-                <td>
-                    <button type="button"
-                            v-on:click="openUsersList()">
-                        {{$t("users")}}
-                    </button>
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr v-if="admin">
+            <tr>
                 <td></td>
                 <td>
                     <button type="button"
@@ -36,7 +25,7 @@
                 <td></td>
                 <td></td>
             </tr>
-            <tr v-if="admin">
+            <tr>
                 <td></td>
                 <td>
                     <label class="custom-file-upload">
@@ -56,7 +45,7 @@
     import axios from "axios";
 
     export default {
-        name: "Menu.vue",
+        name: "Menu",
 
         props: {
             admin: Boolean,
@@ -70,10 +59,6 @@
         },
 
         methods: {
-            openItemsManagement() {
-                this.$router.push({ name: "items_management" });
-            },
-
             openUsersList() {
                 this.$router.push({ name: "user_list" });
             },

@@ -56,9 +56,9 @@
 
 <script>
     import {mapState} from "vuex";
-    import shared from "../shared";
-    import ButtonNavigateToItem from "./button/ButtonNavigateToItem";
-    import ButtonDelete from "./button/ButtonDelete";
+    import shared from "../../util/shared";
+    import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
+    import ButtonDelete from "../element/button/ButtonDelete";
 
     export default {
         name: "ItemDescription",

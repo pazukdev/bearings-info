@@ -1,18 +1,16 @@
 <template>
     <div>
-        <button type="button"
-                @click="pushTo(part.itemId)">
-            {{getText(part)}}
-        </button>
+        <DefaultButton @on-click="pushTo(part.itemId)" :text="getText(part)"/>
     </div>
 </template>
 
 <script>
     import {mapState} from "vuex";
+    import DefaultButton from "./DefaultButton";
 
     export default {
         name: "ButtonNavigateToItem",
-
+        components: {DefaultButton},
         props: {
             part: Object,
             infoButton: Boolean,

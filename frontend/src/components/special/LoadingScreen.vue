@@ -1,5 +1,5 @@
 <template>
-    <div>{{"Loading..."}}</div>
+    <div class="default-margin">{{"Loading..."}}</div>
 </template>
 
 <script>

@@ -34,10 +34,10 @@
 </template>
 
 <script>
-    import ItemSelect from "./ItemSelect";
+    import ItemSelect from "../element/ItemSelect";
     import {mapState} from "vuex";
-    import shared from "../shared";
-    import itemViewUtil from "../itemViewUtil";
+    import shared from "../../util/shared";
+    import itemViewUtil from "../../util/itemViewUtil";
 
     export default {
         name: "AddPartForm",

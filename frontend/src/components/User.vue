@@ -7,8 +7,8 @@
 <script>
     import axios from "axios";
     import {mapState} from "vuex";
-    import storeUtil from "../storeUtil";
-    import routerUtil from "../routerUtil";
+    import storeUtil from "../util/storeUtil";
+    import routerUtil from "../util/routerUtil";
 
     export default {
         name: "User",

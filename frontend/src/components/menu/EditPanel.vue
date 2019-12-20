@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import storeUtil from "../storeUtil";
+    import storeUtil from "../../util/storeUtil";
     import {mapState} from "vuex";
 
     export default {

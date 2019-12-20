@@ -17,12 +17,12 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
-    import Menu from "./Menu";
-    import MotorcycleCatalogue from "./MotorcycleCatalogue";
     import axios from "axios";
-    import LoadingScreen from "./LoadingScreen";
-    import itemViewUtil from "../itemViewUtil";
+    import {mapState} from "vuex";
+    import Menu from "../menu/Menu";
+    import MotorcycleCatalogue from "../list/MotorcycleCatalogue";
+    import LoadingScreen from "../special/LoadingScreen";
+    import itemViewUtil from "../../util/itemViewUtil";
 
     export default {
         name: "Home",

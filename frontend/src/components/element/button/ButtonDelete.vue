@@ -12,7 +12,7 @@
 
 <script>
     import {mapState} from "vuex";
-    import itemViewUtil from "../../itemViewUtil";
+    import itemViewUtil from "../../../util/itemViewUtil";
 
     export default {
         name: "ButtonDelete",

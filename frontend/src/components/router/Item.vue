@@ -2,7 +2,7 @@
     <div>
         <LoadingScreen v-if="this.loadingState"/>
         <div v-else>
-            <HeaderMenu @save="save"/>
+            <ItemMenu @save="save"/>
             <ItemDescription/>
             <EditPanel @save="save"/>
             <PartsSection/>
@@ -14,20 +14,20 @@
 <script>
     import axios from 'axios';
     import {mapState} from 'vuex';
-    import HeaderMenu from "./HeaderMenu";
-    import ItemDescription from "./ItemDescription";
-    import EditPanel from "./EditPanel";
-    import PartsSection from "./PartsSection";
-    import ReplacersSection from "./ReplacersSection";
-    import itemViewUtil from "../itemViewUtil";
-    import LoadingScreen from "./LoadingScreen";
-    import routerUtil from "../routerUtil";
+    import ItemMenu from "../menu/ItemMenu";
+    import ItemDescription from "../item/ItemDescription";
+    import EditPanel from "../menu/EditPanel";
+    import PartsSection from "../item/PartsSection";
+    import ReplacersSection from "../item/ReplacersSection";
+    import itemViewUtil from "../../util/itemViewUtil";
+    import LoadingScreen from "../special/LoadingScreen";
+    import routerUtil from "../../util/routerUtil";
 
     export default {
 
         components: {
             LoadingScreen,
-            HeaderMenu,
+            ItemMenu,
             ItemDescription,
             EditPanel,
             PartsSection,
@@ -51,10 +51,6 @@
                 userName: state => state.dictionary.userName,
                 loadingState: state => state.dictionary.loadingState,
                 itemView: state => state.dictionary.itemView,
-                itemsManagementId: state => state.dictionary.itemsManagementId,
-                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId,
-                wishlistId: state => state.dictionary.wishlistId,
-                userlistId: state => state.dictionary.userlistId,
                 appLanguage: state => state.dictionary.appLanguage
             })
         },

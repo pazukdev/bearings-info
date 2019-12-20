@@ -4,7 +4,6 @@
             <AppBar :back-button-displayed="isBackButtonDisplayed()"
                     :login-button-displayed="isLoginButtonDisplayed()"
                     :logout-button-displayed="isLogoutButtonDisplayed()"
-                    :language-select-displayed="isLanguageSelectDisplayed()"
                     :language="appLanguage"
                     @logout="logout"
                     @select-language="selectLanguage"
@@ -17,11 +16,13 @@
 <!--                {{"basicUrl: " + basicUrl}}<br>-->
 <!--                {{"userName: " + userName}}<br>-->
 <!--                {{"authorization: " + authorization}}<br>-->
-                {{"loadingState: " + loadingState}}<br>
-                {{"editMode: " + editMode}}<br>
+<!--                {{"loadingState: " + loadingState}}<br>-->
+<!--                {{"editMode: " + editMode}}<br>-->
 <!--                {{"itemView: " + itemView}}<br>-->
             </div>
-            <router-view style="padding: 20px"/>
+            <NavigationBar/>
+            <UserMenu/>
+            <router-view/>
         </div>
     </div>
 </template>
@@ -29,14 +30,19 @@
 <script>
     import axios from 'axios';
     import {mapState} from 'vuex';
-    import AppBar from "./components/AppBar";
-    import Home from "./components/Home";
-    import LoadingScreen from "./components/LoadingScreen";
+    import AppBar from "./components/menu/AppBar";
+    import Home from "./components/router/Home";
+    import LoadingScreen from "./components/special/LoadingScreen";
+    import NavigationBar from "./components/menu/NavigationBar";
+    import UserMenu from "./components/menu/UserMenu";
+    import routerUtil from "./util/routerUtil";
 
     export default {
         name: 'app',
 
         components: {
+            UserMenu,
+            NavigationBar,
             LoadingScreen,
             AppBar,
             Home
@@ -51,7 +57,6 @@
                 itemView: state => state.dictionary.itemView,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
-                motorcycleCatalogueId: state => state.dictionary.motorcycleCatalogueId,
                 appLanguage: state => state.dictionary.appLanguage
             })
         },
@@ -140,17 +145,12 @@
                 return this.isGuest() && !this.isLoginPage();
             },
 
-            isLanguageSelectDisplayed() {
-                // return !this.isLoginPage();
-                return true;
-            },
-
             isLoginPage() {
-                return window.location.href.includes("login");
+                return routerUtil.isLoginPage(this.$route);
             },
 
             isHomePage() {
-                return this.$route.name === "home";
+                return routerUtil.isHomePage(this.$route);
             }
         }
     }
@@ -231,8 +231,12 @@
     }
 
     table {
-        border-spacing: 6px;
         border-collapse: initial;
+        border-spacing: 10px;
+    }
+
+    hr, .default-margin {
+        margin: 10px;
     }
 
     th {
@@ -272,6 +276,10 @@
 
     .no-border {
         border-spacing: 0;
+    }
+
+    .equal-columns-table {
+        table-layout: fixed;
     }
 
     .third-part-wide {

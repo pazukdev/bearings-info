@@ -6,10 +6,10 @@
 </template>
 
 <script>
-    import LoadingScreen from "./LoadingScreen";
+    import LoadingScreen from "../special/LoadingScreen";
     import ItemList from "./ItemList";
     import axios from "axios";
-    import itemViewUtil from "../itemViewUtil";
+    import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
 
     export default {
