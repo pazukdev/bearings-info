@@ -4,13 +4,9 @@
             <tbody>
                 <tr>
                     <td class="third-part-wide">
-                        <button type="button"
-                                v-if="!isGuest()"
-                                @click="openWishlist()">
-                            {{getWishListButtonText()}}
-                        </button>
+                        <DefaultButton v-if="!isGuest()" @on-click="openWishlist" :text="getWishListButtonText()"/>
                     </td>
-                    <td></td>
+                    <td/>
                     <td class="third-part-wide" style="text-align: right">
                         <div v-if="!isGuest()">{{itemView.userData.itemName}}</div>
                         <div v-if="!isGuest()">{{$t("rating") + ": " + itemView.userData.rating}}</div>
@@ -27,10 +23,11 @@
 <script>
     import {mapState} from "vuex";
     import itemViewUtil from "../../util/itemViewUtil";
+    import DefaultButton from "../element/button/DefaultButton";
 
     export default {
         name: "UserMenu",
-
+        components: {DefaultButton},
         computed: {
             ...mapState({
                 userName: state => state.dictionary.userName,

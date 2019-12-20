@@ -355,23 +355,6 @@ public class ItemUtil {
         }
     }
 
-    public static void updateWishList(final Item item,
-                                      final ItemView itemView,
-                                      final UserEntity currentUser,
-                                      final ItemService itemService) {
-        if (itemView.isAddToWishList()) {
-            addItemToWishList(item.getId(), currentUser, itemService);
-            itemView.setAddToWishList(false);
-        }
-    }
-
-    private static void addItemToWishList(final Long itemId,
-                                          final UserEntity currentUser,
-                                          final ItemService itemService) {
-        currentUser.getWishList().getItems().add(itemService.getOne(itemId));
-        itemService.getUserService().update(currentUser);
-    }
-
     private static void applyToAllItemDescriptions(final String updatingItemCategory,
                                                    final String oldValue,
                                                    final String newValue,

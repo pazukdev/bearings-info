@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table>
+        <table class="equal-columns-table">
             <tbody>
             <tr>
                 <td>
@@ -30,9 +30,9 @@
 
 <script>
     import {mapState} from "vuex";
-    import storeUtil from "../../util/storeUtil";
     import shared from "../../util/shared";
     import itemViewUtil from "../../util/itemViewUtil";
+    import axios from "axios";
 
     export default {
         name: "ItemMenu",
@@ -54,10 +54,25 @@
                 window.open('http://google.com/search?q=' + q);
             },
 
-            addItemToWishList() { // make it easier
-                storeUtil.setLoadingState(this.$store, true);
-                this.itemView.addToWishList = true;
-                this.$emit("save");
+            addItemToWishList() {
+                // user/{username}/add-item-to-wishlist/{item-id}
+                let itemId = this.itemView.itemId;
+                axios
+                    .put(this.basicUrl
+                            + "/" + "user"
+                        + "/" + this.userName
+                        + "/" + "add-item-to-wishlist"
+                        + "/" + itemId, {
+                            headers: {
+                                Authorization: this.authorization
+                            }
+                        })
+                    .then(response => {
+                        let added = response.data === true;
+                        if (added) {
+                            this.itemView.wishListIds.push(itemId);
+                        }
+                    });
             },
 
             isAddToWishListButtonRendered() {
@@ -86,7 +101,5 @@
 </script>
 
 <style scoped>
-    #header-menu {
-        border-spacing: 0;
-    }
+
 </style>

@@ -3,6 +3,7 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.user.UserDto;
+import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.validator.CredentialsValidator;
@@ -60,6 +61,19 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     @Transactional
     public Set<String> getRoles() {
         return new HashSet<>(Arrays.asList(Role.USER.name(), Role.ADMIN.name()));
+    }
+
+    @Transactional
+    public boolean addItemToWishList(final Item item, final String userName) {
+        final UserEntity currentUser = findByName(userName);
+        if (!currentUser.getWishList().getItems().contains(item)) {
+            currentUser.getWishList().getItems().add(item);
+            update(currentUser);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     public UserEntity getAdmin() {

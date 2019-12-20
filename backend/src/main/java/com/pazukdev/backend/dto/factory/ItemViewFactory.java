@@ -232,21 +232,17 @@ public class ItemViewFactory {
 
         final Item item = itemService.getOne(itemId);
 
-        if (itemView.isAddToWishList()) {
-            ItemUtil.updateWishList(item, itemView, currentUser, itemService);
-        } else {
-            if (!userLanguage.equals("en")) {
-                translate(userLanguage, "en", itemView, true, itemService);
-            }
-
-            final Map<String, String> headerMap = TableUtil.createHeaderMap(itemView.getHeader());
-
-            ItemUtil.updateName(item, headerMap, itemService);
-            ItemUtil.updateDescription(item, headerMap, itemService);
-            ItemUtil.updateImg(itemView, item);
-            ItemUtil.updateChildItems(item, itemView, itemService, currentUser);
-            ItemUtil.updateReplacers(item, itemView, itemService, currentUser);
+        if (!userLanguage.equals("en")) {
+            translate(userLanguage, "en", itemView, true, itemService);
         }
+
+        final Map<String, String> headerMap = TableUtil.createHeaderMap(itemView.getHeader());
+
+        ItemUtil.updateName(item, headerMap, itemService);
+        ItemUtil.updateDescription(item, headerMap, itemService);
+        ItemUtil.updateImg(itemView, item);
+        ItemUtil.updateChildItems(item, itemView, itemService, currentUser);
+        ItemUtil.updateReplacers(item, itemView, itemService, currentUser);
 
         itemService.update(item);
         return createItemView(itemId, currentUser.getName(), userLanguage);

@@ -6,7 +6,6 @@ import com.pazukdev.backend.dto.factory.ItemViewFactory;
 import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.dto.user.UserView;
 import com.pazukdev.backend.entity.Item;
-import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.WishList;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
@@ -111,32 +110,22 @@ public class UserController {
         return userService.getRoles();
     }
 
-    @PutMapping(value = "{userName}/add-item/{itemId}")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Add item to wish list")
-    public boolean addItem(@PathVariable final String userName, @PathVariable final Long itemId) {
-        final UserEntity user = userService.findByName(userName);
-        final WishList wishList = user.getWishList();
-        final Item item = itemService.getOne(itemId);
-        if (!isItemInWishList(userName, item)) {
-            wishList.getItems().add(item);
-            userService.update(user);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     @GetMapping(value = "{userName}/wishlist/{itemId}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get user wishlist")
     public boolean isItemInWishList(@PathVariable final String userName, @PathVariable final Long itemId) {
-        return isItemInWishList(userName, itemService.getOne(itemId));
-    }
-
-    private boolean isItemInWishList(final String userName, final Item item) {
+        final Item item = itemService.getOne(itemId);
         final WishList wishList = userService.findByName(userName).getWishList();
         return wishList.getItems().contains(item);
+    }
+
+    @PutMapping("user/{username}/add-item-to-wishlist/{item-id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Add item to wish list")
+    public boolean addItemToWishList(@PathVariable("item-id") final Long id,
+                                  @PathVariable("username") final String userName) {
+        final Item item = itemService.getOne(id);
+        return userService.addItemToWishList(item, userName);
     }
 
 }

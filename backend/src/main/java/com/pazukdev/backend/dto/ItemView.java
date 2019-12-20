@@ -22,7 +22,6 @@ public class ItemView extends AbstractDto {
 
     private boolean searchEnabled;
     private boolean newItem;
-    private boolean addToWishList;
     private boolean hardDelete = false;
     private boolean defaultImg = true;
     private Long itemId;
