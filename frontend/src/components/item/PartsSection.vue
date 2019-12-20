@@ -1,19 +1,19 @@
 <template>
     <div>
-        <PartsTable :show-form="showForm"
-                    @show-add-form="showAddForm"
-                    @hide-add-form="hideAddForm"/>
+        <PartList :show-form="showForm"
+                  @show-add-form="showAddForm"
+                  @hide-add-form="hideAddForm"/>
     </div>
 </template>
 
 <script>
-    import PartsTable from "./PartsTable";
+    import PartList from "../list/PartList";
 
     export default {
         name: "PartsSection",
 
         components: {
-            PartsTable
+            PartList
         },
 
         data() {

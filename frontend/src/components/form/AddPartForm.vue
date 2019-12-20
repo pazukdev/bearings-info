@@ -20,11 +20,7 @@
                         <input v-model="itemQuantity" type="text"/>
                     </td>
                     <td class="three-column-table-button-column">
-                        <button type="button"
-                                class="round-button"
-                                @click="addItem">
-                            {{"+"}}
-                        </button>
+                        <ButtonAdd @add-item="addItem"/>
                     </td>
                 </tr>
                 </tbody>
@@ -38,11 +34,13 @@
     import {mapState} from "vuex";
     import shared from "../../util/shared";
     import itemViewUtil from "../../util/itemViewUtil";
+    import ButtonAdd from "../element/button/ButtonAdd";
 
     export default {
         name: "AddPartForm",
 
         components: {
+            ButtonAdd,
             ItemSelect
         },
 

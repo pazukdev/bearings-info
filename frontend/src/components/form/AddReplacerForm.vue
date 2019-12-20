@@ -15,11 +15,7 @@
                     </td>
                     <td class="not-symmetrical-right"/>
                     <td>
-                        <button type="button"
-                                class="round-button"
-                                @click="addItem">
-                            {{"+"}}
-                        </button>
+                        <ButtonAdd @add-item="addItem"/>
                     </td>
                 </tr>
                 <tr>
@@ -38,11 +34,13 @@
     import {mapState} from "vuex";
     import shared from "../../util/shared";
     import itemViewUtil from "../../util/itemViewUtil";
+    import ButtonAdd from "../element/button/ButtonAdd";
 
     export default {
         name: "AddReplacerForm",
 
         components: {
+            ButtonAdd,
             ItemSelect
         },
 

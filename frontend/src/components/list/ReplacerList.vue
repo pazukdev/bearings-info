@@ -75,7 +75,7 @@
     import ButtonDelete from "../element/button/ButtonDelete";
 
     export default {
-        name: "ReplacersTable",
+        name: "ReplacerList",
 
         components: {
             ButtonDelete,

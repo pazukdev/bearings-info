@@ -76,7 +76,7 @@
     import ButtonDelete from "../element/button/ButtonDelete";
 
     export default {
-        name: "PartsTable",
+        name: "PartList",
 
         components: {
             ButtonDelete,

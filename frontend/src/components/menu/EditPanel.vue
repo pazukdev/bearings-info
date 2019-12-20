@@ -1,16 +1,16 @@
 <template>
     <div>
-        <table>
+        <table class="equal-columns-table">
             <tbody>
             <tr>
-                <td style="width: 50%">
+                <td>
                     <button v-if="editMode"
                             type="button"
                             @click="cancel()">
                         {{$t("cancel")}}
                     </button>
                 </td>
-                <td style="width: 50%; text-align: right">
+                <td>
                     <button v-if="!editMode"
                             type="button"
                             @click="edit()">
@@ -22,7 +22,6 @@
                         {{$t("save")}}
                     </button>
                 </td>
-                <td></td>
             </tr>
             </tbody>
         </table>

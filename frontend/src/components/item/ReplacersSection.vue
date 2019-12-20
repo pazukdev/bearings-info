@@ -1,19 +1,19 @@
 <template>
     <div>
-        <ReplacersTable @show-add-form="showAddForm"/>
+        <ReplacerList @show-add-form="showAddForm"/>
         <AddReplacerForm :show-form="showForm" @hide-add-form="hideAddForm"/>
     </div>
 </template>
 
 <script>
-    import ReplacersTable from "./ReplacersTable";
+    import ReplacerList from "../list/ReplacerList";
     import AddReplacerForm from "../form/AddReplacerForm";
 
     export default {
         name: "ReplacersSection",
 
         components: {
-            ReplacersTable,
+            ReplacerList,
             AddReplacerForm
         },
 
