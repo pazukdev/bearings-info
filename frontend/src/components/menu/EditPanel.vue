@@ -1,16 +1,16 @@
 <template>
     <div v-if="!isMotorcycleCatalogueView()">
-        <table class="equal-columns-table">
+        <table>
             <tbody>
             <tr>
-                <td>
+                <td class="two-columns-table-left-column">
                     <button v-if="editMode"
                             type="button"
                             @click="cancel()">
                         {{$t("cancel")}}
                     </button>
                 </td>
-                <td>
+                <td class="two-column-table-right-column">
                     <button v-if="!editMode"
                             type="button"
                             @click="edit()">
@@ -22,6 +22,9 @@
                         {{$t("save")}}
                     </button>
                 </td>
+                <td>
+                    <ButtonAdd v-if="editMode" style="visibility: hidden"/>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -32,10 +35,11 @@
     import storeUtil from "../../util/storeUtil";
     import {mapState} from "vuex";
     import itemViewUtil from "../../util/itemViewUtil";
+    import ButtonAdd from "../element/button/ButtonAdd";
 
     export default {
         name: "EditPanel",
-
+        components: {ButtonAdd},
         computed: {
             ...mapState({
                 userName: state => state.dictionary.userName,

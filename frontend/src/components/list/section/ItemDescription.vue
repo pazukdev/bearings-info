@@ -2,7 +2,7 @@
     <div>
         <div style="text-align: center">
             <p><b>{{itemView.header.name}}</b></p>
-            <p>{{$t("createdBy") + " " + itemView.creatorName}}</p>
+            <p v-if="item">{{$t("createdBy") + " " + itemView.creatorName}}</p>
             <br>
         </div>
 
@@ -16,16 +16,16 @@
                     </p>
                 </td>
                 <td class="two-column-table-right-column">
-                    <input v-if="editMode" v-model="row.value" type="text"/>
-                    <p v-if="!isShowInfoButton(row.itemId) && !editMode">
+                    <p v-if="!isEdit() && !isShowInfoButton(row.itemId)">
                         {{row.value}}
                     </p>
+                    <input v-if="isEdit()" v-model="row.value" type="text"/>
                     <ButtonNavigateToItem v-if="isShowInfoButton(row.itemId)"
                                           :part="row"
                                           :info-button="true"/>
                 </td>
                 <td>
-                    <ButtonDelete :item="row" @remove-item="removeItem"/>
+                    <ButtonDelete v-if="isEdit()" :item="row" @remove-item="removeItem"/>
                 </td>
             </tr>
             <tr>
@@ -33,7 +33,7 @@
                     {{newHeaderRowMessage}}
                 </td>
             </tr>
-            <tr v-if="editMode">
+            <tr v-if="isEdit()">
                 <td>
                     <input v-model="parameter" type="text"/>
                 </td>
@@ -41,11 +41,7 @@
                     <input v-model="value" type="text"/>
                 </td>
                 <td>
-                    <button type="button"
-                            class="round-button"
-                            @click="addHeaderRow()">
-                        {{"+"}}
-                    </button>
+                    <ButtonAdd @add-item="addHeaderRow"/>
                 </td>
             </tr>
             </tbody>
@@ -59,14 +55,20 @@
     import ButtonNavigateToItem from "../../element/button/ButtonNavigateToItem";
     import ButtonDelete from "../../element/button/ButtonDelete";
     import ListHeader from "./ListHeader";
+    import ButtonAdd from "../../element/button/ButtonAdd";
 
     export default {
         name: "ItemDescription",
 
         components: {
+            ButtonAdd,
             ListHeader,
             ButtonDelete,
             ButtonNavigateToItem
+        },
+
+        props: {
+            item: Boolean
         },
         
         computed: {
@@ -129,6 +131,10 @@
             removeItem(row) {
                 shared.removeFromArray(row, this.itemView.header.rows);
             },
+
+            isEdit() {
+                return this.item && this.editMode;
+            }
         }
     }
 </script>

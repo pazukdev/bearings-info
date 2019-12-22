@@ -1,7 +1,6 @@
 <template>
     <div>
-        <NestedItemsTableTitle :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
-        <ItemList :editable-comments="true"/>
+        <ItemList :item="true" :editable-comments="true"/>
         <AddPartForm :show-form="showForm" @hide-add-form="hideAddForm"/>
     </div>
 </template>

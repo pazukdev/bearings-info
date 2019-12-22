@@ -3,7 +3,6 @@
         <LoadingScreen v-if="this.loadingState"/>
         <div v-else>
             <ItemMenu/>
-            <ItemDescription/>
             <PartsSection/>
             <ReplacersSection/>
         </div>

@@ -11,11 +11,13 @@
     import ItemList from "../list/ItemList";
     import LoadingScreen from "../special/LoadingScreen";
     import itemViewUtil from "../../util/itemViewUtil";
+    import ItemDescription from "../list/section/ItemDescription";
 
     export default {
         name: "ItemsManagement",
 
         components: {
+            ItemDescription,
             LoadingScreen,
             ItemList
         },

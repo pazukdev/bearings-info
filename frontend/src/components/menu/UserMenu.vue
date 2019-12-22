@@ -17,6 +17,7 @@
             </tbody>
         </table>
         <hr>
+        <hr>
     </div>
 </template>
 

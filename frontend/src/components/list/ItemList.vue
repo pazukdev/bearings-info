@@ -1,6 +1,8 @@
 <template>
     <div>
+        <ItemDescription :item="item"/>
         <EditPanel @save="save"/>
+        <NestedItemsTableTitle :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
         <table id="parts-table">
             <tbody>
             <tr>
@@ -10,7 +12,7 @@
             </tr>
             <tr v-for="table in itemsListAsTables()">
                 <td>
-                    <details open>
+                    <v-details v-model="table.opened">
                         <summary><b>{{table.name}}</b></summary>
                         <table>
                             <tbody>
@@ -36,7 +38,7 @@
                             </tr>
                             </tbody>
                         </table>
-                    </details>
+                    </v-details>
                 </td>
             </tr>
             </tbody>
@@ -51,14 +53,18 @@
     import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
     import EditPanel from "../menu/EditPanel";
     import ListHeader from "./section/ListHeader";
+    import ItemDescription from "./section/ItemDescription";
+    import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
 
     export default {
         name: "ItemList",
-        components: {ListHeader, EditPanel, ButtonNavigateToItem, ButtonDelete},
+        components: {NestedItemsTableTitle, ItemDescription, ListHeader, EditPanel, ButtonNavigateToItem, ButtonDelete},
 
         props: {
+            item: Boolean,
             editableComments: Boolean,
-            userListView: Boolean
+            userListView: Boolean,
+            itemsManagementView: Boolean
         },
 
         computed: {
@@ -74,7 +80,13 @@
 
         methods: {
             itemsListAsTables() {
-                return itemViewUtil.itemsListToTables(this.itemView.partsTable.parts);
+                let tables = itemViewUtil.itemsListToTables(this.itemView.partsTable.parts);
+                if (this.itemsManagementView) {
+                    for (let i = 0; i < tables.length; i++) {
+                        tables[i].opened = false;
+                    }
+                }
+                return tables;
             },
 
             save() {
