@@ -1,26 +1,34 @@
 <template>
     <div>
-        <EditPanel v-if="!motorcycleCatalogueView" @save="save"/>
-        <table>
-            <tr v-for="table in getItemsListAsTables()">
+        <EditPanel @save="save"/>
+        <table id="parts-table">
+            <tbody>
+            <tr>
                 <td>
-                    <v-details v-model="table.opened">
+                    <ListHeader/>
+                </td>
+            </tr>
+            <tr v-for="table in itemsListAsTables()">
+                <td>
+                    <details open>
                         <summary><b>{{table.name}}</b></summary>
-                        <table id="get-all-table">
+                        <table>
                             <tbody>
                             <tr v-for="item in table.items">
                                 <td class="three-column-table-left-column">
-                                    <p class="three-column-table-left-column-text">
+                                    <p class="three-column-table-left-column-text" v-if="!isEdit()">
                                         {{item.localizedComment}}
                                     </p>
+                                    <input v-if="isEdit()" v-model="item.localizedComment" type="text"/>
                                 </td>
                                 <td class="three-column-table-middle-column">
                                     <ButtonNavigateToItem :part="item" :user="userListView"/>
                                 </td>
                                 <td class="three-column-table-right-column">
-                                    <div class="parts-right-column-text">
+                                    <div class="parts-right-column-text" v-if="!isEdit()">
                                         {{item.localizedSecondComment}}
                                     </div>
+                                    <input v-if="isEdit()" v-model="item.localizedSecondComment" type="text"/>
                                 </td>
                                 <td class="three-column-table-button-column">
                                     <ButtonDelete :item="item" @remove-item="removeItem"/>
@@ -28,35 +36,29 @@
                             </tr>
                             </tbody>
                         </table>
-                    </v-details>
+                    </details>
                 </td>
             </tr>
+            </tbody>
         </table>
     </div>
 </template>
 
 <script>
-    import axios from "axios";
-    import {mapState} from "vuex";
-    import EditPanel from "../menu/EditPanel";
     import itemViewUtil from "../../util/itemViewUtil";
-    import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
     import ButtonDelete from "../element/button/ButtonDelete";
+    import {mapState} from "vuex";
+    import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
+    import EditPanel from "../menu/EditPanel";
+    import ListHeader from "./section/ListHeader";
 
     export default {
         name: "ItemList",
-
-        components: {
-            ButtonDelete,
-            EditPanel,
-            ButtonNavigateToItem
-        },
+        components: {ListHeader, EditPanel, ButtonNavigateToItem, ButtonDelete},
 
         props: {
-            motorcycleCatalogueView: Boolean,
-            userListView: Boolean,
-            itemsManagementView: Boolean,
-            wishlistView: Boolean
+            editableComments: Boolean,
+            userListView: Boolean
         },
 
         computed: {
@@ -71,26 +73,8 @@
         },
 
         methods: {
-            getItemsListAsTables() {
-                let tables = itemViewUtil.itemsListToTables(this.itemView.partsTable.parts);
-                if (this.itemsManagementView) {
-                    for (let i = 0; i < tables.length; i++) {
-                        tables[i].opened = false;
-                    }
-                }
-                return tables;
-            },
-
-            edit(editMode) {
-                this.editMode = editMode === true;
-            },
-
-            navigateToItem(itemId) {
-                this.pushTo(itemId);
-            },
-
-            removeItem(item) {
-                itemViewUtil.removeItemFromItemList(this.itemView, item);
+            itemsListAsTables() {
+                return itemViewUtil.itemsListToTables(this.itemView.partsTable.parts);
             },
 
             save() {
@@ -98,23 +82,18 @@
             },
 
             update(itemId) {
-                axios
-                    .put(this.basicUrl.toString()
-                        + "/" + "item"
-                        + "/" + "update"
-                        + "/" + itemId
-                        + "/" + this.userName.toString()
-                        + "/" + this.appLanguage.toString(),
-                        this.itemView, {
-                            headers: {
-                                Authorization: this.authorization
-                            }
-                        })
-                    .then(response => {
-                        let updatedItemView = response.data;
-                        itemViewUtil.dispatchView(this.$store, updatedItemView);
-                        console.log("item updated");
-                    });
+                let basicUrl = this.basicUrl.toString();
+                let userName = this.userName.toString();
+                let appLanguage = this.appLanguage.toString();
+                itemViewUtil.updateItem(itemId, basicUrl, userName, appLanguage);
+            },
+
+            removeItem(item) {
+                itemViewUtil.removeItemFromItemList(this.itemView, item);
+            },
+
+            isEdit() {
+                return this.editableComments && this.editMode;
             }
         }
     }

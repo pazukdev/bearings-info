@@ -1,7 +1,7 @@
 <template>
     <div>
         <LoadingScreen v-if="this.loadingState"/>
-        <EditableItemList v-else/>
+        <ItemList v-else :editable-comments="true"/>
     </div>
 </template>
 
@@ -11,11 +11,10 @@
     import {mapState} from "vuex";
     import axios from "axios";
     import itemViewUtil from "../../util/itemViewUtil";
-    import EditableItemList from "./EditableItemList";
 
     export default {
         name: "WishList",
-        components: {EditableItemList, ItemList, LoadingScreen},
+        components: {ItemList, LoadingScreen},
 
         computed: {
             ...mapState({

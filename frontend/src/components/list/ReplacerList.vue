@@ -71,7 +71,7 @@
     import shared from "../../util/shared";
     import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
     import itemViewUtil from "../../util/itemViewUtil";
-    import NestedItemsTableTitle from "../NestedItemsTableTitle";
+    import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
     import ButtonDelete from "../element/button/ButtonDelete";
 
     export default {

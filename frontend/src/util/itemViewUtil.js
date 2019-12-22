@@ -1,5 +1,6 @@
 import shared from "./shared";
 import storeUtil from "./storeUtil";
+import axios from "axios";
 
 export default {
     itemsListToTables(items) {
@@ -36,6 +37,26 @@ export default {
         return nestedTables;
     },
 
+    updateItem(itemId, basicUrl, userName, appLanguage) {
+        axios
+            .put(basicUrl
+                + "/" + "item"
+                + "/" + "update"
+                + "/" + itemId
+                + "/" + userName
+                + "/" + appLanguage,
+                this.itemView, {
+                    headers: {
+                        Authorization: this.authorization
+                    }
+                })
+            .then(response => {
+                let updatedItemView = response.data;
+                this.dispatchView(this.$store, updatedItemView);
+                console.log("item updated");
+            });
+    },
+
     isGuest(itemView, userName) {
         return itemView.userData.comment === "Guest" && userName.toString() === "guest";
     },
@@ -61,4 +82,8 @@ export default {
         shared.removeFromArray(item, itemView.partsTable.parts);
         itemView.idsToRemove.push(item.itemId);
     },
+
+    isMotorcycleCatalogueView(itemView) {
+        return itemView.itemId === -2;
+    }
 }

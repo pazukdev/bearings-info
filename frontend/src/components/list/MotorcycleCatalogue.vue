@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ItemList :motorcycle-catalogue-view="true"/>
+        <ItemList/>
     </div>
 </template>
 

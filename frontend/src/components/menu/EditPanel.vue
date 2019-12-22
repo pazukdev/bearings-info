@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!isMotorcycleCatalogueView()">
         <table class="equal-columns-table">
             <tbody>
             <tr>
@@ -31,6 +31,7 @@
 <script>
     import storeUtil from "../../util/storeUtil";
     import {mapState} from "vuex";
+    import itemViewUtil from "../../util/itemViewUtil";
 
     export default {
         name: "EditPanel",
@@ -38,7 +39,8 @@
         computed: {
             ...mapState({
                 userName: state => state.dictionary.userName,
-                editMode: state => state.dictionary.editMode
+                editMode: state => state.dictionary.editMode,
+                itemView: state => state.dictionary.itemView
             })
         },
 
@@ -56,6 +58,10 @@
                 storeUtil.setLoadingState(this.$store, true);
                 storeUtil.setEditMode(this.$store, false);
                 this.$emit("save");
+            },
+
+            isMotorcycleCatalogueView() {
+                return itemViewUtil.isMotorcycleCatalogueView(this.itemView);
             }
         }
     }

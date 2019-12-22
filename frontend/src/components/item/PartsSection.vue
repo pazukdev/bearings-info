@@ -12,9 +12,7 @@
     export default {
         name: "PartsSection",
 
-        components: {
-            PartList
-        },
+        components: {PartList},
 
         data() {
             return {

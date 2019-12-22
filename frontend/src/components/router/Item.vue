@@ -2,9 +2,8 @@
     <div>
         <LoadingScreen v-if="this.loadingState"/>
         <div v-else>
-            <ItemMenu @save="save"/>
+            <ItemMenu/>
             <ItemDescription/>
-            <EditPanel @save="save"/>
             <PartsSection/>
             <ReplacersSection/>
         </div>
@@ -15,7 +14,7 @@
     import axios from 'axios';
     import {mapState} from 'vuex';
     import ItemMenu from "../menu/ItemMenu";
-    import ItemDescription from "../item/ItemDescription";
+    import ItemDescription from "../list/section/ItemDescription";
     import EditPanel from "../menu/EditPanel";
     import PartsSection from "../item/PartsSection";
     import ReplacersSection from "../item/ReplacersSection";
@@ -151,7 +150,6 @@
             },
 
             getItemView(itemId) {
-                // this.switchEditModeOff();
                 axios
                     .get(this.basicUrl
                         + "/" + "item"
@@ -166,41 +164,8 @@
                     })
                     .then(response => {
                         let itemView = response.data;
-                        this.dispatchView(itemView);
-                        this.logEvent("item view displayed: item", itemView);
-                        this.$emit("set-admin", this.isAdmin());
+                        itemViewUtil.dispatchView(this.$store, itemView);
                     });
-            },
-
-            update(itemId) {
-                // this.switchEditModeOff();
-                axios
-                    .put(this.basicUrl
-                        + "/" + "item"
-                        + "/" + "update"
-                        + "/" + itemId
-                        + "/" + this.userName
-                        + "/" + this.getLanguage(),
-                        this.itemView, {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => {
-                        let updatedItemView = response.data;
-                        this.dispatchView(updatedItemView);
-                        this.logEvent("item updated", updatedItemView);
-                    });
-            },
-
-            dispatchView(itemView) {
-                itemViewUtil.dispatchView(this.$store, itemView);
-            },
-
-            logEvent(event, itemView) {
-                console.log(event + ": "
-                    + "id=" + itemView.itemId
-                    + "; name=" + itemView.header.name);
             },
 
             isAuthorized() {
@@ -246,44 +211,12 @@
                 this.itemView.messages.push("img removed");
             },
             //
-            // rateAction(action, itemId) {
-            //     this.itemView.rate = {
-            //         action: action,
-            //         itemId: itemId
-            //     };
-            //     this.save();
-            // },
-            //
             // getItemName() {
             //     return this.itemView.header.rows[0].parameter;
             // },
             //
-            // isInArray(element, array) {
-            //     for (let i=0; i < array.length; i++) {
-            //         if (array[i] === element) {
-            //             return true;
-            //         }
-            //     }
-            //     return false;
-            // },
-            // removeReplacerFromList(replacer) {
-            //     this.removeFromArray(replacer, this.itemView.replacersTable.replacers);
-            // },
-            //
-            // removeFromArray(element, array) {
-            //     shared.removeFromArray(element, array);
-            // },
-            //
             // selectOnChange() {
             //     this.categoryMessage = "";
-            // },
-            //
-            // edit() {
-            //     this.editMode = true;
-            // },
-
-            // cancel() {
-            //     this.getItemViewByUrl();
             // },
 
             // switchEditModeOff() {
@@ -308,76 +241,6 @@
             //
             // clearNewItemData() {
             //     this.newItemName = "";
-            // },
-
-            save() {
-                this.update(this.itemView.itemId);
-            },
-
-            // isPartsTitleVisible() {
-            //     return !this.isMotorcycleCatalogueView()
-            //         && (this.notStub(this.itemView.partsTable.name) && this.itemHaveActiveParts())
-            //         || (this.notStub(this.itemView.partsTable.name) && this.editMode);
-            // },
-            //
-            // isReplacersTableVisible() {
-            //     return (this.notStub(this.itemView.replacersTable.name)
-            //         && this.arrayHaveActiveItems(this.itemView.replacersTable.replacers))
-            //     || (this.notStub(this.itemView.replacersTable.name) && this.editMode);
-            // },
-            //
-            // getFirstColumnValue(item) {
-            //     if (this.isUserListView()) {
-            //         return item.comment;
-            //     } else {
-            //         return item.location;
-            //     }
-            //
-            // },
-
-            // arrayHaveActiveItems(array) {
-            //     for (let i=0; i < array.length; i++) {
-            //         if (this.statusIsActive(array[i].status)) {
-            //             return true;
-            //         }
-            //     }
-            //     return false;
-            // },
-            //
-            // isOrdinaryItemView() {
-            //     return this.itemView.itemId > 0;
-            // },
-            //
-            // isItemsManagementView() {
-            //     return this.itemView.itemId === -1;
-            // },
-            //
-            // isEditButtonVisible() {
-            //     return !this.isMotorcycleCatalogueView() && !this.isGuest();
-            // },
-
-            // isMotorcycleCatalogueView() {
-            //     return this.itemView.itemId === this.motorcycleCatalogueId;
-            // },
-            //
-            // isWishListView() {
-            //     return this.itemView.itemId === -3;
-            // },
-            //
-            // isUserListView() {
-            //     return this.itemView.itemId === -4;
-            // },
-            //
-            // isShowQuantityValue() {
-            //     return (!this.editMode && (this.isOrdinaryItemView() || this.isUserListView()))
-            //         || (this.editMode && this.isUserListView());
-            // },
-
-            // isItemDeleteButtonVisibleToCurrentUser(item) {
-            //     return this.itemView.userData.comment === "Admin"
-            //         || this.currentUserIsCreator(item)
-            //         || this.isOrdinaryItemView()
-            //         || this.isWishListView();
             // },
 
             isViewWithImage() {

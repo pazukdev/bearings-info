@@ -50,20 +50,21 @@
             </tr>
             </tbody>
         </table>
-        <hr>
     </div>
 </template>
 
 <script>
     import {mapState} from "vuex";
-    import shared from "../../util/shared";
-    import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
-    import ButtonDelete from "../element/button/ButtonDelete";
+    import shared from "../../../util/shared";
+    import ButtonNavigateToItem from "../../element/button/ButtonNavigateToItem";
+    import ButtonDelete from "../../element/button/ButtonDelete";
+    import ListHeader from "./ListHeader";
 
     export default {
         name: "ItemDescription",
 
         components: {
+            ListHeader,
             ButtonDelete,
             ButtonNavigateToItem
         },

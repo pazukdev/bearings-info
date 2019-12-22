@@ -1,31 +1,37 @@
 <template>
-    <div>
-        <div v-if="editMode">
-            <p>{{"Add replacer"}}</p>
-            <p v-if="showMessage" class="alert-message">
-                {{message}}
-            </p>
-            <table v-if="showAddForm" class="bordered">
-                <tbody>
-                <tr>
-                    <td class="not-symmetrical-left">
-                        <ItemSelect :replacer="true"
-                                    @hide-add-form="hideAddForm"
-                                    @on-change="itemSelectOnChange"/>
-                    </td>
-                    <td class="not-symmetrical-right"/>
-                    <td>
-                        <ButtonAdd @add-item="addItem"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <textarea v-model="itemComment"/>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+    <div v-if="editMode">
+        <p>{{"Add replacer"}}</p>
+        <p v-if="showMessage" class="alert-message">
+            {{message}}
+        </p>
+        <table v-if="showAddForm">
+            <tbody>
+            <tr>
+                <td>
+                    <table class="bordered">
+                        <tbody>
+                        <tr>
+                            <td class="not-symmetrical-left">
+                                <ItemSelect :replacer="true"
+                                            @hide-add-form="hideAddForm"
+                                            @on-change="itemSelectOnChange"/>
+                            </td>
+                            <td class="not-symmetrical-right"/>
+                            <td>
+                                <ButtonAdd @add-item="addItem"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <textarea v-model="itemComment"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
