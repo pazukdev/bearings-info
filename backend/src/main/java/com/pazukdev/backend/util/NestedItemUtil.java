@@ -5,7 +5,6 @@ import com.pazukdev.backend.dto.factory.NestedItemDtoFactory;
 import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.service.UserService;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,7 +12,7 @@ import java.util.stream.Collectors;
 public class NestedItemUtil {
 
     public static List<NestedItemDto> prepareNestedItemDtosToConverting(final List<NestedItemDto> dtos) {
-        correctFieldsValues(dtos);
+//        correctFieldsValues(dtos);
 
         final List<NestedItemDto> hasId = new ArrayList<>();
         final List<NestedItemDto> noId = new ArrayList<>();
@@ -92,18 +91,8 @@ public class NestedItemUtil {
 
     public static void correctFieldsValues(final List<NestedItemDto> dtos) {
         for (final NestedItemDto dto : dtos) {
-            final String comment = dto.getComment();
-            final String location = dto.getLocation();
-            final String quantity = dto.getQuantity();
-            if (StringUtils.isBlank(comment)) {
-                dto.setComment("-");
-            }
-            if (StringUtils.isBlank(location)) {
-                dto.setLocation("-");
-            }
-            if (StringUtils.isBlank(quantity)) {
-                dto.setQuantity("0");
-            }
+            dto.setLocalizedComment(SpecificStringUtil.replaceBlankWithDash(dto.getLocalizedComment()));
+            dto.setLocalizedSecondComment(SpecificStringUtil.replaceBlankWithDash(dto.getLocalizedSecondComment()));
         }
     }
 

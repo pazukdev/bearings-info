@@ -91,12 +91,13 @@ public class TranslatorUtil {
         return headerTable;
     }
 
-    private static void translate(final String languageFrom,
-                                  final String languageTo,
-                                  final PartsTable partsTable,
-                                  final boolean addToDictionary,
-                                  final ItemService itemService) {
-        partsTable.setLocalizedName(translate(languageFrom, languageTo, partsTable.getName(), addToDictionary, false, itemService));
+    public static void translate(final String languageFrom,
+                                 final String languageTo,
+                                 final PartsTable partsTable,
+                                 final boolean addToDictionary,
+                                 final ItemService itemService) {
+        final String name = partsTable.getName();
+        partsTable.setLocalizedName(translate(languageFrom, languageTo, name, addToDictionary, false, itemService));
         String[] header = partsTable.getHeader();
         translate(languageFrom, languageTo, header, addToDictionary, itemService);
         List<NestedItemDto> dtos = partsTable.getParts();
@@ -113,27 +114,32 @@ public class TranslatorUtil {
         translateNestedItemDtoList(languageFrom, languageTo, replacers, addToDictionary, itemService);
     }
 
-    private static void translateNestedItemDtoList(final String languageFrom,
-                                                   final String languageTo,
-                                                   final List<NestedItemDto> dtos,
-                                                   final boolean addToDictionary,
-                                                   final ItemService itemService) {
+    public static void translateNestedItemDtoList(final String languageFrom,
+                                                  final String languageTo,
+                                                  final List<NestedItemDto> dtos,
+                                                  final boolean addToDictionary,
+                                                  final ItemService itemService) {
         for (final NestedItemDto dto : dtos) {
-            translate(languageFrom, languageTo, dto, addToDictionary, itemService);
+            translate(languageFrom, languageTo, dto, itemService);
         }
     }
 
-    private static void translate(final String languageFrom,
-                                  final String languageTo,
+    private static void translate(final String langFrom,
+                                  final String langTo,
                                   final NestedItemDto dto,
-                                  final boolean addToDictionary,
                                   final ItemService itemService) {
-//        dto.setLocalizedName(translate(languageFrom, languageTo, dto.getName(), addToDictionary, false, itemService));
-//        dto.setItemCategory(translate(languageFrom, languageTo, dto.getItemCategory(), addToDictionary, false, itemService));
-        dto.setButtonText(translate(languageFrom, languageTo, dto.getButtonText(), addToDictionary, true, itemService));
-        dto.setSelectText(translate(languageFrom, languageTo, dto.getSelectText(), addToDictionary, true, itemService));
-        dto.setLocation(translate(languageFrom, languageTo, dto.getLocation(), addToDictionary, false, itemService));
-        dto.setLocalizedComment(translate(languageFrom, languageTo, dto.getComment(), addToDictionary, true, itemService));
+//        final String buttonText = dto.getButtonText();
+//        final String selectText = dto.getSelectText();
+//        final String comment = dto.getComment();
+//        final String secondComment = dto.getSecondComment();
+//
+//        dto.setLocalizedButtonText(translate(langFrom, langTo, buttonText, addToDictionary, true, itemService));
+//        dto.setLocalizedSelectText(translate(langFrom, langTo, selectText, addToDictionary, true, itemService));
+//        dto.setLocalizedComment(translate(langFrom, langTo, comment, addToDictionary, true, itemService));
+//        dto.setLocalizedSecondComment(translate(langFrom, langTo, secondComment, addToDictionary, false, itemService));
+
+        dto.translate(langFrom, langTo, itemService);
+
     }
 
     private static void translate(final String languageFrom,
@@ -374,6 +380,10 @@ public class TranslatorUtil {
         value = value.trim();
         final Set<String> lines = FileUtil.getTxtFileLines(FileUtil.getDictionaryFilePath());
         for (final String line : lines) {
+            if (line.split(DICTIONARY_SEPARATOR).length < 3) {
+                continue;
+            }
+
             if (language.equals("en")) {
                 if (line.split(DICTIONARY_SEPARATOR)[2].equals(value)) {
                     return line.split(DICTIONARY_SEPARATOR)[1];

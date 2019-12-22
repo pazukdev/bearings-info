@@ -123,7 +123,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Add item to wish list")
     public boolean addItemToWishList(@PathVariable("item-id") final Long id,
-                                  @PathVariable("username") final String userName) {
+                                     @PathVariable("username") final String userName) {
         final Item item = itemService.getOne(id);
         return userService.addItemToWishList(item, userName);
     }

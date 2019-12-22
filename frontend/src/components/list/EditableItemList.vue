@@ -1,26 +1,50 @@
 <template>
     <div>
-        <EditPanel v-if="!motorcycleCatalogueView" @save="save"/>
-        <table>
-            <tr v-for="table in getItemsListAsTables()">
+        <EditPanel @save="save"/>
+        <table id="parts-table">
+            <tbody>
+            <tr v-if="isShowPartsTableHeader()">
                 <td>
-                    <v-details v-model="table.opened">
+                    <table id="parts-header">
+                        <tbody>
+                        <tr>
+                            <td class="three-column-table-left-column">
+                                {{itemView.partsTable.header[0]}}
+                            </td>
+                            <td class="three-column-table-middle-column">
+                                {{itemView.partsTable.header[1]}}
+                            </td>
+                            <td class="three-column-table-right-column" v-if="itemView.partsTable.header[2] !== '-'">
+                                {{itemView.partsTable.header[2]}}
+                            </td>
+                            <td class="three-column-table-button-column"/>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr v-for="table in itemsListAsTables()">
+                <td colspan="3">
+                    <details open>
                         <summary><b>{{table.name}}</b></summary>
-                        <table id="get-all-table">
+                        <table>
                             <tbody>
                             <tr v-for="item in table.items">
+<!--                                {{item}}-->
                                 <td class="three-column-table-left-column">
-                                    <p class="three-column-table-left-column-text">
+                                    <p class="three-column-table-left-column-text" v-if="!editMode">
                                         {{item.localizedComment}}
                                     </p>
+                                    <input v-if="editMode" v-model="item.localizedComment" type="text"/>
                                 </td>
                                 <td class="three-column-table-middle-column">
-                                    <ButtonNavigateToItem :part="item" :user="userListView"/>
+                                    <ButtonNavigateToItem :part="item"/>
                                 </td>
                                 <td class="three-column-table-right-column">
-                                    <div class="parts-right-column-text">
+                                    <div class="parts-right-column-text" v-if="!editMode">
                                         {{item.localizedSecondComment}}
                                     </div>
+                                    <input v-if="editMode" v-model="item.localizedSecondComment" type="text"/>
                                 </td>
                                 <td class="three-column-table-button-column">
                                     <ButtonDelete :item="item" @remove-item="removeItem"/>
@@ -28,36 +52,26 @@
                             </tr>
                             </tbody>
                         </table>
-                    </v-details>
+                    </details>
                 </td>
             </tr>
+            </tbody>
         </table>
     </div>
 </template>
 
 <script>
-    import axios from "axios";
-    import {mapState} from "vuex";
-    import EditPanel from "../menu/EditPanel";
     import itemViewUtil from "../../util/itemViewUtil";
-    import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
     import ButtonDelete from "../element/button/ButtonDelete";
+    import shared from "../../util/shared";
+    import {mapState} from "vuex";
+    import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
+    import axios from "axios";
+    import EditPanel from "../menu/EditPanel";
 
     export default {
-        name: "ItemList",
-
-        components: {
-            ButtonDelete,
-            EditPanel,
-            ButtonNavigateToItem
-        },
-
-        props: {
-            motorcycleCatalogueView: Boolean,
-            userListView: Boolean,
-            itemsManagementView: Boolean,
-            wishlistView: Boolean
-        },
+        name: "EditableItemList",
+        components: {EditPanel, ButtonNavigateToItem, ButtonDelete},
 
         computed: {
             ...mapState({
@@ -71,26 +85,8 @@
         },
 
         methods: {
-            getItemsListAsTables() {
-                let tables = itemViewUtil.itemsListToTables(this.itemView.partsTable.parts);
-                if (this.itemsManagementView) {
-                    for (let i = 0; i < tables.length; i++) {
-                        tables[i].opened = false;
-                    }
-                }
-                return tables;
-            },
-
-            edit(editMode) {
-                this.editMode = editMode === true;
-            },
-
-            navigateToItem(itemId) {
-                this.pushTo(itemId);
-            },
-
-            removeItem(item) {
-                itemViewUtil.removeItemFromItemList(this.itemView, item);
+            itemsListAsTables() {
+                return itemViewUtil.itemsListToTables(this.itemView.partsTable.parts);
             },
 
             save() {
@@ -115,7 +111,19 @@
                         itemViewUtil.dispatchView(this.$store, updatedItemView);
                         console.log("item updated");
                     });
-            }
+            },
+
+            removeItem(item) {
+                itemViewUtil.removeItemFromItemList(this.itemView, item);
+            },
+
+            isShowPartsTableHeader() {
+                let header = this.itemView.partsTable.header;
+                if (header === null) {
+                    return false;
+                }
+                return !shared.isInArray("-", header);
+            },
         }
     }
 </script>

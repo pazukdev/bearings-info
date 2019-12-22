@@ -17,7 +17,7 @@
                             <td class="three-column-table-right-column" v-if="itemView.partsTable.header[2] !== '-'">
                                 {{itemView.partsTable.header[2]}}
                             </td>
-                            <td class="three-column-table-button-column"></td>
+                            <td class="three-column-table-button-column"/>
                         </tr>
                         </tbody>
                     </table>
@@ -31,21 +31,19 @@
                             <tbody>
                             <tr v-for="item in table.items">
                                 <td class="three-column-table-left-column">
-                                    <p class="three-column-table-left-column-text"
-                                       v-if="!editMode">
-                                        {{item.location}}
+                                    <p class="three-column-table-left-column-text" v-if="!editMode">
+                                        {{item.localizedComment}}
                                     </p>
-                                    <input v-if="editMode"
-                                           v-model="item.location" type="text"/>
+                                    <input v-if="editMode" v-model="item.localizedComment" type="text"/>
                                 </td>
                                 <td class="three-column-table-middle-column">
                                     <ButtonNavigateToItem :part="item"/>
                                 </td>
                                 <td class="three-column-table-right-column">
-                                    <div v-if="isShowQuantityValue()" class="parts-right-column-text">
-                                        {{item.quantity}}
+                                    <div class="parts-right-column-text" v-if="!editMode">
+                                        {{item.localizedSecondComment}}
                                     </div>
-                                    <input v-if="editMode" v-model="item.quantity" type="text"/>
+                                    <input v-if="editMode" v-model="item.localizedSecondComment" type="text"/>
                                 </td>
                                 <td class="three-column-table-button-column">
                                     <ButtonDelete :item="item" @remove-item="removeItem"/>
@@ -118,10 +116,6 @@
                     return false;
                 }
                 return !shared.isInArray("-", header);
-            },
-
-            isShowQuantityValue() {
-                return !this.editMode;
             },
 
             hideAddForm() {

@@ -4,6 +4,7 @@ ru=Bearing=Подшипник
 ru=BrAZHMC 10-3-1.5=БрАЖМц 10-3-1.5
 ru=BrOF10=БрОФ10
 ru=Bronze=Бронза
+ru=Cage=Сепаратор
 ru=Carburetor=Карбюратор
 ru=Created by=Добавлено пользователем
 ru=Dnepr MT-9=Днепр МТ-9
@@ -62,8 +63,9 @@ ru=Rear suspension=Задняя подвеска
 ru=Replacers=Заменители
 ru=Role=Роль
 ru=SHH-15=ШХ-15
-ru=Cage=Сепаратор
 ru=Telescopic=Телескопическая
+ru=USSR 110=СССР 110
+ru=USSR 200=СССР 200
 ru=USSR=СССР
 ru=Ural M-63=Урал М-63
 ru=Ural M63=Урал М63
@@ -71,6 +73,3 @@ ru=Username=Имя пользователя
 ru=Weight, kg=Вес, кг
 ru=Wheel=Колесо
 ru=Width=Ширина
-ru=USSR 110=СССР 110
-ru=USSR 200=СССР 200
-

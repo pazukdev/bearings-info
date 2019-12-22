@@ -3,9 +3,11 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.user.UserDto;
+import com.pazukdev.backend.entity.ChildItem;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.UserRepository;
+import com.pazukdev.backend.util.ChildItemUtil;
 import com.pazukdev.backend.validator.CredentialsValidator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -66,8 +68,14 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     @Transactional
     public boolean addItemToWishList(final Item item, final String userName) {
         final UserEntity currentUser = findByName(userName);
-        if (!currentUser.getWishList().getItems().contains(item)) {
-            currentUser.getWishList().getItems().add(item);
+
+        final Set<Long> ids = ChildItemUtil.collectIds(currentUser.getWishList().getItems());
+
+        if (!ids.contains(item.getId())) {
+            final ChildItem childItem = new ChildItem();
+            childItem.setName(ChildItemUtil.createNameForWishListItem(item.getName()));
+            childItem.setItem(item);
+            currentUser.getWishList().getItems().add(childItem);
             update(currentUser);
             return true;
         } else {

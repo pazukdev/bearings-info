@@ -55,8 +55,8 @@ public class ChildItemUtil {
             part.setId(nestedItem.getId());
             part.setName(nestedItem.getName());
             part.setItem(partItem);
-            part.setLocation(nestedItem.getLocation());
-            part.setQuantity(nestedItem.getQuantity());
+            part.setLocation(nestedItem.getComment());
+            part.setQuantity(nestedItem.getSecondComment());
             part.setStatus(nestedItem.getStatus());
 
             partsFromItemView.add(part);
@@ -97,6 +97,18 @@ public class ChildItemUtil {
         } else {
             return null;
         }
+    }
+
+    public static Set<Long> collectIds(final Set<ChildItem> items) {
+        final Set<Long> ids = new HashSet<>();
+        for (final ChildItem item : items) {
+            ids.add(item.getItem().getId());
+        }
+        return ids;
+    }
+
+    public static String createNameForWishListItem(final String itemName) {
+        return "Wishlist - " + itemName;
     }
 
 }

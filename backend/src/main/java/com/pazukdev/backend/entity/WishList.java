@@ -4,11 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,12 +18,14 @@ import java.util.Set;
 @Table(name = "wishlist")
 public class WishList extends AbstractEntity {
 
-    @OneToMany
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "wishlist_item",
             joinColumns = @JoinColumn(name = "wishlist_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id")
     )
-    private Set<Item> items = new HashSet<>();
+    private Set<ChildItem> items = new HashSet<>();
 
 }

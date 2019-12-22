@@ -35,6 +35,10 @@
             this.getView();
         },
 
+        watch: {
+            '$route': 'getView'
+        },
+
         methods: {
             getView() {
                 axios

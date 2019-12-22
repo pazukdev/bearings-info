@@ -18,6 +18,20 @@ import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.*;
 
 public class TableUtil {
 
+    public static PartsTable wishListTable(final Set<ChildItem> items,
+                                           final String tableName,
+                                           final ItemService itemService) {
+        final List<NestedItemDto> dtos = new ArrayList<>();
+        for (final ChildItem item : items) {
+            final NestedItemDto itemDto = createWishListItem(item, itemService.getUserService());
+            dtos.add(itemDto);
+        }
+        final String[] header = {"Comment", "Name", "Quantity, pcs"};
+//        final String[] header = null;
+        final Set<String> categories = itemService.findAllCategories();
+        return PartsTable.create(tableName, header, dtos, categories);
+    }
+
     public static PartsTable specialItemsTable(final List<Item> items,
                                                final String tableName,
                                                final ItemService itemService) {

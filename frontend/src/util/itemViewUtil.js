@@ -55,5 +55,10 @@ export default {
     dispatchView(store, itemView) {
         store.dispatch("setItemView", itemView);
         storeUtil.setLoadingState(store, false);
-    }
+    },
+
+    removeItemFromItemList(itemView, item) {
+        shared.removeFromArray(item, itemView.partsTable.parts);
+        itemView.idsToRemove.push(item.itemId);
+    },
 }

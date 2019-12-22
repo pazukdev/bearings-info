@@ -4,12 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -27,7 +22,7 @@ public class ChildItem extends AbstractEntity {
 //    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id")
     private Item item;
-    private String location;
-    private String quantity;
+    private String location = "-";
+    private String quantity = "1";
 
 }

@@ -12,16 +12,14 @@ import com.pazukdev.backend.service.UserService;
 import com.pazukdev.backend.util.*;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.pazukdev.backend.util.ItemUtil.SpecialItemId.*;
 import static com.pazukdev.backend.util.NestedItemUtil.createPossibleParts;
 import static com.pazukdev.backend.util.NestedItemUtil.createReplacerDtos;
 import static com.pazukdev.backend.util.TableUtil.*;
 import static com.pazukdev.backend.util.TranslatorUtil.translate;
+import static com.pazukdev.backend.util.TranslatorUtil.translateNestedItemDtoList;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -113,15 +111,15 @@ public class ItemViewFactory {
                                    final String userLanguage,
                                    final ItemView itemView) {
         final UserEntity user = itemService.getUserService().findByName(userName);
-        final boolean removeItem = itemId == ITEMS_MANAGEMENT_VIEW.getItemId();
-        final boolean removeItemFromWishList = itemId == WISH_LIST_VIEW.getItemId();
-        final boolean removeUser = itemId == USER_LIST_VIEW.getItemId();
+        final boolean removeItem = itemId.equals(ITEMS_MANAGEMENT_VIEW.getItemId());
+        final boolean removeItemFromWishList = itemId.equals(WISH_LIST_VIEW.getItemId());
+        final boolean removeUser = itemId.equals(USER_LIST_VIEW.getItemId());
 
         if (removeItem) {
             return removeItem(itemView, user, itemService.getUserService(), itemView.isHardDelete());
         }
         if (removeItemFromWishList) {
-            return removeItemFromWishList(itemView, user);
+            return editWishList(itemView, user, userLanguage);
         }
         if (removeUser) {
             return removeUsers(itemView);
@@ -196,7 +194,7 @@ public class ItemViewFactory {
     }
 
     private ItemView createWishListView(final ItemView itemView, final WishList wishList) {
-        final List<Item> allItems = new ArrayList<>(wishList.getItems());
+        final Set<ChildItem> allItems = wishList.getItems();
         String tableName = "Your Wishlist";
         String countParameterName = "Items";
 
@@ -205,7 +203,7 @@ public class ItemViewFactory {
                 allItems.size(),
                 tableName,
                 countParameterName,
-                specialItemsTable(allItems, countParameterName, itemService));
+                wishListTable(allItems, countParameterName, itemService));
     }
 
     private ItemView createItemsView(final ItemView itemView,
@@ -260,16 +258,30 @@ public class ItemViewFactory {
         return ItemUtil.toDescription(descriptionMap);
     }
 
-    private ItemView removeItemFromWishList(final ItemView itemView, final UserEntity user) {
-        for (final Long itemId : itemView.getIdsToRemove()) {
-            final Item item = itemService.getOne(itemId);
-            user.getWishList().getItems().remove(item);
-            UserActionUtil.processItemAction("remove from wishlist", item, user, itemService);
-        }
+    private ItemView editWishList(final ItemView itemView, final UserEntity user, final String userLanguage) {
+        final Set<ChildItem> oldItems = new HashSet<>(user.getWishList().getItems());
+
+        Set<ChildItem> newItems = ChildItemUtil.createPartsFromItemView(itemView, itemService);
+        itemView.getHeader().getRows().get(0).setValue(String.valueOf(newItems.size()));
+
+        // delete all items from wishlist and child item repository and save that state
+        user.getWishList().getItems().clear();
         itemService.getUserService().update(user);
-        itemView.getWishListIds().removeAll(itemView.getIdsToRemove());
-        itemView.getIdsToRemove().clear();
-        itemView.getHeader().getRows().get(0).setValue(String.valueOf(itemView.getWishListIds().size()));
+        for (final ChildItem oldItem : oldItems) {
+            if (!newItems.contains(oldItem)) {
+                final Long id = oldItem.getId();
+                final Long itemId = oldItem.getItem().getId();
+                itemView.getWishListIds().remove(itemId);
+                itemService.getChildItemRepository().deleteById(id);
+            }
+        }
+
+        // add all actual items to wish list after translation and save that state
+        translateNestedItemDtoList(userLanguage, "en", itemView.getPartsTable().getParts(), true, itemService);
+        newItems = ChildItemUtil.createPartsFromItemView(itemView, itemService);
+        user.getWishList().getItems().addAll(newItems);
+        itemService.getUserService().update(user);
+
         return itemView;
     }
 
@@ -326,7 +338,12 @@ public class ItemViewFactory {
 
     private void removeItemFromAllWishLists(final Item itemToRemove, final UserService userService) {
         for (final UserEntity user : userService.findAll()) {
-            user.getWishList().getItems().remove(itemToRemove);
+            final List<ChildItem> wishListItemsCopy = new ArrayList<>(user.getWishList().getItems());
+            for (final ChildItem wishListItem : wishListItemsCopy) {
+                if (wishListItem.getItem().getId().equals(itemToRemove.getId())) {
+                    user.getWishList().getItems().remove(wishListItem);
+                }
+            }
             userService.update(user);
         }
     }

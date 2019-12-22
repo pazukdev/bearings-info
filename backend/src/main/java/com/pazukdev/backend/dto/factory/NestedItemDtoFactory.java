@@ -6,6 +6,7 @@ import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.Replacer;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.UserService;
+import com.pazukdev.backend.util.ChildItemUtil;
 import com.pazukdev.backend.util.SpecificStringUtil;
 import com.pazukdev.backend.util.UserUtil;
 
@@ -26,7 +27,7 @@ public class NestedItemDtoFactory {
         userData.setRating(user.getRating());
         userData.setItemCategory(role);
         userData.setComment(role);
-        userData.setQuantity(user.getRating().toString());
+        userData.setSecondComment(user.getRating().toString());
         userData.setStatus(user.getStatus());
         return userData;
     }
@@ -37,8 +38,8 @@ public class NestedItemDtoFactory {
         final String manufacturer = getValueFromDescription(description, "Manufacturer");
 
         final NestedItemDto motorcycleDto = createBasicNestedItemDto(motorcycle, userService);
-        motorcycleDto.setLocation(production);
-        motorcycleDto.setComment(manufacturer);
+        motorcycleDto.setComment(production);
+        motorcycleDto.setSecondComment(manufacturer);
         motorcycleDto.setItemCategory(manufacturer);
         motorcycleDto.setDeletable(false);
         return motorcycleDto;
@@ -50,8 +51,8 @@ public class NestedItemDtoFactory {
         final NestedItemDto childItemDto = createBasicNestedItemDto(item, userService);
         childItemDto.setId(childItem.getId());
         childItemDto.setName(childItem.getName());
-        childItemDto.setQuantity(childItem.getQuantity());
-        childItemDto.setLocation(childItem.getLocation());
+        childItemDto.setComment(childItem.getLocation());
+        childItemDto.setSecondComment(childItem.getQuantity());
         childItemDto.setStatus(childItem.getStatus());
         return childItemDto;
     }
@@ -63,9 +64,19 @@ public class NestedItemDtoFactory {
         replacerDto.setId(replacer.getId());
         replacerDto.setName(replacer.getName());
         replacerDto.setComment(replacer.getComment());
-        replacerDto.setQuantity("-");
-        replacerDto.setLocation("-");
+        replacerDto.setSecondComment("-");
         return replacerDto;
+    }
+
+    public static NestedItemDto createWishListItem(final ChildItem childItem, final UserService userService) {
+        final Item item = childItem.getItem();
+
+        final NestedItemDto dto = createBasicNestedItemDto(item, userService);
+        dto.setId(childItem.getId());
+        dto.setName(ChildItemUtil.createNameForWishListItem(item.getName()));
+        dto.setComment(childItem.getLocation());
+        dto.setSecondComment(childItem.getQuantity());
+        return dto;
     }
 
     public static NestedItemDto createItemForItemsManagement(final Item item, final UserService userService) {
@@ -95,15 +106,15 @@ public class NestedItemDtoFactory {
             leftColumnData = getValueFromDescription(description, "Tension, V");
         }
 
-        basicSpecialNestedItemDto.setLocation(leftColumnData != null ? leftColumnData : "-");
-        basicSpecialNestedItemDto.setComment(rightColumnData != null ? rightColumnData : "-");
+        basicSpecialNestedItemDto.setComment(leftColumnData != null ? leftColumnData : "-");
+        basicSpecialNestedItemDto.setSecondComment(rightColumnData != null ? rightColumnData : "-");
 
         return basicSpecialNestedItemDto;
     }
 
     public static NestedItemDto createBasicSpecialNestedItemDto(final Item item, final UserService userService) {
         final NestedItemDto basicSpecialNestedItemDto = createBasicNestedItemDto(item, userService);
-        basicSpecialNestedItemDto.setLocation(item.getCategory());
+        basicSpecialNestedItemDto.setComment(item.getCategory());
         return basicSpecialNestedItemDto;
     }
 
