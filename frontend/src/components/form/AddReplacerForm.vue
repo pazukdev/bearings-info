@@ -39,7 +39,6 @@
     import ItemSelect from "../element/ItemSelect";
     import {mapState} from "vuex";
     import shared from "../../util/shared";
-    import itemViewUtil from "../../util/itemViewUtil";
     import ButtonAdd from "../element/button/ButtonAdd";
 
     export default {
@@ -86,7 +85,7 @@
             },
 
             addItem() {
-                this.item.name = itemViewUtil.getItemName(this.itemView) + this.item.name;
+                // this.item.name = itemViewUtil.getItemName(this.itemView) + this.item.name;
                 this.item.comment = this.itemComment;
 
                 let newItem = this.item;

@@ -21,18 +21,18 @@
 <!--                                {{item}}-->
                                 <td class="three-column-table-left-column">
                                     <p class="three-column-table-left-column-text" v-if="!isEdit()">
-                                        {{item.localizedComment}}
+                                        {{item.comment}}
                                     </p>
-                                    <input v-if="isEdit()" v-model="item.localizedComment" type="text"/>
+                                    <input v-if="isEdit()" v-model="item.comment" type="text"/>
                                 </td>
                                 <td class="three-column-table-middle-column">
                                     <ButtonNavigateToItem :part="item" :user="userListView"/>
                                 </td>
                                 <td class="three-column-table-right-column">
                                     <div class="parts-right-column-text" v-if="!isEdit()">
-                                        {{item.localizedSecondComment}}
+                                        {{item.secondComment}}
                                     </div>
-                                    <input v-if="isEdit()" v-model="item.localizedSecondComment" type="text"/>
+                                    <input v-if="isEdit()" v-model="item.secondComment" type="text"/>
                                 </td>
                                 <td class="three-column-table-button-column">
                                     <ButtonDelete :item="item" @remove-item="removeItem"/>

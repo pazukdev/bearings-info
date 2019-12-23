@@ -52,8 +52,8 @@
                         </tr>
                         <tr>
                             <td colspan="4">
-                                <p style="text-align: left" v-if="!editMode">{{item.localizedComment}}</p>
-                                <textarea v-if="editMode" v-model="item.localizedComment"/>
+                                <p style="text-align: left" v-if="!editMode">{{item.comment}}</p>
+                                <textarea v-if="editMode" v-model="item.comment"/>
                             </td>
                         </tr>
                         </tbody>

@@ -91,8 +91,11 @@ public class NestedItemUtil {
 
     public static void correctFieldsValues(final List<NestedItemDto> dtos) {
         for (final NestedItemDto dto : dtos) {
-            dto.setLocalizedComment(SpecificStringUtil.replaceBlankWithDash(dto.getLocalizedComment()));
-            dto.setLocalizedSecondComment(SpecificStringUtil.replaceBlankWithDash(dto.getLocalizedSecondComment()));
+//            dto.setLocalizedComment(SpecificStringUtil.replaceBlankWithDash(dto.getLocalizedComment()));
+//            dto.setLocalizedSecondComment(SpecificStringUtil.replaceBlankWithDash(dto.getLocalizedSecondComment()));
+
+            dto.setComment(SpecificStringUtil.replaceBlankWithDash(dto.getComment()));
+            dto.setSecondComment(SpecificStringUtil.replaceBlankWithDash(dto.getSecondComment()));
         }
     }
 

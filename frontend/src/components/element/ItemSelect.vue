@@ -1,9 +1,8 @@
 <template>
     <div>
-        <select v-model="selectedItem"
-                @change="onChange">
+        <select v-model="selectedItem" @change="onChange">
             <option v-for="item in actualPossibleItemsList" :value="item">
-                {{item.localizedSelectText}}
+                {{item.selectText}}
             </option>
         </select>
     </div>

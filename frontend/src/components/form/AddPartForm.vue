@@ -33,7 +33,6 @@
     import ItemSelect from "../element/ItemSelect";
     import {mapState} from "vuex";
     import shared from "../../util/shared";
-    import itemViewUtil from "../../util/itemViewUtil";
     import ButtonAdd from "../element/button/ButtonAdd";
 
     export default {
@@ -89,9 +88,11 @@
                     return;
                 }
 
-                this.item.name = itemViewUtil.getItemName(this.itemView) + this.item.name;
-                this.item.localizedComment = this.itemLocation;
-                this.item.localizedSecondComment = this.itemQuantity;
+                // console.log(this.item.name);
+                // this.item.name = itemViewUtil.getItemName(this.itemView) + this.item.name;
+                // console.log(this.item.name);
+                this.item.comment = this.itemLocation;
+                this.item.secondComment = this.itemQuantity;
 
                 let newItem = this.item;
                 this.itemView.partsTable.parts.push(newItem);

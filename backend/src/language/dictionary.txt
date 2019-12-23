@@ -22,6 +22,7 @@ ru=GOST=ГОСТ
 ru=Gearbox=Коробка передач
 ru=Generator G-11A=Генератор Г-11А
 ru=Generator=Генератор
+ru=Gold Material=Материал Gold
 ru=IMZ / KMZ=ИМЗ / КМЗ
 ru=IMZ 8103=ИМЗ 8103
 ru=IMZ=ИМЗ
@@ -46,6 +47,8 @@ ru=MMVZ=ММВЗ
 ru=MMZ=ММЗ
 ru=MT-9 type engine=Двигатель MT-9 type
 ru=Macaque 2=Макак-2
+ru=Macaque 3 Motorcycle=Мотоцикл Macaque 3
+ru=Macaque 4=Макак 4
 ru=Macaque=Макак
 ru=Manufacturer=Производитель
 ru=Material=Материал
@@ -65,6 +68,7 @@ ru=Partnumber=Наименование
 ru=Parts=Агрегаты и детали
 ru=Pcs/Vol=Кол-во/объем
 ru=Pendulum type=Маятникового типа
+ru=Platinum=Платина
 ru=Production=Годы пр-ва
 ru=Rating=Рейтинг
 ru=Rear suspension=Задняя подвеска
@@ -80,7 +84,12 @@ ru=Ural M-63=Урал М-63
 ru=Ural M63=Урал М63
 ru=Username=Имя пользователя
 ru=Weight, kg=Вес, кг
+ru=Weight=Масса
 ru=Wheel=Колесо
 ru=Width=Ширина
 ru=Your Wishlist=Ваш список желаемого
+ru=good=хороший
+ru=location 2=локация 2
+ru=location 3=локация 3
+ru=location 4=локация 4
 ru=motor=мотор

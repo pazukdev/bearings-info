@@ -38,7 +38,7 @@
                 if (this.infoButton) {
                     return item.value;
                 } else {
-                    return item.localizedButtonText;
+                    return item.buttonText;
                 }
             }
         }

@@ -49,11 +49,13 @@ public class ChildItemUtil {
 
         final Set<ChildItem> partsFromItemView = new HashSet<>();
         for (final NestedItemDto nestedItem : preparedItems) {
+            final Item parent = itemService.getOne(itemView.getItemId());
             final Item partItem = itemService.getOne(nestedItem.getItemId());
+
 
             final ChildItem part = new ChildItem();
             part.setId(nestedItem.getId());
-            part.setName(nestedItem.getName());
+            part.setName(getName(parent.getName(), partItem.getName()));
             part.setItem(partItem);
             part.setLocation(nestedItem.getComment());
             part.setQuantity(nestedItem.getSecondComment());
@@ -89,7 +91,7 @@ public class ChildItemUtil {
             final Item child = itemService.getOrCreate(oldChild);
 
             final ChildItem childItem = new ChildItem();
-            childItem.setName(parent.getName() + " - " + name);
+            childItem.setName(getName(parent.getName(), name));
             childItem.setItem(child);
             childItem.setLocation(location);
             childItem.setQuantity(quantity);
@@ -108,7 +110,18 @@ public class ChildItemUtil {
     }
 
     public static String createNameForWishListItem(final String itemName) {
-        return "Wishlist - " + itemName;
+        final String parentName = "Wishlist";
+        return getName(parentName, itemName);
+    }
+
+    public static String getName(final Long parentId, final Long id, final ItemService itemService) {
+        final String parentName = itemService.getOne(parentId).getName();
+        final String name = itemService.getOne(id).getName();
+        return getName(parentName, name);
+    }
+
+    public static String getName(final String parentName, final String name) {
+        return parentName + " - " + name;
     }
 
 }

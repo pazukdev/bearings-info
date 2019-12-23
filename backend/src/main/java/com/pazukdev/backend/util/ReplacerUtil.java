@@ -56,11 +56,12 @@ public class ReplacerUtil {
 
         final Set<Replacer> replacersFromItemView = new HashSet<>();
         for (final NestedItemDto dto : dtos) {
+            final Item parent = itemService.getOne(itemView.getItemId());
             final Item replacerItem = itemService.getOne(dto.getItemId());
 
             final Replacer replacer = new Replacer();
             replacer.setId(dto.getId());
-            replacer.setName(dto.getName());
+            replacer.setName(ChildItemUtil.getName(parent.getName(), replacerItem.getName()));
             replacer.setItem(replacerItem);
             replacer.setComment(dto.getComment());
             replacer.setStatus(dto.getStatus());
