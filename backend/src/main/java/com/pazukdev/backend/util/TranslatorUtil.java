@@ -79,7 +79,7 @@ public class TranslatorUtil {
             itemName = translate(languageFrom, languageTo, itemName, addToDictionary, true, itemService);
             tableName = TableUtil.getHeaderTableName(itemCategory, itemName);
         } else {
-            tableName = translate(languageFrom, languageTo, tableName, addToDictionary, true, itemService);
+            tableName = translate(languageFrom, languageTo, tableName, false, true, itemService);
         }
         headerTable.setName(tableName);
 
