@@ -94,10 +94,12 @@
             },
 
             update(itemId) {
+                let itemView = this.itemView;
                 let basicUrl = this.basicUrl.toString();
                 let userName = this.userName.toString();
                 let appLanguage = this.appLanguage.toString();
-                itemViewUtil.updateItem(itemId, basicUrl, userName, appLanguage);
+                let authorization = this.authorization;
+                itemViewUtil.updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization, this.$store);
             },
 
             removeItem(item) {

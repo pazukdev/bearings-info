@@ -37,7 +37,7 @@ export default {
         return nestedTables;
     },
 
-    updateItem(itemId, basicUrl, userName, appLanguage) {
+    updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization, store) {
         axios
             .put(basicUrl
                 + "/" + "item"
@@ -45,14 +45,14 @@ export default {
                 + "/" + itemId
                 + "/" + userName
                 + "/" + appLanguage,
-                this.itemView, {
+                itemView, {
                     headers: {
-                        Authorization: this.authorization
+                        Authorization: authorization
                     }
                 })
             .then(response => {
                 let updatedItemView = response.data;
-                this.dispatchView(this.$store, updatedItemView);
+                this.dispatchView(store, updatedItemView);
                 console.log("item updated");
             });
     },
