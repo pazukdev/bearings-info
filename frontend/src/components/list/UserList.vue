@@ -28,14 +28,19 @@
         },
 
         created() {
-            this.getView();
+            this.onUrlChange();
         },
 
         watch: {
-            '$route': 'getView'
+            '$route': 'onUrlChange'
         },
 
         methods: {
+            onUrlChange() {
+                itemViewUtil.setLocale(this.$router, this.$route, this.$i18n, this.appLanguage.toString());
+                this.getView();
+            },
+
             getView() {
                 axios
                     .get(this.basicUrl

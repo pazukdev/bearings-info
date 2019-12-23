@@ -70,6 +70,7 @@ ru=USSR=СССР
 ru=Ural M-63=Урал М-63
 ru=Ural M63=Урал М63
 ru=Username=Имя пользователя
+ru=Your Wishlist=Ваш список желаемого
 ru=Weight, kg=Вес, кг
 ru=Wheel=Колесо
 ru=Width=Ширина

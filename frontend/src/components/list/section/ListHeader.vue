@@ -28,17 +28,28 @@
 
         computed: {
             ...mapState({
-                itemView: state => state.dictionary.itemView
+                itemView: state => state.dictionary.itemView,
+                editMode: state => state.dictionary.editMode
             })
         },
 
         methods: {
             isShowPartsTableHeader() {
-                let header = this.itemView.partsTable.header;
+                let partsTable = this.itemView.partsTable;
+                let header = partsTable.header;
                 if (header === null) {
                     return false;
                 }
-                return !shared.isInArray("-", header);
+                if (this.editMode === true) {
+                    return true;
+                }
+                if (partsTable.parts.length < 1) {
+                    return false;
+                }
+                if (shared.isInArray("-", header)) {
+                    return false;
+                }
+                return true;
             }
         }
     }

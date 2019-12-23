@@ -53,33 +53,22 @@
             })
         },
 
-        watch: {
-            '$route': 'getItemViewByUrl'
+        created() {
+            this.onUrlChange();
         },
 
-        created() {
-            this.getItemViewByUrl();
+        watch: {
+            '$route': 'onUrlChange'
         },
 
         methods: {
-            getItemId() {
-                return routerUtil.getId(this.$route);
+            onUrlChange() {
+                itemViewUtil.setLocale(this.$router, this.$route, this.$i18n, this.appLanguage.toString());
+                this.getView();
             },
 
-            getUserRole() {
-                return this.itemView.userData.comment;
-            },
-
-            getItemViewByUrl() {
-                if (this.$route.params.lang !== this.appLanguage.toString()) {
-                    this.$router.replace({
-                        path: this.$router.currentRoute.path.replace(/\/[^\/]*$/, "/" + this.appLanguage)
-                    });
-                }
-                this.$i18n.locale = this.appLanguage.toString();
-
+            getView() {
                 let id = this.processItemId(this.getItemId());
-
                 if (id === "redirect to login") {
                     console.log("/" + this.getItemId()
                         + " url is forbidden for user with role " + this.getUserRole());
@@ -87,9 +76,16 @@
                     this.pushToLoginForm();
                     return;
                 }
-
                 console.log("getItemViewByUrl(): " + id);
                 this.getItemView(id);
+            },
+
+            getItemId() {
+                return routerUtil.getId(this.$route);
+            },
+
+            getUserRole() {
+                return this.itemView.userData.comment;
             },
 
             processItemId(itemId) {
@@ -132,8 +128,7 @@
             },
 
             pushTo(id) {
-                let lang = this.getLanguage();
-                this.$router.push({ name: "item", params: {id, lang} });
+                routerUtil.toItem(this.$router, id, this.appLanguage.toString());
             },
 
             pushToHome() {
@@ -144,10 +139,6 @@
                 this.pushTo(itemId);
             },
 
-            getLanguage() {
-                return this.appLanguage.toString();
-            },
-
             getItemView(itemId) {
                 axios
                     .get(this.basicUrl
@@ -156,7 +147,7 @@
                         + "/" + "item"
                         + "/" + itemId
                         + "/" + this.userName
-                        + "/" + this.getLanguage(), {
+                        + "/" + this.appLanguage, {
                         headers: {
                             Authorization: this.authorization
                         }

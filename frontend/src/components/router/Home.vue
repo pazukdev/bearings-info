@@ -60,25 +60,11 @@
 
         methods: {
             onUrlChange() {
-                this.getMotorcycleCatalogueItemView();
+                itemViewUtil.setLocale(this.$router, this.$route, this.$i18n, this.appLanguage.toString());
+                this.getView();
             },
 
-            setLocale() {
-                let language = this.appLanguage.toString();
-                if (this.$route.params.lang !== language) {
-                    this.changeLanguageInUrl(language);
-                }
-                this.$i18n.locale = language;
-            },
-
-            changeLanguageInUrl(language) {
-                this.$router.replace({
-                    path: this.$router.currentRoute.path.replace(/\/[^/]*$/, "/" + language)
-                });
-            },
-
-            getMotorcycleCatalogueItemView() {
-                this.setLocale();
+            getView() {
                 axios
                     .get(this.basicUrl
                         + "/" + "item/view"

@@ -7,6 +7,7 @@
 <script>
     import {mapState} from "vuex";
     import DefaultButton from "./DefaultButton";
+    import routerUtil from "../../../util/routerUtil";
 
     export default {
         name: "ButtonNavigateToItem",
@@ -29,7 +30,7 @@
                 if (this.user) {
                     this.$router.push({ name: "user", params: {id, lang} });
                 } else {
-                    this.$router.push({ name: "item", params: {id, lang} });
+                    routerUtil.toItem(this.$router, id, lang);
                 }
             },
 

@@ -10,6 +10,10 @@ export default {
 
     isHomePage(route) {
         return route.name === "home";
+    },
+
+    toItem(router, itemId, lang) {
+        router.push({ name: "item", params: {id: itemId, lang} });
     }
 
 }

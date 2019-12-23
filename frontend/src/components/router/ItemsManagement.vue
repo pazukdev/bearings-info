@@ -1,7 +1,10 @@
 <template>
     <div>
         <LoadingScreen v-if="this.loadingState"/>
-        <ItemList v-else :items-management-view="true"/>
+        <div v-else>
+            <CreateItemForm/>
+            <ItemList :items-management-view="true"/>
+        </div>
     </div>
 </template>
 
@@ -12,11 +15,13 @@
     import LoadingScreen from "../special/LoadingScreen";
     import itemViewUtil from "../../util/itemViewUtil";
     import ItemDescription from "../list/section/ItemDescription";
+    import CreateItemForm from "../form/CreateItemForm";
 
     export default {
         name: "ItemsManagement",
 
         components: {
+            CreateItemForm,
             ItemDescription,
             LoadingScreen,
             ItemList

@@ -57,6 +57,17 @@ export default {
             });
     },
 
+    setLocale(router, route, i18n, lang) {
+        if (route.params.lang !== lang) {
+            this.changeLanguageInUrl(lang);
+        }
+        i18n.locale = lang;
+    },
+
+    changeLanguageInUrl(router, lang) {
+        router.replace({path: router.currentRoute.path.replace(/\/[^/]*$/, "/" + lang)});
+    },
+
     isGuest(itemView, userName) {
         return itemView.userData.comment === "Guest" && userName.toString() === "guest";
     },
