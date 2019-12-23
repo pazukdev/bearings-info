@@ -46,9 +46,6 @@ ru=MG-10=МГ-10
 ru=MMVZ=ММВЗ
 ru=MMZ=ММЗ
 ru=MT-9 type engine=Двигатель MT-9 type
-ru=Macaque 2=Макак-2
-ru=Macaque 3 Motorcycle=Мотоцикл Macaque 3
-ru=Macaque 4=Макак 4
 ru=Macaque=Макак
 ru=Manufacturer=Производитель
 ru=Material=Материал
@@ -56,7 +53,6 @@ ru=Max speed, km/h=Макс. скорость, км/ч
 ru=Model=Модель
 ru=Motorcycle Jupiter 5=Мотоцикл Юпитер 5
 ru=Motorcycle M1=Мотоцикл М1
-ru=Motorcycle Macaque-2=Мотоцикл Макак-2
 ru=Motorcycle R-75=Мотоцикл R-75
 ru=Motorcycle catalogue=Модельный ряд
 ru=Motorcycle macaque=Мотоцикл Макак
@@ -88,8 +84,3 @@ ru=Weight=Масса
 ru=Wheel=Колесо
 ru=Width=Ширина
 ru=Your Wishlist=Ваш список желаемого
-ru=good=хороший
-ru=location 2=локация 2
-ru=location 3=локация 3
-ru=location 4=локация 4
-ru=motor=мотор
