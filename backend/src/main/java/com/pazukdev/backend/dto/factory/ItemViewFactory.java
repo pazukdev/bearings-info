@@ -230,9 +230,11 @@ public class ItemViewFactory {
 
         final Item item = itemService.getOne(itemId);
 
-        if (!userLanguage.equals("en")) {
-            translate(userLanguage, "en", itemView, true, itemService);
-        }
+//        if (!userLanguage.equals("en")) {
+//            translate(userLanguage, "en", itemView, true, itemService);
+//        }
+
+        translate(userLanguage, "en", itemView, true, itemService);
 
         final Map<String, String> headerMap = TableUtil.createHeaderMap(itemView.getHeader());
 

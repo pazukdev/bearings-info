@@ -17,6 +17,7 @@ public class NestedItemDto extends AbstractDto {
     private Long itemId;
     private String itemName = "-";
     private String itemCategory = "-";
+    private String localizedItemCategory = "-";
     private String creatorName;
     private Integer rating = 0;
 
@@ -29,6 +30,11 @@ public class NestedItemDto extends AbstractDto {
     private String localizedComment = "-";
     private String secondComment = "-";
     private String localizedSecondComment = "-";
+
+    public void setItemCategory(final String itemCategory) {
+        this.itemCategory = itemCategory;
+        this.localizedItemCategory = itemCategory;
+    }
 
     public void setButtonText(final String buttonText) {
         this.buttonText = buttonText;
@@ -66,6 +72,7 @@ public class NestedItemDto extends AbstractDto {
         final boolean addToDictionary = false;
         final boolean parse = false;
 
+        localizedItemCategory = TranslatorUtil.translate(langFrom, langTo, itemCategory, addToDictionary, parse, service);
         localizedButtonText = TranslatorUtil.translate(langFrom, langTo, buttonText, addToDictionary, parse, service);
         localizedSelectText = TranslatorUtil.translate(langFrom, langTo, selectText, addToDictionary, parse, service);
         localizedComment = TranslatorUtil.translate(langFrom, langTo, comment, addToDictionary, parse, service);
@@ -77,6 +84,7 @@ public class NestedItemDto extends AbstractDto {
         final boolean addToDictionary = true;
         final boolean parse = false;
 
+        itemCategory = TranslatorUtil.translate(langFrom, langTo, localizedItemCategory, addToDictionary, parse, service);
         comment = TranslatorUtil.translate(langFrom, langTo, localizedComment, addToDictionary, parse, service);
         secondComment = TranslatorUtil.translate(langFrom, langTo, localizedSecondComment, addToDictionary, parse, service);
     }

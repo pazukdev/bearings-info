@@ -1,6 +1,7 @@
 ru=- Gear oil for gearbox=- Трансмиссионное масло для КПП
 ru=AL-5=АЛ-5
 ru=Bearing=Подшипник
+ru=Beaver Oil=Бобровое масло
 ru=BrAZHMC 10-3-1.5=БрАЖМц 10-3-1.5
 ru=BrOF10=БрОФ10
 ru=Bronze=Бронза
@@ -42,17 +43,24 @@ ru=M66=М66
 ru=M67 type engine=Двигатель M67 type
 ru=MG-10=МГ-10
 ru=MMVZ=ММВЗ
+ru=MMZ=ММЗ
 ru=MT-9 type engine=Двигатель MT-9 type
+ru=Macaque 2=Макак-2
+ru=Macaque=Макак
 ru=Manufacturer=Производитель
+ru=Material=Материал
 ru=Max speed, km/h=Макс. скорость, км/ч
 ru=Model=Модель
 ru=Motorcycle Jupiter 5=Мотоцикл Юпитер 5
 ru=Motorcycle M1=Мотоцикл М1
+ru=Motorcycle Macaque-2=Мотоцикл Макак-2
 ru=Motorcycle R-75=Мотоцикл R-75
 ru=Motorcycle catalogue=Модельный ряд
+ru=Motorcycle macaque=Мотоцикл Макак
 ru=Motorcycle=Мотоцикл
 ru=Name=Название
 ru=Oil - 20W-50 Synthetic=Масло - 20W-50 Синтетика
+ru=Oil - Beaver Oil=Масло - Бобровое масло
 ru=Partnumber=Наименование
 ru=Parts=Агрегаты и детали
 ru=Pcs/Vol=Кол-во/объем
@@ -63,6 +71,7 @@ ru=Rear suspension=Задняя подвеска
 ru=Replacers=Заменители
 ru=Role=Роль
 ru=SHH-15=ШХ-15
+ru=Silver=Серебро
 ru=Telescopic=Телескопическая
 ru=USSR 110=СССР 110
 ru=USSR 200=СССР 200
@@ -70,7 +79,8 @@ ru=USSR=СССР
 ru=Ural M-63=Урал М-63
 ru=Ural M63=Урал М63
 ru=Username=Имя пользователя
-ru=Your Wishlist=Ваш список желаемого
 ru=Weight, kg=Вес, кг
 ru=Wheel=Колесо
 ru=Width=Ширина
+ru=Your Wishlist=Ваш список желаемого
+ru=motor=мотор

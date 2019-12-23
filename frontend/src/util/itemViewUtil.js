@@ -6,7 +6,7 @@ export default {
     itemsListToTables(items) {
         let categories = [];
         for (let i = 0; i < items.length; i++) {
-            let category = items[i].itemCategory;
+            let category = items[i].localizedItemCategory;
             if (!shared.isInArray(category, categories)) {
                 categories.push(category);
             }
@@ -24,7 +24,7 @@ export default {
 
             for (let i = 0; i < items.length; i++) {
                 let item = items[i];
-                if (item.itemCategory === category) {
+                if (item.localizedItemCategory === category) {
                     nestedTable.items.push(item);
                 }
             }

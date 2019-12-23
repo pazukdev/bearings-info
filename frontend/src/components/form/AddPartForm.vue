@@ -90,8 +90,8 @@
                 }
 
                 this.item.name = itemViewUtil.getItemName(this.itemView) + this.item.name;
-                this.item.location = this.itemLocation;
-                this.item.quantity = this.itemQuantity;
+                this.item.localizedComment = this.itemLocation;
+                this.item.localizedSecondComment = this.itemQuantity;
 
                 let newItem = this.item;
                 this.itemView.partsTable.parts.push(newItem);

@@ -11,12 +11,14 @@
                 </td>
             </tr>
             <tr v-for="table in itemsListAsTables()">
+<!--                {{table}}-->
                 <td>
                     <v-details v-model="table.opened">
                         <summary><b>{{table.name}}</b></summary>
                         <table>
                             <tbody>
                             <tr v-for="item in table.items">
+<!--                                {{item}}-->
                                 <td class="three-column-table-left-column">
                                     <p class="three-column-table-left-column-text" v-if="!isEdit()">
                                         {{item.localizedComment}}
