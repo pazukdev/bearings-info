@@ -1,5 +1,6 @@
 <template>
     <div>
+        <ItemViewImage/>
         <ItemDescription :item="item"/>
         <EditPanel @save="save"/>
         <NestedItemsTableTitle :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
@@ -57,10 +58,13 @@
     import ListHeader from "./section/ListHeader";
     import ItemDescription from "./section/ItemDescription";
     import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
+    import ItemViewImage from "../item/ItemViewImage";
 
     export default {
         name: "ItemList",
-        components: {NestedItemsTableTitle, ItemDescription, ListHeader, EditPanel, ButtonNavigateToItem, ButtonDelete},
+        components: {
+            ItemViewImage,
+            NestedItemsTableTitle, ItemDescription, ListHeader, EditPanel, ButtonNavigateToItem, ButtonDelete},
 
         props: {
             item: Boolean,

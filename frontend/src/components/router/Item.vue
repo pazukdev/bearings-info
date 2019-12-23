@@ -32,16 +32,6 @@
             ReplacersSection
         },
 
-        data() {
-            return {
-                imgData: "",
-                newItemCategory: "",
-                newItemName: "",
-                categoryMessage: "",
-                fileUploadMessage: ""
-            }
-        },
-
         computed: {
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
@@ -108,37 +98,6 @@
                 this.$router.push({ name: `login` });
             },
 
-            loginAsGuest() {
-                let username = "guest";
-                let password = "user";
-                let credentialsUrl ="username=" + username + "&" + "password=" + password;
-                axios
-                    .post(this.basicUrl + "/login", credentialsUrl)
-                    .then(response => {
-                        if (response.status === 200) {
-                            let authorization = response.data.Authorization;
-                            this.$store.dispatch("setAuthorization", authorization);
-                            this.$store.dispatch("setUserName", username);
-                            console.log("logged in as " + username);
-                        }
-                    })
-                    .catch(error => {
-                        console.log("login as " + username + " failed");
-                    });
-            },
-
-            pushTo(id) {
-                routerUtil.toItem(this.$router, id, this.appLanguage.toString());
-            },
-
-            pushToHome() {
-                this.pushTo(this.motorcycleCatalogueId.toString());
-            },
-
-            navigateToItem(itemId) {
-                this.pushTo(itemId);
-            },
-
             getItemView(itemId) {
                 axios
                     .get(this.basicUrl
@@ -159,87 +118,12 @@
             },
 
             isAuthorized() {
-                return this.authorization !== "";
-            },
-
-            isAdditionalMenuDisplayed() {
-                return this.isHomePage() && !this.isGuest();
-            },
-
-            isHomePage() {
-                return this.isMotorcycleCatalogueView();
-            },
-
-            isAdmin() {
-                return this.itemView.userData.comment === "Admin";
+                return itemViewUtil.isAuthorized(this.authorization);
             },
 
             isGuest() {
                 return itemViewUtil.isGuest(this.itemView, this.userName);
-            },
-
-            previewImage(event) {
-                let input = event.target;
-                let file = input.files[0];
-                if (file !== null) {
-                    if (file.size > 2097152) {
-                        this.fileUploadMessage = "Image is too big! Size limit is 2MB";
-                        return;
-                    }
-                    this.fileUploadMessage = "";
-                    this.removeFromArray("img removed", this.itemView.messages);
-                    this.itemView.messages.push("img uploaded");
-                    let reader = new FileReader();
-                    reader.onload = (e) => {
-                        this.itemView.imgData = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            },
-
-            removeImg() {
-                this.itemView.messages.push("img removed");
-            },
-            //
-            // getItemName() {
-            //     return this.itemView.header.rows[0].parameter;
-            // },
-            //
-            // selectOnChange() {
-            //     this.categoryMessage = "";
-            // },
-
-            // switchEditModeOff() {
-            //     this.editMode = false;
-            //     this.clearAllEditData();
-            // },
-
-            // clearAllEditData() {
-            //     this.clearAllMessages();
-            //     this.clearNewItemData();
-            //     this.imgData = "";
-            // },
-
-            // clearAllMessages() {
-            //     this.fileUploadMessage = "";
-            //     this.clearItemCreationMessages();
-            // },
-            //
-            // clearItemCreationMessages() {
-            //     this.categoryMessage = "";
-            // },
-            //
-            // clearNewItemData() {
-            //     this.newItemName = "";
-            // },
-
-            isViewWithImage() {
-                return this.itemView.imgData !== '-';
-            },
-
-            // messagesContain(message) {
-            //     return this.isInArray(message, this.itemView.messages);
-            // }
+            }
         }
     }
 </script>
@@ -278,10 +162,6 @@
 
     .round-delete-button {
         background: red;
-    }
-
-    #item-creation-menu, #item-image {
-        border-spacing: 0;
     }
 
     #menu-summary {

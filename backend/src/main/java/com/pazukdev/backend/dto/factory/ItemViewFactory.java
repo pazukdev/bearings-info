@@ -2,6 +2,7 @@ package com.pazukdev.backend.dto.factory;
 
 import com.pazukdev.backend.dto.ImgViewData;
 import com.pazukdev.backend.dto.ItemView;
+import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.HeaderTableRow;
 import com.pazukdev.backend.dto.table.PartsTable;
@@ -19,7 +20,6 @@ import static com.pazukdev.backend.util.NestedItemUtil.createPossibleParts;
 import static com.pazukdev.backend.util.NestedItemUtil.createReplacerDtos;
 import static com.pazukdev.backend.util.TableUtil.*;
 import static com.pazukdev.backend.util.TranslatorUtil.translate;
-import static com.pazukdev.backend.util.TranslatorUtil.translateNestedItemDtoList;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -98,6 +98,7 @@ public class ItemViewFactory {
         final Item item = new Item();
         item.setName(name);
         item.setCategory(category);
+        item.setImage("-");
         item.setCreatorId(creator.getId());
         item.setUserActionDate(DateUtil.now());
         item.setDescription(createEmptyDescription(category));
@@ -234,8 +235,6 @@ public class ItemViewFactory {
             translate(userLanguage, "en", itemView, true, itemService);
         }
 
-//        translate(userLanguage, "en", itemView, true, itemService);
-
         final Map<String, String> headerMap = TableUtil.createHeaderMap(itemView.getHeader());
 
         ItemUtil.updateName(item, headerMap, itemService);
@@ -272,18 +271,19 @@ public class ItemViewFactory {
         for (final ChildItem oldItem : oldItems) {
             if (!newItems.contains(oldItem)) {
                 final Long id = oldItem.getId();
-                final Long itemId = oldItem.getItem().getId();
-                itemView.getWishListIds().remove(itemId);
                 itemService.getChildItemRepository().deleteById(id);
             }
         }
 
-        // add all actual items to wish list after translation and save that state
-        translateNestedItemDtoList(userLanguage, "en", itemView.getPartsTable().getParts(), true, itemService);
+        // add all actual items to wishlist after translation and save that state
+        final List<NestedItemDto> dtos = itemView.getPartsTable().getParts();
+        TranslatorUtil.translateNestedItemDtoList(userLanguage, "en", dtos, true, itemService);
         newItems = ChildItemUtil.createPartsFromItemView(itemView, itemService);
         user.getWishList().getItems().addAll(newItems);
         itemService.getUserService().update(user);
 
+        itemView.setWishListIds(ChildItemUtil.collectIds(newItems));
+        TranslatorUtil.translateNestedItemDtoList("en", userLanguage, dtos, true, itemService);
         return itemView;
     }
 

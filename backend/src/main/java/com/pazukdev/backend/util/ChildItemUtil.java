@@ -46,16 +46,15 @@ public class ChildItemUtil {
                                                          final ItemService itemService) {
         final List<NestedItemDto> allItems = NestedItemUtil.collectAllItems(itemView.getPartsTable());
         final List<NestedItemDto> preparedItems = prepareNestedItemDtosToConverting(allItems);
+        final String parentName = getParentName(itemView, itemService);
 
         final Set<ChildItem> partsFromItemView = new HashSet<>();
         for (final NestedItemDto nestedItem : preparedItems) {
-            final Item parent = itemService.getOne(itemView.getItemId());
             final Item partItem = itemService.getOne(nestedItem.getItemId());
-
 
             final ChildItem part = new ChildItem();
             part.setId(nestedItem.getId());
-            part.setName(getName(parent.getName(), partItem.getName()));
+            part.setName(getName(parentName, partItem.getName()));
             part.setItem(partItem);
             part.setLocation(nestedItem.getComment());
             part.setQuantity(nestedItem.getSecondComment());
@@ -114,10 +113,15 @@ public class ChildItemUtil {
         return getName(parentName, itemName);
     }
 
-    public static String getName(final Long parentId, final Long id, final ItemService itemService) {
-        final String parentName = itemService.getOne(parentId).getName();
-        final String name = itemService.getOne(id).getName();
-        return getName(parentName, name);
+    public static String getParentName(final ItemView itemView, final ItemService itemService) {
+        final Long parentId = itemView.getItemId();
+        if (parentId > 0) {
+            return itemService.getOne(parentId).getName();
+        }
+        if (parentId.equals(ItemUtil.SpecialItemId.WISH_LIST_VIEW.getItemId())) {
+            return "Wishlist";
+        }
+        return null;
     }
 
     public static String getName(final String parentName, final String name) {

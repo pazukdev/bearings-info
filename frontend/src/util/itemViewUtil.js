@@ -68,6 +68,10 @@ export default {
         router.replace({path: router.currentRoute.path.replace(/\/[^/]*$/, "/" + lang)});
     },
 
+    isAuthorized(authorization) {
+        return authorization !== "";
+    },
+
     isGuest(itemView, userName) {
         return itemView.userData.comment === "Guest" && userName.toString() === "guest";
     },

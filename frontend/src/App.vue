@@ -215,7 +215,7 @@
         background: #617D89;
     }
 
-    button, select, input, textarea {
+    button, select, input, textarea, img {
         border-radius: 4px;
         border: none;
     }

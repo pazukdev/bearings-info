@@ -255,7 +255,7 @@ public class ItemUtil {
 
     public static void updateImg(final ItemView itemView, final Item item) {
         if (itemView.getMessages().contains("img removed")) {
-            item.setImage(null);
+            item.setImage("-");
             return;
         } else if (!itemView.getMessages().contains("img uploaded")) {
             return;
