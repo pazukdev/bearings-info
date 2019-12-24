@@ -12,7 +12,6 @@
                 </td>
             </tr>
             <tr v-for="table in itemsListAsTables()">
-<!--                {{table}}-->
                 <td>
                     <v-details v-model="table.opened">
                         <summary><b>{{table.name}}</b></summary>

@@ -86,19 +86,7 @@
             })
         },
 
-        created() {
-            this.onUrlChange();
-        },
-
-        watch: {
-            '$route': 'onUrlChange'
-        },
-
         methods: {
-            onUrlChange() {
-                this.$i18n.locale = this.appLanguage.toString();
-            },
-
             performLoginPageAction() {
                 if (this.isLogin) {
                     this.login();

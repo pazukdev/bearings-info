@@ -6,7 +6,6 @@
                     :logout-button-displayed="isLogoutButtonDisplayed()"
                     :language="appLanguage"
                     @logout="logout"
-                    @select-language="selectLanguage"
                     @open-login-form="openLoginForm"/>
             <div style="text-align: left">
 <!--                {{"store: " + appLanguage}}<br>-->
@@ -20,6 +19,7 @@
 <!--                {{"editMode: " + editMode}}<br>-->
 <!--                {{"itemView: " + itemView}}<br>-->
             </div>
+            <LangMenu/>
             <NavigationBar/>
             <UserMenu/>
             <router-view/>
@@ -36,11 +36,13 @@
     import NavigationBar from "./components/menu/NavigationBar";
     import UserMenu from "./components/menu/UserMenu";
     import routerUtil from "./util/routerUtil";
+    import LangMenu from "./components/menu/LangMenu";
 
     export default {
         name: 'app',
 
         components: {
+            LangMenu,
             UserMenu,
             NavigationBar,
             LoadingScreen,
@@ -78,11 +80,6 @@
                     basicUrl = "https://bearings-info.herokuapp.com";
                 }
                 this.$store.dispatch("setBasicUrl", basicUrl);
-            },
-
-            selectLanguage(language) {
-                this.$store.dispatch("setAppLanguage", language);
-                this.$router.replace({ path: this.$router.currentRoute.path.replace(/\/[^\/]*$/, "/" + language) });
             },
 
             isGuest() {
@@ -176,7 +173,7 @@
     #screen {
         overflow: auto;
         background-color: #212121;
-        color: #808080;
+        color: grey;
         width: 480px;
         height: 800px;
         border-radius: 10px;
@@ -208,7 +205,7 @@
     }
 
     hr, button, select, input {
-        background: #808080;
+        background: grey;
     }
 
     input, textarea, #app_bar {

@@ -60,7 +60,6 @@
 
         methods: {
             onUrlChange() {
-                itemViewUtil.setLocale(this.$router, this.$route, this.$i18n, this.appLanguage.toString());
                 this.getView();
             },
 

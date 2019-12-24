@@ -59,7 +59,7 @@ export default {
 
     setLocale(router, route, i18n, lang) {
         if (route.params.lang !== lang) {
-            this.changeLanguageInUrl(lang);
+            this.changeLanguageInUrl(router, lang);
         }
         i18n.locale = lang;
     },

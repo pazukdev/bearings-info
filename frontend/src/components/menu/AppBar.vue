@@ -1,8 +1,5 @@
 <template>
     <div id="app_bar">
-<!--        <div style="color: black">-->
-<!--            {{appLanguage}}<br>-->
-<!--        </div>-->
         <table>
             <tbody>
             <tr>
@@ -15,19 +12,8 @@
                         {{$t('back')}}
                     </button>
                 </td>
-                <td class="app-bar-middle-side-column">
-                    {{"v 2.0"}}
-                </td>
                 <td id="appName">
                     {{"Soviet boxers seals & bearings"}}
-                </td>
-                <td class="app-bar-middle-side-column">
-                    <select v-model="newLanguage"
-                            @change="selectLanguage()">
-                        <option v-for="lang in languages" :value="lang">
-                            {{lang}}
-                        </option>
-                    </select>
                 </td>
                 <td class="app-bar-side-column">
                     <button
@@ -52,8 +38,6 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex';
-
     export default {
         name: 'AppBar',
 
@@ -61,27 +45,9 @@
             backButtonDisplayed: Boolean,
             logoutButtonDisplayed: Boolean,
             loginButtonDisplayed: Boolean,
-            language: String
-        },
-
-        computed: {
-            ...mapState({
-                appLanguage: state => state.dictionary.appLanguage
-            })
-        },
-
-        data() {
-            return {
-                languages: ["en", "ru"],
-                newLanguage: this.language
-            }
         },
 
         methods: {
-            selectLanguage() {
-                this.$emit("select-language", this.newLanguage);
-            },
-
             logout() {
                 this.$emit("logout");
             },
@@ -99,25 +65,14 @@
 </script>
 
 <style scoped>
-    table, select, .app-bar-button {
+    table, .app-bar-button {
         color: #212121;
         font-weight: bold;
         text-align: center;
     }
 
-    select {
-        width: initial;
-        height: initial;
-        background: initial;
-        border-radius: initial;
-    }
-
     .app-bar-side-column {
         width: 20%;
-    }
-
-    .app-bar-middle-side-column {
-        width: 12%;
     }
 
     .app-bar-button {
