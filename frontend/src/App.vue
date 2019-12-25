@@ -23,16 +23,15 @@
 </template>
 
 <script>
-    import axios from 'axios';
     import {mapState} from 'vuex';
     import AppBar from "./components/menu/AppBar";
     import Home from "./components/router/Home";
     import LoadingScreen from "./components/special/LoadingScreen";
     import NavigationBar from "./components/menu/NavigationBar";
     import UserMenu from "./components/menu/UserMenu";
-    import routerUtil from "./util/routerUtil";
     import LangMenu from "./components/menu/LangMenu";
     import itemViewUtil from "./util/itemViewUtil";
+    import axiosUtil from "./util/axiosUtil";
 
     export default {
         name: 'app',
@@ -87,20 +86,8 @@
             },
 
             loginAsGuest() {
-                let username = "guest";
-                let password = "guest";
-                let credentialsUrl ="username=" + username + "&" + "password=" + password;
-                axios
-                    .post(this.basicUrl + "/login", credentialsUrl)
-                    .then(response => {
-                        if (response.status === 200) {
-                            let authorization = response.data.Authorization;
-                            this.$store.dispatch("setAuthorization", authorization);
-                            this.$store.dispatch("setUserName", username);
-                            console.log("logged in as " + username);
-                            routerUtil.toHome(this.$router);
-                        }
-                    });
+                let toHome = true;
+                axiosUtil.loginAsGuest(this.basicUrl, toHome);
             }
         }
     }

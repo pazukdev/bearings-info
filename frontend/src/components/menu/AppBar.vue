@@ -41,12 +41,14 @@
     import routerUtil from "../../util/routerUtil";
     import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
+    import axiosUtil from "../../util/axiosUtil";
 
     export default {
         name: 'AppBar',
 
         computed: {
             ...mapState({
+                basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
                 loadingState: state => state.dictionary.loadingState,
                 userName: state => state.dictionary.userName,
@@ -56,13 +58,14 @@
 
         methods: {
             logout() {
-                routerUtil.toLogin(this.$router);
+                routerUtil.toLogin();
                 console.log("logout");
-                this.loginAsGuest();
+                let toHome = false;
+                axiosUtil.loginAsGuest(this.basicUrl, toHome);
             },
 
             openLoginForm() {
-                routerUtil.toLogin(this.$router);
+                routerUtil.toLogin();
                 console.log("logout");
                 console.log("login form opened");
             },

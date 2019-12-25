@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!isLoginPage()">
         <table>
             <tbody>
                 <tr>
@@ -25,6 +25,7 @@
     import {mapState} from "vuex";
     import itemViewUtil from "../../util/itemViewUtil";
     import DefaultButton from "../element/button/DefaultButton";
+    import routerUtil from "../../util/routerUtil";
 
     export default {
         name: "UserMenu",
@@ -55,6 +56,10 @@
 
             isAdmin() {
                 return itemViewUtil.isAdmin(this.itemView);
+            },
+
+            isLoginPage() {
+                return routerUtil.isLogin(this.$route);
             }
         }
     }

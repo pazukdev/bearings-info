@@ -1,6 +1,5 @@
 import shared from "./shared";
 import storeUtil from "./storeUtil";
-import axios from "axios";
 
 export default {
     itemsListToTables(items) {
@@ -35,26 +34,6 @@ export default {
         nestedTables.sort((a,b) => (a.name > b.name) ? 1 : -1);
 
         return nestedTables;
-    },
-
-    updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization, store) {
-        axios
-            .put(basicUrl
-                + "/" + "item"
-                + "/" + "update"
-                + "/" + itemId
-                + "/" + userName
-                + "/" + appLanguage,
-                itemView, {
-                    headers: {
-                        Authorization: authorization
-                    }
-                })
-            .then(response => {
-                let updatedItemView = response.data;
-                this.dispatchView(store, updatedItemView);
-                console.log("item updated");
-            });
     },
 
     setLocale(router, route, i18n, lang) {
