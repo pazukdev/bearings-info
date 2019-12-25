@@ -5,7 +5,7 @@
             <tr>
                 <td class="app-bar-side-column">
                     <button
-                            v-show="backButtonDisplayed"
+                            v-show="isBackButtonDisplayed()"
                             @click="back()"
                             id="back"
                             class="app-bar-button">
@@ -17,14 +17,14 @@
                 </td>
                 <td class="app-bar-side-column">
                     <button
-                            v-show="logoutButtonDisplayed"
+                            v-show="isLogoutButtonDisplayed()"
                             @click="logout()"
                             id="logout"
                             class="app-bar-button">
                         {{$t('logout')}}
                     </button>
                     <button
-                            v-show="loginButtonDisplayed"
+                            v-show="isLoginButtonDisplayed()"
                             @click="openLoginForm()"
                             id="login"
                             class="app-bar-button">
@@ -38,27 +38,66 @@
 </template>
 
 <script>
+    import routerUtil from "../../util/routerUtil";
+    import itemViewUtil from "../../util/itemViewUtil";
+    import {mapState} from "vuex";
+
     export default {
         name: 'AppBar',
 
-        props: {
-            backButtonDisplayed: Boolean,
-            logoutButtonDisplayed: Boolean,
-            loginButtonDisplayed: Boolean,
+        computed: {
+            ...mapState({
+                authorization: state => state.dictionary.authorization,
+                loadingState: state => state.dictionary.loadingState,
+                userName: state => state.dictionary.userName,
+                appLanguage: state => state.dictionary.appLanguage
+            })
         },
 
         methods: {
             logout() {
-                this.$emit("logout");
+                routerUtil.toLogin(this.$router);
+                console.log("logout");
+                this.loginAsGuest();
             },
 
             openLoginForm() {
-                this.$emit("open-login-form");
+                routerUtil.toLogin(this.$router);
+                console.log("logout");
+                console.log("login form opened");
             },
 
             back() {
                 console.log("back button taped");
                 window.history.back();
+            },
+
+            isAuthorized() {
+                return itemViewUtil.isAuthorized(this.authorization);
+            },
+
+            isGuest() {
+                return itemViewUtil.isGuest(null, this.userName);
+            },
+
+            isBackButtonDisplayed() {
+                return !this.isLoginPage() && !this.isHomePage() && !this.loadingState;
+            },
+
+            isLogoutButtonDisplayed() {
+                return !this.isGuest() && this.isAuthorized();
+            },
+
+            isLoginButtonDisplayed() {
+                return this.isGuest() && !this.isLoginPage();
+            },
+
+            isLoginPage() {
+                return routerUtil.isLogin(this.$route);
+            },
+
+            isHomePage() {
+                return routerUtil.isHome(this.$route);
             }
         }
     }

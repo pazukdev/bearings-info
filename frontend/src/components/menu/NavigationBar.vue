@@ -42,19 +42,19 @@
 
         methods: {
             goHome() {
-                this.$router.push({name: "home"});
+                routerUtil.toHome(this.$router);
             },
 
             openItemsManagement() {
-                this.$router.push({name: "items_management"});
+                routerUtil.toItemsManagement(this.$router);
             },
 
             isLoginPage() {
-                return routerUtil.isLoginPage(this.$route);
+                return routerUtil.isLogin(this.$route);
             },
 
             isGuest() {
-                return itemViewUtil.isGuest(this.itemView, this.userName.toString());
+                return itemViewUtil.isGuest(null, this.userName);
             }
         }
     }

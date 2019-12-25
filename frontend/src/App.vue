@@ -1,12 +1,10 @@
 <template id="app">
     <div id="main-div">
         <div id="screen">
-            <AppBar :back-button-displayed="isBackButtonDisplayed()"
-                    :login-button-displayed="isLoginButtonDisplayed()"
-                    :logout-button-displayed="isLogoutButtonDisplayed()"
-                    :language="appLanguage"
-                    @logout="logout"
-                    @open-login-form="openLoginForm"/>
+            <AppBar/>
+            <LangMenu/>
+            <NavigationBar/>
+            <UserMenu/>
             <div style="text-align: left">
 <!--                {{"store: " + appLanguage}}<br>-->
 <!--                {{"i18n: " + $i18n.locale}}<br>-->
@@ -19,9 +17,6 @@
 <!--                {{"editMode: " + editMode}}<br>-->
 <!--                {{"itemView: " + itemView}}<br>-->
             </div>
-            <LangMenu/>
-            <NavigationBar/>
-            <UserMenu/>
             <router-view/>
         </div>
     </div>
@@ -37,6 +32,7 @@
     import UserMenu from "./components/menu/UserMenu";
     import routerUtil from "./util/routerUtil";
     import LangMenu from "./components/menu/LangMenu";
+    import itemViewUtil from "./util/itemViewUtil";
 
     export default {
         name: 'app',
@@ -82,16 +78,12 @@
                 this.$store.dispatch("setBasicUrl", basicUrl);
             },
 
+            isAuthorized() {
+                return itemViewUtil.isAuthorized(this.authorization);
+            },
+
             isGuest() {
-                return this.isAuthorized() && this.userName.toString() === "guest";
-            },
-
-            pushToHome() {
-                this.$router.push({ name: "home" });
-            },
-
-            pushToLoginForm() {
-                this.$router.push({ name: "login" });
+                return itemViewUtil.isGuest(null, this.userName);
             },
 
             loginAsGuest() {
@@ -106,48 +98,9 @@
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", username);
                             console.log("logged in as " + username);
-                            this.pushToHome();
+                            routerUtil.toHome(this.$router);
                         }
-                    })
-                    .catch(error => {
-                        console.log("login as " + username + " failed");
                     });
-            },
-
-            logout() {
-                this.pushToLoginForm();
-                console.log("logout");
-                this.loginAsGuest();
-            },
-
-            openLoginForm() {
-                this.pushToLoginForm();
-                console.log("logout");
-                console.log("login form opened");
-            },
-
-            isAuthorized() {
-                return this.authorization.toString() !== "";
-            },
-
-            isBackButtonDisplayed() {
-                return !this.isLoginPage() && !this.isHomePage() && !this.loadingState;
-            },
-
-            isLogoutButtonDisplayed() {
-                return !this.isGuest() && this.isAuthorized();
-            },
-
-            isLoginButtonDisplayed() {
-                return this.isGuest() && !this.isLoginPage();
-            },
-
-            isLoginPage() {
-                return routerUtil.isLoginPage(this.$route);
-            },
-
-            isHomePage() {
-                return routerUtil.isHomePage(this.$route);
             }
         }
     }

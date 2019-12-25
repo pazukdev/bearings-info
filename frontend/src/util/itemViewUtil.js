@@ -73,7 +73,7 @@ export default {
     },
 
     isGuest(itemView, userName) {
-        return itemView.userData.comment === "Guest" && userName.toString() === "guest";
+        return userName === "guest";
     },
 
     isAdmin(itemView) {
