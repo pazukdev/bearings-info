@@ -8,8 +8,12 @@ export default {
         return false;
     },
 
+    isEmpty(value) {
+        return value === "-" || value === "" || value === null || value === undefined;
+    },
+
     messageIsEmpty(message) {
-        return message === "";
+        return this.isEmpty(message);
     },
 
     statusIsActive(status) {
@@ -22,6 +26,6 @@ export default {
 
     isNestedItemsTitleVisible(nestedItemsList, editMode) {
         return nestedItemsList.length > 0 || editMode;
-    },
+    }
 
 }

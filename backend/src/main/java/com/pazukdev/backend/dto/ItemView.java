@@ -40,6 +40,8 @@ public class ItemView extends AbstractDto {
     private String creatorName;
     private Set<Long> wishListIds = new HashSet<>();
     private LikeListDto likeList;
-//    private ItemView oldItemViewInEnglish;
+    private String wikiLink;
+    private String sellerLink;
+    private String sellerLang;
 
 }

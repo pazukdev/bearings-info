@@ -8,6 +8,7 @@
             <div style="text-align: left">
 <!--                {{"store: " + appLanguage}}<br>-->
 <!--                {{"i18n: " + $i18n.locale}}<br>-->
+<!--                {{"langs: " + langs}}-->
 <!--                {{this.$route.params.item_id}}<br>-->
 <!--                {{this.$route.params.lang}}<br>-->
 <!--                {{"basicUrl: " + basicUrl}}<br>-->
@@ -54,7 +55,8 @@
                 itemView: state => state.dictionary.itemView,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
-                appLanguage: state => state.dictionary.appLanguage
+                appLanguage: state => state.dictionary.appLanguage,
+                langs: state => state.dictionary.langs
             })
         },
 

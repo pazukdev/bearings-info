@@ -52,7 +52,8 @@
                 authorization: state => state.dictionary.authorization,
                 loadingState: state => state.dictionary.loadingState,
                 userName: state => state.dictionary.userName,
-                appLanguage: state => state.dictionary.appLanguage
+                appLanguage: state => state.dictionary.appLanguage,
+                editMode: state => state.dictionary.editMode
             })
         },
 
@@ -84,6 +85,9 @@
             },
 
             isBackButtonDisplayed() {
+                if (this.editMode) {
+                    return false;
+                }
                 return !this.isLoginPage() && !this.isHomePage() && !this.loadingState;
             },
 

@@ -46,5 +46,14 @@ public class Item extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "replacer_item_id")
     )
     private Set<Replacer> replacers = new HashSet<>();
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(
+            name = "item_link",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "link_id")
+    )
+    private Set<Link> links = new HashSet<>();
 
 }

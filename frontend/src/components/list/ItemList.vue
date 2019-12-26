@@ -58,6 +58,7 @@
     import ItemDescription from "./section/ItemDescription";
     import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
     import ItemViewImage from "../item/ItemViewImage";
+    import axiosUtil from "../../util/axiosUtil";
 
     export default {
         name: "ItemList",
@@ -104,7 +105,7 @@
                 let userName = this.userName.toString();
                 let appLanguage = this.appLanguage.toString();
                 let authorization = this.authorization;
-                itemViewUtil.updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization, this.$store);
+                axiosUtil.updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization);
             },
 
             removeItem(item) {

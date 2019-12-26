@@ -16,6 +16,7 @@
             <column name="status" type="varchar(255)"/>
             <column name="description" type="varchar(1000)"/>
             <column name="replacer" type="varchar(1000)"/>
+            <column name="wiki" type="varchar(1000)"/>
         </createTable>
     </changeSet>
 
@@ -73,6 +74,18 @@
             <column name="status" type="varchar(255)"/>
             <column name="item_id" type="bigint"/>
             <column name="comment" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_link_table" author="sviarkaltsau">
+        <createTable tableName="link">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
+            <column name="type" type="varchar(255)"/>
+            <column name="lang" type="varchar(255)"/>
         </createTable>
     </changeSet>
 
@@ -172,6 +185,17 @@
             </column>
             <column name="item_id" type="bigint">
                 <constraints foreignKeyName="fk_dislikelist_item_item_id" references="item (id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_item_link_table" author="sviarkaltsau">
+        <createTable tableName="item_link">
+            <column name="item_id" type="bigint">
+                <constraints foreignKeyName="fk_item_link_item_id" references="item (id)"/>
+            </column>
+            <column name="link_id" type="bigint">
+                <constraints foreignKeyName="fk_item_link_link_id" references="link (id)"/>
             </column>
         </createTable>
     </changeSet>

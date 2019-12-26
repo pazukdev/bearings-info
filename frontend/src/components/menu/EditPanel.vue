@@ -6,6 +6,7 @@
                 <td class="two-columns-table-left-column">
                     <button v-if="editMode"
                             type="button"
+                            style="background: darkgreen"
                             @click="cancel()">
                         {{$t("cancel")}}
                     </button>
@@ -16,8 +17,9 @@
                             @click="edit()">
                         {{$t("edit")}}
                     </button>
-                    <button v-if="editMode"
+                    <button v-if="isSaveButtonRendered()"
                             type="button"
+                            style="background: red"
                             @click="save()">
                         {{$t("save")}}
                     </button>
@@ -62,6 +64,10 @@
                 storeUtil.setLoadingState(this.$store, true);
                 storeUtil.setEditMode(this.$store, false);
                 this.$emit("save");
+            },
+
+            isSaveButtonRendered() {
+                return this.editMode;
             },
 
             isMotorcycleCatalogueView() {

@@ -150,6 +150,7 @@ public class ItemViewFactory {
         itemView.setCreatorId(item.getCreatorId());
         itemView.setCreatorName(UserUtil.getCreatorName(item, itemService.getUserService()));
         itemView.setLikeList(UserUtil.createLikeListDto(currentUser));
+        LinkUtil.setLinksToItemView(itemView, item);
         return itemView;
     }
 
@@ -242,7 +243,7 @@ public class ItemViewFactory {
         ItemUtil.updateImg(itemView, item);
         ItemUtil.updateChildItems(item, itemView, itemService, currentUser);
         ItemUtil.updateReplacers(item, itemView, itemService, currentUser);
-
+        LinkUtil.updateItemLinks(item, itemView);
         itemService.update(item);
         return createItemView(itemId, currentUser.getName(), userLanguage);
     }

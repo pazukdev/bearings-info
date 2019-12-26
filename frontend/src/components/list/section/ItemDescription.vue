@@ -8,12 +8,9 @@
 
         <table id="item-description">
             <tbody>
-            <tr style="text-align: left"
-                v-for="row in itemView.header.rows">
+            <tr v-for="row in itemView.header.rows">
                 <td class="two-columns-table-left-column">
-                    <p>
-                        {{row.parameter}}
-                    </p>
+                    <p>{{row.parameter}}</p>
                 </td>
                 <td class="two-column-table-right-column">
                     <p v-if="!isEdit() && !isShowInfoButton(row.itemId)">
@@ -140,5 +137,7 @@
 </script>
 
 <style scoped>
-
+    #item-description {
+        text-align: left;
+    }
 </style>

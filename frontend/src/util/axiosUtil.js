@@ -24,7 +24,7 @@ export default {
             });
     },
 
-    updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization, store) {
+    updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization) {
         axios
             .put(basicUrl
                 + "/" + "item"
@@ -41,6 +41,22 @@ export default {
                 let updatedItemView = response.data;
                 itemViewUtil.dispatchView(store, updatedItemView);
                 console.log("item updated");
+            });
+    },
+
+    setSupportedLangs(basicUrl, authorization) {
+        axios
+            .get(basicUrl
+                + "/" + "app-settings"
+                + "/" + "langs", {
+                headers: {
+                    Authorization: authorization
+                }
+            })
+            .then(response => {
+                let langs = response.data;
+                console.log("got langs: " + langs);
+                store.dispatch("setLangs", langs);
             });
     },
 

@@ -1,5 +1,6 @@
 const state = {
     basicUrl: "backend",
+    langs: [],
     appLanguage: "en",
     editMode: false,
     loadingState: false,
@@ -12,6 +13,10 @@ const state = {
 const actions = {
     setBasicUrl: ({commit}, context) => {
         commit("setBasicUrl", context);
+    },
+
+    setLangs: ({commit}, context) => {
+        commit("setLangs", context);
     },
 
     setAppLanguage: ({commit}, context) => {
@@ -44,6 +49,10 @@ const actions = {
 };
 
 const mutations = {
+    setLangs(state, langs) {
+        state.langs = langs;
+    },
+
     setAppLanguage(state, appLanguage) {
         state.appLanguage = appLanguage;
     },

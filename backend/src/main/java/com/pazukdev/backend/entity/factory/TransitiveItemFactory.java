@@ -73,4 +73,8 @@ public class TransitiveItemFactory extends AbstractEntityFactory<TransitiveItem>
         item.setReplacer(replacer != null ? replacer : "-");
     }
 
+    private void applyWiki(final TransitiveItem item, final TableRow tableRow) {
+        item.setWiki(tableRow.getData().get("Wiki"));
+    }
+
 }

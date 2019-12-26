@@ -12,10 +12,7 @@ import com.pazukdev.backend.repository.ChildItemRepository;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.repository.ReplacerRepository;
 import com.pazukdev.backend.repository.UserActionRepository;
-import com.pazukdev.backend.util.CategoryUtil;
-import com.pazukdev.backend.util.DateUtil;
-import com.pazukdev.backend.util.ItemUtil;
-import com.pazukdev.backend.util.RateUtil;
+import com.pazukdev.backend.util.*;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -170,6 +167,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         item.setCreatorId(userService.getAdmin().getId());
         item.setUserActionDate(DateUtil.now());
         item.setImage(transitiveItem.getImage());
+        LinkUtil.addLinksToItem(item, transitiveItem);
         return item;
     }
 
