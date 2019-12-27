@@ -1,6 +1,15 @@
 <template>
-    <div>
-        {{user}}
+    <div style="text-align: center">
+<!--        {{user}}-->
+        <p>{{"User"}}</p>
+        <table class="equal-columns-table">
+            <tbody>
+            <tr><td>{{"Name"}}</td><td>{{user.name}}</td></tr>
+            <tr><td>{{"Role"}}</td><td>{{user.role}}</td></tr>
+            <tr><td>{{"Rating"}}</td><td>{{user.rating}}</td></tr>
+            <tr><td>{{"Email"}}</td><td>{{user.email}}</td></tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -52,5 +61,7 @@
 </script>
 
 <style scoped>
-
+    table {
+        text-align: left;
+    }
 </style>
