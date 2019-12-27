@@ -2,7 +2,10 @@
     <div>
         <div style="text-align: center">
             <p><b>{{itemView.header.name}}</b></p>
-            <p v-if="item">{{$t("createdBy") + " " + itemView.creatorName}}</p>
+            {{$t("createdBy")}}
+            <router-link :to="{name: 'user', params: {id: itemView.creatorId, lang: appLanguage}}">
+                {{itemView.creatorName}}
+            </router-link>
             <br>
         </div>
 
@@ -71,7 +74,8 @@
         computed: {
             ...mapState({
                 itemView: state => state.dictionary.itemView,
-                editMode: state => state.dictionary.editMode
+                editMode: state => state.dictionary.editMode,
+                appLanguage: state => state.dictionary.appLanguage
             }),
         },
 
@@ -139,5 +143,10 @@
 <style scoped>
     #item-description {
         text-align: left;
+    }
+
+    a {
+        color: grey;
+        text-decoration: underline;
     }
 </style>

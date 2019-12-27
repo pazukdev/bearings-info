@@ -2,7 +2,6 @@ import axios from "axios";
 import routerUtil from "./routerUtil";
 import store from "../plugins/store";
 import itemViewUtil from "./itemViewUtil";
-import router from "../plugins/router";
 
 export default {
     loginAsGuest(basicUrl, toHome) {
@@ -18,7 +17,7 @@ export default {
                     store.dispatch("setUserName", username);
                     console.log("logged in as " + username);
                     if (toHome) {
-                        routerUtil.toHome(router);
+                        routerUtil.toHome();
                     }
                 }
             });

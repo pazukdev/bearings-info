@@ -28,9 +28,9 @@
             pushTo(id) {
                 let lang = this.appLanguage.toString();
                 if (this.user) {
-                    this.$router.push({ name: "user", params: {id, lang} });
+                    routerUtil.toUser(id, lang);
                 } else {
-                    routerUtil.toItem(this.$router, id, lang);
+                    routerUtil.toItem(id, lang);
                 }
             },
 

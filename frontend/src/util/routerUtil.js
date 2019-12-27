@@ -16,11 +16,15 @@ export default {
         return route.name === "home";
     },
 
-    toItem(router, itemId, lang) {
+    toItem(itemId, lang) {
         router.push({name: "item", params: {id: itemId, lang}});
     },
 
-    toHome(router) {
+    toUser(id, lang) {
+        router.push({name: "user", params: {id, lang}});
+    },
+
+    toHome() {
         router.push({name: "home"});
     },
 

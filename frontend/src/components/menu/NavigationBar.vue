@@ -42,7 +42,7 @@
 
         methods: {
             goHome() {
-                routerUtil.toHome(this.$router);
+                routerUtil.toHome();
             },
 
             openItemsManagement() {
