@@ -202,11 +202,6 @@
 </script>
 
 <style scoped>
-    label {
-        width: 100%;
-        color: grey;
-    }
-
     select {
         width: initial;
         height: initial;

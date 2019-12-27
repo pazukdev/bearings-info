@@ -1,9 +1,9 @@
 <template>
-    <div id="login">
-        <table>
+    <div id="login-page">
+        <table class="equal-columns-table">
             <tbody>
             <tr>
-                <td class="half-width">
+                <td>
                     <button @click="switchForm()">
                         {{buttonReverseName()}}
                     </button>
@@ -14,52 +14,53 @@
                     </button>
                 </td>
             </tr>
-            <tr style="height: 200px">
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>
-                    {{"E-mail"}}
-                </td>
-                <td>
-                    <input type="text" name="username" v-model="username"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {{$t('password')}}
-                </td>
-                <td>
-                    <input type="password" name="password" v-model="password"/>
-                </td>
-            </tr>
-            <tr v-if="!isLogin">
-                <td>
-                    {{$t("repeatPassword")}}
-                </td>
-                <td>
-                    <input v-model="repeatedPassword"/>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <button v-on:click="performLoginPageAction()">{{buttonName()}}</button>
-                </td>
-            </tr>
-            <tr v-if="incorrectCredentials" class="warning-message">
-                <td colspan="2">
-                    {{getIncorrectLoginOrPasswordMessage()}}
-                </td>
-            </tr>
-            <tr v-for="message in validationMessages" v-bind:value="message" class="warning-message">
-                <td colspan="2">
-                    {{message}}
-                </td>
-            </tr>
             </tbody>
         </table>
+
+        <form id="login-form" @submit="performLoginPageAction">
+            <table>
+                <tbody>
+                <tr v-if="validationMessages.length" style="text-align: left">
+                    <td>
+                        <ul v-for="message in validationMessages">
+                            <li class="alert-message">{{message}}</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>{{"E-mail"}}
+                            <input type="email" name="username" v-model="username"/>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>{{$t('password')}}
+                            <input type="password" name="password" v-model="password"/>
+                        </label>
+                    </td>
+                </tr>
+                <tr v-if="!isLogin">
+                    <td>
+                        <label>{{$t("repeatPassword")}}
+                            <input type="password" v-model="repeatedPassword"/>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="submit-login-form" type="submit" :value="buttonName()">
+                    </td>
+                </tr>
+                <tr v-if="incorrectCredentials" class="warning-message">
+                    <td colspan="2">
+                        {{getIncorrectLoginOrPasswordMessage()}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
     </div>
 </template>
 
@@ -87,7 +88,12 @@
         },
 
         methods: {
-            performLoginPageAction() {
+            validate() {
+
+            },
+
+            performLoginPageAction: function (e) {
+                e.preventDefault();
                 if (this.isLogin) {
                     this.login();
                 } else {
@@ -185,12 +191,17 @@
         text-align: left;
     }
 
-    .half-width {
-        width: 50%;
+    form {
+        margin-top: 50px;
+        width: 80%;
     }
 
-    .warning-message {
-        text-align: center;
-        color: red;
+    #submit-login-form {
+        background: grey;
     }
+
+    #login-page, #login-form {
+        text-align: center;
+    }
+
 </style>

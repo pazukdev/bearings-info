@@ -3,7 +3,7 @@
         <div style="text-align: center">
             <p><b>{{itemView.header.name}}</b></p>
             {{$t("createdBy")}}
-            <router-link :to="{name: 'user', params: {id: itemView.creatorId, lang: appLanguage}}">
+            <router-link v-if="item" :to="{name: 'user', params: {id: itemView.creatorId, lang: appLanguage}}">
                 {{itemView.creatorName}}
             </router-link>
             <br>

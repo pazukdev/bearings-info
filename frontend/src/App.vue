@@ -115,11 +115,13 @@
     #screen {
         overflow: auto;
         background-color: #212121;
-        color: grey;
         width: 480px;
         height: 800px;
         border-radius: 10px;
+    }
 
+    #screen, #screen label {
+        color: grey;
     }
 
     #screen::-webkit-scrollbar {
@@ -138,7 +140,7 @@
         text-align: center;
     }
 
-    table, button, select, input, textarea {
+    table, button, select, input, textarea, label {
         width: 100%;
     }
 
