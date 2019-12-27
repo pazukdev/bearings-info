@@ -62,6 +62,7 @@
                     <td>
                         <label>{{"Seller"}}
                             <input id="seller-link-input" v-model="itemView.sellerLink"
+                                   :disabled="!isInputEnabled()"
                                    type="url"
                                    @change="validate()"/>
                         </label>
@@ -180,6 +181,21 @@
 
             isEmpty(value) {
                 return shared.isEmpty(value);
+            },
+
+            isInputEnabled() {
+                if (shared.isInArray(this.userName, this.getPermittedToEditSellerLinkUserNameList())) {
+                    return true;
+                }
+                return this.isAdmin();
+            },
+
+            getPermittedToEditSellerLinkUserNameList() {
+                return ["serg"];
+            },
+
+            isAdmin() {
+                return itemViewUtil.isAdmin(this.itemView);
             }
         }
     }
