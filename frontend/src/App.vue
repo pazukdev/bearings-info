@@ -84,7 +84,7 @@
             },
 
             isGuest() {
-                return itemViewUtil.isGuest(null, this.userName);
+                return itemViewUtil.isGuest(this.userName);
             },
 
             loginAsGuest() {

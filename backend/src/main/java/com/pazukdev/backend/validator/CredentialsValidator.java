@@ -14,11 +14,10 @@ import java.util.List;
 @Component
 public class CredentialsValidator {
 
-    public List<String> validate(final UserDto dto, final boolean userExists) {
+    public List<String> validate(final UserDto dto, final boolean nameExists, final boolean emailExists) {
         final List<String> validationMessages = new ArrayList<>();
-        final String email = dto.getName();
 
-        if (!EmailValidator.getInstance().isValid(email)) {
+        if (!EmailValidator.getInstance().isValid(dto.getEmail())) {
             validationMessages.add("Invalid email");
         }
         if (StringUtils.isBlank(dto.getName())) {
@@ -30,11 +29,18 @@ public class CredentialsValidator {
         if (!dto.getRepeatedPassword().equals(dto.getPassword())) {
             validationMessages.add("Passwords are different");
         }
-        if (userExists) {
-            validationMessages.add("User with this Login already exists");
+        if (nameExists) {
+            validationMessages.add(createUserExistsMessage("name"));
+        }
+        if (emailExists) {
+            validationMessages.add(createUserExistsMessage("email"));
         }
 
         return validationMessages;
+    }
+
+    private String createUserExistsMessage(final String userParameter) {
+        return "User with this " + userParameter + " already exists";
     }
 
 }

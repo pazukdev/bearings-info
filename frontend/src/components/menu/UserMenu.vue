@@ -1,5 +1,6 @@
 <template>
     <div v-if="!isLoginPage()">
+<!--        {{itemView.userData}}-->
         <table>
             <tbody>
                 <tr>
@@ -8,7 +9,7 @@
                     </td>
                     <td/>
                     <td class="third-part-wide" style="text-align: right">
-                        <div v-if="!isGuest()">{{itemView.userData.itemName}}</div>
+                        <div v-if="!isGuest()">{{itemView.userData.name}}</div>
                         <div v-if="!isGuest()">{{$t("rating") + ": " + itemView.userData.rating}}</div>
                         <div v-if="isAdmin()">{{$t("youAreAdmin")}}</div>
                         <div v-if="isGuest()">{{$t('youAreGuest')}}</div>
@@ -51,7 +52,7 @@
             },
 
             isGuest() {
-                return itemViewUtil.isGuest(this.itemView, this.userName.toString());
+                return itemViewUtil.isGuest(this.userName);
             },
 
             isAdmin() {

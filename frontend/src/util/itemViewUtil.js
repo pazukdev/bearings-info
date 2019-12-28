@@ -51,12 +51,12 @@ export default {
         return authorization !== "";
     },
 
-    isGuest(itemView, userName) {
+    isGuest(userName) {
         return userName === "guest";
     },
 
     isAdmin(itemView) {
-        return itemView.userData.comment === "Admin";
+        return itemView.userData.role === "ADMIN";
     },
 
     getItemName(itemView) {

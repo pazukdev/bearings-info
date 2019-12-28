@@ -20,31 +20,31 @@
         <form id="login-form" @submit="performLoginPageAction">
             <table>
                 <tbody>
-                <tr v-if="validationMessages.length" style="text-align: left">
-                    <td>
-                        <ul v-for="message in validationMessages">
-                            <li class="alert-message">{{message}}</li>
-                        </ul>
-                    </td>
-                </tr>
                 <tr>
                     <td>
+                        <label>{{"Nickname"}}
+                            <input type="text" name="username" v-model="name" required/>
+                        </label>
+                    </td>
+                </tr>
+                <tr v-if="!isLogin">
+                    <td>
                         <label>{{"E-mail"}}
-                            <input type="email" name="username" v-model="username"/>
+                            <input type="email" name="username" v-model="email" required/>
                         </label>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <label>{{$t('password')}}
-                            <input type="password" name="password" v-model="password"/>
+                            <input type="password" name="password" v-model="password" required/>
                         </label>
                     </td>
                 </tr>
                 <tr v-if="!isLogin">
                     <td>
                         <label>{{$t("repeatPassword")}}
-                            <input type="password" v-model="repeatedPassword"/>
+                            <input type="password" v-model="repeatedPassword" required/>
                         </label>
                     </td>
                 </tr>
@@ -54,8 +54,15 @@
                     </td>
                 </tr>
                 <tr v-if="incorrectCredentials" class="warning-message">
-                    <td colspan="2">
+                    <td class="alert-message">
                         {{getIncorrectLoginOrPasswordMessage()}}
+                    </td>
+                </tr>
+                <tr v-if="validationMessages.length" style="text-align: left">
+                    <td>
+                        <ul v-for="message in validationMessages">
+                            <li class="alert-message">{{message}}</li>
+                        </ul>
                     </td>
                 </tr>
                 </tbody>
@@ -72,7 +79,8 @@
         data() {
             return {
                 isLogin: true,
-                username: "pazuk1985@gmail.com",
+                name: "admin",
+                email: "",
                 password: "admin",
                 repeatedPassword: "",
                 validationMessages: []
@@ -110,13 +118,14 @@
             },
 
             loginAsGuest() {
-                this.username = "guest";
+                this.name = "guest";
                 this.password = "guest";
                 this.login();
             },
 
             login() {
-                let credentialsUrl ="username=" + this.username + "&" + "password=" + this.password;
+                let credentialsUrl ="username=" + this.name + "&" + "password=" + this.password;
+                // console.log(credentialsUrl);
                 axios
                     .post(this.basicUrl + "/login", credentialsUrl)
                     .then(response => {
@@ -124,9 +133,9 @@
                             this.setIncorrectCredentials(false);
                             let authorization = response.data.Authorization;
                             this.$store.dispatch("setAuthorization", authorization);
-                            this.$store.dispatch("setUserName", this.username);
+                            this.$store.dispatch("setUserName", this.name);
                             this.pushToHome();
-                            console.log("logged in as " + this.username);
+                            console.log("logged in as " + this.name);
                         }
                     })
                     .catch(error => {
@@ -141,7 +150,8 @@
 
             signUp() {
                 let newUser = {
-                    name: this.username,
+                    name: this.name,
+                    email: this.email,
                     password: this.password,
                     repeatedPassword: this.repeatedPassword
                 };
@@ -170,7 +180,8 @@
             },
 
             resetUserData() {
-                this.username = "";
+                this.name = "";
+                this.email = "";
                 this.password = "";
                 this.repeatedPassword = "";
             },

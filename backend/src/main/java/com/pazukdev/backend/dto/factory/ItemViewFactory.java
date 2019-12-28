@@ -52,7 +52,7 @@ public class ItemViewFactory {
         final ItemView basicItemView = new ItemView();
         basicItemView.setItemId(itemId);
         basicItemView.setWishListIds(UserUtil.collectWishListItemsIds(currentUser));
-        basicItemView.setUserData(NestedItemDtoFactory.createUser(currentUser));
+        basicItemView.setUserData(UserDtoFactory.createItemViewUserData(currentUser));
 
         ItemView itemView;
 

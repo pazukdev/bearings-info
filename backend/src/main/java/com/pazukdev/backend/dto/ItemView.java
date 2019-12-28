@@ -3,6 +3,7 @@ package com.pazukdev.backend.dto;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.dto.table.ReplacersTable;
+import com.pazukdev.backend.dto.user.UserDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -26,7 +27,7 @@ public class ItemView extends AbstractDto {
     private boolean defaultImg = true;
     private Long itemId;
     private String category;
-    private NestedItemDto userData;
+    private UserDto userData;
     private String imgData = "-";
     private HeaderTable header;
     private PartsTable partsTable;

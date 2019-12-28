@@ -147,7 +147,7 @@
             },
 
             isGuest() {
-                return itemViewUtil.isGuest(this.itemView, this.userName);
+                return itemViewUtil.isGuest(this.userName);
             },
 
             rate(action, itemId) {

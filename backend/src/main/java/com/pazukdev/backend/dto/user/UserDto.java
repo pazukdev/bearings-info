@@ -14,9 +14,10 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class UserDto extends AbstractDto {
 
-    private Integer rating = 0;
+    private String email;
     private String password;
     private String repeatedPassword;
+    private Integer rating = 0;
     @ApiModelProperty(hidden = true)
     private String role = "USER";
     private Long wishListId;

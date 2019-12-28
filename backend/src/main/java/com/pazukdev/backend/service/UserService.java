@@ -40,6 +40,11 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     }
 
     @Transactional
+    public UserEntity findByEmail(final String email) {
+        return ((UserRepository) repository).findByEmail(email);
+    }
+
+    @Transactional
     @Override
     public List<UserEntity> findAll() {
         final List<UserEntity> users = super.findAll();
@@ -95,12 +100,10 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         if (validationMessages.isEmpty()) {
             dto.setPassword(passwordEncoder.encode(dto.getPassword()));
             if (create) {
-                final String validEmail = dto.getName();
-
                 final UserEntity user = new UserEntity();
                 user.setPassword(dto.getPassword());
-                user.setEmail(validEmail);
-                user.setName(validEmail);
+                user.setEmail(dto.getEmail());
+                user.setName(dto.getName());
                 repository.save(user);
             } else {
                 update(id, dto);
@@ -110,11 +113,13 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     }
 
     private List<String> validateCredentials(final UserDto dto, final boolean checkIfAlreadyExists) {
-        boolean userExists = false;
+        boolean nameExists = false;
+        boolean emailExists = false;
         if (checkIfAlreadyExists) {
-            userExists = findByName(dto.getName()) != null;
+            nameExists = findByName(dto.getName()) != null;
+            emailExists = findByEmail(dto.getEmail()) != null;
         }
-        return credentialsValidator.validate(dto, userExists);
+        return credentialsValidator.validate(dto, nameExists, emailExists);
     }
 
 }

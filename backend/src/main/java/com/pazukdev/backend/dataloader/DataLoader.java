@@ -11,7 +11,6 @@ import com.pazukdev.backend.service.TransitiveItemService;
 import com.pazukdev.backend.util.BearingUtil;
 import com.pazukdev.backend.util.ItemUtil;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -51,18 +50,23 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void createDefaultUsers() {
-        createUser(Role.GUEST, "guest", "$2a$10$unchbvwqbdJHEaRU/zT03emzPvORNIDnVYXgWUh8tN8G2WlcnPH6y");
-        createUser(Role.ADMIN, "pazuk1985@gmail.com", "$2a$10$LJDm6BOaekdsan3q3j15Q.ceRCSHHb1J8kAPqQasWZSdKoJtDAnyO");
-        createUser(Role.ADMIN, "dominator", "$2a$10$mRsNu6BVh3YAm1vKWwsbz.AlOUqzoi0eW9TAcV5AysIciUyusnxrm");
-        createUser(Role.USER, "user", "$2a$10$50E.w9jZJAIjGlsb4OU0N.wSvxrfWe.VEmiAV7.filaKuuKN.f992");
+        createUser(Role.GUEST, "guest", null,
+                "$2a$10$unchbvwqbdJHEaRU/zT03emzPvORNIDnVYXgWUh8tN8G2WlcnPH6y");
+        createUser(Role.ADMIN, "admin", "pazuk1985@gmail.com",
+                "$2a$10$LJDm6BOaekdsan3q3j15Q.ceRCSHHb1J8kAPqQasWZSdKoJtDAnyO");
+        createUser(Role.ADMIN, "dominator", null,
+                "$2a$10$mRsNu6BVh3YAm1vKWwsbz.AlOUqzoi0eW9TAcV5AysIciUyusnxrm");
+        createUser(Role.USER, "user", null,
+                "$2a$10$50E.w9jZJAIjGlsb4OU0N.wSvxrfWe.VEmiAV7.filaKuuKN.f992");
     }
 
     private void createUser(final Role role,
-                            final String nameOrEmail,
+                            final String name,
+                            final String email,
                             final String password) {
         final UserEntity user = new UserEntity();
-        user.setName(nameOrEmail);
-        user.setEmail(EmailValidator.getInstance().isValid(nameOrEmail) ? nameOrEmail : "-");
+        user.setName(name);
+        user.setEmail(email);
         user.setRole(role);
         user.setPassword(password);
         itemService.getUserService().getRepository().save(user);

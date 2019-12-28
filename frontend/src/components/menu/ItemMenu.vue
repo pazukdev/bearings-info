@@ -165,7 +165,7 @@
             },
 
             isGuest() {
-                return itemViewUtil.isGuest(this.itemView, this.userName.toString());
+                return itemViewUtil.isGuest(this.userName);
             },
 
             isSearchEnabled() {
