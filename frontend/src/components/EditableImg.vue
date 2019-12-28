@@ -1,5 +1,6 @@
 <template>
     <div>
+<!--        {{itemView}}-->
         <table id="item-image" v-if="isViewWithImage()">
             <tbody>
             <tr v-if="!messagesContain('img removed')">
@@ -45,10 +46,10 @@
 
 <script>
     import {mapState} from "vuex";
-    import shared from "../../util/shared";
+    import shared from "../util/shared";
 
     export default {
-        name: "ItemViewImage",
+        name: "EditableImg",
 
         computed: {
             ...mapState({

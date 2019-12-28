@@ -2,6 +2,7 @@ package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.dto.ImgViewData;
 import com.pazukdev.backend.entity.Item;
+import com.pazukdev.backend.entity.UserEntity;
 
 import javax.imageio.ImageIO;
 import javax.xml.bind.DatatypeConverter;
@@ -17,6 +18,26 @@ public class ImgUtil {
     public static final String IMG_DIRECTORY_PATH = "backend/src/img/";
     private static final String PNG_EXTENSION = "png";
     private static final String IMG_DATA_METADATA = "data:image/png;base64,";
+
+    public static String getUserImgData(final UserEntity user) {
+        String imgName;
+        String imgPath;
+        BufferedImage img = null;
+        if (user.getImg() != null) {
+            imgName = user.getImg();
+            imgPath = IMG_DIRECTORY_PATH + "user/" + imgName;
+            try {
+                img = getImg(imgPath);
+            } catch (IOException e1) {
+                try {
+                    img = getImg(IMG_DIRECTORY_PATH + "user/default.png");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return createBase64ImgData(img);
+    }
 
     public static ImgViewData getImgViewData(final Item item) {
         final String itemCategory = item.getCategory();

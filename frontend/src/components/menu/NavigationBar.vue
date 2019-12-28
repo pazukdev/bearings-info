@@ -11,7 +11,8 @@
                                        @on-click="openItemsManagement" :text="$t('itemsManagement')"/>
                     </td>
                     <td>
-                        <DefaultButton v-if="false" @on-click="goHome" :text="'not-displayed'"/>
+                        <DefaultButton v-if="!isGuest()"
+                                       @on-click="showCurrentUserProfile()" :text="'My profile'"/>
                     </td>
                 </tr>
             </tbody>
@@ -43,6 +44,10 @@
         methods: {
             goHome() {
                 routerUtil.toHome();
+            },
+
+            showCurrentUserProfile() {
+                routerUtil.toUser(this.itemView.userData.id, this.appLanguage)
             },
 
             openItemsManagement() {

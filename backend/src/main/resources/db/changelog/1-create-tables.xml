@@ -153,6 +153,7 @@
             <column name="role" type="varchar(255)"/>
             <column name="wishlist_id" type="bigint"/>
             <column name="likelist_id" type="bigint"/>
+            <column name="img" type="varchar(255)"/>
         </createTable>
     </changeSet>
 

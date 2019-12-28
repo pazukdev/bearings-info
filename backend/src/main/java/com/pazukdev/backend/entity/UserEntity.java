@@ -20,6 +20,7 @@ public class UserEntity extends AbstractEntity {
     private Integer rating = 0;
     private String email;
     private String password;
+    private String img;
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ItemViewImage/>
+        <EditableImg/>
         <ItemDescription :item="item"/>
         <EditPanel @save="save"/>
         <NestedItemsTableTitle :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
@@ -57,14 +57,19 @@
     import ListHeader from "./section/ListHeader";
     import ItemDescription from "./section/ItemDescription";
     import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
-    import ItemViewImage from "../item/ItemViewImage";
     import axiosUtil from "../../util/axiosUtil";
+    import EditableImg from "../EditableImg";
 
     export default {
         name: "ItemList",
         components: {
-            ItemViewImage,
-            NestedItemsTableTitle, ItemDescription, ListHeader, EditPanel, ButtonNavigateToItem, ButtonDelete},
+            EditableImg,
+            NestedItemsTableTitle,
+            ItemDescription,
+            ListHeader,
+            EditPanel,
+            ButtonNavigateToItem,
+            ButtonDelete},
 
         props: {
             item: Boolean,

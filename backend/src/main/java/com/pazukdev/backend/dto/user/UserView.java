@@ -11,5 +11,6 @@ public class UserView extends AbstractDto {
     private String role;
     private String rating;
     private String email;
+    private String imgData = "-";
 
 }

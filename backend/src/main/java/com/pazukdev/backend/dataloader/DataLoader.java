@@ -50,25 +50,21 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void createDefaultUsers() {
-        createUser(Role.GUEST, "guest", null,
-                "$2a$10$unchbvwqbdJHEaRU/zT03emzPvORNIDnVYXgWUh8tN8G2WlcnPH6y");
-        createUser(Role.ADMIN, "admin", "pazuk1985@gmail.com",
-                "$2a$10$LJDm6BOaekdsan3q3j15Q.ceRCSHHb1J8kAPqQasWZSdKoJtDAnyO");
-        createUser(Role.ADMIN, "dominator", null,
-                "$2a$10$mRsNu6BVh3YAm1vKWwsbz.AlOUqzoi0eW9TAcV5AysIciUyusnxrm");
-        createUser(Role.USER, "user", null,
-                "$2a$10$50E.w9jZJAIjGlsb4OU0N.wSvxrfWe.VEmiAV7.filaKuuKN.f992");
+        createUser(Role.GUEST, "guest", "$2a$10$unchbvwqbdJHEaRU/zT03emzPvORNIDnVYXgWUh8tN8G2WlcnPH6y");
+        createUser(Role.ADMIN, "admin", "$2a$10$LJDm6BOaekdsan3q3j15Q.ceRCSHHb1J8kAPqQasWZSdKoJtDAnyO");
+        createUser(Role.ADMIN, "dominator", "$2a$10$mRsNu6BVh3YAm1vKWwsbz.AlOUqzoi0eW9TAcV5AysIciUyusnxrm");
+        createUser(Role.USER, "user", "$2a$10$50E.w9jZJAIjGlsb4OU0N.wSvxrfWe.VEmiAV7.filaKuuKN.f992");
     }
 
-    private void createUser(final Role role,
-                            final String name,
-                            final String email,
-                            final String password) {
+    private void createUser(final Role role, final String name, final String password) {
         final UserEntity user = new UserEntity();
         user.setName(name);
-        user.setEmail(email);
         user.setRole(role);
         user.setPassword(password);
+        if (name.equalsIgnoreCase("admin")) {
+            user.setEmail("pazuk1985@gmail.com");
+            user.setImg("admin.png");
+        }
         itemService.getUserService().getRepository().save(user);
     }
 

@@ -2,6 +2,7 @@
     <div style="text-align: center">
 <!--        {{user}}-->
         <p>{{"User"}}</p>
+        <EditableImg/>
         <table class="equal-columns-table">
             <tbody>
             <tr><td>{{"Name"}}</td><td>{{user.name}}</td></tr>
@@ -18,14 +19,17 @@
     import {mapState} from "vuex";
     import storeUtil from "../util/storeUtil";
     import routerUtil from "../util/routerUtil";
+    import EditableImg from "./EditableImg";
+    import itemViewUtil from "../util/itemViewUtil";
 
     export default {
         name: "User",
-
+        components: {EditableImg},
         computed: {
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization
+                authorization: state => state.dictionary.authorization,
+                itemView: state => state.dictionary.itemView,
             })
         },
 
@@ -36,10 +40,18 @@
         },
 
         created() {
-            this.getView();
+            this.onUrlChange();
+        },
+
+        watch: {
+            '$route': 'onUrlChange'
         },
 
         methods: {
+            onUrlChange() {
+                this.getView();
+            },
+
             getView() {
                 axios
                     .get(this.basicUrl
@@ -52,6 +64,13 @@
                     })
                     .then(response => {
                         this.user = response.data;
+                        let itemView = {
+                            imgData: this.user.imgData,
+                            messages: [],
+                            userData: this.itemView.userData,
+                            wishListIds: this.itemView.wishListIds
+                        };
+                        itemViewUtil.dispatchView(this.$store, itemView);
                         console.log("user rendered: name: " + this.user.name);
                         storeUtil.setLoadingState(this.$store, false);
                     });

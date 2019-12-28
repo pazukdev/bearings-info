@@ -4,6 +4,7 @@ import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.dto.user.UserView;
 import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.util.ImgUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +36,7 @@ public class UserConverter implements EntityDtoConverter<UserEntity, UserDto> {
         userView.setRole(user.getRole().toString().toLowerCase());
         userView.setRating(user.getRating().toString());
         userView.setEmail(user.getEmail());
+        userView.setImgData(ImgUtil.getUserImgData(user));
         return userView;
     }
 
