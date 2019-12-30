@@ -3,12 +3,14 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.user.UserDto;
+import com.pazukdev.backend.dto.user.UserView;
 import com.pazukdev.backend.entity.ChildItem;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.util.ChildItemUtil;
-import com.pazukdev.backend.validator.CredentialsValidator;
+import com.pazukdev.backend.validator.UserDataValidator;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,15 +24,15 @@ import java.util.*;
 public class UserService extends AbstractService<UserEntity, UserDto> {
 
     private final PasswordEncoder passwordEncoder;
-    private final CredentialsValidator credentialsValidator;
+    private final UserDataValidator userDataValidator;
 
     public UserService(final UserRepository repository,
                        final UserConverter converter,
                        final PasswordEncoder passwordEncoder,
-                       final CredentialsValidator credentialsValidator) {
+                       final UserDataValidator userDataValidator) {
         super(repository, converter);
         this.passwordEncoder = passwordEncoder;
-        this.credentialsValidator = credentialsValidator;
+        this.userDataValidator = userDataValidator;
     }
 
     @Transactional
@@ -54,15 +56,43 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
     @Transactional
     public List<String> createUser(final UserDto dto) {
-        final Long id = null;
-        final boolean create = true;
-        return createOrUpdateWithCredentialsValidation(id, dto, create);
+        final List<String> validationMessages = userDataValidator.validateSignUpData(dto, this);
+        if (validationMessages.isEmpty()) {
+            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+            final UserEntity user = new UserEntity();
+            user.setPassword(dto.getPassword());
+            user.setEmail(dto.getEmail());
+            user.setName(dto.getName());
+            repository.save(user);
+        }
+        return validationMessages;
     }
 
     @Transactional
-    public List<String> updateUser(final Long id, final UserDto dto) {
-        final boolean create = false;
-        return createOrUpdateWithCredentialsValidation(id, dto, create);
+    public List<String> updateUser(final UserView userView) {
+        final String newName = userView.getName();
+        final String newEmail = userView.getEmail();
+
+        final UserEntity user = getOne(userView.getId());
+        boolean checkNameExists = newName != null && !StringUtils.equalsIgnoreCase(user.getName(), newName);
+        boolean checkEmailExists = newEmail != null && !StringUtils.equalsIgnoreCase(user.getEmail(), newEmail);
+
+        final List<String> validationMessages = new ArrayList<>();
+        if (checkNameExists) {
+            validationMessages.addAll(userDataValidator.validateName(newName, this));
+        }
+        if (checkEmailExists) {
+            validationMessages.addAll(userDataValidator.validateEmail(newEmail, this));
+        }
+
+        if (validationMessages.isEmpty()) {
+            user.setName(newName);
+            user.setEmail(newEmail);
+            user.setRole(Role.valueOf(userView.getRole().toUpperCase()));
+            repository.save(user);
+        }
+
+        return validationMessages;
     }
 
     @Transactional
@@ -91,35 +121,6 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
     public UserEntity getAdmin() {
         return getOne(2L);
-    }
-
-    private List<String> createOrUpdateWithCredentialsValidation(final Long id,
-                                                                 final UserDto dto,
-                                                                 final boolean create) {
-        final List<String> validationMessages = validateCredentials(dto, create);
-        if (validationMessages.isEmpty()) {
-            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-            if (create) {
-                final UserEntity user = new UserEntity();
-                user.setPassword(dto.getPassword());
-                user.setEmail(dto.getEmail());
-                user.setName(dto.getName());
-                repository.save(user);
-            } else {
-                update(id, dto);
-            }
-        }
-        return validationMessages;
-    }
-
-    private List<String> validateCredentials(final UserDto dto, final boolean checkIfAlreadyExists) {
-        boolean nameExists = false;
-        boolean emailExists = false;
-        if (checkIfAlreadyExists) {
-            nameExists = findByName(dto.getName()) != null;
-            emailExists = findByEmail(dto.getEmail()) != null;
-        }
-        return credentialsValidator.validate(dto, nameExists, emailExists);
     }
 
 }

@@ -58,11 +58,9 @@
                         {{getIncorrectLoginOrPasswordMessage()}}
                     </td>
                 </tr>
-                <tr v-if="validationMessages.length" style="text-align: left">
+                <tr>
                     <td>
-                        <ul v-for="message in validationMessages">
-                            <li class="alert-message">{{message}}</li>
-                        </ul>
+                        <AlertMessagesSection :messages="validationMessages"/>
                     </td>
                 </tr>
                 </tbody>
@@ -74,8 +72,10 @@
 <script>
     import axios from 'axios';
     import {mapState} from 'vuex';
+    import AlertMessagesSection from "../AlertMessagesSection";
 
     export default {
+        components: {AlertMessagesSection},
         data() {
             return {
                 isLogin: true,
@@ -96,10 +96,6 @@
         },
 
         methods: {
-            validate() {
-
-            },
-
             performLoginPageAction: function (e) {
                 e.preventDefault();
                 if (this.isLogin) {

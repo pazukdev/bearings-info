@@ -1,5 +1,6 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.dto.ImgViewData;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.UserEntity;
@@ -20,20 +21,21 @@ public class ImgUtil {
     private static final String IMG_DATA_METADATA = "data:image/png;base64,";
 
     public static String getUserImgData(final UserEntity user) {
-        String imgName;
-        String imgPath;
+        final Role userRole = user.getRole();
+        if (userRole == Role.USER || userRole == Role.GUEST) {
+            return "-";
+        }
+
         BufferedImage img = null;
-        if (user.getImg() != null) {
-            imgName = user.getImg();
-            imgPath = IMG_DIRECTORY_PATH + "user/" + imgName;
+        final String imgName = user.getImg();
+        final String imgPath = IMG_DIRECTORY_PATH + "user/" + imgName;
+        try {
+            img = getImg(imgPath);
+        } catch (IOException e1) {
             try {
-                img = getImg(imgPath);
-            } catch (IOException e1) {
-                try {
-                    img = getImg(IMG_DIRECTORY_PATH + "user/default.png");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                img = getImg(IMG_DIRECTORY_PATH + "user/default.png");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         return createBase64ImgData(img);
@@ -108,7 +110,7 @@ public class ImgUtil {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             ImageIO.write(img, PNG_EXTENSION, baos);
-        } catch (IOException e) {
+        } catch (final Exception e) {
             return "-";
         }
         return IMG_DATA_METADATA + DatatypeConverter.printBase64Binary(baos.toByteArray());

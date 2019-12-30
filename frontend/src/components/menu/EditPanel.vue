@@ -17,16 +17,17 @@
                             @click="edit()">
                         {{$t("edit")}}
                     </button>
-                    <button v-if="isSaveButtonRendered()"
+                    <button id="save-button" v-if="isSaveButtonRendered() && !saveIsSubmit"
                             type="button"
                             style="background: red"
                             @click="save()">
                         {{$t("save")}}
                     </button>
+                    <input id="submit" v-if="isSaveButtonRendered() && saveIsSubmit" type="submit" form="form"/>
                 </td>
-                <td>
-                    <ButtonAdd v-if="editMode" style="visibility: hidden"/>
-                </td>
+<!--                <td>-->
+<!--                    <ButtonAdd v-if="editMode" style="visibility: hidden"/>-->
+<!--                </td>-->
             </tr>
             </tbody>
         </table>
@@ -42,6 +43,11 @@
     export default {
         name: "EditPanel",
         components: {ButtonAdd},
+
+        props: {
+            saveIsSubmit: Boolean
+        },
+
         computed: {
             ...mapState({
                 userName: state => state.dictionary.userName,
@@ -52,17 +58,17 @@
 
         methods: {
             cancel() {
-                storeUtil.setEditMode(this.$store, false);
+                storeUtil.setEditMode(false);
                 this.$router.go();
             },
 
             edit() {
-                storeUtil.setEditMode(this.$store, true);
+                storeUtil.setEditMode(true);
             },
 
             save() {
-                storeUtil.setLoadingState(this.$store, true);
-                storeUtil.setEditMode(this.$store, false);
+                storeUtil.setLoadingState(true);
+                storeUtil.setEditMode(false);
                 this.$emit("save");
             },
 
@@ -78,5 +84,7 @@
 </script>
 
 <style scoped>
-
+    #submit, #save-button {
+        background: red;
+    }
 </style>

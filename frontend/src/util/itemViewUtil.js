@@ -52,11 +52,15 @@ export default {
     },
 
     isGuest(userName) {
-        return userName === "guest";
+        return userName.toString() === "guest";
     },
 
     isAdmin(itemView) {
         return itemView.userData.role === "ADMIN";
+    },
+
+    isSeller(itemView) {
+        return itemView.userData.role === "SELLER";
     },
 
     getItemName(itemView) {
@@ -69,7 +73,7 @@ export default {
 
     dispatchView(store, itemView) {
         store.dispatch("setItemView", itemView);
-        storeUtil.setLoadingState(store, false);
+        storeUtil.setLoadingState(false);
     },
 
     removeItemFromItemList(itemView, item) {

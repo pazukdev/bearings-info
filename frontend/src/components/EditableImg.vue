@@ -1,6 +1,6 @@
 <template>
     <div>
-<!--        {{itemView}}-->
+<!--        {{itemView.imgData}}-->
         <table id="item-image" v-if="isViewWithImage()">
             <tbody>
             <tr v-if="!messagesContain('img removed')">

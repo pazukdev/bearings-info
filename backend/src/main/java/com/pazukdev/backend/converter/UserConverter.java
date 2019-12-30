@@ -32,6 +32,7 @@ public class UserConverter implements EntityDtoConverter<UserEntity, UserDto> {
 
     public UserView convertToUserView(final UserEntity user) {
         final UserView userView = new UserView();
+        userView.setId(user.getId());
         userView.setName(user.getName());
         userView.setRole(user.getRole().toString().toLowerCase());
         userView.setRating(user.getRating().toString());

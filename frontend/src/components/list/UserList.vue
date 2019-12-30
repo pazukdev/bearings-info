@@ -46,7 +46,7 @@
                         + "/" + "view"
                         + "/" + "user/list"
                         + "/" + this.userName
-                        + "/" + this.appLanguage.toString(), {
+                        + "/" + this.appLanguage, {
                         headers: {
                             Authorization: this.authorization
                         }

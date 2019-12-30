@@ -12,7 +12,7 @@
 <!--                {{this.$route.params.item_id}}<br>-->
 <!--                {{this.$route.params.lang}}<br>-->
 <!--                {{"basicUrl: " + basicUrl}}<br>-->
-<!--                {{"userName: " + userName}}<br>-->
+                {{"userName: " + userName}}<br>
 <!--                {{"authorization: " + authorization}}<br>-->
 <!--                {{"loadingState: " + loadingState}}<br>-->
 <!--                {{"editMode: " + editMode}}<br>-->

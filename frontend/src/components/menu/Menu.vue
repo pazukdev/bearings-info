@@ -1,55 +1,63 @@
 <template>
-    <div>
-        <table id="additional-menu">
-            <tbody>
-            <tr>
-                <td class="three-column-table-left-column"/>
-                <td class="three-column-table-middle-column">
-                    <button type="button"
-                            v-on:click="openUsersList()">
-                        {{$t("users")}}
-                    </button>
-                </td>
-                <td class="three-column-table-right-column"/>
-                <td class="three-column-table-button-column"/>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <button type="button"
-                            content=""
-                            v-on:click="downloadDictionary">
-                        {{$t("downloadDictionary")}}
-                    </button>
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <label class="custom-file-upload">
-                        {{$t("uploadDictionary")}}
-                        <input type="file" accept="text/plain" @change="uploadDictionary"/>
-                    </label>
-                </td>
-                <td>{{uploadMessage}}</td>
-                <td></td>
-            </tr>
-            </tbody>
-        </table>
+    <div v-if="!isGuest()">
+        <details open>
+            <summary id="menu-summary">{{$t("menu")}}</summary>
+            <table id="additional-menu">
+                <tbody>
+                    <tr>
+                        <td class="three-column-table-left-column"/>
+                        <td class="three-column-table-middle-column">
+                            <button type="button"
+                                    v-on:click="openUsersList()">
+                                {{$t("users")}}
+                            </button>
+                        </td>
+                        <td class="three-column-table-right-column"/>
+                        <td class="three-column-table-button-column"/>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button type="button"
+                                    content=""
+                                    v-on:click="downloadDictionary">
+                                {{$t("downloadDictionary")}}
+                            </button>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <label class="custom-file-upload">
+                                {{$t("uploadDictionary")}}
+                                <input type="file" accept="text/plain" @change="uploadDictionary"/>
+                            </label>
+                        </td>
+                        <td>{{uploadMessage}}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </details>
     </div>
 </template>
 
 <script>
     import axios from "axios";
+    import itemViewUtil from "../../util/itemViewUtil";
+    import {mapState} from "vuex";
 
     export default {
         name: "Menu",
 
-        props: {
-            admin: Boolean,
-            basicUrl: String
+        computed: {
+            ...mapState({
+                basicUrl: state => state.dictionary.basicUrl,
+                userName: state => state.dictionary.userName,
+                itemView: state => state.dictionary.itemView
+            })
         },
 
         data() {
@@ -59,6 +67,14 @@
         },
 
         methods: {
+            isGuest() {
+                return  itemViewUtil.isGuest(this.userName);
+            },
+
+            isAdmin() {
+                return itemViewUtil.isAdmin(this.itemView);
+            },
+
             openUsersList() {
                 this.$router.push({ name: "user_list" });
             },

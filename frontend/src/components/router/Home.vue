@@ -3,12 +3,7 @@
         <LoadingScreen v-if="this.loadingState"/>
         <div v-else>
             <MotorcycleCatalogue/>
-
-            <details open>
-                <summary id="menu-summary">{{$t("menu")}}</summary>
-                <Menu :admin="true" :basic-url="basicUrl"/>
-            </details>
-
+            <Menu/>
             <div id="place-of-creation">
                 {{"Minsk 2019"}}
             </div>

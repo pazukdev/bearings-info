@@ -82,11 +82,11 @@ public class UserController {
         return userService.createUser(dto);
     }
 
-    @PutMapping("/admin/user/{id}")
+    @PutMapping("/user/{id}/update")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update user")
-    public List<String> update(@PathVariable("id") final Long id, @RequestBody final UserDto dto) {
-        return userService.updateUser(id, dto);
+    public List<String> update(@PathVariable final Long id, @RequestBody final UserView userView) {
+        return userService.updateUser(userView);
     }
 
     @DeleteMapping("/admin/user/delete/{id}")

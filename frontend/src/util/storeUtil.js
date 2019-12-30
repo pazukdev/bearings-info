@@ -1,9 +1,16 @@
+import store from "../plugins/store";
+
 export default {
-    setEditMode(store, editMode) {
+    setUserName(userName, itemView) {
+        store.dispatch("setUserName", userName);
+        itemView.userData.name = userName;
+    },
+
+    setEditMode(editMode) {
         store.dispatch("setEditMode", editMode);
     },
 
-    setLoadingState(store, loadingState) {
+    setLoadingState(loadingState) {
         store.dispatch("setLoadingState", loadingState);
     }
 }
