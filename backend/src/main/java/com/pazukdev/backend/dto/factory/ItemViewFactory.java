@@ -1,12 +1,12 @@
 package com.pazukdev.backend.dto.factory;
 
 import com.pazukdev.backend.dto.ImgViewData;
-import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.HeaderTableRow;
 import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.dto.table.ReplacersTable;
+import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
@@ -226,24 +226,24 @@ public class ItemViewFactory {
     }
 
     private ItemView updateItem(final Long itemId,
-                                final ItemView itemView,
+                                final ItemView view,
                                 final UserEntity currentUser,
                                 final String userLanguage) {
 
         final Item item = itemService.getOne(itemId);
 
         if (!userLanguage.equals("en")) {
-            translate(userLanguage, "en", itemView, true, itemService);
+            translate(userLanguage, "en", view, true, itemService);
         }
 
-        final Map<String, String> headerMap = TableUtil.createHeaderMap(itemView.getHeader());
+        final Map<String, String> headerMap = TableUtil.createHeaderMap(view.getHeader());
 
         ItemUtil.updateName(item, headerMap, itemService);
         ItemUtil.updateDescription(item, headerMap, itemService);
-        ItemUtil.updateImg(itemView, item);
-        ItemUtil.updateChildItems(item, itemView, itemService, currentUser);
-        ItemUtil.updateReplacers(item, itemView, itemService, currentUser);
-        LinkUtil.updateItemLinks(item, itemView);
+        ImgUtil.updateImg(view, item);
+        ItemUtil.updateChildItems(item, view, itemService, currentUser);
+        ItemUtil.updateReplacers(item, view, itemService, currentUser);
+        LinkUtil.updateItemLinks(item, view);
         itemService.update(item);
         return createItemView(itemId, currentUser.getName(), userLanguage);
     }

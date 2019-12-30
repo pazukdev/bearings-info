@@ -1,8 +1,8 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.ReplacersTable;
+import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.Replacer;
 import com.pazukdev.backend.entity.TransitiveItem;

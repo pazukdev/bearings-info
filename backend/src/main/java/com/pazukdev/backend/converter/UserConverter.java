@@ -2,7 +2,7 @@ package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.user.UserDto;
-import com.pazukdev.backend.dto.user.UserView;
+import com.pazukdev.backend.dto.view.UserView;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.util.ImgUtil;
 import org.modelmapper.ModelMapper;

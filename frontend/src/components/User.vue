@@ -109,9 +109,11 @@
                 storeUtil.setLoadingState(true);
                 storeUtil.setEditMode(false);
 
-                // /user/id/update
                 let userView = this.user;
-                console.log(userView);
+                userView.imgData = this.itemView.imgData;
+                userView.messages = this.itemView.messages;
+
+                // /user/id/update
                 axios
                     .put(this.basicUrl
                         + "/" + "user"

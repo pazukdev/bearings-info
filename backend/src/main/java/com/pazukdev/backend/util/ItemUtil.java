@@ -1,16 +1,15 @@
 package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.dto.ItemQuantity;
-import com.pazukdev.backend.dto.ItemView;
 import com.pazukdev.backend.dto.ReplacerData;
 import com.pazukdev.backend.dto.TransitiveItemDescriptionMap;
+import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.TransitiveItemService;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -251,27 +250,6 @@ public class ItemUtil {
             applyToAllItemDescriptions(item.getCategory(), oldName, newName, itemService);
         }
         description.remove("Name");
-    }
-
-    public static void updateImg(final ItemView itemView, final Item item) {
-        if (itemView.getMessages().contains("img removed")) {
-            item.setImage("-");
-            return;
-        } else if (!itemView.getMessages().contains("img uploaded")) {
-            return;
-        }
-
-        String base64Data = null;
-        try {
-            base64Data = itemView.getImgData();
-            ImgUtil.createImgFileInFileSystem(base64Data, item);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (ImgUtil.isPngFile(base64Data)) {
-            final String imgName = ImgUtil.getImgName(item.getCategory(), item.getName());
-            item.setImage(imgName);
-        }
     }
 
     public static void updateDescription(final Item item,

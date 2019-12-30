@@ -1,5 +1,7 @@
-package com.pazukdev.backend.dto;
+package com.pazukdev.backend.dto.view;
 
+import com.pazukdev.backend.dto.LikeListDto;
+import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.dto.table.ReplacersTable;
@@ -19,7 +21,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ItemView extends AbstractDto {
+public class ItemView extends AbstractView {
 
     private boolean searchEnabled;
     private boolean newItem;
@@ -28,7 +30,6 @@ public class ItemView extends AbstractDto {
     private Long itemId;
     private String category;
     private UserDto userData;
-    private String imgData = "-";
     private HeaderTable header;
     private PartsTable partsTable;
     private ReplacersTable replacersTable;
@@ -36,7 +37,6 @@ public class ItemView extends AbstractDto {
     private List<NestedItemDto> possibleReplacers = new ArrayList<>();
     private List<String> allCategories = new ArrayList<>();
     private Set<Long> idsToRemove = new HashSet<>();
-    private List<String> messages = new ArrayList<>();
     private Long creatorId;
     private String creatorName;
     private Set<Long> wishListIds = new HashSet<>();

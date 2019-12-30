@@ -3,12 +3,13 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.user.UserDto;
-import com.pazukdev.backend.dto.user.UserView;
+import com.pazukdev.backend.dto.view.UserView;
 import com.pazukdev.backend.entity.ChildItem;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.util.ChildItemUtil;
+import com.pazukdev.backend.util.ImgUtil;
 import com.pazukdev.backend.validator.UserDataValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -69,11 +70,11 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     }
 
     @Transactional
-    public List<String> updateUser(final UserView userView) {
-        final String newName = userView.getName();
-        final String newEmail = userView.getEmail();
+    public List<String> updateUser(final UserView view) {
+        final String newName = view.getName();
+        final String newEmail = view.getEmail();
 
-        final UserEntity user = getOne(userView.getId());
+        final UserEntity user = getOne(view.getId());
         boolean checkNameExists = newName != null && !StringUtils.equalsIgnoreCase(user.getName(), newName);
         boolean checkEmailExists = newEmail != null && !StringUtils.equalsIgnoreCase(user.getEmail(), newEmail);
 
@@ -88,7 +89,8 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         if (validationMessages.isEmpty()) {
             user.setName(newName);
             user.setEmail(newEmail);
-            user.setRole(Role.valueOf(userView.getRole().toUpperCase()));
+            user.setRole(Role.valueOf(view.getRole().toUpperCase()));
+            ImgUtil.updateImg(view, user);
             repository.save(user);
         }
 
