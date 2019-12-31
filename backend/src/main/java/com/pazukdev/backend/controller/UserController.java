@@ -89,11 +89,11 @@ public class UserController {
         return userService.updateUser(userView);
     }
 
-    @DeleteMapping("/admin/user/delete/{id}")
+    @DeleteMapping("/user/{id}/delete")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Delete User. Admins-only permitted")
-    public UserDto delete(@PathVariable("id") final Long id) {
-        return userConverter.convertToDto(userService.delete(id));
+    @ApiOperation(value = "Delete user")
+    public void delete(@PathVariable("id") final Long id) {
+        userService.delete(id);
     }
 
     @DeleteMapping("/admin/user/list")

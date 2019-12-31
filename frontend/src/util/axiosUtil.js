@@ -23,6 +23,13 @@ export default {
             });
     },
 
+    logout(basicUrl) {
+        routerUtil.toLogin();
+        console.log("logout");
+        let toHome = false;
+        this.loginAsGuest(basicUrl, toHome);
+    },
+
     updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization) {
         axios
             .put(basicUrl

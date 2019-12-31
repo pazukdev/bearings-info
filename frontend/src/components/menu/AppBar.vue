@@ -59,10 +59,7 @@
 
         methods: {
             logout() {
-                routerUtil.toLogin();
-                console.log("logout");
-                let toHome = false;
-                axiosUtil.loginAsGuest(this.basicUrl, toHome);
+                axiosUtil.logout(this.basicUrl);
             },
 
             openLoginForm() {

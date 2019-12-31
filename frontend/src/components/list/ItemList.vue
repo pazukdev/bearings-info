@@ -11,7 +11,7 @@
                     <ListHeader/>
                 </td>
             </tr>
-            <tr v-for="table in itemsListAsTables()">
+            <tr v-for="table in itemsListAsTables()" v-if="!hideTable(table)">
                 <td>
                     <v-details v-model="table.opened">
                         <summary><b>{{table.name}}</b></summary>
@@ -119,6 +119,12 @@
 
             isEdit() {
                 return this.editableComments && this.editMode;
+            },
+
+            hideTable(table) {
+                if (table.name.toLowerCase() === "guest" && !itemViewUtil.isAdmin(this.itemView)) {
+                    return true;
+                }
             }
         }
     }

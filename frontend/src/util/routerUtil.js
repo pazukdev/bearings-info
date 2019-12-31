@@ -4,6 +4,14 @@ import router from "../plugins/router";
 
 export default {
 
+    refresh() {
+        router.go();
+    },
+
+    back() {
+        router.go(-1);
+    },
+
     getId(route) {
         return route.params.id;
     },
@@ -28,6 +36,10 @@ export default {
         router.push({name: "home"});
     },
 
+    toUserList() {
+        router.push({name: "user_list"})
+    },
+
     toLogin() {
         router.push({name: "login"});
         let itemViewStub = {
@@ -42,6 +54,6 @@ export default {
 
     toItemsManagement(router) {
         router.push({name: "items_management"});
-    },
+    }
 
 }

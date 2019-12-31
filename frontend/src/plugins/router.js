@@ -5,9 +5,9 @@ import User from "../components/User";
 import Item from "../components/router/Item";
 import Login from "../components/router/Login";
 import ItemsManagement from "../components/router/ItemsManagement";
-import store from "./store";
 import UserList from "../components/list/UserList";
 import WishList from "../components/list/WishList";
+import storeUtil from "../util/storeUtil";
 
 Vue.use(VueRouter);
 
@@ -39,7 +39,8 @@ const router = new VueRouter({
 });
 
 router.beforeResolve((to, from, next) => {
-    store.dispatch("setLoadingState", true);
+    storeUtil.setLoadingState(true);
+    storeUtil.setEditMode(false);
     next();
 });
 

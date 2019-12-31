@@ -8,28 +8,54 @@
         <form id="form" @submit="submit">
             <table class="equal-columns-table">
                 <tbody>
-
-                <tr v-if="!editMode"><td>{{"Name"}}</td><td>{{user.name}}</td></tr>
-                <tr v-if="editMode">
-                    <td colspan="2">
-                        <label>{{"Nickname"}}
-                            <input v-model="user.name" type="text"
-                                   pattern=".{3,20}" required title="3-20 characters length"/>
-                        </label>
+                <tr>
+                    <td>{{"Nickname"}}</td>
+                    <td>
+                        <p v-if="!editMode">{{user.name}}</p>
+                        <input v-if="editMode" v-model="user.name" type="text"
+                               pattern=".{3,20}" required title="3-20 characters length"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{"Email"}}</td>
+                    <td>
+                        <p v-if="!editMode">{{user.email}}</p>
+                        <input v-if="editMode" id="email" type="email" v-model="user.email" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{"Role"}}</td>
+                    <td>
+                        <p v-if="!isRoleSelectRendered()">{{user.role}}</p>
+                        <select v-if="isRoleSelectRendered()" v-model="user.role">
+                            <option v-for="role in ['admin', 'seller', 'user']" :key="role">
+                                {{role}}
+                            </option>
+                        </select>
                     </td>
                 </tr>
 
-                <tr v-if="!editMode"><td>{{"Email"}}</td><td>{{user.email}}</td></tr>
-                <tr v-if="editMode">
-                    <td colspan="2">
-                        <label>{{"Email"}}
-                            <input id="email" type="email" v-model="user.email" required/>
-                        </label>
-                    </td>
-                </tr>
-
-                <tr><td>{{"Role"}}</td><td>{{user.role}}</td></tr>
                 <tr><td>{{"Rating"}}</td><td>{{user.rating}}</td></tr>
+                <tr v-if="editMode">
+                    <td/>
+                    <td>
+                        <DefaultButton id="user-delete" :text="'Delete profile'" :color="'red'"
+                                       @on-click="openUserDeleteDialog()"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table v-if="userDeleteDialogOpened" style="text-align: center">
+                <tbody class="bordered">
+                <tr><td colspan="2">{{"Confirm deletion"}}</td></tr>
+                <tr>
+                    <td>
+                        <DefaultButton id="cancel-user-delete" :text="'Cancel'" @on-click="cancelUserDelete()"/>
+                    </td>
+                    <td>
+                        <DefaultButton id="confirm-user-delete" :text="'Confirm'" @on-click="confirmUserDelete()"/>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </form>
@@ -45,10 +71,12 @@
     import itemViewUtil from "../util/itemViewUtil";
     import EditPanel from "./menu/EditPanel";
     import AlertMessagesSection from "./AlertMessagesSection";
+    import DefaultButton from "./element/button/DefaultButton";
+    import axiosUtil from "../util/axiosUtil";
 
     export default {
         name: "User",
-        components: {AlertMessagesSection, EditPanel, EditableImg},
+        components: {DefaultButton, AlertMessagesSection, EditPanel, EditableImg},
         computed: {
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
@@ -62,7 +90,8 @@
         data() {
             return {
                 user: "",
-                validationMessages: []
+                validationMessages: [],
+                userDeleteDialogOpened: false
             }
         },
 
@@ -131,7 +160,6 @@
                             storeUtil.setLoadingState(false);
                             console.log("user data successfully updated");
                         } else {
-                            // this.getView();
                             console.log("user data update failed");
                             storeUtil.setEditMode(true);
                         }
@@ -146,7 +174,51 @@
                 if (this.editMode) {
                     return true;
                 }
-                return this.isAdmin() || this.user.name === this.userName;
+                return this.isAdmin() || this.isCurrentUserProfile();
+            },
+
+            isCurrentUserProfile() {
+                return this.user.name === this.userName;
+            },
+
+            isRoleSelectRendered() {
+                return this.editMode && this.isAdmin();
+            },
+
+            openUserDeleteDialog() {
+                this.userDeleteDialogOpened = true;
+            },
+
+            cancelUserDelete() {
+                this.userDeleteDialogOpened = false;
+            },
+
+            confirmUserDelete() {
+                // /user/{id}/delete
+                let userId = routerUtil.getId(this.$route);
+                axios
+                    .delete(this.basicUrl
+                        + "/" + "user"
+                        + "/" + userId
+                        + "/" + "delete", {
+                            headers: {
+                                Authorization: this.authorization
+                            }
+                        })
+                    .then(response => {
+                        if (response.status === 200) {
+                            this.userDeleteDialogOpened = false;
+                            if (this.isCurrentUserProfile()) {
+                                axiosUtil.logout(this.basicUrl);
+                            } else {
+                                routerUtil.back();
+                            }
+                            console.log("user id=" + userId + " successfully deleted");
+                        } else {
+                            console.log("user id=" + userId + " deletion failed");
+                        }
+                        storeUtil.setLoadingState(false);
+                    });
             }
         }
     }

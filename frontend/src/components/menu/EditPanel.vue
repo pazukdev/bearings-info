@@ -39,6 +39,7 @@
     import {mapState} from "vuex";
     import itemViewUtil from "../../util/itemViewUtil";
     import ButtonAdd from "../element/button/ButtonAdd";
+    import routerUtil from "../../util/routerUtil";
 
     export default {
         name: "EditPanel",
@@ -59,7 +60,7 @@
         methods: {
             cancel() {
                 storeUtil.setEditMode(false);
-                this.$router.go();
+                routerUtil.refresh();
             },
 
             edit() {
