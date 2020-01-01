@@ -23,7 +23,9 @@
                 <tr>
                     <td>
                         <label>{{"Nickname"}}
-                            <input type="text" name="username" v-model="name" required/>
+                            <input type="text" name="username" v-model="name" required
+                                   pattern="[A-Za-z0-9]{2,30}"
+                                   :title="$t('nameAndPasswordInputLabel')"/>
                         </label>
                     </td>
                 </tr>
@@ -37,14 +39,18 @@
                 <tr>
                     <td>
                         <label>{{$t('password')}}
-                            <input type="password" name="password" v-model="password" required/>
+                            <input type="password" name="password" v-model="password" required
+                                   pattern="[A-Za-z0-9]{2,30}"
+                                   :title="$t('nameAndPasswordInputLabel')"/>
                         </label>
                     </td>
                 </tr>
                 <tr v-if="!isLogin">
                     <td>
                         <label>{{$t("repeatPassword")}}
-                            <input type="password" v-model="repeatedPassword" required/>
+                            <input type="password" v-model="repeatedPassword" required
+                                   pattern="[A-Za-z0-9]{2,30}"
+                                   :title="$t('nameAndPasswordInputLabel')"/>
                         </label>
                     </td>
                 </tr>
@@ -201,10 +207,6 @@
     form {
         margin-top: 50px;
         width: 80%;
-    }
-
-    #submit-login-form {
-        background: grey;
     }
 
     #login-page, #login-form {

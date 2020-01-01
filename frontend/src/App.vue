@@ -120,12 +120,12 @@
         border-radius: 10px;
     }
 
-    #screen, #screen label {
-        color: grey;
-    }
-
     #screen::-webkit-scrollbar {
         /*display: none;*/
+    }
+
+    label, #screen {
+        color: grey;
     }
 
     @media only screen and (max-width: 1280px) {
@@ -148,7 +148,7 @@
         height: 100%;
     }
 
-    hr, button, select, input {
+    hr, button, select, input, #submit-login-form {
         background: grey;
     }
 
@@ -165,7 +165,7 @@
         height: 52px;
     }
 
-    button, label {
+    button {
         min-height: 52px;
         max-height: 92px;
         color: #050505;
@@ -198,6 +198,14 @@
 
     textarea {
         /*resize: none;*/
+    }
+
+    input:not([type="submit"]):not([type="button"]):invalid {
+        border: 2px solid red;
+    }
+
+    input:not([type="submit"]):not([type="button"]):valid {
+        /*border: 1px solid green;*/
     }
 
     .round-button, .round-delete-button {

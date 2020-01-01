@@ -41,7 +41,8 @@ export const i18n = new VueI18n({
             users: "Users",
             buy: "buy",
             downloadDictionary: "Download dictionary",
-            uploadDictionary: "Upload dictionary"
+            uploadDictionary: "Upload dictionary",
+            nameAndPasswordInputLabel: "Length: 2 - 30 characters. Numbers and english letters only"
         },
         ru: {
             language: "Русский язык",
@@ -77,7 +78,8 @@ export const i18n = new VueI18n({
             users: "Пользователи",
             buy: "купить",
             downloadDictionary: "Скачать словарь",
-            uploadDictionary: "Загрузить словарь"
+            uploadDictionary: "Загрузить словарь",
+            nameAndPasswordInputLabel: "Длина: 2 - 30 символов. Только цифры и английские буквы"
         }
     }
 });

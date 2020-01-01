@@ -14,8 +14,9 @@
                     <td>{{"Nickname"}}</td>
                     <td>
                         <p v-if="!editMode">{{user.name}}</p>
-                        <input v-if="editMode" v-model="user.name" type="text"
-                               pattern=".{3,20}" required title="3-20 characters length"/>
+                        <input v-if="editMode" v-model="user.name" type="text" required
+                               pattern="[A-Za-z0-9]{2,30}"
+                               :title="$t('nameAndPasswordInputLabel')"/>
                     </td>
                 </tr>
                 <tr>
