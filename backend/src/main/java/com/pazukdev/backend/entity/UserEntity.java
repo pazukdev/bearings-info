@@ -21,6 +21,7 @@ public class UserEntity extends AbstractEntity {
     private String email;
     private String password;
     private String img;
+    private String country;
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;

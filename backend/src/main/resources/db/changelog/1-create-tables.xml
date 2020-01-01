@@ -154,6 +154,7 @@
             <column name="wishlist_id" type="bigint"/>
             <column name="likelist_id" type="bigint"/>
             <column name="img" type="varchar(255)"/>
+            <column name="country" type="varchar(2)"/>
         </createTable>
     </changeSet>
 

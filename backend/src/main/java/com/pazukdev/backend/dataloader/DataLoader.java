@@ -65,6 +65,10 @@ public class DataLoader implements ApplicationRunner {
         if (name.equalsIgnoreCase("admin")) {
             user.setEmail("pazuk1985@gmail.com");
             user.setImg("admin.png");
+            user.setCountry("BY");
+        }
+        if (name.equalsIgnoreCase("retromech")) {
+            user.setCountry("BY");
         }
         itemService.getUserService().getRepository().save(user);
     }

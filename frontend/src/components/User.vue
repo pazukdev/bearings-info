@@ -1,6 +1,8 @@
 <template>
     <div style="text-align: center">
 <!--        {{itemView.userData}}<br>-->
+        {{countryName}}<br>
+        {{user.country}}
         <p>{{"User"}}</p>
         <EditableImg/>
         <EditPanel v-if="isEditable()" :save-is-submit="true"/>
@@ -34,7 +36,29 @@
                         </select>
                     </td>
                 </tr>
-
+                <tr>
+                    <td>{{"Country"}}</td>
+                    <td>
+                        <p v-if="!editMode">{{countryName}}</p>
+<!--                        <div v-if="editMode">-->
+<!--                            <input type="text" list="countries" v-model="user.country"/>-->
+<!--                            <datalist id="countries">-->
+<!--                                <option v-for="country in countries" :key="country.alpha2Code" :value="country.alpha2Code">-->
+<!--                                    {{country.name}}-->
+<!--                                </option>-->
+<!--                            </datalist>-->
+<!--                        </div>-->
+                        <select v-if="editMode" v-model="user.country">
+                            <option v-for="country in countries" :value="country.alpha2Code">
+                                {{country.name}}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+<!--                <tr>-->
+<!--                    <td></td>-->
+<!--                    <td><input id="searchTextField" type="text" size="50"></td>-->
+<!--                </tr>-->
                 <tr><td>{{"Rating"}}</td><td>{{user.rating}}</td></tr>
                 <tr v-if="editMode">
                     <td/>
@@ -45,6 +69,7 @@
                 </tr>
                 </tbody>
             </table>
+
             <table v-if="userDeleteDialogOpened" style="text-align: center">
                 <tbody class="bordered">
                 <tr><td colspan="2">{{"Confirm deletion"}}</td></tr>
@@ -77,6 +102,7 @@
     export default {
         name: "User",
         components: {DefaultButton, AlertMessagesSection, EditPanel, EditableImg},
+
         computed: {
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
@@ -91,12 +117,21 @@
             return {
                 user: "",
                 validationMessages: [],
-                userDeleteDialogOpened: false
+                userDeleteDialogOpened: false,
+                countries: [],
+                countryName: ""
             }
         },
 
+        // mounted() {
+        //     let script = document.createElement('script');
+        //     script.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key=&libraries=places');
+        //     document.head.appendChild(script);
+        // },
+
         created() {
             this.onUrlChange();
+            this.getCountries();
         },
 
         watch: {
@@ -120,6 +155,7 @@
                     })
                     .then(response => {
                         this.user = response.data;
+                        this.getCountryName(this.user.country);
                         let itemView = {
                             imgData: this.user.imgData,
                             messages: [],
@@ -158,6 +194,7 @@
                         if (this.validationMessages.length === 0) {
                             storeUtil.setUserName(userView.name, this.itemView);
                             storeUtil.setLoadingState(false);
+                            this.getCountryName(this.user.country);
                             console.log("user data successfully updated");
                         } else {
                             console.log("user data update failed");
@@ -219,6 +256,30 @@
                         }
                         storeUtil.setLoadingState(false);
                     });
+            },
+
+            getCountries() {
+                console.log("get countries list");
+                axios
+                    .get("https://restcountries.eu/rest/v2/all")
+                    .then(response => {
+                        this.countries = response.data;
+                    })
+            },
+
+            getCountryName(alpha2Code) {
+                console.log("get country name for: " + alpha2Code);
+                if (alpha2Code === null) {
+                    this.countryName = "-";
+                    return;
+                }
+                axios
+                    .get("https://restcountries.eu/rest/v2/alpha/" + alpha2Code)
+                    .then(response => {
+                        let country = response.data;
+                        console.log("country name: " + country.name);
+                        this.countryName = country.name;
+                    })
             }
         }
     }

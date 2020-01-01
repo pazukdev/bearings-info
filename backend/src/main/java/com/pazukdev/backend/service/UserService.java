@@ -90,6 +90,7 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
             user.setName(newName);
             user.setEmail(newEmail);
             user.setRole(Role.valueOf(view.getRole().toUpperCase()));
+            user.setCountry(view.getCountry());
             ImgUtil.updateImg(view, user);
             repository.save(user);
         }
