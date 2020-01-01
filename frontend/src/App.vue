@@ -150,6 +150,7 @@
 
     hr, button, select, input, #submit-login-form {
         background: grey;
+        color: #050505;
     }
 
     input, textarea, #app_bar {

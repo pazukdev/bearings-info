@@ -130,5 +130,7 @@
         border: none;
         width: 100%;
         cursor: pointer;
+        color: #050505;
+        height: 52px;
     }
 </style>

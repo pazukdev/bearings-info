@@ -23,7 +23,8 @@
                             @click="save()">
                         {{$t("save")}}
                     </button>
-                    <input id="submit" v-if="isSaveButtonRendered() && saveIsSubmit" type="submit" form="form"/>
+                    <input id="submit" v-if="isSaveButtonRendered() && saveIsSubmit"
+                           type="submit" form="form" :value="$t('save')"/>
                 </td>
 <!--                <td>-->
 <!--                    <ButtonAdd v-if="editMode" style="visibility: hidden"/>-->
