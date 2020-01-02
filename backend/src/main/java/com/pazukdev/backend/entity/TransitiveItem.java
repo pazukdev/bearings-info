@@ -21,6 +21,8 @@ public class TransitiveItem extends AbstractEntity {
     private String image;
     private String description = "-";
     private String replacer = "-";
-    private String wiki = "-";
+    private String wiki;
+    private String website;
+    private String websiteLand;
 
 }

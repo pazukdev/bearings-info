@@ -42,7 +42,7 @@ public class ItemView extends AbstractView {
     private Set<Long> wishListIds = new HashSet<>();
     private LikeListDto likeList;
     private String wikiLink;
-    private String sellerLink;
-    private String sellerLang;
+    private String websiteLink;
+    private String websiteLang;
 
 }

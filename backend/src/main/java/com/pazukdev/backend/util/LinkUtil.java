@@ -24,51 +24,47 @@ public class LinkUtil {
             }
         }
 
-        final String sellerLink = source.getSellerLink();
-        String sellerLinkLang = source.getSellerLang();
-        final Link seller = getLink("seller", target);
-        if (seller != null) {
-            if (SpecificStringUtil.isEmpty(sellerLink)) {
-                target.getLinks().remove(seller);
+        final String websiteLink = source.getWebsiteLink();
+        String websiteLang = source.getWebsiteLang();
+        final Link website = getLink("website", target);
+        if (website != null) {
+            if (SpecificStringUtil.isEmpty(websiteLink)) {
+                target.getLinks().remove(website);
             } else {
-                seller.setName(sellerLink);
-                seller.setLang(sellerLinkLang);
+                website.setName(websiteLink);
+                website.setLang(websiteLang);
             }
         } else {
-            if (!SpecificStringUtil.isEmpty(sellerLink)) {
-                final Link newSeller = LinkFactory.createSellerLink(sellerLink, sellerLinkLang);
-                target.getLinks().add(newSeller);
+            if (!SpecificStringUtil.isEmpty(websiteLink)) {
+                final Link newWebsite = LinkFactory.createWebsiteLink(websiteLink, websiteLang);
+                target.getLinks().add(newWebsite);
             }
         }
     }
 
     public static void setLinksToItemView(final ItemView target, final Item source) {
-        final String defaultSellerLang = "all";
-        target.setSellerLang(defaultSellerLang);
+        final String defaultWebsiteLang = "all";
+        target.setWebsiteLang(defaultWebsiteLang);
 
         for (final Link link : source.getLinks()) {
-            if (link.getType().equals("wiki")) {
+            final String linkType = link.getType();
+            if (linkType.equalsIgnoreCase("wiki")) {
                 target.setWikiLink(link.getName());
             }
-            if (link.getType().equals("seller")) {
-                target.setSellerLink(link.getName());
-                target.setSellerLang(link.getLang());
+            if (linkType.equalsIgnoreCase("website")) {
+                target.setWebsiteLink(link.getName());
+                target.setWebsiteLang(link.getLang());
             }
 
         }
     }
 
     public static void addLinksToItem(final Item target, final TransitiveItem source) {
-        final Link wiki = LinkFactory.createWikiLink(source.getWiki());
-        if (wiki != null) {
-            target.getLinks().add(wiki);
+        if (source.getWiki() != null) {
+            target.getLinks().add(LinkFactory.createWikiLink(source.getWiki()));
         }
-
-        if (target.getName().equalsIgnoreCase("pvl-1 serg")) {
-            final String link = "https://vk.com/market-181468296?w=product-181468296_3462964%2Fquery";
-            final String lang = null;
-            final Link seller = LinkFactory.createSellerLink(link, lang);
-            target.getLinks().add(seller);
+        if (source.getWebsite() != null) {
+            target.getLinks().add(LinkFactory.createWebsiteLink(source.getWebsite(), source.getWebsiteLand()));
         }
     }
 

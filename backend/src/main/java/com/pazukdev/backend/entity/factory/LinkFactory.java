@@ -5,12 +5,12 @@ import com.pazukdev.backend.util.SpecificStringUtil;
 
 public class LinkFactory {
 
-    public static Link createSellerLink(final String link, final String lang) {
+    public static Link createWebsiteLink(final String link, final String lang) {
         final Link linkObj = createLink(link);
         if (linkObj == null) {
             return null;
         }
-        linkObj.setType("seller");
+        linkObj.setType("website");
         linkObj.setLang(SpecificStringUtil.isEmpty(lang) ? "all" : lang);
         return linkObj;
     }
