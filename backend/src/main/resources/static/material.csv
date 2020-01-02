@@ -1,4 +1,5 @@
-Category:,Material (i)
-Name,Description,Image
-NBR,nitrile butadiene rubber,-
-FPM,flouride rubber,-
+Category:,Material (i),,,,,
+Name,Description,Class,Standard,Purpose,Wiki,Image
+NBR,Nitrile Butadiene Rubber,-,-,Oil resistant material for gaskets and seals,https://en.wikipedia.org/wiki/Nitrile_rubber,-
+FPM,Fluorocarbon Rubber,-,-,-,https://en.wikipedia.org/wiki/Fluoropolymer,-
+RTI-1,Rubber product,Insulation,GOST 2068-61,Heat resistant wire insulation,https://en.wikipedia.org/wiki/Natural_rubber,-
