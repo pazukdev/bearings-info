@@ -84,3 +84,14 @@ ru=Weight=Масса
 ru=Wheel=Колесо
 ru=Width=Ширина
 ru=Your Wishlist=Ваш список желаемого
+ru=Outer concentric flat thrust spring retaining rings and grooves=Кольца пружинные упорные плоские наружные концентрические и канавки для них
+ru=Inner eccentric flat thrust spring retaining rings and grooves=Кольца пружинные упорные плоские внутренние эксцентрические и канавки для них
+ru=Round spring lock rings=Кольца пружинные круглые
+ru=High voltage wires for tractor ignition devices=Провода автотракторные высокого напряжения для приборов зажигания
+ru=Spark plugs for car, tractor and motorcycle engines=Свечи зажигательные искровые для автомобильных, тракторных и мотоциклетных двигателей
+ru=Rubber for electric cables wires and cords=Резина электрических кабелей, проводов и шнуров
+ru=Spark plugs for tractor type engines=Свечи зажигательные искровые для двигателей автотракторного типа
+ru=Spark plugs=Свечи зажигания искровые
+ru=Rubber product=Резино-техническое изделие
+ru=Gasket=Прокладка
+ru=Gasket kit=Набор прокладок
