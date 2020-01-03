@@ -18,9 +18,7 @@ import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.*;
 
 public class TableUtil {
 
-    public static PartsTable wishListTable(final Set<ChildItem> items,
-                                           final String tableName,
-                                           final ItemService itemService) {
+    public static PartsTable wishListTable(final Set<ChildItem> items, final ItemService itemService) {
         final List<NestedItemDto> dtos = new ArrayList<>();
         for (final ChildItem item : items) {
             final NestedItemDto itemDto = createWishListItem(item, itemService.getUserService());
@@ -29,12 +27,10 @@ public class TableUtil {
         final String[] header = {"Comment", "Name", "Quantity, pcs"};
 //        final String[] header = null;
         final Set<String> categories = itemService.findAllCategories();
-        return PartsTable.create(tableName, header, dtos, categories);
+        return PartsTable.create(header, dtos, categories);
     }
 
-    public static PartsTable specialItemsTable(final List<Item> items,
-                                               final String tableName,
-                                               final ItemService itemService) {
+    public static PartsTable specialItemsTable(final List<Item> items, final ItemService itemService) {
         final List<NestedItemDto> dtos = new ArrayList<>();
         for (final Item item : items) {
             final NestedItemDto itemDto = createItemForItemsManagement(item, itemService.getUserService());
@@ -43,12 +39,10 @@ public class TableUtil {
 //        final String[] header = {"Category", "Name", "-"};
         final String[] header = null;
         final Set<String> categories = itemService.findAllCategories();
-        return PartsTable.create(tableName, header, dtos, categories);
+        return PartsTable.create(header, dtos, categories);
     }
 
-    public static  PartsTable motorcyclesTable(final List<Item> motorcycles,
-                                               final String tableName,
-                                               final UserService userService) {
+    public static  PartsTable motorcyclesTable(final List<Item> motorcycles, final UserService userService) {
         final List<NestedItemDto> dtos = new ArrayList<>();
         final Set<String> categories = new HashSet<>();
         for (final Item motorcycle : motorcycles) {
@@ -58,22 +52,20 @@ public class TableUtil {
         }
 
         final String[] header = {"Production", "Model", "Manufacturer"};
-        return PartsTable.create(tableName, header, dtos, categories);
+        return PartsTable.create(header, dtos, categories);
     }
 
-    public static  PartsTable usersTable(final List<UserEntity> users, final String tableName) {
+    public static  PartsTable usersTable(final List<UserEntity> users) {
         final List<NestedItemDto> dtos = new ArrayList<>();
         for (final UserEntity user : users) {
             dtos.add(createUser(user));
         }
         final String[] header = {"Role", "Username", "Rating"};
         final Set<String> partCategories = new HashSet<>(Arrays.asList("Admin", "User"));
-        return PartsTable.create(tableName, header, dtos, partCategories);
+        return PartsTable.create(header, dtos, partCategories);
     }
 
-    public static PartsTable createPartsTable(final Item item,
-                                              final String tableName,
-                                              final ItemService itemService) {
+    public static PartsTable createPartsTable(final Item item, final ItemService itemService) {
         if (!CategoryUtil.itemIsAbleToContainParts(item)) {
             return PartsTable.createStub();
         }
@@ -86,7 +78,7 @@ public class TableUtil {
         final String[] header = {"Location", "Partnumber", "Pcs/Vol"};
         //final String[] header = null;
         final Set<String> categories = itemService.findAllPartCategories();
-        return PartsTable.create(tableName, header, dtos, categories);
+        return PartsTable.create(header, dtos, categories);
     }
 
     public static ReplacersTable createReplacersTable(final Item item, final UserService userService) {
@@ -107,7 +99,7 @@ public class TableUtil {
         final Map<String, String> description = ItemUtil.toMap(item.getDescription());
 
         final List<HeaderTableRow> headerTableRows = new ArrayList<>();
-        headerTableRows.add(HeaderTableRow.create("Name", itemName, itemCategory));
+        headerTableRows.add(HeaderTableRow.create("Name", itemName));
         return createTable(tableName, description, headerTableRows, itemCategory, itemService);
     }
 
@@ -130,7 +122,7 @@ public class TableUtil {
                 itemId = foundItem.getId().toString();
             }
 
-            final HeaderTableRow row = HeaderTableRow.create(parameter, value, itemCategory);
+            final HeaderTableRow row = HeaderTableRow.create(parameter, value);
             row.setItemId(itemId);
             headerTableRows.add(row);
         }

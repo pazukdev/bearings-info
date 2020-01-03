@@ -7,12 +7,10 @@
                         <DefaultButton @on-click="goHome" :text="'Home'"/>
                     </td>
                     <td>
-                        <DefaultButton v-if="!isGuest()"
-                                       @on-click="openItemsManagement" :text="$t('itemsManagement')"/>
+                        <DefaultButton @on-click="openItemsManagement" :text="$t('itemsManagement')"/>
                     </td>
                     <td>
-                        <DefaultButton v-if="!isGuest()"
-                                       @on-click="showCurrentUserProfile()" :text="'My profile'"/>
+                        <DefaultButton v-if="!isGuest()" @on-click="showCurrentUserProfile()" :text="'My profile'"/>
                     </td>
                 </tr>
             </tbody>

@@ -95,3 +95,28 @@ ru=Spark plugs=Свечи зажигания искровые
 ru=Rubber product=Резино-техническое изделие
 ru=Gasket=Прокладка
 ru=Gasket kit=Набор прокладок
+ru=Irbitskiy Mototsikletniy Zavod=Ирбитский Мотоциклетный Завод
+ru=Kievskiy Mototsikletniy Zavod=Киевский Мотоциклетный Завод
+ru=RTI-1=РТИ-1
+ru=PVL-1=ПВЛ-1
+ru=Heat resistant wire insulation=Изоляция токопроводящих жил теплостойкая
+ru=Insulation rubber=Резина кабельная изоляционная
+ru=Standard=Стандарт
+ru=Wire=Провод
+ru=Cotton yarn braid coated with nitrocellulose varnish=Хлопчатобумажная пряжа покрытая нитроцеллюлозным лаком
+ru=Core=Токопроводящая жила
+ru=Dimensions, mm=Размеры, мм
+ru=Voltage=Напряжение
+ru=Insulation=Изоляция
+ru=Outer shield material=Оплетка
+ru=High voltage=Высокого напряжения
+ru=Ukrainian SSR / Ukraine=УССР / Украина
+ru=Russia / USA=Россия / США
+ru=Germany=Германия
+ru=USA=США
+ru=Russia=Россия
+ru=Belarus=Беларусь
+ru=Founded=Основано
+ru=Defunct=Закрыто
+ru=Full name=Полное название
+ru=Country=Страна

@@ -7,7 +7,6 @@ import com.pazukdev.backend.dto.table.HeaderTableRow;
 import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.dto.table.ReplacersTable;
 import com.pazukdev.backend.dto.view.ItemView;
-import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.service.ItemService;
 import org.json.JSONArray;
 
@@ -35,21 +34,25 @@ public class TranslatorUtil {
                                  final String languageTo,
                                  final ItemView itemView,
                                  final boolean addToDictionary,
-                                 final ItemService itemService) {
+                                 final ItemService service) {
         HeaderTable header = itemView.getHeader();
+        final String category = itemView.getCategory();
+        final String name = itemView.getName();
         final PartsTable partsTable = itemView.getPartsTable();
         final ReplacersTable replacersTable = itemView.getReplacersTable();
         final List<NestedItemDto> possibleParts = itemView.getPossibleParts();
         final List<NestedItemDto> replacers = itemView.getPossibleReplacers();
         final List<String> categories = itemView.getAllCategories();
 
-        header = translate(languageFrom, languageTo, header, addToDictionary, itemView.getItemId(), itemService);
-        translate(languageFrom, languageTo, partsTable, addToDictionary, itemService);
-        translate(languageFrom, languageTo, replacersTable, addToDictionary, itemService);
-        translateNestedItemDtoList(languageFrom, languageTo, possibleParts, addToDictionary, itemService);
-        translateNestedItemDtoList(languageFrom, languageTo, replacers, addToDictionary, itemService);
-        translate(languageFrom, languageTo, categories, addToDictionary, itemService);
+        header = translate(languageFrom, languageTo, header, addToDictionary, itemView.getItemId(), service);
+        translate(languageFrom, languageTo, partsTable, addToDictionary, service);
+        translate(languageFrom, languageTo, replacersTable, addToDictionary, service);
+        translateNestedItemDtoList(languageFrom, languageTo, possibleParts, addToDictionary, service);
+        translateNestedItemDtoList(languageFrom, languageTo, replacers, addToDictionary, service);
+        translate(languageFrom, languageTo, categories, addToDictionary, service);
 
+        itemView.setLocalizedCategory(translate(languageFrom, languageTo, category, addToDictionary, false, service));
+        itemView.setLocalizedName(translate(languageFrom, languageTo, name, addToDictionary, false, service));
         itemView.setHeader(header);
         itemView.setPartsTable(partsTable);
         itemView.setReplacersTable(replacersTable);
@@ -64,24 +67,24 @@ public class TranslatorUtil {
                                          final boolean addToDictionary,
                                          final Long itemId,
                                          final ItemService itemService) {
-        Item item = null;
-        String itemCategory = null;
-        String itemName = null;
-        if (!ItemUtil.isSpecialItem(itemId)) {
-            item = itemService.getOne(itemId);
-            itemCategory = item.getCategory();
-            itemName = item.getName();
-        }
+//        Item item = null;
+//        String itemCategory = null;
+//        String itemName = null;
+//        if (!ItemUtil.isSpecialItem(itemId)) {
+//            item = itemService.getOne(itemId);
+//            itemCategory = item.getCategory();
+//            itemName = item.getName();
+//        }
 
-        String tableName = headerTable.getName();
-        if (item != null && tableName.equals(TableUtil.getHeaderTableName(itemCategory, itemName))) {
-            itemCategory = translate(languageFrom, languageTo, itemCategory, addToDictionary, true, itemService);
-            itemName = translate(languageFrom, languageTo, itemName, addToDictionary, true, itemService);
-            tableName = TableUtil.getHeaderTableName(itemCategory, itemName);
-        } else {
-            tableName = translate(languageFrom, languageTo, tableName, false, true, itemService);
-        }
-        headerTable.setName(tableName);
+//        String tableName = headerTable.getName();
+//        if (item != null && tableName.equals(TableUtil.getHeaderTableName(itemCategory, itemName))) {
+//            itemCategory = translate(languageFrom, languageTo, itemCategory, addToDictionary, true, itemService);
+//            itemName = translate(languageFrom, languageTo, itemName, addToDictionary, true, itemService);
+//            tableName = TableUtil.getHeaderTableName(itemCategory, itemName);
+//        } else {
+//            tableName = translate(languageFrom, languageTo, tableName, false, true, itemService);
+//        }
+//        headerTable.setName(tableName);
 
         for (final HeaderTableRow row : headerTable.getRows()) {
             row.setParameter(translate(languageFrom, languageTo, row.getParameter(), addToDictionary, false, itemService));

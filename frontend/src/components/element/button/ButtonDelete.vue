@@ -13,6 +13,7 @@
 <script>
     import {mapState} from "vuex";
     import itemViewUtil from "../../../util/itemViewUtil";
+    import userUtil from "../../../util/userUtil";
 
     export default {
         name: "ButtonDelete",
@@ -36,12 +37,8 @@
                     return false;
                 }
                 return itemViewUtil.isAdmin(this.itemView)
-                    || this.currentUserIsCreator(item)
+                    || userUtil.isCurrentUserItemCreator(this.userName, item.creatorName)
                     || this.wishlistView;
-            },
-
-            currentUserIsCreator(item) {
-                return item.creatorName === this.userName.toString();
             },
 
             removeItem(item) {

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!isGuest()">
         <table>
             <tbody>
             <tr>
@@ -137,6 +137,10 @@
                 }
                 return false;
             },
+
+            isGuest() {
+                return itemViewUtil.isGuest(this.userName);
+            }
         }
     }
 </script>

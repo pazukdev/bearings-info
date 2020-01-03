@@ -1,31 +1,29 @@
 <template>
-    <div>
-        <div v-if="editMode">
-            <p>{{"Add part"}}</p>
-            <p v-if="showMessage" class="alert-message">
-                {{message}}
-            </p>
-            <table v-if="showAddForm">
-                <tbody>
-                <tr>
-                    <td class="three-column-table-left-column">
-                        <input v-model="itemLocation" type="text"/>
-                    </td>
-                    <td class="three-column-table-middle-column">
-                        <ItemSelect :replacer="false"
-                                    @hide-add-form="hideAddForm"
-                                    @on-change="itemSelectOnChange"/>
-                    </td>
-                    <td class="three-column-table-right-column">
-                        <input v-model="itemQuantity" type="text"/>
-                    </td>
-                    <td class="three-column-table-button-column">
-                        <ButtonAdd @add-item="addItem"/>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+    <div v-if="itemView.partsEnabled && editMode">
+        <p>{{"Add part"}}</p>
+        <p v-if="showMessage" class="alert-message">
+            {{message}}
+        </p>
+        <table v-if="showAddForm">
+            <tbody>
+            <tr>
+                <td class="three-column-table-left-column">
+                    <input v-model="itemLocation" type="text"/>
+                </td>
+                <td class="three-column-table-middle-column">
+                    <ItemSelect :replacer="false"
+                                @hide-add-form="hideAddForm"
+                                @on-change="itemSelectOnChange"/>
+                </td>
+                <td class="three-column-table-right-column">
+                    <input v-model="itemQuantity" type="text"/>
+                </td>
+                <td class="three-column-table-button-column">
+                    <ButtonAdd @add-item="addItem"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 

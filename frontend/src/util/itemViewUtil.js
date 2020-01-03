@@ -1,5 +1,6 @@
 import shared from "./shared";
 import storeUtil from "./storeUtil";
+import arrayUtil from "./arrayUtil";
 
 export default {
     itemsListToTables(items) {
@@ -31,9 +32,7 @@ export default {
             nestedTables.push(nestedTable);
         }
 
-        nestedTables.sort((a,b) => (a.name > b.name) ? 1 : -1);
-
-        return nestedTables;
+        return arrayUtil.sortByName(nestedTables);
     },
 
     setLocale(router, route, i18n, lang) {
@@ -67,10 +66,6 @@ export default {
         return itemView.header.rows[0].value;
     },
 
-    getTitle(table) {
-        return table.localizedName;
-    },
-
     dispatchView(store, itemView) {
         store.dispatch("setItemView", itemView);
         storeUtil.setLoadingState(false);
@@ -83,5 +78,10 @@ export default {
 
     isMotorcycleCatalogueView(itemView) {
         return itemView.itemId === -2;
+    },
+
+    isManufacturer(itemView) {
+        // console.log(itemView.category.toLowerCase());
+        return itemView.category.toLowerCase() === "manufacturer"
     }
 }

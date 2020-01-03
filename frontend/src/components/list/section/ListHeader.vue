@@ -35,8 +35,13 @@
 
         methods: {
             isShowPartsTableHeader() {
+                if (!this.itemView.partsEnabled) {
+                    return false;
+                }
+
                 let partsTable = this.itemView.partsTable;
                 let header = partsTable.header;
+
                 if (header === null) {
                     return false;
                 }

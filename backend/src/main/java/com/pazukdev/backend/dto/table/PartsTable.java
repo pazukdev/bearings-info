@@ -32,12 +32,10 @@ public class PartsTable extends AbstractDto {
         return partsTable;
     }
 
-    public static PartsTable create(final String tableName,
-                                    final String[] header,
+    public static PartsTable create(final String[] header,
                                     final List<NestedItemDto> parts,
                                     final Set<String> partCategories) {
         final PartsTable table = new PartsTable();
-        table.setName(tableName);
         table.setHeader(header);
         table.setParts(parts);
         table.setPartCategories(partCategories);

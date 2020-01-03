@@ -157,6 +157,11 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final List<ChildItem> childItems = createParts(transitiveItem, items, this, transitiveItemService);
         final List<Replacer> replacers = createReplacers(transitiveItem, this, transitiveItemService);
 
+        final String name = transitiveItem.getName();
+        final Long soyuzRetromechanicId = 5L;
+        final Long adminId = userService.getAdmin().getId();
+        final Long creatorId = name.toLowerCase().contains("soyuz retromechanic") ? soyuzRetromechanicId : adminId;
+
         final Item item = new Item();
         item.setName(transitiveItem.getName());
         item.setCategory(transitiveItem.getCategory().replace(" (i)", ""));
@@ -164,7 +169,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         item.setDescription(createItemDescription(descriptionMap));
         item.getChildItems().addAll(childItems);
         item.getReplacers().addAll(replacers);
-        item.setCreatorId(userService.getAdmin().getId());
+        item.setCreatorId(creatorId);
         item.setUserActionDate(DateUtil.now());
         item.setImage(transitiveItem.getImage());
         LinkUtil.addLinksToItem(item, transitiveItem);

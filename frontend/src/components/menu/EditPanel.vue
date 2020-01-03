@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isMotorcycleCatalogueView()">
+    <div v-if="!isMotorcycleCatalogueView() && !isGuest()">
         <table>
             <tbody>
             <tr>
@@ -26,9 +26,9 @@
                     <input id="submit" v-if="isSaveButtonRendered() && saveIsSubmit"
                            type="submit" form="form" :value="$t('save')"/>
                 </td>
-<!--                <td>-->
-<!--                    <ButtonAdd v-if="editMode" style="visibility: hidden"/>-->
-<!--                </td>-->
+                <td>
+                    <ButtonAdd v-if="editMode" style="visibility: hidden"/>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -80,6 +80,10 @@
 
             isMotorcycleCatalogueView() {
                 return itemViewUtil.isMotorcycleCatalogueView(this.itemView);
+            },
+
+            isGuest() {
+                return itemViewUtil.isGuest(this.userName);
             }
         }
     }

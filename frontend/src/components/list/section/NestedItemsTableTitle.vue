@@ -11,7 +11,6 @@
 
 <script>
     import shared from "../../../util/shared";
-    import itemViewUtil from "../../../util/itemViewUtil";
 
     export default {
         name: "NestedItemsTableTitle",
@@ -29,7 +28,7 @@
             },
 
             getTitle() {
-                return itemViewUtil.getTitle(this.table);
+                return this.replacers ? this.$t("replacers") : this.$t("parts");
             },
         }
     }

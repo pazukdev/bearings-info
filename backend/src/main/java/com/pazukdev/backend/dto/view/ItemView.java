@@ -27,8 +27,11 @@ public class ItemView extends AbstractView {
     private boolean newItem;
     private boolean hardDelete = false;
     private boolean defaultImg = true;
+    private boolean partsEnabled = true;
     private Long itemId;
-    private String category;
+    private String category = "-";
+    private String localizedCategory = "-";
+    private String localizedName = "-";
     private UserDto userData;
     private HeaderTable header;
     private PartsTable partsTable;

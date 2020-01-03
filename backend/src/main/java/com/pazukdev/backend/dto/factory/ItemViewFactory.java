@@ -27,6 +27,9 @@ import static com.pazukdev.backend.util.TranslatorUtil.translate;
 @RequiredArgsConstructor
 public class ItemViewFactory {
 
+    private final static List<String> partsDisabled = new ArrayList<>(Arrays
+            .asList("manufacturer", "material", "standard", "wire"));
+
     private final ItemService itemService;
 
     public ItemView createHomeView(final String userName, final String userLanguage) {
@@ -134,88 +137,90 @@ public class ItemViewFactory {
         final Item item = itemService.getOne(itemId);
         final List<Item> allItems = itemService.findAll();
         final List<Item> sameCategoryItems = itemService.find(item.getCategory(), allItems);
-        final String tableName = "Parts";
-        final String itemCategory = item.getCategory();
+        final String category = item.getCategory();
+        final String name = item.getName();
         final ImgViewData imgViewData = ImgUtil.getImgViewData(item);
 
         itemView.setSearchEnabled(true);
-        itemView.setCategory(itemCategory);
+        itemView.setCategory(category);
+        itemView.setLocalizedCategory(category);
+        itemView.setName(name);
+        itemView.setLocalizedName(name);
         itemView.setDefaultImg(imgViewData.isDefaultImg());
         itemView.setImgData(imgViewData.getImgData());
         itemView.setHeader(createHeader(item, itemService));
-        itemView.setPartsTable(createPartsTable(item, tableName, itemService));
+        itemView.setPartsTable(createPartsTable(item, itemService));
         itemView.setReplacersTable(createReplacersTable(item, itemService.getUserService()));
         itemView.getPossibleParts().addAll(createPossibleParts(allItems, itemService.getUserService()));
         itemView.getPossibleReplacers().addAll(createReplacerDtos(sameCategoryItems, itemService.getUserService()));
         itemView.setCreatorId(item.getCreatorId());
         itemView.setCreatorName(UserUtil.getCreatorName(item, itemService.getUserService()));
         itemView.setLikeList(UserUtil.createLikeListDto(currentUser));
+        itemView.setPartsEnabled(!partsDisabled.contains(category.toLowerCase()));
         LinkUtil.setLinksToItemView(itemView, item);
+
         return itemView;
     }
 
     private ItemView createMotorcycleCatalogueView(final ItemView itemView) {
         final List<Item> motorcycles = itemService.find("Motorcycle");
-        final String tableName = "Motorcycle catalogue";
         final String countParameterName = "Model";
 
+        itemView.setLocalizedName("Motorcycle catalogue");
         itemView.setImgData(ImgUtil.getAppImgData());
 
         return createItemsView(
                 itemView,
                 motorcycles.size(),
-                tableName,
                 countParameterName,
-                motorcyclesTable(motorcycles, countParameterName, itemService.getUserService()));
+                motorcyclesTable(motorcycles, itemService.getUserService()));
     }
 
     private ItemView createUsersListView(final ItemView itemView) {
         final List<UserEntity> users = itemService.getUserService().findAll();
-        final String tableName = "Users";
         final String countParameterName = "User";
+
+        itemView.setLocalizedName("Users");
 
         return createItemsView(
                 itemView,
                 users.size(),
-                tableName,
                 countParameterName,
-                usersTable(users, tableName));
+                usersTable(users));
     }
 
     private ItemView createItemsManagementView(final ItemView itemView) {
         final List<Item> allItems = itemService.findAll();
-        final String tableName = "Items management";
         final String countParameterName = "Items";
+
+        itemView.setLocalizedName("Items management");
 
         return createItemsView(
                 itemView,
                 allItems.size(),
-                tableName,
                 countParameterName,
-                specialItemsTable(allItems, countParameterName, itemService));
+                specialItemsTable(allItems, itemService));
     }
 
     private ItemView createWishListView(final ItemView itemView, final WishList wishList) {
         final Set<ChildItem> allItems = wishList.getItems();
-        String tableName = "Your Wishlist";
         String countParameterName = "Items";
+
+        itemView.setLocalizedName("Your Wishlist");
 
         return createItemsView(
                 itemView,
                 allItems.size(),
-                tableName,
                 countParameterName,
-                wishListTable(allItems, countParameterName, itemService));
+                wishListTable(allItems, itemService));
     }
 
     private ItemView createItemsView(final ItemView itemView,
                                      final Integer size,
-                                     String tableName,
                                      String parameter,
                                      final PartsTable table) {
-        final String itemCategory = "-";
-        final HeaderTableRow row = HeaderTableRow.create(parameter, String.valueOf(size), itemCategory);
-        final HeaderTable header = HeaderTable.createSingleRowTable(tableName, row);
+        final HeaderTableRow row = HeaderTableRow.create(parameter, String.valueOf(size));
+        final HeaderTable header = HeaderTable.createSingleRowTable("-", row);
         final List<String> categories = new ArrayList<>(itemService.findAllCategories());
 
         itemView.setHeader(header);

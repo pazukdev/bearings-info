@@ -23,6 +23,6 @@ public class TransitiveItem extends AbstractEntity {
     private String replacer = "-";
     private String wiki;
     private String website;
-    private String websiteLand;
+    private String websiteLang;
 
 }

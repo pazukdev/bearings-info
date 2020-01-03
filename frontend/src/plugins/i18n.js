@@ -42,7 +42,9 @@ export const i18n = new VueI18n({
             buy: "buy",
             downloadDictionary: "Download dictionary",
             uploadDictionary: "Upload dictionary",
-            nameAndPasswordInputLabel: "Length: 2 - 30 characters. Numbers and english letters only"
+            nameAndPasswordInputLabel: "Length: 2 - 30 characters. Numbers and english letters only",
+            parts: "Parts",
+            replacers: "Replacers"
         },
         ru: {
             language: "Русский язык",
@@ -79,7 +81,9 @@ export const i18n = new VueI18n({
             buy: "купить",
             downloadDictionary: "Скачать словарь",
             uploadDictionary: "Загрузить словарь",
-            nameAndPasswordInputLabel: "Длина: 2 - 30 символов. Только цифры и английские буквы"
+            nameAndPasswordInputLabel: "Длина: 2 - 30 символов. Только цифры и английские буквы",
+            parts: "Детали",
+            replacers: "Заменители"
         }
     }
 });

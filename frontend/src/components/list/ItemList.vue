@@ -3,7 +3,8 @@
         <EditableImg/>
         <ItemDescription :item="item"/>
         <EditPanel @save="save"/>
-        <NestedItemsTableTitle :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
+        <NestedItemsTableTitle v-if="itemView.partsEnabled"
+                               :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
         <table id="parts-table">
             <tbody>
             <tr>

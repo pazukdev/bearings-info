@@ -1,9 +1,9 @@
 <template>
     <div style="text-align: center">
 <!--        {{itemView.userData}}<br>-->
-        {{countryName}}<br>
-        {{user.country}}
-        <p>{{"User"}}</p>
+<!--        {{countryName}}<br>-->
+<!--        {{user.country}}-->
+        <p>{{user.name}}</p>
         <EditableImg/>
         <EditPanel v-if="isEditable()" :save-is-submit="true"/>
         <AlertMessagesSection :messages="validationMessages"/>
@@ -15,7 +15,7 @@
                     <td>
                         <p v-if="!editMode">{{user.name}}</p>
                         <input v-if="editMode" v-model="user.name" type="text" required
-                               pattern="[A-Za-z0-9]{2,30}"
+                               pattern="[A-Za-z0-9 ]{2,30}"
                                :title="$t('nameAndPasswordInputLabel')"/>
                     </td>
                 </tr>

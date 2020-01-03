@@ -1,8 +1,8 @@
 <template>
     <div>
 <!--        {{"wikiLink: " + itemView.wikiLink}}<br>-->
-<!--        {{"sellerLink: " + itemView.sellerLink}}<br>-->
-<!--        {{"sellerLang: " + itemView.sellerLang}}<br>-->
+<!--        {{"websiteLink: " + itemView.websiteLink}}<br>-->
+<!--        {{"websiteLang: " + itemView.websiteLang}}<br>-->
 <!--        {{"validationMessage: " + validationMessage}}-->
         <table class="equal-columns-table">
             <tbody v-if="!editMode">
@@ -22,14 +22,16 @@
                 </tr>
                 <tr>
                     <td>
-                        <button v-if="isLinkButtonRendered(itemView.sellerLink, itemView.sellerLang)"
+                        <button id="website-link-button"
+                                v-if="isWebsiteLinkButtonRendered(itemView.websiteLink, itemView.websiteLang)"
                                 type="button"
-                                @click="open(itemView.sellerLink)">
-                            {{"Seller"}}
+                                :style="buttonStyles"
+                                @click="open(itemView.websiteLink)">
+                            {{getButtonText()}}
                         </button>
                     </td>
                     <td>
-                        <button v-if="isLinkButtonRendered(itemView.wikiLink, 'all')"
+                        <button v-if="isWebsiteLinkButtonRendered(itemView.wikiLink, 'all')"
                                 type="button"
                                 @click="open(itemView.wikiLink)">
                             {{"Wiki"}}
@@ -51,7 +53,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <label>{{"Wiki"}}
+                        <label>{{"Wiki link"}}
                             <input id="wiki-link-input" v-model="itemView.wikiLink"
                                    type="url"
                                    @change="validate()"/>
@@ -60,9 +62,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <label>{{"Seller"}}
-                            <input id="seller-link-input" v-model="itemView.sellerLink"
-                                   :disabled="!isInputEnabled()"
+                        <label>{{"Buy / website link"}}
+                            <input id="seller-link-input" v-model="itemView.websiteLink"
                                    type="url"
                                    @change="validate()"/>
                         </label>
@@ -70,8 +71,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <label>{{"Seller language"}}
-                            <select v-model="itemView.sellerLang">
+                        <label>{{"Website link language"}}
+                            <select v-model="itemView.websiteLang">
                                 <option v-for="lang in langs" :key="lang">
                                     {{lang}}
                                 </option>
@@ -89,6 +90,7 @@
     import shared from "../../util/shared";
     import itemViewUtil from "../../util/itemViewUtil";
     import axios from "axios";
+    import userUtil from "../../util/userUtil";
 
     export default {
         name: "ItemMenu",
@@ -102,7 +104,13 @@
                 itemView: state => state.dictionary.itemView,
                 appLanguage: state => state.dictionary.appLanguage,
                 langs: state => state.dictionary.langs
-            })
+            }),
+
+            buttonStyles() {
+                return {
+                    backgroundColor: this.isManufacturer() ? '' : 'darkgreen',
+                }
+            }
         },
 
         data() {
@@ -124,8 +132,15 @@
             },
 
             searchInGoogle() {
-                let itemName = this.itemView.header.name.toLowerCase();
-                let q = this.$t("buy") + " " + itemName;
+                let itemView = this.itemView;
+                let itemName = itemView.header.name.toLowerCase();
+                let textBefore;
+                if (itemView.category.toLowerCase() === "manufacturer") {
+                    textBefore = "";
+                } else {
+                    textBefore = this.$t("buy") + " ";
+                }
+                let q = textBefore + itemName;
                 window.open('http://google.com/search?q=' + q);
             },
 
@@ -153,6 +168,7 @@
             isAddToWishListButtonRendered() {
                 return !this.isInWishList(this.itemView.itemId)
                     && !this.editMode
+                    && !this.isManufacturer()
                     && !this.isGuest();
             },
 
@@ -172,7 +188,7 @@
                 return this.itemView.searchEnabled;
             },
 
-            isLinkButtonRendered(link, lang) {
+            isWebsiteLinkButtonRendered(link, lang) {
                 if (lang == null || lang === "all" || lang === this.appLanguage) {
                     return !this.isEmpty(link);
                 }
@@ -184,18 +200,23 @@
             },
 
             isInputEnabled() {
-                if (shared.isInArray(this.userName, this.getPermittedToEditSellerLinkUserNameList())) {
-                    return true;
-                }
-                return this.isAdmin();
-            },
-
-            getPermittedToEditSellerLinkUserNameList() {
-                return ["serg"];
+                return this.isAdmin() || userUtil.isCurrentUserItemCreator(this.userName, this.itemView.creatorName);
             },
 
             isAdmin() {
                 return itemViewUtil.isAdmin(this.itemView);
+            },
+
+            getButtonText() {
+                if (this.isManufacturer()) {
+                    return "Website";
+                } else {
+                    return "Buy";
+                }
+            },
+
+            isManufacturer() {
+                return itemViewUtil.isManufacturer(this.itemView);
             }
         }
     }

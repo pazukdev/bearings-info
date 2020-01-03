@@ -54,7 +54,7 @@ public class DataLoader implements ApplicationRunner {
         createUser(Role.ADMIN, "admin", "$2a$10$LJDm6BOaekdsan3q3j15Q.ceRCSHHb1J8kAPqQasWZSdKoJtDAnyO");
         createUser(Role.ADMIN, "dominator", "$2a$10$mRsNu6BVh3YAm1vKWwsbz.AlOUqzoi0eW9TAcV5AysIciUyusnxrm");
         createUser(Role.USER, "user", "$2a$10$50E.w9jZJAIjGlsb4OU0N.wSvxrfWe.VEmiAV7.filaKuuKN.f992");
-        createUser(Role.SELLER, "retromech", "$2a$10$50E.w9jZJAIjGlsb4OU0N.wSvxrfWe.VEmiAV7.filaKuuKN.f992");
+        createUser(Role.SELLER, "soyuz retromechanic", "$2a$10$50E.w9jZJAIjGlsb4OU0N.wSvxrfWe.VEmiAV7.filaKuuKN.f992");
     }
 
     private void createUser(final Role role, final String name, final String password) {
@@ -64,11 +64,14 @@ public class DataLoader implements ApplicationRunner {
         user.setPassword(password);
         if (name.equalsIgnoreCase("admin")) {
             user.setEmail("pazuk1985@gmail.com");
-            user.setImg("admin.png");
+            user.setImg(name + ".png");
             user.setCountry("BY");
-        }
-        if (name.equalsIgnoreCase("retromech")) {
+        } else if (name.equalsIgnoreCase("dominator")) {
             user.setCountry("BY");
+            user.setImg(name + ".png");
+        } else if (name.equalsIgnoreCase("soyuz retromechanic")) {
+            user.setCountry("BY");
+            user.setImg(name + ".png");
         }
         itemService.getUserService().getRepository().save(user);
     }

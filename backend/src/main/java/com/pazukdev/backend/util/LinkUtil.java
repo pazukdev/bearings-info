@@ -64,7 +64,7 @@ public class LinkUtil {
             target.getLinks().add(LinkFactory.createWikiLink(source.getWiki()));
         }
         if (source.getWebsite() != null) {
-            target.getLinks().add(LinkFactory.createWebsiteLink(source.getWebsite(), source.getWebsiteLand()));
+            target.getLinks().add(LinkFactory.createWebsiteLink(source.getWebsite(), source.getWebsiteLang()));
         }
     }
 

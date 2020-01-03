@@ -1,7 +1,8 @@
 <template>
     <div>
         <div style="text-align: center">
-            <p><b>{{itemView.header.name}}</b></p>
+            <p v-if="!isEmpty(itemView.localizedCategory)"><b>{{itemView.localizedCategory}}</b></p>
+            <p v-if="!isEmpty(itemView.localizedName)"><b>{{itemView.localizedName}}</b></p>
             {{$t("createdBy")}}
             <router-link v-if="item" :to="{name: 'user', params: {id: itemView.creatorId, lang: appLanguage}}">
                 {{itemView.creatorName}}
@@ -9,9 +10,11 @@
             <br>
         </div>
 
+<!--        {{itemView.header.rows}}-->
+
         <table id="item-description">
             <tbody>
-            <tr v-for="row in itemView.header.rows">
+            <tr v-for="row in sortByWeight(itemView.header.rows)">
                 <td class="two-columns-table-left-column">
                     <p>{{row.parameter}}</p>
                 </td>
@@ -56,6 +59,7 @@
     import ButtonDelete from "../../element/button/ButtonDelete";
     import ListHeader from "./ListHeader";
     import ButtonAdd from "../../element/button/ButtonAdd";
+    import arrayUtil from "../../../util/arrayUtil";
 
     export default {
         name: "ItemDescription",
@@ -88,6 +92,10 @@
         },
 
         methods: {
+            sortByWeight(array) {
+                return arrayUtil.sortByWeight(array);
+            },
+
             addHeaderRow() {
                 this.newHeaderRowMessage = "";
                 if (this.newLineIsEmpty(this.parameter, this.value)) {
@@ -135,6 +143,10 @@
 
             isEdit() {
                 return this.item && this.editMode;
+            },
+
+            isEmpty(value) {
+                return shared.isEmpty(value);
             }
         }
     }
