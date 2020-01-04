@@ -1,5 +1,6 @@
 Category:,Material (i),,,,,
-Name,Description,Class,Standard,Purpose,Wiki,Image
-NBR,Nitrile Butadiene Rubber,-,-,Oil resistant material for gaskets and seals,https://en.wikipedia.org/wiki/Nitrile_rubber,-
-FPM,Fluorocarbon Rubber,-,-,-,https://en.wikipedia.org/wiki/Fluoropolymer,-
-RTI-1,Rubber product,Insulation rubber,GOST 2068-61,Heat resistant wire insulation,https://en.wikipedia.org/wiki/Natural_rubber,-
+Name,Full name,Type,Standard,Purpose,Wiki,Image
+NBR,Nitrile Butadiene Rubber,Rubber,-,Oil resistant material for gaskets and seals,https://en.wikipedia.org/wiki/Nitrile_rubber,-
+FPM,Fluorocarbon Rubber,Rubber,-,-,https://en.wikipedia.org/wiki/Fluoropolymer,-
+RTI-1,Rubber product,Rubber,GOST 2068-61,Heat resistant wire insulation,https://en.wikipedia.org/wiki/Natural_rubber,-
+Aluminium A5,Aluminium mark A5,Non-ferrous metals and alloys,GOST 11069-2001,-,http://www.splav-kharkov.com/mat_start.php?name_id=1219,-

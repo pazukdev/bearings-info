@@ -102,8 +102,17 @@ public class NestedItemDtoFactory {
         } else if (category.toLowerCase().equals("spark plug")) {
             leftColumnData = getValueFromDescription(description, "Manufacturer");
             rightColumnData = getValueFromDescription(description, "Heat range");
+        } else if (category.toLowerCase().equals("material")) {
+            leftColumnData = getValueFromDescription(description, "Type");
+        } else if (category.toLowerCase().equals("wire")) {
+            leftColumnData = getValueFromDescription(description, "Voltage");
+            rightColumnData = getValueFromDescription(description, "Core");
         } else if (category.toLowerCase().equals("generator")) {
             leftColumnData = getValueFromDescription(description, "Tension, V");
+        } else if (category.toLowerCase().equals("manufacturer")) {
+            leftColumnData = getValueFromDescription(description, "Country");
+            rightColumnData = getValueFromDescription(description, "Founded")
+                    + "-" + getValueFromDescription(description, "Defunct");
         }
 
         basicSpecialNestedItemDto.setComment(leftColumnData != null ? leftColumnData : "-");

@@ -100,7 +100,7 @@ public class TableUtil {
 
         final List<HeaderTableRow> headerTableRows = new ArrayList<>();
         headerTableRows.add(HeaderTableRow.create("Name", itemName));
-        return createTable(tableName, description, headerTableRows, itemCategory, itemService);
+        return createTable(tableName, description, headerTableRows, itemService);
     }
 
     public static String getHeaderTableName(final String itemCategory, final String itemName) {
@@ -110,14 +110,15 @@ public class TableUtil {
     private static HeaderTable createTable(final String tableName,
                                            final Map<String, String> descriptionMap,
                                            final List<HeaderTableRow> headerTableRows,
-                                           final String itemCategory,
                                            final ItemService itemService) {
         for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
             String parameter = entry.getKey();
             String value = entry.getValue();
             String itemId = "-";
 
-            final Item foundItem = itemService.find(parameter, value);
+            // str.matches(".*\\d
+            String category = parameter.replaceAll("[0-9]","").trim();
+            final Item foundItem = itemService.find(category, value);
             if (foundItem != null) {
                 itemId = foundItem.getId().toString();
             }

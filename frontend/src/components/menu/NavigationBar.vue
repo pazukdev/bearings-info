@@ -99,7 +99,7 @@
         display: inline-block;
         margin-right: 14px;
         margin-bottom: 14px;
-        max-width: 24%;
+        max-width: 28%;
         text-align: center;
     }
 
@@ -109,6 +109,7 @@
 
     a {
         display: inline-block;
+        font-size: large;
         color: grey;
         text-decoration: none;
         padding-bottom: 14px;

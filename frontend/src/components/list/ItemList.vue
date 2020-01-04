@@ -30,9 +30,9 @@
                                     <ButtonNavigateToItem :part="item" :user="userListView"/>
                                 </td>
                                 <td class="three-column-table-right-column">
-                                    <div class="parts-right-column-text" v-if="!isEdit()">
+                                    <p class="parts-right-column-text" v-if="!isEdit()">
                                         {{item.secondComment}}
-                                    </div>
+                                    </p>
                                     <input v-if="isEdit()" v-model="item.secondComment" type="text"/>
                                 </td>
                                 <td class="three-column-table-button-column">
@@ -132,5 +132,7 @@
 </script>
 
 <style scoped>
-
+    p {
+        text-align: left;
+    }
 </style>

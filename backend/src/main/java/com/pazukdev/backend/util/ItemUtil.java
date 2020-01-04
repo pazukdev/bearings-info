@@ -166,7 +166,8 @@ public class ItemUtil {
     }
 
     public static boolean isInfoItem(final String parameter, final TransitiveItemService service) {
-        return service.find(parameter + " (i)").size() > 0;
+        final Set<String> infoCategories = service.findInfoCategories();
+        return infoCategories.contains(parameter);
     }
 
     public static ReplacerData parseReplacerData(final String replacerDataSourceString) {

@@ -188,6 +188,10 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return findCategories(findAll());
     }
 
+    final Set<String> findInfoCategories() {
+        return transitiveItemService.findInfoCategories();
+    }
+
     public Set<String> findAllPartCategories() {
         return CategoryUtil.filterPartCategories(findAllCategories());
     }

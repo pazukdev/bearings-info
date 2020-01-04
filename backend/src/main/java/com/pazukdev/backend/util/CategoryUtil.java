@@ -41,4 +41,18 @@ public class CategoryUtil {
         return partCategories;
     }
 
+    public static Set<String> filterInfoCategories(final Set<String> categories) {
+        final Set<String> infoCategories = new HashSet<>();
+        for (final String category : categories) {
+            if (isInfoCategory(category)) {
+                infoCategories.add(category);
+            }
+        }
+        return infoCategories;
+    }
+
+    public static boolean isInfoCategory(final String category) {
+        return category.contains("(i)");
+    }
+
 }

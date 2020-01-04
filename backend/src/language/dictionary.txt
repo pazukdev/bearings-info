@@ -120,3 +120,10 @@ ru=Founded=Основано
 ru=Defunct=Закрыто
 ru=Full name=Полное название
 ru=Country=Страна
+ru=Stranded, copper=Многопроволочная, медная
+ru=Rubber=Резина
+ru=Aluminium A5=Алюминий А5
+ru=Aluminium mark A5=Алюминий первичный марки А5
+ru=Aluminium alloy= Алюминиевый сплав
+ru=Non-ferrous metals and alloys=Цветные металлы и сплавы
+ru=Primary aluminum. Brands=Алюминий первичный. Марки

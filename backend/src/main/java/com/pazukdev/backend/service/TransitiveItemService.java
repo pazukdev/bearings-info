@@ -4,14 +4,13 @@ import com.pazukdev.backend.converter.TransitiveItemConverter;
 import com.pazukdev.backend.dto.TransitiveItemDto;
 import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.repository.TransitiveItemRepository;
+import com.pazukdev.backend.util.CategoryUtil;
 import com.pazukdev.backend.util.ItemUtil;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -99,6 +98,22 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
             }
         }
         return categorizedItems;
+    }
+
+    public Set<String> findAllCategories() {
+        return findCategories(transitiveItemRepository.findAll());
+    }
+
+    public Set<String> findInfoCategories() {
+        return CategoryUtil.filterInfoCategories(findAllCategories());
+    }
+
+    public Set<String> findCategories(final List<TransitiveItem> items) {
+        final Set<String> categories = new HashSet<>();
+        for (final TransitiveItem item : items) {
+            categories.add(item.getCategory());
+        }
+        return categories;
     }
 
 }
