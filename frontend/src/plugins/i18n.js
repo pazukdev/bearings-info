@@ -44,7 +44,10 @@ export const i18n = new VueI18n({
             uploadDictionary: "Upload dictionary",
             nameAndPasswordInputLabel: "Length: 2 - 30 characters. Numbers and english letters only",
             parts: "Parts",
-            replacers: "Replacers"
+            replacers: "Replacers",
+            home: "Home",
+            appData: "App data",
+            myProfile: "My profile"
         },
         ru: {
             language: "Русский язык",
@@ -83,7 +86,10 @@ export const i18n = new VueI18n({
             uploadDictionary: "Загрузить словарь",
             nameAndPasswordInputLabel: "Длина: 2 - 30 символов. Только цифры и английские буквы",
             parts: "Детали",
-            replacers: "Заменители"
+            replacers: "Заменители",
+            home: "Home",
+            appData: "Все данные",
+            myProfile: "Мой профиль"
         }
     }
 });
