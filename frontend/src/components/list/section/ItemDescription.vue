@@ -2,11 +2,14 @@
     <div>
         <div style="text-align: center">
             <p v-if="!isEmpty(itemView.localizedCategory)"><b>{{itemView.localizedCategory}}</b></p>
+            <br>
             <p v-if="!isEmpty(itemView.localizedName)"><b>{{itemView.localizedName}}</b></p>
-            {{$t("createdBy")}}
-            <router-link v-if="item" :to="{name: 'user', params: {id: itemView.creatorId, lang: appLanguage}}">
-                {{itemView.creatorName}}
-            </router-link>
+            <p v-if="!isEmpty(itemView.creatorName)">
+                {{$t("createdBy")}}
+                <router-link v-if="item" :to="{name: 'user', params: {id: itemView.creatorId, lang: appLanguage}}">
+                    {{itemView.creatorName}}
+                </router-link>
+            </p>
             <br>
         </div>
 

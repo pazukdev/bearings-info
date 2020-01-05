@@ -24,7 +24,7 @@
                     <td>
                         <label>{{"Nickname"}}
                             <input type="text" name="username" v-model="name" required
-                                   pattern="[A-Za-z0-9 ]{2,30}"
+                                   pattern="[a-zA-Z][a-zA-Z0-9 _-]{1,28}[a-zA-Z0-9_-]"
                                    :title="$t('nameAndPasswordInputLabel')"/>
                         </label>
                     </td>
@@ -40,7 +40,7 @@
                     <td>
                         <label>{{$t('password')}}
                             <input type="password" name="password" v-model="password" required
-                                   pattern="[A-Za-z0-9 ]{2,30}"
+                                   pattern="[a-zA-Z][a-zA-Z0-9 _-]{1,28}[a-zA-Z0-9_-]"
                                    :title="$t('nameAndPasswordInputLabel')"/>
                         </label>
                     </td>
@@ -49,7 +49,7 @@
                     <td>
                         <label>{{$t("repeatPassword")}}
                             <input type="password" v-model="repeatedPassword" required
-                                   pattern="[A-Za-z0-9 ]{2,30}"
+                                   pattern="[a-zA-Z][a-zA-Z0-9 _-]{1,28}[a-zA-Z0-9_-]"
                                    :title="$t('nameAndPasswordInputLabel')"/>
                         </label>
                     </td>

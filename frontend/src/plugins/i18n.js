@@ -42,12 +42,13 @@ export const i18n = new VueI18n({
             buy: "buy",
             downloadDictionary: "Download dictionary",
             uploadDictionary: "Upload dictionary",
-            nameAndPasswordInputLabel: "Length: 2 - 30 characters. Numbers and english letters only",
             parts: "Parts",
             replacers: "Replacers",
             home: "Home",
             appData: "App data",
-            myProfile: "My profile"
+            myProfile: "My profile",
+            nameAndPasswordInputLabel: "Length: 3 - 30 characters: english letters, numbers, - , _ , space",
+            defaultInputTitle: "Length: 3 - 30 characters: letters, numbers, - , _ , space"
         },
         ru: {
             language: "Русский язык",
@@ -84,12 +85,13 @@ export const i18n = new VueI18n({
             buy: "купить",
             downloadDictionary: "Скачать словарь",
             uploadDictionary: "Загрузить словарь",
-            nameAndPasswordInputLabel: "Длина: 2 - 30 символов. Только цифры и английские буквы",
             parts: "Детали",
             replacers: "Заменители",
             home: "Home",
             appData: "Все данные",
-            myProfile: "Мой профиль"
+            myProfile: "Мой профиль",
+            nameAndPasswordInputLabel: "Длина: 3 - 30 символов: английские буквы, цифры, - , _ , пробел",
+            defaultInputTitle: "Длина: 3 - 30 символов: буквы, цифры, - , _ , пробел"
         }
     }
 });

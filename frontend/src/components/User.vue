@@ -15,7 +15,7 @@
                     <td>
                         <p v-if="!editMode">{{user.name}}</p>
                         <input v-if="editMode" v-model="user.name" type="text" required
-                               pattern="[A-Za-z0-9 ]{2,30}"
+                               pattern="[a-zA-Z][a-zA-Z0-9 _-]{1,28}[a-zA-Z0-9_-]"
                                :title="$t('nameAndPasswordInputLabel')"/>
                     </td>
                 </tr>

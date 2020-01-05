@@ -244,6 +244,14 @@
         background: #617D89;
     }
 
+    .background-grey {
+        background: grey;
+    }
+
+    .background-darkgreen {
+        background: darkgreen;
+    }
+
     .red-background {
         background: red;
     }

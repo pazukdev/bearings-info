@@ -1,49 +1,53 @@
 <template>
     <div v-if="!isGuest()">
-        <table>
-            <tbody>
-            <tr>
-                <td colspan="2">{{$t("createNewItem")}}</td>
-            </tr>
-            <tr style="color: red">
-                <td colspan="2">{{categoryMessage}}</td>
-            </tr>
-            <tr style="color: red">
-                <td colspan="2">{{newItemNameMessage}}</td>
-            </tr>
-            <tr>
-                <td class="two-columns-table-left-column">
-                    {{$t("category")}}
-                </td>
-                <td class="two-column-table-right-column">
-                    {{$t("name")}}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="text"
-                           list="categories"
-                           @change="categorySelectOnChange()"
-                           v-model="newItemCategory"/>
-                    <datalist id="categories">
-                        <option v-for="category in itemView.allCategories" :value="category">
-                            {{category}}
-                        </option>
-                    </datalist>
-                </td>
-                <td>
-                    <input @change="newItemNameMessage = ''" v-model="newItemName" type="text"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <button type="button" @click="create()">
-                        {{$t("create")}}
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <details>
+            <summary style="text-align: center">{{$t("createNewItem")}}</summary>
+            <form id="create-item-form" @submit="submit">
+                <table>
+                    <tbody>
+                    <tr><td colspan="2" class="alert-message">{{categoryMessage}}</td></tr>
+                    <tr><td colspan="2" class="alert-message">{{newItemNameMessage}}</td></tr>
+                    <tr>
+                        <td class="two-columns-table-left-column">
+                            {{$t("category")}}
+                        </td>
+                        <td class="two-column-table-right-column">
+                            {{$t("name")}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text"
+                                   required
+                                   list="categories"
+                                   pattern="[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9 _-]{1,28}[a-zA-Zа-яА-Я0-9_-]"
+                                   :title="$t('defaultInputTitle')"
+                                   @change="categorySelectOnChange()"
+                                   v-model="newItemCategory"/>
+                            <datalist id="categories">
+                                <option v-for="category in itemView.allCategories" :value="category">
+                                    {{category}}
+                                </option>
+                            </datalist>
+                        </td>
+                        <td>
+                            <input type="text"
+                                   required
+                                   pattern="[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9 _-]{1,28}[a-zA-Zа-яА-Я0-9_-]"
+                                   :title="$t('defaultInputTitle')"
+                                   @change="newItemNameMessage = ''"
+                                   v-model="newItemName"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input type="submit" class="background-grey" :value="$t('create')"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </details>
         <hr>
     </div>
 </template>
@@ -83,7 +87,8 @@
                 this.categoryMessage = "";
             },
 
-            create() {
+            submit(e) {
+                e.preventDefault();
                 this.clearItemCreationMessages();
                 if (this.newItemCategory === "") {
                     this.categoryMessage = "Category not specified";
