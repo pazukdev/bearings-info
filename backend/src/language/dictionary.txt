@@ -122,8 +122,27 @@ ru=Full name=Полное название
 ru=Country=Страна
 ru=Stranded, copper=Многопроволочная, медная
 ru=Rubber=Резина
-ru=Aluminium A5=Алюминий А5
-ru=Aluminium mark A5=Алюминий первичный марки А5
+ru=Aluminium A5-grade 0.5mm=Алюминий первичный марки А5 0.5мм
 ru=Aluminium alloy= Алюминиевый сплав
+ru=Aluminium bronze=Алюминиевая бронза
+ru=Metals and alloys=Металлы и сплавы
 ru=Non-ferrous metals and alloys=Цветные металлы и сплавы
-ru=Primary aluminum. Brands=Алюминий первичный. Марки
+ru=Primary aluminum=Алюминий первичный
+ru=Foundry tin bronzes=Бронзы оловянные литейные
+ru=Wrought aluminium and aluminium alloys=Алюминий и сплавы алюминиевые деформируемые
+ru=Copper zinc pressure treated alloys (brasses)=Сплавы медно-цинковые (латуни), обрабатываемые давлением
+ru=Moulding polyamide 610=Полиамид 610 литьевой
+ru=Tin-free pressure-worked bronzes=GradesБронзы безоловянные, обрабатываемые давлением
+ru=Cork. Terms and definitions=Кора пробковая. Термины и определения
+ru=Portugal cork 3mm=Португальская пробка 3мм
+ru=Gasket paper A-grade 0.5mm=Прокладочный картон марки А 0.5мм
+ru=Gasket paper=Прокладочный картон
+ru=Paper=Бумага
+ru=Cork=Пробка
+ru=TU 5443-012-00278882-2005=ТУ 5443-012-00278882-2005
+ru=Purpose=Применение
+ru=Duralumin=Дюраль
+ru=Solid brass cage=Латунный сепаратор
+ru=Sheet metal cage=Сепаратор из листового металла
+ru=Duralumin cage=Дюралевый сепаратор
+ru=Steel=Сталь

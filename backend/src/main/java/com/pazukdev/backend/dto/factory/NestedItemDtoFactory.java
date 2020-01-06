@@ -109,6 +109,8 @@ public class NestedItemDtoFactory {
             rightColumnData = getValueFromDescription(description, "Core");
         } else if (category.toLowerCase().equals("generator")) {
             leftColumnData = getValueFromDescription(description, "Tension, V");
+        } else if (category.toLowerCase().equals("standard")) {
+            leftColumnData = getValueFromDescription(description, "Full name");
         } else if (category.toLowerCase().equals("manufacturer")) {
             leftColumnData = getValueFromDescription(description, "Country");
             rightColumnData = getValueFromDescription(description, "Founded")

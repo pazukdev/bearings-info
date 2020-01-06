@@ -135,7 +135,8 @@
                 let itemView = this.itemView;
                 let itemName = itemView.header.name.toLowerCase();
                 let textBefore;
-                if (itemView.category.toLowerCase() === "manufacturer") {
+                let category = itemView.category.toLowerCase();
+                if (category === "manufacturer" || category === "standard") {
                     textBefore = "";
                 } else {
                     textBefore = this.$t("buy") + " ";
