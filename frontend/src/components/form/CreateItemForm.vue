@@ -20,7 +20,7 @@
                             <input type="text"
                                    required
                                    list="categories"
-                                   pattern="[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9 _-]{1,28}[a-zA-Zа-яА-Я0-9_-]"
+                                   pattern="[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9 _-]{0,28}[a-zA-Zа-яА-Я0-9_-]"
                                    :title="$t('defaultInputTitle')"
                                    @change="categorySelectOnChange()"
                                    v-model="newItemCategory"/>
@@ -33,7 +33,7 @@
                         <td>
                             <input type="text"
                                    required
-                                   pattern="[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9 _-]{1,28}[a-zA-Zа-яА-Я0-9_-]"
+                                   pattern="[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9 _-]{0,28}[a-zA-Zа-яА-Я0-9_-]"
                                    :title="$t('defaultInputTitle')"
                                    @change="newItemNameMessage = ''"
                                    v-model="newItemName"/>
