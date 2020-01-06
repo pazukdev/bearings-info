@@ -146,3 +146,7 @@ ru=Solid brass cage=Латунный сепаратор
 ru=Sheet metal cage=Сепаратор из листового металла
 ru=Duralumin cage=Дюралевый сепаратор
 ru=Steel=Сталь
+ru=Universal joint=Крестовина в сборе
+ru=Universal joint cross=Крестовина
+ru=Rolling element=Тело качения
+ru=Screw=Винт

@@ -1,6 +1,9 @@
 package com.pazukdev.backend.config;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ContextData {
 
@@ -17,11 +20,14 @@ public class ContextData {
     public static final String TYPE = "type";
     public static final String VOLTAGE = "voltage";
 
-    private static final List<String> fixedParams = new ArrayList<>(Arrays
-            .asList(NAME, FULL_NAME, PRODUCTION, MANUFACTURER, COUNTRY, FOUNDED, DEFUNCT));
+    private static final List<String> fixedParams = Arrays
+            .asList(NAME, FULL_NAME, PRODUCTION, MANUFACTURER, COUNTRY, FOUNDED, DEFUNCT);
 
-    private static final List<String> descriptionIgnore = new ArrayList<>(
-            Arrays.asList(NAME, "category", "replacer", "image", "website", "website lang", "wiki"));
+    private static final List<String> translatableSubstrings = Arrays
+            .asList("gost", "imz", "kmz");
+
+    private static final List<String> descriptionIgnore = Arrays
+            .asList(NAME, "category", "replacer", "image", "website", "website lang", "wiki");
 
     private static final Map<String, Integer> parametersWeight = new HashMap<String, Integer>() {{
         put(NAME, 100);
@@ -53,6 +59,10 @@ public class ContextData {
 
     public static boolean isDescriptionIgnored(final String parameter) {
         return descriptionIgnore.contains(parameter.toLowerCase());
+    }
+
+    public static boolean isTranslatableSubstring(final String substring) {
+        return translatableSubstrings.contains(substring.toLowerCase());
     }
 
 }

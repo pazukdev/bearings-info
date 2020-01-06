@@ -1,5 +1,6 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.config.ContextData;
 import com.pazukdev.backend.dto.ItemData;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
@@ -189,7 +190,7 @@ public class TranslatorUtil {
                                    final String languageTo,
                                    String text,
                                    final boolean addToDictionary,
-                                   final boolean parseBeforeTranslate,
+                                   boolean parseBeforeTranslate,
                                    final ItemService itemService) {
 
         if (text == null) {
@@ -206,19 +207,12 @@ public class TranslatorUtil {
         }
 
         if (languageFrom.equals("en")) {
-            if (parseBeforeTranslate) {
-                final String translated = parseAndTranslate(languageTo, text, itemService);
-                if (!translated.equals("")) {
-                    return translated;
-                }
-            }
-
-            final String translated = getValueFromDictionary(text, languageTo);
+            String translated = getValueFromDictionary(text, languageTo);
             if (translated != null) {
                 return translated;
-            } else {
-                return text;
             }
+            translated = parseAndTranslate(languageTo, text, itemService);
+            return translated != null ? translated : text;
         } else {
             return translateToEnglish(languageFrom, text, addToDictionary);
         }
@@ -261,72 +255,42 @@ public class TranslatorUtil {
         return translated;
     }
 
-    private static String parseAndTranslate(final String languageTo,
-                                            final String text,
-                                            final ItemService itemService) {
-        if (true) { // parsing is turned off
-            return "";
-        }
-        
-        if (text.equals("Motorcycle catalogue")) {
-            return "";
-        }
-        String translated = "";
+    private static String parseAndTranslate(final String languageTo, final String text, final ItemService service) {
+        final String empty = null;
 
-        for (final String textToSearchInDictionary : getCheckList(itemService)) {
-            if (!text.contains(textToSearchInDictionary)) {
+        if (false) { // parsing is turned off
+            return empty;
+        }
+
+        final List<String> words = Arrays.asList(text.split(" "));
+        final String firstWord = words.get(0);
+        if (firstWord.equals("GOST")) {
+            int j = 0;
+        }
+        if (!ContextData.isTranslatableSubstring(firstWord)) {
+            return empty;
+        }
+
+        final String translatedFirstWord = getValueFromDictionary(firstWord, languageTo);
+//        if (SpecificStringUtil.isEmpty(translatedFirstWord)) {
+//            return empty;
+//        }
+
+        String restOfText = "";
+        int i = 0;
+        for (final String word : words) {
+            if (i++ == 0) {
                 continue;
             }
-
-            String foundInDictionary = getValueFromDictionary(textToSearchInDictionary, languageTo);
-            if (foundInDictionary == null) {
-                foundInDictionary = textToSearchInDictionary;
-            }
-
-            if (text.trim().equals(textToSearchInDictionary)) {
-                return foundInDictionary;
-            }
-
-            final List<String> textAsList = Arrays.asList(text.split(textToSearchInDictionary));
-            String textBefore = "";
-            String textAfter = "";
-
-            if (text.contains(" " + textToSearchInDictionary)) {
-                textBefore = textAsList.get(0).trim();
-            }
-            if (text.contains(textToSearchInDictionary + " ")) {
-                textAfter = textAsList.get(textAsList.size() - 1).trim();
-            }
-
-            if (!textBefore.equals("")) {
-                textBefore = getValueFromDictionary(textBefore.trim(), languageTo);
-                if (textBefore == null) {
-                    textBefore = "";
-                } else {
-                    textBefore = textBefore + " ";
-                }
-            }
-            if (!textAfter.equals("")) {
-                textAfter = getValueFromDictionary(textAfter.trim(), languageTo);
-                if (textAfter == null) {
-                    textAfter = "";
-                } else {
-                    textAfter = " " + textAfter;
-                }
-            }
-
-            translated = textBefore + foundInDictionary + textAfter;
+            restOfText += word + " ";
         }
 
-        return translated;
-    }
+        String translatedRestOfText = getValueFromDictionary(restOfText, languageTo);
+        if (SpecificStringUtil.isEmpty(translatedRestOfText)) {
+            translatedRestOfText = restOfText;
+        }
 
-    private static List<String> getCheckList(final ItemService itemService) {
-        final List<String> checkList = new ArrayList<>(itemService.findAllCategories());
-//        checkList.add("USSR");
-//        checkList.add("IMZ");
-//        checkList.add("KMZ");
-        return checkList;
+        return translatedFirstWord + " " + translatedRestOfText;
     }
 
     public static String translateToEnglish(final String languageFrom, final ItemData itemData) {
