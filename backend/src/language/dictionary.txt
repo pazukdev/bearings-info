@@ -1,5 +1,4 @@
 ru=- Gear oil for gearbox=- Трансмиссионное масло для КПП
-ru=Type=Тип
 ru=AL-5=АЛ-5
 ru=Aluminium A5-grade 0.5mm=Алюминий первичный марки А5 0.5мм
 ru=Aluminium alloy= Алюминиевый сплав
@@ -12,6 +11,7 @@ ru=BrOF10=БрОФ10
 ru=Bronze=Бронза
 ru=Cage=Сепаратор
 ru=Carburetor=Карбюратор
+ru=China=Китай
 ru=Copper zinc pressure treated alloys (brasses)=Сплавы медно-цинковые (латуни), обрабатываемые давлением
 ru=Core=Токопроводящая жила
 ru=Cork. Terms and definitions=Кора пробковая. Термины и определения
@@ -77,6 +77,7 @@ ru=MG-10=МГ-10
 ru=MMVZ=ММВЗ
 ru=MMZ=ММЗ
 ru=MT-9 type engine=Двигатель MT-9 type
+ru=MTZ=МТЗ
 ru=Macaque=Макак
 ru=Manufacturer=Производитель
 ru=Material=Материал
@@ -92,6 +93,7 @@ ru=Motorcycle=Мотоцикл
 ru=Moulding polyamide 610=Полиамид 610 литьевой
 ru=Name=Название
 ru=Non-ferrous metals and alloys=Цветные металлы и сплавы
+ru=OST=ОСТ
 ru=Oil - 20W-50 Synthetic=Масло - 20W-50 Синтетика
 ru=Oil - Beaver Oil=Масло - Бобровое масло
 ru=Outer concentric flat thrust spring retaining rings and grooves=Кольца пружинные упорные плоские наружные концентрические и канавки для них
@@ -117,7 +119,6 @@ ru=Round spring lock rings=Кольца пружинные круглые
 ru=Rubber for electric cables wires and cords=Резина электрических кабелей, проводов и шнуров
 ru=Rubber product=Резино-техническое изделие
 ru=Rubber=Резина
-ru=China=Китай
 ru=Russia=Россия
 ru=SHH-15=ШХ-15
 ru=Screw=Винт
@@ -131,9 +132,9 @@ ru=Standard=Стандарт
 ru=Steel=Сталь
 ru=Stranded, copper=Многопроволочная, медная
 ru=TU=ТУ
-ru=OST=ОСТ
 ru=Telescopic=Телескопическая
 ru=Tin-free pressure-worked bronzes=GradesБронзы безоловянные, обрабатываемые давлением
+ru=Type=Тип
 ru=USA=США
 ru=USSR 110=СССР 110
 ru=USSR 200=СССР 200
@@ -152,3 +153,6 @@ ru=Width=Ширина
 ru=Wire=Провод
 ru=Wrought aluminium and aluminium alloys=Алюминий и сплавы алюминиевые деформируемые
 ru=Your Wishlist=Ваш список желаемого
+ru=U.4301-3401485=У.4301-3401485
+ru=OOO NPO Universal kardan detal=ООО НПО Универсал кардан деталь
+ru=TPK ChelnyZapChast=ТПК ЧелныЗапЧасть

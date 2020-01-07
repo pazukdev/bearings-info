@@ -16,7 +16,8 @@
                 <td>
                     <v-details v-model="table.opened">
                         <summary><b>{{table.name}}</b></summary>
-                        <table>
+
+                        <table v-if="!itemsManagementView">
                             <tbody>
                             <tr v-for="item in table.items">
 <!--                                {{item}}-->
@@ -36,6 +37,22 @@
                                     <input v-if="isEdit()" v-model="item.secondComment" type="text"/>
                                 </td>
                                 <td class="three-column-table-button-column">
+                                    <ButtonDelete :item="item" @remove-item="removeItem"/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <table v-if="itemsManagementView">
+                            <tbody>
+                            <tr v-for="item in table.items">
+                                <td class="two-columns-table-left-column" style="text-align: left">
+                                    <p>{{item.comment}}</p>
+                                </td>
+                                <td class="two-column-table-right-column">
+                                    <ButtonNavigateToItem :part="item" :user="userListView"/>
+                                </td>
+                                <td>
                                     <ButtonDelete :item="item" @remove-item="removeItem"/>
                                 </td>
                             </tr>

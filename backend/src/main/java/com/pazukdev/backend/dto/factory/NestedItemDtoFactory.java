@@ -85,40 +85,32 @@ public class NestedItemDtoFactory {
         final String description = item.getDescription();
 
         String leftColumnData = null;
-        String rightColumnData = null;
 
         if (category.toLowerCase().equals("bearing")) {
             leftColumnData = getValueFromDescription(description, "Type");
-            rightColumnData = getValueFromDescription(description, "Size, mm");
         } else if (category.toLowerCase().equals("seal")) {
             leftColumnData = getValueFromDescription(description, "Size, mm");
-            rightColumnData = getValueFromDescription(description, "Rotation");
         } else if (category.toLowerCase().equals("oil")) {
             leftColumnData = getValueFromDescription(description, "Base");
-            rightColumnData = getValueFromDescription(description, "Seasonality");
         } else if (category.toLowerCase().equals("motorcycle")) {
-            leftColumnData = getValueFromDescription(description, "Production");
-            rightColumnData = getValueFromDescription(description, "Manufacturer");
+            leftColumnData = getValueFromDescription(description, "Manufacturer");
         } else if (category.toLowerCase().equals("spark plug")) {
             leftColumnData = getValueFromDescription(description, "Manufacturer");
-            rightColumnData = getValueFromDescription(description, "Heat range");
         } else if (category.toLowerCase().equals("material")) {
             leftColumnData = getValueFromDescription(description, "Type");
         } else if (category.toLowerCase().equals("wire")) {
             leftColumnData = getValueFromDescription(description, "Voltage");
-            rightColumnData = getValueFromDescription(description, "Core");
         } else if (category.toLowerCase().equals("generator")) {
             leftColumnData = getValueFromDescription(description, "Tension, V");
         } else if (category.toLowerCase().equals("standard")) {
             leftColumnData = getValueFromDescription(description, "Full name");
+        } else if (category.toLowerCase().equals("universal joint")) {
+            leftColumnData = getValueFromDescription(description, "Full name");
         } else if (category.toLowerCase().equals("manufacturer")) {
             leftColumnData = getValueFromDescription(description, "Country");
-            rightColumnData = getValueFromDescription(description, "Founded")
-                    + "-" + getValueFromDescription(description, "Defunct");
         }
 
         basicSpecialNestedItemDto.setComment(leftColumnData != null ? leftColumnData : "-");
-        basicSpecialNestedItemDto.setSecondComment(rightColumnData != null ? rightColumnData : "-");
 
         return basicSpecialNestedItemDto;
     }
