@@ -49,6 +49,8 @@ public class ItemViewFactory {
     }
 
     public ItemView createItemView(final Long itemId, final String userName, final String userLanguage) {
+        final long businessLogicStartTime = System.nanoTime();
+
         final UserEntity currentUser = itemService.getUserService().findByName(userName);
         final WishList wishList = currentUser.getWishList();
 
@@ -71,9 +73,15 @@ public class ItemViewFactory {
             itemView = createOrdinaryItemView(basicItemView, itemId, currentUser);
         }
 
+        final double businessLogicEndTime = System.nanoTime();
+        final double businessLogicDuration = businessLogicEndTime - businessLogicStartTime;
+
         if (!userLanguage.equals("en")) {
             translate("en", userLanguage, itemView, false, itemService);
         }
+        double translationDuration = System.nanoTime() - businessLogicEndTime;
+
+        setTime(itemView, businessLogicDuration, translationDuration);
         return itemView;
     }
 
@@ -81,9 +89,13 @@ public class ItemViewFactory {
                                       final String name,
                                       final String userName,
                                       final String userLanguage) {
+        final long businessLogicStartTime = System.nanoTime();
+
         final Item item = createNewItem(name, category, userName, userLanguage);
         final ItemView itemView = createItemView(item.getId(), userName, userLanguage);
         itemView.setNewItem(true);
+
+        setTime(itemView, (double) (System.nanoTime() - businessLogicStartTime), null);
         return itemView;
     }
 
@@ -151,8 +163,8 @@ public class ItemViewFactory {
         itemView.setHeader(createHeader(item, itemService));
         itemView.setPartsTable(createPartsTable(item, itemService));
         itemView.setReplacersTable(createReplacersTable(item, itemService.getUserService()));
-        itemView.getPossibleParts().addAll(createPossibleParts(allItems, itemService.getUserService()));
-        itemView.getPossibleReplacers().addAll(createReplacerDtos(sameCategoryItems, itemService.getUserService()));
+        itemView.getPossibleParts().addAll(createPossibleParts(allItems, category, itemService.getUserService()));
+        itemView.getPossibleReplacers().addAll(createReplacerDtos(sameCategoryItems, itemId, itemService.getUserService()));
         itemView.setCreatorId(item.getCreatorId());
         itemView.setCreatorName(UserUtil.getCreatorName(item, itemService.getUserService()));
         itemView.setLikeList(UserUtil.createLikeListDto(currentUser));
@@ -235,11 +247,15 @@ public class ItemViewFactory {
                                 final UserEntity currentUser,
                                 final String userLanguage) {
 
+        final long businessLogicStartTime = System.nanoTime();
+
         final Item item = itemService.getOne(itemId);
 
+        final long translationFromUserLang = System.nanoTime();
         if (!userLanguage.equals("en")) {
             translate(userLanguage, "en", view, true, itemService);
         }
+        final long translationFromUserLangDuration = System.nanoTime() - translationFromUserLang;
 
         final Map<String, String> headerMap = TableUtil.createHeaderMap(view.getHeader());
 
@@ -250,7 +266,12 @@ public class ItemViewFactory {
         ItemUtil.updateReplacers(item, view, itemService, currentUser);
         LinkUtil.updateItemLinks(item, view);
         itemService.update(item);
-        return createItemView(itemId, currentUser.getName(), userLanguage);
+
+        final ItemView newItemView = createItemView(itemId, currentUser.getName(), userLanguage);
+
+        final double totalTranslationTime = view.getTranslationTime() * 1000000000 + translationFromUserLangDuration;
+        setTime(newItemView, (double) (System.nanoTime() - businessLogicStartTime), null);
+        return newItemView;
     }
 
     private String createEmptyDescription(final String category) {
@@ -389,6 +410,19 @@ public class ItemViewFactory {
 
     private <E extends AbstractEntity> void hardDeleteItemsInSet(final Set<E> set) {
         set.removeIf(abstractEntity -> abstractEntity.getStatus().equals("deleted"));
+    }
+
+    private void setTime(final ItemView view,
+                         final Double businessLogicDuration,
+                         final Double translationDuration) {
+        final double secondsInNano = 0.000000001;
+        if (businessLogicDuration != null) {
+            view.setBusinessLogicTime(businessLogicDuration * secondsInNano);
+        }
+        if (translationDuration != null) {
+            view.setTranslationTime(translationDuration * secondsInNano);
+        }
+        view.setResponseTotalTime(view.getBusinessLogicTime() + view.getTranslationTime());
     }
 
 }

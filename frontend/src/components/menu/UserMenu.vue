@@ -18,6 +18,25 @@
             </tbody>
         </table>
         <hr>
+        <div v-if="true && isAdmin()">
+            <table class="equal-columns-table" style="text-align: left">
+                <tbody>
+                    <tr>
+                        <td>{{"Business logic time"}}</td>
+                        <td>{{itemView.businessLogicTime}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{"Translation time"}}</td>
+                        <td>{{itemView.translationTime}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{"Response total time"}}</td>
+                        <td>{{itemView.responseTotalTime}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+        </div>
     </div>
 </template>
 

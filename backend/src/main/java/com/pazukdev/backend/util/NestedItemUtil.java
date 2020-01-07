@@ -125,11 +125,13 @@ public class NestedItemUtil {
         return partsTable.getParts();
     }
 
-    public static List<NestedItemDto> createPossibleParts(final List<Item> items, final UserService userService) {
+    public static List<NestedItemDto> createPossibleParts(final List<Item> items,
+                                                          final String parentItemCategory,
+                                                          final UserService userService) {
         final List<NestedItemDto> childItemDtos = new ArrayList<>();
         for (final Item item : items) {
             final String category = item.getCategory();
-            if (!CategoryUtil.isPartCategory(category)) {
+            if (!CategoryUtil.isPartCategory(category) || category.equalsIgnoreCase(parentItemCategory)) {
                 continue;
             }
             final NestedItemDto dto = NestedItemDtoFactory.createBasicNestedItemDto(item, userService);
@@ -139,9 +141,14 @@ public class NestedItemUtil {
         return childItemDtos;
     }
 
-    public static List<NestedItemDto> createReplacerDtos(final List<Item> items, final UserService userService) {
+    public static List<NestedItemDto> createReplacerDtos(final List<Item> items,
+                                                         final Long parentItemId,
+                                                         final UserService userService) {
         final List<NestedItemDto> replacerDtos = new ArrayList<>();
         for (final Item item : items) {
+            if (item.getId().equals(parentItemId)) {
+                continue;
+            }
             replacerDtos.add(NestedItemDtoFactory.createBasicNestedItemDto(item, userService));
         }
         replacerDtos.sort(Comparator.comparing(NestedItemDto::getRating).reversed());

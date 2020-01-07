@@ -28,7 +28,7 @@ public class CategoryUtil {
         return !(category.equals("Motorcycle")
                 || category.equals("Manufacturer")
                 || category.equals("Material")
-                || category.equals("GOST"));
+                || category.equals("Standard"));
     }
 
     public static Set<String> filterPartCategories(final Set<String> categories) {
