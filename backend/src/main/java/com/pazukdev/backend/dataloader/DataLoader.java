@@ -11,10 +11,13 @@ import com.pazukdev.backend.service.TransitiveItemService;
 import com.pazukdev.backend.util.BearingUtil;
 import com.pazukdev.backend.util.ItemUtil;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +29,8 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class DataLoader implements ApplicationRunner {
+
+    private static final Logger LOG = LoggerFactory.getLogger("DataLoader");
 
     private final TransitiveItemFactory transitiveItemFactory;
     private final TransitiveItemService transitiveItemService;
@@ -40,9 +45,18 @@ public class DataLoader implements ApplicationRunner {
         if (!repositoryIsEmpty(transitiveItemService.getTransitiveItemRepository())) {
             return;
         }
+        final long start = System.nanoTime();
+        final String startTime = LocalTime.now().toString();
+
         createDefaultUsers();
         createTransitiveItems();
         createItems();
+
+        final long stop = System.nanoTime();
+        LOG.error("Start time: " + startTime);
+        LOG.error("Stop time: " + LocalTime.now());
+        final double time = (stop - start) * 0.000000001;
+        LOG.error("DB created in, seconds: " + time);
     }
 
     private boolean repositoryIsEmpty(final TransitiveItemRepository repository) {
