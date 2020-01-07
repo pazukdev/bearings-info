@@ -133,6 +133,6 @@
 
 <style scoped>
     p {
-        text-align: left;
+        /*text-align: left;*/
     }
 </style>

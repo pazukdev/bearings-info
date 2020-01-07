@@ -1,6 +1,5 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.config.ContextData;
 import com.pazukdev.backend.dto.ItemData;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
@@ -23,12 +22,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+import static com.pazukdev.backend.util.SpecificStringUtil.splitIntoWords;
+import static com.pazukdev.backend.util.SpecificStringUtil.wordsIntoText;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
 public class TranslatorUtil {
     
     private static String EN = "en";
+    private static String WORD_SEPARATOR = " ";
     private static String DICTIONARY_SEPARATOR = "=";
 
     public static void translate(final String languageFrom,
@@ -255,42 +258,48 @@ public class TranslatorUtil {
         return translated;
     }
 
-    private static String parseAndTranslate(final String languageTo, final String text, final ItemService service) {
+    private static String parseAndTranslate(final String languageTo, String text, final ItemService service) {
         final String empty = null;
 
         if (false) { // parsing is turned off
             return empty;
         }
 
-        final List<String> words = Arrays.asList(text.split(" "));
-        final String firstWord = words.get(0);
-        if (firstWord.equals("GOST")) {
-            int j = 0;
-        }
-        if (!ContextData.isTranslatableSubstring(firstWord)) {
-            return empty;
-        }
-
-        final String translatedFirstWord = getValueFromDictionary(firstWord, languageTo);
-//        if (SpecificStringUtil.isEmpty(translatedFirstWord)) {
-//            return empty;
-//        }
-
-        String restOfText = "";
+        final Map<String, String> map = new HashMap<>();
         int i = 0;
-        for (final String word : words) {
-            if (i++ == 0) {
-                continue;
+        final String s = "#";
+        for (final List<String> subList : getAllSubListsSortedBySize(splitIntoWords(text))) {
+            final String toTranslate = wordsIntoText(subList);
+            final String translated = getValueFromDictionary(toTranslate, languageTo);
+            if (translated != null) {
+                final String key = s + i++;
+                text = text.replace(toTranslate, key);
+                map.put(key, translated);
             }
-            restOfText += word + " ";
+        }
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            text = text.replace(entry.getKey(), entry.getValue());
         }
 
-        String translatedRestOfText = getValueFromDictionary(restOfText, languageTo);
-        if (SpecificStringUtil.isEmpty(translatedRestOfText)) {
-            translatedRestOfText = restOfText;
-        }
+        return text;
 
-        return translatedFirstWord + " " + translatedRestOfText;
+    }
+
+    private static List<List<String>> getAllSubListsSortedBySize(final List<String> words) {
+        final List<String> subArraysAsStrings = new ArrayList<>();
+        for ( int i = 0; i < words.size(); i++) {
+            String s = "";
+            for (int j = i; j < words.size(); j++) {
+                s += words.get(j) + " ";
+                subArraysAsStrings.add(s.trim());
+            }
+        }
+        final List<List<String>> subArrays = new ArrayList<>();
+        for (final String subArrayAsString : subArraysAsStrings) {
+            subArrays.add(Arrays.asList(subArrayAsString.split(WORD_SEPARATOR)));
+        }
+        subArrays.sort(Comparator.comparing(List::size, Comparator.reverseOrder()));
+        return subArrays;
     }
 
     public static String translateToEnglish(final String languageFrom, final ItemData itemData) {

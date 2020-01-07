@@ -1,4 +1,5 @@
 ru=- Gear oil for gearbox=- Трансмиссионное масло для КПП
+ru=Type=Тип
 ru=AL-5=АЛ-5
 ru=Aluminium A5-grade 0.5mm=Алюминий первичный марки А5 0.5мм
 ru=Aluminium alloy= Алюминиевый сплав
@@ -116,7 +117,7 @@ ru=Round spring lock rings=Кольца пружинные круглые
 ru=Rubber for electric cables wires and cords=Резина электрических кабелей, проводов и шнуров
 ru=Rubber product=Резино-техническое изделие
 ru=Rubber=Резина
-ru=Russia / USA=Россия / США
+ru=China=Китай
 ru=Russia=Россия
 ru=SHH-15=ШХ-15
 ru=Screw=Винт
@@ -129,7 +130,8 @@ ru=Spark plugs=Свечи зажигания искровые
 ru=Standard=Стандарт
 ru=Steel=Сталь
 ru=Stranded, copper=Многопроволочная, медная
-ru=TU 5443-012-00278882-2005=ТУ 5443-012-00278882-2005
+ru=TU=ТУ
+ru=OST=ОСТ
 ru=Telescopic=Телескопическая
 ru=Tin-free pressure-worked bronzes=GradesБронзы безоловянные, обрабатываемые давлением
 ru=USA=США

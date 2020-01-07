@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class SpecificStringUtil {
 
+    public static final String WORD_SEPARATOR = " ";
+
     @Getter
     enum Position {
 
@@ -215,6 +217,19 @@ public class SpecificStringUtil {
 
     public static String replaceBlankWithDash(final String s) {
         return StringUtils.isBlank(s) ? "-" : s;
+    }
+
+    public static List<String> splitIntoWords(final String text) {
+        return new ArrayList<>(Arrays.asList(text.split(WORD_SEPARATOR)));
+    }
+
+    public static String wordsIntoText(final List<String> words) {
+        String text = "";
+        for (final String word : words) {
+            text += word + WORD_SEPARATOR;
+        }
+        text = text.trim(); // to remove space at the end
+        return text;
     }
 
 }
