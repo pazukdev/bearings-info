@@ -19,23 +19,26 @@
         </table>
         <hr>
         <div v-if="true && isAdmin()">
-            <table class="equal-columns-table" style="text-align: left">
-                <tbody>
-                    <tr>
-                        <td>{{"Business logic time"}}</td>
-                        <td>{{itemView.businessLogicTime}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{"Translation time"}}</td>
-                        <td>{{itemView.translationTime}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{"Response total time"}}</td>
-                        <td>{{itemView.responseTotalTime}}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <hr>
+            <details open>
+                <summary>{{"Information for admin"}}</summary>
+                <table class="equal-columns-table" style="text-align: left">
+                    <tbody>
+                        <tr>
+                            <td>{{"Business logic time"}}</td>
+                            <td>{{itemView.businessLogicTime.toFixed(2) + " sec"}}</td>
+                        </tr>
+                        <tr>
+                            <td>{{"Translation time"}}</td>
+                            <td>{{itemView.translationTime.toFixed(2) + " sec"}}</td>
+                        </tr>
+                        <tr>
+                            <td>{{"Response total time"}}</td>
+                            <td>{{itemView.responseTotalTime.toFixed(2) + " sec"}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr>
+            </details>
         </div>
     </div>
 </template>
@@ -85,5 +88,7 @@
 </script>
 
 <style scoped>
-
+    summary {
+        text-align: center;
+    }
 </style>
