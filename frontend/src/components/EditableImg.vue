@@ -1,16 +1,20 @@
 <template>
     <div>
-<!--        {{itemView.imgData}}-->
+        {{editMode}}<br>
+        {{isEmpty(itemView.defaultImg) + ": "}}
+        {{itemView.defaultImg}}<br>
+        {{isEmpty(itemView.img) + ": "}}
+        {{itemView.img}}
         <table id="item-image" v-if="isViewWithImage()">
             <tbody>
             <tr v-if="!messagesContain('img removed')">
                 <td>
                     <div class="image-preview">
-                        <img class="preview" :src="itemView.imgData" alt="Item image">
+                        <img class="preview" :src="getImgUrl()" alt="Item image">
                     </div>
                 </td>
             </tr>
-            <tr v-if="editMode && itemView.defaultImg && !messagesContain('img removed')">
+            <tr v-if="editMode && !isEmpty(itemView.img) && !messagesContain('img removed')">
                 <td>
                     <button id="remove-img-button" type="button" @click="removeImg()">
                         {{"Remove image"}}
@@ -47,6 +51,7 @@
 <script>
     import {mapState} from "vuex";
     import shared from "../util/shared";
+    import routerUtil from "../util/routerUtil";
 
     export default {
         name: "EditableImg",
@@ -55,19 +60,45 @@
             ...mapState({
                 editMode: state => state.dictionary.editMode,
                 itemView: state => state.dictionary.itemView,
+                basicUrl: state => state.dictionary.basicUrl
             })
         },
 
         data() {
             return {
-                imgData: "",
+                img: "",
                 fileUploadMessage: ""
             }
         },
 
         methods: {
+            getImgUrl() {
+                if (routerUtil.isHome(this.$route)) {
+                    return "https://pazukdev.github.io/sovietboxers/img/app_logo.9a3c3892.png";
+                }
+                let itemView = this.itemView;
+                let img = !this.isEmpty(itemView.img) ? itemView.img : itemView.defaultImg;
+                let isBase64ImgData = img.includes(";base64,");
+                if (isBase64ImgData) {
+                    return img;
+                } else {
+                    //localhost:8090/bearings-info/api/bearing/bearing_18.png
+                    let imgUrl = this.basicUrl + "/" + img;
+                    console.log(imgUrl);
+                    return imgUrl;
+                }
+            },
+
             isViewWithImage() {
-                return this.itemView.imgData !== '-';
+                if (routerUtil.isHome(this.$route)) {
+                    return true;
+                }
+                let view = this.itemView;
+                return !this.isEmpty(view.img) || !this.isEmpty(view.defaultImg);
+            },
+
+            isEmpty(value) {
+                return shared.isEmpty(value) || value.includes("/-");
             },
 
             messagesContain(message) {
@@ -75,7 +106,7 @@
             },
 
             removeImg() {
-                this.itemView.messages.push("img removed");
+                this.itemView.img = null;
             },
 
             previewImage(event) {
@@ -91,7 +122,7 @@
                     this.itemView.messages.push("img uploaded");
                     let reader = new FileReader();
                     reader.onload = (e) => {
-                        this.itemView.imgData = e.target.result;
+                        this.itemView.img = e.target.result;
                     };
                     reader.readAsDataURL(file);
                 }

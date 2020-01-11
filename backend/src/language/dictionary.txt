@@ -156,3 +156,25 @@ ru=Your Wishlist=Ваш список желаемого
 ru=U.4301-3401485=У.4301-3401485
 ru=OOO NPO Universal kardan detal=ООО НПО Универсал кардан деталь
 ru=TPK ChelnyZapChast=ТПК ЧелныЗапЧасть
+ru=SSH-15=ШХ-15
+ru=Ball=Шарик
+ru=Roller=Ролик
+ru=Needle=Иголка
+ru=Needle bearing=Игольчатый
+ru=Cylindrical roller bearing=Роликовый
+ru=Roller, cylindrical=Ролик, цилиндрический
+ru=Roller, tapered=Ролик, конический
+ru=Roller bearing=Роликовый
+ru=Thrust bearing=Упорный
+ru=Deepgroove bearing=Радиальный
+ru=Half-bearing=Вкладыш
+ru=Plain bearing=Подшипник скольжения
+ru=Kit, Needle=Комплект иголок
+ru=Tapered roller bearing=Конический роликовый
+ru=kit=комплект
+ru=Kit=Комплект
+ru=Additional info=Доп. информация
+ru=no data=нет данных
+ru=No data=Нет данных
+ru=no=нет
+ru=No=Нет
