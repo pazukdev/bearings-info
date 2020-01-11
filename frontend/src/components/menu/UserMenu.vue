@@ -25,15 +25,15 @@
                     <tbody>
                         <tr>
                             <td>{{"Business logic time"}}</td>
-                            <td>{{itemView.businessLogicTime.toFixed(2) + " sec"}}</td>
+                            <td>{{getTime(itemView.businessLogicTime)}}</td>
                         </tr>
                         <tr>
                             <td>{{"Translation time"}}</td>
-                            <td>{{itemView.translationTime.toFixed(2) + " sec"}}</td>
+                            <td>{{getTime(itemView.translationTime)}}</td>
                         </tr>
                         <tr>
                             <td>{{"Response total time"}}</td>
-                            <td>{{itemView.responseTotalTime.toFixed(2) + " sec"}}</td>
+                            <td>{{getTime(itemView.responseTotalTime)}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -48,6 +48,7 @@
     import itemViewUtil from "../../util/itemViewUtil";
     import DefaultButton from "../element/button/DefaultButton";
     import routerUtil from "../../util/routerUtil";
+    import shared from "../../util/shared";
 
     export default {
         name: "UserMenu",
@@ -56,6 +57,7 @@
             ...mapState({
                 userName: state => state.dictionary.userName,
                 itemView: state => state.dictionary.itemView,
+                loadingState: state => state.dictionary.loadingState
             })
         },
 
@@ -82,6 +84,13 @@
 
             isLoginPage() {
                 return routerUtil.isLogin(this.$route);
+            },
+
+            getTime(value) {
+                if (this.loadingState || shared.isEmpty(value)) {
+                    return "-";
+                }
+                return value.toFixed(2) + " sec";
             }
         }
     }
