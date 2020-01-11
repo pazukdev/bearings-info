@@ -16,27 +16,25 @@
                         <td class="three-column-table-button-column"/>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td/>
                         <td>
-                            <button type="button"
-                                    content=""
-                                    v-on:click="downloadDictionary">
+                            <a :href="getDownloadUrl()" class="button" download="dictionary.txt">
                                 {{$t("downloadDictionary")}}
-                            </button>
+                            </a>
                         </td>
-                        <td></td>
-                        <td></td>
+                        <td/>
+                        <td/>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td/>
                         <td>
-                            <label class="custom-file-upload">
+                            <label class="upload-button">
                                 {{$t("uploadDictionary")}}
                                 <input type="file" accept="text/plain" @change="uploadDictionary"/>
                             </label>
                         </td>
                         <td>{{uploadMessage}}</td>
-                        <td></td>
+                        <td/>
                     </tr>
                 </tbody>
             </table>
@@ -79,12 +77,8 @@
                 this.$router.push({ name: "user_list" });
             },
 
-            downloadDictionary() {
-                axios
-                    .get(this.basicUrl + "/file/dictionary/download")
-                    .then(response => {
-                        console.log(response);
-                    });
+            getDownloadUrl() {
+                return this.basicUrl + "/file/dictionary/download";
             },
 
             uploadDictionary(event) {
@@ -122,15 +116,5 @@
 <style scoped>
     input[type="file"] {
         display: none;
-    }
-
-    .custom-file-upload {
-        background: #808080;
-        border-radius: 4px;
-        border: none;
-        width: 100%;
-        cursor: pointer;
-        color: #050505;
-        height: 52px;
     }
 </style>

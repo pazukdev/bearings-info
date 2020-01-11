@@ -1,10 +1,10 @@
 <template>
     <div>
-        {{editMode}}<br>
-        {{isEmpty(itemView.defaultImg) + ": "}}
-        {{itemView.defaultImg}}<br>
-        {{isEmpty(itemView.img) + ": "}}
-        {{itemView.img}}
+<!--        {{editMode}}<br>-->
+<!--        {{isEmpty(itemView.defaultImg) + ": "}}-->
+<!--        {{itemView.defaultImg}}<br>-->
+<!--        {{isEmpty(itemView.img) + ": "}}-->
+<!--        {{itemView.img}}-->
         <table id="item-image" v-if="isViewWithImage()">
             <tbody>
             <tr v-if="!messagesContain('img removed')">

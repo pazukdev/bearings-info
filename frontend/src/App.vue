@@ -140,7 +140,7 @@
         text-align: center;
     }
 
-    table, button, select, input, textarea, label {
+    table, button, select, input, textarea, label, a.button {
         width: 100%;
     }
 
@@ -148,7 +148,7 @@
         height: 100%;
     }
 
-    hr, button, select, input, #submit-login-form {
+    hr, button, select, input, a.button, label.upload-button, #submit-login-form {
         background: grey;
         color: #050505;
     }
@@ -157,7 +157,7 @@
         background: #617D89;
     }
 
-    button, select, input, textarea, img {
+    button, select, input, textarea, img, label, a.button {
         border-radius: 4px;
         border: none;
     }
@@ -166,10 +166,20 @@
         height: 52px;
     }
 
-    button {
+    button, a.button, label.upload-button {
         min-height: 52px;
         max-height: 92px;
-        color: #050505;
+    }
+
+    a.button, label.upload-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+    }
+
+    label.upload-button {
+        cursor: pointer;
     }
 
     table {
