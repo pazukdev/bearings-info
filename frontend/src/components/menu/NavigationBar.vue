@@ -16,24 +16,28 @@
             </tbody>
         </table>
 
-        <ul v-if="!buttonStyle">
-            <li>
-                <router-link :to="{name: 'home'}" active-class="active">
-                    {{$t('home')}}
-                </router-link>
-            </li>
-            <li>
-                <router-link :to="{name: 'items_management'}" active-class="active">
-                    {{$t('appData')}}
-                </router-link>
-            </li>
-            <li>
-                <router-link :to="{name: 'user', params: {id: itemView.userData.id, lang: appLanguage}}"
-                             active-class="active">
-                    {{$t('myProfile')}}
-                </router-link>
-            </li>
-        </ul>
+        <table v-if="!buttonStyle" style="margin-bottom: 20px" class="equal-columns-table">
+            <tbody>
+                <tr>
+                    <td>
+                        <router-link :to="{name: 'home'}" active-class="active">
+                            {{$t('home')}}
+                        </router-link>
+                    </td>
+                    <td>
+                        <router-link :to="{name: 'items_management'}" active-class="active">
+                            {{$t('appData')}}
+                        </router-link>
+                    </td>
+                    <td>
+                        <router-link :to="{name: 'user', params: {id: itemView.userData.id, lang: appLanguage}}"
+                                     active-class="active">
+                            {{$t('myProfile')}}
+                        </router-link>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -89,27 +93,13 @@
 </script>
 
 <style scoped>
-    ul {
-        list-style-type: none;
-        margin: 10px;
-        padding: 0;
-    }
-
-    li {
-        display: inline-block;
-        margin-right: 14px;
-        margin-bottom: 14px;
-        max-width: 28%;
-        text-align: center;
-    }
-
     .active {
         border-bottom: grey solid 2px;
     }
 
     a {
         display: inline-block;
-        font-size: large;
+        width: 100%;
         color: grey;
         text-decoration: none;
         padding-bottom: 14px;
