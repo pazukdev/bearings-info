@@ -1,8 +1,10 @@
 ru=- Gear oil for gearbox=- Трансмиссионное масло для КПП
 ru=AL-5=АЛ-5
+ru=Additional info=Доп. информация
 ru=Aluminium A5-grade 0.5mm=Алюминий первичный марки А5 0.5мм
 ru=Aluminium alloy= Алюминиевый сплав
 ru=Aluminium bronze=Алюминиевая бронза
+ru=Ball=Шарик
 ru=Bearing=Подшипник
 ru=Beaver Oil=Бобровое масло
 ru=Belarus=Беларусь
@@ -19,6 +21,8 @@ ru=Cork=Пробка
 ru=Cotton yarn braid coated with nitrocellulose varnish=Хлопчатобумажная пряжа покрытая нитроцеллюлозным лаком
 ru=Country=Страна
 ru=Created by=Добавлено пользователем
+ru=Cylindrical roller bearing=Роликовый
+ru=Deepgroove bearing=Радиальный
 ru=Defunct=Закрыто
 ru=Dimensions, mm=Размеры, мм
 ru=Dnepr MT-9=Днепр МТ-9
@@ -45,6 +49,7 @@ ru=Generator G-11A=Генератор Г-11А
 ru=Generator=Генератор
 ru=Germany=Германия
 ru=Gold Material=Материал Gold
+ru=Half-bearing=Вкладыш
 ru=Heat resistant wire insulation=Изоляция токопроводящих жил теплостойкая
 ru=High voltage wires for tractor ignition devices=Провода автотракторные высокого напряжения для приборов зажигания
 ru=High voltage=Высокого напряжения
@@ -63,10 +68,13 @@ ru=K-750M type engine=Двигатель K-750M type
 ru=KMZ M-72N=КМЗ М-72Н
 ru=KMZ=КМЗ
 ru=Kievskiy Mototsikletniy Zavod=Киевский Мотоциклетный Завод
+ru=Kit, Needle=Комплект иголок
+ru=Kit=Комплект
 ru=Location=Расположение
 ru=M-72N=М-72Н
 ru=M1=М1
 ru=M1M Monkey=М1М Макака
+ru=M2=М2
 ru=M61 Irbit=М61 Ирбит
 ru=M63 Ural-2=М63 Урал-2
 ru=M66 Ural-3=М66 Урал-3
@@ -92,7 +100,12 @@ ru=Motorcycle macaque=Мотоцикл Макак
 ru=Motorcycle=Мотоцикл
 ru=Moulding polyamide 610=Полиамид 610 литьевой
 ru=Name=Название
+ru=Needle bearing=Игольчатый
+ru=Needle=Иголка
+ru=No data=Нет данных
+ru=No=Нет
 ru=Non-ferrous metals and alloys=Цветные металлы и сплавы
+ru=OOO NPO Universal kardan detal=ООО НПО Универсал кардан деталь
 ru=OST=ОСТ
 ru=Oil - 20W-50 Synthetic=Масло - 20W-50 Синтетика
 ru=Oil - Beaver Oil=Масло - Бобровое масло
@@ -104,6 +117,7 @@ ru=Partnumber=Наименование
 ru=Parts=Агрегаты и детали
 ru=Pcs/Vol=Кол-во/объем
 ru=Pendulum type=Маятникового типа
+ru=Plain bearing=Подшипник скольжения
 ru=Platinum=Платина
 ru=Portugal cork 3mm=Португальская пробка 3мм
 ru=Primary aluminum=Алюминий первичный
@@ -114,6 +128,10 @@ ru=Rating=Рейтинг
 ru=Rear suspension=Задняя подвеска
 ru=Replacers=Заменители
 ru=Role=Роль
+ru=Roller bearing=Роликовый
+ru=Roller, cylindrical=Ролик, цилиндрический
+ru=Roller, tapered=Ролик, конический
+ru=Roller=Ролик
 ru=Rolling element=Тело качения
 ru=Round spring lock rings=Кольца пружинные круглые
 ru=Rubber for electric cables wires and cords=Резина электрических кабелей, проводов и шнуров
@@ -131,10 +149,14 @@ ru=Spark plugs=Свечи зажигания искровые
 ru=Standard=Стандарт
 ru=Steel=Сталь
 ru=Stranded, copper=Многопроволочная, медная
+ru=TPK ChelnyZapChast=ТПК ЧелныЗапЧасть
 ru=TU=ТУ
+ru=Tapered roller bearing=Конический роликовый
 ru=Telescopic=Телескопическая
+ru=Thrust bearing=Упорный
 ru=Tin-free pressure-worked bronzes=GradesБронзы безоловянные, обрабатываемые давлением
 ru=Type=Тип
+ru=U.4301-3401485=У.4301-3401485
 ru=USA=США
 ru=USSR 110=СССР 110
 ru=USSR 200=СССР 200
@@ -153,28 +175,6 @@ ru=Width=Ширина
 ru=Wire=Провод
 ru=Wrought aluminium and aluminium alloys=Алюминий и сплавы алюминиевые деформируемые
 ru=Your Wishlist=Ваш список желаемого
-ru=U.4301-3401485=У.4301-3401485
-ru=OOO NPO Universal kardan detal=ООО НПО Универсал кардан деталь
-ru=TPK ChelnyZapChast=ТПК ЧелныЗапЧасть
-ru=SSH-15=ШХ-15
-ru=Ball=Шарик
-ru=Roller=Ролик
-ru=Needle=Иголка
-ru=Needle bearing=Игольчатый
-ru=Cylindrical roller bearing=Роликовый
-ru=Roller, cylindrical=Ролик, цилиндрический
-ru=Roller, tapered=Ролик, конический
-ru=Roller bearing=Роликовый
-ru=Thrust bearing=Упорный
-ru=Deepgroove bearing=Радиальный
-ru=Half-bearing=Вкладыш
-ru=Plain bearing=Подшипник скольжения
-ru=Kit, Needle=Комплект иголок
-ru=Tapered roller bearing=Конический роликовый
 ru=kit=комплект
-ru=Kit=Комплект
-ru=Additional info=Доп. информация
 ru=no data=нет данных
-ru=No data=Нет данных
 ru=no=нет
-ru=No=Нет

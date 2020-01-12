@@ -1,9 +1,9 @@
 <template>
     <div>
-        {{"itemView.defaultImg: " + isEmpty(itemView.defaultImg) + ": "}}
-        {{itemView.defaultImg}}<br>
-        {{"itemView.img: " + isEmpty(itemView.img) + ": "}}
-        {{itemView.img}}
+<!--        {{"itemView.defaultImg: " + isEmpty(itemView.defaultImg) + ": "}}-->
+<!--        {{itemView.defaultImg}}<br>-->
+<!--        {{"itemView.img: " + isEmpty(itemView.img) + ": "}}-->
+<!--        {{itemView.img}}-->
         <table id="item-image" v-if="isViewWithImage()">
             <tbody>
             <tr v-if="!messagesContain('img removed')">

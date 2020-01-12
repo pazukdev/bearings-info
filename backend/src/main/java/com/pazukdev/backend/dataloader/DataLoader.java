@@ -56,7 +56,7 @@ public class DataLoader implements ApplicationRunner {
 //        LOG.info("Start time: " + startTime);
 //        LOG.info("Stop time: " + LocalTime.now());
         final Double time = (stop - start) * 0.000000001;
-        LOG.error("DB created in " + time.intValue() + " seconds");
+        LOG.info("DB created in " + time.intValue() + " seconds");
     }
 
     private boolean repositoryIsEmpty(final TransitiveItemRepository repository) {

@@ -1,9 +1,9 @@
 package com.pazukdev.backend.entity.factory;
 
-import com.pazukdev.backend.config.ContextData;
 import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.service.TransitiveItemService;
 import com.pazukdev.backend.tablemodel.TableRow;
+import com.pazukdev.backend.util.CategoryUtil;
 import com.pazukdev.backend.util.FileUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -58,7 +58,7 @@ public class TransitiveItemFactory extends AbstractEntityFactory<TransitiveItem>
         String description = "";
         for (final Map.Entry<String, String> entry : tableRow.getData().entrySet()) {
             final String key = entry.getKey();
-            if (ContextData.isDescriptionIgnored(key)) {
+            if (CategoryUtil.isDescriptionIgnored(key)) {
                 continue;
             }
 

@@ -1,7 +1,7 @@
 package com.pazukdev.backend.dto.table;
 
-import com.pazukdev.backend.config.ContextData;
 import com.pazukdev.backend.dto.AbstractDto;
+import com.pazukdev.backend.util.CategoryUtil;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,8 +26,8 @@ public class HeaderTableRow extends AbstractDto {
         headerTableRow.setName(parameter);
         headerTableRow.setParameter(parameter);
         headerTableRow.setValue(value);
-        headerTableRow.setDeletable(!ContextData.isFixed(parameter));
-        headerTableRow.setWeight(ContextData.getWeight(parameter));
+        headerTableRow.setDeletable(!CategoryUtil.isFixed(parameter));
+        headerTableRow.setWeight(CategoryUtil.getWeight(parameter));
         return headerTableRow;
     }
 
