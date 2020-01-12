@@ -158,7 +158,8 @@
                         this.user = response.data;
                         this.getCountryName(this.user.country);
                         let itemView = {
-                            imgData: this.user.imgData,
+                            img: this.user.img,
+                            defaultImg: this.user.defaultImg,
                             messages: [],
                             userData: this.itemView.userData,
                             wishListIds: this.itemView.wishListIds
@@ -176,8 +177,8 @@
                 storeUtil.setEditMode(false);
 
                 let userView = this.user;
-                userView.imgData = this.itemView.imgData;
-                userView.messages = this.itemView.messages;
+                userView.img = this.itemView.img;
+                userView.defaultImg = this.itemView.defaultImg;
 
                 // /user/id/update
                 axios

@@ -63,7 +63,7 @@
 
         methods: {
             openWishlist() {
-                this.$router.push({name: "wish_list"});
+                routerUtil.toWishlist();
             },
 
             getWishListButtonText() {

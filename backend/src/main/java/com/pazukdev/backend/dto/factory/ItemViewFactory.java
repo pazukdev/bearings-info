@@ -159,8 +159,8 @@ public class ItemViewFactory {
         itemView.setLocalizedCategory(category);
         itemView.setName(name);
         itemView.setLocalizedName(name);
-        itemView.setDefaultImg(imgViewData.getDefaultImgData());
-        itemView.setImg(imgViewData.getImgData());
+        itemView.setDefaultImg(imgViewData.getDefaultImg());
+        itemView.setImg(imgViewData.getImg());
         itemView.setHeader(createHeader(item, itemService));
         itemView.setPartsTable(createPartsTable(item, itemService));
         itemView.setReplacersTable(createReplacersTable(item, itemService.getUserService()));

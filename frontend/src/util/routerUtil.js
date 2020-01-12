@@ -24,8 +24,8 @@ export default {
         return route.name === "home";
     },
 
-    toItem(itemId, lang) {
-        router.push({name: "item", params: {id: itemId, lang}});
+    toItem(id, lang) {
+        router.push({name: "item", params: {id, lang}});
     },
 
     toUser(id, lang) {
@@ -38,6 +38,10 @@ export default {
 
     toUserList() {
         router.push({name: "user_list"})
+    },
+
+    toWishlist() {
+        router.push({name: "wish_list"});
     },
 
     toLogin() {

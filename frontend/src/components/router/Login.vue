@@ -79,6 +79,7 @@
     import axios from 'axios';
     import {mapState} from 'vuex';
     import AlertMessagesSection from "../AlertMessagesSection";
+    import routerUtil from "../../util/routerUtil";
 
     export default {
         components: {AlertMessagesSection},
@@ -136,7 +137,7 @@
                             let authorization = response.data.Authorization;
                             this.$store.dispatch("setAuthorization", authorization);
                             this.$store.dispatch("setUserName", this.name);
-                            this.pushToHome();
+                            routerUtil.toHome();
                             console.log("logged in as " + this.name);
                         }
                     })
@@ -144,10 +145,6 @@
                         this.setIncorrectCredentials(true);
                         console.log("login failed: " + this.getIncorrectLoginOrPasswordMessage());
                     });
-            },
-
-            pushToHome() {
-                this.$router.push({ name: "home" });
             },
 
             signUp() {

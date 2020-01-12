@@ -23,8 +23,13 @@ public class ImgUtil {
     private static final String PNG_EXTENSION = "png";
     private static final String IMG_DATA_METADATA = "data:image/png;base64,";
 
-    public static String getImg(final UserEntity user) {
-        return getImgPath(user.getImg(), "user", false);
+    public static ImgViewData getImg(final UserEntity user) {
+        final String imgPath = getImgPath(user.getImg(), "user", false);
+
+        final ImgViewData imgViewData = new ImgViewData();
+        imgViewData.setImg(imgPath);
+        imgViewData.setDefaultImg("user/default.png");
+        return imgViewData;
     }
 
     public static ImgViewData getImg(final Item item) {
@@ -34,13 +39,13 @@ public class ImgUtil {
         final String defaultImgPath = getImgIfItemHasNoSpecificImg(itemCategory);
 
         final ImgViewData imgViewData = new ImgViewData();
-        imgViewData.setImgData(imgPath);
-        imgViewData.setDefaultImgData(defaultImgPath);
+        imgViewData.setImg(imgPath);
+        imgViewData.setDefaultImg(defaultImgPath);
 
         try {
             getImg(IMG_DIRECTORY_PATH + defaultImgPath);
         } catch (IOException e) {
-            imgViewData.setDefaultImgData(getItemDefaultImgPath());
+            imgViewData.setDefaultImg(getItemDefaultImgPath());
         }
 
         return imgViewData;

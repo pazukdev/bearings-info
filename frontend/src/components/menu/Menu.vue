@@ -46,6 +46,7 @@
     import axios from "axios";
     import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
+    import routerUtil from "../../util/routerUtil";
 
     export default {
         name: "Menu",
@@ -74,7 +75,7 @@
             },
 
             openUsersList() {
-                this.$router.push({ name: "user_list" });
+                routerUtil.toUserList();
             },
 
             getDownloadUrl() {

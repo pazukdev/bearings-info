@@ -1,10 +1,9 @@
 <template>
     <div>
-<!--        {{editMode}}<br>-->
-<!--        {{isEmpty(itemView.defaultImg) + ": "}}-->
-<!--        {{itemView.defaultImg}}<br>-->
-<!--        {{isEmpty(itemView.img) + ": "}}-->
-<!--        {{itemView.img}}-->
+        {{"itemView.defaultImg: " + isEmpty(itemView.defaultImg) + ": "}}
+        {{itemView.defaultImg}}<br>
+        {{"itemView.img: " + isEmpty(itemView.img) + ": "}}
+        {{itemView.img}}
         <table id="item-image" v-if="isViewWithImage()">
             <tbody>
             <tr v-if="!messagesContain('img removed')">
@@ -77,6 +76,9 @@
                     return "https://pazukdev.github.io/sovietboxers/img/app_logo.9a3c3892.png";
                 }
                 let itemView = this.itemView;
+                // if (this.isEmpty(itemView.img) && this.isEmpty(itemView.defaultImg)) {
+                //     return "https://pazukdev.github.io/sovietboxers/img/app_logo.9a3c3892.png";
+                // }
                 let img = !this.isEmpty(itemView.img) ? itemView.img : itemView.defaultImg;
                 let isBase64ImgData = img.includes(";base64,");
                 if (isBase64ImgData) {
@@ -98,7 +100,10 @@
             },
 
             isEmpty(value) {
-                return shared.isEmpty(value) || value.includes("/-");
+                if (shared.isEmpty(value)) {
+                    return true;
+                }
+                return value.includes("/-");
             },
 
             messagesContain(message) {
