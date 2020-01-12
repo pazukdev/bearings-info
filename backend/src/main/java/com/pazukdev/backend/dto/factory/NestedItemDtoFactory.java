@@ -82,7 +82,7 @@ public class NestedItemDtoFactory {
 
     public static NestedItemDto createItemForItemsManagement(final Item item, final UserService userService) {
         final NestedItemDto basicSpecialNestedItemDto = createBasicNestedItemDto(item, userService);
-        String leftColumnData = CategoryUtil.getItemManagementLeftColumnValue(item);
+        String leftColumnData = CategoryUtil.getItemsManagementComment(item);
         basicSpecialNestedItemDto.setComment(leftColumnData != null ? leftColumnData : "-");
         return basicSpecialNestedItemDto;
     }

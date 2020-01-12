@@ -124,7 +124,7 @@ public class CategoryUtil {
         put(OUTER_SHIELD_MATERIAL, 28);
     }};
 
-    private static final Map<String, String> itemManagementLeftColumnData = new HashMap<String, String>() {{
+    private static final Map<String, String> itemsManagementComments = new HashMap<String, String>() {{
         put(OIL, BASE);
 
         put(MANUFACTURER, COUNTRY);
@@ -145,10 +145,10 @@ public class CategoryUtil {
         put(WIRE, VOLTAGE);
     }};
 
-    public static String getItemManagementLeftColumnValue(final Item item) {
+    public static String getItemsManagementComment(final Item item) {
         final String description = item.getDescription();
         final String category = item.getCategory();
-        final String parameter = itemManagementLeftColumnData.get(category);
+        final String parameter = itemsManagementComments.get(category);
         return getValueFromDescription(description, parameter);
     }
 

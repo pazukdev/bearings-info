@@ -29,6 +29,7 @@ export default {
                 }
             }
 
+            nestedTable.items = arrayUtil.sortByComment(nestedTable.items);
             nestedTables.push(nestedTable);
         }
 
