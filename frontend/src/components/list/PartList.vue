@@ -1,6 +1,9 @@
 <template>
     <div>
-        <ItemList :item="true" :editable-comments="true"/>
+        <Header :item="true"/>
+        <NestedItemsTableTitle v-if="itemView.partsEnabled"
+                               :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
+        <ItemList :item="true" :editable-comments="true" :sorted="!editMode"/>
         <AddPartForm :show-form="showForm" @hide-add-form="hideAddForm"/>
     </div>
 </template>
@@ -15,11 +18,13 @@
     import ButtonDelete from "../element/button/ButtonDelete";
     import ListHeader from "./section/ListHeader";
     import ItemList from "./ItemList";
+    import Header from "./section/Header";
 
     export default {
         name: "PartList",
 
         components: {
+            Header,
             ItemList,
             ListHeader,
             ButtonDelete,

@@ -23,6 +23,11 @@ import java.util.Set;
 @ToString(callSuper = true)
 public class ItemView extends AbstractView {
 
+    public enum ViewType {
+        STANDARD, PARENTS, ALL_ITEMS, WISH_LIST
+    }
+
+    private ViewType type = ViewType.STANDARD;
     private boolean searchEnabled;
     private boolean newItem;
     private boolean hardDelete;
@@ -38,6 +43,7 @@ public class ItemView extends AbstractView {
     private ReplacersTable replacersTable;
     private List<NestedItemDto> possibleParts = new ArrayList<>();
     private List<NestedItemDto> possibleReplacers = new ArrayList<>();
+    private ItemView parents;
     private List<String> allCategories = new ArrayList<>();
     private Set<Long> idsToRemove = new HashSet<>();
     private Long creatorId;

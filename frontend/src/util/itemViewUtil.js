@@ -3,7 +3,7 @@ import storeUtil from "./storeUtil";
 import arrayUtil from "./arrayUtil";
 
 export default {
-    itemsListToTables(items) {
+    itemsListToTables(items, sort) {
         let categories = [];
         for (let i = 0; i < items.length; i++) {
             let category = items[i].itemCategory;
@@ -29,7 +29,9 @@ export default {
                 }
             }
 
-            nestedTable.items = arrayUtil.sortByComment(nestedTable.items);
+            if (sort) {
+                nestedTable.items = arrayUtil.sortByComment(nestedTable.items);
+            }
             nestedTables.push(nestedTable);
         }
 

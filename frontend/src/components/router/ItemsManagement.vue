@@ -3,7 +3,10 @@
         <LoadingScreen v-if="this.loadingState"/>
         <div v-else>
             <CreateItemForm/>
-            <ItemList :items-management-view="true"/>
+            <Header :item="false"/>
+            <NestedItemsTableTitle v-if="itemView.partsEnabled"
+                                   :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
+            <ItemList :items-management-view="true" :sorted="true"/>
         </div>
     </div>
 </template>
@@ -14,15 +17,17 @@
     import ItemList from "../list/ItemList";
     import LoadingScreen from "../special/LoadingScreen";
     import itemViewUtil from "../../util/itemViewUtil";
-    import ItemDescription from "../list/section/ItemDescription";
     import CreateItemForm from "../form/CreateItemForm";
+    import NestedItemsTableTitle from "../list/section/NestedItemsTableTitle";
+    import Header from "../list/section/Header";
 
     export default {
         name: "ItemsManagement",
 
         components: {
+            Header,
+            NestedItemsTableTitle,
             CreateItemForm,
-            ItemDescription,
             LoadingScreen,
             ItemList
         },
@@ -34,7 +39,8 @@
                 userName: state => state.dictionary.userName,
                 appLanguage: state => state.dictionary.appLanguage,
                 itemView: state => state.dictionary.itemView,
-                loadingState: state => state.dictionary.loadingState
+                loadingState: state => state.dictionary.loadingState,
+                editMode: state => state.dictionary.editMode
             })
         },
 

@@ -1,13 +1,8 @@
 <template>
     <div>
-        <EditableImg/>
-        <ItemDescription :item="item"/>
-        <EditPanel @save="save"/>
-        <NestedItemsTableTitle v-if="itemView.partsEnabled"
-                               :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
         <table id="parts-table">
             <tbody>
-            <tr>
+            <tr v-if="!usageView">
                 <td>
                     <ListHeader/>
                 </td>
@@ -75,7 +70,6 @@
     import ListHeader from "./section/ListHeader";
     import ItemDescription from "./section/ItemDescription";
     import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
-    import axiosUtil from "../../util/axiosUtil";
     import EditableImg from "../EditableImg";
 
     export default {
@@ -93,7 +87,10 @@
             item: Boolean,
             editableComments: Boolean,
             userListView: Boolean,
-            itemsManagementView: Boolean
+            itemsManagementView: Boolean,
+            usageView: Boolean,
+            itemViewProp: Object,
+            sorted: Boolean
         },
 
         computed: {
@@ -109,26 +106,20 @@
 
         methods: {
             itemsListAsTables() {
-                let tables = itemViewUtil.itemsListToTables(this.itemView.partsTable.parts);
+                let itemView;
+                if (this.usageView && this.itemViewProp != null) {
+                    itemView = this.itemViewProp;
+                } else {
+                    itemView = this.itemView;
+                }
+
+                let tables = itemViewUtil.itemsListToTables(itemView.partsTable.parts, this.sorted);
                 if (this.itemsManagementView) {
                     for (let i = 0; i < tables.length; i++) {
                         tables[i].opened = false;
                     }
                 }
                 return tables;
-            },
-
-            save() {
-                this.update(this.itemView.itemId);
-            },
-
-            update(itemId) {
-                let itemView = this.itemView;
-                let basicUrl = this.basicUrl.toString();
-                let userName = this.userName.toString();
-                let appLanguage = this.appLanguage.toString();
-                let authorization = this.authorization;
-                axiosUtil.updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization);
             },
 
             removeItem(item) {

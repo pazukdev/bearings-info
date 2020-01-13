@@ -171,6 +171,7 @@ public class ItemViewFactory {
         itemView.setLikeList(UserUtil.createLikeListDto(currentUser));
         itemView.setPartsEnabled(!partsDisabled.contains(category.toLowerCase()));
         LinkUtil.setLinksToItemView(itemView, item);
+        itemView.setParents(createParentItemsView(itemId));
 
         return itemView;
     }
@@ -203,16 +204,27 @@ public class ItemViewFactory {
     }
 
     private ItemView createItemsManagementView(final ItemView itemView) {
-        final List<Item> allItems = itemService.findAll();
+        return createItemsView(itemView, itemService.findAll(), "Items management");
+    }
+
+    private ItemView createParentItemsView(final Long itemId) {
+        final ItemView parents = new ItemView();
+        parents.setType(ItemView.ViewType.PARENTS);
+        return createItemsView(parents, itemService.getParents(itemId), "Usage");
+    }
+
+    private ItemView createItemsView(final ItemView itemView,
+                                     final List<Item> items,
+                                     final String localizedName) {
         final String countParameterName = "Items";
 
-        itemView.setLocalizedName("Items management");
+        itemView.setLocalizedName(localizedName);
 
         return createItemsView(
                 itemView,
-                allItems.size(),
+                items.size(),
                 countParameterName,
-                specialItemsTable(allItems, itemService));
+                specialItemsTable(items, itemService));
     }
 
     private ItemView createWishListView(final ItemView itemView, final WishList wishList) {

@@ -205,4 +205,16 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return new ItemViewFactory(this);
     }
 
+    public List<Item> getParents(final Long itemId) {
+        final List<Item> parents = new ArrayList<>();
+        for (final Item item : findAll()) {
+            for (final ChildItem child : item.getChildItems()) {
+                if (child.getItem().getId().equals(itemId)) {
+                    parents.add(item);
+                }
+            }
+        }
+        return parents;
+    }
+
 }

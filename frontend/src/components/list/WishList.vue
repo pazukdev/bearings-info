@@ -1,7 +1,12 @@
 <template>
     <div>
         <LoadingScreen v-if="this.loadingState"/>
-        <ItemList v-else :editable-comments="true"/>
+        <div v-else>
+            <Header :item="false"/>
+            <NestedItemsTableTitle v-if="itemView.partsEnabled"
+                                   :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
+            <ItemList :editable-comments="true"/>
+        </div>
     </div>
 </template>
 
@@ -11,10 +16,12 @@
     import {mapState} from "vuex";
     import axios from "axios";
     import itemViewUtil from "../../util/itemViewUtil";
+    import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
+    import Header from "./section/Header";
 
     export default {
         name: "WishList",
-        components: {ItemList, LoadingScreen},
+        components: {Header, NestedItemsTableTitle, ItemList, LoadingScreen},
 
         computed: {
             ...mapState({
@@ -23,7 +30,8 @@
                 userName: state => state.dictionary.userName,
                 appLanguage: state => state.dictionary.appLanguage,
                 itemView: state => state.dictionary.itemView,
-                loadingState: state => state.dictionary.loadingState
+                loadingState: state => state.dictionary.loadingState,
+                editMode: state => state.dictionary.editMode
             })
         },
 
@@ -56,6 +64,10 @@
                         console.log("user wishlist rendered");
                     });
             },
+
+            save() {
+                itemViewUtil.update(this.itemView);
+            }
         }
     }
 </script>

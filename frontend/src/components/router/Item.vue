@@ -5,6 +5,7 @@
             <ItemMenu/>
             <PartsSection/>
             <ReplacersSection/>
+            <Usage/>
         </div>
     </div>
 </template>
@@ -20,10 +21,12 @@
     import itemViewUtil from "../../util/itemViewUtil";
     import LoadingScreen from "../special/LoadingScreen";
     import routerUtil from "../../util/routerUtil";
+    import Usage from "../item/Usage";
 
     export default {
 
         components: {
+            Usage,
             LoadingScreen,
             ItemMenu,
             ItemDescription,

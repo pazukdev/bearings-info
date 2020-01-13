@@ -1,7 +1,10 @@
 <template>
     <div>
         <LoadingScreen v-if="this.loadingState"/>
-        <ItemList v-else :user-list-view="true"/>
+        <div v-else>
+            <Header :item="false"/>
+            <ItemList :user-list-view="true"/>
+        </div>
     </div>
 </template>
 
@@ -11,10 +14,11 @@
     import axios from "axios";
     import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
+    import Header from "./section/Header";
 
     export default {
         name: "UserList",
-        components: {ItemList, LoadingScreen},
+        components: {Header, ItemList, LoadingScreen},
 
         computed: {
             ...mapState({
