@@ -2,9 +2,9 @@
     <div style="text-align: center">
 <!--        {{itemView.userData}}<br>-->
 <!--        {{countryName}}<br>-->
-<!--        {{user.country}}-->
+<!--        {{user.role}}-->
         <p>{{user.name}}</p>
-        <EditableImg/>
+        <EditableImg v-if="isImgRendered()"/>
         <EditPanel v-if="isEditable()" :save-is-submit="true"/>
         <AlertMessagesSection :messages="validationMessages"/>
         <form id="form" @submit="submit">
@@ -99,6 +99,7 @@
     import AlertMessagesSection from "./AlertMessagesSection";
     import DefaultButton from "./element/button/DefaultButton";
     import axiosUtil from "../util/axiosUtil";
+    import userUtil from "../util/userUtil";
 
     export default {
         name: "User",
@@ -205,8 +206,16 @@
                     });
             },
 
+            isImgRendered() {
+                return this.isAdmin() || this.isSeller();
+            },
+
             isAdmin() {
                 return itemViewUtil.isAdmin(this.itemView);
+            },
+
+            isSeller() {
+                userUtil.isSeller(this.user.role);
             },
 
             isEditable() {

@@ -1,3 +1,5 @@
+import shared from "./shared";
+
 export default {
     isAuthorized(authorization) {
         return authorization !== "";
@@ -11,8 +13,11 @@ export default {
         return itemView.userData.role === "ADMIN";
     },
 
-    isSeller(itemView) {
-        return itemView.userData.role === "SELLER";
+    isSeller(role) {
+        if (shared.isEmpty(role)) {
+            return false;
+        }
+        return role.toLowerCase() === "seller";
     },
 
     isCurrentUserItemCreator(currentUserName, itemCreatorName) {
