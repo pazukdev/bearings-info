@@ -1,10 +1,7 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.entity.ChildItem;
-import com.pazukdev.backend.entity.Item;
-import com.pazukdev.backend.entity.Replacer;
-import com.pazukdev.backend.entity.UserAction;
-import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.*;
+import com.pazukdev.backend.repository.UserActionRepository;
 import com.pazukdev.backend.service.ItemService;
 import lombok.Getter;
 
@@ -23,6 +20,7 @@ public class UserActionUtil {
     public enum ValueIncrease {
 
         RATE_ITEM(1),
+        UPLOAD_DICTIONARY(1),
         UPDATE(4),
         CREATE_PART(4),
         CREATE_REPLACER(6),
@@ -83,6 +81,22 @@ public class UserActionUtil {
 
     }
 
+    public static void processUploadDictionaryAction(final String actionType,
+                                                     final String changed,
+                                                     final UserEntity user,
+                                                     final UserActionRepository repository) {
+        updateUserRating(user, actionType, null);
+
+        final UserAction userAction = new UserAction();
+
+        userAction.setName(actionType + changed);
+        userAction.setActionType(actionType);
+        userAction.setActionDate(LocalDateTime.now().toString());
+        userAction.setUserId(user.getId().toString());
+
+        repository.save(userAction);
+    }
+
     private static void updateUserRating(final UserEntity user, final String actionType, final String actionObject) {
         if (!userRatedActions.contains(actionType)) {
             return;
@@ -115,6 +129,8 @@ public class UserActionUtil {
             increase = UPDATE.getValue();
         } else if (actionType.equals("rate")) {
             increase = RATE_ITEM.getValue();
+        } else if (actionType.equals("upload dictionary")) {
+            increase = UPLOAD_DICTIONARY.getValue();
         }
         return increase;
     }

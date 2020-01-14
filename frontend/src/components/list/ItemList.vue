@@ -1,6 +1,6 @@
 <template>
     <div>
-        {{filter}}
+<!--        {{filter}}-->
         <table id="parts-table">
             <tbody>
             <tr v-if="itemsManagementView && !usageView">

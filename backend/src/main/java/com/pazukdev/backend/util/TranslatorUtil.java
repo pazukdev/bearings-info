@@ -428,4 +428,8 @@ public class TranslatorUtil {
         return jsonArray3.get(0).toString(); // "नमस्ते"
     }
 
+//    public static int getDictionarySize() {
+//
+//    }
+
 }
