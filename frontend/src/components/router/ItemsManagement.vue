@@ -4,9 +4,8 @@
         <div v-else>
             <CreateItemForm/>
             <Header :item="false"/>
-            <NestedItemsTableTitle v-if="itemView.partsEnabled"
-                                   :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
             <ItemList :items-management-view="true" :sorted="true"/>
+            <div style="height: 100px"/>
         </div>
     </div>
 </template>

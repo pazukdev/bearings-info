@@ -1,9 +1,10 @@
 import shared from "./shared";
 import storeUtil from "./storeUtil";
 import arrayUtil from "./arrayUtil";
+import searchUtil from "./searchUtil";
 
 export default {
-    itemsListToTables(items, sort) {
+    itemsListToTables(items, sort, filter) {
         let categories = [];
         for (let i = 0; i < items.length; i++) {
             let category = items[i].itemCategory;
@@ -24,7 +25,7 @@ export default {
 
             for (let i = 0; i < items.length; i++) {
                 let item = items[i];
-                if (item.itemCategory === category) {
+                if (item.itemCategory === category && searchUtil.filterItem(item, filter)) {
                     nestedTable.items.push(item);
                 }
             }
@@ -32,7 +33,10 @@ export default {
             if (sort) {
                 nestedTable.items = arrayUtil.sortByComment(nestedTable.items);
             }
-            nestedTables.push(nestedTable);
+
+            if (nestedTable.items.length) {
+                nestedTables.push(nestedTable);
+            }
         }
 
         return arrayUtil.sortByName(nestedTables);

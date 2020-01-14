@@ -1,5 +1,7 @@
 <template>
     <div>
+<!--        {{itemView.name}}<br>-->
+<!--        {{itemView.localizedName}}<br>-->
         <div style="text-align: center">
             <p v-if="!isEmpty(itemView.localizedCategory)"><b>{{itemView.localizedCategory}}</b></p>
             <br>

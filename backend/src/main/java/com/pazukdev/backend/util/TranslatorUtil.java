@@ -41,14 +41,14 @@ public class TranslatorUtil {
                                  final ItemService service) {
         HeaderTable header = itemView.getHeader();
         final String category = itemView.getCategory();
-        final String name = itemView.getName();
+        final String localizedName = itemView.getLocalizedName();
         final PartsTable partsTable = itemView.getPartsTable();
         final ReplacersTable replacersTable = itemView.getReplacersTable();
         final List<NestedItemDto> possibleParts = itemView.getPossibleParts();
         final List<NestedItemDto> replacers = itemView.getPossibleReplacers();
         final List<String> categories = itemView.getAllCategories();
 
-        header = translate(languageFrom, languageTo, header, addToDictionary, itemView.getItemId(), service);
+        header = translate(languageFrom, languageTo, header, addToDictionary, service);
         translate(languageFrom, languageTo, partsTable, addToDictionary, service);
         translate(languageFrom, languageTo, replacersTable, addToDictionary, service);
         translateNestedItemDtoList(languageFrom, languageTo, possibleParts, addToDictionary, service);
@@ -56,7 +56,7 @@ public class TranslatorUtil {
         translate(languageFrom, languageTo, categories, addToDictionary, service);
 
         itemView.setLocalizedCategory(translate(languageFrom, languageTo, category, addToDictionary, false, service));
-        itemView.setLocalizedName(translate(languageFrom, languageTo, name, addToDictionary, false, service));
+        itemView.setLocalizedName(translate(languageFrom, languageTo, localizedName, addToDictionary, false, service));
         itemView.setHeader(header);
         itemView.setPartsTable(partsTable);
         itemView.setReplacersTable(replacersTable);
@@ -69,27 +69,8 @@ public class TranslatorUtil {
                                          final String languageTo,
                                          final HeaderTable headerTable,
                                          final boolean addToDictionary,
-                                         final Long itemId,
                                          final ItemService itemService) {
-//        Item item = null;
-//        String itemCategory = null;
-//        String itemName = null;
-//        if (!ItemUtil.isSpecialItem(itemId)) {
-//            item = itemService.getOne(itemId);
-//            itemCategory = item.getCategory();
-//            itemName = item.getName();
-//        }
-
-//        String tableName = headerTable.getName();
-//        if (item != null && tableName.equals(TableUtil.getHeaderTableName(itemCategory, itemName))) {
-//            itemCategory = translate(languageFrom, languageTo, itemCategory, addToDictionary, true, itemService);
-//            itemName = translate(languageFrom, languageTo, itemName, addToDictionary, true, itemService);
-//            tableName = TableUtil.getHeaderTableName(itemCategory, itemName);
-//        } else {
-//            tableName = translate(languageFrom, languageTo, tableName, false, true, itemService);
-//        }
-//        headerTable.setName(tableName);
-
+//        headerTable.setLocalizedName(translate(languageFrom, languageTo, headerTable.getName(), false, true, itemService));
         for (final HeaderTableRow row : headerTable.getRows()) {
             row.setParameter(translate(languageFrom, languageTo, row.getParameter(), addToDictionary, false, itemService));
             row.setValue(translate(languageFrom, languageTo, row.getValue(), addToDictionary, false, itemService));

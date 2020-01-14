@@ -153,6 +153,10 @@
         color: #050505;
     }
 
+    ::placeholder {
+        color: #252525;
+    }
+
     input, textarea, #app_bar {
         background: #617D89;
     }

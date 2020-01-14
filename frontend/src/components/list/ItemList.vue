@@ -1,7 +1,11 @@
 <template>
     <div>
+        {{filter}}
         <table id="parts-table">
             <tbody>
+            <tr v-if="itemsManagementView && !usageView">
+                <input type="search" v-model="filter" placeholder="Search...">
+            </tr>
             <tr v-if="!usageView">
                 <td>
                     <ListHeader/>
@@ -9,6 +13,8 @@
             </tr>
             <tr v-for="table in itemsListAsTables()" v-if="!hideTable(table)">
                 <td>
+<!--                    {{"!!!"}}-->
+<!--                    {{table}}-->
                     <v-details v-model="table.opened">
                         <summary><b>{{table.name}}</b></summary>
 
@@ -104,6 +110,12 @@
             })
         },
 
+        data() {
+            return {
+                filter: ""
+            }
+        },
+
         methods: {
             itemsListAsTables() {
                 let itemView;
@@ -113,7 +125,7 @@
                     itemView = this.itemView;
                 }
 
-                let tables = itemViewUtil.itemsListToTables(itemView.partsTable.parts, this.sorted);
+                let tables = itemViewUtil.itemsListToTables(itemView.partsTable.parts, this.sorted, this.filter);
                 if (this.itemsManagementView) {
                     for (let i = 0; i < tables.length; i++) {
                         tables[i].opened = false;

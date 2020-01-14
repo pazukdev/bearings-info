@@ -204,7 +204,7 @@ public class ItemViewFactory {
     }
 
     private ItemView createItemsManagementView(final ItemView itemView) {
-        return createItemsView(itemView, itemService.findAll(), "Items management");
+        return createItemsView(itemView, itemService.findAll(), "App data");
     }
 
     private ItemView createParentItemsView(final Long itemId) {

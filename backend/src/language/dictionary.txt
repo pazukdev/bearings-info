@@ -180,3 +180,4 @@ ru=no data=нет данных
 ru=no=нет
 ru=42209l=42209л
 ru=pcs=шт
+ru=App data=Все данные
