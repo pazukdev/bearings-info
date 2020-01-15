@@ -30,23 +30,23 @@ public class FileUtil {
     public static String[] getCSVFilesPaths() {
         final String[] fileNames = {
                 "manufacturer",
-                "standard",
-                "material",
-                "wire",
-                "gasket",
-                "washer",
-                "screw",
-                "oil",
-                "seal",
-                "spark_plug",
-                "lock_ring",
-                "universal_joint_cross",
-                "rolling_element",
-                "cage",
-                "bearing",
-                "universal_joint",
-                "wheel",
-                "frame_and_wheels"
+//                "standard",
+//                "material",
+//                "wire",
+//                "gasket",
+//                "washer",
+//                "screw",
+//                "oil",
+//                "seal",
+//                "spark_plug",
+//                "lock_ring",
+//                "universal_joint_cross",
+//                "rolling_element",
+//                "cage",
+//                "bearing",
+//                "universal_joint",
+//                "wheel",
+//                "frame_and_wheels"
         };
         final List<String> paths = new ArrayList<>();
         for (final String fileName : fileNames) {

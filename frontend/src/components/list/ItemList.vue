@@ -4,7 +4,9 @@
         <table id="parts-table">
             <tbody>
             <tr v-if="itemsManagementView && !usageView">
-                <input type="search" v-model="filter" placeholder="Search...">
+                <td>
+                    <input type="search" v-model="filter" placeholder="Search...">
+                </td>
             </tr>
             <tr v-if="!usageView">
                 <td>
@@ -13,7 +15,6 @@
             </tr>
             <tr v-for="table in itemsListAsTables()" v-if="!hideTable(table)">
                 <td>
-<!--                    {{"!!!"}}-->
 <!--                    {{table}}-->
                     <v-details v-model="table.opened">
                         <summary><b>{{table.name}}</b></summary>

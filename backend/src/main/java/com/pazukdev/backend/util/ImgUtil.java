@@ -33,7 +33,7 @@ public class ImgUtil {
     }
 
     public static ImgViewData getImg(final Item item) {
-        final String itemImg = item.getImage();
+        final String itemImg = item.getImg();
         final String itemCategory = item.getCategory();
         final String imgPath = getImgPath(itemImg, itemCategory, false);
         final String defaultImgPath = getImgIfItemHasNoSpecificImg(itemCategory);
@@ -92,7 +92,7 @@ public class ImgUtil {
     public static void updateImg(final ItemView view, final Item item) {
         final String imgName = getNewImg(view, item);
         if (imgName != null) {
-            item.setImage(imgName);
+            item.setImg(imgName);
         }
     }
 
@@ -111,6 +111,12 @@ public class ImgUtil {
         final String imgData = abstractView.getImg();
         if (imgData == null) {
             return "-";
+        }
+//        if (LinkUtil.isUrl(imgData) && (imgData.contains("https:") || imgData.contains("http:"))) {
+//            return imgData;
+//        }
+        if (LinkUtil.isUrl(imgData)) {
+            return imgData;
         }
         if (!isBase64Data(abstractView.getImg()) || !ImgUtil.isPngFile(imgData)) {
             return null;
@@ -169,6 +175,9 @@ public class ImgUtil {
     private static String getImgPath(final String itemImg, final String itemCategory, final boolean save) {
         if (itemImg == null || itemCategory == null) {
             return null;
+        }
+        if (LinkUtil.isUrl(itemImg)) {
+            return itemImg;
         }
         return getDirectoryPath(itemCategory, save) + "/" + itemImg;
     }

@@ -91,8 +91,8 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     public Item saveAsItem(final TransitiveItem transitiveItem) {
         final Item item = getOrCreate(transitiveItem);
         item.setName(replaceBlankWithDash(item.getName()));
-        if (item.getImage() == null) {
-            item.setImage("-");
+        if (item.getImg() == null) {
+            item.setImg("-");
         }
         return repository.save(item);
     }
@@ -171,7 +171,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         item.getReplacers().addAll(replacers);
         item.setCreatorId(creatorId);
         item.setUserActionDate(DateUtil.now());
-        item.setImage(transitiveItem.getImage());
+        item.setImg(transitiveItem.getImage());
         LinkUtil.addLinksToItem(item, transitiveItem);
         return item;
     }

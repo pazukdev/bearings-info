@@ -113,7 +113,7 @@ public class ItemViewFactory {
         final Item item = new Item();
         item.setName(name);
         item.setCategory(category);
-        item.setImage("-");
+        item.setImg("-");
         item.setCreatorId(creator.getId());
         item.setUserActionDate(DateUtil.now());
         item.setDescription(createEmptyDescription(category));

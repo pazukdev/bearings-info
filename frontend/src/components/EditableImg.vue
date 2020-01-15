@@ -4,7 +4,8 @@
 <!--        {{itemView.defaultImg}}<br>-->
 <!--        {{"itemView.img: " + isEmpty(itemView.img) + ": "}}-->
 <!--        {{itemView.img}}-->
-        <table id="item-image" v-if="isViewWithImage()">
+
+        <table v-if="isViewWithImage()">
             <tbody>
             <tr v-if="!messagesContain('img removed')">
                 <td>
@@ -13,28 +14,43 @@
                     </div>
                 </td>
             </tr>
-            <tr v-if="editMode && !isEmpty(itemView.img) && !messagesContain('img removed')">
+            </tbody>
+        </table>
+
+        <table v-if="isViewWithImage() && editMode">
+            <tbody>
+            <tr v-if="!isEmpty(itemView.img) && !messagesContain('img removed')">
                 <td>
                     <button id="remove-img-button" type="button" @click="removeImg()">
                         {{"Remove image"}}
                     </button>
                 </td>
             </tr>
-            <tr v-if="editMode">
+            <tr>
                 <td>
                     <br>
-                    Upload another image<br>
-                    Accepts .png images only<br>
-                    Size limit: 2MB<br>
+                    {{"Input new image link"}}
                     <br>
                 </td>
             </tr>
-            <tr v-if="editMode" class="alert-message">
+            <tr>
+                <td>
+                    <input type="text" v-model="itemView.img">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <br>
+                    {{"or upload file (accepts .png, size limit 2MB)"}}
+                    <br>
+                </td>
+            </tr>
+            <tr class="alert-message">
                 <td>
                     {{fileUploadMessage}}
                 </td>
             </tr>
-            <tr v-if="editMode">
+            <tr>
                 <td>
                     <input type="file" accept="image/png"
                            style="color: black"
@@ -76,16 +92,20 @@
                     return "https://pazukdev.github.io/sovietboxers/img/app_logo.9a3c3892.png";
                 }
                 let itemView = this.itemView;
-                // if (this.isEmpty(itemView.img) && this.isEmpty(itemView.defaultImg)) {
-                //     return "https://pazukdev.github.io/sovietboxers/img/app_logo.9a3c3892.png";
-                // }
                 let img = !this.isEmpty(itemView.img) ? itemView.img : itemView.defaultImg;
                 let isBase64ImgData = img.includes(";base64,");
                 if (isBase64ImgData) {
                     return img;
                 } else {
-                    //localhost:8090/bearings-info/api/bearing/bearing_18.png
-                    let imgUrl = this.basicUrl + "/" + img;
+                    let imgUrl;
+                    if (img.includes("https:") || img.includes("http:")) {
+                        imgUrl = img;
+                    } else {
+                        // e.g.: localhost:8090/bearings-info/api/bearing/bearing_18.png
+                        imgUrl = this.basicUrl + "/" + img;
+                    }
+
+                    console.log(img);
                     console.log(imgUrl);
                     return imgUrl;
                 }

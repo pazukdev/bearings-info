@@ -1,5 +1,7 @@
 package com.pazukdev.backend.entity;
 
+import com.pazukdev.backend.util.LinkUtil;
+import com.pazukdev.backend.util.SpecificStringUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -27,7 +29,6 @@ public class Item extends AbstractEntity {
     private String userActionDate;
     @Column(name = "description", table = "item_description")
     private String description;
-    private String image;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -55,5 +56,28 @@ public class Item extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "link_id")
     )
     private Set<Link> links = new HashSet<>();
+
+    public String getImg() {
+        final Link imgLink = LinkUtil.getLink("img", this);
+        return imgLink != null ? imgLink.getName() : null;
+    }
+
+    public void setImg(final String img) {
+        Link imgLink = getImgLink();
+        if (SpecificStringUtil.isEmpty(img)) {
+            links.remove(imgLink);
+            return;
+        }
+        if (imgLink == null) {
+            imgLink = new Link();
+            imgLink.setType("img");
+        }
+        imgLink.setName(img);
+        links.add(imgLink);
+    }
+
+    private Link getImgLink() {
+        return LinkUtil.getLink("img", this);
+    }
 
 }

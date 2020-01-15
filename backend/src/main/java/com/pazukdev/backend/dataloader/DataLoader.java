@@ -86,6 +86,7 @@ public class DataLoader implements ApplicationRunner {
         } else if (name.equalsIgnoreCase("soyuz retromechanic")) {
             user.setCountry("BY");
             user.setImg(name + ".png");
+            user.setEmail("абв");
         }
         itemService.getUserService().getRepository().save(user);
     }
