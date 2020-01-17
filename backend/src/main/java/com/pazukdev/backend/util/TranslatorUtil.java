@@ -114,18 +114,7 @@ public class TranslatorUtil {
                                   final String langTo,
                                   final NestedItemDto dto,
                                   final ItemService itemService) {
-//        final String buttonText = dto.getButtonText();
-//        final String selectText = dto.getSelectText();
-//        final String comment = dto.getComment();
-//        final String secondComment = dto.getSecondComment();
-//
-//        dto.setLocalizedButtonText(translate(langFrom, langTo, buttonText, addToDictionary, true, itemService));
-//        dto.setLocalizedSelectText(translate(langFrom, langTo, selectText, addToDictionary, true, itemService));
-//        dto.setLocalizedComment(translate(langFrom, langTo, comment, addToDictionary, true, itemService));
-//        dto.setLocalizedSecondComment(translate(langFrom, langTo, secondComment, addToDictionary, false, itemService));
-
         dto.translate(langFrom, langTo, itemService);
-
     }
 
     private static void translate(final String languageFrom,
@@ -200,18 +189,13 @@ public class TranslatorUtil {
         }
     }
 
-    public static void main(String[] args) {
-        String s = "Большой Слон-1";
-        System.out.println(translateToEnglish("ru", s, true));
-    }
-
-    private static String translateToEnglish(final String languageFrom,
+    private static String translateToEnglish(final String langFrom,
                                              String text,
                                              final boolean addToDictionary) {
-        if (text == null || languageFrom == null) {
+        if (text == null || langFrom == null) {
             return null;
         }
-        if (languageFrom.equals("ru") && !containsCyrillic(text)) {
+        if (langFrom.equals("ru") && !containsCyrillic(text)) {
             return text;
         }
 
@@ -221,23 +205,35 @@ public class TranslatorUtil {
             return text;
         }
 
-//        if (endChars.contains(getLastChar(value))) {
-//            final String beforeLastChar = removeLastChar(value);
-//            final String translatedBeforeLastChar = getValueFromDictionary(beforeLastChar, lang);
-//            return value.replaceFirst(beforeLastChar, translatedBeforeLastChar);
-//        }
-//
-//        if (isName(value)) {
-//            final String beforeNumber = value.split(getSubstringWithFirstNumber(value))[0];
-//            final String translatedBeforeNumber = getValueFromDictionary(beforeNumber, lang);
-//            return value.replaceFirst(beforeNumber, translatedBeforeNumber);
-//        }
-//
-//        if (startsWithNumber(value)) {
-//            final String afterNumber = value.replace(getSubstringWithFirstNumber(value), "");
-//            final String translatedAfterNumber = getValueFromDictionary(afterNumber, lang);
-//            return value.replaceFirst(afterNumber, translatedAfterNumber);
-//        }
+        final boolean startsWithUppercase = startsWithUppercase(text);
+        text = SpecificStringUtil.uncapitalize(text);
+
+        if (isSingleWord(text)) {
+            if (endChars.contains(getLastChar(text))) {
+                final String beforeLastChar = removeLastChar(text);
+                final String translatedBeforeLastChar = translateToEnglish(langFrom, beforeLastChar, addToDictionary);
+                return text.replaceFirst(beforeLastChar, translatedBeforeLastChar);
+            }
+
+            if (isName(text)) {
+                return text;
+            }
+
+            if (startsWithNumber(text)) {
+                final String afterNumber = text.replace(getSubstringWithFirstNumber(text), "");
+                final String translatedAfterNumber = translateToEnglish(langFrom, afterNumber, addToDictionary);
+                return text.replaceFirst(afterNumber, translatedAfterNumber);
+            }
+        }
+
+        final String comma = ", ";
+        if (text.contains(comma)) {
+            final String firstPart = text.split(comma)[0];
+            final String secondPart = text.split(comma)[1];
+            final String translatedFirstPart = translateToEnglish(langFrom, firstPart, addToDictionary);
+            final String translatedSecondPart = translateToEnglish(langFrom, secondPart, addToDictionary);
+            return translatedFirstPart + comma + translatedSecondPart;
+        }
 
         String translated = getValueFromDictionary(text, "en");
         if (translated != null) {
@@ -245,16 +241,19 @@ public class TranslatorUtil {
         }
 
         try {
-            translated = translateWithGoogle(languageFrom, "en", text).trim();
+            translated = translateWithGoogle(langFrom, "en", text).trim();
             if (translated.equals(text)) {
                 return text;
             }
             if (addToDictionary) {
-                addToDictionary(text, translated, languageFrom);
+                addToDictionary(text, translated, langFrom);
             }
         } catch (final IOException e) {
             e.printStackTrace();
             return text;
+        }
+        if (startsWithUppercase) {
+            translated = SpecificStringUtil.capitalize(translated);
         }
         return translated;
     }
@@ -303,25 +302,6 @@ public class TranslatorUtil {
         return subArrays;
     }
 
-//    public static String translateToEnglish(final String languageFrom, final ItemData itemData) {
-//        String nameInEnglish = itemData.getName();
-//        if (nameInEnglish != null) {
-//            return nameInEnglish;
-//        } else {
-//            final String localizedName = itemData.getLocalizedName();
-//            nameInEnglish = getValueFromDictionary(localizedName, languageFrom);
-//            if (nameInEnglish == null) {
-//                try {
-//                    nameInEnglish = translateWithGoogle(languageFrom, "en", localizedName);
-//                    addToDictionary(localizedName, nameInEnglish, languageFrom);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//        return nameInEnglish;
-//    }
-
     public static boolean isInEnglish(final String text) {
         return !containsCyrillic(text);
     }
@@ -368,28 +348,30 @@ public class TranslatorUtil {
         if (value == null) {
             return null;
         }
-        if (containsCyrillic(value)) {
-            return value;
-        }
 
         value = value.trim();
 
-        if (endChars.contains(getLastChar(value))) {
-            final String beforeLastChar = removeLastChar(value);
-            final String translatedBeforeLastChar = getValueFromDictionary(beforeLastChar, lang);
-            return value.replaceFirst(beforeLastChar, translatedBeforeLastChar);
-        }
+        final boolean startsWithUppercase = startsWithUppercase(value);
+        value = uncapitalize(value);
 
-        if (isName(value)) {
-            final String beforeNumber = value.split(getSubstringWithFirstNumber(value))[0];
-            final String translatedBeforeNumber = getValueFromDictionary(beforeNumber, lang);
-            return value.replaceFirst(beforeNumber, translatedBeforeNumber);
-        }
+        if (isSingleWord(value)) {
+            if (endChars.contains(getLastChar(value))) {
+                final String beforeLastChar = removeLastChar(value);
+                final String translatedBeforeLastChar = getValueFromDictionary(beforeLastChar, lang);
+                return value.replaceFirst(beforeLastChar, translatedBeforeLastChar);
+            }
 
-        if (startsWithNumber(value)) {
-            final String afterNumber = value.replace(getSubstringWithFirstNumber(value), "");
-            final String translatedAfterNumber = getValueFromDictionary(afterNumber, lang);
-            return value.replaceFirst(afterNumber, translatedAfterNumber);
+            if (isName(value)) {
+                final String beforeNumber = value.split(getSubstringWithFirstNumber(value))[0];
+                final String translatedBeforeNumber = getValueFromDictionary(beforeNumber, lang);
+                return value.replaceFirst(beforeNumber, translatedBeforeNumber);
+            }
+
+            if (startsWithNumber(value)) {
+                final String afterNumber = value.replace(getSubstringWithFirstNumber(value), "");
+                final String translatedAfterNumber = getValueFromDictionary(afterNumber, lang);
+                return value.replaceFirst(afterNumber, translatedAfterNumber);
+            }
         }
 
         String translated = null;
@@ -399,12 +381,13 @@ public class TranslatorUtil {
                 continue;
             }
             if (lang.equals("en")) {
-                if (line.split(DICTIONARY_SEPARATOR)[2].equals(value)) {
+                if (line.split(DICTIONARY_SEPARATOR)[2].equalsIgnoreCase(value)) {
                     translated = line.split(DICTIONARY_SEPARATOR)[1];
                     break;
                 }
             } else {
-                if (line.contains(lang + DICTIONARY_SEPARATOR + value + DICTIONARY_SEPARATOR)) {
+                if (line.toLowerCase()
+                        .contains(lang + DICTIONARY_SEPARATOR + value.toLowerCase() + DICTIONARY_SEPARATOR)) {
                     translated = line.split(DICTIONARY_SEPARATOR)[2];
                     if (translationResultIsBroken(translated)) {
                         return null;
@@ -412,6 +395,9 @@ public class TranslatorUtil {
                     break;
                 }
             }
+        }
+        if (startsWithUppercase) {
+            translated = capitalize(translated);
         }
         return translated;
     }

@@ -1,189 +1,158 @@
 ru=AL=АЛ
-ru=Additional info=Доп. информация
-ru=Aluminium A5-grade 0.5mm=Алюминий первичный марки А5 0.5мм
-ru=Aluminium alloy= Алюминиевый сплав
-ru=Aluminium bronze=Алюминиевая бронза
-ru=App data=Все данные
-ru=Ball=Шарик
-ru=Bearing=Подшипник
-ru=Beaver Oil=Бобровое масло
-ru=Belarus=Беларусь
-ru=Bronze=Бронза
-ru=Cage=Сепаратор
-ru=Carburetor=Карбюратор
 ru=China=Китай
-ru=Copper zinc pressure treated alloys (brasses)=Сплавы медно-цинковые (латуни), обрабатываемые давлением
-ru=Core=Токопроводящая жила
 ru=Cork. Terms and definitions=Кора пробковая. Термины и определения
-ru=Cork=Пробка
-ru=Cotton yarn braid coated with nitrocellulose varnish=Хлопчатобумажная пряжа покрытая нитроцеллюлозным лаком
-ru=Country=Страна
-ru=Created by=Добавлено пользователем
-ru=Cylindrical roller bearing=Роликовый
-ru=Deepgroove bearing=Радиальный
-ru=Defunct=Закрыто
-ru=Dimensions, mm=Размеры, мм
 ru=Dnepr=Днепр
-ru=Duralumin cage=Дюралевый сепаратор
-ru=Duralumin=Дюраль
-ru=Eccentric inner flat snap rings=Эксцентричные внутренние плоские пружинные кольца
-ru=Edit=Редактировать
-ru=Engine M-72 type=Двигатель M-72 type
-ru=Engine M67-36 type=Двигатель M67-36 type
-ru=Engine=Двигатель
-ru=Final drive=Редуктор
-ru=Founded=Основано
-ru=Foundry tin bronzes=Бронзы оловянные литейные
-ru=Front fork=Передняя вилка
-ru=Fuel capacity, l=Объем бензобака, л
-ru=Full name=Полное название
 ru=GOST=ГОСТ
-ru=Gasket kit=Набор прокладок
-ru=Gasket paper A-grade 0.5mm=Прокладочный картон марки А 0.5мм
-ru=Gasket paper=Прокладочный картон
-ru=Gasket=Прокладка
-ru=Gear oil=Трансмиссионное масло
-ru=Gearbox=Коробка передач
-ru=General specifications=Общие технические условия
-ru=Generator G-11A=Генератор Г-11А
-ru=Generator=Генератор
-ru=Germany=Германия
-ru=Gold Material=Материал Gold
-ru=Half-bearing=Вкладыш
-ru=Heat resistant wire insulation=Изоляция токопроводящих жил теплостойкая
-ru=High voltage wires for tractor ignition devices=Провода автотракторные высокого напряжения для приборов зажигания
-ru=High voltage=Высокого напряжения
-ru=IMZ / KMZ=ИМЗ / КМЗ
-ru=IMZ 8103=ИМЗ 8103
 ru=IMZ=ИМЗ
-ru=IZHMASH=ИЖМАШ
-ru=Inner eccentric flat thrust spring retaining rings and grooves=Кольца пружинные упорные плоские внутренние эксцентрические и канавки для них
-ru=Insulation rubber=Резина кабельная изоляционная
-ru=Insulation=Изоляция
 ru=Irbitskiy Mototsikletniy Zavod=Ирбитский Мотоциклетный Завод
-ru=Jupiter 5=Юпитер 5
-ru=K-302=К-302
-ru=K-750 type engine=Двигатель K-750 type
-ru=K-750M type engine=Двигатель K-750M type
-ru=KMZ M-72N=КМЗ М-72Н
 ru=KMZ=КМЗ
 ru=Kievskiy Mototsikletniy Zavod=Киевский Мотоциклетный Завод
-ru=Kit, Needle=Комплект иголок
-ru=Kit=Комплект
-ru=Location=Расположение
-ru=M-72N=М-72Н
-ru=M1=М1
 ru=M1M Monkey=М1М Макака
-ru=M2=М2
 ru=M61 Irbit=М61 Ирбит
 ru=M63 Ural-2=М63 Урал-2
 ru=M66 Ural-3=М66 Урал-3
-ru=M66 engine=Двигатель M66
-ru=M66=М66
-ru=M67 type engine=Двигатель M67 type
-ru=MG-10=МГ-10
 ru=MMVZ=ММВЗ
-ru=MMZ=ММЗ
-ru=MT-9 type engine=Двигатель MT-9 type
 ru=MTZ=МТЗ
-ru=Macaque=Макак
-ru=Manufacturer=Производитель
-ru=Material=Материал
-ru=Max speed, km/h=Макс. скорость, км/ч
-ru=Metals and alloys=Металлы и сплавы
-ru=Model=Модель
-ru=Motorcycle Jupiter 5=Мотоцикл Юпитер 5
-ru=Motorcycle M1=Мотоцикл М1
-ru=Motorcycle R-75=Мотоцикл R-75
-ru=Motorcycle catalogue=Модельный ряд
-ru=Motorcycle macaque=Мотоцикл Макак
-ru=Motorcycle=Мотоцикл
-ru=Moulding polyamide 610=Полиамид 610 литьевой
-ru=Name=Название
-ru=Needle bearing=Игольчатый
-ru=Needle=Иголка
-ru=No data=Нет данных
-ru=No=Нет
-ru=Non-ferrous metals and alloys=Цветные металлы и сплавы
-ru=OOO NPO Universal kardan detal=ООО НПО Универсал кардан деталь
-ru=OST=ОСТ
-ru=Oil=Масло
-ru=Outer concentric flat thrust spring retaining rings and grooves=Кольца пружинные упорные плоские наружные концентрические и канавки для них
-ru=Outer shield material=Оплетка
-ru=Paper=Бумага
-ru=Partnumber=Наименование
-ru=Parts=Агрегаты и детали
-ru=Pcs/Vol=Кол-во/объем
-ru=Pendulum type=Маятникового типа
-ru=Plain bearing=Подшипник скольжения
-ru=Platinum=Платина
-ru=Portuguese cork=Португальская пробка
-ru=Primary aluminum=Алюминий первичный
-ru=Production=Годы пр-ва
-ru=Purpose=Применение
-ru=RTI-1=РТИ-1
-ru=Rating=Рейтинг
-ru=Rear suspension=Задняя подвеска
-ru=Replacers=Заменители
-ru=Role=Роль
-ru=Roller bearing=Роликовый
-ru=Roller, cylindrical=Ролик, цилиндрический
-ru=Roller, tapered=Ролик, конический
-ru=Roller=Ролик
-ru=Rolling bearings=Подшипники качения
-ru=Rolling element=Тело качения
-ru=Round spring lock rings=Кольца пружинные круглые
-ru=Rubber for electric cables wires and cords=Резина электрических кабелей, проводов и шнуров
-ru=Rubber product=Резино-техническое изделие
-ru=Rubber=Резина
 ru=Russia=Россия
-ru=Screw=Винт
-ru=Sheet metal cage=Сепаратор из листового металла
-ru=Silver=Серебро
-ru=Solid brass cage=Латунный сепаратор
-ru=Spark plugs for car, tractor and motorcycle engines=Свечи зажигательные искровые для автомобильных, тракторных и мотоциклетных двигателей
-ru=Spark plugs for tractor type engines=Свечи зажигательные искровые для двигателей автотракторного типа
-ru=Spark plugs=Свечи зажигания искровые
-ru=Standard=Стандарт
-ru=Steel=Сталь
-ru=Stranded, copper=Многопроволочная, медная
-ru=Synthetic=Синтетика
-ru=TPK ChelnyZapChast=ТПК ЧелныЗапЧасть
-ru=TU=ТУ
-ru=Tapered roller bearing=Конический роликовый
-ru=Telescopic=Телескопическая
-ru=Thrust bearing=Упорный
-ru=Tin-free pressure-worked bronzes=GradesБронзы безоловянные, обрабатываемые давлением
-ru=Type=Тип
-ru=U.4301-3401485=У.4301-3401485
 ru=USA=США
 ru=USSR=СССР
 ru=Ukraine=Украина
 ru=Ukrainian SSR=УССР
-ru=Universal joint cross=Крестовина
-ru=Universal joint=Крестовина в сборе
 ru=Ural=Урал
-ru=Username=Имя пользователя
-ru=Voltage=Напряжение
-ru=Weight=Вес
-ru=Wheel=Колесо
-ru=Width=Ширина
-ru=Wire=Провод
-ru=Wrought aluminium and aluminium alloys=Алюминий и сплавы алюминиевые деформируемые
-ru=Your Wishlist=Ваш список желаемого
+ru=additional info=доп. информация
+ru=aluminium A5-grade 0.5mm=алюминий первичный марки А5 0.5мм
+ru=aluminium alloy= алюминиевый сплав
+ru=aluminium bronze=алюминиевая бронза
+ru=app data=все данные
+ru=ball=шарик
+ru=bearing=подшипник
+ru=bronze=бронза
+ru=cage=сепаратор
+ru=carburetor=карбюратор
+ru=copper zinc pressure treated alloys (brasses)=сплавы медно-цинковые (латуни), обрабатываемые давлением
+ru=core=токопроводящая жила
+ru=cork=пробка
+ru=cotton yarn braid coated with nitrocellulose varnish=хлопчатобумажная пряжа покрытая нитроцеллюлозным лаком
+ru=country=страна
+ru=created by=добавлено пользователем
+ru=cylindrical roller bearing=роликовый
+ru=deepgroove bearing=радиальный
+ru=defunct=закрыто
+ru=dimensions=размеры
+ru=duralumin cage=дюралевый сепаратор
+ru=duralumin=дюраль
+ru=eccentric inner flat snap rings=эксцентричные внутренние плоские пружинные кольца
+ru=edit=редактировать
+ru=engine=двигатель
+ru=final drive=редуктор
 ru=for gearbox=для КПП
 ru=for=для
+ru=founded=основано
+ru=foundry tin bronzes=бронзы оловянные литейные
+ru=front fork=передняя вилка
+ru=fuel capacity=объем бензобака
+ru=full name=полное название
+ru=gasket kit=набор прокладок
+ru=gasket paper A-grade 0.5mm=прокладочный картон марки А 0.5мм
+ru=gasket paper=прокладочный картон
+ru=gasket=прокладка
+ru=gear oil=трансмиссионное масло
+ru=gearbox=коробка передач
+ru=general specifications=общие технические условия
+ru=generator=генератор
+ru=germany=германия
+ru=half-bearing=вкладыш
+ru=heat resistant wire insulation=изоляция токопроводящих жил теплостойкая
+ru=high voltage wires for tractor ignition devices=провода автотракторные высокого напряжения для приборов зажигания
+ru=high voltage=высокого напряжения
+ru=inner eccentric flat thrust spring retaining rings and grooves=кольца пружинные упорные плоские внутренние эксцентрические и канавки для них
+ru=insulation rubber=резина кабельная изоляционная
+ru=insulation=изоляция
+ru=jupiter=юпитер
 ru=kg=кг
+ru=kit, needle=комплект иголок
 ru=kit=комплект
-ru=kmh=км/ч
+ru=kit=комплект
 ru=km/h=км/ч
 ru=km=км
+ru=kmh=км/ч
+ru=location=расположение
+ru=manufacturer=производитель
+ru=material=материал
+ru=max speed=макс. скорость
+ru=metals and alloys=металлы и сплавы
 ru=min=мин
 ru=mm=мм
+ru=model=модель
+ru=motorcycle=мотоцикл
+ru=moulding polyamide 610=полиамид 610 литьевой
 ru=mph=миль/ч
+ru=name=название
+ru=needle bearing=игольчатый
+ru=needle=иголка
+ru=no data=нет данных
 ru=no data=нет данных
 ru=no=нет
+ru=no=нет
+ru=non-ferrous metals and alloys=цветные металлы и сплавы
 ru=oil=масло
+ru=oil=масло
+ru=outer concentric flat thrust spring retaining rings and grooves=кольца пружинные упорные плоские наружные концентрические и канавки для них
+ru=outer shield material=оплетка
+ru=paper=бумага
+ru=partnumber=наименование
+ru=parts=детали
+ru=pcs/vol=кол-во/объем
 ru=pcs=шт
+ru=pendulum type=маятникового типа
+ru=plain bearing=подшипник скольжения
+ru=planet=планета
+ru=platinum=платина
+ru=portuguese cork=португальская пробка
+ru=primary aluminum=алюминий первичный
+ru=production=годы пр-ва
+ru=purpose=применение
+ru=rating=рейтинг
+ru=rear suspension=задняя подвеска
+ru=replacers=заменители
+ru=role=роль
+ru=roller bearing=роликовый
+ru=roller, cylindrical=ролик, цилиндрический
+ru=roller, tapered=ролик, конический
+ru=roller=ролик
+ru=rolling bearings=подшипники качения
+ru=rolling element=тело качения
+ru=round spring lock rings=кольца пружинные круглые
+ru=rubber for electric cables wires and cords=резина электрических кабелей, проводов и шнуров
+ru=rubber product=резино-техническое изделие
+ru=rubber=резина
 ru=s=с
+ru=screw=винт
 ru=sec=сек
+ru=sheet metal cage=сепаратор из листового металла
+ru=silver=серебро
+ru=solid brass cage=латунный сепаратор
+ru=spark plugs for car, tractor and motorcycle engines=свечи зажигательные искровые для автомобильных, тракторных и мотоциклетных двигателей
+ru=spark plugs for tractor type engines=свечи зажигательные искровые для двигателей автотракторного типа
+ru=spark plugs=свечи зажигания искровые
+ru=standard=стандарт
+ru=steel=сталь
+ru=stranded, copper=многопроволочная, медная
+ru=synthetic=синтетика
+ru=tapered roller bearing=конический роликовый
+ru=telescopic=телескопическая
+ru=terms and definitions=термины и определения
+ru=thrust bearing=упорный
+ru=tin-free pressure-worked bronzes=бронзы безоловянные, обрабатываемые давлением
+ru=type=тип
+ru=units=агрегаты
+ru=universal joint cross=крестовина
+ru=universal joint=крестовина в сборе
+ru=username=имя пользователя
+ru=voltage=напряжение
+ru=weight=вес
+ru=wheel=колесо
+ru=width=ширина
+ru=wire=провод
+ru=wrought aluminium and aluminium alloys=алюминий и сплавы алюминиевые деформируемые
+ru=your wishlist=ваш список желаемого

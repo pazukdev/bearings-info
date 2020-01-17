@@ -83,9 +83,9 @@ public class CategoryUtil {
         public static final String CORE = "Core";
         public static final String COUNTRY = "Country";
         public static final String DEFUNCT = "Defunct";
-        public static final String INSULATION = "Insulation";
         public static final String FOUNDED = "Founded";
         public static final String FULL_NAME = "Full name";
+        public static final String INSULATION = "Insulation";
         public static final String NAME = "Name";
         public static final String OUTER_SHIELD_MATERIAL = "Outer shield material";
         public static final String PRODUCTION = "Production";

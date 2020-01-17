@@ -44,10 +44,12 @@ public class SpecificStringUtil {
     }
 
     public static final List<String> nullKeys = Arrays.asList("?", "-", "null");
-    public static final List<String> abbreviation = Arrays.asList("имз", "кмз", "гост");
+    public static final List<String> abbreviation = Arrays
+            .asList("imz", "kmz", "gost", "bmw", "ussr", "al", "usa", "fag");
     public final static List<Character> endChars = Arrays.asList('.', ',', ';', ':', '-', '?', '!');
     public final static List<String> units = Arrays
-            .asList("mm", "cm", "m", "g", "kg", "km/h", "kmh", "mph", "s", "sec", "min", "n", "nm");
+            .asList("mm", "cm", "m", "g", "kg", "km/h", "kmh", "mph", "s", "min", "n", "nm", "ml", "l", "t", "hp",
+                    "rpm");
 
     public static List<String> getList(String source) {
         return Arrays.asList(removeSpaces(source).split(Separator.SEMICOLON.getSeparator()));
@@ -120,7 +122,14 @@ public class SpecificStringUtil {
         if (isAbbreviation(s)) {
             return s.toUpperCase();
         }
-        return StringUtils.capitalize(s.toLowerCase());
+        return StringUtils.capitalize(s);
+    }
+
+    public static String uncapitalize(final String s) {
+        if (isAbbreviation(s)) {
+            return s.toLowerCase();
+        }
+        return StringUtils.uncapitalize(s);
     }
 
     public static String enumNameToCapitalizedLowerCaseString(final String name) {
@@ -202,7 +211,7 @@ public class SpecificStringUtil {
     }
 
     private static boolean isAbbreviation(final String s) {
-        return abbreviation.contains(s);
+        return abbreviation.contains(s.toLowerCase());
     }
 
     public static Integer extractIntegerAutomatically(final String source) {
@@ -234,6 +243,14 @@ public class SpecificStringUtil {
         }
         text = text.trim(); // to remove space at the end
         return text;
+    }
+
+    public static boolean startsWithUppercase(final String s) {
+        if (s == null) {
+            return false;
+        }
+        final String firstLetter = String.valueOf(s.charAt(0));
+        return firstLetter.equals(firstLetter.toUpperCase());
     }
 
     public static Character getLastChar(final String s) {
@@ -354,6 +371,12 @@ public class SpecificStringUtil {
     public static boolean isName(final String s) {
         return containsNumber(s) && !startsWithNumber(s);
     }
+
+    public static boolean isSingleWord(final String s) {
+        return s != null && s.trim().equals(s.trim().replaceAll(" ", ""));
+    }
+
+
 
 }
 
