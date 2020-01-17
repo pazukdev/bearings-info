@@ -15,7 +15,7 @@
             <br>
         </div>
 
-<!--        {{itemView.header.rows}}-->
+<!--        {{itemView}}-->
 
         <table id="item-description">
             <tbody>

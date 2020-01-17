@@ -1,6 +1,5 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.dto.ItemData;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.HeaderTableRow;
@@ -22,14 +21,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-import static com.pazukdev.backend.util.SpecificStringUtil.splitIntoWords;
-import static com.pazukdev.backend.util.SpecificStringUtil.wordsIntoText;
+import static com.pazukdev.backend.util.SpecificStringUtil.*;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
 public class TranslatorUtil {
-    
+
     private static String EN = "en";
     private static String WORD_SEPARATOR = " ";
     private static String DICTIONARY_SEPARATOR = "=";
@@ -202,16 +200,44 @@ public class TranslatorUtil {
         }
     }
 
+    public static void main(String[] args) {
+        String s = "Большой Слон-1";
+        System.out.println(translateToEnglish("ru", s, true));
+    }
+
     private static String translateToEnglish(final String languageFrom,
-                                             final String text,
+                                             String text,
                                              final boolean addToDictionary) {
+        if (text == null || languageFrom == null) {
+            return null;
+        }
         if (languageFrom.equals("ru") && !containsCyrillic(text)) {
             return text;
         }
 
-        if (text.matches("[0-9]+")) {
+        text = text.trim();
+
+        if (isNumber(text)) {
             return text;
         }
+
+//        if (endChars.contains(getLastChar(value))) {
+//            final String beforeLastChar = removeLastChar(value);
+//            final String translatedBeforeLastChar = getValueFromDictionary(beforeLastChar, lang);
+//            return value.replaceFirst(beforeLastChar, translatedBeforeLastChar);
+//        }
+//
+//        if (isName(value)) {
+//            final String beforeNumber = value.split(getSubstringWithFirstNumber(value))[0];
+//            final String translatedBeforeNumber = getValueFromDictionary(beforeNumber, lang);
+//            return value.replaceFirst(beforeNumber, translatedBeforeNumber);
+//        }
+//
+//        if (startsWithNumber(value)) {
+//            final String afterNumber = value.replace(getSubstringWithFirstNumber(value), "");
+//            final String translatedAfterNumber = getValueFromDictionary(afterNumber, lang);
+//            return value.replaceFirst(afterNumber, translatedAfterNumber);
+//        }
 
         String translated = getValueFromDictionary(text, "en");
         if (translated != null) {
@@ -227,14 +253,8 @@ public class TranslatorUtil {
                 addToDictionary(text, translated, languageFrom);
             }
         } catch (final IOException e) {
-            try {
-                translated = transliterate(text);
-                if (addToDictionary) {
-                    addToDictionary(text, translated, languageFrom);
-                }
-            } catch (final IOException e1) {
-                return text;
-            }
+            e.printStackTrace();
+            return text;
         }
         return translated;
     }
@@ -283,32 +303,32 @@ public class TranslatorUtil {
         return subArrays;
     }
 
-    public static String translateToEnglish(final String languageFrom, final ItemData itemData) {
-        String nameInEnglish = itemData.getName();
-        if (nameInEnglish != null) {
-            return nameInEnglish;
-        } else {
-            final String localizedName = itemData.getLocalizedName();
-            nameInEnglish = getValueFromDictionary(localizedName, languageFrom);
-            if (nameInEnglish == null) {
-                try {
-                    nameInEnglish = translateWithGoogle(languageFrom, "en", localizedName);
-                    addToDictionary(localizedName, nameInEnglish, languageFrom);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return nameInEnglish;
-    }
+//    public static String translateToEnglish(final String languageFrom, final ItemData itemData) {
+//        String nameInEnglish = itemData.getName();
+//        if (nameInEnglish != null) {
+//            return nameInEnglish;
+//        } else {
+//            final String localizedName = itemData.getLocalizedName();
+//            nameInEnglish = getValueFromDictionary(localizedName, languageFrom);
+//            if (nameInEnglish == null) {
+//                try {
+//                    nameInEnglish = translateWithGoogle(languageFrom, "en", localizedName);
+//                    addToDictionary(localizedName, nameInEnglish, languageFrom);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        return nameInEnglish;
+//    }
 
     public static boolean isInEnglish(final String text) {
         return !containsCyrillic(text);
     }
 
     private static boolean containsCyrillic(final String text) {
-        for(int i = 0; i < text.length(); i++) {
-            if(Character.UnicodeBlock.of(text.charAt(i)).equals(Character.UnicodeBlock.CYRILLIC)) {
+        for (int i = 0; i < text.length(); i++) {
+            if (Character.UnicodeBlock.of(text.charAt(i)).equals(Character.UnicodeBlock.CYRILLIC)) {
                 return true;
             }
         }
@@ -316,9 +336,20 @@ public class TranslatorUtil {
     }
 
     private static String transliterate(String message){
-        char[] abcCyr =   {' ','а','б','в','г','д','е','ё', 'ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х', 'ц','ч', 'ш','щ','ъ','ы','ь','э', 'ю','я','А','Б','В','Г','Д','Е','Ё', 'Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х', 'Ц', 'Ч','Ш', 'Щ','Ъ','Ы','Ь','Э','Ю','Я','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
-        String[] abcLat = {" ","a","b","v","g","d","e","e","zh","z","i","y","k","l","m","n","o","p","r","s","t","u","f","h","ts","ch","sh","sch", "","i", "","e","ju","ja","A","B","V","G","D","E","E","Zh","Z","I","Y","K","L","M","N","O","P","R","S","T","U","F","H","Ts","Ch","Sh","Sch", "","I", "","E","Ju","Ja","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
-        StringBuilder builder = new StringBuilder();
+        final char[] abcCyr =   {' ','а','б','в','г','д','е','ё','ж','з','и','й','к','л','м','н','о','п','р','с','т',
+                'у','ф','х', 'ц','ч', 'ш','щ','ъ','ы','ь','э', 'ю','я','А','Б','В','Г','Д','Е','Ё', 'Ж','З','И','Й',
+                'К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х', 'Ц', 'Ч','Ш', 'Щ','Ъ','Ы','Ь','Э','Ю','Я'
+                ,'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+                'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
+        };
+        final String[] abcLat = {" ","a","b","v","g","d","e","e","zh","z","i","y","k","l","m","n","o","p","r","s","t",
+                "u","f","h","ts","ch","sh","sch","","i","","e","ju","ja",
+                "A","B","V","G","D","E","E","Zh","Z","I","Y","K","L","M","N","O","P","R","S","T","U","F","H","Ts","Ch",
+                "Sh","Sch","","I","","E","Ju","Ja","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p",
+                "q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O",
+                "P","Q","R","S","T","U","V","W","X","Y","Z"
+        };
+        final StringBuilder builder = new StringBuilder();
         for (int i = 0; i < message.length(); i++) {
             for (int x = 0; x < abcCyr.length; x++ ) {
                 if (message.charAt(i) == abcCyr[x]) {
@@ -333,29 +364,56 @@ public class TranslatorUtil {
         return translationResult.contains("??") || translationResult.contains("? ?");
     }
 
-    private static String getValueFromDictionary(String value, final String language) {
+    private static String getValueFromDictionary(String value, final String lang) {
+        if (value == null) {
+            return null;
+        }
+        if (containsCyrillic(value)) {
+            return value;
+        }
+
         value = value.trim();
+
+        if (endChars.contains(getLastChar(value))) {
+            final String beforeLastChar = removeLastChar(value);
+            final String translatedBeforeLastChar = getValueFromDictionary(beforeLastChar, lang);
+            return value.replaceFirst(beforeLastChar, translatedBeforeLastChar);
+        }
+
+        if (isName(value)) {
+            final String beforeNumber = value.split(getSubstringWithFirstNumber(value))[0];
+            final String translatedBeforeNumber = getValueFromDictionary(beforeNumber, lang);
+            return value.replaceFirst(beforeNumber, translatedBeforeNumber);
+        }
+
+        if (startsWithNumber(value)) {
+            final String afterNumber = value.replace(getSubstringWithFirstNumber(value), "");
+            final String translatedAfterNumber = getValueFromDictionary(afterNumber, lang);
+            return value.replaceFirst(afterNumber, translatedAfterNumber);
+        }
+
+        String translated = null;
         final Set<String> lines = FileUtil.getTxtFileLines(FileUtil.getDictionaryFilePath());
         for (final String line : lines) {
             if (line.split(DICTIONARY_SEPARATOR).length < 3) {
                 continue;
             }
-
-            if (language.equals("en")) {
+            if (lang.equals("en")) {
                 if (line.split(DICTIONARY_SEPARATOR)[2].equals(value)) {
-                    return line.split(DICTIONARY_SEPARATOR)[1];
+                    translated = line.split(DICTIONARY_SEPARATOR)[1];
+                    break;
                 }
             } else {
-                if (line.contains(language + DICTIONARY_SEPARATOR + value + DICTIONARY_SEPARATOR)) {
-                    final String translated = line.split(DICTIONARY_SEPARATOR)[2];
+                if (line.contains(lang + DICTIONARY_SEPARATOR + value + DICTIONARY_SEPARATOR)) {
+                    translated = line.split(DICTIONARY_SEPARATOR)[2];
                     if (translationResultIsBroken(translated)) {
                         return null;
                     }
-                    return translated;
+                    break;
                 }
             }
         }
-        return null;
+        return translated;
     }
 
     private static void addToDictionary(final String value,

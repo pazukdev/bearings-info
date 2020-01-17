@@ -1,5 +1,6 @@
 package com.pazukdev.backend.controller;
 
+import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.dto.Message;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.UserActionRepository;
@@ -46,10 +47,12 @@ public class FileController {
     public String uploadDictionaryFile(@PathVariable final String username,
                                      @RequestBody final Message message) throws IOException {
 
+        final UserEntity user = userService.findByName(username);
+
         final int dictionarySize = FileUtil.getTxtFileLines(FileUtil.getDictionaryFilePath()).size();
         final int newDictionarySize = message.getText().split(System.getProperty("line.separator")).length;
         final int difference = dictionarySize - newDictionarySize;
-        final int removedLinesLimit = 2;
+        final int removedLinesLimit = user.getRole() == Role.ADMIN ? 20 : 2;
 
         if (difference > removedLinesLimit) {
             return "New dictionary not accepted. " +
@@ -63,7 +66,6 @@ public class FileController {
         final String plus = -difference > 0 ? "+" : "";
         String changed = ": " + plus + (-difference) + " lines";
 
-        final UserEntity user = userService.findByName(username);
         UserActionUtil.processUploadDictionaryAction("upload dictionary", changed, user, userActionRepository);
 
         if (difference == 0) {

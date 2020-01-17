@@ -2,6 +2,7 @@ package com.pazukdev.backend.util;
 
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
@@ -42,8 +43,11 @@ public class SpecificStringUtil {
 
     }
 
-    private static final List<String> nullKeys = Arrays.asList("?", "-", "null");
-    private static final List<String> abbreviation = Arrays.asList("имз", "кмз", "гост");
+    public static final List<String> nullKeys = Arrays.asList("?", "-", "null");
+    public static final List<String> abbreviation = Arrays.asList("имз", "кмз", "гост");
+    public final static List<Character> endChars = Arrays.asList('.', ',', ';', ':', '-', '?', '!');
+    public final static List<String> units = Arrays
+            .asList("mm", "cm", "m", "g", "kg", "km/h", "kmh", "mph", "s", "sec", "min", "n", "nm");
 
     public static List<String> getList(String source) {
         return Arrays.asList(removeSpaces(source).split(Separator.SEMICOLON.getSeparator()));
@@ -230,6 +234,125 @@ public class SpecificStringUtil {
         }
         text = text.trim(); // to remove space at the end
         return text;
+    }
+
+    public static Character getLastChar(final String s) {
+        if (s == null) {
+            return null;
+        }
+        return s.charAt(s.length() - 1);
+    }
+
+    public static String removeLastChar(final String s) {
+        if (s == null) {
+            return null;
+        }
+        return s.substring(0, s.length() - 1);
+    }
+
+    public static boolean isNumber(final String s) {
+        return NumberUtils.isCreatable(s);
+    }
+
+    public static boolean isNumberWithUnit(String s) {
+        if (!startsWithNumber(s)) {
+            return false;
+        }
+        s = removeSpaces(s);
+        String number = "";
+        for (final Character c : s.toCharArray()) {
+            if (isNumber(c.toString()) || c == '.') {
+                number += c;
+            }
+        }
+        final String unit = s.replace(number, "");
+        return units.contains(unit.toLowerCase()) && s.equals(number + unit);
+    }
+
+    public static boolean isParameterWithUnit(String s) {
+        for (final String unit : units) {
+            if (stringEndsWithSubstring(s, unit)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String getUnitFromParameter(String s) {
+        if (!isParameterWithUnit(s)) {
+            return null;
+        }
+        for (final String unit : units) {
+            if (stringEndsWithSubstring(s, unit)) {
+                return unit;
+            }
+        }
+        return null;
+    }
+
+    public static String getSubstringWithFirstNumber(final String s) {
+        final Double doubleNumber = getFirstNumber(s);
+        if (doubleNumber == doubleNumber.intValue()) {
+            return String.valueOf(doubleNumber.intValue());
+        }
+        return doubleNumber.toString();
+    }
+
+    public static Double getFirstNumber(final String s) {
+        if (!containsNumber(s)) {
+            return null;
+        }
+        boolean firstDigitFound = false;
+        String number = "";
+        for (final Character c : s.toCharArray()) {
+            if (!firstDigitFound) {
+                if (isNumber(c.toString())) {
+                    firstDigitFound = true;
+                    number += c;
+                }
+            } else {
+                if (isNumber(c.toString()) || c == '.') {
+                    number += c;
+                } else {
+                    break;
+                }
+            }
+        }
+        if (number.isEmpty() || !isNumber(number)) {
+            return null;
+        }
+        return NumberUtils.createDouble(number);
+    }
+
+    public static boolean endsWithNumber(String s) {
+        return s != null && s.trim().matches(".*\\d");
+    }
+
+    public static boolean startsWithNumber(final String s) {
+        return s != null && s.trim().matches("\\d.*");
+    }
+
+    //    public static boolean startsWithNumber(final String s) {
+//        if (s == null) {
+//            return false;
+//        }
+//        return isNumber(String.valueOf(removeSpaces(s).toCharArray()[0]));
+//    }
+
+    public static boolean containsNumber(final String s) {
+        return s != null && s.trim().matches(".*\\d.*");
+    }
+
+    public static boolean stringEndsWithSubstring(final String s, final String substring) {
+        return s != null && substring != null && s.trim().equals(s.trim().replaceFirst(substring, "") + substring);
+    }
+
+    public static boolean stringStartsWithSubstring(final String s, final String substring) {
+        return s != null && substring != null && s.trim().equals(substring + s.trim().replaceFirst(substring, ""));
+    }
+
+    public static boolean isName(final String s) {
+        return containsNumber(s) && !startsWithNumber(s);
     }
 
 }

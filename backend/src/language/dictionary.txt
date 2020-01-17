@@ -1,12 +1,9 @@
-ru=Gear oil=Трансмиссионное масло
-ru=oil=масло
-ru=for gearbox=для КПП
-ru=for=для
 ru=AL=АЛ
 ru=Additional info=Доп. информация
 ru=Aluminium A5-grade 0.5mm=Алюминий первичный марки А5 0.5мм
 ru=Aluminium alloy= Алюминиевый сплав
 ru=Aluminium bronze=Алюминиевая бронза
+ru=App data=Все данные
 ru=Ball=Шарик
 ru=Bearing=Подшипник
 ru=Beaver Oil=Бобровое масло
@@ -45,7 +42,9 @@ ru=Gasket kit=Набор прокладок
 ru=Gasket paper A-grade 0.5mm=Прокладочный картон марки А 0.5мм
 ru=Gasket paper=Прокладочный картон
 ru=Gasket=Прокладка
+ru=Gear oil=Трансмиссионное масло
 ru=Gearbox=Коробка передач
+ru=General specifications=Общие технические условия
 ru=Generator G-11A=Генератор Г-11А
 ru=Generator=Генератор
 ru=Germany=Германия
@@ -109,7 +108,6 @@ ru=Non-ferrous metals and alloys=Цветные металлы и сплавы
 ru=OOO NPO Universal kardan detal=ООО НПО Универсал кардан деталь
 ru=OST=ОСТ
 ru=Oil=Масло
-ru=Synthetic=Синтетика
 ru=Outer concentric flat thrust spring retaining rings and grooves=Кольца пружинные упорные плоские наружные концентрические и канавки для них
 ru=Outer shield material=Оплетка
 ru=Paper=Бумага
@@ -119,7 +117,7 @@ ru=Pcs/Vol=Кол-во/объем
 ru=Pendulum type=Маятникового типа
 ru=Plain bearing=Подшипник скольжения
 ru=Platinum=Платина
-ru=Portugal cork 3mm=Португальская пробка 3мм
+ru=Portuguese cork=Португальская пробка
 ru=Primary aluminum=Алюминий первичный
 ru=Production=Годы пр-ва
 ru=Purpose=Применение
@@ -132,6 +130,7 @@ ru=Roller bearing=Роликовый
 ru=Roller, cylindrical=Ролик, цилиндрический
 ru=Roller, tapered=Ролик, конический
 ru=Roller=Ролик
+ru=Rolling bearings=Подшипники качения
 ru=Rolling element=Тело качения
 ru=Round spring lock rings=Кольца пружинные круглые
 ru=Rubber for electric cables wires and cords=Резина электрических кабелей, проводов и шнуров
@@ -148,6 +147,7 @@ ru=Spark plugs=Свечи зажигания искровые
 ru=Standard=Стандарт
 ru=Steel=Сталь
 ru=Stranded, copper=Многопроволочная, медная
+ru=Synthetic=Синтетика
 ru=TPK ChelnyZapChast=ТПК ЧелныЗапЧасть
 ru=TU=ТУ
 ru=Tapered roller bearing=Конический роликовый
@@ -158,26 +158,32 @@ ru=Type=Тип
 ru=U.4301-3401485=У.4301-3401485
 ru=USA=США
 ru=USSR=СССР
-ru=Ukrainian SSR=УССР
 ru=Ukraine=Украина
+ru=Ukrainian SSR=УССР
 ru=Universal joint cross=Крестовина
 ru=Universal joint=Крестовина в сборе
-ru=Ural M-63=Урал М-63
-ru=Ural M63=Урал М63
+ru=Ural=Урал
 ru=Username=Имя пользователя
 ru=Voltage=Напряжение
-ru=Weight, kg=Вес, кг
-ru=Weight=Масса
+ru=Weight=Вес
 ru=Wheel=Колесо
 ru=Width=Ширина
 ru=Wire=Провод
 ru=Wrought aluminium and aluminium alloys=Алюминий и сплавы алюминиевые деформируемые
 ru=Your Wishlist=Ваш список желаемого
+ru=for gearbox=для КПП
+ru=for=для
+ru=kg=кг
 ru=kit=комплект
+ru=kmh=км/ч
+ru=km/h=км/ч
+ru=km=км
+ru=min=мин
+ru=mm=мм
+ru=mph=миль/ч
 ru=no data=нет данных
 ru=no=нет
-ru=42209l=42209л
+ru=oil=масло
 ru=pcs=шт
-ru=App data=Все данные
-ru=Rolling bearings=Подшипники качения
-ru=General specifications=Общие технические условия
+ru=s=с
+ru=sec=сек

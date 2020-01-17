@@ -30,8 +30,8 @@ public class FileUtil {
     public static String[] getCSVFilesPaths() {
         final String[] fileNames = {
                 "manufacturer",
-//                "standard",
-//                "material",
+                "standard",
+                "material",
 //                "wire",
 //                "gasket",
 //                "washer",
