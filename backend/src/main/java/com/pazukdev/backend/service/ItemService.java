@@ -72,15 +72,19 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public List<Item> find(final String category) {
-        return find(category, findAll());
+    public List<Item> find(final String... categories) {
+        final List<Item> items = new ArrayList<>();
+        for (final String category : categories) {
+            items.addAll(find(category, findAll()));
+        }
+        return items;
     }
 
     @Transactional
     public List<Item> find(final String category, final List<Item> items) {
         final List<Item> categorizedItems = new ArrayList<>();
         for (final Item item : items) {
-            if (item.getCategory().toLowerCase().equals(category.toLowerCase())) {
+            if (item.getCategory().equalsIgnoreCase(category)) {
                 categorizedItems.add(item);
             }
         }
@@ -186,6 +190,17 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     public Set<String> findAllCategories() {
         return findCategories(findAll());
+    }
+
+    @Transactional
+    public List<Item> findVehicles() {
+        final List<Item> items = new ArrayList<>();
+        for (final Item item : findAll()) {
+            if (CategoryUtil.isVehicle(item.getCategory())) {
+                items.add(item);
+            }
+        }
+        return items;
     }
 
     final Set<String> findInfoCategories() {

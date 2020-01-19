@@ -211,7 +211,7 @@ public class SpecificStringUtil {
     }
 
     private static boolean isAbbreviation(final String s) {
-        return abbreviation.contains(s.toLowerCase());
+        return s != null && abbreviation.contains(s.toLowerCase());
     }
 
     public static Integer extractIntegerAutomatically(final String source) {
@@ -246,7 +246,7 @@ public class SpecificStringUtil {
     }
 
     public static boolean startsWithUppercase(final String s) {
-        if (s == null) {
+        if (s == null || s.isEmpty()) {
             return false;
         }
         final String firstLetter = String.valueOf(s.charAt(0));
@@ -254,14 +254,14 @@ public class SpecificStringUtil {
     }
 
     public static Character getLastChar(final String s) {
-        if (s == null) {
+        if (s == null || s.isEmpty()) {
             return null;
         }
         return s.charAt(s.length() - 1);
     }
 
     public static String removeLastChar(final String s) {
-        if (s == null) {
+        if (s == null || s.isEmpty()) {
             return null;
         }
         return s.substring(0, s.length() - 1);
@@ -308,7 +308,13 @@ public class SpecificStringUtil {
     }
 
     public static String getSubstringWithFirstNumber(final String s) {
+        if (s == null) {
+            return null;
+        }
         final Double doubleNumber = getFirstNumber(s);
+        if (doubleNumber == null) {
+            return null;
+        }
         if (doubleNumber == doubleNumber.intValue()) {
             return String.valueOf(doubleNumber.intValue());
         }
@@ -357,15 +363,17 @@ public class SpecificStringUtil {
 //    }
 
     public static boolean containsNumber(final String s) {
-        return s != null && s.trim().matches(".*\\d.*");
+        return s != null && !s.isEmpty() && s.trim().matches(".*\\d.*");
     }
 
     public static boolean stringEndsWithSubstring(final String s, final String substring) {
-        return s != null && substring != null && s.trim().equals(s.trim().replaceFirst(substring, "") + substring);
+        return s != null && !s.isEmpty() && substring != null
+                && s.trim().equals(s.trim().replaceFirst(substring, "") + substring);
     }
 
     public static boolean stringStartsWithSubstring(final String s, final String substring) {
-        return s != null && substring != null && s.trim().equals(substring + s.trim().replaceFirst(substring, ""));
+        return s != null && !s.isEmpty() && substring != null
+                && s.trim().equals(substring + s.trim().replaceFirst(substring, ""));
     }
 
     public static boolean isName(final String s) {
@@ -373,11 +381,35 @@ public class SpecificStringUtil {
     }
 
     public static boolean isSingleWord(final String s) {
-        return s != null && s.trim().equals(s.trim().replaceAll(" ", ""));
+        return s != null && !s.isEmpty() && s.trim().equals(s.trim().replaceAll(" ", ""));
     }
 
+    public static boolean isBetweenParenthesises(String s) {
+        if (s == null) {
+            return false;
+        }
+        s = s.trim();
+        if (s.isEmpty()) {
+            return false;
+        }
+        final char[] chars = s.toCharArray();
+        return chars[0] == '(' && chars[chars.length - 1] == ')';
+    }
 
+    public static void main(String[] args) {
+        System.out.println(containsOnlyDigitsAndDash("123-123--12---0"));
+    }
 
+    public static boolean containsOnlyDigitsAndDash(String s) {
+        if (s == null) {
+            return false;
+        }
+        s = s.trim();
+        if (isEmpty(s) && !s.equals("-")) {
+            return false;
+        }
+        return s.matches("\\d*-*\\d*-*\\d*-*\\d*-*\\d*-*\\d*-*");
+    }
 }
 
 

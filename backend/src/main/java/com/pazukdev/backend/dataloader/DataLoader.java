@@ -106,7 +106,11 @@ public class DataLoader implements ApplicationRunner {
 
     private void saveTransitiveItems(final List<TransitiveItem> items) {
         for (final TransitiveItem item : items) {
-            transitiveItemService.getTransitiveItemRepository().save(item);
+            try {
+                transitiveItemService.getTransitiveItemRepository().save(item);
+            } catch (Exception e) {
+                int i = 0;
+            }
         }
     }
 

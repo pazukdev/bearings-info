@@ -83,7 +83,7 @@
             <column autoIncrement="true" name="id" type="bigserial">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="name" type="varchar(255)"/>
+            <column name="name" type="varchar(1000)"/>
             <column name="status" type="varchar(255)"/>
             <column name="type" type="varchar(255)"/>
             <column name="lang" type="varchar(255)"/>

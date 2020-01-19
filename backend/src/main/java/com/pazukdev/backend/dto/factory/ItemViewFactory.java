@@ -54,35 +54,40 @@ public class ItemViewFactory {
         final UserEntity currentUser = itemService.getUserService().findByName(userName);
         final WishList wishList = currentUser.getWishList();
 
-        final ItemView basicItemView = new ItemView();
-        basicItemView.setItemId(itemId);
-        basicItemView.setWishListIds(UserUtil.collectWishListItemsIds(currentUser));
-        basicItemView.setUserData(UserDtoFactory.createItemViewUserData(currentUser));
+        final ItemView basicView = new ItemView();
+        basicView.setItemId(itemId);
+        basicView.setWishListIds(UserUtil.collectWishListItemsIds(currentUser));
+        basicView.setUserData(UserDtoFactory.createItemViewUserData(currentUser));
 
-        ItemView itemView;
+        ItemView view;
 
         if (itemId.equals(WISH_LIST_VIEW.getItemId())) {
-            itemView = createWishListView(basicItemView, wishList);
+            view = createWishListView(basicView, wishList);
         } else if (itemId.equals(MOTORCYCLE_CATALOGUE_VIEW.getItemId())) {
-            itemView = createMotorcycleCatalogueView(basicItemView);
+            view = createMotorcycleCatalogueView(basicView);
         } else if (itemId.equals(ITEMS_MANAGEMENT_VIEW.getItemId())) {
-            itemView = createItemsManagementView(basicItemView);
+            view = createItemsManagementView(basicView);
         } else if (itemId.equals(USER_LIST_VIEW.getItemId())) {
-            itemView = createUsersListView(basicItemView);
+            view = createUsersListView(basicView);
         } else {
-            itemView = createOrdinaryItemView(basicItemView, itemId, currentUser);
+            view = createOrdinaryItemView(basicView, itemId, currentUser);
         }
 
         final double businessLogicEndTime = System.nanoTime();
         final double businessLogicDuration = businessLogicEndTime - businessLogicStartTime;
 
         if (!userLanguage.equals("en")) {
-            translate("en", userLanguage, itemView, false, itemService);
+            try {
+                translate("en", userLanguage, view, false, itemService);
+            } catch (Exception e) {
+                view.setErrorMessage(e.getMessage());
+                return view;
+            }
         }
         double translationDuration = System.nanoTime() - businessLogicEndTime;
 
-        setTime(itemView, businessLogicDuration, translationDuration);
-        return itemView;
+        setTime(view, businessLogicDuration, translationDuration);
+        return view;
     }
 
     public ItemView createNewItemView(final String category,
@@ -92,11 +97,11 @@ public class ItemViewFactory {
         final long businessLogicStartTime = System.nanoTime();
 
         final Item item = createNewItem(name, category, userName, userLanguage);
-        final ItemView itemView = createItemView(item.getId(), userName, userLanguage);
-        itemView.setNewItem(true);
+        final ItemView view = createItemView(item.getId(), userName, userLanguage);
+        view.setNewItem(true);
 
-        setTime(itemView, (double) (System.nanoTime() - businessLogicStartTime), null);
-        return itemView;
+        setTime (view, (double) (System.nanoTime() - businessLogicStartTime), null);
+        return view;
     }
 
     private Item createNewItem(String name,
@@ -106,8 +111,8 @@ public class ItemViewFactory {
         final UserEntity creator = itemService.getUserService().findByName(userName);
 
         if (!userLanguage.equals("en")) {
-            name = translate(userLanguage, "en", name, true, false, itemService);
-            category = translate(userLanguage, "en", category, true, false, itemService);
+            name = translate(userLanguage, "en", name, true);
+            category = translate(userLanguage, "en", category, true);
         }
 
         final Item item = new Item();
@@ -125,25 +130,25 @@ public class ItemViewFactory {
     public ItemView updateItemView(final Long itemId,
                                    final String userName,
                                    final String userLanguage,
-                                   final ItemView itemView) {
+                                   final ItemView view) {
         final UserEntity user = itemService.getUserService().findByName(userName);
         final boolean removeItem = itemId.equals(ITEMS_MANAGEMENT_VIEW.getItemId());
         final boolean removeItemFromWishList = itemId.equals(WISH_LIST_VIEW.getItemId());
         final boolean removeUser = itemId.equals(USER_LIST_VIEW.getItemId());
 
         if (removeItem) {
-            return removeItem(itemView, user, itemService.getUserService(), itemView.isHardDelete());
+            return removeItem(view, user, itemService.getUserService(), view.isHardDelete());
         }
         if (removeItemFromWishList) {
-            return editWishList(itemView, user, userLanguage);
+            return editWishList(view, user, userLanguage);
         }
         if (removeUser) {
-            return removeUsers(itemView);
+            return removeUsers(view);
         }
-        return updateItem(itemId, itemView, user, userLanguage);
+        return updateItem(itemId, view, user, userLanguage);
     }
 
-    private ItemView createOrdinaryItemView(final ItemView itemView,
+    private ItemView createOrdinaryItemView(final ItemView view,
                                             final Long itemId,
                                             final UserEntity currentUser) {
         final Item item = itemService.getOne(itemId);
@@ -153,94 +158,93 @@ public class ItemViewFactory {
         final String name = item.getName();
         final ImgViewData imgViewData = ImgUtil.getImg(item);
 
-        itemView.setSearchEnabled(true);
-        itemView.setOrdinaryItem(true);
-        itemView.setCategory(category);
-        itemView.setLocalizedCategory(category);
-        itemView.setName(name);
-        itemView.setLocalizedName(name);
-        itemView.setDefaultImg(imgViewData.getDefaultImg());
-        itemView.setImg(imgViewData.getImg());
-        itemView.setHeader(createHeader(item, itemService));
-        itemView.setPartsTable(createPartsTable(item, itemService));
-        itemView.setReplacersTable(createReplacersTable(item, itemService.getUserService()));
-        itemView.getPossibleParts().addAll(createPossibleParts(allItems, category, itemService.getUserService()));
-        itemView.getPossibleReplacers().addAll(createReplacerDtos(sameCategoryItems, itemId, itemService.getUserService()));
-        itemView.setCreatorId(item.getCreatorId());
-        itemView.setCreatorName(UserUtil.getCreatorName(item, itemService.getUserService()));
-        itemView.setLikeList(UserUtil.createLikeListDto(currentUser));
-        itemView.setPartsEnabled(!partsDisabled.contains(category.toLowerCase()));
-        LinkUtil.setLinksToItemView(itemView, item);
-        itemView.setParents(createParentItemsView(itemId));
+        view.setSearchEnabled(true);
+        view.setOrdinaryItem(true);
+        view.setCategory(category);
+        view.setLocalizedCategory(category);
+        view.setName(name);
+        view.setLocalizedName(name);
+        view.setDefaultImg(imgViewData.getDefaultImg());
+        view.setImg(imgViewData.getImg());
+        view.setHeader(createHeader(item, itemService));
+        view.setPartsTable(createPartsTable(item, itemService));
+        view.setReplacersTable(createReplacersTable(item, itemService.getUserService()));
+        view.getPossibleParts().addAll(createPossibleParts(allItems, category, itemService.getUserService()));
+        view.getPossibleReplacers().addAll(createReplacerDtos(sameCategoryItems, itemId, itemService.getUserService()));
+        view.setCreatorId(item.getCreatorId());
+        view.setCreatorName(UserUtil.getCreatorName(item, itemService.getUserService()));
+        view.setLikeList(UserUtil.createLikeListDto(currentUser));
+        view.setPartsEnabled(!partsDisabled.contains(category.toLowerCase()));
+        LinkUtil.setLinksToItemView(view, item);
+        view.setParents(createParentItemsView(itemId));
 
-        return itemView;
+        return view;
     }
 
-    private ItemView createMotorcycleCatalogueView(final ItemView itemView) {
-        final List<Item> motorcycles = itemService.find("Motorcycle");
+    private ItemView createMotorcycleCatalogueView(final ItemView view) {
+        final List<Item> motorcycles = itemService.findVehicles();
         final String countParameterName = "Model";
 
-        itemView.setLocalizedName("Motorcycle catalogue");
-//        itemView.setImg(ImgUtil.getAppImgData());
+        view.setLocalizedName("Vehicles");
+//        view.setImg(ImgUtil.getAppImgData());
 
         return createItemsView(
-                itemView,
+                view,
                 motorcycles.size(),
                 countParameterName,
                 motorcyclesTable(motorcycles, itemService.getUserService()));
     }
 
-    private ItemView createUsersListView(final ItemView itemView) {
+    private ItemView createUsersListView(final ItemView view) {
         final List<UserEntity> users = itemService.getUserService().findAll();
         final String countParameterName = "User";
 
-        itemView.setLocalizedName("Users");
+        view.setLocalizedName("Users");
 
         return createItemsView(
-                itemView,
+                view,
                 users.size(),
                 countParameterName,
                 usersTable(users));
     }
 
-    private ItemView createItemsManagementView(final ItemView itemView) {
-        return createItemsView(itemView, itemService.findAll(), "App data");
+    private ItemView createItemsManagementView(final ItemView view) {
+        return createItemsView (view, itemService.findAll(), "App data");
     }
 
     private ItemView createParentItemsView(final Long itemId) {
         final ItemView parents = new ItemView();
-        parents.setType(ItemView.ViewType.PARENTS);
         return createItemsView(parents, itemService.getParents(itemId), "Usage");
     }
 
-    private ItemView createItemsView(final ItemView itemView,
+    private ItemView createItemsView(final ItemView view,
                                      final List<Item> items,
                                      final String localizedName) {
         final String countParameterName = "Items";
 
-        itemView.setLocalizedName(localizedName);
+        view.setLocalizedName(localizedName);
 
         return createItemsView(
-                itemView,
+                view,
                 items.size(),
                 countParameterName,
                 specialItemsTable(items, itemService));
     }
 
-    private ItemView createWishListView(final ItemView itemView, final WishList wishList) {
+    private ItemView createWishListView(final ItemView view, final WishList wishList) {
         final Set<ChildItem> allItems = wishList.getItems();
         String countParameterName = "Items";
 
-        itemView.setLocalizedName("Your Wishlist");
+        view.setLocalizedName("Your Wishlist");
 
         return createItemsView(
-                itemView,
+                view,
                 allItems.size(),
                 countParameterName,
                 wishListTable(allItems, itemService));
     }
 
-    private ItemView createItemsView(final ItemView itemView,
+    private ItemView createItemsView(final ItemView view,
                                      final Integer size,
                                      String parameter,
                                      final PartsTable table) {
@@ -248,11 +252,11 @@ public class ItemViewFactory {
         final HeaderTable header = HeaderTable.createSingleRowTable("-", row);
         final List<String> categories = new ArrayList<>(itemService.findAllCategories());
 
-        itemView.setHeader(header);
-        itemView.setPartsTable(table);
-        itemView.setReplacersTable(ReplacersTable.createStub());
-        itemView.setAllCategories(categories);
-        return itemView;
+        view.setHeader(header);
+        view.setPartsTable(table);
+        view.setReplacersTable(ReplacersTable.createStub());
+        view.setAllCategories(categories);
+        return view;
     }
 
     private ItemView updateItem(final Long itemId,
@@ -266,7 +270,12 @@ public class ItemViewFactory {
 
         final long translationFromUserLang = System.nanoTime();
         if (!userLanguage.equals("en")) {
-            translate(userLanguage, "en", view, true, itemService);
+            try {
+                translate(userLanguage, "en", view, true, itemService);
+            } catch (Exception e) {
+                view.setErrorMessage(e.getMessage());
+                return view;
+            }
         }
         final long translationFromUserLangDuration = System.nanoTime() - translationFromUserLang;
 
@@ -299,11 +308,11 @@ public class ItemViewFactory {
         return ItemUtil.toDescription(descriptionMap);
     }
 
-    private ItemView editWishList(final ItemView itemView, final UserEntity user, final String userLanguage) {
+    private ItemView editWishList(final ItemView view, final UserEntity user, final String userLanguage) {
         final Set<ChildItem> oldItems = new HashSet<>(user.getWishList().getItems());
 
-        Set<ChildItem> newItems = ChildItemUtil.createPartsFromItemView(itemView, itemService);
-        itemView.getHeader().getRows().get(0).setValue(String.valueOf(newItems.size()));
+        Set<ChildItem> newItems = ChildItemUtil.createPartsFromItemView (view, itemService);
+        view.getHeader().getRows().get(0).setValue(String.valueOf(newItems.size()));
 
         // delete all items from wishlist and child item repository and save that state
         user.getWishList().getItems().clear();
@@ -316,32 +325,32 @@ public class ItemViewFactory {
         }
 
         // add all actual items to wishlist after translation and save that state
-        final List<NestedItemDto> dtos = itemView.getPartsTable().getParts();
-        TranslatorUtil.translateNestedItemDtoList(userLanguage, "en", dtos, true, itemService);
-        newItems = ChildItemUtil.createPartsFromItemView(itemView, itemService);
+        final List<NestedItemDto> dtos = view.getPartsTable().getParts();
+        TranslatorUtil.translateNestedItemDtoList(userLanguage, "en", dtos, itemService);
+        newItems = ChildItemUtil.createPartsFromItemView (view, itemService);
         user.getWishList().getItems().addAll(newItems);
         itemService.getUserService().update(user);
 
-        itemView.setWishListIds(ChildItemUtil.collectIds(newItems));
-        TranslatorUtil.translateNestedItemDtoList("en", userLanguage, dtos, true, itemService);
-        return itemView;
+        view.setWishListIds(ChildItemUtil.collectIds(newItems));
+        TranslatorUtil.translateNestedItemDtoList("en", userLanguage, dtos, itemService);
+        return view;
     }
 
-    private ItemView removeUsers(final ItemView itemView) {
-        for (final Long userToRemoveId : itemView.getIdsToRemove()) {
+    private ItemView removeUsers(final ItemView view) {
+        for (final Long userToRemoveId : view.getIdsToRemove()) {
             itemService.getUserService().delete(userToRemoveId);
         }
-        itemView.getIdsToRemove().clear();
-        return itemView;
+        view.getIdsToRemove().clear();
+        return view;
     }
 
-    private ItemView removeItem(final ItemView itemView,
+    private ItemView removeItem(final ItemView view,
                                 final UserEntity user,
                                 final UserService userService,
                                 final boolean hardDelete) {
-        removeItems(itemView.getIdsToRemove(), user, userService, hardDelete);
-        itemView.getIdsToRemove().clear();
-        return itemView;
+        removeItems (view.getIdsToRemove(), user, userService, hardDelete);
+        view.getIdsToRemove().clear();
+        return view;
     }
 
     private void removeItems(final Set<Long> idsToRemove,
