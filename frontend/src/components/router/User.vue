@@ -91,15 +91,15 @@
 <script>
     import axios from "axios";
     import {mapState} from "vuex";
-    import storeUtil from "../util/storeUtil";
-    import routerUtil from "../util/routerUtil";
-    import EditableImg from "./EditableImg";
-    import itemViewUtil from "../util/itemViewUtil";
-    import EditPanel from "./menu/EditPanel";
-    import AlertMessagesSection from "./AlertMessagesSection";
-    import DefaultButton from "./element/button/DefaultButton";
-    import axiosUtil from "../util/axiosUtil";
-    import userUtil from "../util/userUtil";
+    import storeUtil from "../../util/storeUtil";
+    import routerUtil from "../../util/routerUtil";
+    import EditableImg from "../EditableImg";
+    import itemViewUtil from "../../util/itemViewUtil";
+    import EditPanel from "../menu/EditPanel";
+    import AlertMessagesSection from "../AlertMessagesSection";
+    import DefaultButton from "../element/button/DefaultButton";
+    import axiosUtil from "../../util/axiosUtil";
+    import userUtil from "../../util/userUtil";
 
     export default {
         name: "User",
@@ -163,11 +163,15 @@
                             defaultImg: this.user.defaultImg,
                             messages: [],
                             userData: this.itemView.userData,
-                            wishListIds: this.itemView.wishListIds
+                            wishListIds: this.itemView.wishListIds,
+                            errorMessage: this.itemView.errorMessage
                         };
-                        itemViewUtil.dispatchView(this.$store, itemView);
+                        itemViewUtil.dispatchView(itemView);
                         console.log("user rendered: name: " + this.user.name);
                         storeUtil.setLoadingState(false);
+                    })
+                    .catch(error => {
+                        itemViewUtil.dispatchResponseError(error);
                     });
             },
 

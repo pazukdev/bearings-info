@@ -70,9 +70,11 @@
                         }
                     })
                     .then(response => {
-                        let itemView = response.data;
-                        itemViewUtil.dispatchView(this.$store, itemView);
+                        itemViewUtil.dispatchView(response.data);
                         console.log("home displayed");
+                    })
+                    .catch(error => {
+                        itemViewUtil.dispatchResponseError(error);
                     });
             },
 

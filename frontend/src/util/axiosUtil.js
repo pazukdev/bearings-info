@@ -45,7 +45,7 @@ export default {
                 })
             .then(response => {
                 let updatedItemView = response.data;
-                itemViewUtil.dispatchView(store, updatedItemView);
+                itemViewUtil.dispatchView(updatedItemView);
                 console.log("item updated");
             });
     },

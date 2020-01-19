@@ -12,5 +12,9 @@ export default {
 
     setLoadingState(loadingState) {
         store.dispatch("setLoadingState", loadingState);
+    },
+
+    setErrorMessage(errorMessage) {
+        store.dispatch("setErrorMessage", errorMessage);
     }
 }

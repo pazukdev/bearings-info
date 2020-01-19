@@ -1,9 +1,7 @@
 <template>
-    <div>
-        <div v-if="isEmpty(errorMessage)" class="default-margin">
-            {{"Loading..."}}
-        </div>
+    <div v-if="!isLoginPage()">
         <div v-if="!isEmpty(errorMessage)" class="alert-message" style="text-align: center">
+            {{"Error!"}}<br>
             {{errorMessage}}
         </div>
     </div>
@@ -12,14 +10,13 @@
 <script>
     import {mapState} from "vuex";
     import shared from "../../util/shared";
+    import routerUtil from "../../util/routerUtil";
 
     export default {
-        name: "LoadingScreen",
+        name: "MessagesSection",
 
         computed: {
             ...mapState({
-                itemView: state => state.dictionary.itemView,
-                loadingState: state => state.dictionary.loadingState,
                 errorMessage: state => state.dictionary.errorMessage
             })
         },
@@ -27,6 +24,10 @@
         methods: {
             isEmpty(errorMessage) {
                 return shared.isEmpty(errorMessage);
+            },
+
+            isLoginPage() {
+                return routerUtil.isLogin(this.$route);
             }
         }
     }

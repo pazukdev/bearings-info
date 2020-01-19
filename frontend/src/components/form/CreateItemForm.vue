@@ -114,7 +114,7 @@
                         })
                         .then(response => {
                             let newItemView = response.data;
-                            itemViewUtil.dispatchView(this.$store, newItemView);
+                            itemViewUtil.dispatchView(newItemView);
                             this.logEvent("a new item created", newItemView);
                             routerUtil.toItem(newItemView.itemId, language);
                         });

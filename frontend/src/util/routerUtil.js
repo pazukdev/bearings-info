@@ -53,11 +53,20 @@ export default {
                 rating: ""
             }
         };
-        itemViewUtil.dispatchView(store, itemViewStub);
+        itemViewUtil.dispatchView(itemViewStub);
     },
 
     toItemsManagement(router) {
         router.push({name: "items_management"});
+    },
+
+    setLang(lang) {
+        store.dispatch("setAppLanguage", lang);
+        this.changeLanguageInUrl(router, lang);
+    },
+
+    changeLanguageInUrl(router, lang) {
+        router.replace({path: router.currentRoute.path.replace(/\/[^/]*$/, "/" + lang)});
     }
 
 }

@@ -115,7 +115,10 @@
                     })
                     .then(response => {
                         let itemView = response.data;
-                        itemViewUtil.dispatchView(this.$store, itemView);
+                        itemViewUtil.dispatchView(itemView);
+                    })
+                    .catch(error => {
+                        itemViewUtil.dispatchResponseError(error);
                     });
             },
 

@@ -11,8 +11,8 @@
 
 <script>
     import {mapState} from "vuex";
-    import itemViewUtil from "../../../util/itemViewUtil";
     import axiosUtil from "../../../util/axiosUtil";
+    import routerUtil from "../../../util/routerUtil";
 
     export default {
         name: "LanguageSelect",
@@ -48,13 +48,16 @@
             },
 
             onUrlChange() {
-                itemViewUtil.setLocale(this.$router, this.$route, this.$i18n, this.newLanguage);
+                let urlLang = this.$route.params.lang;
+                if (urlLang !== this.newLanguage) {
+                    this.newLanguage = urlLang;
+                    this.$store.dispatch("setAppLanguage", this.newLanguage);
+                }
+                this.$i18n.locale = this.newLanguage;
             },
 
             selectLanguage() {
-                let lang = this.newLanguage;
-                this.$store.dispatch("setAppLanguage", lang);
-                itemViewUtil.changeLanguageInUrl(this.$router, lang);
+                routerUtil.setLang(this.newLanguage);
             },
         }
     }

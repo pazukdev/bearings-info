@@ -4,10 +4,12 @@
             <AppBar/>
             <LangMenu/>
             <NavigationBar/>
+            <MessagesSection/>
             <UserMenu/>
             <div style="text-align: left">
-<!--                {{"store: " + appLanguage}}<br>-->
-<!--                {{"i18n: " + $i18n.locale}}<br>-->
+<!--                {{"appLanguage: " + appLanguage}}<br>-->
+<!--                {{"$i18n.locale: " + $i18n.locale}}<br>-->
+<!--                {{"errorMessage: " + errorMessage}}-->
 <!--                {{"langs: " + langs}}-->
 <!--                {{this.$route.params.item_id}}<br>-->
 <!--                {{this.$route.params.lang}}<br>-->
@@ -33,11 +35,13 @@
     import LangMenu from "./components/menu/LangMenu";
     import itemViewUtil from "./util/itemViewUtil";
     import axiosUtil from "./util/axiosUtil";
+    import MessagesSection from "./components/special/MessagesSection";
 
     export default {
         name: 'app',
 
         components: {
+            MessagesSection,
             LangMenu,
             UserMenu,
             NavigationBar,
@@ -56,7 +60,8 @@
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
                 appLanguage: state => state.dictionary.appLanguage,
-                langs: state => state.dictionary.langs
+                langs: state => state.dictionary.langs,
+                errorMessage: state => state.dictionary.errorMessage
             })
         },
 

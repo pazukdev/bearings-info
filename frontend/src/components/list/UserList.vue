@@ -56,8 +56,11 @@
                         }
                     })
                     .then(response => {
-                        itemViewUtil.dispatchView(this.$store, response.data);
+                        itemViewUtil.dispatchView(response.data);
                         console.log("user list rendered");
+                    })
+                    .catch(error => {
+                        itemViewUtil.dispatchResponseError(error);
                     });
             },
         }

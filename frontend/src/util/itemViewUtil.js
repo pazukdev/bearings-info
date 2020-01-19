@@ -2,6 +2,7 @@ import shared from "./shared";
 import storeUtil from "./storeUtil";
 import arrayUtil from "./arrayUtil";
 import searchUtil from "./searchUtil";
+import store from "../plugins/store";
 
 export default {
     itemsListToTables(items, sort, filter) {
@@ -42,17 +43,6 @@ export default {
         return arrayUtil.sortByName(nestedTables);
     },
 
-    setLocale(router, route, i18n, lang) {
-        if (route.params.lang !== lang) {
-            this.changeLanguageInUrl(router, lang);
-        }
-        i18n.locale = lang;
-    },
-
-    changeLanguageInUrl(router, lang) {
-        router.replace({path: router.currentRoute.path.replace(/\/[^/]*$/, "/" + lang)});
-    },
-
     isAuthorized(authorization) {
         return authorization !== "";
     },
@@ -73,9 +63,15 @@ export default {
         return itemView.header.rows[0].value;
     },
 
-    dispatchView(store, itemView) {
+    dispatchView(itemView) {
+        storeUtil.setErrorMessage(itemView.errorMessage);
         store.dispatch("setItemView", itemView);
         storeUtil.setLoadingState(false);
+    },
+
+    dispatchResponseError(error) {
+        console.error(error);
+        storeUtil.setErrorMessage("Page error. Please, return to previous page");
     },
 
     removeItemFromItemList(itemView, item) {
@@ -88,7 +84,6 @@ export default {
     },
 
     isManufacturer(itemView) {
-        // console.log(itemView.category.toLowerCase());
         return itemView.category.toLowerCase() === "manufacturer"
     }
 }

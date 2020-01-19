@@ -70,7 +70,7 @@
 
             back() {
                 console.log("back button taped");
-                window.history.back();
+                routerUtil.back();
             },
 
             isAuthorized() {

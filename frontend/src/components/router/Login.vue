@@ -128,7 +128,6 @@
 
             login() {
                 let credentialsUrl ="username=" + this.name + "&" + "password=" + this.password;
-                // console.log(credentialsUrl);
                 axios
                     .post(this.basicUrl + "/login", credentialsUrl)
                     .then(response => {

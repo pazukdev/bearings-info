@@ -7,7 +7,8 @@ const state = {
     incorrectCredentials: false,
     authorization: "",
     userName: "",
-    itemView: ""
+    itemView: "",
+    // errorMessage: ""
 };
 
 const actions = {
@@ -45,6 +46,10 @@ const actions = {
 
     setItemView: ({commit}, context) => {
         commit("setItemView", context);
+    },
+
+    setErrorMessage: ({commit}, context) => {
+        commit("setErrorMessage", context);
     }
 };
 
@@ -83,6 +88,10 @@ const mutations = {
 
     setItemView(state, itemView) {
         state.itemView = itemView;
+    },
+
+    setErrorMessage(state, errorMessage) {
+        state.errorMessage = errorMessage;
     }
 };
 
