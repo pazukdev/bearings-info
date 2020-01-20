@@ -19,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+import static com.pazukdev.backend.util.CategoryUtil.Category.Info.MATERIAL;
+import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
+import static com.pazukdev.backend.util.CategoryUtil.*;
 import static com.pazukdev.backend.util.ChildItemUtil.createParts;
 import static com.pazukdev.backend.util.ItemUtil.createDescriptionMap;
 import static com.pazukdev.backend.util.ReplacerUtil.createReplacers;
@@ -59,6 +62,10 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     @Override
     public Item findByName(String name) {
         return ((ItemRepository) repository).findByName(name);
+    }
+
+    public List<Item> findAllInfoItems() {
+        return find(getInfoCategories().toArray(new String[0]));
     }
 
     @Transactional
@@ -168,7 +175,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
         final Item item = new Item();
         item.setName(transitiveItem.getName());
-        item.setCategory(transitiveItem.getCategory().replace(" (i)", ""));
+        item.setCategory(transitiveItem.getCategory());
         item.setStatus("active");
         item.setDescription(createItemDescription(descriptionMap));
         item.getChildItems().addAll(childItems);
@@ -196,19 +203,15 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     public List<Item> findVehicles() {
         final List<Item> items = new ArrayList<>();
         for (final Item item : findAll()) {
-            if (CategoryUtil.isVehicle(item.getCategory())) {
+            if (isVehicle(item.getCategory())) {
                 items.add(item);
             }
         }
         return items;
     }
 
-    final Set<String> findInfoCategories() {
-        return transitiveItemService.findInfoCategories();
-    }
-
     public Set<String> findAllPartCategories() {
-        return CategoryUtil.filterPartCategories(findAllCategories());
+        return filterPartCategories(findAllCategories());
     }
 
     private String createItemDescription(final TransitiveItemDescriptionMap descriptionMap) {
@@ -220,12 +223,33 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return new ItemViewFactory(this);
     }
 
-    public List<Item> getParents(final Long itemId) {
+    public List<Item> getParents(final Item item) {
+        final Long itemId = item.getId();
+        final boolean infoItem = CategoryUtil.isInfo(item.getCategory());
         final List<Item> parents = new ArrayList<>();
-        for (final Item item : findAll()) {
-            for (final ChildItem child : item.getChildItems()) {
-                if (child.getItem().getId().equals(itemId)) {
-                    parents.add(item);
+
+        if (infoItem) {
+            for (final Item parent : findAll()) {
+                for (final Map.Entry<String, String> entry : ItemUtil.toMap(parent.getDescription()).entrySet()) {
+                    String parameter = entry.getKey();
+                    String value = entry.getValue();
+                    // str.matches(".*\\d
+                    String category = parameter.replaceAll("[0-9]","").trim();
+                    if (category.equalsIgnoreCase(INSULATION)) {
+                        category = MATERIAL;
+                    }
+                    final Item foundItem = find(category, value);
+                    if (foundItem != null && foundItem.getId().equals(itemId)) {
+                        parents.add(parent);
+                    }
+                }
+            }
+        } else {
+            for (final Item parent : findAll()) {
+                for (final ChildItem child : parent.getChildItems()) {
+                    if (child.getItem().getId().equals(itemId)) {
+                        parents.add(parent);
+                    }
                 }
             }
         }

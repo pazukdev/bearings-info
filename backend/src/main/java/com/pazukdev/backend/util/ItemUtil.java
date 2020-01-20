@@ -147,27 +147,15 @@ public class ItemUtil {
         for (final Map.Entry<String, String> entry : unsortedMap.entrySet()) {
             final String parameter = StringUtils.trim(entry.getKey());
             final String value = StringUtils.trim(entry.getValue());
-            if (isInfoItem(parameter, service)) {
+            if (CategoryUtil.isInfo(parameter)) {
                 itemDescriptionMap.getSelectableParameters().put(parameter, value);
-            } else if (isPart(parameter, service)) {
+            } else if (CategoryUtil.isPart(parameter)) {
                 itemDescriptionMap.getItems().put(parameter, value);
             } else {
                 itemDescriptionMap.getParameters().put(parameter, value);
             }
         }
         return itemDescriptionMap;
-    }
-
-    public static boolean isPart(final String parameter, final TransitiveItemService service) {
-        if (isInfoItem(parameter, service)) {
-            return false;
-        }
-        return service.find(parameter).size() > 0;
-    }
-
-    public static boolean isInfoItem(final String parameter, final TransitiveItemService service) {
-        final Set<String> infoCategories = service.findInfoCategories();
-        return infoCategories.contains(parameter);
     }
 
     public static ReplacerData parseReplacerData(final String replacerDataSourceString) {

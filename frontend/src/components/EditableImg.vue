@@ -4,6 +4,9 @@
 <!--        {{itemView.defaultImg}}<br>-->
 <!--        {{"itemView.img: " + isEmpty(itemView.img) + ": "}}-->
 <!--        {{itemView.img}}-->
+        <br>
+        <br>
+        <br>
 
         <table v-if="isViewWithImage()">
             <tbody>
@@ -60,6 +63,10 @@
             <tr><td><hr></td></tr>
             </tbody>
         </table>
+
+        <br>
+        <br>
+        <br>
     </div>
 </template>
 

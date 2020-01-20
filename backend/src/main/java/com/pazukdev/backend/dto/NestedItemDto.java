@@ -58,25 +58,18 @@ public class NestedItemDto extends AbstractDto {
 
     public void translate(final String langFrom, final String langTo, final ItemService service) {
         if (langTo.equals("en")) {
-            translateToEnglish(langFrom, service);
+            translateToEnglish(langFrom);
             return;
         }
 
         if (langFrom.equals("en")) {
-            translateToLang(langTo, service);
+            translateToLang(langTo);
         }
     }
 
-    private void translateToLang(final String langTo, final ItemService service) {
+    private void translateToLang(final String langTo) {
         final String langFrom = "en";
         final boolean addToDictionary = false;
-        final boolean parse = false;
-
-//        localizedItemCategory = TranslatorUtil.translate(langFrom, langTo, itemCategory, addToDictionary, parse, service);
-//        localizedButtonText = TranslatorUtil.translate(langFrom, langTo, buttonText, addToDictionary, parse, service);
-//        localizedSelectText = TranslatorUtil.translate(langFrom, langTo, selectText, addToDictionary, parse, service);
-//        localizedComment = TranslatorUtil.translate(langFrom, langTo, comment, addToDictionary, parse, service);
-//        localizedSecondComment = TranslatorUtil.translate(langFrom, langTo, secondComment, addToDictionary, parse, service);
 
         itemCategory = TranslatorUtil.translate(langFrom, langTo, itemCategory, addToDictionary);
         buttonText = TranslatorUtil.translate(langFrom, langTo, buttonText, addToDictionary);
@@ -85,18 +78,13 @@ public class NestedItemDto extends AbstractDto {
         secondComment = TranslatorUtil.translate(langFrom, langTo, secondComment, addToDictionary);
     }
 
-    private void translateToEnglish(final String langFrom, final ItemService service) {
+    private void translateToEnglish(final String langFrom) {
         final String langTo = "en";
         final boolean addToDictionary = true;
-        final boolean parse = false;
 
         if (langFrom.equals(langTo)) {
             return;
         }
-
-//        itemCategory = TranslatorUtil.translate(langFrom, langTo, localizedItemCategory, addToDictionary, parse, service);
-//        comment = TranslatorUtil.translate(langFrom, langTo, localizedComment, addToDictionary, parse, service);
-//        secondComment = TranslatorUtil.translate(langFrom, langTo, localizedSecondComment, addToDictionary, parse, service);
 
         itemCategory = TranslatorUtil.translate(langFrom, langTo, itemCategory, addToDictionary);
         comment = TranslatorUtil.translate(langFrom, langTo, comment, addToDictionary);

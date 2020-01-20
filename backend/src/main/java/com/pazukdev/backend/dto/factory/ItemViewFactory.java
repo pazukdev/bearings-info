@@ -176,7 +176,7 @@ public class ItemViewFactory {
         view.setLikeList(UserUtil.createLikeListDto(currentUser));
         view.setPartsEnabled(!partsDisabled.contains(category.toLowerCase()));
         LinkUtil.setLinksToItemView(view, item);
-        view.setParents(createParentItemsView(itemId));
+        view.setParents(createParentItemsView(item));
 
         return view;
     }
@@ -212,9 +212,9 @@ public class ItemViewFactory {
         return createItemsView (view, itemService.findAll(), "App data");
     }
 
-    private ItemView createParentItemsView(final Long itemId) {
+    private ItemView createParentItemsView(final Item item) {
         final ItemView parents = new ItemView();
-        return createItemsView(parents, itemService.getParents(itemId), "Usage");
+        return createItemsView(parents, itemService.getParents(item), "Usage");
     }
 
     private ItemView createItemsView(final ItemView view,

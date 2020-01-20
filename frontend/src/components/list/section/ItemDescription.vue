@@ -4,7 +4,6 @@
 <!--        {{itemView.localizedName}}<br>-->
         <div style="text-align: center">
             <p v-if="!isEmpty(itemView.localizedCategory)"><b>{{itemView.localizedCategory}}</b></p>
-            <br>
             <p v-if="!isEmpty(itemView.localizedName)"><b>{{itemView.localizedName}}</b></p>
             <p v-if="!isEmpty(itemView.creatorName)">
                 {{$t("createdBy")}}

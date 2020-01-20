@@ -180,11 +180,13 @@ public class TranslatorUtil {
 
         if (langFrom.equals("en")) {
             String translated = getValueFromDictionary(text, langTo);
-            if (translated != null && !translated.equalsIgnoreCase(text)) {
-                return translated;
+            if (!isTranslated(translated, text)) {
+                translated = parseAndTranslate(langTo, text);
+                if (!isTranslated(translated, text)) {
+                    return text;
+                }
             }
-            translated = parseAndTranslate(langTo, text);
-            return translated != null ? translated : text;
+            return translated;
         } else {
             return translateToEnglish(langFrom, text, addToDictionary);
         }
@@ -211,7 +213,6 @@ public class TranslatorUtil {
         }
 
         final boolean startsWithUppercase = startsWithUppercase(text);
-        text = SpecificStringUtil.uncapitalize(text);
 
         if (isSingleWord(text)) {
             if (endChars.contains(getLastChar(text)) && text.length() > 1) {
@@ -245,13 +246,13 @@ public class TranslatorUtil {
         }
 
         String translated = getValueFromDictionary(text, "en");
-        if (translated != null) {
+        if (isTranslated(translated, text)) {
             return translated;
         }
 
         try {
             translated = translateWithGoogle(langFrom, "en", text).trim();
-            if (translated.equals(text)) {
+            if (!isTranslated(translated, text)) {
                 return text;
             }
             if (addToDictionary) {
@@ -262,9 +263,13 @@ public class TranslatorUtil {
             return text;
         }
         if (startsWithUppercase) {
-            translated = SpecificStringUtil.capitalize(translated);
+            translated = capitalize(translated);
         }
         return translated;
+    }
+
+    public static boolean isTranslated(final String translated, final String original) {
+        return translated != null && !translated.equalsIgnoreCase(original);
     }
 
     private static String parseAndTranslate(final String languageTo, String text) {
@@ -346,12 +351,6 @@ public class TranslatorUtil {
         return translationResult.contains("??") || translationResult.contains("? ?");
     }
 
-    public static void main(String[] args) {
-        String s = "Rolling bearings. General specifications";
-//        System.out.println(parseAndTranslate("ru", s));
-        System.out.println(translate("en", "ru", s, true));
-    }
-
     private static String getValueFromDictionary(String value, final String lang) {
         if (value == null) {
             return null;
@@ -368,7 +367,6 @@ public class TranslatorUtil {
         }
 
         final boolean startsWithUppercase = startsWithUppercase(value);
-//        value = uncapitalize(value);
 
         if (endChars.contains(getLastChar(value)) && value.length() > 1) {
             final String beforeLastChar = removeLastChar(value);
@@ -446,12 +444,10 @@ public class TranslatorUtil {
         return sortedFileContent;
     }
 
-    private static String createDictionaryLine(final String languageCode,
-                                               final String valueInDefaultLanguage,
-                                               final String valueInSpecifiedLanguage) {
-        return languageCode
-                + DICTIONARY_SEPARATOR + valueInDefaultLanguage
-                + DICTIONARY_SEPARATOR + valueInSpecifiedLanguage;
+    private static String createDictionaryLine(final String lang,
+                                               final String valueInEnglish,
+                                               final String value) {
+        return lang + DICTIONARY_SEPARATOR + valueInEnglish + DICTIONARY_SEPARATOR + value;
     }
 
     private static String translateWithGoogle(final String languageFrom,
@@ -486,14 +482,10 @@ public class TranslatorUtil {
     }
 
     private static String getTranslation(final String inputJson) {
-        final JSONArray jsonArray = new JSONArray(inputJson); // [[["नमस्ते","hello",,,1]],,"en"]
-        final JSONArray jsonArray2 = (JSONArray) jsonArray.get(0); // [["नमस्ते","hello",,,1]]
-        final JSONArray jsonArray3 = (JSONArray) jsonArray2.get(0); // ["नमस्ते","hello",,,1]
-        return jsonArray3.get(0).toString(); // "नमस्ते"
+        final JSONArray jsonArray = new JSONArray(inputJson);
+        final JSONArray jsonArray2 = (JSONArray) jsonArray.get(0);
+        final JSONArray jsonArray3 = (JSONArray) jsonArray2.get(0);
+        return jsonArray3.get(0).toString();
     }
-
-//    public static int getDictionarySize() {
-//
-//    }
 
 }

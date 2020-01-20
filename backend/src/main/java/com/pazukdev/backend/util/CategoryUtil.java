@@ -4,19 +4,19 @@ import com.pazukdev.backend.entity.Item;
 
 import java.util.*;
 
-import static com.pazukdev.backend.util.CategoryUtil.Category.Lubricant.OIL;
+import static com.pazukdev.backend.util.AppCollectionUtil.contains;
 import static com.pazukdev.backend.util.CategoryUtil.Category.*;
+import static com.pazukdev.backend.util.CategoryUtil.Category.Info.*;
+import static com.pazukdev.backend.util.CategoryUtil.Category.Lubricant.OIL;
 import static com.pazukdev.backend.util.CategoryUtil.Category.Part.*;
 import static com.pazukdev.backend.util.CategoryUtil.Category.Unit.*;
 import static com.pazukdev.backend.util.CategoryUtil.Category.Vehicle.MOTORCYCLE;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.*;
+import static com.pazukdev.backend.util.CategoryUtil.Parameter.DescriptionIgnored.NAME;
+import static com.pazukdev.backend.util.ClassUtil.getFieldsValues;
 import static com.pazukdev.backend.util.ItemUtil.getValueFromDescription;
 
 public class CategoryUtil {
-
-    public static void main(String[] args) throws IllegalAccessException {
-
-    }
 
     public static class Category {
 
@@ -69,16 +69,30 @@ public class CategoryUtil {
 
         }
 
+        public static class Info {
+            public static final String MANUFACTURER = "Manufacturer";
+            public static final String MATERIAL = "Material";
+            public static final String STANDARD = "Standard";
+        }
+
         // other
-        public static final String MANUFACTURER = "Manufacturer";
-        public static final String MATERIAL = "Material";
-        public static final String STANDARD = "Standard";
         public static final String USER = "User";
 
     }
 
     public static class Parameter {
 
+        public static class DescriptionIgnored {
+            public static final String CATEGORY = "Category";
+            public static final String IMAGE = "Image";
+            public static final String NAME = "Name";
+            public static final String REPLACER = "Replacer";
+            public static final String WEBSITE = "Website";
+            public static final String WEBSITE_LANG = "Website lang";
+            public static final String WIKI = "Wiki";
+        }
+
+        // other
         public static final String BASE = "Base";
         public static final String CORE = "Core";
         public static final String COUNTRY = "Country";
@@ -86,24 +100,16 @@ public class CategoryUtil {
         public static final String FOUNDED = "Founded";
         public static final String FULL_NAME = "Full name";
         public static final String INSULATION = "Insulation";
-        public static final String NAME = "Name";
         public static final String OUTER_SHIELD_MATERIAL = "Outer shield material";
         public static final String PRODUCTION = "Production";
         public static final String SIZE = "Size, mm";
         public static final String TENSION = "Tension, V";
         public static final String TYPE = "Type";
         public static final String VOLTAGE = "Voltage";
-
     }
 
     private static final List<String> fixedParams = Arrays
             .asList(NAME, FULL_NAME, PRODUCTION, MANUFACTURER, COUNTRY, FOUNDED, DEFUNCT);
-
-//    private static final List<String> translatableSubstrings = Arrays
-//            .asList("gost", "imz", "kmz");
-
-    private static final List<String> descriptionIgnore = Arrays
-            .asList(NAME, "category", "replacer", "image", "website", "website lang", "wiki");
 
     private static final Map<String, Integer> parametersWeight = new HashMap<String, Integer>() {{
         put(NAME, 100);
@@ -161,14 +167,6 @@ public class CategoryUtil {
         return weight != null ? weight : 0;
     }
 
-    public static boolean isDescriptionIgnored(final String parameter) {
-        return descriptionIgnore.contains(parameter);
-    }
-
-//    public static boolean isTranslatableSubstring(final String substring) {
-//        return translatableSubstrings.contains(substring);
-//    }
-
     public static boolean isAddManufacturerName(final Item nestedItem) {
         final String category = nestedItem.getCategory();
         return category.equalsIgnoreCase(SEAL) || category.equalsIgnoreCase(SPARK_PLUG);
@@ -178,24 +176,32 @@ public class CategoryUtil {
         return isUnit(item.getCategory()) || isVehicle(item.getCategory());
     }
 
-    public static boolean isInfoCategory(final String category) {
-        return category.contains("(i)");
-    }
-
     public static boolean isPartCategory(final String category) {
         return isPart(category) || isUnit(category);
     }
 
     public static boolean isVehicle(final String category) {
-        return ClassUtil.getFieldsValues(CategoryUtil.Category.Vehicle.class).contains(category);
+        return getFieldsValues(Vehicle.class).contains(category);
     }
 
     public static boolean isUnit(final String category) {
-        return ClassUtil.getFieldsValues(CategoryUtil.Category.Unit.class).contains(category);
+        return contains(getFieldsValues(Unit.class), category);
     }
 
     public static boolean isPart(final String category) {
-        return ClassUtil.getFieldsValues(CategoryUtil.Category.Part.class).contains(category);
+        return contains(getFieldsValues(Part.class), category);
+    }
+
+    public static boolean isInfo(final String category) {
+        return contains(getFieldsValues(Info.class), category);
+    }
+
+    public static boolean isDescriptionIgnored(final String parameter) {
+        return contains(getFieldsValues(DescriptionIgnored.class), parameter);
+    }
+
+    public static List<String> getInfoCategories() {
+        return getFieldsValues(Info.class);
     }
 
     public static Set<String> filterPartCategories(final Set<String> categories) {
@@ -211,7 +217,7 @@ public class CategoryUtil {
     public static Set<String> filterInfoCategories(final Set<String> categories) {
         final Set<String> infoCategories = new HashSet<>();
         for (final String category : categories) {
-            if (isInfoCategory(category)) {
+            if (isInfo(category)) {
                 infoCategories.add(category);
             }
         }

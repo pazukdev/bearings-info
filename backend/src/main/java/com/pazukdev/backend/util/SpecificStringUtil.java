@@ -118,6 +118,20 @@ public class SpecificStringUtil {
         return refactoredNames;
     }
 
+    public static String capitalizeAfterDot(final String s) {
+        if (s == null) {
+            return null;
+        }
+        if (isEmpty(s)) {
+            return s;
+        }
+        String capitalized = "";
+        for (final String sentence : s.split("\\. ")) {
+            capitalized += capitalize(sentence) + ". ";
+        }
+        return removeLastChar(capitalized.trim());
+    }
+
     public static String capitalize(final String s) {
         if (isAbbreviation(s)) {
             return s.toUpperCase();
@@ -394,10 +408,6 @@ public class SpecificStringUtil {
         }
         final char[] chars = s.toCharArray();
         return chars[0] == '(' && chars[chars.length - 1] == ')';
-    }
-
-    public static void main(String[] args) {
-        System.out.println(containsOnlyDigitsAndDash("123-123--12---0"));
     }
 
     public static boolean containsOnlyDigitsAndDash(String s) {

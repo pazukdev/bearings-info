@@ -15,6 +15,8 @@ import com.pazukdev.backend.service.UserService;
 import java.util.*;
 
 import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.*;
+import static com.pazukdev.backend.util.CategoryUtil.Category.Info.MATERIAL;
+import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
 
 public class TableUtil {
 
@@ -118,6 +120,9 @@ public class TableUtil {
 
             // str.matches(".*\\d
             String category = parameter.replaceAll("[0-9]","").trim();
+            if (category.equalsIgnoreCase(INSULATION)) {
+                category = MATERIAL;
+            }
             final Item foundItem = itemService.find(category, value);
             if (foundItem != null) {
                 itemId = foundItem.getId().toString();
