@@ -1,12 +1,10 @@
 <template>
     <div style="text-align: center" v-if="!editMode">
-        <br>
-        <hr>
         <p>{{"Usage"}}</p>
 <!--        {{itemView.parents.type}}<br>-->
 <!--        {{itemView.parents.partsTable.parts}}<br>-->
         <p v-if="itemView.parents.partsTable.parts.length < 1">{{"Items not found"}}</p>
-        <ItemList v-else :items-management-view="true" :usage-view="true" :item-view-prop="itemView.parents"/>
+        <ItemList v-else :usage-view="true" :item-view-prop="itemView.parents"/>
         <div style="height: 100px"/>
     </div>
 </template>

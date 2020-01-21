@@ -13,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.pazukdev.backend.util.CategoryUtil.*;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -147,9 +149,9 @@ public class ItemUtil {
         for (final Map.Entry<String, String> entry : unsortedMap.entrySet()) {
             final String parameter = StringUtils.trim(entry.getKey());
             final String value = StringUtils.trim(entry.getValue());
-            if (CategoryUtil.isInfo(parameter)) {
+            if (isInfo(parameter)) {
                 itemDescriptionMap.getSelectableParameters().put(parameter, value);
-            } else if (CategoryUtil.isPart(parameter)) {
+            } else if (isPart(parameter)) {
                 itemDescriptionMap.getItems().put(parameter, value);
             } else {
                 itemDescriptionMap.getParameters().put(parameter, value);
@@ -184,7 +186,7 @@ public class ItemUtil {
     }
 
     public static String createButtonText(final Item nestedItem) {
-        if (CategoryUtil.isAddManufacturerName(nestedItem)) {
+        if (isAddManufacturerName(nestedItem)) {
             return getValueFromDescription(nestedItem.getDescription(), "Manufacturer")
                     + " " + nestedItem.getName();
         } else {

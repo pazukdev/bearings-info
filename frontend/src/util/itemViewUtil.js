@@ -5,7 +5,7 @@ import searchUtil from "./searchUtil";
 import store from "../plugins/store";
 
 export default {
-    itemsListToTables(items, sort, filter) {
+    itemsListToTables(items, sort, filter, opened) {
         let categories = [];
         for (let i = 0; i < items.length; i++) {
             let category = items[i].itemCategory;
@@ -21,7 +21,7 @@ export default {
             let nestedTable = {
                 name: category,
                 items: [],
-                opened: true
+                opened: opened
             };
 
             for (let i = 0; i < items.length; i++) {

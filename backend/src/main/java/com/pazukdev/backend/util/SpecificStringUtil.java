@@ -48,7 +48,7 @@ public class SpecificStringUtil {
             .asList("imz", "kmz", "gost", "bmw", "ussr", "al", "usa", "fag");
     public final static List<Character> endChars = Arrays.asList('.', ',', ';', ':', '-', '?', '!');
     public final static List<String> units = Arrays
-            .asList("mm", "cm", "m", "g", "kg", "km/h", "kmh", "mph", "s", "min", "n", "nm", "ml", "l", "t", "hp",
+            .asList("mm", "cm", "m", "g", "kg", "km/h", "kmh", "mph", "s", "min", "n", "nm", "ml", "L", "t", "hp",
                     "rpm");
 
     public static List<String> getList(String source) {
@@ -322,17 +322,26 @@ public class SpecificStringUtil {
     }
 
     public static String getSubstringWithFirstNumber(final String s) {
-        if (s == null) {
+        if (!containsNumber(s)) {
             return null;
         }
-        final Double doubleNumber = getFirstNumber(s);
-        if (doubleNumber == null) {
-            return null;
+        boolean firstDigitFound = false;
+        String number = "";
+        for (final Character c : s.toCharArray()) {
+            if (!firstDigitFound) {
+                if (isNumber(c.toString())) {
+                    firstDigitFound = true;
+                    number += c;
+                }
+            } else {
+                if (isNumber(c.toString()) || c == '.') {
+                    number += c;
+                } else {
+                    break;
+                }
+            }
         }
-        if (doubleNumber == doubleNumber.intValue()) {
-            return String.valueOf(doubleNumber.intValue());
-        }
-        return doubleNumber.toString();
+        return number;
     }
 
     public static Double getFirstNumber(final String s) {
@@ -380,9 +389,13 @@ public class SpecificStringUtil {
         return s != null && !s.isEmpty() && s.trim().matches(".*\\d.*");
     }
 
-    public static boolean stringEndsWithSubstring(final String s, final String substring) {
-        return s != null && !s.isEmpty() && substring != null
-                && s.trim().equals(s.trim().replaceFirst(substring, "") + substring);
+    public static boolean stringEndsWithSubstring(String s, String substring) {
+        if (s == null || substring == null || s.isEmpty()) {
+            return false;
+        }
+        s = s.trim().toLowerCase();
+        substring = substring.trim().toLowerCase();
+        return s.equals(s.replaceFirst(substring, "") + substring);
     }
 
     public static boolean stringStartsWithSubstring(final String s, final String substring) {

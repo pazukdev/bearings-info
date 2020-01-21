@@ -1,14 +1,11 @@
 <template>
-    <div>
+    <div v-if="isViewWithImage()" id="img-container">
 <!--        {{"itemView.defaultImg: " + isEmpty(itemView.defaultImg) + ": "}}-->
 <!--        {{itemView.defaultImg}}<br>-->
 <!--        {{"itemView.img: " + isEmpty(itemView.img) + ": "}}-->
 <!--        {{itemView.img}}-->
-        <br>
-        <br>
-        <br>
 
-        <table v-if="isViewWithImage()">
+        <table>
             <tbody>
             <tr v-if="!messagesContain('img removed')">
                 <td>
@@ -20,7 +17,7 @@
             </tbody>
         </table>
 
-        <table v-if="isViewWithImage() && editMode">
+        <table v-if="editMode">
             <tbody>
             <tr v-if="!isEmpty(itemView.img) && !messagesContain('img removed')">
                 <td>
@@ -63,10 +60,6 @@
             <tr><td><hr></td></tr>
             </tbody>
         </table>
-
-        <br>
-        <br>
-        <br>
     </div>
 </template>
 
@@ -164,5 +157,7 @@
 </script>
 
 <style scoped>
-
+    #img-container {
+        padding: 20px 0;
+    }
 </style>

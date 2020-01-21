@@ -3,7 +3,7 @@
         <Header :item="true"/>
         <NestedItemsTableTitle v-if="itemView.partsEnabled"
                                :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
-        <ItemList :item="true" :editable-comments="true" :sorted="!editMode"/>
+        <CountedItemList :item="true" :editable-comments="true" :sorted="!editMode"/>
         <AddPartForm :show-form="showForm" @hide-add-form="hideAddForm"/>
     </div>
 </template>
@@ -17,15 +17,15 @@
     import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
     import ButtonDelete from "../element/button/ButtonDelete";
     import ListHeader from "./section/ListHeader";
-    import ItemList from "./ItemList";
     import Header from "./section/Header";
+    import CountedItemList from "./CountedItemList";
 
     export default {
         name: "PartList",
 
         components: {
+            CountedItemList,
             Header,
-            ItemList,
             ListHeader,
             ButtonDelete,
             NestedItemsTableTitle,

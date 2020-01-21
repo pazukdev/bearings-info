@@ -3,22 +3,22 @@
         <LoadingScreen v-if="this.loadingState"/>
         <div v-else>
             <Header :item="false"/>
-            <ItemList :user-list-view="true"/>
+            <CountedItemList :user-list-view="true"/>
         </div>
     </div>
 </template>
 
 <script>
+    import CountedItemList from "./CountedItemList";
+    import Header from "./section/Header";
     import LoadingScreen from "../special/LoadingScreen";
-    import ItemList from "./ItemList";
     import axios from "axios";
     import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
-    import Header from "./section/Header";
 
     export default {
         name: "UserList",
-        components: {Header, ItemList, LoadingScreen},
+        components: {CountedItemList, Header, LoadingScreen},
 
         computed: {
             ...mapState({

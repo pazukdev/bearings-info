@@ -5,6 +5,7 @@
             <ItemMenu/>
             <PartsSection/>
             <ReplacersSection/>
+            <ItemSummary/>
             <Usage/>
         </div>
     </div>
@@ -22,10 +23,14 @@
     import LoadingScreen from "../special/LoadingScreen";
     import routerUtil from "../../util/routerUtil";
     import Usage from "../item/Usage";
+    import CountedItemList from "../list/CountedItemList";
+    import ItemSummary from "../item/ItemSummary";
 
     export default {
 
         components: {
+            ItemSummary,
+            CountedItemList,
             Usage,
             LoadingScreen,
             ItemMenu,

@@ -5,23 +5,23 @@
             <Header :item="false"/>
             <NestedItemsTableTitle v-if="itemView.partsEnabled"
                                    :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
-            <ItemList :editable-comments="true"/>
+            <CountedItemList :editable-comments="true"/>
         </div>
     </div>
 </template>
 
 <script>
-    import ItemList from "./ItemList";
+    import CountedItemList from "./CountedItemList";
+    import Header from "./section/Header";
     import LoadingScreen from "../special/LoadingScreen";
-    import {mapState} from "vuex";
+    import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
     import axios from "axios";
     import itemViewUtil from "../../util/itemViewUtil";
-    import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
-    import Header from "./section/Header";
+    import {mapState} from "vuex";
 
     export default {
         name: "WishList",
-        components: {Header, NestedItemsTableTitle, ItemList, LoadingScreen},
+        components: {CountedItemList, Header, NestedItemsTableTitle, LoadingScreen},
 
         computed: {
             ...mapState({

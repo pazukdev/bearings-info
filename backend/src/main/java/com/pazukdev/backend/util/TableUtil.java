@@ -67,20 +67,75 @@ public class TableUtil {
         return PartsTable.create(header, dtos, partCategories);
     }
 
-    public static PartsTable createPartsTable(final Item item, final ItemService itemService) {
-        if (!CategoryUtil.itemIsAbleToContainParts(item)) {
-            return PartsTable.createStub();
-        }
+    public static PartsTable createPartsTable(final Item item, final ItemService service) {
+        return createPartsTable(item, service, getDefaultPartsHeader(), false);
+    }
+
+    public static PartsTable createPartsSummaryTable(final Item item, final ItemService service) {
+        final String[] header = getDefaultPartsHeader();
+        header[0] = "-";
+        return createPartsTable(item, service, header, true);
+    }
+
+    private static String[] getDefaultPartsHeader() {
+        return new String[]{"Location", "Partnumber", "Pcs/Vol"};
+    }
+
+    private static PartsTable createPartsTable(final Item item,
+                                               final ItemService service,
+                                               final String[] header,
+                                               final boolean summary) {
         final List<NestedItemDto> dtos = new ArrayList<>();
-        final List<ChildItem> parts = new ArrayList<>(item.getChildItems());
-        for (final ChildItem part : parts) {
-            final NestedItemDto partDto = createChildItem(part, itemService.getUserService());
-            dtos.add(partDto);
-        }
-        final String[] header = {"Location", "Partnumber", "Pcs/Vol"};
-        //final String[] header = null;
-        final Set<String> categories = itemService.findAllPartCategories();
+        addParts(item.getChildItems(), dtos, service.getUserService(), summary);
+        final Set<String> categories = service.findAllPartCategories();
         return PartsTable.create(header, dtos, categories);
+    }
+
+    private static void addParts(final Set<ChildItem> parts,
+                                 final List<NestedItemDto> dtos,
+                                 final UserService userService,
+                                 final boolean summary) {
+        for (final ChildItem part : parts) {
+            boolean add = true;
+            final NestedItemDto partDto = createChildItem(part, userService, !summary);
+            if (summary) {
+                for (final NestedItemDto dto : dtos) {
+                    if (dto.getItemId().equals(partDto.getItemId())) {
+                        final String totalQuantity = sumQuantities(dto.getSecondComment(), partDto.getSecondComment());
+                        dto.setSecondComment(totalQuantity);
+                        add = false;
+                        break;
+                    }
+                }
+            }
+            if (add) {
+                dtos.add(partDto);
+            }
+            if (summary) {
+                addParts(part.getItem().getChildItems(), dtos, userService, true);
+            }
+        }
+    }
+
+    public static String sumQuantities(final String c1, final String c2) {
+        try {
+            final String unit = SpecificStringUtil.getUnitFromParameter(c1);
+            Double d1 = SpecificStringUtil.getFirstNumber(c1);
+            Double d2 = SpecificStringUtil.getFirstNumber(c2);
+            d1 = d1 != null ? d1 : 0;
+            d2 = d2 != null ? d2 : 0;
+            return String.format("%.01f", d1 + d2) + unit;
+        } catch (final Exception e) {
+            e.printStackTrace();
+            return "error value";
+        }
+    }
+
+    public static String sumDoubles(Double d1, Double d2) {
+        d1 = d1 != null ? d1 : 0;
+        d2 = d2 != null ? d2 : 0;
+        final Double sum = d1 + d2;
+        return sum - sum.intValue() == 0 ? String.valueOf(sum.intValue()) : sum.toString();
     }
 
     public static ReplacersTable createReplacersTable(final Item item, final UserService userService) {

@@ -82,7 +82,7 @@ public class ChildItemUtil {
         } else {
             name = value;
             location = "-";
-            quantity = category.equals("Spark plug") ? "2" : "1";
+            quantity = category.equals(CategoryUtil.Category.Part.SPARK_PLUG) ? "2" : "1";
         }
 
         final TransitiveItem oldChild = transitiveItemService.find(category, name);

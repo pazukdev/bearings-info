@@ -131,7 +131,7 @@ public class NestedItemUtil {
         final List<NestedItemDto> childItemDtos = new ArrayList<>();
         for (final Item item : items) {
             final String category = item.getCategory();
-            if (!CategoryUtil.isPartCategory(category) || category.equalsIgnoreCase(parentItemCategory)) {
+            if (!CategoryUtil.isPart(category) || category.equalsIgnoreCase(parentItemCategory)) {
                 continue;
             }
             final NestedItemDto dto = NestedItemDtoFactory.createBasicNestedItemDto(item, userService);

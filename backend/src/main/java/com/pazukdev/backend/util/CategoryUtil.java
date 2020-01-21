@@ -176,20 +176,12 @@ public class CategoryUtil {
         return isUnit(item.getCategory()) || isVehicle(item.getCategory());
     }
 
-    public static boolean isPartCategory(final String category) {
-        return isPart(category) || isUnit(category);
-    }
-
     public static boolean isVehicle(final String category) {
         return getFieldsValues(Vehicle.class).contains(category);
     }
 
     public static boolean isUnit(final String category) {
         return contains(getFieldsValues(Unit.class), category);
-    }
-
-    public static boolean isPart(final String category) {
-        return contains(getFieldsValues(Part.class), category);
     }
 
     public static boolean isInfo(final String category) {
@@ -200,6 +192,10 @@ public class CategoryUtil {
         return contains(getFieldsValues(DescriptionIgnored.class), parameter);
     }
 
+    public static boolean isPart(final String category) {
+        return !isInfo(category) && !isVehicle(category);
+    }
+
     public static List<String> getInfoCategories() {
         return getFieldsValues(Info.class);
     }
@@ -207,21 +203,18 @@ public class CategoryUtil {
     public static Set<String> filterPartCategories(final Set<String> categories) {
         final Set<String> partCategories = new HashSet<>();
         for (final String category : categories) {
-            if (isPartCategory(category)) {
+            if (isPart(category)) {
                 partCategories.add(category);
             }
         }
         return partCategories;
     }
 
-    public static Set<String> filterInfoCategories(final Set<String> categories) {
-        final Set<String> infoCategories = new HashSet<>();
-        for (final String category : categories) {
-            if (isInfo(category)) {
-                infoCategories.add(category);
-            }
-        }
-        return infoCategories;
-    }
+//    public static List<String> getPartCategories() {
+//        final List<String> categories = getFieldsValues(Part.class);
+//        categories.addAll(getFieldsValues(Unit.class));
+//        categories.addAll(getFieldsValues(Lubricant.class));
+//        return categories;
+//    }
 
 }

@@ -7,7 +7,7 @@
                     <input type="search" v-model="filter" placeholder="Search...">
                 </td>
             </tr>
-            <tr v-if="!usageView">
+            <tr>
                 <td>
                     <ListHeader/>
                 </td>
@@ -16,16 +16,27 @@
                 <td>
                     <v-details v-model="table.opened">
                         <summary><b>{{table.name}}</b></summary>
+
                         <table>
                             <tbody>
                             <tr v-for="item in table.items">
-                                <td class="two-columns-table-left-column" style="text-align: left">
-                                    <p>{{item.comment}}</p>
+                                <!--                                {{item}}-->
+                                <td class="three-column-table-left-column">
+                                    <p class="three-column-table-left-column-text" v-if="!isEdit()">
+                                        {{item.comment}}
+                                    </p>
+                                    <input v-if="isEdit()" v-model="item.comment" type="text"/>
                                 </td>
-                                <td class="two-column-table-right-column">
-                                    <ButtonNavigateToItem :part="item"/>
+                                <td class="three-column-table-middle-column">
+                                    <ButtonNavigateToItem :part="item" :user="userListView"/>
                                 </td>
-                                <td>
+                                <td class="three-column-table-right-column">
+                                    <p class="parts-right-column-text" v-if="!isEdit()">
+                                        {{item.secondComment}}
+                                    </p>
+                                    <input v-if="isEdit()" v-model="item.secondComment" type="text"/>
+                                </td>
+                                <td class="three-column-table-button-column">
                                     <ButtonDelete :item="item" @remove-item="removeItem"/>
                                 </td>
                             </tr>
@@ -51,7 +62,8 @@
     import EditableImg from "../EditableImg";
 
     export default {
-        name: "ItemList",
+        name: "CountedItemList",
+
         components: {
             EditableImg,
             NestedItemsTableTitle,
@@ -64,16 +76,18 @@
         props: {
             item: Boolean,
             editableComments: Boolean,
-            itemsManagementView: Boolean,
-            usageView: Boolean,
+            userListView: Boolean,
+            summaryView: Boolean,
             itemViewProp: Object,
-            sorted: Boolean
+            sorted: Boolean,
+            items: Array
         },
 
         computed: {
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
+                userName: state => state.dictionary.userName,
                 itemView: state => state.dictionary.itemView,
                 editMode: state => state.dictionary.editMode,
                 appLanguage: state => state.dictionary.appLanguage
@@ -89,14 +103,15 @@
         methods: {
             itemsListAsTables() {
                 let itemView;
-                if (this.usageView && this.itemViewProp != null) {
-                    itemView = this.itemViewProp;
+                itemView = this.itemView;
+                let items;
+                if (this.summaryView) {
+                    items = itemView.summaryTable.parts;
                 } else {
-                    itemView = this.itemView;
+                    items = itemView.partsTable.parts;
                 }
-                let items = itemView.partsTable.parts;
-                let opened = !this.itemsManagementView && !this.usageView;
-                return  itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
+                let opened = !this.summaryView;
+                return itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
             },
 
             removeItem(item) {
@@ -114,7 +129,7 @@
             },
 
             searchIsRendered() {
-                return !this.usageView;
+                return !this.item && !this.userListView;
             }
         }
     }

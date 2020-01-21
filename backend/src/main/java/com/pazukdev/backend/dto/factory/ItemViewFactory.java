@@ -168,6 +168,7 @@ public class ItemViewFactory {
         view.setImg(imgViewData.getImg());
         view.setHeader(createHeader(item, itemService));
         view.setPartsTable(createPartsTable(item, itemService));
+        view.setSummaryTable(createPartsSummaryTable(item, itemService));
         view.setReplacersTable(createReplacersTable(item, itemService.getUserService()));
         view.getPossibleParts().addAll(createPossibleParts(allItems, category, itemService.getUserService()));
         view.getPossibleReplacers().addAll(createReplacerDtos(sameCategoryItems, itemId, itemService.getUserService()));

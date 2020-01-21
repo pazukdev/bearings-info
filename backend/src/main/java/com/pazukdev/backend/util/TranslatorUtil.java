@@ -376,9 +376,14 @@ public class TranslatorUtil {
 
         if (isSingleWord(value)) {
             if (isName(value)) {
-                final String beforeNumber = value.split(getSubstringWithFirstNumber(value))[0];
-                final String translatedBeforeNumber = getValueFromDictionary(beforeNumber, lang);
-                return value.replaceFirst(beforeNumber, translatedBeforeNumber);
+                try {
+                    final String beforeNumber = value.split(getSubstringWithFirstNumber(value))[0];
+                    final String translatedBeforeNumber = getValueFromDictionary(beforeNumber, lang);
+                    return value.replaceFirst(beforeNumber, translatedBeforeNumber);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    int i = 0;
+                }
             }
 
             if (startsWithNumber(value)) {

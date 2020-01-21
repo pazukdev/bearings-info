@@ -35,6 +35,7 @@ public class ItemView extends AbstractView {
     private UserDto userData;
     private HeaderTable header;
     private PartsTable partsTable;
+    private PartsTable summaryTable;
     private ReplacersTable replacersTable;
     private List<NestedItemDto> possibleParts = new ArrayList<>();
     private List<NestedItemDto> possibleReplacers = new ArrayList<>();

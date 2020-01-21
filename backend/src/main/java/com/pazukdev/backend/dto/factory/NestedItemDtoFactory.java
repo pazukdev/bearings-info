@@ -46,13 +46,17 @@ public class NestedItemDtoFactory {
         return motorcycleDto;
     }
 
-    public static NestedItemDto createChildItem(final ChildItem childItem, final UserService userService) {
+    public static NestedItemDto createChildItem(final ChildItem childItem,
+                                                final UserService userService,
+                                                final boolean addLocation) {
         final Item item = childItem.getItem();
 
         final NestedItemDto childItemDto = createBasicNestedItemDto(item, userService);
         childItemDto.setId(childItem.getId());
         childItemDto.setName(childItem.getName());
-        childItemDto.setComment(childItem.getLocation());
+        if (addLocation) {
+            childItemDto.setComment(childItem.getLocation());
+        }
         childItemDto.setSecondComment(childItem.getQuantity());
         childItemDto.setStatus(childItem.getStatus());
         return childItemDto;

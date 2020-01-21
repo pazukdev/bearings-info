@@ -37,16 +37,16 @@ public class FileUtil {
                 "washer",
                 "screw",
                 "oil",
-//                "seal",
+                "seal",
                 "spark_plug",
                 "lock_ring",
                 "universal_joint_cross",
-//                "rolling_element",
+                "rolling_element",
                 "cage",
-//                "bearing",
-//                "universal_joint",
-//                "wheel",
-//                "frame_and_wheels"
+                "bearing",
+                "universal_joint",
+                "wheel",
+                "frame_and_wheels"
         };
         final List<String> paths = new ArrayList<>();
         for (final String fileName : fileNames) {

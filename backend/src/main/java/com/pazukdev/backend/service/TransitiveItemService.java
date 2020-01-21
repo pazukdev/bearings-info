@@ -4,7 +4,6 @@ import com.pazukdev.backend.converter.TransitiveItemConverter;
 import com.pazukdev.backend.dto.TransitiveItemDto;
 import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.repository.TransitiveItemRepository;
-import com.pazukdev.backend.util.CategoryUtil;
 import com.pazukdev.backend.util.ItemUtil;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -102,10 +101,6 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
 
     public Set<String> findAllCategories() {
         return findCategories(transitiveItemRepository.findAll());
-    }
-
-    public Set<String> findInfoCategories() {
-        return CategoryUtil.filterInfoCategories(findAllCategories());
     }
 
     public Set<String> findCategories(final List<TransitiveItem> items) {
