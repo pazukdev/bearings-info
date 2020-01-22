@@ -433,6 +433,38 @@ public class SpecificStringUtil {
         }
         return s.matches("\\d*-*\\d*-*\\d*-*\\d*-*\\d*-*\\d*-*");
     }
+
+    public static String sumQuantities(final String c1, final String c2) {
+        try {
+            final String unit = getUnitFromParameter(c1);
+            Double d1 = getFirstNumber(c1);
+            Double d2 = getFirstNumber(c2);
+            d1 = d1 != null ? d1 : 0;
+            d2 = d2 != null ? d2 : 0;
+            String sum = sumDoubles(d1, d2);
+            if (!isEmpty(unit)) {
+                sum = sum + unit;
+            }
+            return sum;
+        } catch (final Exception e) {
+            e.printStackTrace();
+            return "error value";
+        }
+    }
+
+    public static String sumDoubles(Double d1, Double d2) {
+        d1 = d1 != null ? d1 : 0;
+        d2 = d2 != null ? d2 : 0;
+        return doubleToString(d1 + d2);
+    }
+
+    public static String doubleToString(final Double d) {
+        if (d == null) {
+            return null;
+        }
+        return d - d.intValue() == 0 ? String.valueOf(d.intValue()) : String.format("%.01f", d);
+    }
+
 }
 
 

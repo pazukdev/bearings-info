@@ -17,6 +17,7 @@ import java.util.*;
 import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.*;
 import static com.pazukdev.backend.util.CategoryUtil.Category.Info.MATERIAL;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
+import static com.pazukdev.backend.util.SpecificStringUtil.*;
 
 public class TableUtil {
 
@@ -86,7 +87,7 @@ public class TableUtil {
                                                final String[] header,
                                                final boolean summary) {
         final List<NestedItemDto> dtos = new ArrayList<>();
-        addParts(item.getChildItems(), dtos, service.getUserService(), summary);
+        addParts(item.getChildItems(), dtos, service.getUserService(), summary, null);
         final Set<String> categories = service.findAllPartCategories();
         return PartsTable.create(header, dtos, categories);
     }
@@ -94,14 +95,22 @@ public class TableUtil {
     private static void addParts(final Set<ChildItem> parts,
                                  final List<NestedItemDto> dtos,
                                  final UserService userService,
-                                 final boolean summary) {
+                                 final boolean summary,
+                                 final Double parentQuantity) {
         for (final ChildItem part : parts) {
             boolean add = true;
             final NestedItemDto partDto = createChildItem(part, userService, !summary);
+            Double quantity = null;
             if (summary) {
+                quantity = getFirstNumber(part.getQuantity());
+                if (quantity != null && parentQuantity != null) {
+                    quantity = quantity * parentQuantity;
+                    partDto.setSecondComment(doubleToString(quantity));
+                }
                 for (final NestedItemDto dto : dtos) {
-                    if (dto.getItemId().equals(partDto.getItemId())) {
-                        final String totalQuantity = sumQuantities(dto.getSecondComment(), partDto.getSecondComment());
+                    final boolean itemIsInList = dto.getItemId().equals(partDto.getItemId());
+                    if (itemIsInList) {
+                        final String totalQuantity = sumQuantities(dto.getSecondComment(), doubleToString(quantity));
                         dto.setSecondComment(totalQuantity);
                         add = false;
                         break;
@@ -112,30 +121,9 @@ public class TableUtil {
                 dtos.add(partDto);
             }
             if (summary) {
-                addParts(part.getItem().getChildItems(), dtos, userService, true);
+                addParts(part.getItem().getChildItems(), dtos, userService, true, quantity);
             }
         }
-    }
-
-    public static String sumQuantities(final String c1, final String c2) {
-        try {
-            final String unit = SpecificStringUtil.getUnitFromParameter(c1);
-            Double d1 = SpecificStringUtil.getFirstNumber(c1);
-            Double d2 = SpecificStringUtil.getFirstNumber(c2);
-            d1 = d1 != null ? d1 : 0;
-            d2 = d2 != null ? d2 : 0;
-            return String.format("%.01f", d1 + d2) + unit;
-        } catch (final Exception e) {
-            e.printStackTrace();
-            return "error value";
-        }
-    }
-
-    public static String sumDoubles(Double d1, Double d2) {
-        d1 = d1 != null ? d1 : 0;
-        d2 = d2 != null ? d2 : 0;
-        final Double sum = d1 + d2;
-        return sum - sum.intValue() == 0 ? String.valueOf(sum.intValue()) : sum.toString();
     }
 
     public static ReplacersTable createReplacersTable(final Item item, final UserService userService) {

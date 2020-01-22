@@ -9,7 +9,7 @@
             </tr>
             <tr>
                 <td>
-                    <ListHeader/>
+                    <ListHeader :header="getHeader()"/>
                 </td>
             </tr>
             <tr v-for="table in itemsListAsTables()" v-if="!hideTable(table)">
@@ -130,6 +130,13 @@
 
             searchIsRendered() {
                 return !this.item && !this.userListView;
+            },
+
+            getHeader() {
+                if (this.summaryView) {
+                    return this.itemView.summaryTable.header;
+                }
+                return null;
             }
         }
     }

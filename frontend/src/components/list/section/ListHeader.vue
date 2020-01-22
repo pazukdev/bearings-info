@@ -1,16 +1,17 @@
 <template>
     <div v-if="isShowPartsTableHeader()">
+<!--        {{itemView.partsTable.header}}-->
         <table id="parts-header">
             <tbody>
             <tr>
                 <td class="three-column-table-left-column">
-                    {{itemView.partsTable.header[0]}}
+                    {{getHeader()[0]}}
                 </td>
                 <td class="three-column-table-middle-column">
-                    {{itemView.partsTable.header[1]}}
+                    {{getHeader()[1]}}
                 </td>
-                <td class="three-column-table-right-column" v-if="itemView.partsTable.header[2] !== '-'">
-                    {{itemView.partsTable.header[2]}}
+                <td class="three-column-table-right-column" v-if="getHeader()[2] !== '-'">
+                    {{getHeader()[2]}}
                 </td>
                 <td class="three-column-table-button-column"/>
             </tr>
@@ -33,8 +34,22 @@
             })
         },
 
+        props: {
+            header: Array
+        },
+
         methods: {
+            getHeader() {
+                if (this.header != null) {
+                    return this.header;
+                }
+                return this.itemView.partsTable.header;
+            },
+
             isShowPartsTableHeader() {
+                if (this.header != null) {
+                    return true;
+                }
                 if (!this.itemView.partsEnabled) {
                     return false;
                 }
