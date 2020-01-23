@@ -17,6 +17,7 @@ import java.util.*;
 import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.*;
 import static com.pazukdev.backend.util.CategoryUtil.Category.Info.MATERIAL;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
+import static com.pazukdev.backend.util.ItemUtil.*;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 
 public class TableUtil {
@@ -141,7 +142,7 @@ public class TableUtil {
         final String itemName = item.getName();
         final String itemCategory = item.getCategory();
         final String tableName = getHeaderTableName(itemCategory, itemName);
-        final Map<String, String> description = ItemUtil.toMap(item.getDescription());
+        final Map<String, String> description = toMap(item.getDescription());
 
         final List<HeaderTableRow> headerTableRows = new ArrayList<>();
         headerTableRows.add(HeaderTableRow.create("Name", itemName));
@@ -163,7 +164,7 @@ public class TableUtil {
             String link = null;
 
             // str.matches(".*\\d
-            String category = parameter.split(" #")[0];
+            String category = parameter.split(MULTI_PARAM_SEPARATOR)[0];
             if (category.equalsIgnoreCase(INSULATION)) {
                 category = MATERIAL;
             }
@@ -191,8 +192,8 @@ public class TableUtil {
 
     private static boolean isBoxer(final Item motorcycle) {
         final String description = motorcycle.getDescription().toLowerCase();
-        final String type = ItemUtil.getValueFromDescription(description, "type");
-        final String manufacturer = ItemUtil.getValueFromDescription(description, "manufacturer");
+        final String type = getValueFromDescription(description, "type");
+        final String manufacturer = getValueFromDescription(description, "manufacturer");
         final String name = motorcycle.getName().toLowerCase();
 
         if (type != null && type.equals("boxer")) {

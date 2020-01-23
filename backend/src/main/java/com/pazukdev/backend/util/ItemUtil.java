@@ -21,6 +21,8 @@ import static com.pazukdev.backend.util.CategoryUtil.isInfo;
  */
 public class ItemUtil {
 
+    public static final String MULTI_PARAM_SEPARATOR = " #";
+
     @Getter
     public enum SpecialItemId {
 
@@ -148,13 +150,14 @@ public class ItemUtil {
         final TransitiveItemDescriptionMap itemDescriptionMap = new TransitiveItemDescriptionMap();
         itemDescriptionMap.setParent(item);
         for (final Map.Entry<String, String> entry : unsortedMap.entrySet()) {
-            final String parameter = StringUtils.trim(entry.getKey());
+            String parameter = StringUtils.trim(entry.getKey());
             final String value = StringUtils.trim(entry.getValue());
             if (isInfo(parameter)) {
                 if (value.contains("; ")) {
                     int count = 1;
                     for (final String subValue : value.split("; ")) {
-                        itemDescriptionMap.getParameters().put(parameter + " #" + count++, subValue);
+                        parameter = parameter + MULTI_PARAM_SEPARATOR + count++;
+                        itemDescriptionMap.getParameters().put(parameter, subValue);
                     }
                 } else {
                     itemDescriptionMap.getParameters().put(parameter, value);

@@ -12,7 +12,9 @@ import com.pazukdev.backend.repository.ChildItemRepository;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.repository.ReplacerRepository;
 import com.pazukdev.backend.repository.UserActionRepository;
-import com.pazukdev.backend.util.*;
+import com.pazukdev.backend.util.DateUtil;
+import com.pazukdev.backend.util.LinkUtil;
+import com.pazukdev.backend.util.RateUtil;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +25,7 @@ import static com.pazukdev.backend.util.CategoryUtil.Category.Info.MATERIAL;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
 import static com.pazukdev.backend.util.CategoryUtil.*;
 import static com.pazukdev.backend.util.ChildItemUtil.createParts;
-import static com.pazukdev.backend.util.ItemUtil.createDescriptionMap;
+import static com.pazukdev.backend.util.ItemUtil.*;
 import static com.pazukdev.backend.util.ReplacerUtil.createReplacers;
 import static com.pazukdev.backend.util.SpecificStringUtil.replaceBlankWithDash;
 
@@ -216,28 +218,34 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     private String createItemDescription(final TransitiveItemDescriptionMap descriptionMap) {
         descriptionMap.getItems().clear();
-        return ItemUtil.toDescription(descriptionMap);
+        return toDescription(descriptionMap);
     }
 
     private ItemViewFactory createNewItemViewFactory() {
         return new ItemViewFactory(this);
     }
 
-    public List<Item> getParents(final Item item) {
+    public List<Item> findParents(final Item item, final List<Item> checkList) {
         final Long itemId = item.getId();
-        final boolean infoItem = CategoryUtil.isInfo(item.getCategory());
+        final String category = item.getCategory();
+        String secondSearchCategory = null;
+        if (category.equalsIgnoreCase(MATERIAL)) {
+            secondSearchCategory = INSULATION;
+        }
         final List<Item> parents = new ArrayList<>();
 
-        if (infoItem) {
-            for (final Item parent : findAll()) {
-                for (final Map.Entry<String, String> entry : ItemUtil.toMap(parent.getDescription()).entrySet()) {
-                    String parameter = entry.getKey();
-                    String value = entry.getValue();
-                    // str.matches(".*\\d
-                    String category = parameter.replaceAll("[0-9]","").trim();
-                    if (category.equalsIgnoreCase(INSULATION)) {
-                        category = MATERIAL;
+        if (isInfo(category)) {
+            for (final Item parent : checkList) {
+                final String description = parent.getDescription();
+                if (!description.contains(category) && !description.contains(secondSearchCategory)) {
+                    continue;
+                }
+                for (final Map.Entry<String, String> entry : toMap(description).entrySet()) {
+                    String parameter = entry.getKey().split(MULTI_PARAM_SEPARATOR)[0];
+                    if (!parameter.equals(category) && !parameter.equals(secondSearchCategory)) {
+                        continue;
                     }
+                    String value = entry.getValue();
                     final Item foundItem = find(category, value);
                     if (foundItem != null && foundItem.getId().equals(itemId)) {
                         parents.add(parent);
@@ -245,7 +253,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                 }
             }
         } else {
-            for (final Item parent : findAll()) {
+            for (final Item parent : checkList) {
                 for (final ChildItem child : parent.getChildItems()) {
                     if (child.getItem().getId().equals(itemId)) {
                         parents.add(parent);
