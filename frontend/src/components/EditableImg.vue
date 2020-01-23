@@ -86,6 +86,10 @@
             }
         },
 
+        // https://docs.google.com/uc?id=
+        // https://docs.google.com/uc?id=1extF0_k84tnjsySobPZWvwREz9vBOXD4
+        //
+
         methods: {
             getImgUrl() {
                 if (routerUtil.isHome(this.$route)) {
@@ -104,9 +108,6 @@
                         // e.g.: localhost:8090/bearings-info/api/bearing/bearing_18.png
                         imgUrl = this.basicUrl + "/" + img;
                     }
-
-                    console.log(img);
-                    console.log(imgUrl);
                     return imgUrl;
                 }
             },

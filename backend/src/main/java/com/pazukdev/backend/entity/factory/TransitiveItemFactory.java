@@ -9,7 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.DescriptionIgnored.*;
@@ -63,17 +62,17 @@ public class TransitiveItemFactory extends AbstractEntityFactory<TransitiveItem>
             if (isDescriptionIgnored(key)) {
                 continue;
             }
-
-            final String value = entry.getValue();
-
-            if (value.contains("; ")) {
-                int count = 1;
-                for (final String subValue : Arrays.asList(value.split("; "))) {
-                    description = description + key + " " + count++ + ":" + subValue + ";;";
-                }
-            } else {
-                description = description + key + ":" + value + ";;";
-            }
+//            final String value = entry.getValue();
+//
+//            if (value.contains("; ")) {
+//                int count = 1;
+//                for (final String subValue : Arrays.asList(value.split("; "))) {
+//                    description = description + key + " " + count++ + ":" + subValue + ";;";
+//                }
+//            } else {
+//                description = description + key + ":" + value + ";;";
+//            }
+            description = description + entry.getKey() + ":" + entry.getValue() + ";;";
         }
         item.setDescription(description);
     }

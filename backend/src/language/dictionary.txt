@@ -186,3 +186,10 @@ ru=gap=зазор
 ru=heat range=калильное число
 ru=thread=резьба
 ru=thread length=длинна резьбы
+ru=tyre=шина
+ru=tire=шина
+ru=moped=мопед
+ru=cycle-car=мотоколяска
+ru=microcar=мотоколяска
+ru=scooter=мотороллер
+ru=Pneumatic tires for motorcycles, cycle-cars, scooters and mopeds=Шины для мотоциклов. мотоколясок, мотороллеров и мопедов

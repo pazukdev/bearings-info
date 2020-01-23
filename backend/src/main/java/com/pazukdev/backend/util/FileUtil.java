@@ -37,6 +37,8 @@ public class FileUtil {
                 "washer",
                 "screw",
                 "oil",
+                "tube",
+                "tire",
                 "seal",
                 "spark_plug",
                 "lock_ring",

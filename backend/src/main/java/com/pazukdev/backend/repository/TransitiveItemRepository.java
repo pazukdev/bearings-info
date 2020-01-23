@@ -12,4 +12,6 @@ public interface TransitiveItemRepository extends JpaRepository<TransitiveItem, 
 
     TransitiveItem findByName(final String name);
 
+    TransitiveItem findFirstByCategory(final String category);
+
 }

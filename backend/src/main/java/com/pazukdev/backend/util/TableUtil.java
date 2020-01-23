@@ -160,19 +160,22 @@ public class TableUtil {
             String parameter = entry.getKey();
             String value = entry.getValue();
             String itemId = "-";
+            String link = null;
 
             // str.matches(".*\\d
-            String category = parameter.replaceAll("[0-9]","").trim();
+            String category = parameter.split(" #")[0];
             if (category.equalsIgnoreCase(INSULATION)) {
                 category = MATERIAL;
             }
             final Item foundItem = itemService.find(category, value);
             if (foundItem != null) {
                 itemId = foundItem.getId().toString();
+                link = foundItem.getWiki();
             }
 
             final HeaderTableRow row = HeaderTableRow.create(parameter, value);
             row.setItemId(itemId);
+            row.setLink(link);
             headerTableRows.add(row);
         }
         return HeaderTable.create(tableName, headerTableRows);

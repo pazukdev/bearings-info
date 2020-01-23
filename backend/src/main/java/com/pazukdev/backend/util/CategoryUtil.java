@@ -7,9 +7,6 @@ import java.util.*;
 import static com.pazukdev.backend.util.AppCollectionUtil.contains;
 import static com.pazukdev.backend.util.CategoryUtil.Category.*;
 import static com.pazukdev.backend.util.CategoryUtil.Category.Info.*;
-import static com.pazukdev.backend.util.CategoryUtil.Category.Lubricant.OIL;
-import static com.pazukdev.backend.util.CategoryUtil.Category.Part.*;
-import static com.pazukdev.backend.util.CategoryUtil.Category.Unit.*;
 import static com.pazukdev.backend.util.CategoryUtil.Category.Vehicle.MOTORCYCLE;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.*;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.DescriptionIgnored.NAME;
@@ -33,47 +30,37 @@ public class CategoryUtil {
             public static final String TRUCK = "Truck";
         }
 
-        public static class Unit {
-            public static final String BEARING = "Bearing";
-            public static final String ENGINE = "Engine";
-            public static final String FINAL_DRIVE = "Final drive";
-            public static final String FRAME_AND_WHEELS = "Frame and wheels";
-            public static final String GEARBOX = "Gearbox";
-            public static final String GENERATOR = "Generator";
-            public static final String SIDECAR_REDUCTION = "Sidecar reduction";
-            public static final String SIDECAR_REDUCTION_DRIVE = "Sidecar reduction drive";
-            public static final String UNIVERSAL_JOINT = "Universal joint";
-            public static final String WHEEL = "Wheel";
-        }
-
-        public static class Part {
-            public static final String AIR_FILTER = "Air filter";
-            public static final String CAGE = "Cage";
-            public static final String GASKET = "Gasket";
-            public static final String LOCK_RING = "Lock ring";
-            public static final String OIL_FILTER  = "Oil filter";
-            public static final String ROLLING_ELEMENT = "Rolling element";
-            public static final String SCREW = "Screw";
-            public static final String SEAL = "Seal";
-            public static final String SPARK_PLUG = "Spark plug";
-            public static final String UNIVERSAL_JOINT_CROSS = "Universal joint cross";
-            public static final String WASHER = "Washer";
-            public static final String WIRE = "Wire";
-        }
-
-        public static class Lubricant {
-            public static final String OIL = "Oil";
-        }
-
-        public static class Tool {
-
-        }
-
         public static class Info {
             public static final String MANUFACTURER = "Manufacturer";
             public static final String MATERIAL = "Material";
             public static final String STANDARD = "Standard";
         }
+
+        public static final String AIR_FILTER = "Air filter";
+        public static final String BEARING = "Bearing";
+        public static final String CAGE = "Cage";
+        public static final String ENGINE = "Engine";
+        public static final String FINAL_DRIVE = "Final drive";
+        public static final String FRAME_AND_WHEELS = "Frame and wheels";
+        public static final String GASKET = "Gasket";
+        public static final String GEARBOX = "Gearbox";
+        public static final String GENERATOR = "Generator";
+        public static final String LOCK_RING = "Lock ring";
+        public static final String OIL = "Oil";
+        public static final String OIL_FILTER  = "Oil filter";
+        public static final String ROLLING_ELEMENT = "Rolling element";
+        public static final String SCREW = "Screw";
+        public static final String SEAL = "Seal";
+        public static final String SIDECAR_REDUCTION = "Sidecar reduction";
+        public static final String SIDECAR_REDUCTION_DRIVE = "Sidecar reduction drive";
+        public static final String SPARK_PLUG = "Spark plug";
+        public static final String TIRE = "Tire";
+        public static final String TUBE = "Tube";
+        public static final String UNIVERSAL_JOINT = "Universal joint";
+        public static final String UNIVERSAL_JOINT_CROSS = "Universal joint cross";
+        public static final String WASHER = "Washer";
+        public static final String WHEEL = "Wheel";
+        public static final String WIRE = "Wire";
 
         // other
         public static final String USER = "User";
@@ -172,16 +159,8 @@ public class CategoryUtil {
         return category.equalsIgnoreCase(SEAL) || category.equalsIgnoreCase(SPARK_PLUG);
     }
 
-    public static boolean itemIsAbleToContainParts(final Item item) {
-        return isUnit(item.getCategory()) || isVehicle(item.getCategory());
-    }
-
     public static boolean isVehicle(final String category) {
         return getFieldsValues(Vehicle.class).contains(category);
-    }
-
-    public static boolean isUnit(final String category) {
-        return contains(getFieldsValues(Unit.class), category);
     }
 
     public static boolean isInfo(final String category) {
@@ -192,7 +171,8 @@ public class CategoryUtil {
         return contains(getFieldsValues(DescriptionIgnored.class), parameter);
     }
 
-    public static boolean isPart(final String category) {
+    public static boolean isPart(String category) {
+        category = category;
         return !isInfo(category) && !isVehicle(category);
     }
 
@@ -209,12 +189,5 @@ public class CategoryUtil {
         }
         return partCategories;
     }
-
-//    public static List<String> getPartCategories() {
-//        final List<String> categories = getFieldsValues(Part.class);
-//        categories.addAll(getFieldsValues(Unit.class));
-//        categories.addAll(getFieldsValues(Lubricant.class));
-//        return categories;
-//    }
 
 }

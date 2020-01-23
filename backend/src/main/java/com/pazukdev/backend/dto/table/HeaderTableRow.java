@@ -18,6 +18,7 @@ public class HeaderTableRow extends AbstractDto {
     private String parameter = "-";
     private String value = "-";
     private String itemId = "-";
+    private String link;
     private boolean deletable;
     private int weight = 0;
 

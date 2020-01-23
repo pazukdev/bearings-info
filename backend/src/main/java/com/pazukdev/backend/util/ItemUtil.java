@@ -13,7 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.pazukdev.backend.util.CategoryUtil.*;
+import static com.pazukdev.backend.util.CategoryUtil.isAddManufacturerName;
+import static com.pazukdev.backend.util.CategoryUtil.isInfo;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -150,14 +151,25 @@ public class ItemUtil {
             final String parameter = StringUtils.trim(entry.getKey());
             final String value = StringUtils.trim(entry.getValue());
             if (isInfo(parameter)) {
-                itemDescriptionMap.getSelectableParameters().put(parameter, value);
-            } else if (isPart(parameter)) {
+                if (value.contains("; ")) {
+                    int count = 1;
+                    for (final String subValue : value.split("; ")) {
+                        itemDescriptionMap.getParameters().put(parameter + " #" + count++, subValue);
+                    }
+                } else {
+                    itemDescriptionMap.getParameters().put(parameter, value);
+                }
+            } else if (service.isPart(parameter)) {
                 itemDescriptionMap.getItems().put(parameter, value);
             } else {
                 itemDescriptionMap.getParameters().put(parameter, value);
             }
         }
         return itemDescriptionMap;
+    }
+
+    public static String paramToCategory(final String param) {
+        return param.split(" #")[0];
     }
 
     public static ReplacerData parseReplacerData(final String replacerDataSourceString) {
