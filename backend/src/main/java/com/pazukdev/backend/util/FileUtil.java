@@ -48,7 +48,13 @@ public class FileUtil {
                 "bearing",
                 "universal_joint",
                 "wheel",
-                "frame_and_wheels"
+                "frame_and_wheels",
+                "generator",
+                "sidecar_reduction_drive",
+                "final_drive",
+                "gearbox",
+                "engine",
+                "motorcycle"
         };
         final List<String> paths = new ArrayList<>();
         for (final String fileName : fileNames) {

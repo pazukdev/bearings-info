@@ -156,8 +156,7 @@ public class ItemUtil {
                 if (value.contains("; ")) {
                     int count = 1;
                     for (final String subValue : value.split("; ")) {
-                        parameter = parameter + MULTI_PARAM_SEPARATOR + count++;
-                        itemDescriptionMap.getParameters().put(parameter, subValue);
+                        itemDescriptionMap.getParameters().put(parameter + MULTI_PARAM_SEPARATOR + count++, subValue);
                     }
                 } else {
                     itemDescriptionMap.getParameters().put(parameter, value);

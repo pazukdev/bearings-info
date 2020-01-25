@@ -86,9 +86,9 @@
             }
         },
 
-        // https://docs.google.com/uc?id=
-        // https://docs.google.com/uc?id=1extF0_k84tnjsySobPZWvwREz9vBOXD4
-        //
+        // https://drive.google.com/open?id=1Bug04cPyPdus3bsu7bLk55peDgrTE2qo
+        // https://docs.google.com/uc?id=10Ga24eg76RPWxdX7muRlZcUv8dhrofXA
+        // https://docs.google.com/uc?id=1Bug04cPyPdus3bsu7bLk55peDgrTE2qo
 
         methods: {
             getImgUrl() {
@@ -108,7 +108,7 @@
                         // e.g.: localhost:8090/bearings-info/api/bearing/bearing_18.png
                         imgUrl = this.basicUrl + "/" + img;
                     }
-                    return imgUrl;
+                    return imgUrl.replace("https://drive.google.com/open?id=", "https://docs.google.com/uc?id=");
                 }
             },
 
