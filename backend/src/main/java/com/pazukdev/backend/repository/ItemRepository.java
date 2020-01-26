@@ -12,4 +12,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     Item findByName(final String name);
 
+    Item findFirstByCategoryAndName(final String category, final String name);
+
 }

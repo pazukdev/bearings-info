@@ -82,12 +82,12 @@ public class ChildItemUtil {
         } else {
             name = value;
             location = "-";
-            quantity = category.equals(CategoryUtil.Category.Part.SPARK_PLUG) ? "2" : "1";
+            quantity = category.equals(CategoryUtil.Category.SPARK_PLUG) ? "2" : "1";
         }
 
         final TransitiveItem oldChild = transitiveItemService.find(category, name);
         if (oldChild != null) {
-            final Item child = itemService.getOrCreate(oldChild);
+            final Item child = itemService.create(oldChild);
 
             final ChildItem childItem = new ChildItem();
             childItem.setName(getName(parent.getName(), name));

@@ -129,7 +129,7 @@ public class ItemUtil {
                 = toDescription(descriptionMap.getParameters())
                 + toDescription(descriptionMap.getSelectableParameters())
                 + toDescription(descriptionMap.getItems());
-        return SpecificStringUtil.replaceBlankWithDash(description);
+        return SpecificStringUtil.replaceEmpty(description);
     }
 
     public static Map<String, String> toMap(final String description) {

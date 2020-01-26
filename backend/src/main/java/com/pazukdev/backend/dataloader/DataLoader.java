@@ -100,7 +100,7 @@ public class DataLoader implements ApplicationRunner {
     private void createItems() {
         final List<TransitiveItem> transitiveItems = transitiveItemService.findAll();
         for (final TransitiveItem transitiveItem : transitiveItems) {
-            itemService.saveAsItem(transitiveItem);
+            itemService.create(transitiveItem);
         }
     }
 

@@ -27,7 +27,6 @@ import static com.pazukdev.backend.util.CategoryUtil.*;
 import static com.pazukdev.backend.util.ChildItemUtil.createParts;
 import static com.pazukdev.backend.util.ItemUtil.*;
 import static com.pazukdev.backend.util.ReplacerUtil.createReplacers;
-import static com.pazukdev.backend.util.SpecificStringUtil.replaceBlankWithDash;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -42,6 +41,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     private final UserActionRepository userActionRepository;
     private final ReplacerRepository replacerRepository;
     private final ReplacerConverter replacerConverter;
+    private final ItemRepository itemRepository;
 
     public ItemService(final ItemRepository itemRepository,
                        final ItemConverter converter,
@@ -58,6 +58,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         this.userActionRepository = userActionRepository;
         this.replacerRepository = replacerRepository;
         this.replacerConverter = replacerConverter;
+        this.itemRepository = itemRepository;
     }
 
     @Transactional
@@ -72,12 +73,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     @Transactional
     public Item find(final String category, final String name) {
-        for (final Item item : find(category)) {
-            if (item.getName().equals(name)) {
-                return item;
-            }
-        }
-        return null;
+        return itemRepository.findFirstByCategoryAndName(category, name);
     }
 
     @Transactional
@@ -101,13 +97,38 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public Item saveAsItem(final TransitiveItem transitiveItem) {
-        final Item item = getOrCreate(transitiveItem);
-        item.setName(replaceBlankWithDash(item.getName()));
-        if (item.getImg() == null) {
-            item.setImg("-");
+    public Item create(final TransitiveItem transitiveItem) {
+        final String category = transitiveItem.getCategory();
+        final String name = transitiveItem.getName();
+
+        final Item alreadyExistingItem = find(category, name);
+        if (alreadyExistingItem != null) {
+            return alreadyExistingItem;
         }
-        return repository.save(item);
+
+        final TransitiveItemDescriptionMap descriptionMap = createDescriptionMap(transitiveItem, transitiveItemService);
+        final Map<String, String> items = descriptionMap.getItems();
+        final List<ChildItem> childItems = createParts(transitiveItem, items, this, transitiveItemService);
+        final List<Replacer> replacers = createReplacers(transitiveItem, this, transitiveItemService);
+
+        final Long soyuzRetromechanicId = 5L;
+        final Long adminId = userService.getAdmin().getId();
+        final Long creatorId = name.toLowerCase().contains("soyuz retromechanic") ? soyuzRetromechanicId : adminId;
+
+        final Item newItem = new Item();
+        newItem.setName(name);
+        newItem.setCategory(category);
+        newItem.setStatus("active");
+        newItem.setDescription(createItemDescription(descriptionMap));
+        newItem.getChildItems().addAll(childItems);
+        newItem.getReplacers().addAll(replacers);
+        newItem.setCreatorId(creatorId);
+        newItem.setUserActionDate(DateUtil.now());
+        newItem.setImg(transitiveItem.getImage());
+        LinkUtil.addLinksToItem(newItem, transitiveItem);
+
+        itemRepository.save(newItem);
+        return newItem;
     }
 
     @Transactional
@@ -157,36 +178,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     public RateReplacer rateReplacer(final String userName, final RateReplacer rate) {
         final UserEntity user = userService.findByName(userName);
         return RateUtil.rateReplacer(rate, user, this);
-    }
-
-    public Item getOrCreate(final TransitiveItem transitiveItem) {
-        final Item item = find(transitiveItem.getCategory(), transitiveItem.getName());
-        return item != null ? item : create(transitiveItem);
-    }
-
-    public Item create(final TransitiveItem transitiveItem) {
-        final TransitiveItemDescriptionMap descriptionMap = createDescriptionMap(transitiveItem, transitiveItemService);
-        final Map<String, String> items = descriptionMap.getItems();
-        final List<ChildItem> childItems = createParts(transitiveItem, items, this, transitiveItemService);
-        final List<Replacer> replacers = createReplacers(transitiveItem, this, transitiveItemService);
-
-        final String name = transitiveItem.getName();
-        final Long soyuzRetromechanicId = 5L;
-        final Long adminId = userService.getAdmin().getId();
-        final Long creatorId = name.toLowerCase().contains("soyuz retromechanic") ? soyuzRetromechanicId : adminId;
-
-        final Item item = new Item();
-        item.setName(transitiveItem.getName());
-        item.setCategory(transitiveItem.getCategory());
-        item.setStatus("active");
-        item.setDescription(createItemDescription(descriptionMap));
-        item.getChildItems().addAll(childItems);
-        item.getReplacers().addAll(replacers);
-        item.setCreatorId(creatorId);
-        item.setUserActionDate(DateUtil.now());
-        item.setImg(transitiveItem.getImage());
-        LinkUtil.addLinksToItem(item, transitiveItem);
-        return item;
     }
 
     public Set<String> findCategories(final List<Item> items) {

@@ -94,8 +94,8 @@ public class NestedItemUtil {
 //            dto.setLocalizedComment(SpecificStringUtil.replaceBlankWithDash(dto.getLocalizedComment()));
 //            dto.setLocalizedSecondComment(SpecificStringUtil.replaceBlankWithDash(dto.getLocalizedSecondComment()));
 
-            dto.setComment(SpecificStringUtil.replaceBlankWithDash(dto.getComment()));
-            dto.setSecondComment(SpecificStringUtil.replaceBlankWithDash(dto.getSecondComment()));
+            dto.setComment(SpecificStringUtil.replaceEmpty(dto.getComment()));
+            dto.setSecondComment(SpecificStringUtil.replaceEmpty(dto.getSecondComment()));
         }
     }
 
