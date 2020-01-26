@@ -86,9 +86,7 @@
             }
         },
 
-        // https://drive.google.com/open?id=1Bug04cPyPdus3bsu7bLk55peDgrTE2qo
-        // https://docs.google.com/uc?id=10Ga24eg76RPWxdX7muRlZcUv8dhrofXA
-        // https://docs.google.com/uc?id=1Bug04cPyPdus3bsu7bLk55peDgrTE2qo
+        // https://docs.google.com/uc?id=1FJAJs0bqgNRyzGcEa8gMm0hJkG4ZccfC
 
         methods: {
             getImgUrl() {

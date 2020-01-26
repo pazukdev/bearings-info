@@ -184,9 +184,9 @@ public class ItemViewFactory {
 
     private ItemView createMotorcycleCatalogueView(final ItemView view) {
         final List<Item> motorcycles = itemService.findVehicles();
-        final String countParameterName = "Model";
+        final String countParameterName = "--";
 
-        view.setLocalizedName("Vehicles");
+        view.setLocalizedName("--");
 //        view.setImg(ImgUtil.getAppImgData());
 
         return createItemsView(

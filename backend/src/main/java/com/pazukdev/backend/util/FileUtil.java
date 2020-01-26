@@ -42,6 +42,8 @@ public class FileUtil {
                 "seal",
                 "spark_plug",
                 "lock_ring",
+                "adapter",
+                "oil_filter",
                 "piston_rings",
                 "piston_pin",
                 "piston",

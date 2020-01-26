@@ -110,7 +110,17 @@ public class ItemUtil {
     }
 
     public static String getValueFromDescription(final String description, final String key) {
-        return toMap(description).get(key);
+        final Map<String, String> map = toMap(description);
+        String value = map.get(key);
+        if (value == null) {
+            for (int i = 0; i < 10; i++) {
+                value = map.get(key + " #" + i);
+                if (value != null) {
+                    return value;
+                }
+            }
+        }
+        return value;
     }
 
     public static String toDescription(final Map<String, String> map) {

@@ -19,7 +19,7 @@ export default {
             let category = categories[i];
 
             let nestedTable = {
-                name: category,
+                name: category != null ? category : "-",
                 items: [],
                 opened: opened
             };
@@ -27,6 +27,12 @@ export default {
             for (let i = 0; i < items.length; i++) {
                 let item = items[i];
                 if (item.itemCategory === category && searchUtil.filterItem(item, filter)) {
+                    // if (shared.isEmpty(item.comment)) {
+                    //     item.comment = "-";
+                    // }
+                    // if (shared.isEmpty(item.secondComment)) {
+                    //     item.secondComment = "-";
+                    // }
                     nestedTable.items.push(item);
                 }
             }
