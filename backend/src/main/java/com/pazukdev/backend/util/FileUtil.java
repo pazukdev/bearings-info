@@ -35,7 +35,7 @@ public class FileUtil {
                 "wire",
                 "gasket",
                 "washer",
-                "screw",
+                "fastener",
                 "oil",
                 "tube",
                 "tire",
@@ -60,7 +60,9 @@ public class FileUtil {
                 "final_drive",
                 "gearbox",
                 "engine",
-                "motorcycle"
+                "motorcycle",
+                "moped",
+                "car"
         };
         final List<String> paths = new ArrayList<>();
         for (final String fileName : fileNames) {

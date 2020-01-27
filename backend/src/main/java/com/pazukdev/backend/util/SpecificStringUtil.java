@@ -49,7 +49,7 @@ public class SpecificStringUtil {
     public final static List<Character> endChars = Arrays.asList('.', ',', ';', ':', '-', '?', '!');
     public final static List<String> units = Arrays
             .asList("mm", "cm", "m", "g", "kg", "km/h", "kmh", "mph", "s", "min", "n", "nm", "ml", "L", "t", "hp",
-                    "rpm");
+                    "rpm", "L/100km", "CC", "cc");
 
     public static List<String> getList(String source) {
         return Arrays.asList(removeSpaces(source).split(Separator.SEMICOLON.getSeparator()));
