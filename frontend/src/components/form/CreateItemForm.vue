@@ -1,7 +1,7 @@
 <template>
-    <div v-if="!isGuest()">
+    <div v-if="!isGuest()" class="default-margin">
         <details>
-            <summary style="text-align: center">{{$t("createNewItem")}}</summary>
+            <summary>{{$t("createNewItem")}}</summary>
             <form id="create-item-form" @submit="submit">
                 <table>
                     <tbody>
@@ -46,9 +46,9 @@
                     </tr>
                     </tbody>
                 </table>
+                <hr>
             </form>
         </details>
-        <hr>
     </div>
 </template>
 
@@ -133,7 +133,7 @@
             },
 
             sameItemNameExistsInCategory(category, name) {
-                let array = this.itemView.partsTable.parts;
+                let array = this.itemView.children;
                 for (let j = 0; j < array.length; j++) {
                     let item = array[j];
                     if (item.itemCategory === category && item.itemName === name) {

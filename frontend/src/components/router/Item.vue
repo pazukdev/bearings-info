@@ -3,10 +3,28 @@
         <LoadingScreen v-if="this.loadingState"/>
         <div v-else>
             <ItemMenu/>
-            <PartsSection/>
-            <ReplacersSection/>
-            <ItemSummary/>
-            <Usage/>
+
+            <Header :item="true"/>
+
+            <details v-if="arrayIsRendered(itemView.children)" open>
+                <summary>{{"Parts"}}</summary>
+                <PartsSection/>
+            </details>
+
+            <details v-if="arrayIsRendered(itemView.replacersTable.replacers)" open>
+                <summary>{{"Replacers"}}</summary>
+                <ReplacersSection/>
+            </details>
+
+            <details v-if="arrayIsRendered(itemView.allChildren)">
+                <summary>{{"All parts"}}</summary>
+                <ItemSummary/>
+            </details>
+
+            <details v-if="arrayIsRendered(itemView.parents.children)">
+                <summary>{{"Usage"}}</summary>
+                <Usage/>
+            </details>
         </div>
     </div>
 </template>
@@ -25,10 +43,12 @@
     import Usage from "../item/Usage";
     import CountedItemList from "../list/CountedItemList";
     import ItemSummary from "../item/ItemSummary";
+    import Header from "../list/section/Header";
 
     export default {
 
         components: {
+            Header,
             ItemSummary,
             CountedItemList,
             Usage,
@@ -47,7 +67,8 @@
                 userName: state => state.dictionary.userName,
                 loadingState: state => state.dictionary.loadingState,
                 itemView: state => state.dictionary.itemView,
-                appLanguage: state => state.dictionary.appLanguage
+                appLanguage: state => state.dictionary.appLanguage,
+                editMode: state => state.dictionary.editMode
             })
         },
 
@@ -60,6 +81,10 @@
         },
 
         methods: {
+            arrayIsRendered(array) {
+                return this.editMode || array.length > 0;
+            },
+
             onUrlChange() {
                 this.getView();
             },
@@ -138,56 +163,8 @@
     }
 </script>
 
-<style>
-    .not-symmetrical-left {
-        width: 80%;
-    }
-
-    .not-symmetrical-right {
-        width: 20%;
-    }
-
-    .two-columns-table-left-column {
-        width: 50%;
-    }
-
-    .two-column-table-right-column, .three-column-table-right-column, #get-all-table {
-        width: 100%;
-    }
-
-    .three-column-table-left-column, .three-column-table-middle-column {
-        width: 33.33%;
-    }
-
-    .three-column-table-left-column, .three-column-table-left-column-text {
-        text-align: left;
-    }
-
-    .three-column-table-right-column {
-        text-align: center;
-    }
-
-    .three-column-table-button-column {
-    }
-
-    .round-delete-button {
-        background: red;
-    }
-
-    #menu-summary {
-        text-align: center;
-        font-weight: bold;
-        font-size: large;
-    }
-
-    #place-of-creation {
-        text-align: center;
-        margin-top: 60px;
-        margin-bottom: 20px;
-    }
-
-    #remove-img-button {
-        width: initial;
-        background: red
+<style scoped>
+    details {
+        margin: 10px;
     }
 </style>

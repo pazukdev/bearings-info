@@ -5,13 +5,35 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static com.pazukdev.backend.util.FileUtil.FileFormat.CSV;
+import static com.pazukdev.backend.util.FileUtil.FileFormat.TXT;
 
 public class FileUtil {
 
-    private static String BASIC_DIRECTORY = "backend/src/";
-    public static final String STATIC_DIRECTORY = "/static/";
-    public static final String CSV = "csv";
+    public static class Directory {
+        public static String BASIC_DIRECTORY = "backend/src/";
+        public static final String STATIC_DIRECTORY = "/static/";
+    }
+
+    public static class FileFormat {
+        public static final String CSV = ".csv";
+        public static final String TXT = ".txt";
+    }
+
+    public static class FileName {
+        public static final String COMMENTS = "comments";
+        public static final String INFO_CATEGORIES = "info_categories";
+        public static final String DICTIONARY = "dictionary";
+    }
+
+    public static Set<String> getTxtFileLines(final String fileName) {
+        return getTxtFileLines(getTxtFilePath(fileName));
+    }
 
     public static Set<String> getTxtFileLines(final Path path) {
         try {
@@ -22,9 +44,8 @@ public class FileUtil {
         }
     }
 
-    public static Path getDictionaryFilePath() {
-//        return new PathFinder().getDictionaryFilePath();
-        return Paths.get(getDictionaryFilePathString());
+    public static Path getTxtFilePath(final String fileName) {
+        return Paths.get(Directory.BASIC_DIRECTORY + "txt/" + fileName + TXT);
     }
 
     public static String[] getCSVFilesPaths() {
@@ -54,15 +75,13 @@ public class FileUtil {
                 "bearing",
                 "universal_joint",
                 "wheel",
-                "frame_and_wheels",
+                "chassis",
                 "generator",
                 "sidecar_reduction_drive",
                 "final_drive",
                 "gearbox",
                 "engine",
-                "motorcycle",
-                "moped",
-                "car"
+                "vehicle"
         };
         final List<String> paths = new ArrayList<>();
         for (final String fileName : fileNames) {
@@ -72,19 +91,19 @@ public class FileUtil {
     }
 
     private static String dataFilePathInResources(final String fileName) {
-        return STATIC_DIRECTORY + fileName + "." + CSV;
+        return Directory.STATIC_DIRECTORY + fileName + CSV;
     }
 
-    public static void createDictionaryFileInFileSystem(final String base64Data) throws IOException {
-        createDictionaryFileInFileSystem(Base64.getDecoder().decode(base64Data.getBytes(StandardCharsets.UTF_8)));
+//    public static void createDictionaryFileInFileSystem(final String base64Data) throws IOException {
+//        createDictionaryFileInFileSystem(Base64.getDecoder().decode(base64Data.getBytes(StandardCharsets.UTF_8)));
+//    }
+
+    public static void createFileInFileSystem(final String fileName, final byte[] text) throws IOException {
+        Files.write(getTxtFilePath(fileName), text);
     }
 
-    public static void createDictionaryFileInFileSystem(final byte[] text) throws IOException {
-        Files.write(getDictionaryFilePath(), text);
-    }
-
-    public static String getDictionaryFilePathString() {
-        return BASIC_DIRECTORY + "language/dictionary.txt";
-    }
+//    public static String getDictionaryFilePathString() {
+//        return Directory.BASIC_DIRECTORY + "language/" + DICTIONARY + TXT;
+//    }
 
 }

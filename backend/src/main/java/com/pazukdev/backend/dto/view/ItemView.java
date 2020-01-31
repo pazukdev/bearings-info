@@ -3,7 +3,6 @@ package com.pazukdev.backend.dto.view;
 import com.pazukdev.backend.dto.LikeListDto;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
-import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.dto.table.ReplacersTable;
 import com.pazukdev.backend.dto.user.UserDto;
 import lombok.Data;
@@ -34,8 +33,8 @@ public class ItemView extends AbstractView {
     private String localizedName = "-";
     private UserDto userData;
     private HeaderTable header;
-    private PartsTable partsTable;
-    private PartsTable summaryTable;
+    private List<NestedItemDto> children;
+    private List<NestedItemDto> allChildren;
     private ReplacersTable replacersTable;
     private List<NestedItemDto> possibleParts = new ArrayList<>();
     private List<NestedItemDto> possibleReplacers = new ArrayList<>();

@@ -44,7 +44,7 @@
                     items = this.itemView.replacersTable.replacers;
                 } else {
                     possibleItems = this.itemView.possibleParts;
-                    items = this.itemView.partsTable.parts;
+                    items = this.itemView.children;
                 }
 
                 let actualPossibleItems = [];

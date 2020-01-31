@@ -21,10 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.pazukdev.backend.util.CategoryUtil.Category.Info.MATERIAL;
+import static com.pazukdev.backend.util.CategoryUtil.Category.MATERIAL;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
-import static com.pazukdev.backend.util.CategoryUtil.*;
+import static com.pazukdev.backend.util.CategoryUtil.isInfo;
 import static com.pazukdev.backend.util.ChildItemUtil.createParts;
+import static com.pazukdev.backend.util.FileUtil.FileName.INFO_CATEGORIES;
+import static com.pazukdev.backend.util.FileUtil.getTxtFileLines;
 import static com.pazukdev.backend.util.ItemUtil.*;
 import static com.pazukdev.backend.util.ReplacerUtil.createReplacers;
 
@@ -67,9 +69,9 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return ((ItemRepository) repository).findByName(name);
     }
 
-    public List<Item> findAllInfoItems() {
-        return find(getInfoCategories().toArray(new String[0]));
-    }
+//    public List<Item> findAllInfoItems() {
+//        return find(getInfoCategories().toArray(new String[0]));
+//    }
 
     @Transactional
     public Item find(final String category, final String name) {
@@ -97,7 +99,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public Item create(final TransitiveItem transitiveItem) {
+    public Item create(final TransitiveItem transitiveItem, final Set<String> infoCategories) {
         final String category = transitiveItem.getCategory();
         final String name = transitiveItem.getName();
 
@@ -106,10 +108,11 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             return alreadyExistingItem;
         }
 
-        final TransitiveItemDescriptionMap descriptionMap = createDescriptionMap(transitiveItem, transitiveItemService);
+        final TransitiveItemDescriptionMap descriptionMap
+                = createDescriptionMap(transitiveItem, transitiveItemService, infoCategories);
         final Map<String, String> items = descriptionMap.getItems();
-        final List<ChildItem> childItems = createParts(transitiveItem, items, this, transitiveItemService);
-        final List<Replacer> replacers = createReplacers(transitiveItem, this, transitiveItemService);
+        final List<ChildItem> childItems = createParts(transitiveItem, items, this, transitiveItemService, infoCategories);
+        final List<Replacer> replacers = createReplacers(transitiveItem, this, transitiveItemService, infoCategories);
 
         final Long soyuzRetromechanicId = 5L;
         final Long adminId = userService.getAdmin().getId();
@@ -156,7 +159,8 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                                       final String name,
                                       final String userName,
                                       final String userLanguage) {
-        final ItemViewFactory itemViewFactory = new ItemViewFactory(this);
+
+        final ItemViewFactory itemViewFactory = new ItemViewFactory(this, getTxtFileLines(INFO_CATEGORIES));
         try {
             return itemViewFactory.createNewItemView(category, name, userName, userLanguage);
         } catch (Exception e) {
@@ -170,7 +174,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                                    final String userName,
                                    final String language,
                                    final ItemView itemView) {
-        final ItemViewFactory itemViewFactory = new ItemViewFactory(this);
+        final ItemViewFactory itemViewFactory = new ItemViewFactory(this, getTxtFileLines(INFO_CATEGORIES));
         return itemViewFactory.updateItemView(itemId, userName, language, itemView);
     }
 
@@ -180,7 +184,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return RateUtil.rateReplacer(rate, user, this);
     }
 
-    public Set<String> findCategories(final List<Item> items) {
+    public Set<String> collectCategories(final List<Item> items) {
         final Set<String> categories = new HashSet<>();
         for (final Item item : items) {
             categories.add(item.getCategory());
@@ -188,24 +192,13 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return categories;
     }
 
-    public Set<String> findAllCategories() {
-        return findCategories(findAll());
-    }
+//    public Set<String> findAllCategories() {
+//        return collectCategories(findAll());
+//    }
 
-    @Transactional
-    public List<Item> findVehicles() {
-        final List<Item> items = new ArrayList<>();
-        for (final Item item : findAll()) {
-            if (isVehicle(item.getCategory())) {
-                items.add(item);
-            }
-        }
-        return items;
-    }
-
-    public Set<String> findAllPartCategories() {
-        return filterPartCategories(findAllCategories());
-    }
+//    public Set<String> findAllPartCategories() {
+//        return filterPartCategories(findAllCategories());
+//    }
 
     private String createItemDescription(final TransitiveItemDescriptionMap descriptionMap) {
         descriptionMap.getItems().clear();
@@ -213,10 +206,12 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     private ItemViewFactory createNewItemViewFactory() {
-        return new ItemViewFactory(this);
+        return new ItemViewFactory(this, getTxtFileLines(INFO_CATEGORIES));
     }
 
-    public List<Item> findParents(final Item item, final List<Item> checkList) {
+    public List<Item> findParents(final Item item,
+                                  final List<Item> checkList,
+                                  final Set<String> infoCategories) {
         final Long itemId = item.getId();
         final String category = item.getCategory();
         String secondSearchCategory = null;
@@ -225,10 +220,11 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         }
         final List<Item> parents = new ArrayList<>();
 
-        if (isInfo(category)) {
+        if (isInfo(category, infoCategories)) {
             for (final Item parent : checkList) {
                 final String description = parent.getDescription();
-                if (!description.contains(category) && !description.contains(secondSearchCategory)) {
+                if (!description.contains(category)
+                        && (secondSearchCategory == null || !description.contains(secondSearchCategory))) {
                     continue;
                 }
                 for (final Map.Entry<String, String> entry : toMap(description).entrySet()) {

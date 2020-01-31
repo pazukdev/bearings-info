@@ -20,6 +20,8 @@ import javax.persistence.EntityExistsException;
 import java.util.List;
 import java.util.Set;
 
+import static com.pazukdev.backend.util.CategoryUtil.getInfoCategories;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -58,7 +60,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get user list view")
     public ItemView getUserListView(@PathVariable final String userName, @PathVariable final String language) {
-        return new ItemViewFactory(itemService).createUserListView(userName, language);
+        return new ItemViewFactory(itemService, getInfoCategories()).createUserListView(userName, language);
     }
 
     @GetMapping("/view/wishlist/{userName}/{language}")

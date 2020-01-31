@@ -7,12 +7,40 @@
                     <input type="search" v-model="filter" placeholder="Search...">
                 </td>
             </tr>
-            <tr v-if="!usageView">
+            <tr v-for="vehicleClass in itemsListAsTables()" v-if="vehicles">
                 <td>
-                    <ListHeader/>
+                    <v-details v-model="vehicleClass.opened">
+                        <summary><b>{{vehicleClass.name}}</b></summary>
+                        <table>
+                            <tbody>
+                            <tr v-for="manufacturer in vehicleClass.manufacturers">
+                                <td>
+                                    <details>
+                                        <summary>{{manufacturer.name}}</summary>
+                                        <table class="equal-columns-table">
+                                            <tbody>
+                                            <tr v-for="item in manufacturer.items">
+                                                <td style="text-align: left">
+                                                    <p>{{item.comment}}</p>
+                                                </td>
+                                                <td>
+                                                    <ButtonNavigateToItem :part="item"/>
+                                                </td>
+                                                <td>
+                                                    {{item.secondComment}}
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </details>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </v-details>
                 </td>
             </tr>
-            <tr v-for="table in itemsListAsTables()" v-if="!hideTable(table)">
+            <tr v-for="table in itemsListAsTables()" v-if="!vehicles && !hideTable(table)">
                 <td>
                     <v-details v-model="table.opened">
                         <summary><b>{{table.name}}</b></summary>
@@ -36,6 +64,7 @@
             </tr>
             </tbody>
         </table>
+        <hr>
     </div>
 </template>
 
@@ -45,18 +74,16 @@
     import {mapState} from "vuex";
     import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
     import EditPanel from "../menu/EditPanel";
-    import ListHeader from "./section/ListHeader";
     import ItemDescription from "./section/ItemDescription";
-    import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
     import EditableImg from "../EditableImg";
+    import shared from "../../util/shared";
+    import arrayUtil from "../../util/arrayUtil";
 
     export default {
         name: "ItemList",
         components: {
             EditableImg,
-            NestedItemsTableTitle,
             ItemDescription,
-            ListHeader,
             EditPanel,
             ButtonNavigateToItem,
             ButtonDelete},
@@ -66,6 +93,7 @@
             editableComments: Boolean,
             itemsManagementView: Boolean,
             usageView: Boolean,
+            vehicles:Boolean,
             itemViewProp: Object,
             sorted: Boolean
         },
@@ -94,9 +122,53 @@
                 } else {
                     itemView = this.itemView;
                 }
-                let items = itemView.partsTable.parts;
-                let opened = !this.itemsManagementView && !this.usageView;
-                return  itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
+                let items = itemView.children;
+
+                // let opened = !this.itemsManagementView && !this.usageView;
+                let opened = false;
+
+                if (this.vehicles) {
+                    let vehicleClasses = [];
+                    let translatedVehicleClasses = [];
+                    for (let i = 0; i < items.length; i++) {
+                        let vehicleClass = items[i].vehicleClass;
+                        let translatedVehicleClass = items[i].translatedVehicleClass;
+                        if (!shared.isInArray(vehicleClass, vehicleClasses)) {
+                            vehicleClasses.push(vehicleClass);
+                        }
+                        if (!shared.isInArray(translatedVehicleClass, translatedVehicleClasses)) {
+                            translatedVehicleClasses.push(translatedVehicleClass);
+                        }
+                    }
+
+                    let parentTables = [];
+
+                    for (let i = 0; i < translatedVehicleClasses.length; i++) {
+                        let category = translatedVehicleClasses[i];
+                        let vehicles = [];
+
+                        for (let j = 0; j < items.length; j++) {
+                            let item = items[j];
+                            if (item.translatedVehicleClass === category) {
+                                vehicles.push(item);
+                            }
+                        }
+                        let childTables = itemViewUtil.itemsListToTables(vehicles, true, this.filter, opened);
+                        let parentTable = {
+                            name: !shared.isEmpty(category) ? category : "Other",
+                            manufacturers: childTables,
+                            opened: vehicleClasses[i] === "Motorcycle"
+                        };
+
+                        if (childTables.length > 0) {
+                            parentTables.push(parentTable);
+                        }
+                    }
+                    return arrayUtil.sortByName(parentTables);
+                } else {
+                    return itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
+                }
+
             },
 
             removeItem(item) {
@@ -114,7 +186,7 @@
             },
 
             searchIsRendered() {
-                return !this.usageView;
+                return !this.editMode && !this.usageView;
             }
         }
     }

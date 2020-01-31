@@ -3,129 +3,23 @@ package com.pazukdev.backend.util;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.HeaderTableRow;
-import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.dto.table.ReplacersTable;
-import com.pazukdev.backend.entity.ChildItem;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.Replacer;
-import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.*;
-import static com.pazukdev.backend.util.CategoryUtil.Category.Info.MATERIAL;
+import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.createReplacer;
+import static com.pazukdev.backend.util.CategoryUtil.Category.MATERIAL;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
 import static com.pazukdev.backend.util.ItemUtil.*;
-import static com.pazukdev.backend.util.SpecificStringUtil.*;
 
 public class TableUtil {
-
-    public static PartsTable wishListTable(final Set<ChildItem> items, final ItemService itemService) {
-        final List<NestedItemDto> dtos = new ArrayList<>();
-        for (final ChildItem item : items) {
-            final NestedItemDto itemDto = createWishListItem(item, itemService.getUserService());
-            dtos.add(itemDto);
-        }
-        final String[] header = {"Comment", "Name", "Quantity, pcs"};
-//        final String[] header = null;
-        final Set<String> categories = itemService.findAllCategories();
-        return PartsTable.create(header, dtos, categories);
-    }
-
-    public static PartsTable specialItemsTable(final List<Item> items, final ItemService itemService) {
-        final List<NestedItemDto> dtos = new ArrayList<>();
-        for (final Item item : items) {
-            final NestedItemDto itemDto = createItemForItemsManagement(item, itemService.getUserService());
-            dtos.add(itemDto);
-        }
-//        final String[] header = {"Category", "Name", "-"};
-        final String[] header = null;
-        final Set<String> categories = itemService.findAllCategories();
-        return PartsTable.create(header, dtos, categories);
-    }
-
-    public static  PartsTable motorcyclesTable(final List<Item> motorcycles, final UserService userService) {
-        final List<NestedItemDto> dtos = new ArrayList<>();
-        final Set<String> categories = new HashSet<>();
-        for (final Item motorcycle : motorcycles) {
-            final NestedItemDto motorcycleDto = createMotorcycle(motorcycle, userService);
-            dtos.add(motorcycleDto);
-            categories.add(motorcycleDto.getItemCategory());
-        }
-
-        final String[] header = {"Production", "Model", "Manufacturer"};
-        return PartsTable.create(header, dtos, categories);
-    }
-
-    public static  PartsTable usersTable(final List<UserEntity> users) {
-        final List<NestedItemDto> dtos = new ArrayList<>();
-        for (final UserEntity user : users) {
-            dtos.add(createUser(user));
-        }
-        final String[] header = {"Role", "Username", "Rating"};
-        final Set<String> partCategories = new HashSet<>(Arrays.asList("Admin", "User"));
-        return PartsTable.create(header, dtos, partCategories);
-    }
-
-    public static PartsTable createPartsTable(final Item item, final ItemService service) {
-        return createPartsTable(item, service, getDefaultPartsHeader(), false);
-    }
-
-    public static PartsTable createPartsSummaryTable(final Item item, final ItemService service) {
-        final String[] header = getDefaultPartsHeader();
-        header[0] = "-";
-        return createPartsTable(item, service, header, true);
-    }
-
-    private static String[] getDefaultPartsHeader() {
-        return new String[]{"Location", "Partnumber", "Pcs/Vol"};
-    }
-
-    private static PartsTable createPartsTable(final Item item,
-                                               final ItemService service,
-                                               final String[] header,
-                                               final boolean summary) {
-        final List<NestedItemDto> dtos = new ArrayList<>();
-        addParts(item.getChildItems(), dtos, service.getUserService(), summary, null);
-        final Set<String> categories = service.findAllPartCategories();
-        return PartsTable.create(header, dtos, categories);
-    }
-
-    private static void addParts(final Set<ChildItem> parts,
-                                 final List<NestedItemDto> dtos,
-                                 final UserService userService,
-                                 final boolean summary,
-                                 final Double parentQuantity) {
-        for (final ChildItem part : parts) {
-            boolean add = true;
-            final NestedItemDto partDto = createChildItem(part, userService, !summary);
-            Double quantity = null;
-            if (summary) {
-                quantity = getFirstNumber(part.getQuantity());
-                if (quantity != null && parentQuantity != null) {
-                    quantity = quantity * parentQuantity;
-                    partDto.setSecondComment(doubleToString(quantity));
-                }
-                for (final NestedItemDto dto : dtos) {
-                    final boolean itemIsInList = dto.getItemId().equals(partDto.getItemId());
-                    if (itemIsInList) {
-                        final String totalQuantity = sumQuantities(dto.getSecondComment(), doubleToString(quantity));
-                        dto.setSecondComment(totalQuantity);
-                        add = false;
-                        break;
-                    }
-                }
-            }
-            if (add) {
-                dtos.add(partDto);
-            }
-            if (summary) {
-                addParts(part.getItem().getChildItems(), dtos, userService, true, quantity);
-            }
-        }
-    }
 
     public static ReplacersTable createReplacersTable(final Item item, final UserService userService) {
         final ReplacersTable replacersTable = new ReplacersTable();

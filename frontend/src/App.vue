@@ -2,10 +2,6 @@
     <div id="main-div">
         <div id="screen">
             <AppBar/>
-            <LangMenu/>
-            <NavigationBar/>
-            <MessagesSection/>
-            <UserMenu/>
             <div style="text-align: left">
 <!--                {{"appLanguage: " + appLanguage}}<br>-->
 <!--                {{"$i18n.locale: " + $i18n.locale}}<br>-->
@@ -20,7 +16,16 @@
 <!--                {{"editMode: " + editMode}}<br>-->
 <!--                {{"itemView: " + itemView}}<br>-->
             </div>
-            <router-view/>
+            <div>
+                <LangMenu/>
+                <NavigationBar/>
+                <MessagesSection/>
+                <UserMenu/>
+                <router-view/>
+            </div>
+            <div id="place-of-creation">
+                <p v-if="isHome()">{{"2017-2020 Minsk"}}</p>
+            </div>
         </div>
     </div>
 </template>
@@ -36,6 +41,7 @@
     import itemViewUtil from "./util/itemViewUtil";
     import axiosUtil from "./util/axiosUtil";
     import MessagesSection from "./components/special/MessagesSection";
+    import routerUtil from "./util/routerUtil";
 
     export default {
         name: 'app',
@@ -95,6 +101,10 @@
             loginAsGuest() {
                 let toHome = true;
                 axiosUtil.loginAsGuest(this.basicUrl, toHome);
+            },
+
+            isHome() {
+                return routerUtil.isHome(this.$route);
             }
         }
     }
@@ -192,8 +202,14 @@
     }
 
     table {
+        /*border-collapse: collapse;*/
+        /*border-style: hidden;*/
         border-collapse: initial;
         border-spacing: 10px;
+    }
+
+    table td {
+        /*border: 10px solid transparent;*/
     }
 
     hr, .default-margin {
@@ -251,10 +267,6 @@
         table-layout: fixed;
     }
 
-    .third-part-wide {
-        width: 33.33%;
-    }
-
     .alert-message {
         color: red;
     }
@@ -277,5 +289,57 @@
 
     .title {
         text-align: center;
+    }
+
+    #place-of-creation {
+        text-align: center;
+        margin-top: 60px;
+        margin-bottom: 20px;
+    }
+
+    .not-symmetrical-left {
+        width: 80%;
+    }
+
+    .not-symmetrical-right {
+        width: 20%;
+    }
+
+    .half-wide, .two-columns-table-left-column {
+        width: 50%;
+    }
+
+    .two-column-table-right-column, .three-column-table-right-column, #get-all-table {
+        width: 100%;
+    }
+
+    .third-part-wide, .three-column-table-left-column, .three-column-table-middle-column {
+        width: 33.33%;
+    }
+
+    .three-column-table-left-column, .three-column-table-left-column-text {
+        text-align: left;
+    }
+
+    .three-column-table-right-column {
+        text-align: center;
+    }
+
+    .three-column-table-button-column {
+    }
+
+    .round-delete-button {
+        background: red;
+    }
+
+    #menu-summary {
+        text-align: center;
+        font-weight: bold;
+        font-size: large;
+    }
+
+    #remove-img-button {
+        width: initial;
+        background: red
     }
 </style>

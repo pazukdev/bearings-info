@@ -1,6 +1,6 @@
 package com.pazukdev.backend.dto;
 
-import com.pazukdev.backend.service.ItemService;
+import com.pazukdev.backend.util.SpecificStringUtil;
 import com.pazukdev.backend.util.TranslatorUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,51 +17,32 @@ public class NestedItemDto extends AbstractDto {
     private Long itemId;
     private String itemName = "-";
     private String itemCategory = "-";
-//    private String localizedItemCategory = "-";
     private String creatorName;
     private Integer rating = 0;
 
     private String buttonText = "-";
-//    private String localizedButtonText = "-";
     private String selectText = "-";
-//    private String localizedSelectText = "-";
 
     private String comment = "-";
-//    private String localizedComment = "-";
     private String secondComment = "-";
-//    private String localizedSecondComment = "-";
 
-    public void setItemCategory(final String itemCategory) {
-        this.itemCategory = itemCategory;
-//        this.localizedItemCategory = itemCategory;
+    private String vehicleIcon;
+    private String vehicleClass;
+    private String translatedVehicleClass;
+
+    public void setVehicleClass(final String vehicleClass) {
+        this.vehicleClass = vehicleClass;
+        this.translatedVehicleClass = vehicleClass;
     }
 
-    public void setButtonText(final String buttonText) {
-        this.buttonText = buttonText;
-//        this.localizedButtonText = buttonText;
-    }
-
-    public void setSelectText(final String selectText) {
-        this.selectText = selectText;
-//        this.localizedSelectText = selectText;
-    }
-
-    public void setComment(final String comment) {
-        this.comment = comment;
-//        this.localizedComment = comment;
-    }
-
-    public void setSecondComment(final String secondComment) {
-        this.secondComment = secondComment;
-//        this.localizedSecondComment = secondComment;
-    }
-
-    public void translate(final String langFrom, final String langTo, final ItemService service) {
+    public void translate(final String langFrom, final String langTo) {
+        if (SpecificStringUtil.isEmpty(langFrom) || SpecificStringUtil.isEmpty(langTo)) {
+            return;
+        }
         if (langTo.equals("en")) {
             translateToEnglish(langFrom);
             return;
         }
-
         if (langFrom.equals("en")) {
             translateToLang(langTo);
         }
@@ -76,6 +57,7 @@ public class NestedItemDto extends AbstractDto {
         selectText = TranslatorUtil.translate(langFrom, langTo, selectText, addToDictionary);
         comment = TranslatorUtil.translate(langFrom, langTo, comment, addToDictionary);
         secondComment = TranslatorUtil.translate(langFrom, langTo, secondComment, addToDictionary);
+        translatedVehicleClass = TranslatorUtil.translate(langFrom, langTo, vehicleClass, addToDictionary);
     }
 
     private void translateToEnglish(final String langFrom) {

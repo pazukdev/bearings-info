@@ -93,7 +93,7 @@
                 this.item.secondComment = this.itemQuantity;
 
                 let newItem = this.item;
-                this.itemView.partsTable.parts.push(newItem);
+                this.itemView.children.push(newItem);
 
                 this.item = "";
                 this.itemLocation = "";

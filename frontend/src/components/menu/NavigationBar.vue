@@ -35,6 +35,11 @@
                             {{$t('myProfile')}}
                         </router-link>
                     </td>
+                    <td>
+                        <router-link :to="{name: 'menu'}" active-class="active">
+                            {{$t("menu")}}
+                        </router-link>
+                    </td>
                 </tr>
             </tbody>
         </table>

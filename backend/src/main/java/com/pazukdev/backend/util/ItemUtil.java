@@ -110,7 +110,10 @@ public class ItemUtil {
     }
 
     public static String getValueFromDescription(final String description, final String key) {
-        final Map<String, String> map = toMap(description);
+        return getValueFromDescriptionMap(toMap(description), key);
+    }
+
+    public static String getValueFromDescriptionMap(final Map<String, String> map, final String key) {
         String value = map.get(key);
         if (value == null) {
             for (int i = 0; i < 10; i++) {
@@ -155,14 +158,15 @@ public class ItemUtil {
     }
 
     public static TransitiveItemDescriptionMap createDescriptionMap(final TransitiveItem item,
-                                                                    final TransitiveItemService service) {
+                                                                    final TransitiveItemService service,
+                                                                    final Set<String> infoCategories) {
         final Map<String, String> unsortedMap = toMap(item.getDescription());
         final TransitiveItemDescriptionMap itemDescriptionMap = new TransitiveItemDescriptionMap();
         itemDescriptionMap.setParent(item);
         for (final Map.Entry<String, String> entry : unsortedMap.entrySet()) {
             String parameter = StringUtils.trim(entry.getKey());
             final String value = StringUtils.trim(entry.getValue());
-            if (isInfo(parameter)) {
+            if (isInfo(parameter, infoCategories)) {
                 if (value.contains("; ")) {
                     int count = 1;
                     for (final String subValue : value.split("; ")) {
@@ -171,7 +175,7 @@ public class ItemUtil {
                 } else {
                     itemDescriptionMap.getParameters().put(parameter, value);
                 }
-            } else if (service.isPart(parameter)) {
+            } else if (service.isPart(parameter, infoCategories)) {
                 itemDescriptionMap.getItems().put(parameter, value);
             } else {
                 itemDescriptionMap.getParameters().put(parameter, value);
@@ -353,7 +357,7 @@ public class ItemUtil {
                                                    final String newValue,
                                                    final ItemService itemService) {
         final List<Item> items = itemService.findAll();
-        final Set<String> categories = itemService.findCategories(items);
+        final Set<String> categories = itemService.collectCategories(items);
         for (final Item item : items) {
             final Map<String, String> descriptionMap = ItemUtil.toMap(item.getDescription());
             for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
@@ -400,10 +404,6 @@ public class ItemUtil {
             ids.add(item.getId());
         }
         return ids;
-    }
-
-    public static boolean isSpecialItem(final Long itemId) {
-        return itemId != null && itemId < 0;
     }
 
 }

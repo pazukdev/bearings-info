@@ -1,19 +1,6 @@
 <template>
     <div>
-        <table>
-            <tbody>
-            <tr><td><hr></td></tr>
-            <tr>
-                <td>
-                    <details>
-                        <summary>{{"All parts"}}</summary>
-                        <CountedItemList :summary-view="true" :sorted="true"/>
-                    </details>
-                </td>
-            </tr>
-            <tr><td><hr></td></tr>
-            </tbody>
-        </table>
+        <CountedItemList :summary-view="true" :sorted="true"/>
     </div>
 </template>
 
@@ -27,7 +14,4 @@
 </script>
 
 <style scoped>
-    hr {
-        margin: 0;
-    }
 </style>

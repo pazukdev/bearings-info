@@ -8,19 +8,33 @@ export default {
 
         filter = filter.toLowerCase();
 
-        if (item.creatorName.toLowerCase() === filter) {
+        let comment = item.comment;
+        if (comment !== null && comment.toLowerCase().includes(filter)) {
             return true;
         }
 
-        if (item.buttonText.toLowerCase().includes(filter)) {
+        let creatorName = item.creatorName;
+        if (creatorName !== null && creatorName.toLowerCase() === filter) {
             return true;
         }
 
-        if (item.selectText.toLowerCase().includes(filter)) {
+        let buttonText = item.buttonText;
+        if (buttonText !== null && buttonText.toLowerCase().includes(filter)) {
             return true;
         }
 
-        if (item.itemCategory.toLowerCase().includes(filter)) {
+        let selectText = item.selectText;
+        if (selectText !== null && selectText.toLowerCase().includes(filter)) {
+            return true;
+        }
+
+        let category = item.itemCategory;
+        if (category !== null && category.toLowerCase().includes(filter)) {
+            return true;
+        }
+
+        let vehicleClass = item.translatedVehicleClass;
+        if (vehicleClass !== null && vehicleClass.toLowerCase().includes(filter)) {
             return true;
         }
 

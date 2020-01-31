@@ -1,11 +1,6 @@
 <template>
-    <div style="text-align: center" v-if="!editMode">
-        <p>{{"Usage"}}</p>
-<!--        {{itemView.parents.type}}<br>-->
-<!--        {{itemView.parents.partsTable.parts}}<br>-->
-        <p v-if="itemView.parents.partsTable.parts.length < 1">{{"Items not found"}}</p>
-        <ItemList v-else :usage-view="true" :item-view-prop="itemView.parents"/>
-        <div style="height: 100px"/>
+    <div>
+        <ItemList :usage-view="true" :item-view-prop="itemView.parents"/>
     </div>
 </template>
 
@@ -18,13 +13,11 @@
         components: {ItemList},
         computed: {
             ...mapState({
-                itemView: state => state.dictionary.itemView,
-                editMode: state => state.dictionary.editMode
+                itemView: state => state.dictionary.itemView
             })
         },
     }
 </script>
 
 <style scoped>
-
 </style>

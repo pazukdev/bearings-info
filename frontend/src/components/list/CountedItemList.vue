@@ -7,11 +7,6 @@
                     <input type="search" v-model="filter" placeholder="Search...">
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <ListHeader :header="getHeader()"/>
-                </td>
-            </tr>
             <tr v-for="table in itemsListAsTables()" v-if="!hideTable(table)">
                 <td>
                     <v-details v-model="table.opened">
@@ -47,6 +42,7 @@
             </tr>
             </tbody>
         </table>
+        <hr>
     </div>
 </template>
 
@@ -58,7 +54,6 @@
     import EditPanel from "../menu/EditPanel";
     import ListHeader from "./section/ListHeader";
     import ItemDescription from "./section/ItemDescription";
-    import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
     import EditableImg from "../EditableImg";
 
     export default {
@@ -66,7 +61,6 @@
 
         components: {
             EditableImg,
-            NestedItemsTableTitle,
             ItemDescription,
             ListHeader,
             EditPanel,
@@ -106,11 +100,12 @@
                 itemView = this.itemView;
                 let items;
                 if (this.summaryView) {
-                    items = itemView.summaryTable.parts;
+                    items = itemView.allChildren;
                 } else {
-                    items = itemView.partsTable.parts;
+                    items = itemView.children;
                 }
-                let opened = !this.summaryView;
+                // let opened = !this.summaryView;
+                let opened = false;
                 return itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
             },
 
@@ -129,14 +124,8 @@
             },
 
             searchIsRendered() {
-                return !this.item && !this.userListView;
-            },
-
-            getHeader() {
-                if (this.summaryView) {
-                    return this.itemView.summaryTable.header;
-                }
-                return null;
+                return !this.editMode && !this.item;
+                // return !this.item && !this.userListView;
             }
         }
     }

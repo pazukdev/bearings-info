@@ -8,6 +8,7 @@ import ItemsManagement from "../components/router/ItemsManagement";
 import UserList from "../components/list/UserList";
 import WishList from "../components/list/WishList";
 import storeUtil from "../util/storeUtil";
+import Menu from "../components/router/Menu";
 
 Vue.use(VueRouter);
 
@@ -25,6 +26,7 @@ const router = new VueRouter({
         // urls to components binding
         { path: '/login/:lang', name: 'login', component: Login },
         { path: '/home/:lang', name: 'home', component: Home, meta: { requiresAuth: true }},
+        { path: '/menu/:lang', name: 'menu', component: Menu, meta: { requiresAuth: true } },
         { path: '/item/id/:id/:lang', name: 'item', component: Item, meta: { requiresAuth: true }},
         { path: '/user/id/:id/:lang', name: 'user', component: User, meta: { requiresAuth: true }},
         { path: '/user_list/:lang', name: 'user_list', component: UserList, meta: { requiresAuth: true }},

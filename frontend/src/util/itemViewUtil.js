@@ -19,7 +19,7 @@ export default {
             let category = categories[i];
 
             let nestedTable = {
-                name: category != null ? category : "-",
+                name: !shared.isEmpty(category) ? category : "Not specified",
                 items: [],
                 opened: opened
             };
@@ -27,12 +27,6 @@ export default {
             for (let i = 0; i < items.length; i++) {
                 let item = items[i];
                 if (item.itemCategory === category && searchUtil.filterItem(item, filter)) {
-                    // if (shared.isEmpty(item.comment)) {
-                    //     item.comment = "-";
-                    // }
-                    // if (shared.isEmpty(item.secondComment)) {
-                    //     item.secondComment = "-";
-                    // }
                     nestedTable.items.push(item);
                 }
             }
@@ -41,7 +35,7 @@ export default {
                 nestedTable.items = arrayUtil.sortByComment(nestedTable.items);
             }
 
-            if (nestedTable.items.length) {
+            if (nestedTable.items.length > 0) {
                 nestedTables.push(nestedTable);
             }
         }
@@ -81,8 +75,8 @@ export default {
     },
 
     removeItemFromItemList(itemView, item) {
-        shared.removeFromArray(item, itemView.partsTable.parts);
-        itemView.idsToRemove.push(item.itemId);
+        shared.removeFromArray(item, itemView.children);
+        //itemView.idsToRemove.push(item.itemId);
     },
 
     isMotorcycleCatalogueView(itemView) {

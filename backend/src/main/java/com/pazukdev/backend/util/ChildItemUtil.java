@@ -18,21 +18,24 @@ public class ChildItemUtil {
     public static List<ChildItem> createParts(final TransitiveItem parent,
                                               final Map<String, String> childItemsDescription,
                                               final ItemService itemService,
-                                              final TransitiveItemService transitiveItemService) {
+                                              final TransitiveItemService transitiveItemService,
+                                              final Set<String> infoCategories) {
         final List<ChildItem> childItems = new ArrayList<>();
         for (final Map.Entry<String, String> entry : childItemsDescription.entrySet()) {
             final String category = entry.getKey();
             if (entry.getValue().contains(";")) {
                 final String[] names = entry.getValue().split("; ");
                 for (final String name : names) {
-                    final ChildItem child = createChild(parent, name, category, itemService, transitiveItemService);
+                    final ChildItem child
+                            = createChild(parent, name, category, itemService, transitiveItemService, infoCategories);
                     if (child != null) {
                         childItems.add(child);
                     }
                 }
             } else {
                 final String name = entry.getValue();
-                final ChildItem child = createChild(parent, name, category, itemService, transitiveItemService);
+                final ChildItem child
+                        = createChild(parent, name, category, itemService, transitiveItemService, infoCategories);
                 if (child != null) {
                     childItems.add(child);
                 }
@@ -42,11 +45,9 @@ public class ChildItemUtil {
         return childItems;
     }
 
-    public static Set<ChildItem> createPartsFromItemView(final ItemView itemView,
-                                                         final ItemService itemService) {
-        final List<NestedItemDto> allItems = NestedItemUtil.collectAllItems(itemView.getPartsTable());
-        final List<NestedItemDto> preparedItems = prepareNestedItemDtosToConverting(allItems);
-        final String parentName = getParentName(itemView, itemService);
+    public static Set<ChildItem> createPartsFromItemView(final ItemView view, final ItemService itemService) {
+        final List<NestedItemDto> preparedItems = prepareNestedItemDtosToConverting(view.getChildren());
+        final String parentName = getParentName(view, itemService);
 
         final Set<ChildItem> partsFromItemView = new HashSet<>();
         for (final NestedItemDto nestedItem : preparedItems) {
@@ -70,7 +71,8 @@ public class ChildItemUtil {
                                          final String value,
                                          final String category,
                                          final ItemService itemService,
-                                         final TransitiveItemService transitiveItemService) {
+                                         final TransitiveItemService transitiveItemService,
+                                         final Set<String> infoCategories) {
         String name;
         String location = "";
         String quantity;
@@ -87,7 +89,7 @@ public class ChildItemUtil {
 
         final TransitiveItem oldChild = transitiveItemService.find(category, name);
         if (oldChild != null) {
-            final Item child = itemService.create(oldChild);
+            final Item child = itemService.create(oldChild, infoCategories);
 
             final ChildItem childItem = new ChildItem();
             childItem.setName(getName(parent.getName(), name));

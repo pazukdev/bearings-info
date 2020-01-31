@@ -21,7 +21,8 @@ public class ReplacerUtil {
 
     public static List<Replacer> createReplacers(final TransitiveItem transitiveItem,
                                                  final ItemService itemService,
-                                                 final TransitiveItemService transitiveItemService) {
+                                                 final TransitiveItemService transitiveItemService,
+                                                 final Set<String> infoCategories) {
         final List<Replacer> replacers = new ArrayList<>();
         final String replacersSourceString = transitiveItem.getReplacer();
         if (isEmpty(replacersSourceString)) {
@@ -41,7 +42,7 @@ public class ReplacerUtil {
             }
             final String category = transitiveItem.getCategory();
             final TransitiveItem transitiveReplacerItem = transitiveItemService.find(category, replacerName);
-            final Item replacerItem = itemService.create(transitiveReplacerItem);
+            final Item replacerItem = itemService.create(transitiveReplacerItem, infoCategories);
 
             final Replacer replacer = new Replacer();
             replacer.setName(NestedItemUtil.createName(transitiveItem.getName(), replacerName));

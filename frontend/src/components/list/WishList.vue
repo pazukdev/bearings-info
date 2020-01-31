@@ -2,9 +2,7 @@
     <div>
         <LoadingScreen v-if="this.loadingState"/>
         <div v-else>
-            <Header :item="false"/>
-            <NestedItemsTableTitle v-if="itemView.partsEnabled"
-                                   :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
+            <Header/>
             <CountedItemList :editable-comments="true"/>
         </div>
     </div>
@@ -14,14 +12,13 @@
     import CountedItemList from "./CountedItemList";
     import Header from "./section/Header";
     import LoadingScreen from "../special/LoadingScreen";
-    import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
     import axios from "axios";
     import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
 
     export default {
         name: "WishList",
-        components: {CountedItemList, Header, NestedItemsTableTitle, LoadingScreen},
+        components: {CountedItemList, Header, LoadingScreen},
 
         computed: {
             ...mapState({
@@ -54,7 +51,7 @@
                         + "/" + "view"
                         + "/" + "wishlist"
                         + "/" + this.userName
-                        + "/" + this.appLanguage.toString(), {
+                        + "/" + this.appLanguage, {
                         headers: {
                             Authorization: this.authorization
                         }

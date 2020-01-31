@@ -7,7 +7,7 @@
 
         <table>
             <tbody>
-            <tr v-if="!messagesContain('img removed')">
+            <tr v-if="isImgRendered()">
                 <td>
                     <div class="image-preview">
                         <img class="preview" :src="getImgUrl()" alt="Item image">
@@ -38,26 +38,25 @@
                     <input type="text" v-model="itemView.img">
                 </td>
             </tr>
-            <tr>
+            <tr v-if="imgFileUploadEnabled()">
                 <td>
                     <br>
                     {{"or upload file (accepts .png, size limit 2MB)"}}
                     <br>
                 </td>
             </tr>
-            <tr class="alert-message">
+            <tr class="alert-message" v-if="imgFileUploadEnabled()">
                 <td>
                     {{fileUploadMessage}}
                 </td>
             </tr>
-            <tr>
+            <tr v-if="imgFileUploadEnabled()">
                 <td>
                     <input type="file" accept="image/png"
                            style="color: black"
                            @change="previewImage"><br><br>
                 </td>
             </tr>
-            <tr><td><hr></td></tr>
             </tbody>
         </table>
     </div>
@@ -93,8 +92,9 @@
                 if (routerUtil.isHome(this.$route)) {
                     return "https://pazukdev.github.io/sovietboxers/img/app_logo.9a3c3892.png";
                 }
+                let defaultImg = "https://drive.google.com/open?id=1wyb_Av3pKeP2gnzLPRfz40FjJaUZkQde";
                 let itemView = this.itemView;
-                let img = !this.isEmpty(itemView.img) ? itemView.img : itemView.defaultImg;
+                let img = !this.isEmpty(itemView.img) ? itemView.img : defaultImg;
                 let isBase64ImgData = img.includes(";base64,");
                 if (isBase64ImgData) {
                     return img;
@@ -108,6 +108,15 @@
                     }
                     return imgUrl.replace("https://drive.google.com/open?id=", "https://docs.google.com/uc?id=");
                 }
+            },
+
+            isImgRendered() {
+                // return !messagesContain('img removed');
+                return true;
+            },
+
+            imgFileUploadEnabled() {
+                return false;
             },
 
             isViewWithImage() {

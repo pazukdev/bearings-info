@@ -1,24 +1,23 @@
 <template>
-    <div>
-        <Header :item="false"/>
-        <ItemList/>
+    <div style="text-align: center">
+        <img class="preview" alt="App image"
+             src="https://pazukdev.github.io/sovietboxers/img/app_logo.9a3c3892.png">
+        <ItemList :vehicles="true"/>
     </div>
 </template>
 
 <script>
     import ItemList from "./ItemList";
-    import Header from "./section/Header";
 
     export default {
         name: "MotorcycleCatalogue",
         
-        components: {
-            Header,
-            ItemList
-        }
+        components: {ItemList}
     }
 </script>
 
 <style scoped>
-
+    img {
+        padding: 20px 0;
+    }
 </style>

@@ -2,10 +2,6 @@ package com.pazukdev.backend.dto.factory;
 
 import com.pazukdev.backend.dto.ImgViewData;
 import com.pazukdev.backend.dto.NestedItemDto;
-import com.pazukdev.backend.dto.table.HeaderTable;
-import com.pazukdev.backend.dto.table.HeaderTableRow;
-import com.pazukdev.backend.dto.table.PartsTable;
-import com.pazukdev.backend.dto.table.ReplacersTable;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.service.ItemService;
@@ -15,11 +11,18 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 
+import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.*;
+import static com.pazukdev.backend.util.CategoryUtil.Category.VEHICLE;
+import static com.pazukdev.backend.util.FileUtil.FileName;
+import static com.pazukdev.backend.util.FileUtil.getTxtFileLines;
 import static com.pazukdev.backend.util.ItemUtil.SpecialItemId.*;
 import static com.pazukdev.backend.util.NestedItemUtil.createPossibleParts;
 import static com.pazukdev.backend.util.NestedItemUtil.createReplacerDtos;
-import static com.pazukdev.backend.util.TableUtil.*;
+import static com.pazukdev.backend.util.SpecificStringUtil.*;
+import static com.pazukdev.backend.util.TableUtil.createHeader;
+import static com.pazukdev.backend.util.TableUtil.createReplacersTable;
 import static com.pazukdev.backend.util.TranslatorUtil.translate;
+import static com.pazukdev.backend.util.TranslatorUtil.translateNestedItemDtoList;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -27,10 +30,8 @@ import static com.pazukdev.backend.util.TranslatorUtil.translate;
 @RequiredArgsConstructor
 public class ItemViewFactory {
 
-    private final static List<String> partsDisabled = new ArrayList<>(Arrays
-            .asList("manufacturer", "material", "standard", "wire"));
-
     private final ItemService itemService;
+    private final Set<String> infoCategories;
 
     public ItemView createHomeView(final String userName, final String userLanguage) {
         return createItemView(MOTORCYCLE_CATALOGUE_VIEW.getItemId(), userName, userLanguage);
@@ -51,7 +52,8 @@ public class ItemViewFactory {
     public ItemView createItemView(final Long itemId, final String userName, final String userLanguage) {
         final long businessLogicStartTime = System.nanoTime();
 
-        final UserEntity currentUser = itemService.getUserService().findByName(userName);
+        final UserService userService = itemService.getUserService();
+        final UserEntity currentUser = userService.findByName(userName);
         final WishList wishList = currentUser.getWishList();
 
         final ItemView basicView = new ItemView();
@@ -62,15 +64,15 @@ public class ItemViewFactory {
         ItemView view;
 
         if (itemId.equals(WISH_LIST_VIEW.getItemId())) {
-            view = createWishListView(basicView, wishList);
+            view = createWishListView(basicView, wishList, userService);
         } else if (itemId.equals(MOTORCYCLE_CATALOGUE_VIEW.getItemId())) {
-            view = createMotorcycleCatalogueView(basicView);
+            view = createVehicleView(basicView, userService);
         } else if (itemId.equals(ITEMS_MANAGEMENT_VIEW.getItemId())) {
             view = createItemsManagementView(basicView);
         } else if (itemId.equals(USER_LIST_VIEW.getItemId())) {
-            view = createUsersListView(basicView);
+            view = createUsersListView(basicView, userService);
         } else {
-            view = createOrdinaryItemView(basicView, itemId, currentUser);
+            view = createOrdinaryItemView(basicView, itemId, currentUser, userService);
         }
 
         final double businessLogicEndTime = System.nanoTime();
@@ -78,7 +80,7 @@ public class ItemViewFactory {
 
         if (!userLanguage.equals("en")) {
             try {
-                translate("en", userLanguage, view, false, itemService);
+                translate("en", userLanguage, view, false);
             } catch (Exception e) {
                 view.setErrorMessage(e.getMessage());
                 return view;
@@ -150,7 +152,8 @@ public class ItemViewFactory {
 
     private ItemView createOrdinaryItemView(final ItemView view,
                                             final Long itemId,
-                                            final UserEntity currentUser) {
+                                            final UserEntity currentUser,
+                                            final UserService userService) {
         final Item item = itemService.getOne(itemId);
         final List<Item> allItems = itemService.findAll();
         final List<Item> sameCategoryItems = itemService.find(item.getCategory(), allItems);
@@ -167,96 +170,104 @@ public class ItemViewFactory {
         view.setDefaultImg(imgViewData.getDefaultImg());
         view.setImg(imgViewData.getImg());
         view.setHeader(createHeader(item, itemService));
-        view.setPartsTable(createPartsTable(item, itemService));
-        view.setSummaryTable(createPartsSummaryTable(item, itemService));
-        view.setReplacersTable(createReplacersTable(item, itemService.getUserService()));
-        view.getPossibleParts().addAll(createPossibleParts(allItems, category, itemService.getUserService()));
-        view.getPossibleReplacers().addAll(createReplacerDtos(sameCategoryItems, itemId, itemService.getUserService()));
+        view.setChildren(createChildren(item, userService, false));
+        view.setAllChildren(createChildren(item, userService, true));
+        view.setReplacersTable(createReplacersTable(item, userService));
+        view.getPossibleParts().addAll(createPossibleParts(allItems, category, userService, infoCategories));
+        view.getPossibleReplacers().addAll(createReplacerDtos(sameCategoryItems, itemId, userService));
         view.setCreatorId(item.getCreatorId());
         view.setCreatorName(UserUtil.getCreatorName(item, itemService.getUserService()));
         view.setLikeList(UserUtil.createLikeListDto(currentUser));
-        view.setPartsEnabled(!partsDisabled.contains(category.toLowerCase()));
         LinkUtil.setLinksToItemView(view, item);
-        view.setParents(createParentItemsView(item, allItems));
+        view.setParents(createParentItemsView(item, userService));
 
         return view;
     }
 
-    private ItemView createMotorcycleCatalogueView(final ItemView view) {
-        final List<Item> motorcycles = itemService.findVehicles();
-        final String countParameterName = "--";
-
-        view.setLocalizedName("--");
-//        view.setImg(ImgUtil.getAppImgData());
-
-        return createItemsView(
-                view,
-                motorcycles.size(),
-                countParameterName,
-                motorcyclesTable(motorcycles, itemService.getUserService()));
+    private static List<NestedItemDto> createChildren(final Item item,
+                                                      final UserService userService,
+                                                      final boolean all) {
+        final List<NestedItemDto> dtos = new ArrayList<>();
+        addParts(item.getChildItems(), dtos, userService, all, null);
+        return dtos;
     }
 
-    private ItemView createUsersListView(final ItemView view) {
-        final List<UserEntity> users = itemService.getUserService().findAll();
-        final String countParameterName = "User";
+    public static void addParts(final Set<ChildItem> parts,
+                                final List<NestedItemDto> dtos,
+                                final UserService userService,
+                                final boolean summary,
+                                final Double parentQuantity) {
+        for (final ChildItem part : parts) {
+            boolean add = true;
+            final NestedItemDto partDto = createChildItem(part, userService, !summary);
+            Double quantity = null;
+            if (summary) {
+                quantity = getFirstNumber(part.getQuantity());
+                if (quantity != null && parentQuantity != null) {
+                    quantity = quantity * parentQuantity;
+                    partDto.setSecondComment(doubleToString(quantity));
+                }
+                for (final NestedItemDto dto : dtos) {
+                    final boolean itemIsInList = dto.getItemId().equals(partDto.getItemId());
+                    if (itemIsInList) {
+                        final String totalQuantity = sumQuantities(dto.getSecondComment(), doubleToString(quantity));
+                        dto.setSecondComment(totalQuantity);
+                        add = false;
+                        break;
+                    }
+                }
+            }
+            if (add) {
+                dtos.add(partDto);
+            }
+            if (summary) {
+                addParts(part.getItem().getChildItems(), dtos, userService, true, quantity);
+            }
+        }
+    }
 
-        view.setLocalizedName("Users");
+    private ItemView createVehicleView(final ItemView view, final UserService userService) {
+        final List<Item> vehicles = itemService.find(VEHICLE);
 
-        return createItemsView(
-                view,
-                users.size(),
-                countParameterName,
-                usersTable(users));
+        final List<NestedItemDto> dtos = new ArrayList<>();
+        vehicles.forEach(vehicle -> dtos.add(createVehicle(vehicle, userService)));
+        view.setChildren(dtos);
+        return view;
     }
 
     private ItemView createItemsManagementView(final ItemView view) {
-        return createItemsView (view, itemService.findAll(), "App data");
+        final List<Item> items = itemService.findAll();
+        final Set<String> comments = getTxtFileLines(FileName.COMMENTS);
+
+        final List<NestedItemDto> dtos = new ArrayList<>();
+        items.forEach(item -> dtos.add(createItemForItemsManagement(item, itemService.getUserService(), comments)));
+        view.setChildren(dtos);
+        view.setAllCategories(new ArrayList<>(itemService.collectCategories(items)));
+        return view;
     }
 
-    private ItemView createParentItemsView(final Item item, final List<Item> allItems) {
-        final ItemView parents = new ItemView();
-        return createItemsView(parents, itemService.findParents(item, allItems), "Usage");
+    private ItemView createParentItemsView(final Item item, final UserService userService) {
+        final Set<String> comments = getTxtFileLines(FileName.COMMENTS);
+
+        final ItemView view = new ItemView();
+        final List<NestedItemDto> dtos = new ArrayList<>();
+        itemService.findParents(item, itemService.findAll(), infoCategories)
+                .forEach(parent -> dtos.add(createItemForItemsManagement(parent, userService, comments)));
+        view.setChildren(dtos);
+        return view;
     }
 
-    private ItemView createItemsView(final ItemView view,
-                                     final List<Item> items,
-                                     final String localizedName) {
-        final String countParameterName = "Items";
-
-        view.setLocalizedName(localizedName);
-
-        return createItemsView(
-                view,
-                items.size(),
-                countParameterName,
-                specialItemsTable(items, itemService));
+    private ItemView createUsersListView(final ItemView view, final UserService userService) {
+        final List<NestedItemDto> dtos = new ArrayList<>();
+        userService.findAll().forEach(user -> dtos.add(createUser(user)));
+        view.setChildren(dtos);
+        return view;
     }
 
-    private ItemView createWishListView(final ItemView view, final WishList wishList) {
-        final Set<ChildItem> allItems = wishList.getItems();
-        String countParameterName = "Items";
-
-        view.setLocalizedName("Your Wishlist");
-
-        return createItemsView(
-                view,
-                allItems.size(),
-                countParameterName,
-                wishListTable(allItems, itemService));
-    }
-
-    private ItemView createItemsView(final ItemView view,
-                                     final Integer size,
-                                     String parameter,
-                                     final PartsTable table) {
-        final HeaderTableRow row = HeaderTableRow.create(parameter, String.valueOf(size));
-        final HeaderTable header = HeaderTable.createSingleRowTable("-", row);
-        final List<String> categories = new ArrayList<>(itemService.findAllCategories());
-
-        view.setHeader(header);
-        view.setPartsTable(table);
-        view.setReplacersTable(ReplacersTable.createStub());
-        view.setAllCategories(categories);
+    private ItemView createWishListView(final ItemView view, final WishList wishList, final UserService userService) {
+        final List<NestedItemDto> dtos = new ArrayList<>();
+        wishList.getItems().forEach(item -> dtos.add(createWishListItem(item, userService)));
+        view.setChildren(dtos);
         return view;
     }
 
@@ -272,7 +283,7 @@ public class ItemViewFactory {
         final long translationFromUserLang = System.nanoTime();
         if (!userLanguage.equals("en")) {
             try {
-                translate(userLanguage, "en", view, true, itemService);
+                translate(userLanguage, "en", view, true);
             } catch (Exception e) {
                 view.setErrorMessage(e.getMessage());
                 return view;
@@ -326,14 +337,14 @@ public class ItemViewFactory {
         }
 
         // add all actual items to wishlist after translation and save that state
-        final List<NestedItemDto> dtos = view.getPartsTable().getParts();
-        TranslatorUtil.translateNestedItemDtoList(userLanguage, "en", dtos, itemService);
+        final List<NestedItemDto> dtos = view.getChildren();
+        translateNestedItemDtoList(userLanguage, "en", dtos);
         newItems = ChildItemUtil.createPartsFromItemView (view, itemService);
         user.getWishList().getItems().addAll(newItems);
         itemService.getUserService().update(user);
 
         view.setWishListIds(ChildItemUtil.collectIds(newItems));
-        TranslatorUtil.translateNestedItemDtoList("en", userLanguage, dtos, itemService);
+        translateNestedItemDtoList("en", userLanguage, dtos);
         return view;
     }
 

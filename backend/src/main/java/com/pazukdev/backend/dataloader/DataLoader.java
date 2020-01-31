@@ -20,6 +20,10 @@ import org.springframework.stereotype.Component;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import static com.pazukdev.backend.util.FileUtil.FileName;
+import static com.pazukdev.backend.util.FileUtil.getTxtFileLines;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -48,9 +52,11 @@ public class DataLoader implements ApplicationRunner {
         final long start = System.nanoTime();
         final String startTime = LocalTime.now().toString();
 
+        final Set<String> infoCategories = getTxtFileLines(FileName.INFO_CATEGORIES);
+
         createDefaultUsers();
         createTransitiveItems();
-        createItems();
+        createItems(infoCategories);
 
         final long stop = System.nanoTime();
 //        LOG.info("Start time: " + startTime);
@@ -78,15 +84,14 @@ public class DataLoader implements ApplicationRunner {
         user.setPassword(password);
         if (name.equalsIgnoreCase("admin")) {
             user.setEmail("pazuk1985@gmail.com");
-            user.setImg(name + ".png");
+            user.setImg("https://drive.google.com/open?id=1iuDdjYXtphxQ8UlQD-jjWYnEb_JC9OcG");
             user.setCountry("ZW");
         } else if (name.equalsIgnoreCase("dominator")) {
             user.setCountry("MC");
-            user.setImg(name + ".png");
+            user.setImg("https://drive.google.com/open?id=1YUwn8rh8ZNjg4sw_MPVccY936D87fman");
         } else if (name.equalsIgnoreCase("soyuz retromechanic")) {
             user.setCountry("BY");
-            user.setImg(name + ".png");
-            user.setEmail("абв");
+            user.setImg("https://drive.google.com/open?id=1rtWwJf6XvEp2EV8p79ok5_NwlsOwawVC");
         }
         itemService.getUserService().getRepository().save(user);
     }
@@ -97,10 +102,10 @@ public class DataLoader implements ApplicationRunner {
         createStubReplacers(transitiveItems);
     }
 
-    private void createItems() {
+    private void createItems(final Set<String> infoCategories) {
         final List<TransitiveItem> transitiveItems = transitiveItemService.findAll();
         for (final TransitiveItem transitiveItem : transitiveItems) {
-            itemService.create(transitiveItem);
+            itemService.create(transitiveItem, infoCategories);
         }
     }
 

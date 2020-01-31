@@ -28,7 +28,7 @@ public class HeaderTableRow extends AbstractDto {
         headerTableRow.setParameter(parameter);
         headerTableRow.setValue(value);
         headerTableRow.setDeletable(!CategoryUtil.isFixed(parameter));
-        headerTableRow.setWeight(CategoryUtil.getWeight(parameter));
+//        headerTableRow.setWeight(CategoryUtil.getWeight(parameter));
         return headerTableRow;
     }
 

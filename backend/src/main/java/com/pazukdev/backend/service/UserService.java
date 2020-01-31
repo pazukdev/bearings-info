@@ -8,7 +8,6 @@ import com.pazukdev.backend.entity.ChildItem;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.UserRepository;
-import com.pazukdev.backend.util.ChildItemUtil;
 import com.pazukdev.backend.util.ImgUtil;
 import com.pazukdev.backend.validator.UserDataValidator;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+
+import static com.pazukdev.backend.util.ChildItemUtil.collectIds;
+import static com.pazukdev.backend.util.ChildItemUtil.createNameForWishListItem;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -107,11 +109,11 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     public boolean addItemToWishList(final Item item, final String userName) {
         final UserEntity currentUser = findByName(userName);
 
-        final Set<Long> ids = ChildItemUtil.collectIds(currentUser.getWishList().getItems());
+        final Set<Long> ids = collectIds(currentUser.getWishList().getItems());
 
         if (!ids.contains(item.getId())) {
             final ChildItem childItem = new ChildItem();
-            childItem.setName(ChildItemUtil.createNameForWishListItem(item.getName()));
+            childItem.setName(createNameForWishListItem(item.getName()));
             childItem.setItem(item);
             currentUser.getWishList().getItems().add(childItem);
             update(currentUser);

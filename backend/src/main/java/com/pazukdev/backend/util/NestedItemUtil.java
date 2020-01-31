@@ -2,12 +2,10 @@ package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.factory.NestedItemDtoFactory;
-import com.pazukdev.backend.dto.table.PartsTable;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.service.UserService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class NestedItemUtil {
 
@@ -91,22 +89,9 @@ public class NestedItemUtil {
 
     public static void correctFieldsValues(final List<NestedItemDto> dtos) {
         for (final NestedItemDto dto : dtos) {
-//            dto.setLocalizedComment(SpecificStringUtil.replaceBlankWithDash(dto.getLocalizedComment()));
-//            dto.setLocalizedSecondComment(SpecificStringUtil.replaceBlankWithDash(dto.getLocalizedSecondComment()));
-
             dto.setComment(SpecificStringUtil.replaceEmpty(dto.getComment()));
             dto.setSecondComment(SpecificStringUtil.replaceEmpty(dto.getSecondComment()));
         }
-    }
-
-    public static List<List<NestedItemDto>> categorize(final List<NestedItemDto> nestedItems) {
-        final List<List<NestedItemDto>> categorizedItems = new ArrayList<>();
-        for (final String category : getCategories(nestedItems)) {
-            categorizedItems.add(nestedItems.stream().filter(
-                    nestedItem -> nestedItem.getItemCategory().equals(category)).collect(Collectors.toList()));
-
-        }
-        return categorizedItems;
     }
 
     public static Set<String> getCategories(final List<NestedItemDto> nestedItems) {
@@ -121,17 +106,14 @@ public class NestedItemUtil {
         return parentItemName + " - " + nestedItemName;
     }
 
-    public static List<NestedItemDto> collectAllItems(final PartsTable partsTable) {
-        return partsTable.getParts();
-    }
-
     public static List<NestedItemDto> createPossibleParts(final List<Item> items,
                                                           final String parentItemCategory,
-                                                          final UserService userService) {
+                                                          final UserService userService,
+                                                          final Set<String> infoCategories) {
         final List<NestedItemDto> childItemDtos = new ArrayList<>();
         for (final Item item : items) {
             final String category = item.getCategory();
-            if (!CategoryUtil.isPart(category) || category.equalsIgnoreCase(parentItemCategory)) {
+            if (!CategoryUtil.isPart(category, infoCategories) || category.equalsIgnoreCase(parentItemCategory)) {
                 continue;
             }
             final NestedItemDto dto = NestedItemDtoFactory.createBasicNestedItemDto(item, userService);

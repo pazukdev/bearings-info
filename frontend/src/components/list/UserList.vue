@@ -2,7 +2,7 @@
     <div>
         <LoadingScreen v-if="this.loadingState"/>
         <div v-else>
-            <Header :item="false"/>
+            <Header/>
             <CountedItemList :user-list-view="true"/>
         </div>
     </div>

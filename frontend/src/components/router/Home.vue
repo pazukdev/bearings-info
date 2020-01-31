@@ -1,20 +1,13 @@
 <template>
     <div>
         <LoadingScreen v-if="this.loadingState"/>
-        <div v-else>
-            <MotorcycleCatalogue/>
-            <Menu/>
-            <div id="place-of-creation">
-                {{"Minsk 2019"}}
-            </div>
-        </div>
+        <MotorcycleCatalogue v-else/>
     </div>
 </template>
 
 <script>
     import axios from "axios";
     import {mapState} from "vuex";
-    import Menu from "../menu/Menu";
     import MotorcycleCatalogue from "../list/MotorcycleCatalogue";
     import LoadingScreen from "../special/LoadingScreen";
     import itemViewUtil from "../../util/itemViewUtil";
@@ -22,11 +15,7 @@
     export default {
         name: "Home",
 
-        components: {
-            LoadingScreen,
-            MotorcycleCatalogue,
-            Menu
-        },
+        components: {LoadingScreen, MotorcycleCatalogue},
 
         computed: {
             ...mapState({

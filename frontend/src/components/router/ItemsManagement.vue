@@ -3,7 +3,7 @@
         <LoadingScreen v-if="this.loadingState"/>
         <div v-else>
             <CreateItemForm/>
-            <Header :item="false"/>
+            <Header/>
             <ItemList :items-management-view="true" :sorted="true"/>
             <div style="height: 100px"/>
         </div>

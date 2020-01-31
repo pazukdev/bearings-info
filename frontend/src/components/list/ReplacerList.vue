@@ -1,6 +1,5 @@
 <template>
     <div>
-        <NestedItemsTableTitle :edit-mode="editMode" :replacers="true" :table="itemView.replacersTable"/>
         <table id="replacers-table" style="text-align: center">
             <tbody>
             <tr style="text-align: left"
@@ -71,17 +70,12 @@
     import shared from "../../util/shared";
     import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
     import itemViewUtil from "../../util/itemViewUtil";
-    import NestedItemsTableTitle from "./section/NestedItemsTableTitle";
     import ButtonDelete from "../element/button/ButtonDelete";
 
     export default {
         name: "ReplacerList",
 
-        components: {
-            ButtonDelete,
-            ButtonNavigateToItem,
-            NestedItemsTableTitle
-        },
+        components: {ButtonDelete, ButtonNavigateToItem},
 
         computed: {
             ...mapState({

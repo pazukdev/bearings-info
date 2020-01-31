@@ -1,8 +1,5 @@
 <template>
     <div>
-        <Header :item="true"/>
-        <NestedItemsTableTitle v-if="itemView.partsEnabled"
-                               :edit-mode="editMode" :replacers="false" :table="itemView.partsTable"/>
         <CountedItemList :item="true" :editable-comments="true" :sorted="!editMode"/>
         <AddPartForm :show-form="showForm" @hide-add-form="hideAddForm"/>
     </div>
@@ -44,7 +41,7 @@
             }),
 
             itemsListAsTables() {
-                return itemViewUtil.itemsListToTables(this.itemView.partsTable.parts);
+                return itemViewUtil.itemsListToTables(this.itemView.children);
             }
         },
 
@@ -57,15 +54,7 @@
 
         methods: {
             isTitleVisible() {
-                return shared.isNestedItemsTitleVisible(this.itemView.partsTable.parts, this.editMode);
-            },
-
-            isShowPartsTableHeader() {
-                let header = this.itemView.partsTable.header;
-                if (header === null || !this.isTitleVisible()) {
-                    return false;
-                }
-                return !shared.isInArray("-", header);
+                return shared.isNestedItemsTitleVisible(this.itemView.children, this.editMode);
             },
 
             hideAddForm() {
@@ -73,7 +62,8 @@
             },
 
             removeItem(item) {
-                shared.removeFromArray(item, this.itemView.partsTable.parts);
+                itemViewUtil.removeItemFromItemList(this.itemView, item);
+                // shared.removeFromArray(item, this.itemView.children);
                 this.$emit("show-add-form");
             }
         }

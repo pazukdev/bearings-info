@@ -1,21 +1,5 @@
 <template>
-    <div>
-<!--        {{itemView.name}}<br>-->
-<!--        {{itemView.localizedName}}<br>-->
-        <div style="text-align: center">
-            <p v-if="!isEmpty(itemView.localizedCategory)"><b>{{itemView.localizedCategory}}</b></p>
-            <p v-if="!isEmpty(itemView.localizedName)"><b>{{itemView.localizedName}}</b></p>
-            <p v-if="!isEmpty(itemView.creatorName)">
-                {{$t("createdBy")}}
-                <router-link v-if="item" :to="{name: 'user', params: {id: itemView.creatorId, lang: appLanguage}}">
-                    {{itemView.creatorName}}
-                </router-link>
-            </p>
-            <br>
-        </div>
-
-<!--        {{itemView}}-->
-
+    <div v-if="item">
         <table id="item-description">
             <tbody>
             <tr v-for="row in sortByWeight(itemView.header.rows)">
@@ -159,10 +143,5 @@
 <style scoped>
     #item-description {
         text-align: left;
-    }
-
-    a {
-        color: grey;
-        text-decoration: underline;
     }
 </style>

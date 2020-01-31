@@ -19,7 +19,7 @@
         </table>
         <hr>
         <div v-if="true && isAdmin()">
-            <details open>
+            <details class="default-margin" open>
                 <summary>{{"Information for admin"}}</summary>
                 <table class="equal-columns-table" style="text-align: left">
                     <tbody>
@@ -97,7 +97,4 @@
 </script>
 
 <style scoped>
-    summary {
-        text-align: center;
-    }
 </style>

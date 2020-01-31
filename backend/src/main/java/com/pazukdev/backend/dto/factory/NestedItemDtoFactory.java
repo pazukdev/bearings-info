@@ -6,11 +6,14 @@ import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.Replacer;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.UserService;
-import com.pazukdev.backend.util.CategoryUtil;
 import com.pazukdev.backend.util.ChildItemUtil;
 import com.pazukdev.backend.util.SpecificStringUtil;
 import com.pazukdev.backend.util.UserUtil;
 
+import java.util.Map;
+import java.util.Set;
+
+import static com.pazukdev.backend.util.CategoryUtil.getItemsManagementComment;
 import static com.pazukdev.backend.util.ItemUtil.*;
 
 /**
@@ -33,17 +36,22 @@ public class NestedItemDtoFactory {
         return userData;
     }
 
-    public static NestedItemDto createMotorcycle(final Item motorcycle, final UserService userService) {
-        final String description = motorcycle.getDescription();
-        final String production = getValueFromDescription(description, "Production");
-        final String manufacturer = getValueFromDescription(description, "Manufacturer");
+    public static NestedItemDto createVehicle(final Item vehicle, final UserService userService) {
+        final String description = vehicle.getDescription();
+        final Map<String, String> map = toMap(description);
+        final String production = getValueFromDescriptionMap(map, "Production");
+        final String manufacturer = getValueFromDescriptionMap(map, "Manufacturer");
+        final String vehicleClass = getValueFromDescriptionMap(map, "Class");
 
-        final NestedItemDto motorcycleDto = createBasicNestedItemDto(motorcycle, userService);
-        motorcycleDto.setComment(production);
-        motorcycleDto.setSecondComment(manufacturer);
-        motorcycleDto.setItemCategory(manufacturer);
-        motorcycleDto.setDeletable(false);
-        return motorcycleDto;
+        final NestedItemDto vehicleDto = createBasicNestedItemDto(vehicle, userService);
+        vehicleDto.setComment(production);
+        vehicleDto.setSecondComment(manufacturer);
+        vehicleDto.setItemCategory(manufacturer);
+        vehicleDto.setDeletable(false);
+        vehicleDto.setVehicleIcon(vehicle.getImg());
+        vehicleDto.setVehicleClass(vehicleClass);
+
+        return vehicleDto;
     }
 
     public static NestedItemDto createChildItem(final ChildItem childItem,
@@ -84,9 +92,11 @@ public class NestedItemDtoFactory {
         return dto;
     }
 
-    public static NestedItemDto createItemForItemsManagement(final Item item, final UserService userService) {
+    public static NestedItemDto createItemForItemsManagement(final Item item,
+                                                             final UserService userService,
+                                                             final Set<String> comments) {
         final NestedItemDto basicSpecialNestedItemDto = createBasicNestedItemDto(item, userService);
-        String leftColumnData = CategoryUtil.getItemsManagementComment(item);
+        String leftColumnData = getItemsManagementComment(item, comments);
         basicSpecialNestedItemDto.setComment(leftColumnData != null ? leftColumnData : "-");
         return basicSpecialNestedItemDto;
     }
