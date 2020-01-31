@@ -16,6 +16,7 @@
         <details v-if="itemView.header != null" class="default-margin" open>
             <summary>{{"Specification"}}</summary>
             <ItemDescription :item="item"/>
+            <hr>
         </details>
     </div>
 </template>

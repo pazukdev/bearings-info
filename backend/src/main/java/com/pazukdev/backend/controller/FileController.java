@@ -68,10 +68,11 @@ public class FileController {
     private String uploadDictionaryFile(final String username, final Message message) throws IOException {
         final UserEntity user = userService.findByName(username);
 
+        final String text = message.getText();
         final int dictionarySize = getTxtFileLines(getTxtFilePath(FileName.DICTIONARY)).size();
-        final int newDictionarySize = message.getText().split(System.getProperty("line.separator")).length;
+        final int newDictionarySize = text.split(System.getProperty("line.separator")).length;
         final int difference = dictionarySize - newDictionarySize;
-        final int removedLinesLimit = user.getRole() == Role.ADMIN ? 20 : 2;
+        final int removedLinesLimit = user.getRole() == Role.ADMIN ? 20 : 1;
 
         if (difference > removedLinesLimit) {
             return "New dictionary not accepted. " +
@@ -80,7 +81,7 @@ public class FileController {
                     "You can't remove more than " + removedLinesLimit + " lines at a time";
         }
 
-        createFileInFileSystem(FileName.DICTIONARY, message.getText().getBytes(StandardCharsets.UTF_8));
+        createFileInFileSystem(FileName.DICTIONARY, text.getBytes(StandardCharsets.UTF_8));
 
         final String plus = -difference > 0 ? "+" : "";
         String changed = ": " + plus + (-difference) + " lines";

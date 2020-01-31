@@ -31,8 +31,11 @@ ru=app data=все данные
 ru=ball=шарик
 ru=base=база
 ru=bearing=подшипник
+ru=bolt=болт
+ru=boxer=оппозит
 ru=bronze=бронза
 ru=cage=сепаратор
+ru=car=легковой автомобиль
 ru=carburetor=карбюратор
 ru=cardan shaft groove diameter=диаметр канавки на карданном валу
 ru=chassis=шасси
@@ -113,6 +116,7 @@ ru=needle=иголка
 ru=no data=нет данных
 ru=no=нет
 ru=non-ferrous metals and alloys=цветные металлы и сплавы
+ru=oil filter=масляный фильтр
 ru=oil=масло
 ru=or higher=или выше
 ru=outer concentric flat thrust spring retaining rings and grooves=кольца пружинные упорные плоские наружные концентрические и канавки для них
@@ -129,6 +133,7 @@ ru=piston rings=поршневые кольца
 ru=piston=поршень
 ru=plain bearing=подшипник скольжения
 ru=planet=планета
+ru=plastic=пластик
 ru=platinum=платина
 ru=polyamide=полиамид
 ru=portuguese cork=португальская пробка
@@ -203,7 +208,3 @@ ru=width=ширина
 ru=wire=провод
 ru=wrought aluminium and aluminium alloys=алюминий и сплавы алюминиевые деформируемые
 ru=your wishlist=ваш список желаемого
-ru=oil filter=масляный фильтр
-ru=boxer=оппозит
-ru=bolt=болт
-ru=plastic=пластик
