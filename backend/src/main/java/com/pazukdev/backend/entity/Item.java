@@ -31,7 +31,7 @@ public class Item extends AbstractEntity {
     private String description;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
             name = "item_child_item",
             joinColumns = @JoinColumn(name = "parent_item_id"),
@@ -40,7 +40,7 @@ public class Item extends AbstractEntity {
     private Set<ChildItem> childItems = new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
             name = "item_replacer",
             joinColumns = @JoinColumn(name = "original_item_id"),
@@ -49,7 +49,7 @@ public class Item extends AbstractEntity {
     private Set<Replacer> replacers = new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
             name = "item_link",
             joinColumns = @JoinColumn(name = "item_id"),

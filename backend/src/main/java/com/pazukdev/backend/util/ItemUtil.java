@@ -285,7 +285,7 @@ public class ItemUtil {
                                         final UserEntity user) {
         final Set<ChildItem> oldChildItems = new HashSet<>(item.getChildItems());
         final Set<ChildItem> newChildItems
-                = new HashSet<>(ChildItemUtil.createPartsFromItemView(itemView, itemService));
+                = new HashSet<>(ChildItemUtil.createChildrenFromItemView(itemView, itemService));
         item.getChildItems().clear();
         item.getChildItems().addAll(newChildItems);
 

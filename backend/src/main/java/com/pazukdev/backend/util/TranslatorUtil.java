@@ -58,7 +58,7 @@ public class TranslatorUtil {
         }
 
         itemView.setLocalizedCategory(translate(languageFrom, languageTo, category, addToDictionary));
-        itemView.setLocalizedName(translate(languageFrom, languageTo, localizedName, addToDictionary));
+        itemView.setLocalizedName(translate(languageFrom, languageTo, localizedName, false));
         itemView.setHeader(header);
         itemView.setChildren(children);
         itemView.setReplacersTable(replacersTable);
@@ -75,6 +75,9 @@ public class TranslatorUtil {
             return null;
         }
         for (final HeaderTableRow row : headerTable.getRows()) {
+            if (row.getName().equalsIgnoreCase("Name")) {
+                row.setValue(translate(languageFrom, languageTo, row.getValue(), false));
+            }
             row.setParameter(translate(languageFrom, languageTo, row.getParameter(), addToDictionary));
             row.setValue(translate(languageFrom, languageTo, row.getValue(), addToDictionary));
         }

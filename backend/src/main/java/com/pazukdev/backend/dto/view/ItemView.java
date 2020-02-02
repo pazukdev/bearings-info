@@ -24,7 +24,7 @@ public class ItemView extends AbstractView {
 
     private boolean searchEnabled;
     private boolean newItem;
-    private boolean hardDelete;
+    private boolean hardDelete = true;
     private boolean partsEnabled = true;
     private boolean ordinaryItem;
     private Long itemId;

@@ -6,7 +6,6 @@ import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.dto.view.UserView;
 import com.pazukdev.backend.entity.Item;
-import com.pazukdev.backend.entity.WishList;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
 import io.swagger.annotations.Api;
@@ -60,7 +59,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get user list view")
     public ItemView getUserListView(@PathVariable final String userName, @PathVariable final String language) {
-        return new ItemViewFactory(itemService, getInfoCategories()).createUserListView(userName, language);
+        final ItemViewFactory factory = new ItemViewFactory(itemService, getInfoCategories());
+        return factory.createUserListView(userName, language);
     }
 
     @GetMapping("/view/wishlist/{userName}/{language}")
@@ -112,14 +112,14 @@ public class UserController {
         return userService.getRoles();
     }
 
-    @GetMapping(value = "{userName}/wishlist/{itemId}")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get user wishlist")
-    public boolean isItemInWishList(@PathVariable final String userName, @PathVariable final Long itemId) {
-        final Item item = itemService.getOne(itemId);
-        final WishList wishList = userService.findByName(userName).getWishList();
-        return wishList.getItems().contains(item);
-    }
+//    @GetMapping(value = "{userName}/wishlist/{itemId}")
+//    @ResponseStatus(HttpStatus.OK)
+//    @ApiOperation(value = "Get user wishlist")
+//    public boolean isItemInWishList(@PathVariable final String userName, @PathVariable final Long itemId) {
+//        final Item item = itemService.getOne(itemId);
+//        final WishList wishList = userService.findByName(userName).getWishList();
+//        return wishList.getItems().contains(item);
+//    }
 
     @PutMapping("user/{username}/add-item-to-wishlist/{item-id}")
     @ResponseStatus(HttpStatus.OK)

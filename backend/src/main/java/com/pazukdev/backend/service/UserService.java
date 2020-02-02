@@ -7,9 +7,12 @@ import com.pazukdev.backend.dto.view.UserView;
 import com.pazukdev.backend.entity.ChildItem;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.repository.ChildItemRepository;
 import com.pazukdev.backend.repository.UserRepository;
+import com.pazukdev.backend.repository.WishListRepository;
 import com.pazukdev.backend.util.ImgUtil;
 import com.pazukdev.backend.validator.UserDataValidator;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,18 +27,25 @@ import static com.pazukdev.backend.util.ChildItemUtil.createNameForWishListItem;
  * @author Siarhei Sviarkaltsau
  */
 @Service
+@Getter
 public class UserService extends AbstractService<UserEntity, UserDto> {
 
     private final PasswordEncoder passwordEncoder;
     private final UserDataValidator userDataValidator;
+    private final WishListRepository wishListRepository;
+    private final ChildItemRepository childItemRepository;
 
     public UserService(final UserRepository repository,
                        final UserConverter converter,
                        final PasswordEncoder passwordEncoder,
-                       final UserDataValidator userDataValidator) {
+                       final UserDataValidator userDataValidator,
+                       final WishListRepository wishListRepository,
+                       final ChildItemRepository childItemRepository) {
         super(repository, converter);
         this.passwordEncoder = passwordEncoder;
         this.userDataValidator = userDataValidator;
+        this.wishListRepository = wishListRepository;
+        this.childItemRepository = childItemRepository;
     }
 
     @Transactional
@@ -118,10 +128,9 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
             currentUser.getWishList().getItems().add(childItem);
             update(currentUser);
             return true;
-        } else {
-            return false;
         }
 
+        return  false;
     }
 
     public UserEntity getAdmin() {

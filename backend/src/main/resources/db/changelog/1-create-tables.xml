@@ -165,7 +165,7 @@
                 <constraints foreignKeyName="fk_wishlist_item_wishlist_id" references="wishlist (id)"/>
             </column>
             <column name="item_id" type="bigint">
-                <constraints foreignKeyName="fk_wishlist_item_item_id" references="item (id)"/>
+                <constraints foreignKeyName="fk_wishlist_item_item_id" references="child_item (id)"/>
             </column>
         </createTable>
     </changeSet>

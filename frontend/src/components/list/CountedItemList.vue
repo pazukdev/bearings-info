@@ -72,6 +72,7 @@
             editableComments: Boolean,
             userListView: Boolean,
             summaryView: Boolean,
+            wishListView: Boolean,
             itemViewProp: Object,
             sorted: Boolean,
             items: Array
@@ -104,8 +105,7 @@
                 } else {
                     items = itemView.children;
                 }
-                // let opened = !this.summaryView;
-                let opened = false;
+                let opened = this.wishListView === true;
                 return itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
             },
 

@@ -3,7 +3,7 @@
         <LoadingScreen v-if="this.loadingState"/>
         <div v-else>
             <Header/>
-            <CountedItemList :editable-comments="true"/>
+            <CountedItemList :editable-comments="true" :wish-list-view="true"/>
         </div>
     </div>
 </template>

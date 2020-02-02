@@ -76,7 +76,7 @@ export default {
 
     removeItemFromItemList(itemView, item) {
         shared.removeFromArray(item, itemView.children);
-        //itemView.idsToRemove.push(item.itemId);
+        itemView.idsToRemove.push(item.itemId);
     },
 
     isMotorcycleCatalogueView(itemView) {

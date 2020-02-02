@@ -2,6 +2,7 @@ ru=AL=АЛ
 ru=China=Китай
 ru=Cork. Terms and definitions=кора пробковая. термины и определения
 ru=Dnepr=Днепр
+ru=Exhaust=Выхлоп
 ru=GOST=ГОСТ
 ru=IMZ=ИМЗ
 ru=Irbitskiy Mototsikletniy Zavod=Ирбитский Мотоциклетный Завод

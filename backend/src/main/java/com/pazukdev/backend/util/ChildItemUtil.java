@@ -45,7 +45,7 @@ public class ChildItemUtil {
         return childItems;
     }
 
-    public static Set<ChildItem> createPartsFromItemView(final ItemView view, final ItemService itemService) {
+    public static Set<ChildItem> createChildrenFromItemView(final ItemView view, final ItemService itemService) {
         final List<NestedItemDto> preparedItems = prepareNestedItemDtosToConverting(view.getChildren());
         final String parentName = getParentName(view, itemService);
 

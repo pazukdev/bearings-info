@@ -66,7 +66,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     @Transactional
     @Override
     public Item findByName(String name) {
-        return ((ItemRepository) repository).findByName(name);
+        return itemRepository.findByName(name);
     }
 
 //    public List<Item> findAllInfoItems() {
@@ -75,7 +75,19 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     @Transactional
     public Item find(final String category, final String name) {
-        return itemRepository.findFirstByCategoryAndName(category, name);
+        Item item = itemRepository.findFirstByCategoryAndName(category, name);
+        if (item != null && !item.getStatus().equals("active")) {
+            find(category, name);
+        }
+        return item;
+    }
+
+    @Transactional
+    @Override
+    public List<Item> findAll() {
+        final List<Item> items = itemRepository.findAll();
+        items.removeIf(entity -> !entity.getStatus().equals("active"));
+        return items;
     }
 
     @Transactional
@@ -159,10 +171,8 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                                       final String name,
                                       final String userName,
                                       final String userLanguage) {
-
-        final ItemViewFactory itemViewFactory = new ItemViewFactory(this, getTxtFileLines(INFO_CATEGORIES));
         try {
-            return itemViewFactory.createNewItemView(category, name, userName, userLanguage);
+            return createNewItemViewFactory().createNewItemView(category, name, userName, userLanguage);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -174,8 +184,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                                    final String userName,
                                    final String language,
                                    final ItemView itemView) {
-        final ItemViewFactory itemViewFactory = new ItemViewFactory(this, getTxtFileLines(INFO_CATEGORIES));
-        return itemViewFactory.updateItemView(itemId, userName, language, itemView);
+        return createNewItemViewFactory().updateItemView(itemId, userName, language, itemView);
     }
 
     @Transactional
