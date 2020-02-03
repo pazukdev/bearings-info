@@ -1,5 +1,6 @@
 package com.pazukdev.backend.dto.view;
 
+import com.pazukdev.backend.dto.AdminMessage;
 import com.pazukdev.backend.dto.LikeListDto;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
@@ -53,5 +54,6 @@ public class ItemView extends AbstractView {
     private double businessLogicTime;
     private double translationTime;
     private double responseTotalTime;
+    private AdminMessage adminMessage = new AdminMessage();
 
 }

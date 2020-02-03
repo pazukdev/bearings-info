@@ -2,6 +2,7 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.converter.ReplacerConverter;
+import com.pazukdev.backend.dto.AdminMessage;
 import com.pazukdev.backend.dto.RateReplacer;
 import com.pazukdev.backend.dto.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.dto.TransitiveItemDto;
@@ -16,6 +17,7 @@ import com.pazukdev.backend.util.DateUtil;
 import com.pazukdev.backend.util.LinkUtil;
 import com.pazukdev.backend.util.RateUtil;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,9 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     private final ReplacerRepository replacerRepository;
     private final ReplacerConverter replacerConverter;
     private final ItemRepository itemRepository;
+
+    @Setter
+    private AdminMessage adminMessage;
 
     public ItemService(final ItemRepository itemRepository,
                        final ItemConverter converter,
@@ -200,14 +205,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         }
         return categories;
     }
-
-//    public Set<String> findAllCategories() {
-//        return collectCategories(findAll());
-//    }
-
-//    public Set<String> findAllPartCategories() {
-//        return filterPartCategories(findAllCategories());
-//    }
 
     private String createItemDescription(final TransitiveItemDescriptionMap descriptionMap) {
         descriptionMap.getItems().clear();

@@ -8,7 +8,8 @@
             <p v-if="!isEmpty(itemView.localizedName)"><b>{{itemView.localizedName}}</b></p>
             <p v-if="!isEmpty(itemView.creatorName)">
                 {{$t("createdBy")}}
-                <router-link v-if="item" :to="{name: 'user', params: {id: itemView.creatorId, lang: appLanguage}}">
+                <router-link class="simple-link"
+                             v-if="item" :to="{name: 'user', params: {id: itemView.creatorId, lang: appLanguage}}">
                     {{itemView.creatorName}}
                 </router-link>
             </p>
@@ -71,8 +72,4 @@
 </script>
 
 <style scoped>
-    a {
-        color: grey;
-        text-decoration: underline;
-    }
 </style>

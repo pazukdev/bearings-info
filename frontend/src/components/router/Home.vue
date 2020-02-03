@@ -1,5 +1,6 @@
 <template>
     <div>
+        <NewsSection/>
         <LoadingScreen v-if="this.loadingState"/>
         <MotorcycleCatalogue v-else/>
     </div>
@@ -11,11 +12,13 @@
     import MotorcycleCatalogue from "../list/MotorcycleCatalogue";
     import LoadingScreen from "../special/LoadingScreen";
     import itemViewUtil from "../../util/itemViewUtil";
+    import DefaultButton from "../element/button/DefaultButton";
+    import NewsSection from "../NewsSection";
 
     export default {
         name: "Home",
 
-        components: {LoadingScreen, MotorcycleCatalogue},
+        components: {NewsSection, DefaultButton, LoadingScreen, MotorcycleCatalogue},
 
         computed: {
             ...mapState({

@@ -201,6 +201,11 @@
         cursor: pointer;
     }
 
+    .simple-link {
+        color: grey;
+        text-decoration: underline;
+    }
+
     table {
         /*border-collapse: collapse;*/
         /*border-style: hidden;*/

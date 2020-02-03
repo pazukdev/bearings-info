@@ -233,6 +233,9 @@ public class ItemViewFactory {
         final List<NestedItemDto> dtos = new ArrayList<>();
         vehicles.forEach(vehicle -> dtos.add(createVehicle(vehicle, userService)));
         view.setChildren(dtos);
+
+        view.setAdminMessage(itemService.getAdminMessage());
+
         return view;
     }
 
