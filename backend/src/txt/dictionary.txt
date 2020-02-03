@@ -209,3 +209,7 @@ ru=width=ширина
 ru=wire=провод
 ru=wrought aluminium and aluminium alloys=алюминий и сплавы алюминиевые деформируемые
 ru=your wishlist=ваш список желаемого
+ru=created=создал
+ru=added=добавил
+ru=part=часть
+ru=as=как

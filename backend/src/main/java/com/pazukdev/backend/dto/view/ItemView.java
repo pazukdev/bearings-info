@@ -3,6 +3,7 @@ package com.pazukdev.backend.dto.view;
 import com.pazukdev.backend.dto.AdminMessage;
 import com.pazukdev.backend.dto.LikeListDto;
 import com.pazukdev.backend.dto.NestedItemDto;
+import com.pazukdev.backend.dto.UserActionDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.ReplacersTable;
 import com.pazukdev.backend.dto.user.UserDto;
@@ -54,6 +55,7 @@ public class ItemView extends AbstractView {
     private double businessLogicTime;
     private double translationTime;
     private double responseTotalTime;
-    private AdminMessage adminMessage = new AdminMessage();
+    private AdminMessage adminMessage;
+    private List<UserActionDto> userActions = new ArrayList<>();
 
 }

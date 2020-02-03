@@ -232,10 +232,10 @@ public class ItemViewFactory {
 
         final List<NestedItemDto> dtos = new ArrayList<>();
         vehicles.forEach(vehicle -> dtos.add(createVehicle(vehicle, userService)));
+
         view.setChildren(dtos);
-
         view.setAdminMessage(itemService.getAdminMessage());
-
+        view.setUserActions(UserActionUtil.createUserActionsReport(itemService));
         return view;
     }
 
@@ -245,6 +245,7 @@ public class ItemViewFactory {
 
         final List<NestedItemDto> dtos = new ArrayList<>();
         items.forEach(item -> dtos.add(createItemForItemsManagement(item, itemService.getUserService(), comments)));
+
         view.setChildren(dtos);
         view.setAllCategories(new ArrayList<>(itemService.collectCategories(items)));
         return view;

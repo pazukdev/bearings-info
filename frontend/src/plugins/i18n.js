@@ -48,7 +48,9 @@ export const i18n = new VueI18n({
             appData: "App data",
             myProfile: "My profile",
             nameAndPasswordInputLabel: "Length: 2 - 30 characters: english letters, numbers, - , _ , space",
-            defaultInputTitle: "Length: 2 - 30 characters: letters, numbers, - , _ , space"
+            defaultInputTitle: "Length: 2 - 30 characters: letters, numbers, - , _ , space",
+            as: "as",
+            to: "to"
         },
         ru: {
             language: "Русский язык",
@@ -91,7 +93,9 @@ export const i18n = new VueI18n({
             appData: "Все данные",
             myProfile: "Мой профиль",
             nameAndPasswordInputLabel: "Длина: 2 - 30 символов: английские буквы, цифры, - , _ , пробел",
-            defaultInputTitle: "Длина: 2 - 30 символов: буквы, цифры, - , _ , пробел"
+            defaultInputTitle: "Длина: 2 - 30 символов: буквы, цифры, - , _ , пробел",
+            as: "как",
+            to: "к"
         }
     }
 });

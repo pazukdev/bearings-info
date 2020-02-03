@@ -1,6 +1,7 @@
 package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.dto.NestedItemDto;
+import com.pazukdev.backend.dto.UserActionDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.table.HeaderTableRow;
 import com.pazukdev.backend.dto.table.ReplacersTable;
@@ -31,40 +32,46 @@ public class TranslatorUtil {
     private static String WORD_SEPARATOR = " ";
     private static String DICTIONARY_SEPARATOR = "=";
 
-    public static void translate(final String languageFrom,
-                                 final String languageTo,
-                                 final ItemView itemView,
+    public static void translate(final String langFrom,
+                                 final String langTo,
+                                 final ItemView view,
                                  final boolean addToDictionary) throws Exception {
-        HeaderTable header = itemView.getHeader();
-        final String category = itemView.getCategory();
-        final String localizedName = itemView.getLocalizedName();
-        final ReplacersTable replacersTable = itemView.getReplacersTable();
-        final List<NestedItemDto> children = itemView.getChildren();
-        final List<NestedItemDto> possibleParts = itemView.getPossibleParts();
-        final List<NestedItemDto> replacers = itemView.getPossibleReplacers();
-        final List<String> categories = itemView.getAllCategories();
+        HeaderTable header = view.getHeader();
+        final String category = view.getCategory();
+        final String localizedName = view.getLocalizedName();
+        final ReplacersTable replacersTable = view.getReplacersTable();
+        final List<NestedItemDto> children = view.getChildren();
+        final List<NestedItemDto> possibleParts = view.getPossibleParts();
+        final List<NestedItemDto> replacers = view.getPossibleReplacers();
+        final List<String> categories = view.getAllCategories();
 
         try {
-            header = translate(languageFrom, languageTo, header, addToDictionary);
-            translateNestedItemDtoList(languageFrom, languageTo, children);
-            translate(languageFrom, languageTo, replacersTable, addToDictionary);
-            translateNestedItemDtoList(languageFrom, languageTo, possibleParts);
-            translateNestedItemDtoList(languageFrom, languageTo, replacers);
-            translate(languageFrom, languageTo, categories, addToDictionary);
+            header = translate(langFrom, langTo, header, addToDictionary);
+            translateNestedItemDtoList(langFrom, langTo, children);
+            translate(langFrom, langTo, replacersTable, addToDictionary);
+            translateNestedItemDtoList(langFrom, langTo, possibleParts);
+            translateNestedItemDtoList(langFrom, langTo, replacers);
+            translate(langFrom, langTo, categories, addToDictionary);
         } catch (final Exception e) {
             e.printStackTrace();
             throw new Exception("Translation isn't finished because of the error. "
                     + "To remove this message please select English language");
         }
 
-        itemView.setLocalizedCategory(translate(languageFrom, languageTo, category, addToDictionary));
-        itemView.setLocalizedName(translate(languageFrom, languageTo, localizedName, false));
-        itemView.setHeader(header);
-        itemView.setChildren(children);
-        itemView.setReplacersTable(replacersTable);
-        itemView.setPossibleParts(possibleParts);
-        itemView.setPossibleReplacers(replacers);
-        itemView.setAllCategories(categories);
+        view.setLocalizedCategory(translate(langFrom, langTo, category, addToDictionary));
+        view.setLocalizedName(translate(langFrom, langTo, localizedName, false));
+        view.setHeader(header);
+        view.setChildren(children);
+        view.setReplacersTable(replacersTable);
+        view.setPossibleParts(possibleParts);
+        view.setPossibleReplacers(replacers);
+        view.setAllCategories(categories);
+        if (view.getAdminMessage() != null) {
+            view.getAdminMessage().translate(langTo);
+        }
+        for (final UserActionDto userAction : view.getUserActions()) {
+            userAction.translate(langTo);
+        }
     }
 
     private static HeaderTable translate(final String languageFrom,

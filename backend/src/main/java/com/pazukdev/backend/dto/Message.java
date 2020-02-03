@@ -12,6 +12,6 @@ public class Message implements Serializable {
 
     private final static long serialVersionUID = 12343L;
 
-    private String text;
+    protected String text;
 
 }

@@ -42,11 +42,11 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)"/>
-            <column name="user_id" type="varchar(255)"/>
+            <column name="user_id" type="bigint"/>
             <column name="action_date" type="varchar(255)"/>
             <column name="action_type" type="varchar(255)"/>
-            <column name="parent_item_id" type="varchar(255)"/>
-            <column name="item_id" type="varchar(255)"/>
+            <column name="parent_item_id" type="bigint"/>
+            <column name="item_id" type="bigint"/>
             <column name="item_type" type="varchar(255)"/>
             <column name="item_category" type="varchar(255)"/>
             <column name="status" type="varchar(255)"/>

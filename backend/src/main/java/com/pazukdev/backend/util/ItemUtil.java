@@ -291,7 +291,7 @@ public class ItemUtil {
 
         for (final ChildItem child : newChildItems) {
             if (child.getId() == null) {
-                UserActionUtil.processPartAction("create", child, item, user, itemService);
+                UserActionUtil.processPartAction("add", child, item, user, itemService);
             }
         }
 
@@ -328,7 +328,7 @@ public class ItemUtil {
 
         for (final Replacer replacer : newReplacers) {
             if (replacer.getId() == null) {
-                UserActionUtil.processReplacerAction("create", replacer, item, user, itemService);
+                UserActionUtil.processReplacerAction("add", replacer, item, user, itemService);
             }
         }
 
