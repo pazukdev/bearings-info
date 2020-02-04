@@ -1,23 +1,5 @@
 <template>
     <div v-if="!isLoginPage()">
-<!--        {{itemView.userData}}-->
-        <table>
-            <tbody>
-                <tr>
-                    <td class="third-part-wide">
-                        <DefaultButton v-if="!isGuest()" @on-click="openWishlist" :text="getWishListButtonText()"/>
-                    </td>
-                    <td/>
-                    <td class="third-part-wide" style="text-align: right">
-                        <div v-if="!isGuest()">{{itemView.userData.name}}</div>
-                        <div v-if="!isGuest()">{{$t("rating") + ": " + itemView.userData.rating}}</div>
-                        <div v-if="isAdmin()">{{$t("youAreAdmin")}}</div>
-                        <div v-if="isGuest()">{{$t('youAreGuest')}}</div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <hr>
         <div v-if="true && isAdmin()">
             <details class="default-margin" open>
                 <summary>{{"Information for admin"}}</summary>
@@ -52,7 +34,9 @@
 
     export default {
         name: "UserMenu",
+
         components: {DefaultButton},
+
         computed: {
             ...mapState({
                 userName: state => state.dictionary.userName,
@@ -62,22 +46,6 @@
         },
 
         methods: {
-            openWishlist() {
-                routerUtil.toWishlist();
-            },
-
-            getWishListButtonText() {
-                return this.$t("wishlist") + ": " + this.getItemsCount() + " " + this.$t("itemsPcs");
-            },
-
-            getItemsCount() {
-                return this.itemView.wishListIds.length;
-            },
-
-            isGuest() {
-                return itemViewUtil.isGuest(this.userName);
-            },
-
             isAdmin() {
                 return itemViewUtil.isAdmin(this.itemView);
             },

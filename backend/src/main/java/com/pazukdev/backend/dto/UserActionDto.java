@@ -27,7 +27,7 @@ public class UserActionDto extends AbstractDto {
         itemType = TranslatorUtil.translate("en", langTo, itemType, false);
         itemCategory = TranslatorUtil.translate("en", langTo, itemCategory, false);
         itemName = TranslatorUtil.translate("en", langTo, itemName, false);
-        itemName = TranslatorUtil.translate("en", langTo, parentName, false);
+        parentName = TranslatorUtil.translate("en", langTo, parentName, false);
     }
 
 }

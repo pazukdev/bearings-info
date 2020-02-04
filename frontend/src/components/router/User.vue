@@ -211,7 +211,7 @@
             },
 
             isImgRendered() {
-                return this.isAdmin() || this.isSeller();
+                return true;
             },
 
             isAdmin() {

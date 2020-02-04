@@ -25,14 +25,14 @@
                         </router-link>
                     </td>
                     <td>
-                        <router-link :to="{name: 'items_management'}" active-class="active">
-                            {{$t('appData')}}
+                        <router-link :to="{name: 'wish_list', params: {lang: appLanguage}}"
+                                     active-class="active" v-if="!isGuest()">
+                            {{$t("wishlist") + ": " + itemView.wishListIds.length}}
                         </router-link>
                     </td>
                     <td>
-                        <router-link :to="{name: 'user', params: {id: itemView.userData.id, lang: appLanguage}}"
-                                     active-class="active">
-                            {{$t('myProfile')}}
+                        <router-link :to="{name: 'items_management'}" active-class="active">
+                            {{$t('appData')}}
                         </router-link>
                     </td>
                     <td>
