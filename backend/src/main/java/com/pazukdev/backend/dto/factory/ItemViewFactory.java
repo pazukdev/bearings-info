@@ -24,6 +24,7 @@ import static com.pazukdev.backend.util.SpecificStringUtil.*;
 import static com.pazukdev.backend.util.TableUtil.createHeader;
 import static com.pazukdev.backend.util.TableUtil.createReplacersTable;
 import static com.pazukdev.backend.util.TranslatorUtil.translate;
+import static com.pazukdev.backend.util.UserActionUtil.*;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -126,7 +127,7 @@ public class ItemViewFactory {
         item.setUserActionDate(DateUtil.now());
         item.setDescription(createEmptyDescription(category));
         itemService.update(item);
-        UserActionUtil.processItemAction("create", item, creator, itemService);
+        processItemAction("create", item, creator, itemService);
         return item;
     }
 
@@ -235,7 +236,8 @@ public class ItemViewFactory {
 
         view.setChildren(dtos);
         view.setAdminMessage(itemService.getAdminMessage());
-        view.setUserActions(UserActionUtil.createUserActionsReport(itemService));
+        view.setLastVehicles(getLat5NewVehicles(itemService));
+        view.setLastReplacers(getLat5NewReplacers(itemService));
         return view;
     }
 
@@ -385,7 +387,7 @@ public class ItemViewFactory {
         itemToRemove.setStatus("deleted");
         itemToRemove.setUserActionDate(DateUtil.now());
         itemService.update(itemToRemove);
-        UserActionUtil.processItemAction("delete", itemToRemove, user, itemService);
+        processItemAction("delete", itemToRemove, user, itemService);
     }
 
     private void removeItemFromAllWishLists(final Item itemToRemove, final UserService userService) {
@@ -408,7 +410,7 @@ public class ItemViewFactory {
                 if (nestedItem.getId().equals(idToRemove)) {
 //                    replacer.setStatus("deleted");
                     item.getReplacers().remove(replacer);
-                    UserActionUtil.processReplacerAction(actionType, replacer, item, user, itemService);
+                    processReplacerAction(actionType, replacer, item, user, itemService);
                 }
             }
 
@@ -417,7 +419,7 @@ public class ItemViewFactory {
                 if (nestedItem.getId().equals(idToRemove)) {
 //                    part.setStatus("deleted");
                     item.getChildItems().remove(part);
-                    UserActionUtil.processPartAction(actionType, part, item, user, itemService);
+                    processPartAction(actionType, part, item, user, itemService);
                 }
             }
 

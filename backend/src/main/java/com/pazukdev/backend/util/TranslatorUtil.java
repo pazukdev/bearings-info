@@ -69,7 +69,10 @@ public class TranslatorUtil {
         if (view.getAdminMessage() != null) {
             view.getAdminMessage().translate(langTo);
         }
-        for (final UserActionDto userAction : view.getUserActions()) {
+        for (final UserActionDto userAction : view.getLastVehicles()) {
+            userAction.translate(langTo);
+        }
+        for (final UserActionDto userAction : view.getLastReplacers()) {
             userAction.translate(langTo);
         }
     }

@@ -16,6 +16,7 @@ import com.pazukdev.backend.repository.UserActionRepository;
 import com.pazukdev.backend.util.DateUtil;
 import com.pazukdev.backend.util.LinkUtil;
 import com.pazukdev.backend.util.RateUtil;
+import com.pazukdev.backend.util.UserActionUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.pazukdev.backend.util.CategoryUtil.Category.MATERIAL;
+import static com.pazukdev.backend.util.CategoryUtil.Category.*;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
 import static com.pazukdev.backend.util.CategoryUtil.isInfo;
 import static com.pazukdev.backend.util.ChildItemUtil.createParts;
@@ -31,6 +32,8 @@ import static com.pazukdev.backend.util.FileUtil.FileName.INFO_CATEGORIES;
 import static com.pazukdev.backend.util.FileUtil.getTxtFileLines;
 import static com.pazukdev.backend.util.ItemUtil.*;
 import static com.pazukdev.backend.util.ReplacerUtil.createReplacers;
+import static com.pazukdev.backend.util.UserActionUtil.processItemAction;
+import static com.pazukdev.backend.util.UserActionUtil.processReplacerAction;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -46,9 +49,13 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     private final ReplacerRepository replacerRepository;
     private final ReplacerConverter replacerConverter;
     private final ItemRepository itemRepository;
-
     @Setter
     private AdminMessage adminMessage;
+
+    private int bearingReplacerCounter = 0;
+    private int sealReplacerCounter = 0;
+    private int oilFilterReplacerCounter = 0;
+    private int sparkPlugReplacerCounter = 0;
 
     public ItemService(final ItemRepository itemRepository,
                        final ItemConverter converter,
@@ -148,6 +155,20 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         LinkUtil.addLinksToItem(newItem, transitiveItem);
 
         itemRepository.save(newItem);
+
+        if (category.equals("Vehicle")) {
+            processItemAction(UserActionUtil.ActionType.CREATE, newItem, getUserService().getAdmin(), this);
+        }
+
+        for (final Replacer replacer : replacers) {
+            if ((category.equals(SEAL) && sealReplacerCounter++ < 3)
+                    || (category.equals(SPARK_PLUG) && sparkPlugReplacerCounter++ < 2)
+                    || (category.equals(BEARING) && bearingReplacerCounter++ < 2)
+                    || (category.equals(OIL_FILTER) && oilFilterReplacerCounter++ < 3)) {
+                processReplacerAction(UserActionUtil.ActionType.ADD, replacer, newItem, getUserService().getAdmin(), this);
+            }
+        }
+
         return newItem;
     }
 

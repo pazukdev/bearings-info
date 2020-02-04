@@ -5,6 +5,7 @@ import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.repository.UserActionRepository;
 import com.pazukdev.backend.service.ItemService;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,7 +18,17 @@ import static com.pazukdev.backend.util.UserActionUtil.ValueIncrease.*;
 
 public class UserActionUtil {
 
-    private final static Set<String> userRatedActions = new HashSet<>(Arrays.asList("create", "update", "rate"));
+    public static class ActionType {
+        public static final String ADD = "add";
+        public static final String CREATE = "create";
+        public static final String DELETE = "delete";
+        public static final String RATE = "rate";
+        public static final String UPDATE = "update";
+        public static final String UPLOAD_DICTIONARY = "upload dictionary";
+    }
+
+    private final static Set<String> userRatedActions = new HashSet<>(Arrays
+            .asList(ActionType.CREATE, ActionType.UPDATE, ActionType.RATE));
 
     @Getter
     public enum ValueIncrease {
@@ -37,19 +48,32 @@ public class UserActionUtil {
         }
     }
 
-    public static List<UserActionDto> createUserActionsReport(final ItemService service) {
+    private static Pageable getPageRequest() {
+        return PageRequest.of(0, 10, Sort.Direction.DESC, "id");
+    }
+
+    public static List<UserActionDto> getLat5NewVehicles(final ItemService service) {
+        final UserActionRepository repository = service.getUserActionRepository();
+        final Pageable p = getPageRequest();
+        final Page<UserAction> actions = repository.findFirst10ByActionTypeAndItemCategory(ActionType.CREATE, "Vehicle", p);
+        return getLastUserActionsReport(actions.getContent(), service);
+    }
+
+    public static List<UserActionDto> getLat5NewReplacers(final ItemService service) {
+        final UserActionRepository repository = service.getUserActionRepository();
+        final Pageable p = getPageRequest();
+        final Page<UserAction> actions = repository.findFirst10ByActionTypeAndItemType(ActionType.ADD, "replacer", p);
+        return getLastUserActionsReport(actions.getContent(), service);
+    }
+
+    public static List<UserActionDto> getLastUserActionsReport(final List<UserAction> actions,
+                                                              final ItemService service) {
         final List<UserActionDto> lastUsersActions = new ArrayList<>();
-        final Pageable pageable = PageRequest.of(0, 100, Sort.Direction.DESC, "id");
-        int count = 0;
-        for (final UserAction action : service.getUserActionRepository().findAll(pageable).getContent()) {
-            if (count > 20) {
-                break;
-            }
+        for (final UserAction action : actions) {
             final UserActionDto actionDto = toDto(action, service);
             if (actionDto != null) {
                 lastUsersActions.add(actionDto);
             }
-            count++;
         }
         return lastUsersActions;
     }
@@ -170,7 +194,7 @@ public class UserActionUtil {
 
     private static Integer getIncrease(final String actionType, final String actionObject) {
         Integer increase = null;
-        if (actionType.equals("create")) {
+        if (actionType.equals(ActionType.CREATE)) {
             switch (actionObject) {
                 case "motorcycle":
                     increase = CREATE_MOTORCYCLE.getValue();
@@ -179,7 +203,7 @@ public class UserActionUtil {
                     increase = CREATE_ITEM.getValue();
                     break;
             }
-        } else if (actionType.equals("add")) {
+        } else if (actionType.equals(ActionType.ADD)) {
             switch (actionObject) {
                 case "part":
                     increase = ADD_PART.getValue();
@@ -188,11 +212,11 @@ public class UserActionUtil {
                     increase = ADD_REPLACER.getValue();
                     break;
             }
-        } else if (actionType.equals("update")) {
+        } else if (actionType.equals(ActionType.UPDATE)) {
             increase = UPDATE.getValue();
-        } else if (actionType.equals("rate")) {
+        } else if (actionType.equals(ActionType.RATE)) {
             increase = RATE_ITEM.getValue();
-        } else if (actionType.equals("upload dictionary")) {
+        } else if (actionType.equals(ActionType.UPLOAD_DICTIONARY)) {
             increase = UPLOAD_DICTIONARY.getValue();
         }
         return increase;

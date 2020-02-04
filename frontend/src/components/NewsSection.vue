@@ -38,34 +38,8 @@
                     </tbody>
                 </table>
             </details>
-
-            <details open style="text-align: left" class="default-margin">
-                <summary>{{"Last news"}}</summary>
-                <div class="bordered" id="user-actions" v-if="itemView.userActions !== undefined">
-                    <ul v-for="action in itemView.userActions">
-                        <li>
-                            {{action.date}}<br>
-                            <router-link class="simple-link"
-                                         :to="{name: 'user', params: {id: action.userId, lang: appLanguage}}">
-                                {{action.userName}}
-                            </router-link>
-                            {{" " + action.actionType + " " + action.itemCategory.toLowerCase() + " "}}
-                            <router-link class="simple-link"
-                                         :to="{name: 'item', params: {id: action.itemId, lang: appLanguage}}">
-                                {{action.itemName}}
-                            </router-link>
-                            <span v-if="!isEmpty(action.parentId) && !isEmpty(action.parentName)">
-                            {{" " + $t('to') + " "}}
-                            <router-link class="simple-link"
-                                         :to="{name: 'item', params: {id: action.parentId, lang: appLanguage}}">
-                            {{action.parentName}}
-                            </router-link>
-                            {{" " + $t('as') + " " + action.itemType}}
-                        </span>
-                        </li>
-                    </ul>
-                </div>
-            </details>
+            <LastUserActions :user-actions="itemView.lastVehicles" :item-type="'vehicles'"/>
+            <LastUserActions :user-actions="itemView.lastReplacers" :item-type="'replacers'"/>
         </details>
     </div>
 </template>
@@ -77,16 +51,16 @@
     import DefaultButton from "./element/button/DefaultButton";
     import itemViewUtil from "../util/itemViewUtil";
     import shared from "../util/shared";
+    import LastUserActions from "./LastUserActions";
 
     export default {
         name: "NewsSection",
-        components: {DefaultButton},
+        components: {LastUserActions, DefaultButton},
         computed: {
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
-                itemView: state => state.dictionary.itemView,
-                appLanguage: state => state.dictionary.appLanguage
+                itemView: state => state.dictionary.itemView
             })
         },
 
@@ -132,16 +106,5 @@
 </script>
 
 <style scoped>
-    #user-actions {
-        height: 200px;
-        overflow: auto
-    }
 
-    #user-actions::-webkit-scrollbar {
-        display: none;
-    }
-
-    ul {
-        padding-left: 0;
-    }
 </style>

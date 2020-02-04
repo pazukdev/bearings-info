@@ -35,6 +35,7 @@ public class CategoryUtil {
         public static final String MATERIAL = "Material";
         public static final String OIL = "Oil";
         public static final String OIL_FILTER  = "Oil filter";
+        public static final String PISTON_RINGS = "Piston rings";
         public static final String ROLLING_ELEMENT = "Rolling element";
         public static final String SCREW = "Screw";
         public static final String SEAL = "Seal";

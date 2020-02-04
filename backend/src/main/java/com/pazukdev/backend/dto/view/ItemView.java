@@ -56,6 +56,7 @@ public class ItemView extends AbstractView {
     private double translationTime;
     private double responseTotalTime;
     private AdminMessage adminMessage;
-    private List<UserActionDto> userActions = new ArrayList<>();
+    private List<UserActionDto> lastVehicles = new ArrayList<>();
+    private List<UserActionDto> lastReplacers = new ArrayList<>();
 
 }

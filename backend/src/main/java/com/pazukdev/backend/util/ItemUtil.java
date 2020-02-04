@@ -15,6 +15,9 @@ import java.util.stream.Collectors;
 
 import static com.pazukdev.backend.util.CategoryUtil.isAddManufacturerName;
 import static com.pazukdev.backend.util.CategoryUtil.isInfo;
+import static com.pazukdev.backend.util.UserActionUtil.ActionType.*;
+import static com.pazukdev.backend.util.UserActionUtil.processPartAction;
+import static com.pazukdev.backend.util.UserActionUtil.processReplacerAction;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -291,7 +294,7 @@ public class ItemUtil {
 
         for (final ChildItem child : newChildItems) {
             if (child.getId() == null) {
-                UserActionUtil.processPartAction("add", child, item, user, itemService);
+                processPartAction(ADD, child, item, user, itemService);
             }
         }
 
@@ -302,7 +305,7 @@ public class ItemUtil {
                     toSave.add(oldChild);
                     if (!newChild.getLocation().equals(oldChild.getLocation())
                             || !newChild.getQuantity().equals(oldChild.getQuantity())) {
-                        UserActionUtil.processPartAction("update", oldChild, item, user, itemService);
+                        processPartAction(UPDATE, oldChild, item, user, itemService);
                     }
                 }
             }
@@ -312,7 +315,7 @@ public class ItemUtil {
 
         for (final ChildItem orphan : oldChildItems) {
             itemService.getChildItemRepository().deleteById(orphan.getId());
-            UserActionUtil.processPartAction("delete", orphan, item, user, itemService);
+            processPartAction(DELETE, orphan, item, user, itemService);
         }
     }
 
@@ -328,7 +331,7 @@ public class ItemUtil {
 
         for (final Replacer replacer : newReplacers) {
             if (replacer.getId() == null) {
-                UserActionUtil.processReplacerAction("add", replacer, item, user, itemService);
+                processReplacerAction(ADD, replacer, item, user, itemService);
             }
         }
 
@@ -338,7 +341,7 @@ public class ItemUtil {
                 if (newReplacer.getName().equals(oldReplacer.getName())) {
                     toSave.add(oldReplacer);
                     if (!newReplacer.getComment().equals(oldReplacer.getComment())) {
-                        UserActionUtil.processReplacerAction("update", oldReplacer, item, user, itemService);
+                        processReplacerAction(UPDATE, oldReplacer, item, user, itemService);
                     }
                 }
             }
@@ -348,7 +351,7 @@ public class ItemUtil {
 
         for (final Replacer orphan : oldReplacers) {
             itemService.getReplacerRepository().deleteById(orphan.getId());
-            UserActionUtil.processReplacerAction("delete", orphan, item, user, itemService);
+            processReplacerAction(DELETE, orphan, item, user, itemService);
         }
     }
 
