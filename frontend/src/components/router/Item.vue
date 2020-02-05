@@ -1,6 +1,6 @@
 <template>
     <div>
-        <LoadingScreen v-if="this.loadingState"/>
+        <LoadingScreen v-if="isLoading()"/>
         <div v-else>
             <ItemMenu/>
 
@@ -44,6 +44,7 @@
     import CountedItemList from "../list/CountedItemList";
     import ItemSummary from "../item/ItemSummary";
     import Header from "../list/section/Header";
+    import shared from "../../util/shared";
 
     export default {
 
@@ -158,6 +159,10 @@
 
             isGuest() {
                 return itemViewUtil.isGuest(this.userName);
+            },
+
+            isLoading() {
+                return shared.isLoading(this.loadingState);
             }
         }
     }

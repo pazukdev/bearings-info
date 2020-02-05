@@ -1,7 +1,7 @@
 <template>
     <div>
         <NewsSection/>
-        <LoadingScreen v-if="this.loadingState"/>
+        <LoadingScreen v-if="isLoading()"/>
         <MotorcycleCatalogue v-else/>
     </div>
 </template>
@@ -14,6 +14,7 @@
     import itemViewUtil from "../../util/itemViewUtil";
     import DefaultButton from "../element/button/DefaultButton";
     import NewsSection from "../NewsSection";
+    import shared from "../../util/shared";
 
     export default {
         name: "Home",
@@ -76,6 +77,10 @@
 
             isAdmin() {
                 return itemViewUtil.isAdmin(this.itemView);
+            },
+
+            isLoading() {
+                return shared.isLoading(this.loadingState);
             }
         }
     }

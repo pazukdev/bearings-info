@@ -3,7 +3,7 @@ const state = {
     langs: [],
     appLanguage: "en",
     editMode: false,
-    loadingState: false,
+    loadingState: "",
     incorrectCredentials: false,
     authorization: "",
     userName: "",
@@ -79,7 +79,7 @@ const mutations = {
     },
 
     setLoadingState(state, loadingState) {
-        state.loadingState = loadingState === true;
+        state.loadingState = loadingState;
     },
 
     setUserName(state, userName) {

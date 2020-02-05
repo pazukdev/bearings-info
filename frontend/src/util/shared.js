@@ -26,6 +26,10 @@ export default {
 
     isNestedItemsTitleVisible(nestedItemsList, editMode) {
         return nestedItemsList.length > 0 || editMode;
+    },
+
+    isLoading(loadingState) {
+        return !this.isEmpty(loadingState);
     }
 
 }

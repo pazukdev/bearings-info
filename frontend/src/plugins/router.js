@@ -41,7 +41,7 @@ const router = new VueRouter({
 });
 
 router.beforeResolve((to, from, next) => {
-    storeUtil.setLoadingState(true);
+    storeUtil.setDefaultLoadingState();
     storeUtil.setEditMode(false);
     next();
 });

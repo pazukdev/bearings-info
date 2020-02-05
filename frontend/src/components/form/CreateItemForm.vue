@@ -57,6 +57,7 @@
     import {mapState} from "vuex";
     import itemViewUtil from "../../util/itemViewUtil";
     import routerUtil from "../../util/routerUtil";
+    import storeUtil from "../../util/storeUtil";
 
     export default {
         name: "CreateItemForm",
@@ -97,7 +98,7 @@
                 } else if (this.sameItemNameExistsInCategory(this.newItemCategory, this.newItemName)) {
                     this.newItemNameMessage = "Item with this name already exists"
                 } else {
-                    this.$store.dispatch("setLoadingState", true);
+                    storeUtil.setLoadingState("Creating");
                     let language = this.appLanguage.toString();
                     this.clearItemCreationMessages();
                     // basicUrl/item/create/{category}/{name}/{userName}/{language}

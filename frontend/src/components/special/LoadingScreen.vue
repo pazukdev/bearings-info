@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div v-if="isEmpty(errorMessage)" class="default-margin">
-            {{"Loading..."}}
-        </div>
         <div v-if="!isEmpty(errorMessage)" class="alert-message" style="text-align: center">
             {{errorMessage}}
+        </div>
+        <div v-else class="default-margin">
+        {{loadingState + "..."}}
         </div>
     </div>
 </template>

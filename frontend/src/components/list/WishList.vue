@@ -1,6 +1,6 @@
 <template>
     <div>
-        <LoadingScreen v-if="this.loadingState"/>
+        <LoadingScreen v-if="isLoading()"/>
         <div v-else>
             <Header/>
             <CountedItemList :editable-comments="true" :wish-list-view="true"/>
@@ -15,6 +15,7 @@
     import axios from "axios";
     import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
+    import shared from "../../util/shared";
 
     export default {
         name: "WishList",
@@ -67,6 +68,10 @@
 
             save() {
                 itemViewUtil.update(this.itemView);
+            },
+
+            isLoading() {
+                return shared.isLoading(this.loadingState);
             }
         }
     }

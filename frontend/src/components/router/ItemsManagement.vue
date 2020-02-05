@@ -1,6 +1,6 @@
 <template>
     <div>
-        <LoadingScreen v-if="this.loadingState"/>
+        <LoadingScreen v-if="isLoading()"/>
         <div v-else>
             <CreateItemForm/>
             <Header/>
@@ -19,6 +19,7 @@
     import CreateItemForm from "../form/CreateItemForm";
     import NestedItemsTableTitle from "../list/section/NestedItemsTableTitle";
     import Header from "../list/section/Header";
+    import shared from "../../util/shared";
 
     export default {
         name: "ItemsManagement",
@@ -75,6 +76,10 @@
                     .catch(error => {
                         itemViewUtil.dispatchResponseError(error);
                     });
+            },
+
+            isLoading() {
+                return shared.isLoading(this.loadingState);
             }
         }
     }
