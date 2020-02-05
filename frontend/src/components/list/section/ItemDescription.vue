@@ -4,16 +4,32 @@
             <tbody>
             <tr v-for="row in sortByWeight(itemView.header.rows)">
                 <td class="two-columns-table-left-column">
-                    <p>{{row.parameter}}</p>
+                    <table style="border-spacing: 0px" v-if="!isEdit() && row.ids.length > 0">
+                        <tr v-for="(id, index) in row.ids">
+                            <td>
+                                <p v-if="index === 0">{{row.parameter}}</p>
+                                <p v-else>{{row.parameter + " #" + (index + 1)}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                    <p v-if="isEdit()">{{row.parameter}}</p>
                 </td>
                 <td class="two-column-table-right-column">
-                    <p v-if="!isEdit() && !isShowInfoButton(row.itemId)">
-                        {{row.value}}
-                    </p>
                     <input v-if="isEdit()" v-model="row.value" type="text"/>
-                    <ButtonNavigateToItem v-if="isShowInfoButton(row.itemId)"
-                                          :part="row"
-                                          :info-button="true"/>
+                    <table v-else-if="!isEdit() && row.ids.length > 0">
+                        <tr v-for="(id, index) in row.ids">
+                            <td>
+                                <router-link class="simple-link" v-if="!isEmpty(id)"
+                                             :to="{name: 'item', params: {id: id, lang: appLanguage}}">
+                                    {{row.value.split("; ")[index]}}
+                                </router-link>
+                                <p v-else>{{row.value.split("; ")[index]}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                    <div v-else>
+                        {{row.value}}
+                    </div>
                 </td>
                 <td>
                     <ButtonDelete v-if="isEdit()" :item="row" @remove-item="removeItem"/>
@@ -141,7 +157,10 @@
 </script>
 
 <style scoped>
-    #item-description {
+    table {
         text-align: left;
+        border-collapse: initial;
+        border-spacing: 4px;
+        border-style: hidden;
     }
 </style>

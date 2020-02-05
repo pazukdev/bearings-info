@@ -170,14 +170,7 @@ public class ItemUtil {
             String parameter = StringUtils.trim(entry.getKey());
             final String value = StringUtils.trim(entry.getValue());
             if (isInfo(parameter, infoCategories)) {
-                if (value.contains("; ")) {
-                    int count = 1;
-                    for (final String subValue : value.split("; ")) {
-                        itemDescriptionMap.getParameters().put(parameter + MULTI_PARAM_SEPARATOR + count++, subValue);
-                    }
-                } else {
-                    itemDescriptionMap.getParameters().put(parameter, value);
-                }
+                itemDescriptionMap.getParameters().put(parameter, value);
             } else if (service.isPart(parameter, infoCategories)) {
                 itemDescriptionMap.getItems().put(parameter, value);
             } else {
@@ -185,10 +178,6 @@ public class ItemUtil {
             }
         }
         return itemDescriptionMap;
-    }
-
-    public static String paramToCategory(final String param) {
-        return param.split(" #")[0];
     }
 
     public static ReplacerData parseReplacerData(final String replacerDataSourceString) {

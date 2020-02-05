@@ -256,15 +256,18 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                     continue;
                 }
                 for (final Map.Entry<String, String> entry : toMap(description).entrySet()) {
-                    String parameter = entry.getKey().split(MULTI_PARAM_SEPARATOR)[0];
+                    String parameter = entry.getKey();
                     if (!parameter.equals(category) && !parameter.equals(secondSearchCategory)) {
                         continue;
                     }
-                    String value = entry.getValue();
-                    final Item foundItem = find(category, value);
-                    if (foundItem != null && foundItem.getId().equals(itemId)) {
-                        parents.add(parent);
+                    for (final String value : entry.getValue().split("; ")) {
+                        final Item foundItem = find(category, value);
+                        if (foundItem != null && foundItem.getId().equals(itemId)) {
+                            parents.add(parent);
+                            break;
+                        }
                     }
+
                 }
             }
         } else {

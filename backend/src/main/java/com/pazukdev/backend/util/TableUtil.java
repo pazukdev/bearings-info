@@ -15,9 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.createReplacer;
-import static com.pazukdev.backend.util.CategoryUtil.Category.MATERIAL;
-import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
-import static com.pazukdev.backend.util.ItemUtil.*;
+import static com.pazukdev.backend.util.ItemUtil.getValueFromDescription;
+import static com.pazukdev.backend.util.ItemUtil.toMap;
 
 public class TableUtil {
 
@@ -32,15 +31,15 @@ public class TableUtil {
         return replacersTable;
     }
 
-    public static HeaderTable createHeader(final Item item, final ItemService itemService) {
+    public static HeaderTable createHeader(final Item item, final ItemService service) {
         final String itemName = item.getName();
         final String itemCategory = item.getCategory();
         final String tableName = getHeaderTableName(itemCategory, itemName);
         final Map<String, String> description = toMap(item.getDescription());
 
         final List<HeaderTableRow> headerTableRows = new ArrayList<>();
-        headerTableRows.add(HeaderTableRow.create("Name", itemName));
-        return createTable(tableName, description, headerTableRows, itemService);
+        headerTableRows.add(HeaderTableRow.create("Name", itemName, service));
+        return createTable(tableName, description, headerTableRows, service);
     }
 
     public static String getHeaderTableName(final String itemCategory, final String itemName) {
@@ -49,31 +48,12 @@ public class TableUtil {
 
     private static HeaderTable createTable(final String tableName,
                                            final Map<String, String> descriptionMap,
-                                           final List<HeaderTableRow> headerTableRows,
-                                           final ItemService itemService) {
+                                           final List<HeaderTableRow> rows,
+                                           final ItemService service) {
         for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
-            String parameter = entry.getKey();
-            String value = entry.getValue();
-            String itemId = "-";
-            String link = null;
-
-            // str.matches(".*\\d
-            String category = parameter.split(MULTI_PARAM_SEPARATOR)[0];
-            if (category.equalsIgnoreCase(INSULATION)) {
-                category = MATERIAL;
-            }
-            final Item foundItem = itemService.find(category, value);
-            if (foundItem != null) {
-                itemId = foundItem.getId().toString();
-                link = foundItem.getWiki();
-            }
-
-            final HeaderTableRow row = HeaderTableRow.create(parameter, value);
-            row.setItemId(itemId);
-            row.setLink(link);
-            headerTableRows.add(row);
+            rows.add(HeaderTableRow.create(entry.getKey(), entry.getValue(), service));
         }
-        return HeaderTable.create(tableName, headerTableRows);
+        return HeaderTable.create(tableName, rows);
     }
 
     public static Map<String, String> createHeaderMap(final HeaderTable header) {

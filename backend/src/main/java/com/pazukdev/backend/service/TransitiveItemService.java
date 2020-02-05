@@ -102,7 +102,6 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
     }
 
     public boolean isPart(String parameter, final Set<String> infoCategories) {
-        parameter = ItemUtil.paramToCategory(parameter);
         if (isInfo(parameter, infoCategories)) {
             return false;
         }

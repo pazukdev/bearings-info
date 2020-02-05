@@ -1,7 +1,8 @@
 <template>
     <div>
+<!--        {{getActualPossibleItemsList()[0].selectText}}-->
         <select v-model="selectedItem" @change="onChange">
-            <option v-for="item in actualPossibleItemsList" :value="item">
+            <option v-for="item in getActualPossibleItemsList()" :value="item">
                 {{item.selectText}}
             </option>
         </select>
@@ -10,6 +11,7 @@
 
 <script>
     import {mapState} from "vuex";
+    import arrayUtil from "../../util/arrayUtil";
 
     export default {
         name: "ItemSelect",
@@ -21,11 +23,7 @@
         computed: {
             ...mapState({
                 itemView: state => state.dictionary.itemView
-            }),
-
-            actualPossibleItemsList() {
-                return this.getActualPossibleItemsList();
-            }
+            })
         },
 
         data() {
@@ -58,7 +56,7 @@
                     this.$emit("hide-add-form");
                 }
 
-                return actualPossibleItems;
+                return arrayUtil.sortBySelectText(actualPossibleItems);
             },
 
             isInList(item, list) {

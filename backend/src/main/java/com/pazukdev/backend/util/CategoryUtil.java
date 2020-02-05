@@ -2,10 +2,7 @@ package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.entity.Item;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.pazukdev.backend.util.AppCollectionUtil.contains;
 import static com.pazukdev.backend.util.CategoryUtil.Category.*;
@@ -88,24 +85,24 @@ public class CategoryUtil {
     private static final List<String> fixedParams = Arrays
             .asList(NAME, FULL_NAME, PRODUCTION, MANUFACTURER, COUNTRY, FOUNDED, DEFUNCT);
 
-//    private static final Map<String, Integer> parametersWeight = new HashMap<String, Integer>() {{
-//        put(NAME, 100);
-//        put(FULL_NAME, 99);
-//
-//        put(TYPE, 97);
-//
-//        put(MANUFACTURER, 80);
-//        put(COUNTRY, 80);
-//
-//        put(FOUNDED, 50);
-//        put(DEFUNCT, 49);
-//
-//        put(VOLTAGE, 40);
-//
-//        put(CORE, 30);
-//        put(INSULATION, 29);
-//        put(OUTER_SHIELD_MATERIAL, 28);
-//    }};
+    private static final Map<String, Integer> parametersWeight = new HashMap<String, Integer>() {{
+        put(NAME, 100);
+        put(FULL_NAME, 99);
+
+        put(TYPE, 97);
+
+        put(MANUFACTURER, 80);
+        put(COUNTRY, 80);
+
+        put(FOUNDED, 50);
+        put(DEFUNCT, 49);
+
+        put(VOLTAGE, 40);
+
+        put(CORE, 30);
+        put(INSULATION, 29);
+        put(OUTER_SHIELD_MATERIAL, 28);
+    }};
 
     public static String getItemsManagementComment(final Item item, final Set<String> comments) {
         if (item == null || comments == null) {
@@ -152,10 +149,10 @@ public class CategoryUtil {
         return fixedParams.contains(parameter);
     }
 
-//    public static Integer getWeight(final String parameter) {
-//        final Integer weight = parametersWeight.get(parameter);
-//        return weight != null ? weight : 0;
-//    }
+    public static Integer getWeight(final String parameter) {
+        final Integer weight = parametersWeight.get(parameter);
+        return weight != null ? weight : 0;
+    }
 
     public static boolean isAddManufacturerName(final Item nestedItem) {
         final String category = nestedItem.getCategory();
@@ -191,6 +188,13 @@ public class CategoryUtil {
             }
         }
         return partCategories;
+    }
+
+    public static String getCategory(final String param) {
+        if (param.equalsIgnoreCase(INSULATION)) {
+            return MATERIAL;
+        }
+        return param;
     }
 
 }
