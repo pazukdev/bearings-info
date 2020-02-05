@@ -66,7 +66,7 @@ export default {
     dispatchView(itemView) {
         storeUtil.setErrorMessage(itemView.errorMessage);
         store.dispatch("setItemView", itemView);
-        storeUtil.switchOffLoadingState();
+        storeUtil.setLoadingStateOff();
     },
 
     dispatchResponseError(error) {

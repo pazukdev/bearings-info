@@ -69,7 +69,7 @@
             },
 
             save() {
-                storeUtil.setLoadingState(true);
+                storeUtil.setLoadingStateDefault();
                 storeUtil.setEditMode(false);
                 this.$emit("save");
             },

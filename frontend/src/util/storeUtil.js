@@ -14,11 +14,11 @@ export default {
         store.dispatch("setLoadingState", loadingState);
     },
 
-    setDefaultLoadingState() {
+    setLoadingStateDefault() {
         this.setLoadingState("Loading");
     },
 
-    switchOffLoadingState() {
+    setLoadingStateOff() {
         this.setLoadingState("");
     },
 

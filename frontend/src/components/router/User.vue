@@ -158,7 +158,7 @@
                         };
                         itemViewUtil.dispatchView(itemView);
                         console.log("user rendered: name: " + this.user.name);
-                        storeUtil.setLoadingState(false);
+                        storeUtil.setLoadingStateOff();
                     })
                     .catch(error => {
                         itemViewUtil.dispatchResponseError(error);
@@ -168,7 +168,7 @@
             submit: function (e) {
                 e.preventDefault();
 
-                storeUtil.setLoadingState(true);
+                storeUtil.setLoadingStateDefault();
                 storeUtil.setEditMode(false);
 
                 let userView = this.user;
@@ -190,7 +190,7 @@
                         this.validationMessages = response.data;
                         if (this.validationMessages.length === 0) {
                             storeUtil.setUserName(userView.name, this.itemView);
-                            storeUtil.setLoadingState(false);
+                            storeUtil.setLoadingStateOff();
                             this.getCountryName(this.user.country);
                             console.log("user data successfully updated");
                         } else {
@@ -259,7 +259,7 @@
                         } else {
                             console.log("user id=" + userId + " deletion failed");
                         }
-                        storeUtil.setLoadingState(false);
+                        storeUtil.setLoadingStateOff();
                     });
             },
 
