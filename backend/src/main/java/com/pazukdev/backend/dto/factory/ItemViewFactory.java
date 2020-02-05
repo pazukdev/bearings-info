@@ -1,5 +1,6 @@
 package com.pazukdev.backend.dto.factory;
 
+import com.pazukdev.backend.constant.Status;
 import com.pazukdev.backend.dto.ImgViewData;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.view.ItemView;
@@ -127,7 +128,7 @@ public class ItemViewFactory {
         item.setUserActionDate(DateUtil.now());
         item.setDescription(createEmptyDescription(category));
         itemService.update(item);
-        processItemAction("create", item, creator, itemService);
+        processItemAction(ActionType.CREATE, item, creator, itemService);
         return item;
     }
 
@@ -384,10 +385,10 @@ public class ItemViewFactory {
     }
 
     private void removeItem(final Item itemToRemove, final UserEntity user) {
-        itemToRemove.setStatus("deleted");
+        itemToRemove.setStatus(Status.DELETED);
         itemToRemove.setUserActionDate(DateUtil.now());
         itemService.update(itemToRemove);
-        processItemAction("delete", itemToRemove, user, itemService);
+        processItemAction(ActionType.DELETE, itemToRemove, user, itemService);
     }
 
     private void removeItemFromAllWishLists(final Item itemToRemove, final UserService userService) {
@@ -402,15 +403,13 @@ public class ItemViewFactory {
     }
 
     private void removeItemFromAllParentItems(final Long idToRemove, final UserEntity user) {
-        final String actionType = "delete";
-
         for (final Item item : itemService.findAll()) {
             for (final Replacer replacer : new ArrayList<>(item.getReplacers())) {
                 final Item nestedItem = replacer.getItem();
                 if (nestedItem.getId().equals(idToRemove)) {
 //                    replacer.setStatus("deleted");
                     item.getReplacers().remove(replacer);
-                    processReplacerAction(actionType, replacer, item, user, itemService);
+                    processReplacerAction(ActionType.DELETE, replacer, item, user, itemService);
                 }
             }
 
@@ -419,7 +418,7 @@ public class ItemViewFactory {
                 if (nestedItem.getId().equals(idToRemove)) {
 //                    part.setStatus("deleted");
                     item.getChildItems().remove(part);
-                    processPartAction(actionType, part, item, user, itemService);
+                    processPartAction(ActionType.DELETE, part, item, user, itemService);
                 }
             }
 

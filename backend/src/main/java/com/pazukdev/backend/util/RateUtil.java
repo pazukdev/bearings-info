@@ -10,6 +10,9 @@ import lombok.Getter;
 
 import java.util.Objects;
 
+import static com.pazukdev.backend.util.UserActionUtil.ActionType;
+import static com.pazukdev.backend.util.UserActionUtil.processRateItemAction;
+
 public class RateUtil {
 
     @Getter
@@ -55,8 +58,8 @@ public class RateUtil {
             }
         }
 
-        final String actionType = rateAction == RateAction.CANCEL ? "cancel rate" : "rate";
-        UserActionUtil.processRateItemAction(itemToRate, actionType, currentUser, itemService);
+        final String actionType = rateAction == RateAction.CANCEL ? ActionType.CANCEL_RATE : ActionType.RATE;
+        final int newUserRating = processRateItemAction(itemToRate, actionType, currentUser, itemService);
 
         for (final NestedItemDto replacer : rate.getReplacers()) {
             if (Objects.equals(replacer.getItemId(), itemId)) {
@@ -65,6 +68,7 @@ public class RateUtil {
         }
 
         rate.setLikeList(UserUtil.createLikeListDto(currentUser));
+        rate.setNewUserRating(newUserRating);
         return rate;
     }
 

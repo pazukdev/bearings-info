@@ -13,13 +13,14 @@ import org.springframework.data.domain.Sort;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static com.pazukdev.backend.util.CategoryUtil.Category.VEHICLE;
+import static com.pazukdev.backend.util.CategoryUtil.Category;
 import static com.pazukdev.backend.util.UserActionUtil.ValueIncrease.*;
 
 public class UserActionUtil {
 
     public static class ActionType {
         public static final String ADD = "add";
+        public static final String CANCEL_RATE = "cancel rate";
         public static final String CREATE = "create";
         public static final String DELETE = "delete";
         public static final String RATE = "rate";
@@ -27,8 +28,15 @@ public class UserActionUtil {
         public static final String UPLOAD_DICTIONARY = "upload dictionary";
     }
 
+    public static class ItemType {
+        public static final String VEHICLE = "vehicle";
+        public static final String ITEM = "item";
+        public static final String PART = "part";
+        public static final String REPLACER = "replacer";
+    }
+
     private final static Set<String> userRatedActions = new HashSet<>(Arrays
-            .asList(ActionType.CREATE, ActionType.UPDATE, ActionType.RATE));
+            .asList(ActionType.CREATE, ActionType.ADD, ActionType.UPDATE, ActionType.RATE));
 
     @Getter
     public enum ValueIncrease {
@@ -39,7 +47,7 @@ public class UserActionUtil {
         ADD_PART(4),
         ADD_REPLACER(6),
         CREATE_ITEM(10),
-        CREATE_MOTORCYCLE(20);
+        CREATE_VEHICLE(20);
 
         private final Integer value;
 
@@ -80,9 +88,9 @@ public class UserActionUtil {
 
     public static UserActionDto toDto(final UserAction action, final ItemService service) {
         String actionType = "-";
-        if (action.getActionType().equals("create")) {
+        if (action.getActionType().equals(ActionType.CREATE)) {
             actionType = "created";
-        } else if (action.getActionType().equals("add")) {
+        } else if (action.getActionType().equals(ActionType.ADD)) {
             actionType = "added";
         } else {
             return null;
@@ -122,12 +130,12 @@ public class UserActionUtil {
                                          final Item item,
                                          final UserEntity user,
                                          final ItemService itemService) {
-        final String itemCategory = item.getCategory();
-        final String actionObject = itemCategory.equals(VEHICLE) ? itemCategory.toLowerCase() : "item";
+        final String category = item.getCategory();
+        final String itemType = category.equals(Category.VEHICLE) ? category.toLowerCase() : ItemType.ITEM;
 
-        updateUserRating(user, actionType, actionObject);
+        updateUserRating(user, actionType, itemType);
 
-        final UserAction action = create(user, actionType, "item", item);
+        final UserAction action = create(user, actionType, itemType, item);
         itemService.getUserActionRepository().save(action);
     }
 
@@ -136,7 +144,7 @@ public class UserActionUtil {
                                          final Item parent,
                                          final UserEntity user,
                                          final ItemService itemService) {
-        updateUserRating(user, actionType, "part");
+        updateUserRating(user, actionType, ItemType.PART);
 
         final UserAction action = createChildItemAction(user, actionType, parent, part);
         itemService.getUserActionRepository().save(action);
@@ -147,22 +155,22 @@ public class UserActionUtil {
                                              final Item parent,
                                              final UserEntity user,
                                              final ItemService itemService) {
-        updateUserRating(user, actionType, "replacer");
+        updateUserRating(user, actionType, ItemType.REPLACER);
 
         final UserAction action = createReplacerAction(user, actionType, parent, replacer);
         itemService.getUserActionRepository().save(action);
     }
 
 
-    public static void processRateItemAction(final Item itemToRate,
+    public static int processRateItemAction(final Item itemToRate,
                                              final String actionType,
                                              final UserEntity user,
                                              final ItemService itemService) {
-        updateUserRating(user, actionType, null);
+        final int newUserRating = updateUserRating(user, actionType, null);
 
         final UserAction action = createRateAction(itemToRate, actionType, user);
         itemService.getUserActionRepository().save(action);
-
+        return newUserRating;
     }
 
     public static void processUploadDictionaryAction(final String actionType,
@@ -181,34 +189,35 @@ public class UserActionUtil {
         repository.save(userAction);
     }
 
-    private static void updateUserRating(final UserEntity user, final String actionType, final String actionObject) {
+    private static int updateUserRating(final UserEntity user, final String actionType, final String itemType) {
         if (!userRatedActions.contains(actionType)) {
-            return;
+            return user.getRating();
         }
-        Integer increase = getIncrease(actionType, actionObject);
+        Integer increase = getIncrease(actionType, itemType);
         if (increase != null) {
             final Integer rating = user.getRating() + increase;
             user.setRating(rating);
         }
+        return user.getRating();
     }
 
-    private static Integer getIncrease(final String actionType, final String actionObject) {
+    private static Integer getIncrease(final String actionType, final String itemType) {
         Integer increase = null;
         if (actionType.equals(ActionType.CREATE)) {
-            switch (actionObject) {
-                case "motorcycle":
-                    increase = CREATE_MOTORCYCLE.getValue();
+            switch (itemType) {
+                case ItemType.VEHICLE:
+                    increase = CREATE_VEHICLE.getValue();
                     break;
-                case "item":
+                case ItemType.ITEM:
                     increase = CREATE_ITEM.getValue();
                     break;
             }
         } else if (actionType.equals(ActionType.ADD)) {
-            switch (actionObject) {
-                case "part":
+            switch (itemType) {
+                case ItemType.PART:
                     increase = ADD_PART.getValue();
                     break;
-                case "replacer":
+                case ItemType.REPLACER:
                     increase = ADD_REPLACER.getValue();
                     break;
             }

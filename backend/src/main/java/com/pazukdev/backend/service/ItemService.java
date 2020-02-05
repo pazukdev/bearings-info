@@ -1,5 +1,6 @@
 package com.pazukdev.backend.service;
 
+import com.pazukdev.backend.constant.Status;
 import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.converter.ReplacerConverter;
 import com.pazukdev.backend.dto.AdminMessage;
@@ -88,7 +89,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     @Transactional
     public Item find(final String category, final String name) {
         Item item = itemRepository.findFirstByCategoryAndName(category, name);
-        if (item != null && !item.getStatus().equals("active")) {
+        if (item != null && !item.getStatus().equals(Status.ACTIVE)) {
             find(category, name);
         }
         return item;
@@ -98,7 +99,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     @Override
     public List<Item> findAll() {
         final List<Item> items = itemRepository.findAll();
-        items.removeIf(entity -> !entity.getStatus().equals("active"));
+        items.removeIf(entity -> !entity.getStatus().equals(Status.ACTIVE));
         return items;
     }
 
@@ -145,7 +146,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final Item newItem = new Item();
         newItem.setName(name);
         newItem.setCategory(category);
-        newItem.setStatus("active");
+        newItem.setStatus(Status.ACTIVE);
         newItem.setDescription(createItemDescription(descriptionMap));
         newItem.getChildItems().addAll(childItems);
         newItem.getReplacers().addAll(replacers);
@@ -156,7 +157,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
         itemRepository.save(newItem);
 
-        if (category.equals("Vehicle")) {
+        if (category.equals(VEHICLE)) {
             processItemAction(UserActionUtil.ActionType.CREATE, newItem, getUserService().getAdmin(), this);
         }
 

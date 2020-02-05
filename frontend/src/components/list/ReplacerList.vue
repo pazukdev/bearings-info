@@ -164,6 +164,7 @@
                         let rateReplacer = response.data;
                         this.itemView.likeList = rateReplacer.likeList;
                         this.itemView.replacersTable.replacers = rateReplacer.replacers;
+                        this.itemView.userData.rating = rateReplacer.newUserRating;
                         console.log("Replacer rate action performed: "
                             + "user name: " + this.userName
                             + ", action: " + rate.action
