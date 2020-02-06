@@ -4,17 +4,19 @@
         <div v-else>
             <ItemMenu/>
 
-            <Header :item="true"/>
+            <form id="item-form" @submit="submit">
+                <Header :item="true"/>
 
-            <details v-if="arrayIsRendered(itemView.children)" open>
-                <summary>{{"Parts"}}</summary>
-                <PartsSection/>
-            </details>
+                <details v-if="arrayIsRendered(itemView.children)" open>
+                    <summary>{{"Parts"}}</summary>
+                    <PartsSection/>
+                </details>
 
-            <details v-if="arrayIsRendered(itemView.replacersTable.replacers)" open>
-                <summary>{{"Replacers"}}</summary>
-                <ReplacersSection/>
-            </details>
+                <details v-if="arrayIsRendered(itemView.replacersTable.replacers)" open>
+                    <summary>{{"Replacers"}}</summary>
+                    <ReplacersSection/>
+                </details>
+            </form>
 
             <details v-if="arrayIsRendered(itemView.allChildren)">
                 <summary>{{"All parts"}}</summary>
@@ -45,6 +47,8 @@
     import ItemSummary from "../item/ItemSummary";
     import Header from "../list/section/Header";
     import shared from "../../util/shared";
+    import storeUtil from "../../util/storeUtil";
+    import axiosUtil from "../../util/axiosUtil";
 
     export default {
 
@@ -82,6 +86,22 @@
         },
 
         methods: {
+            submit: function (e) {
+                e.preventDefault();
+                storeUtil.setLoadingStateDefault();
+                storeUtil.setEditMode(false);
+                this.update(this.itemView.itemId);
+            },
+
+            update(itemId) {
+                let itemView = this.itemView;
+                let basicUrl = this.basicUrl.toString();
+                let userName = this.userName.toString();
+                let appLanguage = this.appLanguage.toString();
+                let authorization = this.authorization;
+                axiosUtil.updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization);
+            },
+
             arrayIsRendered(array) {
                 return this.editMode || array.length > 0;
             },

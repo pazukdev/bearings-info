@@ -4,9 +4,9 @@
         <div v-else style="text-align: center">
             <p>{{user.name}}</p>
             <EditableImg v-if="isImgRendered()"/>
-            <EditPanel v-if="isEditable()" :save-is-submit="true"/>
+            <EditPanel v-if="isEditable()" :submit-form1="true"/>
             <AlertMessagesSection :messages="validationMessages"/>
-            <form id="form" @submit="submit">
+            <form id="user-form" @submit="submit">
                 <table class="equal-columns-table">
                     <tbody>
                     <tr>

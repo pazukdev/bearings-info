@@ -12,10 +12,14 @@
                             </td>
                         </tr>
                     </table>
-                    <input v-if="isEdit()" v-model="row.parameter" type="text"/>
+                    <input v-if="isEdit()" v-model="row.parameter" type="text" required
+                           pattern="[a-zA-Zа-яА-Я0-9_ ,/-]*"
+                           title="Allowed: letters, numbers, - , _ , / , comma, space"/>
                 </td>
                 <td class="two-column-table-right-column">
-                    <input v-if="isEdit()" v-model="row.value" type="text"/>
+                    <input v-if="isEdit()" v-model="row.value" type="text" required
+                           pattern="[a-zA-Zа-яА-Я0-9_\\. ;/-]*"
+                           title="Allowed: letters, numbers, - , _ , / , ; , dot, space"/>
                     <table v-else-if="!isEdit() && row.ids.length > 0">
                         <tr v-for="(id, index) in row.ids">
                             <td>

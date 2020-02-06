@@ -16,7 +16,8 @@
                                 @on-change="itemSelectOnChange"/>
                 </td>
                 <td class="three-column-table-right-column">
-                    <input v-model="itemQuantity" type="text"/>
+                    <input v-model="itemQuantity" type="text"
+                           pattern="[L0-9\\.]*" title="Allowed: numbers, dot"/>
                 </td>
                 <td class="three-column-table-button-column">
                     <ButtonAdd @add-item="addItem"/>

@@ -17,14 +17,16 @@
                             @click="edit()">
                         {{$t("edit")}}
                     </button>
-                    <button id="save-button" v-if="isSaveButtonRendered() && !saveIsSubmit"
+                    <button id="save-button" v-if="isSaveButtonRendered() && !userForm && !itemForm"
                             type="button"
                             style="background: red"
                             @click="save()">
                         {{$t("save")}}
                     </button>
-                    <input id="submit" v-if="isSaveButtonRendered() && saveIsSubmit"
-                           type="submit" form="form" :value="$t('save')"/>
+                    <input class="submit" v-if="isSaveButtonRendered() && userForm"
+                           type="submit" form="user-form" :value="$t('save')"/>
+                    <input class="submit" v-if="isSaveButtonRendered() && itemForm"
+                           type="submit" form="item-form" :value="$t('save')"/>
                 </td>
                 <td>
                     <ButtonAdd v-if="editMode" style="visibility: hidden"/>
@@ -47,7 +49,8 @@
         components: {ButtonAdd},
 
         props: {
-            saveIsSubmit: Boolean
+            userForm: Boolean,
+            itemForm: Boolean
         },
 
         computed: {
@@ -90,7 +93,7 @@
 </script>
 
 <style scoped>
-    #submit, #save-button {
+    .submit, #save-button {
         background: red;
     }
 </style>

@@ -29,7 +29,9 @@
                                     <p class="parts-right-column-text" v-if="!isEdit()">
                                         {{item.secondComment}}
                                     </p>
-                                    <input v-if="isEdit()" v-model="item.secondComment" type="text"/>
+                                    <input v-if="isEdit()" v-model="item.secondComment" type="text"
+                                           pattern="[0-9\\.]*"
+                                           title="Allowed: numbers, dot"/>
                                 </td>
                                 <td class="three-column-table-button-column">
                                     <ButtonDelete :item="item" @remove-item="removeItem"/>
