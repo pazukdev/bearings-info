@@ -3,6 +3,8 @@ package com.pazukdev.backend.util;
 import com.pazukdev.backend.dto.ItemQuantity;
 import com.pazukdev.backend.dto.ReplacerData;
 import com.pazukdev.backend.dto.TransitiveItemDescriptionMap;
+import com.pazukdev.backend.dto.table.HeaderTable;
+import com.pazukdev.backend.dto.table.HeaderTableRow;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.service.ItemService;
@@ -145,7 +147,7 @@ public class ItemUtil {
                 = toDescription(descriptionMap.getParameters())
                 + toDescription(descriptionMap.getSelectableParameters())
                 + toDescription(descriptionMap.getItems());
-        return SpecificStringUtil.replaceEmpty(description);
+        return SpecificStringUtil.replaceEmptyWithDash(description);
     }
 
     public static Map<String, String> toMap(final String description) {
@@ -252,22 +254,25 @@ public class ItemUtil {
     }
 
     public static void updateName(final Item item,
-                                  final Map<String, String> description,
-                                  final ItemService itemService) {
+                                  final Map<String, String> newDescriptionMap,
+                                  final List<Item> allItems,
+                                  final ItemService service) {
         final String oldName = item.getName();
-        final String newName = description.get("Name");
+        final String newName = newDescriptionMap.get("Name");
         if (newName != null && !newName.equals(oldName)) {
             item.setName(newName);
-            applyToAllItemDescriptions(item.getCategory(), oldName, newName, itemService);
+            applyToAllItemDescriptions(item.getCategory(), oldName, newName, allItems, service);
         }
-        description.remove("Name");
+        newDescriptionMap.remove("Name");
     }
 
     public static void updateDescription(final Item item,
-                                         final Map<String, String> description,
+                                         final HeaderTable headerTable,
+                                         final Map<String, String> newDescriptionMap,
+                                         final String newDescription,
+                                         final List<Item> allItems,
                                          final ItemService itemService) {
-        final String newDescription = ItemUtil.toDescription(description);
-        applyNewDescriptionToCategory(item.getCategory(), description, itemService);
+        applyNewDescriptionToCategory(item.getCategory(), headerTable, newDescriptionMap, allItems, itemService);
         item.setDescription(newDescription);
     }
 
@@ -347,10 +352,10 @@ public class ItemUtil {
     private static void applyToAllItemDescriptions(final String updatingItemCategory,
                                                    final String oldValue,
                                                    final String newValue,
-                                                   final ItemService itemService) {
-        final List<Item> items = itemService.findAll();
-        final Set<String> categories = itemService.collectCategories(items);
-        for (final Item item : items) {
+                                                   final List<Item> allItems,
+                                                   final ItemService service) {
+        final Set<String> categories = service.collectCategories(allItems);
+        for (final Item item : allItems) {
             final Map<String, String> descriptionMap = ItemUtil.toMap(item.getDescription());
             for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
                 final String value = entry.getValue().split(" \\(")[0];
@@ -366,27 +371,27 @@ public class ItemUtil {
             }
             final String newDescription = ItemUtil.toDescription(descriptionMap);
             item.setDescription(newDescription);
-            itemService.update(item);
+            service.update(item);
         }
     }
 
     private static void applyNewDescriptionToCategory(final String category,
+                                                      final HeaderTable headerTable,
                                                       final Map<String, String> newDescriptionMap,
+                                                      final List<Item> allItems,
                                                       final ItemService itemService) {
-        final List<Item> allItemsOfCategory = itemService.find(category);
-        for (final Item item : allItemsOfCategory) {
-            final Map<String, String> oldItemDescriptionMap = ItemUtil.toMap(item.getDescription());
-            final Map<String, String> newItemDescriptionMap = new HashMap<>(newDescriptionMap);
-            for (final Map.Entry<String, String> entry : newItemDescriptionMap.entrySet()) {
-                final String newParameter = entry.getKey();
-                final String value = oldItemDescriptionMap.get(newParameter);
-                if (value == null) {
-                    entry.setValue("-");
-                } else {
-                    entry.setValue(value);
+        for (final Item item : itemService.find(category, allItems)) {
+            final Map<String, String> oldDescriptionMap = ItemUtil.toMap(item.getDescription());
+            for (final HeaderTableRow row : headerTable.getRows()) {
+                final String oldParam = row.getName();
+                final String newParam = row.getParameter();
+                boolean paramChanged = !oldParam.equals(newParam);
+                if (paramChanged) {
+                    final String value = oldDescriptionMap.get(oldParam);
+                    newDescriptionMap.put(newParam, value == null ? "-" : value);
                 }
             }
-            item.setDescription(ItemUtil.toDescription(newItemDescriptionMap));
+            item.setDescription(ItemUtil.toDescription(newDescriptionMap));
         }
     }
 

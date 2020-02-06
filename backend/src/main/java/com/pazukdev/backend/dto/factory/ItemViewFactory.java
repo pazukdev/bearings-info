@@ -3,6 +3,7 @@ package com.pazukdev.backend.dto.factory;
 import com.pazukdev.backend.constant.Status;
 import com.pazukdev.backend.dto.ImgViewData;
 import com.pazukdev.backend.dto.NestedItemDto;
+import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.service.ItemService;
@@ -288,8 +289,6 @@ public class ItemViewFactory {
 
         final long businessLogicStartTime = System.nanoTime();
 
-        final Item item = itemService.getOne(itemId);
-
         final long translationFromUserLang = System.nanoTime();
         if (!userLanguage.equals("en")) {
             try {
@@ -301,15 +300,22 @@ public class ItemViewFactory {
         }
         final long translationFromUserLangDuration = System.nanoTime() - translationFromUserLang;
 
-        final Map<String, String> headerMap = TableUtil.createHeaderMap(view.getHeader());
+        final List<Item> allItems = itemService.findAll();
 
-        ItemUtil.updateName(item, headerMap, itemService);
-        ItemUtil.updateDescription(item, headerMap, itemService);
-        ImgUtil.updateImg(view, item);
-        ItemUtil.updateChildItems(item, view, itemService, currentUser);
-        ItemUtil.updateReplacers(item, view, itemService, currentUser);
-        LinkUtil.updateItemLinks(item, view);
-        itemService.update(item);
+        final HeaderTable header = view.getHeader();
+        final Map<String, String> newDescriptionMap = TableUtil.createHeaderMap(header);
+        final String newDescription = ItemUtil.toDescription(newDescriptionMap);
+        final Item oldItem = itemService.getOne(itemId);
+
+        if (!oldItem.getDescription().equals(newDescription)) {
+            ItemUtil.updateName(oldItem, newDescriptionMap, allItems, itemService);
+            ItemUtil.updateDescription(oldItem, header, newDescriptionMap, newDescription, allItems, itemService);
+        }
+        ImgUtil.updateImg(view, oldItem);
+        ItemUtil.updateChildItems(oldItem, view, itemService, currentUser);
+        ItemUtil.updateReplacers(oldItem, view, itemService, currentUser);
+        LinkUtil.updateItemLinks(oldItem, view);
+        itemService.update(oldItem);
 
         final ItemView newItemView = createItemView(itemId, currentUser.getName(), userLanguage);
 

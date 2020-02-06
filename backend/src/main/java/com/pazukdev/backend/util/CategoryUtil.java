@@ -130,10 +130,10 @@ public class CategoryUtil {
             if (containsParentheses(s)) {
                 final String paramValue = getValueFromDescription(description, getStringBeforeParentheses(s));
                 final String unit = getStringBetweenParentheses(s);
-                value +=  paramValue + " " + unit;
+                value +=  replaceEmptyWithEmpty(paramValue) + " " + replaceEmptyWithEmpty(unit);
             } else {
                 final String paramValue = getValueFromDescription(description, s);
-                value += paramValue;
+                value += replaceEmptyWithEmpty(paramValue);
             }
             value += " ";
         }

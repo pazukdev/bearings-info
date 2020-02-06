@@ -7,7 +7,6 @@ import com.pazukdev.backend.entity.Replacer;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.UserService;
 import com.pazukdev.backend.util.ChildItemUtil;
-import com.pazukdev.backend.util.SpecificStringUtil;
 import com.pazukdev.backend.util.UserUtil;
 
 import java.util.Map;
@@ -15,6 +14,8 @@ import java.util.Set;
 
 import static com.pazukdev.backend.util.CategoryUtil.getItemsManagementComment;
 import static com.pazukdev.backend.util.ItemUtil.*;
+import static com.pazukdev.backend.util.SpecificStringUtil.capitalize;
+import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -22,7 +23,7 @@ import static com.pazukdev.backend.util.ItemUtil.*;
 public class NestedItemDtoFactory {
 
     public static NestedItemDto createUser(final UserEntity user) {
-        final String role = SpecificStringUtil.capitalize(user.getRole().name());
+        final String role = capitalize(user.getRole().name());
 
         final NestedItemDto userData = new NestedItemDto();
         userData.setItemId(user.getId());
@@ -97,7 +98,7 @@ public class NestedItemDtoFactory {
                                                              final Set<String> comments) {
         final NestedItemDto basicSpecialNestedItemDto = createBasicNestedItemDto(item, userService);
         String leftColumnData = getItemsManagementComment(item, comments);
-        basicSpecialNestedItemDto.setComment(leftColumnData != null ? leftColumnData : "-");
+        basicSpecialNestedItemDto.setComment(!isEmpty(leftColumnData) ? leftColumnData : "-");
         return basicSpecialNestedItemDto;
     }
 

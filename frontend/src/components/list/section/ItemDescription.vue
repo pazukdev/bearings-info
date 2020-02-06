@@ -12,7 +12,7 @@
                             </td>
                         </tr>
                     </table>
-                    <p v-if="isEdit()">{{row.parameter}}</p>
+                    <input v-if="isEdit()" v-model="row.parameter" type="text"/>
                 </td>
                 <td class="two-column-table-right-column">
                     <input v-if="isEdit()" v-model="row.value" type="text"/>

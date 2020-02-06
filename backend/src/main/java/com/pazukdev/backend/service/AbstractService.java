@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.pazukdev.backend.util.SpecificStringUtil.replaceEmpty;
+import static com.pazukdev.backend.util.SpecificStringUtil.replaceEmptyWithDash;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -39,7 +39,7 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
 
     @Transactional
     public Entity create(final Dto dto) {
-        dto.setName(replaceEmpty(dto.getName()));
+        dto.setName(replaceEmptyWithDash(dto.getName()));
         return repository.save(converter.convertToEntity(dto));
     }
 
@@ -55,7 +55,7 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     @Transactional
     public Entity update(final Long id, final Dto dto) {
         dto.setId(id);
-        dto.setName(replaceEmpty(dto.getName()));
+        dto.setName(replaceEmptyWithDash(dto.getName()));
         return repository.save(converter.convertToEntity(dto));
     }
 

@@ -242,8 +242,16 @@ public class SpecificStringUtil {
         return source.contains("(") && source.contains(")");
     }
 
-    public static String replaceEmpty(final String s) {
+    public static String replaceEmptyWithDash(final String s) {
         return isEmpty(s) ? "-" : s;
+    }
+
+    public static String fixSemicolons(final String s) {
+        return isEmpty(s) ? s : s.replaceAll("(;)+","; ").replaceAll("( )+"," ");
+    }
+
+    public static String replaceEmptyWithEmpty(final String s) {
+        return isEmpty(s) ? "" : s;
     }
 
     public static List<String> splitIntoWords(final String text) {

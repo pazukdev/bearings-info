@@ -3,6 +3,7 @@ ru=China=Китай
 ru=Cork. Terms and definitions=кора пробковая. термины и определения
 ru=Dnepr=Днепр
 ru=Exhaust=Выхлоп
+ru=Fuel filter=Топливный фильтр
 ru=GOST=ГОСТ
 ru=IMZ=ИМЗ
 ru=Irbitskiy Mototsikletniy Zavod=Ирбитский Мотоциклетный Завод
@@ -21,7 +22,9 @@ ru=USSR=СССР
 ru=Ukraine=Украина
 ru=Ukrainian SSR=УССР
 ru=Ural=Урал
+ru=Value=Значение
 ru=adapter=адаптер
+ru=added=добавил
 ru=additional info=доп. информация
 ru=aluminium A5-grade 0.5mm=алюминий первичный марки А5 0.5мм
 ru=aluminium alloy= алюминиевый сплав
@@ -29,6 +32,7 @@ ru=aluminium bronze=алюминиевая бронза
 ru=aluminium=алюминий
 ru=aluminum=алюминий
 ru=app data=все данные
+ru=as=как
 ru=ball=шарик
 ru=base=база
 ru=bearing=подшипник
@@ -46,6 +50,7 @@ ru=cork=пробка
 ru=cotton yarn braid coated with nitrocellulose varnish=хлопчатобумажная пряжа покрытая нитроцеллюлозным лаком
 ru=country=страна
 ru=created by=добавлено пользователем
+ru=created=создал
 ru=cycle-car=мотоколяска
 ru=cylindrical roller bearing=роликовый
 ru=deepgroove bearing=радиальный
@@ -123,6 +128,7 @@ ru=or higher=или выше
 ru=outer concentric flat thrust spring retaining rings and grooves=кольца пружинные упорные плоские наружные концентрические и канавки для них
 ru=outer shield material=оплетка
 ru=paper=бумага
+ru=part=часть
 ru=partnumber=наименование
 ru=parts=детали
 ru=pcs/vol=кол-во/объем
@@ -209,7 +215,3 @@ ru=width=ширина
 ru=wire=провод
 ru=wrought aluminium and aluminium alloys=алюминий и сплавы алюминиевые деформируемые
 ru=your wishlist=ваш список желаемого
-ru=created=создал
-ru=added=добавил
-ru=part=часть
-ru=as=как
