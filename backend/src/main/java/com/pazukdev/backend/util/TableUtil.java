@@ -17,7 +17,8 @@ import java.util.Map;
 import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.createReplacer;
 import static com.pazukdev.backend.util.ItemUtil.getValueFromDescription;
 import static com.pazukdev.backend.util.ItemUtil.toMap;
-import static com.pazukdev.backend.util.SpecificStringUtil.fixSemicolons;
+import static com.pazukdev.backend.util.SpecificStringUtil.fixParam;
+import static com.pazukdev.backend.util.SpecificStringUtil.fixValue;
 
 public class TableUtil {
 
@@ -60,7 +61,7 @@ public class TableUtil {
     public static Map<String, String> createHeaderMap(final HeaderTable header) {
         final Map<String, String> map = new HashMap<>();
         for (final HeaderTableRow row : header.getRows()) {
-            map.put(row.getParameter(), fixSemicolons(row.getValue()));
+            map.put(fixParam(row.getParameter()), fixValue(row.getValue()));
         }
         return map;
     }

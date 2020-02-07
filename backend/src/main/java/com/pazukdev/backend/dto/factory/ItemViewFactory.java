@@ -20,13 +20,14 @@ import static com.pazukdev.backend.util.ChildItemUtil.createChildrenFromItemView
 import static com.pazukdev.backend.util.FileUtil.FileName;
 import static com.pazukdev.backend.util.FileUtil.getTxtFileLines;
 import static com.pazukdev.backend.util.ItemUtil.SpecialItemId.*;
-import static com.pazukdev.backend.util.NestedItemUtil.createPossibleParts;
-import static com.pazukdev.backend.util.NestedItemUtil.createReplacerDtos;
+import static com.pazukdev.backend.util.NestedItemUtil.addPossiblePartsAndReplacers;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 import static com.pazukdev.backend.util.TableUtil.createHeader;
 import static com.pazukdev.backend.util.TableUtil.createReplacersTable;
-import static com.pazukdev.backend.util.TranslatorUtil.translate;
+import static com.pazukdev.backend.util.TranslatorUtil.*;
 import static com.pazukdev.backend.util.UserActionUtil.*;
+import static com.pazukdev.backend.util.UserUtil.createLikeListDto;
+import static com.pazukdev.backend.util.UserUtil.getCreatorName;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -117,8 +118,10 @@ public class ItemViewFactory {
         final UserEntity creator = itemService.getUserService().findByName(userName);
 
         if (!userLanguage.equals("en")) {
-            name = translate(userLanguage, "en", name, true);
-            category = translate(userLanguage, "en", category, true);
+            final Set<String> dictionary = getDictionary();
+            name = translate(userLanguage, "en", name, true, dictionary);
+            category = translate(userLanguage, "en", category, true, dictionary);
+            saveDictionary(dictionary);
         }
 
         final Item item = new Item();
@@ -160,7 +163,7 @@ public class ItemViewFactory {
                                             final UserService userService) {
         final Item item = itemService.getOne(itemId);
         final List<Item> allItems = itemService.findAll();
-        final List<Item> sameCategoryItems = itemService.find(item.getCategory(), allItems);
+        allItems.remove(item);
         final String category = item.getCategory();
         final String name = item.getName();
         final ImgViewData imgViewData = ImgUtil.getImg(item);
@@ -177,11 +180,10 @@ public class ItemViewFactory {
         view.setChildren(createChildren(item, userService, false));
         view.setAllChildren(createChildren(item, userService, true));
         view.setReplacersTable(createReplacersTable(item, userService));
-        view.getPossibleParts().addAll(createPossibleParts(allItems, category, userService, infoCategories));
-        view.getPossibleReplacers().addAll(createReplacerDtos(sameCategoryItems, itemId, userService));
+        addPossiblePartsAndReplacers(view, allItems, item, infoCategories, itemService);
         view.setCreatorId(item.getCreatorId());
-        view.setCreatorName(UserUtil.getCreatorName(item, itemService.getUserService()));
-        view.setLikeList(UserUtil.createLikeListDto(currentUser));
+        view.setCreatorName(getCreatorName(item, itemService.getUserService()));
+        view.setLikeList(createLikeListDto(currentUser));
         LinkUtil.setLinksToItemView(view, item);
         view.setParents(createParentItemsView(item, userService, allItems));
 
@@ -325,11 +327,11 @@ public class ItemViewFactory {
     }
 
     private String createEmptyDescription(final String category) {
-        final List<Item> items = itemService.find(category);
-        if (items.isEmpty()) {
+        final Item firstFound = itemService.getItemRepository().findFirstByCategory(category);
+        if (firstFound == null) {
             return "";
         }
-        final Map<String, String> descriptionMap = ItemUtil.toMap(items.get(0).getDescription());
+        final Map<String, String> descriptionMap = ItemUtil.toMap(firstFound.getDescription());
         for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
             entry.setValue("-");
         }
@@ -399,11 +401,8 @@ public class ItemViewFactory {
 
     private void removeItemFromAllWishLists(final Item itemToRemove, final UserService userService) {
         for (final UserEntity user : userService.findAll()) {
-            for (final ChildItem wishListItem : new ArrayList<>(user.getWishList().getItems())) {
-                if (wishListItem.getItem().getId().equals(itemToRemove.getId())) {
-                    user.getWishList().getItems().remove(wishListItem);
-                }
-            }
+            user.getWishList().getItems()
+                    .removeIf(wishListItem -> wishListItem.getItem().getId().equals(itemToRemove.getId()));
             userService.update(user);
         }
     }

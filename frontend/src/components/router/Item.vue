@@ -1,5 +1,6 @@
 <template>
     <div>
+<!--        {{itemView.children.length}}-->
         <LoadingScreen v-if="isLoading()"/>
         <div v-else>
             <ItemMenu/>

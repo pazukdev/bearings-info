@@ -82,10 +82,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return itemRepository.findByName(name);
     }
 
-//    public List<Item> findAllInfoItems() {
-//        return find(getInfoCategories().toArray(new String[0]));
-//    }
-
     @Transactional
     public Item find(final String category, final String name) {
         Item item = itemRepository.findFirstByCategoryAndName(category, name);

@@ -68,6 +68,7 @@ public class CategoryUtil {
 
         // other
         public static final String BASE = "Base";
+        public static final String CLASS = "Class";
         public static final String CORE = "Core";
         public static final String COUNTRY = "Country";
         public static final String DEFUNCT = "Defunct";
@@ -154,9 +155,16 @@ public class CategoryUtil {
         return weight != null ? weight : 0;
     }
 
-    public static boolean isAddManufacturerName(final Item nestedItem) {
-        final String category = nestedItem.getCategory();
-        return category.equalsIgnoreCase(SEAL) || category.equalsIgnoreCase(SPARK_PLUG);
+    public static boolean isAddManufacturer(final String itemCategory,
+                                            final String manufacturer,
+                                            final boolean selectText) {
+        if (isEmpty(manufacturer) || manufacturer.equalsIgnoreCase("ussr")) {
+            return false;
+        }
+        if (selectText) {
+            return true;
+        }
+        return itemCategory.equalsIgnoreCase(SEAL) || itemCategory.equalsIgnoreCase(SPARK_PLUG);
     }
 
     public static boolean isInfo(final String category, final Set<String> infoCategories) {

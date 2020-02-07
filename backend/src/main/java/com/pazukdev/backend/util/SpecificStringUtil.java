@@ -246,6 +246,20 @@ public class SpecificStringUtil {
         return isEmpty(s) ? "-" : s;
     }
 
+    public static String fixParam(final String s) {
+        if (isEmpty(s)) {
+            return s;
+        }
+        return s.replaceAll(":", "");
+    }
+
+    public static String fixValue(final String s) {
+        if (isEmpty(s)) {
+            return s;
+        }
+        return fixSemicolons(s.replaceAll(":", ""));
+    }
+
     public static String fixSemicolons(final String s) {
         return isEmpty(s) ? s : s.replaceAll("(;)+","; ").replaceAll("( )+"," ");
     }

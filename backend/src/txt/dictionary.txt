@@ -1,9 +1,15 @@
 ru=AL=АЛ
 ru=China=Китай
 ru=Cork. Terms and definitions=кора пробковая. термины и определения
+ru=Direct current type=Постоянного напряжения
 ru=Dnepr=Днепр
+ru=Dynamic load rating=Dynamic load рейтинг
 ru=Exhaust=Выхлоп
+ru=For rear journal only=Для rear journal only
 ru=Fuel filter=Топливный фильтр
+ru=G-11A=Г-11А
+ru=G-414=Г-414
+ru=G-424=Г-424
 ru=GOST=ГОСТ
 ru=IMZ=ИМЗ
 ru=Irbitskiy Mototsikletniy Zavod=Ирбитский Мотоциклетный Завод
@@ -15,14 +21,19 @@ ru=M63 Ural-2=М63 Урал-2
 ru=M66 Ural-3=М66 Урал-3
 ru=MMVZ=ММВЗ
 ru=MTZ=МТЗ
+ru=New parameter=Новый параметр
 ru=Pneumatic tires for motorcycles, cycle-cars, scooters and mopeds=Шины для мотоциклов. мотоколясок, мотороллеров и мопедов
 ru=Russia=Россия
+ru=Static load rating=Static load рейтинг
 ru=USA=США
 ru=USSR=СССР
 ru=Ukraine=Украина
 ru=Ukrainian SSR=УССР
 ru=Ural=Урал
 ru=Value=Значение
+ru=Zebra 2=Зебра 2
+ru=Zebra=Зебра
+ru=Zoo <: 3=Зоопарк <:3
 ru=adapter=адаптер
 ru=added=добавил
 ru=additional info=доп. информация
@@ -31,6 +42,7 @@ ru=aluminium alloy= алюминиевый сплав
 ru=aluminium bronze=алюминиевая бронза
 ru=aluminium=алюминий
 ru=aluminum=алюминий
+ru=amperage=ток
 ru=app data=все данные
 ru=as=как
 ru=ball=шарик
@@ -62,6 +74,7 @@ ru=eccentric inner flat snap rings=эксцентричные внутренни
 ru=edit=редактировать
 ru=engine=двигатель
 ru=fastener=крепежный элемент
+ru=felt seal=фетровое кольцо
 ru=final drive=редуктор
 ru=for final drive=для редуктора
 ru=for gearbox=для КПП
@@ -91,6 +104,7 @@ ru=high voltage=высокого напряжения
 ru=inner eccentric flat thrust spring retaining rings and grooves=кольца пружинные упорные плоские внутренние эксцентрические и канавки для них
 ru=insulation rubber=резина кабельная изоляционная
 ru=insulation=изоляция
+ru=irbit=ирбит
 ru=jupiter=юпитер
 ru=kg=кг
 ru=kit, needle=комплект иголок
@@ -142,8 +156,10 @@ ru=plain bearing=подшипник скольжения
 ru=planet=планета
 ru=plastic=пластик
 ru=platinum=платина
+ru=pole shoe screw=винт полюсного башмака
 ru=polyamide=полиамид
 ru=portuguese cork=португальская пробка
+ru=power=мощность
 ru=primary aluminum=алюминий первичный
 ru=production=годы пр-ва
 ru=purpose=применение
@@ -158,6 +174,7 @@ ru=roller, tapered=ролик, конический
 ru=roller=ролик
 ru=rolling bearings=подшипники качения
 ru=rolling element=тело качения
+ru=rotor shaft=вал ротора
 ru=round spring lock rings=кольца пружинные круглые
 ru=rubber for electric cables wires and cords=резина электрических кабелей, проводов и шнуров
 ru=rubber product=резино-техническое изделие
@@ -190,7 +207,9 @@ ru=summer use=летнее
 ru=synthetic=синтетика
 ru=tapered roller bearing=конический роликовый
 ru=telescopic=телескопическая
+ru=tension=напряжение
 ru=terms and definitions=термины и определения
+ru=thickness=толщина
 ru=thread length=длинна резьбы
 ru=thread=резьба
 ru=thrust bearing=упорный

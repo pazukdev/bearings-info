@@ -1,11 +1,19 @@
 package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.dto.NestedItemDto;
-import com.pazukdev.backend.dto.factory.NestedItemDtoFactory;
+import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.Item;
+import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.createBasicNestedItemDto;
+import static com.pazukdev.backend.util.CategoryUtil.Category;
+import static com.pazukdev.backend.util.CategoryUtil.isPart;
 
 public class NestedItemUtil {
 
@@ -106,35 +114,72 @@ public class NestedItemUtil {
         return parentItemName + " - " + nestedItemName;
     }
 
-    public static List<NestedItemDto> createPossibleParts(final List<Item> items,
-                                                          final String parentItemCategory,
-                                                          final UserService userService,
-                                                          final Set<String> infoCategories) {
-        final List<NestedItemDto> childItemDtos = new ArrayList<>();
-        for (final Item item : items) {
-            final String category = item.getCategory();
-            if (!CategoryUtil.isPart(category, infoCategories) || category.equalsIgnoreCase(parentItemCategory)) {
-                continue;
-            }
-            final NestedItemDto dto = NestedItemDtoFactory.createBasicNestedItemDto(item, userService);
-            dto.setSelectText(category + " " + dto.getSelectText());
-            childItemDtos.add(dto);
-        }
-        return childItemDtos;
-    }
+    public static void addPossiblePartsAndReplacers(final ItemView view,
+                                                    final List<Item> allItems,
+                                                    final Item parent,
+                                                    final Set<String> infoCategories,
+                                                    final ItemService itemService) {
+        final UserService userService = itemService.getUserService();
+//        final Set<String> comments = getTxtFileLines(FileUtil.FileName.COMMENTS);
+//        final ItemView parentsView = new ItemView();
 
-    public static List<NestedItemDto> createReplacerDtos(final List<Item> items,
-                                                         final Long parentItemId,
-                                                         final UserService userService) {
-        final List<NestedItemDto> replacerDtos = new ArrayList<>();
-        for (final Item item : items) {
-            if (item.getId().equals(parentItemId)) {
-                continue;
+//        final String category = item.getCategory();
+//        String secondSearchCategory = null;
+//        if (category.equalsIgnoreCase(MATERIAL)) {
+//            secondSearchCategory = INSULATION;
+//        }
+
+        for (final Item item : allItems) {
+//            if (item.getId().equals(parent.getId())) {
+//                continue;
+//            }
+            final String category = item.getCategory();
+
+            boolean addPart = isPart(category, infoCategories) && !category.equals(item.getCategory());
+            boolean addReplacer = category.equals(item.getCategory()) && !category.equals(Category.VEHICLE);
+
+            NestedItemDto dto = null;
+            if (addPart) {
+                dto = createBasicNestedItemDto(item, userService);
+                dto.setSelectText(category + " " + dto.getSelectText());
+                view.getPossibleParts().add(dto);
             }
-            replacerDtos.add(NestedItemDtoFactory.createBasicNestedItemDto(item, userService));
+            if (addReplacer) {
+                if (dto == null) {
+                    dto = createBasicNestedItemDto(item, userService);
+                }
+                view.getPossibleReplacers().add(dto);
+            }
+
+//            if (!isInfo(category, infoCategories)) {
+//                for (final ChildItem child : i.getChildItems()) {
+//                    if (child.getItem().getId().equals(item.getId())) {
+//                        parentsView.getChildren().add(createItemForItemsManagement(i, userService, comments));
+//                    }
+//                }
+//            } else {
+//                final String description = i.getDescription();
+//                if (!description.contains(category)
+//                        && (secondSearchCategory == null || !description.contains(secondSearchCategory))) {
+//                    continue;
+//                }
+//                for (final Map.Entry<String, String> entry : toMap(description).entrySet()) {
+//                    String parameter = entry.getKey();
+//                    if (!parameter.equals(category) && !parameter.equals(secondSearchCategory)) {
+//                        continue;
+//                    }
+//                    for (final String value : entry.getValue().split("; ")) {
+//                        final Item foundItem = itemService.find(category, value);
+//                        if (foundItem != null && foundItem.getId().equals(item.getId())) {
+//                            parentsView.getChildren().add(createItemForItemsManagement(i, userService, comments));
+//                            break;
+//                        }
+//                    }
+//
+//                }
+//            }
         }
-        replacerDtos.sort(Comparator.comparing(NestedItemDto::getRating).reversed());
-        return replacerDtos;
+//        view.setParents(parentsView);
     }
 
 }

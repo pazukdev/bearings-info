@@ -7,15 +7,15 @@ import com.pazukdev.backend.entity.Replacer;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.UserService;
 import com.pazukdev.backend.util.ChildItemUtil;
-import com.pazukdev.backend.util.UserUtil;
 
 import java.util.Map;
 import java.util.Set;
 
-import static com.pazukdev.backend.util.CategoryUtil.getItemsManagementComment;
+import static com.pazukdev.backend.util.CategoryUtil.*;
 import static com.pazukdev.backend.util.ItemUtil.*;
 import static com.pazukdev.backend.util.SpecificStringUtil.capitalize;
 import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
+import static com.pazukdev.backend.util.UserUtil.getCreatorName;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -40,9 +40,9 @@ public class NestedItemDtoFactory {
     public static NestedItemDto createVehicle(final Item vehicle, final UserService userService) {
         final String description = vehicle.getDescription();
         final Map<String, String> map = toMap(description);
-        final String production = getValueFromDescriptionMap(map, "Production");
-        final String manufacturer = getValueFromDescriptionMap(map, "Manufacturer");
-        final String vehicleClass = getValueFromDescriptionMap(map, "Class");
+        final String production = map.get(Parameter.PRODUCTION);
+        final String manufacturer = map.get(Category.MANUFACTURER);
+        final String vehicleClass = map.get(Parameter.CLASS);
 
         final NestedItemDto vehicleDto = createBasicNestedItemDto(vehicle, userService);
         vehicleDto.setComment(production);
@@ -109,11 +109,14 @@ public class NestedItemDtoFactory {
     }
 
     public static NestedItemDto createBasicNestedItemDto(final Item item, final UserService userService) {
+        final Map<String, String> descriptionMap = toMap(item.getDescription());
+        final String manufacturer = descriptionMap.get(Category.MANUFACTURER);
+
         final String name = " - " + item.getName();
         final Long itemId = item.getId();
         final String itemName = item.getName();
-        final String buttonText = createButtonText(item);
-        final String selectText = createSelectText(item);
+        final String buttonText = createButtonText(item, manufacturer);
+        final String selectText = createSelectText(item, manufacturer, descriptionMap);
 
         final NestedItemDto nestedItemDto = new NestedItemDto();
         nestedItemDto.setName(name);
@@ -124,7 +127,7 @@ public class NestedItemDtoFactory {
         nestedItemDto.setButtonText(buttonText);
         nestedItemDto.setSelectText(selectText);
         nestedItemDto.setStatus(item.getStatus());
-        nestedItemDto.setCreatorName(UserUtil.getCreatorName(item, userService));
+        nestedItemDto.setCreatorName(getCreatorName(item, userService));
         return nestedItemDto;
     }
 

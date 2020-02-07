@@ -15,8 +15,12 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.pazukdev.backend.util.CategoryUtil.isAddManufacturerName;
+import static com.pazukdev.backend.util.CategoryUtil.Category.MANUFACTURER;
+import static com.pazukdev.backend.util.CategoryUtil.Category.SEAL;
+import static com.pazukdev.backend.util.CategoryUtil.Parameter.SIZE;
+import static com.pazukdev.backend.util.CategoryUtil.isAddManufacturer;
 import static com.pazukdev.backend.util.CategoryUtil.isInfo;
+import static com.pazukdev.backend.util.SpecificStringUtil.*;
 import static com.pazukdev.backend.util.UserActionUtil.ActionType.*;
 import static com.pazukdev.backend.util.UserActionUtil.processPartAction;
 import static com.pazukdev.backend.util.UserActionUtil.processReplacerAction;
@@ -115,20 +119,7 @@ public class ItemUtil {
     }
 
     public static String getValueFromDescription(final String description, final String key) {
-        return getValueFromDescriptionMap(toMap(description), key);
-    }
-
-    public static String getValueFromDescriptionMap(final Map<String, String> map, final String key) {
-        String value = map.get(key);
-        if (value == null) {
-            for (int i = 0; i < 10; i++) {
-                value = map.get(key + " #" + i);
-                if (value != null) {
-                    return value;
-                }
-            }
-        }
-        return value;
+        return toMap(description).get(key);
     }
 
     public static String toDescription(final Map<String, String> map) {
@@ -147,7 +138,7 @@ public class ItemUtil {
                 = toDescription(descriptionMap.getParameters())
                 + toDescription(descriptionMap.getSelectableParameters())
                 + toDescription(descriptionMap.getItems());
-        return SpecificStringUtil.replaceEmptyWithDash(description);
+        return replaceEmptyWithDash(description);
     }
 
     public static Map<String, String> toMap(final String description) {
@@ -155,7 +146,7 @@ public class ItemUtil {
         if (description == null || !description.contains(":")) {
             return map;
         }
-        final List<String> descriptionList = Arrays.asList(description.split(";;"));
+        final String[] descriptionList = description.split(";;");
         for (final String element : descriptionList) {
             map.put(element.split(":")[0], element.split(":")[1]);
         }
@@ -186,9 +177,9 @@ public class ItemUtil {
         final ReplacerData replacerData = new ReplacerData();
         String replacerName;
         String comment = "-";
-        if (SpecificStringUtil.containsParentheses(replacerDataSourceString)) {
-            replacerName = SpecificStringUtil.getStringBeforeParentheses(replacerDataSourceString);
-            comment = SpecificStringUtil.getStringBetweenParentheses(replacerDataSourceString);
+        if (containsParentheses(replacerDataSourceString)) {
+            replacerName = getStringBeforeParentheses(replacerDataSourceString);
+            comment = getStringBetweenParentheses(replacerDataSourceString);
         } else {
             replacerName = replacerDataSourceString;
         }
@@ -200,39 +191,40 @@ public class ItemUtil {
     public static List<ReplacerData> parseReplacersSourceString(final String replacersSourceString) {
         final List<ReplacerData> data = new ArrayList<>();
         if (!replacersSourceString.equals("-")) {
-            for (final String replacerData : Arrays.asList(replacersSourceString.split("; "))) {
+            for (final String replacerData : replacersSourceString.split("; ")) {
                 data.add(parseReplacerData(replacerData));
             }
         }
         return data;
     }
 
-    public static String createButtonText(final Item nestedItem) {
-        if (isAddManufacturerName(nestedItem)) {
-            return getValueFromDescription(nestedItem.getDescription(), "Manufacturer")
-                    + " " + nestedItem.getName();
+    public static String createButtonText(final Item item, final String manufacturer) {
+        if (isAddManufacturer(item.getCategory(), manufacturer, false)) {
+            return manufacturer + " " + item.getName();
         } else {
-            return nestedItem.getName();
+            return item.getName();
         }
     }
 
-    public static String createSelectText(final Item nestedItem) {
-        final String manufacturer = getValueFromDescription(nestedItem.getDescription(), "Manufacturer");
-        String selectText = nestedItem.getName();
-        if (manufacturer != null) {
-            selectText = manufacturer + " " + nestedItem.getName();
+    public static String createSelectText(final Item item,
+                                          final String manufacturer,
+                                          final Map<String, String> descriptionMap) {
+        final String itemCategory = item.getCategory();
+        final String itemName = item.getName();
+        final boolean addManufacturer = isAddManufacturer(itemCategory, manufacturer, true);
+        if (itemCategory.equals(SEAL)) {
+            return descriptionMap.get(SIZE) + " " + (addManufacturer ? manufacturer + " " : "") + itemName;
         }
-        if (nestedItem.getCategory().equals("Seal")) {
-            final String size = ItemUtil.getValueFromDescription(nestedItem.getDescription(), "Size, mm");
-            selectText = size + " " + manufacturer + " " + nestedItem.getName();
+        if (addManufacturer) {
+            return manufacturer + " " + itemName;
         }
-        return selectText;
+        return itemName;
     }
 
     public static Item getUssrSealBySize(final String searchingSize, final ItemService itemService) {
-        final List<Item> ussrSeals = filter(itemService.find("Seal"), "Manufacturer", "USSR");
+        final List<Item> ussrSeals = filter(itemService.find(SEAL), MANUFACTURER, "USSR");
         for (Item seal : ussrSeals) {
-            final String actualSize = ItemUtil.getValueFromDescription(seal.getDescription(), "Size, mm");
+            final String actualSize = ItemUtil.getValueFromDescription(seal.getDescription(), SIZE);
             if (actualSize.equals(searchingSize)) {
                 return seal;
             }
@@ -385,10 +377,14 @@ public class ItemUtil {
             for (final HeaderTableRow row : headerTable.getRows()) {
                 final String oldParam = row.getName();
                 final String newParam = row.getParameter();
+                final String oldValue = oldDescriptionMap.get(oldParam);
                 boolean paramChanged = !oldParam.equals(newParam);
+
                 if (paramChanged) {
-                    final String value = oldDescriptionMap.get(oldParam);
-                    newDescriptionMap.put(newParam, value == null ? "-" : value);
+                    newDescriptionMap.put(newParam, oldValue == null ? "-" : oldValue);
+                } else {
+                    newDescriptionMap.remove(newParam);
+                    newDescriptionMap.put(newParam, oldValue);
                 }
             }
             item.setDescription(ItemUtil.toDescription(newDescriptionMap));

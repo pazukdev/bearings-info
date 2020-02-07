@@ -35,8 +35,8 @@ public class ItemView extends AbstractView {
     private String localizedName = "-";
     private UserDto userData;
     private HeaderTable header;
-    private List<NestedItemDto> children;
-    private List<NestedItemDto> allChildren;
+    private List<NestedItemDto> children = new ArrayList<>();
+    private List<NestedItemDto> allChildren = new ArrayList<>();
     private ReplacersTable replacersTable;
     private List<NestedItemDto> possibleParts = new ArrayList<>();
     private List<NestedItemDto> possibleReplacers = new ArrayList<>();

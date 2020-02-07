@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.Set;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -35,32 +37,32 @@ public class NestedItemDto extends AbstractDto {
         this.translatedVehicleClass = vehicleClass;
     }
 
-    public void translate(final String langFrom, final String langTo) {
+    public void translate(final String langFrom, final String langTo, final Set<String> dictionary) {
         if (SpecificStringUtil.isEmpty(langFrom) || SpecificStringUtil.isEmpty(langTo)) {
             return;
         }
         if (langTo.equals("en")) {
-            translateToEnglish(langFrom);
+            translateToEnglish(langFrom, dictionary);
             return;
         }
         if (langFrom.equals("en")) {
-            translateToLang(langTo);
+            translateToLang(langTo, dictionary);
         }
     }
 
-    private void translateToLang(final String langTo) {
+    private void translateToLang(final String langTo, final Set<String> dictionary) {
         final String langFrom = "en";
         final boolean addToDictionary = false;
 
-        itemCategory = TranslatorUtil.translate(langFrom, langTo, itemCategory, addToDictionary);
-        buttonText = TranslatorUtil.translate(langFrom, langTo, buttonText, addToDictionary);
-        selectText = TranslatorUtil.translate(langFrom, langTo, selectText, addToDictionary);
-        comment = TranslatorUtil.translate(langFrom, langTo, comment, addToDictionary);
-        secondComment = TranslatorUtil.translate(langFrom, langTo, secondComment, addToDictionary);
-        translatedVehicleClass = TranslatorUtil.translate(langFrom, langTo, vehicleClass, addToDictionary);
+        itemCategory = TranslatorUtil.translate(langFrom, langTo, itemCategory, addToDictionary, dictionary);
+        buttonText = TranslatorUtil.translate(langFrom, langTo, buttonText, addToDictionary, dictionary);
+        selectText = TranslatorUtil.translate(langFrom, langTo, selectText, addToDictionary, dictionary);
+        comment = TranslatorUtil.translate(langFrom, langTo, comment, addToDictionary, dictionary);
+        secondComment = TranslatorUtil.translate(langFrom, langTo, secondComment, addToDictionary, dictionary);
+        translatedVehicleClass = TranslatorUtil.translate(langFrom, langTo, vehicleClass, addToDictionary, dictionary);
     }
 
-    private void translateToEnglish(final String langFrom) {
+    private void translateToEnglish(final String langFrom, final Set<String> dictionary) {
         final String langTo = "en";
         final boolean addToDictionary = true;
 
@@ -68,9 +70,9 @@ public class NestedItemDto extends AbstractDto {
             return;
         }
 
-        itemCategory = TranslatorUtil.translate(langFrom, langTo, itemCategory, addToDictionary);
-        comment = TranslatorUtil.translate(langFrom, langTo, comment, addToDictionary);
-        secondComment = TranslatorUtil.translate(langFrom, langTo, secondComment, addToDictionary);
+        itemCategory = TranslatorUtil.translate(langFrom, langTo, itemCategory, addToDictionary, dictionary);
+        comment = TranslatorUtil.translate(langFrom, langTo, comment, addToDictionary, dictionary);
+        secondComment = TranslatorUtil.translate(langFrom, langTo, secondComment, addToDictionary, dictionary);
     }
 
 }

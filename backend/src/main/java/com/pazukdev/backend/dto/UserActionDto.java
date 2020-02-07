@@ -4,6 +4,8 @@ import com.pazukdev.backend.util.TranslatorUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Set;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -22,12 +24,12 @@ public class UserActionDto extends AbstractDto {
     private String itemCategory;
     private String date;
 
-    public void translate(final String langTo) {
-        actionType = TranslatorUtil.translate("en", langTo, actionType, false);
-        itemType = TranslatorUtil.translate("en", langTo, itemType, false);
-        itemCategory = TranslatorUtil.translate("en", langTo, itemCategory, false);
-        itemName = TranslatorUtil.translate("en", langTo, itemName, false);
-        parentName = TranslatorUtil.translate("en", langTo, parentName, false);
+    public void translate(final String langTo, final Set<String> dictionary) {
+        actionType = TranslatorUtil.translate("en", langTo, actionType, false, dictionary);
+        itemType = TranslatorUtil.translate("en", langTo, itemType, false, dictionary);
+        itemCategory = TranslatorUtil.translate("en", langTo, itemCategory, false, dictionary);
+        itemName = TranslatorUtil.translate("en", langTo, itemName, false, dictionary);
+        parentName = TranslatorUtil.translate("en", langTo, parentName, false, dictionary);
     }
 
 }
