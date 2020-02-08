@@ -23,7 +23,6 @@ public class HeaderTableRow extends AbstractDto {
     private String parameter = "-";
     private String value = "-";
     private List<Long> ids = new ArrayList<>();
-    private boolean deletable;
     private int weight = 0;
 
     public static HeaderTableRow create(final String param, final String value, final ItemService service) {
@@ -41,7 +40,6 @@ public class HeaderTableRow extends AbstractDto {
         row.setName(param);
         row.setParameter(param);
         row.setValue(value);
-        row.setDeletable(!CategoryUtil.isFixed(param));
         row.setIds(ids);
         row.setWeight(CategoryUtil.getWeight(param));
         return row;

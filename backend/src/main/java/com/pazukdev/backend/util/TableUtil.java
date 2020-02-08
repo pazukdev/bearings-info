@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.createReplacer;
-import static com.pazukdev.backend.util.ItemUtil.getValueFromDescription;
+import static com.pazukdev.backend.util.CategoryUtil.Parameter;
 import static com.pazukdev.backend.util.ItemUtil.toMap;
 import static com.pazukdev.backend.util.SpecificStringUtil.fixParam;
 import static com.pazukdev.backend.util.SpecificStringUtil.fixValue;
@@ -36,11 +36,15 @@ public class TableUtil {
     public static HeaderTable createHeader(final Item item, final ItemService service) {
         final String itemName = item.getName();
         final String itemCategory = item.getCategory();
+        if (itemCategory == null) {
+            int i = 0;
+        }
         final String tableName = getHeaderTableName(itemCategory, itemName);
         final Map<String, String> description = toMap(item.getDescription());
 
         final List<HeaderTableRow> headerTableRows = new ArrayList<>();
-        headerTableRows.add(HeaderTableRow.create("Name", itemName, service));
+        headerTableRows.add(HeaderTableRow.create(Parameter.DescriptionIgnored.NAME, itemName, service));
+        headerTableRows.add(HeaderTableRow.create(Parameter.DescriptionIgnored.CATEGORY, itemCategory, service));
         return createTable(tableName, description, headerTableRows, service);
     }
 
@@ -64,24 +68,6 @@ public class TableUtil {
             map.put(fixParam(row.getParameter()), fixValue(row.getValue()));
         }
         return map;
-    }
-
-    private static boolean isBoxer(final Item motorcycle) {
-        final String description = motorcycle.getDescription().toLowerCase();
-        final String type = getValueFromDescription(description, "type");
-        final String manufacturer = getValueFromDescription(description, "manufacturer");
-        final String name = motorcycle.getName().toLowerCase();
-
-        if (type != null && type.equals("boxer")) {
-            return true;
-        } else if (manufacturer != null) {
-            if (manufacturer.contains("imz") || manufacturer.contains("kmz")
-                    || (manufacturer.equals("bmw") && name.equals("r75"))
-                    || (manufacturer.equals("zundapp") && name.equals("ks750"))) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

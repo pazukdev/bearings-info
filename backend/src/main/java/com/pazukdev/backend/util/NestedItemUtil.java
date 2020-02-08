@@ -18,8 +18,6 @@ import static com.pazukdev.backend.util.CategoryUtil.isPart;
 public class NestedItemUtil {
 
     public static List<NestedItemDto> prepareNestedItemDtosToConverting(final List<NestedItemDto> dtos) {
-//        correctFieldsValues(dtos);
-
         final List<NestedItemDto> hasId = new ArrayList<>();
         final List<NestedItemDto> noId = new ArrayList<>();
         for (final NestedItemDto dto : dtos) {
@@ -95,21 +93,6 @@ public class NestedItemUtil {
         return false;
     }
 
-    public static void correctFieldsValues(final List<NestedItemDto> dtos) {
-        for (final NestedItemDto dto : dtos) {
-            dto.setComment(SpecificStringUtil.replaceEmptyWithDash(dto.getComment()));
-            dto.setSecondComment(SpecificStringUtil.replaceEmptyWithDash(dto.getSecondComment()));
-        }
-    }
-
-    public static Set<String> getCategories(final List<NestedItemDto> nestedItems) {
-        final Set<String> categories = new HashSet<>();
-        for (final NestedItemDto nestedItem : nestedItems) {
-            categories.add(nestedItem.getItemCategory());
-        }
-        return categories;
-    }
-
     public static String createName(final String parentItemName, final String nestedItemName) {
         return parentItemName + " - " + nestedItemName;
     }
@@ -120,23 +103,12 @@ public class NestedItemUtil {
                                                     final Set<String> infoCategories,
                                                     final ItemService itemService) {
         final UserService userService = itemService.getUserService();
-//        final Set<String> comments = getTxtFileLines(FileUtil.FileName.COMMENTS);
-//        final ItemView parentsView = new ItemView();
-
-//        final String category = item.getCategory();
-//        String secondSearchCategory = null;
-//        if (category.equalsIgnoreCase(MATERIAL)) {
-//            secondSearchCategory = INSULATION;
-//        }
 
         for (final Item item : allItems) {
-//            if (item.getId().equals(parent.getId())) {
-//                continue;
-//            }
             final String category = item.getCategory();
 
-            boolean addPart = isPart(category, infoCategories) && !category.equals(item.getCategory());
-            boolean addReplacer = category.equals(item.getCategory()) && !category.equals(Category.VEHICLE);
+            boolean addPart = isPart(category, infoCategories) && !category.equals(parent.getCategory());
+            boolean addReplacer = category.equals(parent.getCategory()) && !category.equals(Category.VEHICLE);
 
             NestedItemDto dto = null;
             if (addPart) {
@@ -150,36 +122,7 @@ public class NestedItemUtil {
                 }
                 view.getPossibleReplacers().add(dto);
             }
-
-//            if (!isInfo(category, infoCategories)) {
-//                for (final ChildItem child : i.getChildItems()) {
-//                    if (child.getItem().getId().equals(item.getId())) {
-//                        parentsView.getChildren().add(createItemForItemsManagement(i, userService, comments));
-//                    }
-//                }
-//            } else {
-//                final String description = i.getDescription();
-//                if (!description.contains(category)
-//                        && (secondSearchCategory == null || !description.contains(secondSearchCategory))) {
-//                    continue;
-//                }
-//                for (final Map.Entry<String, String> entry : toMap(description).entrySet()) {
-//                    String parameter = entry.getKey();
-//                    if (!parameter.equals(category) && !parameter.equals(secondSearchCategory)) {
-//                        continue;
-//                    }
-//                    for (final String value : entry.getValue().split("; ")) {
-//                        final Item foundItem = itemService.find(category, value);
-//                        if (foundItem != null && foundItem.getId().equals(item.getId())) {
-//                            parentsView.getChildren().add(createItemForItemsManagement(i, userService, comments));
-//                            break;
-//                        }
-//                    }
-//
-//                }
-//            }
         }
-//        view.setParents(parentsView);
     }
 
 }

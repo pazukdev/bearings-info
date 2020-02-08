@@ -102,12 +102,6 @@ public class NestedItemDtoFactory {
         return basicSpecialNestedItemDto;
     }
 
-    public static NestedItemDto createBasicSpecialNestedItemDto(final Item item, final UserService userService) {
-        final NestedItemDto basicSpecialNestedItemDto = createBasicNestedItemDto(item, userService);
-        basicSpecialNestedItemDto.setComment(item.getCategory());
-        return basicSpecialNestedItemDto;
-    }
-
     public static NestedItemDto createBasicNestedItemDto(final Item item, final UserService userService) {
         final Map<String, String> descriptionMap = toMap(item.getDescription());
         final String manufacturer = descriptionMap.get(Category.MANUFACTURER);

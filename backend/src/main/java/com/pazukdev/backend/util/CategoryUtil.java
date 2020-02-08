@@ -2,11 +2,14 @@ package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.entity.Item;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import static com.pazukdev.backend.util.AppCollectionUtil.contains;
 import static com.pazukdev.backend.util.CategoryUtil.Category.*;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.*;
+import static com.pazukdev.backend.util.CategoryUtil.Parameter.DescriptionIgnored.CATEGORY;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.DescriptionIgnored.NAME;
 import static com.pazukdev.backend.util.ClassUtil.getFieldsValues;
 import static com.pazukdev.backend.util.FileUtil.FileName.INFO_CATEGORIES;
@@ -83,10 +86,8 @@ public class CategoryUtil {
         public static final String VOLTAGE = "Voltage";
     }
 
-    private static final List<String> fixedParams = Arrays
-            .asList(NAME, FULL_NAME, PRODUCTION, MANUFACTURER, COUNTRY, FOUNDED, DEFUNCT);
-
     private static final Map<String, Integer> parametersWeight = new HashMap<String, Integer>() {{
+        put(CATEGORY, 101);
         put(NAME, 100);
         put(FULL_NAME, 99);
 
@@ -146,10 +147,6 @@ public class CategoryUtil {
         return value.trim();
     }
 
-    public static boolean isFixed(final String parameter) {
-        return fixedParams.contains(parameter);
-    }
-
     public static Integer getWeight(final String parameter) {
         final Integer weight = parametersWeight.get(parameter);
         return weight != null ? weight : 0;
@@ -172,7 +169,6 @@ public class CategoryUtil {
             return false;
         }
         return infoCategories.contains(category);
-        //return contains(getFieldsValues(Info.class), category);
     }
 
     public static boolean isDescriptionIgnored(final String parameter) {
@@ -185,17 +181,6 @@ public class CategoryUtil {
 
     public static Set<String> getInfoCategories() {
         return getTxtFileLines(INFO_CATEGORIES);
-    }
-
-    public static Set<String> filterPartCategories(final Set<String> categories,
-                                                   final Set<String> infoCategories) {
-        final Set<String> partCategories = new HashSet<>();
-        for (final String category : categories) {
-            if (isPart(category, infoCategories)) {
-                partCategories.add(category);
-            }
-        }
-        return partCategories;
     }
 
     public static String getCategory(final String param) {

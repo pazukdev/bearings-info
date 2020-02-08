@@ -8,18 +8,23 @@ import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
-import com.pazukdev.backend.util.*;
+import com.pazukdev.backend.util.DateUtil;
+import com.pazukdev.backend.util.ImgUtil;
+import com.pazukdev.backend.util.LinkUtil;
+import com.pazukdev.backend.util.TableUtil;
 import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 
 import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.*;
 import static com.pazukdev.backend.util.CategoryUtil.Category.VEHICLE;
+import static com.pazukdev.backend.util.CategoryUtil.Parameter;
 import static com.pazukdev.backend.util.ChildItemUtil.collectIds;
 import static com.pazukdev.backend.util.ChildItemUtil.createChildrenFromItemView;
 import static com.pazukdev.backend.util.FileUtil.FileName;
 import static com.pazukdev.backend.util.FileUtil.getTxtFileLines;
 import static com.pazukdev.backend.util.ItemUtil.SpecialItemId.*;
+import static com.pazukdev.backend.util.ItemUtil.*;
 import static com.pazukdev.backend.util.NestedItemUtil.addPossiblePartsAndReplacers;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 import static com.pazukdev.backend.util.TableUtil.createHeader;
@@ -130,7 +135,7 @@ public class ItemViewFactory {
         item.setImg("-");
         item.setCreatorId(creator.getId());
         item.setUserActionDate(DateUtil.now());
-        item.setDescription(createEmptyDescription(category));
+        item.setDescription(createEmptyDescription(category, itemService.getItemRepository()));
         itemService.update(item);
         processItemAction(ActionType.CREATE, item, creator, itemService);
         return item;
@@ -302,21 +307,32 @@ public class ItemViewFactory {
         }
         final long translationFromUserLangDuration = System.nanoTime() - translationFromUserLang;
 
-        final List<Item> allItems = itemService.findAll();
-
         final HeaderTable header = view.getHeader();
-        final Map<String, String> newDescriptionMap = TableUtil.createHeaderMap(header);
-        final String newDescription = ItemUtil.toDescription(newDescriptionMap);
-        final Item oldItem = itemService.getOne(itemId);
+        final String newName = header.getValue(Parameter.DescriptionIgnored.NAME);
+        final String newCategory = header.getValue(Parameter.DescriptionIgnored.CATEGORY);
+        header.removeRow(Parameter.DescriptionIgnored.NAME);
+        header.removeRow(Parameter.DescriptionIgnored.CATEGORY);
 
-        if (!oldItem.getDescription().equals(newDescription)) {
-            ItemUtil.updateName(oldItem, newDescriptionMap, allItems, itemService);
-            ItemUtil.updateDescription(oldItem, header, newDescriptionMap, newDescription, allItems, itemService);
+        final Map<String, String> newDescriptionMap = TableUtil.createHeaderMap(header);
+        final String newDescription = toDescription(newDescriptionMap);
+
+        final Item oldItem = itemService.getOne(itemId);
+        final List<Item> allItems = itemService.findAll();
+        allItems.remove(oldItem);
+
+        boolean moveItemToAnotherCategory = updateNameAndCategory(oldItem, newCategory, newName, allItems, infoCategories, itemService);
+
+        if (moveItemToAnotherCategory) {
+            moveItemToAnotherCategory(oldItem, newCategory, newDescriptionMap, itemService);
+        } else if (!oldItem.getDescription().equals(newDescription)) {
+            oldItem.setDescription(newDescription);
+            applyNewDescriptionToCategory(newCategory, header, newDescriptionMap, allItems, itemService);
         }
         ImgUtil.updateImg(view, oldItem);
-        ItemUtil.updateChildItems(oldItem, view, itemService, currentUser);
-        ItemUtil.updateReplacers(oldItem, view, itemService, currentUser);
+        updateChildItems(oldItem, view, itemService, currentUser);
+        updateReplacers(oldItem, view, itemService, currentUser);
         LinkUtil.updateItemLinks(oldItem, view);
+
         itemService.update(oldItem);
 
         final ItemView newItemView = createItemView(itemId, currentUser.getName(), userLanguage);
@@ -324,18 +340,6 @@ public class ItemViewFactory {
         final double totalTranslationTime = view.getTranslationTime() * 1000000000 + translationFromUserLangDuration;
         setTime(newItemView, (double) (System.nanoTime() - businessLogicStartTime), totalTranslationTime);
         return newItemView;
-    }
-
-    private String createEmptyDescription(final String category) {
-        final Item firstFound = itemService.getItemRepository().findFirstByCategory(category);
-        if (firstFound == null) {
-            return "";
-        }
-        final Map<String, String> descriptionMap = ItemUtil.toMap(firstFound.getDescription());
-        for (final Map.Entry<String, String> entry : descriptionMap.entrySet()) {
-            entry.setValue("-");
-        }
-        return ItemUtil.toDescription(descriptionMap);
     }
 
     private ItemView editWishList(final ItemView view, final UserEntity user) {

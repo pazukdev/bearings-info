@@ -74,6 +74,7 @@ ru=cage=сепаратор
 ru=car=легковой автомобиль
 ru=carburetor=карбюратор
 ru=cardan shaft groove diameter=диаметр канавки на карданном валу
+ru=category=категория
 ru=chassis=шасси
 ru=copper zinc pressure treated alloys (brasses)=сплавы медно-цинковые (латуни), обрабатываемые давлением
 ru=core=токопроводящая жила

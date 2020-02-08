@@ -102,8 +102,22 @@ public class FileUtil {
         Files.write(getTxtFilePath(fileName), text);
     }
 
+    public static void createFile(final String fileName, final Set<String> textLines) {
+        try {
+            Files.write(getTxtFilePath(fileName), getSortedFileLines(textLines), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 //    public static String getDictionaryFilePathString() {
 //        return Directory.BASIC_DIRECTORY + "language/" + DICTIONARY + TXT;
 //    }
+
+    public static List<String> getSortedFileLines(final Set<String> textLines) {
+        final List<String> sortedFileContent = new ArrayList<>(textLines);
+        sortedFileContent.sort(String::compareTo);
+        return sortedFileContent;
+    }
 
 }

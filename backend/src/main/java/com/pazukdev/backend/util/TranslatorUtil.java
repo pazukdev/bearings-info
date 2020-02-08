@@ -424,12 +424,6 @@ public class TranslatorUtil {
         dictionary.add(newDictionaryLine);
     }
 
-    private static List<String> getSortedFileLines(final Set<String> fileContent) {
-        final List<String> sortedFileContent = new ArrayList<>(fileContent);
-        sortedFileContent.sort(String::compareTo);
-        return sortedFileContent;
-    }
-
     private static String createDictionaryLine(final String lang,
                                                final String valueInEnglish,
                                                final String value) {
