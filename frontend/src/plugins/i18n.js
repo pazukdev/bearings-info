@@ -35,7 +35,7 @@ export const i18n = new VueI18n({
             menu: "Menu",
             myProfile: "My profile",
             name: "Name",
-            nameAndPasswordInputLabel: "Length: 2 - 30 characters: english letters, numbers, - , _ , space",
+            nameAndPasswordInputLabel: "Length: 4 - 14 characters: english letters, numbers, - , _ , space",
             or: "or",
             parts: "Parts",
             password: "Password",

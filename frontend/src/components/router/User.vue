@@ -1,12 +1,49 @@
 <template>
     <div>
+        {{changePasswordOpened}}
         <LoadingScreen v-if="isLoading()"/>
         <div v-else style="text-align: center">
             <p>{{user.name}}</p>
             <EditableImg v-if="isImgRendered()"/>
-            <EditPanel v-if="isEditable()" :submit-form1="true"/>
+            <EditPanel v-if="isEditable()" :user-form="true"/>
             <AlertMessagesSection :messages="validationMessages"/>
             <form id="user-form" @submit="submit">
+                <v-details v-if="editMode" v-model="changePasswordOpened">
+                    <summary class="default-margin">{{"Change password"}}</summary>
+                    <table class="equal-columns-table">
+                        <tbody>
+                        <tr>
+                            <td colspan="2" style="text-align: center">
+                                {{"To change password input your old password"}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{"Old password"}}</td>
+                            <td>
+                                <input type="password" v-model="user.oldPassword"
+                                       pattern="[a-zA-Z0-9_ \\-]{4,14}"
+                                       :title="$t('nameAndPasswordInputLabel')"/>
+                            </td>
+                        </tr>
+                        <tr v-if="!isEmpty(user.oldPassword)">
+                            <td>{{"New password"}}</td>
+                            <td>
+                                <input type="password" v-model="user.newPassword" required
+                                       pattern="[a-zA-Z0-9_ \\-]{4,14}"
+                                       :title="$t('nameAndPasswordInputLabel')"/>
+                            </td>
+                        </tr>
+                        <tr v-if="!isEmpty(user.newPassword)">
+                            <td>{{"Repeat new password"}}</td>
+                            <td>
+                                <input type="password" v-model="user.repeatedNewPassword" required
+                                       pattern="[a-zA-Z0-9_ \\-]{4,14}"
+                                       :title="$t('nameAndPasswordInputLabel')"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </v-details>
                 <table class="equal-columns-table">
                     <tbody>
                     <tr>
@@ -111,7 +148,8 @@
                 validationMessages: [],
                 userDeleteDialogOpened: false,
                 countries: [],
-                countryName: ""
+                countryName: "",
+                changePasswordOpened: false
             }
         },
 
@@ -188,6 +226,8 @@
                         })
                     .then(response => {
                         this.validationMessages = response.data;
+                        this.changePasswordOpened = this.validationMessages.length > 0
+                            && shared.arrayContainsSubstring("assword", this.validationMessages);
                         if (this.validationMessages.length === 0) {
                             storeUtil.setUserName(userView.name, this.itemView);
                             storeUtil.setLoadingStateOff();
@@ -289,6 +329,10 @@
 
             isLoading() {
                 return shared.isLoading(this.loadingState);
+            },
+
+            isEmpty(value) {
+                return shared.isEmpty(value);
             }
         }
     }

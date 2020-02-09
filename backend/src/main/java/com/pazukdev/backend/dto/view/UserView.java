@@ -11,5 +11,8 @@ public class UserView extends AbstractView {
     private String rating;
     private String email;
     private String country;
+    private String oldPassword;
+    private String newPassword;
+    private String repeatedNewPassword;
 
 }

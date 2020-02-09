@@ -87,23 +87,34 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         final String newEmail = view.getEmail();
 
         final UserEntity user = getOne(view.getId());
-        boolean checkNameExists = newName != null && !StringUtils.equalsIgnoreCase(user.getName(), newName);
-        boolean checkEmailExists = newEmail != null && !StringUtils.equalsIgnoreCase(user.getEmail(), newEmail);
+        boolean changeName = newName!= null && !user.getName().equals(newName);
+        boolean changeEmail = newEmail != null && !StringUtils.equalsIgnoreCase(user.getEmail(), newEmail);
+        boolean changePassword = view.getOldPassword() != null;
 
         final List<String> validationMessages = new ArrayList<>();
-        if (checkNameExists) {
+        if (changeName) {
             validationMessages.addAll(userDataValidator.validateName(newName, this));
         }
-        if (checkEmailExists) {
+        if (changeEmail) {
             validationMessages.addAll(userDataValidator.validateEmail(newEmail, this));
+        }
+        if (changePassword) {
+            validationMessages.addAll(userDataValidator.validateChangedPassword(view, passwordEncoder, this));
         }
 
         if (validationMessages.isEmpty()) {
-            user.setName(newName);
-            user.setEmail(newEmail);
+            if (changeName) {
+                user.setName(newName);
+            }
+            if (changeEmail) {
+                user.setEmail(newEmail);
+            }
             user.setRole(Role.valueOf(view.getRole().toUpperCase()));
             user.setCountry(view.getCountry());
             ImgUtil.updateImg(view, user);
+            if (changePassword) {
+                user.setPassword(passwordEncoder.encode(view.getNewPassword()));
+            }
             repository.save(user);
         }
 
