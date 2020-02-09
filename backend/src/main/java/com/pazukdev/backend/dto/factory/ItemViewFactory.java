@@ -124,8 +124,8 @@ public class ItemViewFactory {
 
         if (!userLanguage.equals("en")) {
             final Set<String> dictionary = getDictionary();
-            name = translate(userLanguage, "en", name, true, dictionary);
-            category = translate(userLanguage, "en", category, true, dictionary);
+            name = translate(userLanguage, "en", name, true, false, dictionary);
+            category = translate(userLanguage, "en", category, false, true, dictionary);
             saveDictionary(dictionary);
         }
 

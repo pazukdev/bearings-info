@@ -53,6 +53,8 @@ ru=Ukraine=Украина
 ru=Ukrainian SSR=УССР
 ru=Ural=Урал
 ru=Value=Значение
+ru=ZAZ-965=ЗАЗ-965
+ru=ZAZ=ЗАЗ
 ru=adapter=адаптер
 ru=added=добавил
 ru=additional info=доп. информация
@@ -76,6 +78,7 @@ ru=carburetor=карбюратор
 ru=cardan shaft groove diameter=диаметр канавки на карданном валу
 ru=category=категория
 ru=chassis=шасси
+ru=class=класс
 ru=copper zinc pressure treated alloys (brasses)=сплавы медно-цинковые (латуни), обрабатываемые давлением
 ru=core=токопроводящая жила
 ru=cork=пробка
@@ -125,8 +128,6 @@ ru=high voltage=высокого напряжения
 ru=inner eccentric flat thrust spring retaining rings and grooves=кольца пружинные упорные плоские внутренние эксцентрические и канавки для них
 ru=insulation rubber=резина кабельная изоляционная
 ru=insulation=изоляция
-ru=irbit=ирбит
-ru=jupiter=юпитер
 ru=kg=кг
 ru=kit, needle=комплект иголок
 ru=kit=комплект

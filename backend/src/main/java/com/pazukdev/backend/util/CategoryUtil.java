@@ -87,7 +87,8 @@ public class CategoryUtil {
     }
 
     private static final Map<String, Integer> parametersWeight = new HashMap<String, Integer>() {{
-        put(CATEGORY, 101);
+        put(CATEGORY, 102);
+        put(CLASS, 101);
         put(NAME, 100);
         put(FULL_NAME, 99);
 
@@ -152,7 +153,7 @@ public class CategoryUtil {
         return weight != null ? weight : 0;
     }
 
-    public static boolean isAddManufacturer(final String itemCategory,
+    public static boolean isAddManufacturer(final Item item,
                                             final String manufacturer,
                                             final boolean selectText) {
         if (isEmpty(manufacturer) || manufacturer.equalsIgnoreCase("ussr")) {
@@ -161,7 +162,14 @@ public class CategoryUtil {
         if (selectText) {
             return true;
         }
-        return itemCategory.equalsIgnoreCase(SEAL) || itemCategory.equalsIgnoreCase(SPARK_PLUG);
+        final String name = item.getName();
+        if (name.equals(manufacturer + name.replace(manufacturer, ""))
+                || name.equals(name.replace(manufacturer, "") + manufacturer)) {
+            return false;
+        }
+
+        final String category = item.getCategory();
+        return category.equalsIgnoreCase(SEAL) || category.equalsIgnoreCase(SPARK_PLUG);
     }
 
     public static boolean isInfo(final String category, final Set<String> infoCategories) {

@@ -17,7 +17,9 @@ public class AdminMessage extends Message {
     private String linkText;
 
     public void translate(final String langTo, final Set<String> dictionary) {
-        text = TranslatorUtil.translate("en", langTo, text, false, dictionary);
+        final boolean name = false;
+        final boolean addToDictionary = false;
+        text = TranslatorUtil.translate("en", langTo, text, name, addToDictionary, dictionary);
     }
 
 }

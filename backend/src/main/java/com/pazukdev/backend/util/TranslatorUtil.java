@@ -11,7 +11,6 @@ import org.json.JSONArray;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -20,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+import static com.pazukdev.backend.util.CategoryUtil.Category;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter;
 import static com.pazukdev.backend.util.FileUtil.*;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
@@ -54,11 +54,11 @@ public class TranslatorUtil {
 
         try {
             header = translate(langFrom, langTo, header, addToDictionary, dictionary);
-            translate(langFrom, langTo, replacersTable, addToDictionary, dictionary);
+            translate(langFrom, langTo, replacersTable, dictionary);
             translate(langFrom, langTo, categories, addToDictionary, dictionary);
 
-            view.setLocalizedCategory(translate(langFrom, langTo, category, addToDictionary, dictionary));
-            view.setLocalizedName(translate(langFrom, langTo, localizedName, false, dictionary));
+            view.setLocalizedCategory(translate(langFrom, langTo, category, false, addToDictionary, dictionary));
+            view.setLocalizedName(translate(langFrom, langTo, localizedName, true, false, dictionary));
             view.setChildren(translateItemDtoList(langFrom, langTo, view.getChildren(), dictionary));
             view.setAllChildren(translateItemDtoList(langFrom, langTo, view.getAllChildren(), dictionary));
             view.setPossibleParts(translateItemDtoList(langFrom, langTo, view.getPossibleParts(), dictionary));
@@ -87,20 +87,23 @@ public class TranslatorUtil {
         view.setAllCategories(categories);
     }
 
-    private static HeaderTable translate(final String languageFrom,
-                                         final String languageTo,
+    private static HeaderTable translate(final String langFrom,
+                                         final String langTo,
                                          final HeaderTable headerTable,
-                                         final boolean addToDictionary,
+                                         boolean addToDictionary,
                                          final Set<String> dictionary) {
         if (headerTable == null) {
             return null;
         }
         for (final HeaderTableRow row : headerTable.getRows()) {
-            if (row.getName().equalsIgnoreCase(Parameter.DescriptionIgnored.NAME)) {
-                row.setValue(translate(languageFrom, languageTo, row.getValue(), false, dictionary));
+            boolean name = row.getName().equalsIgnoreCase(Parameter.DescriptionIgnored.NAME)
+                    || row.getName().equalsIgnoreCase(Category.MANUFACTURER);
+            if (name) {
+                addToDictionary = false;
             }
-            row.setParameter(translate(languageFrom, languageTo, row.getParameter(), addToDictionary, dictionary));
-            row.setValue(translate(languageFrom, languageTo, row.getValue(), addToDictionary, dictionary));
+
+            row.setParameter(translate(langFrom, langTo, row.getParameter(), false, true, dictionary));
+            row.setValue(translate(langFrom, langTo, row.getValue(), name, addToDictionary, dictionary));
         }
 
         return headerTable;
@@ -109,15 +112,11 @@ public class TranslatorUtil {
     private static void translate(final String langFrom,
                                   final String langTo,
                                   final ReplacersTable replacersTable,
-                                  final boolean addToDictionary,
                                   final Set<String> dictionary) {
         if (replacersTable == null) {
             return;
         }
-        final String localizedName = translate(langFrom, langTo, replacersTable.getName(), addToDictionary, dictionary);
-        replacersTable.setLocalizedName(localizedName);
-        final List<NestedItemDto> replacers = replacersTable.getReplacers();
-        translateItemDtoList(langFrom, langTo, replacers, dictionary);
+        translateItemDtoList(langFrom, langTo, replacersTable.getReplacers(), dictionary);
     }
 
     public static List<NestedItemDto> translateItemDtoList(final String langFrom,
@@ -138,7 +137,7 @@ public class TranslatorUtil {
         final List<String> copy = new ArrayList<>(list);
         list.clear();
         for (final String s : copy) {
-            list.add(translate(languageFrom, languageTo, s, addToDictionary, dictionary));
+            list.add(translate(languageFrom, languageTo, s, false, addToDictionary, dictionary));
         }
         list.sort(String::compareTo);
     }
@@ -146,6 +145,7 @@ public class TranslatorUtil {
     public static String translate(final String langFrom,
                                    final String langTo,
                                    String text,
+                                   final boolean name,
                                    final boolean addToDictionary,
                                    final Set<String> dictionary) {
 
@@ -165,6 +165,9 @@ public class TranslatorUtil {
         if (langFrom.equals("en")) {
             String translated = getValueFromDictionary(text, langTo, dictionary);
             if (!isTranslated(translated, text)) {
+                if (name) {
+                    return text;
+                }
                 translated = parseAndTranslate(langTo, text, dictionary);
                 if (!isTranslated(translated, text)) {
                     return text;
@@ -172,6 +175,9 @@ public class TranslatorUtil {
             }
             return translated;
         } else {
+            if (name) {
+                return text;
+            }
             return translateToEnglish(langFrom, text, addToDictionary, dictionary);
         }
     }
@@ -239,7 +245,7 @@ public class TranslatorUtil {
         }
 
         try {
-            translated = translateWithGoogle(langFrom, "en", text).trim();
+            translated = translateToEnglishWithGoogle(langFrom, text).trim();
             if (!isTranslated(translated, text)) {
                 return text;
             }
@@ -430,11 +436,11 @@ public class TranslatorUtil {
         return lang + DICTIONARY_SEPARATOR + valueInEnglish + DICTIONARY_SEPARATOR + value;
     }
 
-    private static String translateWithGoogle(final String languageFrom,
-                                              final String languageTo,
-                                              final String s) throws IOException {
-
-        final String urlString = getUrlString(languageFrom, languageTo, s);
+    private static String translateToEnglishWithGoogle(final String langFrom, final String text) throws IOException {
+        final String urlString = "https://translate.googleapis.com/translate_a/single?client=gtx&" +
+                "sl=" + langFrom +
+                "&tl=" + "en" +
+                "&dt=t&q=" + URLEncoder.encode(text, "UTF-8");
 
         final URL url = new URL(urlString);
         final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -449,20 +455,8 @@ public class TranslatorUtil {
         }
 
         in.close();
-        return getTranslation(response.toString());
-    }
 
-    private static String getUrlString(final String sourceLanguage,
-                                       final String toLanguage,
-                                       final String stringToTranslate) throws UnsupportedEncodingException {
-        return "https://translate.googleapis.com/translate_a/single?client=gtx&" +
-                "sl=" + sourceLanguage +
-                "&tl=" + toLanguage +
-                "&dt=t&q=" + URLEncoder.encode(stringToTranslate, "UTF-8");
-    }
-
-    private static String getTranslation(final String inputJson) {
-        final JSONArray jsonArray = new JSONArray(inputJson);
+        final JSONArray jsonArray = new JSONArray(response.toString());
         final JSONArray jsonArray2 = (JSONArray) jsonArray.get(0);
         final JSONArray jsonArray3 = (JSONArray) jsonArray2.get(0);
         return jsonArray3.get(0).toString();

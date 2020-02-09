@@ -25,11 +25,14 @@ public class UserActionDto extends AbstractDto {
     private String date;
 
     public void translate(final String langTo, final Set<String> dictionary) {
-        actionType = TranslatorUtil.translate("en", langTo, actionType, false, dictionary);
-        itemType = TranslatorUtil.translate("en", langTo, itemType, false, dictionary);
-        itemCategory = TranslatorUtil.translate("en", langTo, itemCategory, false, dictionary);
-        itemName = TranslatorUtil.translate("en", langTo, itemName, false, dictionary);
-        parentName = TranslatorUtil.translate("en", langTo, parentName, false, dictionary);
+        boolean name = false;
+        boolean addToDictionary = false;
+
+        actionType = TranslatorUtil.translate("en", langTo, actionType, name, addToDictionary, dictionary);
+        itemType = TranslatorUtil.translate("en", langTo, itemType, name, addToDictionary, dictionary);
+        itemCategory = TranslatorUtil.translate("en", langTo, itemCategory, name, addToDictionary, dictionary);
+        itemName = TranslatorUtil.translate("en", langTo, itemName, true, addToDictionary, dictionary);
+        parentName = TranslatorUtil.translate("en", langTo, parentName, true, addToDictionary, dictionary);
     }
 
 }

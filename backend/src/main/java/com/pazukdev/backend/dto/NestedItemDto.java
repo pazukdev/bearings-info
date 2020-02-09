@@ -52,27 +52,30 @@ public class NestedItemDto extends AbstractDto {
 
     private void translateToLang(final String langTo, final Set<String> dictionary) {
         final String langFrom = "en";
+        final boolean name = false;
         final boolean addToDictionary = false;
 
-        itemCategory = TranslatorUtil.translate(langFrom, langTo, itemCategory, addToDictionary, dictionary);
-        buttonText = TranslatorUtil.translate(langFrom, langTo, buttonText, addToDictionary, dictionary);
-        selectText = TranslatorUtil.translate(langFrom, langTo, selectText, addToDictionary, dictionary);
-        comment = TranslatorUtil.translate(langFrom, langTo, comment, addToDictionary, dictionary);
-        secondComment = TranslatorUtil.translate(langFrom, langTo, secondComment, addToDictionary, dictionary);
-        translatedVehicleClass = TranslatorUtil.translate(langFrom, langTo, vehicleClass, addToDictionary, dictionary);
+        itemCategory = TranslatorUtil.translate(langFrom, langTo, itemCategory, name, addToDictionary, dictionary);
+        buttonText = TranslatorUtil.translate(langFrom, langTo, buttonText, name, addToDictionary, dictionary);
+        selectText = TranslatorUtil.translate(langFrom, langTo, selectText, name, addToDictionary, dictionary);
+        comment = TranslatorUtil.translate(langFrom, langTo, comment, name, addToDictionary, dictionary);
+        secondComment = TranslatorUtil.translate(langFrom, langTo, secondComment, name, addToDictionary, dictionary);
+        translatedVehicleClass = TranslatorUtil.translate(langFrom, langTo, vehicleClass, name, addToDictionary, dictionary);
     }
 
     private void translateToEnglish(final String langFrom, final Set<String> dictionary) {
         final String langTo = "en";
-        final boolean addToDictionary = true;
 
         if (langFrom.equals(langTo)) {
             return;
         }
 
-        itemCategory = TranslatorUtil.translate(langFrom, langTo, itemCategory, addToDictionary, dictionary);
-        comment = TranslatorUtil.translate(langFrom, langTo, comment, addToDictionary, dictionary);
-        secondComment = TranslatorUtil.translate(langFrom, langTo, secondComment, addToDictionary, dictionary);
+        final boolean name = false;
+        final boolean addToDictionary = true;
+
+        itemCategory = TranslatorUtil.translate(langFrom, langTo, itemCategory, name, addToDictionary, dictionary);
+        comment = TranslatorUtil.translate(langFrom, langTo, comment, name, addToDictionary, dictionary);
+        secondComment = TranslatorUtil.translate(langFrom, langTo, secondComment, name, addToDictionary, dictionary);
     }
 
 }

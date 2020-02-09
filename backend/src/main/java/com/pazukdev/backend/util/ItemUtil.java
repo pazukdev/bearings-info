@@ -177,7 +177,7 @@ public class ItemUtil {
     }
 
     public static String createButtonText(final Item item, final String manufacturer) {
-        if (isAddManufacturer(item.getCategory(), manufacturer, false)) {
+        if (isAddManufacturer(item, manufacturer, false)) {
             return manufacturer + " " + item.getName();
         } else {
             return item.getName();
@@ -189,7 +189,7 @@ public class ItemUtil {
                                           final Map<String, String> descriptionMap) {
         final String itemCategory = item.getCategory();
         final String itemName = item.getName();
-        final boolean addManufacturer = isAddManufacturer(itemCategory, manufacturer, true);
+        final boolean addManufacturer = isAddManufacturer(item, manufacturer, true);
         if (itemCategory.equals(SEAL)) {
             return descriptionMap.get(SIZE) + " " + (addManufacturer ? manufacturer + " " : "") + itemName;
         }
