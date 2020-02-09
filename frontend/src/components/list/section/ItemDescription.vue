@@ -4,7 +4,7 @@
             <tbody>
             <tr v-for="row in sortByWeight(itemView.header.rows)">
                 <td class="two-columns-table-left-column">
-                    <table style="border-spacing: 0px" v-if="!isEdit() && row.ids.length > 0">
+                    <table style="border-spacing: 0px" v-if="!rowParamIsEditable(row) && row.ids.length > 0">
                         <tr v-for="(id, index) in row.ids">
                             <td>
                                 <p v-if="index === 0">{{row.parameter}}</p>
@@ -12,7 +12,7 @@
                             </td>
                         </tr>
                     </table>
-                    <input v-if="isEdit()" v-model="row.parameter" type="text" required
+                    <input v-if="rowParamIsEditable(row)" v-model="row.parameter" type="text" required
                            pattern="[a-zA-Zа-яА-Я0-9_\\. ,/-]*"
                            title="Allowed: letters, numbers, - , _ , / , dot, comma, space"/>
                 </td>
@@ -36,7 +36,7 @@
                     </div>
                 </td>
                 <td>
-                    <ButtonDelete v-if="isEdit()" :item="row" @remove-item="removeItem"/>
+                    <ButtonDelete v-if="rowIsDeletable(row)" :item="row" @remove-item="removeItem"/>
                 </td>
             </tr>
             <tr>
@@ -68,6 +68,7 @@
     import ListHeader from "./ListHeader";
     import ButtonAdd from "../../element/button/ButtonAdd";
     import arrayUtil from "../../../util/arrayUtil";
+    import itemViewUtil from "../../../util/itemViewUtil";
 
     export default {
         name: "ItemDescription",
@@ -95,7 +96,24 @@
             return {
                 newHeaderRowMessage: "",
                 parameter: "",
-                value: ""
+                value: "",
+                notDeletableRows: [
+                    "Category",
+                    "Name"
+                ],
+                notEditableParams: [
+                    "Category",
+                    "Name",
+                    "Class",
+                    "Production",
+                    "Manufacturer",
+                    "Full name",
+                    "Size, mm",
+                    "Weight, kg",
+                    "Weight, g",
+                    "Fuel capacity, L",
+                    "Max speed, kmh"
+                ]
             }
         },
 
@@ -149,12 +167,34 @@
                 shared.removeFromArray(row, this.itemView.header.rows);
             },
 
+            rowParamIsEditable(row) {
+                if (!this.rowIsDeletable(row)) {
+                    return false;
+                }
+                if (!this.isAdmin() && shared.isInArray(row.name, this.notEditableParams)) {
+                    return false;
+                }
+                return this.isEdit();
+            },
+
+            rowIsDeletable(row) {
+                if (shared.isInArray(row.name, this.notDeletableRows)) {
+                    return false;
+                }
+                return this.isEdit();
+            },
+
             isEdit() {
                 return this.item && this.editMode;
             },
 
             isEmpty(value) {
                 return shared.isEmpty(value);
+            },
+
+            isAdmin() {
+                return false;
+                return itemViewUtil.isAdmin(this.itemView);
             }
         }
     }

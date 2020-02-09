@@ -105,6 +105,7 @@ ru=foundry tin bronzes=бронзы оловянные литейные
 ru=front fork=передняя вилка
 ru=fuel capacity=объем бензобака
 ru=full name=полное название
+ru=g=г
 ru=gap=зазор
 ru=gasket kit=набор прокладок
 ru=gasket paper A-grade 0.5mm=прокладочный картон марки А 0.5мм
