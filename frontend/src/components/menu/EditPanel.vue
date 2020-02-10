@@ -21,7 +21,8 @@
                             type="button"
                             style="background: red"
                             @click="save()">
-                        {{$t("save")}}
+                        {{"123"}}
+<!--                        {{$t("save")}}-->
                     </button>
                     <input class="submit" v-if="isSaveButtonRendered() && userForm"
                            type="submit" form="user-form" :value="$t('save')"/>

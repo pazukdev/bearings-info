@@ -99,8 +99,8 @@ public class UserActionUtil {
         final Long userId = action.getUserId();
         final Long itemId = action.getItemId();
 
-        final UserEntity user = service.getUserService().getOne(userId);
-        final Item item = service.getOne(itemId);
+        final UserEntity user = service.getUserService().findOne(userId);
+        final Item item = service.findOne(itemId);
         if (user == null || item == null) {
             return null;
         }
@@ -117,7 +117,7 @@ public class UserActionUtil {
 
         final Long parentId = action.getParentItemId();
         if (parentId != null) {
-            final Item parent = service.getOne(parentId);
+            final Item parent = service.findOne(parentId);
             if (parent != null) {
                 dto.setParentId(parent.getId());
                 dto.setParentName(parent.getName());

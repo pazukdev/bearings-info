@@ -34,7 +34,7 @@ public class RateUtil {
                                             final ItemService itemService) {
 
         final Long itemId = rate.getItemId();
-        final Item itemToRate = itemService.getOne(rate.getItemId());
+        final Item itemToRate = itemService.findOne(rate.getItemId());
         final RateAction rateAction = RateAction.valueOf(rate.getAction().toUpperCase());
         final LikeList likeList = currentUser.getLikeList();
 

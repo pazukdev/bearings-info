@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{changePasswordOpened}}
         <LoadingScreen v-if="isLoading()"/>
         <div v-else style="text-align: center">
             <p>{{user.name}}</p>
@@ -89,13 +88,34 @@
                         <td/>
                         <td>
                             <DefaultButton id="user-delete" :text="'Delete profile'" :color="'red'"
-                                           @on-click="openUserDeleteDialog()"/>
+                                           @on-click="openUserDeleteDialog('delete')"/>
+                        </td>
+                    </tr>
+                    <tr v-if="isAdmin()" style="text-align: center">
+                        <td colspan="2">{{"Admin options"}}</td>
+                    </tr>
+                    <tr v-if="isAdmin()">
+                        <td>{{"Status"}}</td>
+                        <td>
+                            <p v-if="!editMode">{{user.status}}</p>
+                            <select v-if="editMode" v-model="user.status">
+                                <option v-for="status in statuses">
+                                    {{status}}
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr v-if="isAdmin() && editMode">
+                        <td/>
+                        <td>
+                            <DefaultButton id="user-hard-delete" :text="'Hard delete'" :color="'red'"
+                                           @on-click="openUserDeleteDialog('hard-delete')"/>
                         </td>
                     </tr>
                     </tbody>
                 </table>
 
-                <table v-if="userDeleteDialogOpened" style="text-align: center">
+                <table v-if="!isEmpty(deleteOption)" style="text-align: center">
                     <tbody class="bordered">
                     <tr><td colspan="2">{{"Confirm deletion"}}</td></tr>
                     <tr>
@@ -146,10 +166,12 @@
             return {
                 user: "",
                 validationMessages: [],
-                userDeleteDialogOpened: false,
+                deleteOption: "",
                 countries: [],
                 countryName: "",
-                changePasswordOpened: false
+                changePasswordOpened: false,
+                statuses: ["active", "blocked", "deleted"],
+                editedUserIsCurrentUser: false
             }
         },
 
@@ -185,6 +207,7 @@
                     })
                     .then(response => {
                         this.user = response.data;
+                        this.editedUserIsCurrentUser = this.user.name === this.userName;
                         this.getCountryName(this.user.country);
                         let itemView = {
                             img: this.user.img,
@@ -212,6 +235,7 @@
                 let userView = this.user;
                 userView.img = this.itemView.img;
                 userView.defaultImg = this.itemView.defaultImg;
+                userView.currentUserName = this.userName;
 
                 // /user/id/update
                 axios
@@ -229,7 +253,9 @@
                         this.changePasswordOpened = this.validationMessages.length > 0
                             && shared.arrayContainsSubstring("assword", this.validationMessages);
                         if (this.validationMessages.length === 0) {
-                            storeUtil.setUserName(userView.name, this.itemView);
+                            if (this.editedUserIsCurrentUser) {
+                                storeUtil.setUserName(userView.name, this.itemView);
+                            }
                             storeUtil.setLoadingStateOff();
                             this.getCountryName(this.user.country);
                             console.log("user data successfully updated");
@@ -267,12 +293,12 @@
                 return this.editMode && this.isAdmin();
             },
 
-            openUserDeleteDialog() {
-                this.userDeleteDialogOpened = true;
+            openUserDeleteDialog(deleteOption) {
+                this.deleteOption = deleteOption;
             },
 
             cancelUserDelete() {
-                this.userDeleteDialogOpened = false;
+                this.deleteOption = "";
             },
 
             confirmUserDelete() {
@@ -282,7 +308,7 @@
                     .delete(this.basicUrl
                         + "/" + "user"
                         + "/" + userId
-                        + "/" + "delete", {
+                        + "/" + this.deleteOption, {
                             headers: {
                                 Authorization: this.authorization
                             }

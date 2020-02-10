@@ -7,5 +7,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     plugins: [createPersistedState()],
-    modules: {dictionary}
+    modules: {dictionary},
+    getters: {
+        userData: state => {
+            return state.dictionary.userData;
+        }
+    }
 });

@@ -1,6 +1,7 @@
 import itemViewUtil from "./itemViewUtil";
 import store from "../plugins/store";
 import router from "../plugins/router";
+import storeUtil from "./storeUtil";
 
 export default {
 
@@ -46,11 +47,17 @@ export default {
 
     toLogin() {
         router.push({name: "login"});
+        let message = {
+            text: "Your account has been blocked by the administrator",
+            contact: "Contact us by email: pazukdev@gmail.com"
+        };
+
         let itemViewStub = {
             wishListIds: [],
             userData: {
                 itemName: "",
-                rating: ""
+                rating: "",
+                message: storeUtil.userIsBlocked() ? message : null
             }
         };
         itemViewUtil.dispatchView(itemViewStub);

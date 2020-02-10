@@ -1,4 +1,5 @@
 import shared from "./shared";
+import store from "../plugins/store";
 
 export default {
     isAuthorized(authorization) {
@@ -20,7 +21,7 @@ export default {
         return role.toLowerCase() === "seller";
     },
 
-    isCurrentUserItemCreator(currentUserName, itemCreatorName) {
-        return currentUserName === itemCreatorName;
+    isCurrentUserItemCreator(itemCreatorId) {
+        return store.getters.userData.id === itemCreatorId;
     }
 }

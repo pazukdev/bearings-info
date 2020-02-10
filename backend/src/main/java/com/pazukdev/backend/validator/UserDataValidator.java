@@ -53,18 +53,21 @@ public class UserDataValidator {
 
     public List<String> validateChangedPassword(final UserView view,
                                                 final PasswordEncoder passwordEncoder,
+                                                final boolean currentUserIsAdmin,
                                                 final UserService service) {
         final String oldPassword = view.getOldPassword();
         final String password = view.getNewPassword();
         final String repeatedPassword = view.getRepeatedNewPassword();
 
         final List<String> messages = new ArrayList<>();
-        if (isEmpty(oldPassword)) {
-            messages.add("Old password is empty");
-        } else {
-            final UserEntity user = service.getOne(view.getId());
-            if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-                messages.add("Old password is incorrect");
+        if (!currentUserIsAdmin) {
+            if (isEmpty(oldPassword)) {
+                messages.add("Old password is empty");
+            } else {
+                final UserEntity user = service.findOne(view.getId());
+                if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+                    messages.add("Old password is incorrect");
+                }
             }
         }
         messages.addAll(validatePassword(password, repeatedPassword, view.getName(), service));

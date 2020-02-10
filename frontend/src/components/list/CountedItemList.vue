@@ -9,7 +9,7 @@
             </tr>
             <tr v-for="table in itemsListAsTables()" v-if="!hideTable(table)">
                 <td>
-                    <v-details v-model="table.opened">
+                    <v-details v-model="table.opened" v-if="isAdmin() || table.name !== 'deleted'">
                         <summary><b>{{table.name}}</b></summary>
 
                         <table>
@@ -128,6 +128,10 @@
             searchIsRendered() {
                 return !this.editMode && !this.item;
                 // return !this.item && !this.userListView;
+            },
+
+            isAdmin() {
+                return itemViewUtil.isAdmin(this.itemView);
             }
         }
     }

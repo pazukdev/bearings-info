@@ -65,9 +65,11 @@
                 itemView: state => state.dictionary.itemView,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userName: state => state.dictionary.userName,
+                userStatus: state => state.dictionary.userStatus,
                 appLanguage: state => state.dictionary.appLanguage,
                 langs: state => state.dictionary.langs,
-                errorMessage: state => state.dictionary.errorMessage
+                errorMessage: state => state.dictionary.errorMessage,
+                loginMessage: state => state.dictionary.loginMessage
             })
         },
 
@@ -239,6 +241,10 @@
 
     textarea {
         /*resize: none;*/
+    }
+
+    select {
+        text-align-last: center;
     }
 
     input:not([type="submit"]):not([type="button"]):invalid {

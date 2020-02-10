@@ -51,7 +51,7 @@ public class ChildItemUtil {
 
         final Set<ChildItem> partsFromItemView = new HashSet<>();
         for (final NestedItemDto nestedItem : preparedItems) {
-            final Item partItem = itemService.getOne(nestedItem.getItemId());
+            final Item partItem = itemService.findOne(nestedItem.getItemId());
 
             final ChildItem part = new ChildItem();
             part.setId(nestedItem.getId());
@@ -118,7 +118,7 @@ public class ChildItemUtil {
     public static String getParentName(final ItemView itemView, final ItemService itemService) {
         final Long parentId = itemView.getItemId();
         if (parentId > 0) {
-            return itemService.getOne(parentId).getName();
+            return itemService.findOne(parentId).getName();
         }
         if (parentId.equals(ItemUtil.SpecialItemId.WISH_LIST_VIEW.getItemId())) {
             return "Wishlist";

@@ -36,7 +36,7 @@
                         </router-link>
                     </td>
                     <td>
-                        <router-link :to="{name: 'menu'}" active-class="active">
+                        <router-link :to="{name: 'menu'}" active-class="active" v-if="!isGuest()">
                             {{$t("menu")}}
                         </router-link>
                     </td>

@@ -90,7 +90,6 @@
     import shared from "../../util/shared";
     import itemViewUtil from "../../util/itemViewUtil";
     import axios from "axios";
-    import userUtil from "../../util/userUtil";
 
     export default {
         name: "ItemMenu",
@@ -200,9 +199,9 @@
                 return shared.isEmpty(value);
             },
 
-            isInputEnabled() {
-                return this.isAdmin() || userUtil.isCurrentUserItemCreator(this.userName, this.itemView.creatorName);
-            },
+            // isInputEnabled() {
+            //     return this.isAdmin() || userUtil.isCurrentUserItemCreator(this.itemView.creatorData.id);
+            // },
 
             isAdmin() {
                 return itemViewUtil.isAdmin(this.itemView);

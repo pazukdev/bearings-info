@@ -37,7 +37,7 @@
                     return false;
                 }
                 return itemViewUtil.isAdmin(this.itemView)
-                    || userUtil.isCurrentUserItemCreator(this.userName, item.creatorName)
+                    || userUtil.isCurrentUserItemCreator(item.creatorId)
                     || this.wishlistView;
             },
 

@@ -1,5 +1,6 @@
 package com.pazukdev.backend.service;
 
+import com.pazukdev.backend.constant.Status;
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.user.UserDto;
@@ -49,6 +50,15 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     }
 
     @Transactional
+    public UserEntity findActiveByName(final String name) {
+        final UserEntity user = ((UserRepository) repository).findByName(name);
+        if (user != null && user.getStatus().equals(Status.ACTIVE)) {
+            return user;
+        }
+        return null;
+    }
+
+    @Transactional
     @Override
     public UserEntity findByName(final String name) {
         return ((UserRepository) repository).findByName(name);
@@ -83,13 +93,15 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
     @Transactional
     public List<String> updateUser(final UserView view) {
+        boolean admin = isAdmin(findActiveByName(view.getCurrentUserName()));
+
         final String newName = view.getName();
         final String newEmail = view.getEmail();
 
-        final UserEntity user = getOne(view.getId());
-        boolean changeName = newName!= null && !user.getName().equals(newName);
-        boolean changeEmail = newEmail != null && !StringUtils.equalsIgnoreCase(user.getEmail(), newEmail);
-        boolean changePassword = view.getOldPassword() != null;
+        final UserEntity user = findOne(view.getId());
+        final boolean changeName = newName!= null && !user.getName().equals(newName);
+        final boolean changeEmail = newEmail != null && !StringUtils.equalsIgnoreCase(user.getEmail(), newEmail);
+        final boolean changePassword = admin ? view.getNewPassword() != null : view.getOldPassword() != null;
 
         final List<String> validationMessages = new ArrayList<>();
         if (changeName) {
@@ -99,7 +111,7 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
             validationMessages.addAll(userDataValidator.validateEmail(newEmail, this));
         }
         if (changePassword) {
-            validationMessages.addAll(userDataValidator.validateChangedPassword(view, passwordEncoder, this));
+            validationMessages.addAll(userDataValidator.validateChangedPassword(view, passwordEncoder, admin, this));
         }
 
         if (validationMessages.isEmpty()) {
@@ -109,12 +121,14 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
             if (changeEmail) {
                 user.setEmail(newEmail);
             }
-            user.setRole(Role.valueOf(view.getRole().toUpperCase()));
-            user.setCountry(view.getCountry());
-            ImgUtil.updateImg(view, user);
             if (changePassword) {
                 user.setPassword(passwordEncoder.encode(view.getNewPassword()));
             }
+            user.setRole(Role.valueOf(view.getRole().toUpperCase()));
+            user.setCountry(view.getCountry());
+            ImgUtil.updateImg(view, user);
+            user.setStatus(view.getStatus());
+
             repository.save(user);
         }
 
@@ -145,7 +159,11 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     }
 
     public UserEntity getAdmin() {
-        return getOne(2L);
+        return findOne(2L);
+    }
+
+    public boolean isAdmin(final UserEntity user) {
+        return user.getRole().equals(Role.ADMIN);
     }
 
 }

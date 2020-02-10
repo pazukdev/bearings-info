@@ -20,6 +20,7 @@ public class NestedItemDto extends AbstractDto {
     private String itemName = "-";
     private String itemCategory = "-";
     private String creatorName;
+    private Long creatorId;
     private Integer rating = 0;
 
     private String buttonText = "-";

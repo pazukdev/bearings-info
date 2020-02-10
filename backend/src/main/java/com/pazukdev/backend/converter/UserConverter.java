@@ -43,6 +43,7 @@ public class UserConverter implements EntityDtoConverter<UserEntity, UserDto> {
         userView.setImg(imgViewData.getImg());
         userView.setDefaultImg(imgViewData.getDefaultImg());
         userView.setCountry(user.getCountry());
+        userView.setStatus(user.getStatus());
         return userView;
     }
 

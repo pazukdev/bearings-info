@@ -6,9 +6,9 @@ const state = {
     loadingState: "",
     incorrectCredentials: false,
     authorization: "",
-    userName: "",
+    userData: "",
     itemView: "",
-    // errorMessage: ""
+    errorMessage: ""
 };
 
 const actions = {
@@ -38,6 +38,10 @@ const actions = {
 
     setUserName: ({commit}, context) => {
         commit("setUserName", context);
+    },
+
+    setUserData: ({commit}, context) => {
+        commit("setUserData", context);
     },
 
     setLoadingState: ({commit}, context) => {
@@ -86,12 +90,20 @@ const mutations = {
         state.userName = userName;
     },
 
+    setUserStatus(state, userStatus) {
+        state.userStatus = userStatus;
+    },
+
+    setUserData(state, userData) {
+        state.userData = userData;
+    },
+
     setItemView(state, itemView) {
         state.itemView = itemView;
     },
 
-    setErrorMessage(state, errorMessage) {
-        state.errorMessage = errorMessage;
+    setErrorMessage(state, message) {
+        state.errorMessage = message;
     }
 };
 

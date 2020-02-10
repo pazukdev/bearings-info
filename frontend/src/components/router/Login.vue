@@ -18,6 +18,10 @@
         </table>
 
         <form id="login-form" @submit="performLoginPageAction">
+            <div v-if="itemView.userData.message !== null" class="alert-message">
+                {{itemView.userData.message.text}}<br>
+                {{itemView.userData.message.contact}}
+            </div>
             <table>
                 <tbody>
                 <tr>
@@ -98,7 +102,9 @@
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
-                appLanguage: state => state.dictionary.appLanguage
+                appLanguage: state => state.dictionary.appLanguage,
+                loginMessage: state => state.dictionary.loginMessage,
+                itemView: state => state.dictionary.itemView
             })
         },
 
@@ -141,6 +147,7 @@
                         }
                     })
                     .catch(error => {
+                        console.log(error);
                         this.setIncorrectCredentials(true);
                         console.log("login failed: " + this.getIncorrectLoginOrPasswordMessage());
                     });

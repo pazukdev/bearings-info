@@ -9,7 +9,10 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import static com.pazukdev.backend.util.CategoryUtil.isInfo;
 
@@ -69,25 +72,12 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
     @Transactional
     @Override
     public TransitiveItem findByName(final String name) {
-        return transitiveItemRepository.findByName(name);
+        return transitiveItemRepository.findFirstByName(name);
     }
 
     @Transactional
     public TransitiveItem find(final String category, final String name) {
-        if (category == null || name == null) {
-            return null;
-        }
-
-        if (category.equalsIgnoreCase("seal") && isSealSize(name)) {
-            return getUssrSealBySize(name);
-        }
-
-        for (final TransitiveItem item : find(category)) {
-            if (item.getName().equals(name)) {
-                return item;
-            }
-        }
-        return null;
+        return transitiveItemRepository.findFirstByCategoryAndName(category, name);
     }
 
     @Transactional
@@ -106,18 +96,6 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
             return false;
         }
         return transitiveItemRepository.findFirstByCategory(parameter) != null;
-    }
-
-    public Set<String> findAllCategories() {
-        return findCategories(transitiveItemRepository.findAll());
-    }
-
-    public Set<String> findCategories(final List<TransitiveItem> items) {
-        final Set<String> categories = new HashSet<>();
-        for (final TransitiveItem item : items) {
-            categories.add(item.getCategory());
-        }
-        return categories;
     }
 
 }

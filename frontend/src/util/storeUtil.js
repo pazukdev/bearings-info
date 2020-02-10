@@ -6,6 +6,14 @@ export default {
         itemView.userData.name = userName;
     },
 
+    setUserData(user) {
+        store.dispatch("setUserData", user);
+    },
+
+    userIsBlocked() {
+        return store.getters.userData.status === "blocked";
+    },
+
     setEditMode(editMode) {
         store.dispatch("setEditMode", editMode);
     },
@@ -22,7 +30,7 @@ export default {
         this.setLoadingState("");
     },
 
-    setErrorMessage(errorMessage) {
-        store.dispatch("setErrorMessage", errorMessage);
+    setErrorMessage(message) {
+        store.dispatch("setErrorMessage", message);
     }
 }

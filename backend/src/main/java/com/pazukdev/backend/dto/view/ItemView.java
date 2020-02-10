@@ -34,6 +34,7 @@ public class ItemView extends AbstractView {
     private String localizedCategory = "-";
     private String localizedName = "-";
     private UserDto userData;
+    private UserDto creatorData;
     private HeaderTable header;
     private List<NestedItemDto> children = new ArrayList<>();
     private List<NestedItemDto> allChildren = new ArrayList<>();
@@ -45,8 +46,6 @@ public class ItemView extends AbstractView {
     private Set<Long> wishListIds = new HashSet<>();
     private Set<String> adminMessages = new HashSet<>();
     private String errorMessage = "-";
-    private Long creatorId;
-    private String creatorName;
     private LikeListDto likeList;
     private ItemView parents;
     private String wikiLink;

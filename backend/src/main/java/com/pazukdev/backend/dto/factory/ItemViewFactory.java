@@ -32,7 +32,7 @@ import static com.pazukdev.backend.util.TableUtil.createReplacersTable;
 import static com.pazukdev.backend.util.TranslatorUtil.*;
 import static com.pazukdev.backend.util.UserActionUtil.*;
 import static com.pazukdev.backend.util.UserUtil.createLikeListDto;
-import static com.pazukdev.backend.util.UserUtil.getCreatorName;
+import static com.pazukdev.backend.util.UserUtil.getCreatorData;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -166,7 +166,7 @@ public class ItemViewFactory {
                                             final Long itemId,
                                             final UserEntity currentUser,
                                             final UserService userService) {
-        final Item item = itemService.getOne(itemId);
+        final Item item = itemService.findOne(itemId);
         final List<Item> allItems = itemService.findAll();
         allItems.remove(item);
         final String category = item.getCategory();
@@ -186,8 +186,7 @@ public class ItemViewFactory {
         view.setAllChildren(createChildren(item, userService, true));
         view.setReplacersTable(createReplacersTable(item, userService));
         addPossiblePartsAndReplacers(view, allItems, item, infoCategories, itemService);
-        view.setCreatorId(item.getCreatorId());
-        view.setCreatorName(getCreatorName(item, itemService.getUserService()));
+        view.setCreatorData(getCreatorData(item, itemService.getUserService()));
         view.setLikeList(createLikeListDto(currentUser));
         LinkUtil.setLinksToItemView(view, item);
         view.setParents(createParentItemsView(item, userService, allItems));
@@ -316,7 +315,7 @@ public class ItemViewFactory {
         final Map<String, String> newDescriptionMap = TableUtil.createHeaderMap(header);
         final String newDescription = toDescription(newDescriptionMap);
 
-        final Item oldItem = itemService.getOne(itemId);
+        final Item oldItem = itemService.findOne(itemId);
         final List<Item> allItems = itemService.findAll();
         allItems.remove(oldItem);
 
@@ -370,7 +369,7 @@ public class ItemViewFactory {
 
     private ItemView removeUsers(final ItemView view) {
         for (final Long userToRemoveId : view.getIdsToRemove()) {
-            itemService.getUserService().delete(userToRemoveId);
+            itemService.getUserService().softDelete(userToRemoveId);
         }
         view.getIdsToRemove().clear();
         return view;
@@ -389,7 +388,7 @@ public class ItemViewFactory {
                              final UserEntity currentUser,
                              final UserService userService) {
         for (final Long idToRemove : idsToRemove) {
-            final Item itemToRemove = itemService.getOne(idToRemove);
+            final Item itemToRemove = itemService.findOne(idToRemove);
             removeItemFromAllWishLists(itemToRemove, userService);
             removeItemFromAllParentItems(idToRemove, currentUser);
             removeItem(itemToRemove, currentUser);

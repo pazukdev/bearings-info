@@ -45,14 +45,14 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get User. Admins-only permitted")
     public UserDto get(@PathVariable("id") final Long id) {
-        return userConverter.convertToDto(userService.getOne(id));
+        return userConverter.convertToDto(userService.findOne(id));
     }
 
     @GetMapping("/view/user/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get public user data")
     public UserView getUserView(@PathVariable("id") final Long id) {
-        return userConverter.convertToUserView(userService.getOne(id));
+        return userConverter.convertToUserView(userService.findOne(id));
     }
 
     @GetMapping("/view/user/list/{userName}/{language}")
@@ -95,14 +95,21 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete user")
     public void delete(@PathVariable("id") final Long id) {
-        userService.delete(id);
+        userService.softDelete(id);
+    }
+
+    @DeleteMapping("/user/{id}/hard-delete")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete user")
+    public void hardDelete(@PathVariable("id") final Long id) {
+        userService.hardDelete(id);
     }
 
     @DeleteMapping("/admin/user/list")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete all users by ids list")
-    public List<UserDto> delete(@RequestBody final List<Long> ids) {
-        return userConverter.convertToDtoList(userService.deleteAll(ids));
+    public void delete(@RequestBody final List<Long> ids) {
+        userService.softDeleteAll(ids);
     }
 
     @GetMapping("/admin/user/roles")
@@ -112,21 +119,12 @@ public class UserController {
         return userService.getRoles();
     }
 
-//    @GetMapping(value = "{userName}/wishlist/{itemId}")
-//    @ResponseStatus(HttpStatus.OK)
-//    @ApiOperation(value = "Get user wishlist")
-//    public boolean isItemInWishList(@PathVariable final String userName, @PathVariable final Long itemId) {
-//        final Item item = itemService.getOne(itemId);
-//        final WishList wishList = userService.findByName(userName).getWishList();
-//        return wishList.getItems().contains(item);
-//    }
-
     @PutMapping("user/{username}/add-item-to-wishlist/{item-id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Add item to wish list")
     public boolean addItemToWishList(@PathVariable("item-id") final Long id,
                                      @PathVariable("username") final String userName) {
-        final Item item = itemService.getOne(id);
+        final Item item = itemService.findOne(id);
         return userService.addItemToWishList(item, userName);
     }
 

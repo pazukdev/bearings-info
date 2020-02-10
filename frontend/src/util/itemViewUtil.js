@@ -3,6 +3,7 @@ import storeUtil from "./storeUtil";
 import arrayUtil from "./arrayUtil";
 import searchUtil from "./searchUtil";
 import store from "../plugins/store";
+import routerUtil from "./routerUtil";
 
 export default {
     itemsListToTables(items, sort, filter, opened) {
@@ -66,7 +67,12 @@ export default {
     dispatchView(itemView) {
         storeUtil.setErrorMessage(itemView.errorMessage);
         store.dispatch("setItemView", itemView);
+        storeUtil.setUserData(itemView.userData);
         storeUtil.setLoadingStateOff();
+        if (storeUtil.userIsBlocked()) {
+            console.log("Open Login page. Reason: blocked user is logged in");
+            routerUtil.toLogin();
+        }
     },
 
     dispatchResponseError(error) {

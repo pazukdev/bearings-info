@@ -65,7 +65,7 @@ public class ReplacerUtil {
 
         final Set<Replacer> replacersFromItemView = new HashSet<>();
         for (final NestedItemDto dto : dtos) {
-            final Item replacerItem = itemService.getOne(dto.getItemId());
+            final Item replacerItem = itemService.findOne(dto.getItemId());
 
             final Replacer replacer = new Replacer();
             replacer.setId(dto.getId());
