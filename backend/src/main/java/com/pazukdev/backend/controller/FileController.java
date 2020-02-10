@@ -66,7 +66,7 @@ public class FileController {
     }
 
     private String uploadDictionaryFile(final String username, final Message message) throws IOException {
-        final UserEntity user = userService.findByName(username);
+        final UserEntity user = userService.findFirstByName(username);
 
         final String text = message.getText();
         final int dictionarySize = getTxtFileLines(getTxtFilePath(FileName.DICTIONARY)).size();

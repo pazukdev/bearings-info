@@ -78,12 +78,12 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     @Transactional
     @Override
-    public Item findByName(String name) {
-        return itemRepository.findByName(name);
+    public Item findFirstByName(final String name) {
+        return itemRepository.findFirstByName(name);
     }
 
     @Transactional
-    public Item find(final String category, final String name) {
+    public Item findFirstByCategoryAndName(final String category, final String name) {
         return itemRepository.findFirstByCategoryAndNameAndStatus(category, name, Status.ACTIVE);
     }
 
@@ -120,7 +120,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final String category = transitiveItem.getCategory();
         final String name = transitiveItem.getName();
 
-        final Item alreadyExistingItem = find(category, name);
+        final Item alreadyExistingItem = findFirstByCategoryAndName(category, name);
         if (alreadyExistingItem != null) {
             return alreadyExistingItem;
         }
@@ -208,7 +208,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     @Transactional
     public RateReplacer rateReplacer(final String userName, final RateReplacer rate) {
-        final UserEntity user = userService.findByName(userName);
+        final UserEntity user = userService.findFirstByName(userName);
         return RateUtil.rateReplacer(rate, user, this);
     }
 
@@ -253,7 +253,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                         continue;
                     }
                     for (final String value : entry.getValue().split("; ")) {
-                        final Item foundItem = find(category, value);
+                        final Item foundItem = findFirstByCategoryAndName(category, value);
                         if (foundItem != null && foundItem.getId().equals(itemId)) {
                             parents.add(parent);
                             break;

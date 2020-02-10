@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    Item findByName(final String name);
+    Item findFirstByName(final String name);
 
     Item findFirstByCategory(final String category);
 

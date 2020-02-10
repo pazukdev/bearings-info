@@ -51,30 +51,13 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
     @Transactional
     public UserEntity findActiveByName(final String name) {
-        final UserEntity user = ((UserRepository) repository).findByName(name);
-        if (user != null && user.getStatus().equals(Status.ACTIVE)) {
-            return user;
-        }
-        return null;
+        return ((UserRepository) repository).findFirstByNameAndStatus(name, Status.ACTIVE);
     }
 
     @Transactional
     @Override
-    public UserEntity findByName(final String name) {
-        return ((UserRepository) repository).findByName(name);
-    }
-
-    @Transactional
-    public UserEntity findByEmail(final String email) {
-        return ((UserRepository) repository).findByEmail(email);
-    }
-
-    @Transactional
-    @Override
-    public List<UserEntity> findAll() {
-        final List<UserEntity> users = super.findAll();
-        users.sort(Comparator.comparing(UserEntity::getRole));
-        return users;
+    public UserEntity findFirstByName(final String name) {
+        return ((UserRepository) repository).findFirstByName(name);
     }
 
     @Transactional
@@ -142,7 +125,7 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
     @Transactional
     public boolean addItemToWishList(final Item item, final String userName) {
-        final UserEntity currentUser = findByName(userName);
+        final UserEntity currentUser = findFirstByName(userName);
 
         final Set<Long> ids = collectIds(currentUser.getWishList().getItems());
 

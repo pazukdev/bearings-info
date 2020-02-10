@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.pazukdev.backend.util.CategoryUtil.getCategory;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -28,7 +30,7 @@ public class HeaderTableRow extends AbstractDto {
     public static HeaderTableRow create(final String param, final String value, final ItemService service) {
         final List<Long> ids= new ArrayList<>();
         for (final String subValue : value.split("; ")) {
-            final Item item = service.find(CategoryUtil.getCategory(param), subValue);
+            final Item item = service.findFirstByCategoryAndName(getCategory(param), subValue);
             if (item != null) {
                 ids.add(item.getId());
             } else {

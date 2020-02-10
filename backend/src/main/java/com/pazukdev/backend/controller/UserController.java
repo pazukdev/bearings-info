@@ -74,7 +74,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get user by username")
     public UserDto searchByName(@PathVariable(name = "username") final String userName) {
-        return userConverter.convertToDto(userService.findByName(userName));
+        return userConverter.convertToDto(userService.findFirstByName(userName));
     }
 
     @PostMapping("/user/create")

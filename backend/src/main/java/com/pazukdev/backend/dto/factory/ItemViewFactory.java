@@ -63,7 +63,7 @@ public class ItemViewFactory {
         final long businessLogicStartTime = System.nanoTime();
 
         final UserService userService = itemService.getUserService();
-        final UserEntity currentUser = userService.findByName(userName);
+        final UserEntity currentUser = userService.findFirstByName(userName);
         final WishList wishList = currentUser.getWishList();
 
         final ItemView basicView = new ItemView();
@@ -120,7 +120,7 @@ public class ItemViewFactory {
                                String category,
                                final String userName,
                                final String userLanguage) {
-        final UserEntity creator = itemService.getUserService().findByName(userName);
+        final UserEntity creator = itemService.getUserService().findFirstByName(userName);
 
         if (!userLanguage.equals("en")) {
             final Set<String> dictionary = getDictionary();
@@ -145,7 +145,7 @@ public class ItemViewFactory {
                                    final String userName,
                                    final String userLanguage,
                                    final ItemView view) {
-        final UserEntity user = itemService.getUserService().findByName(userName);
+        final UserEntity user = itemService.getUserService().findFirstByName(userName);
         final boolean removeItem = itemId.equals(ITEMS_MANAGEMENT_VIEW.getItemId());
         final boolean removeItemFromWishList = itemId.equals(WISH_LIST_VIEW.getItemId());
         final boolean removeUser = itemId.equals(USER_LIST_VIEW.getItemId());

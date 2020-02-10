@@ -65,7 +65,7 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     }
 
     @Transactional
-    public abstract Entity findByName(final String name);
+    public abstract Entity findFirstByName(final String name);
 
 }
 

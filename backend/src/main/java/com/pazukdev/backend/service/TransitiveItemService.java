@@ -4,14 +4,10 @@ import com.pazukdev.backend.converter.TransitiveItemConverter;
 import com.pazukdev.backend.dto.TransitiveItemDto;
 import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.repository.TransitiveItemRepository;
-import com.pazukdev.backend.util.ItemUtil;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 import static com.pazukdev.backend.util.CategoryUtil.isInfo;
@@ -25,70 +21,20 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
     @Getter
     private final TransitiveItemRepository transitiveItemRepository;
 
-    public TransitiveItemService(final TransitiveItemRepository transitiveItemRepository,
-                                 final TransitiveItemConverter converter) {
-        super(transitiveItemRepository, converter);
-        this.transitiveItemRepository = transitiveItemRepository;
-    }
-
-    public TransitiveItem getUssrSealBySize(final String searchingSize) {
-        final List<TransitiveItem> ussrSeals = filter(find("Seal"), "Manufacturer", "USSR");
-        for (TransitiveItem seal : ussrSeals) {
-            final String actualSize = ItemUtil.getValueFromDescription(seal.getDescription(), "Size, mm");
-            if (actualSize.equals(searchingSize)) {
-                return seal;
-            }
-        }
-        return null;
-    }
-
-    private boolean isSealSize(final String value) {
-        final List<String> dimensions = new ArrayList<>(Arrays.asList(value.split("x")));
-        if (value.length() < 2) {
-            return false;
-        }
-        try {
-            Integer.valueOf(dimensions.get(0));
-            Integer.valueOf(dimensions.get(1));
-        } catch (final Exception e) {
-            return false;
-        }
-        return true;
-    }
-
-    private List<TransitiveItem> filter(final List<TransitiveItem> items,
-                                        final String parameter,
-                                        final String searchingValue) {
-        final List<TransitiveItem> filteredItems = new ArrayList<>();
-        for (TransitiveItem item : items) {
-            final String value = ItemUtil.getValueFromDescription(item.getDescription(), parameter);
-            if (value != null && value.equals(searchingValue)) {
-                filteredItems.add(item);
-            }
-        }
-        return filteredItems;
+    public TransitiveItemService(final TransitiveItemRepository repository, final TransitiveItemConverter converter) {
+        super(repository, converter);
+        this.transitiveItemRepository = repository;
     }
 
     @Transactional
     @Override
-    public TransitiveItem findByName(final String name) {
+    public TransitiveItem findFirstByName(final String name) {
         return transitiveItemRepository.findFirstByName(name);
     }
 
     @Transactional
     public TransitiveItem find(final String category, final String name) {
         return transitiveItemRepository.findFirstByCategoryAndName(category, name);
-    }
-
-    @Transactional
-    public List<TransitiveItem> find(final String category) {
-        final List<TransitiveItem> categorizedItems = new ArrayList<>();
-        for (final TransitiveItem item : findAll()) {
-            if (item.getCategory().toLowerCase().equals(category.toLowerCase())) {
-                categorizedItems.add(item);
-            }
-        }
-        return categorizedItems;
     }
 
     public boolean isPart(String parameter, final Set<String> infoCategories) {

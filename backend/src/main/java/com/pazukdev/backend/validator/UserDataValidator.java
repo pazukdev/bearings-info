@@ -3,6 +3,7 @@ package com.pazukdev.backend.validator;
 import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.dto.view.UserView;
 import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.service.UserService;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -80,7 +81,7 @@ public class UserDataValidator {
             messages.add("Nickname is empty");
         }
         messages.addAll(checkForbiddenSubstrings(userName));
-        if (messages.isEmpty() && service.findByName(userName) != null) {
+        if (messages.isEmpty() && service.findFirstByName(userName) != null) {
             messages.add(createUserExistsMessage("name"));
         }
         return messages;
@@ -92,7 +93,7 @@ public class UserDataValidator {
             messages.add("Invalid email");
         }
         messages.addAll(checkForbiddenSubstrings(email));
-        if (messages.isEmpty() && userService.findByEmail(email) != null) {
+        if (messages.isEmpty() && ((UserRepository) userService.getRepository()).findFirstByEmail(email) != null) {
             messages.add(createUserExistsMessage("email"));
         }
         return messages;
