@@ -15,6 +15,7 @@ export default {
             }
         }
 
+        let itemsCount = 0;
         let nestedTables = [];
         for (let i = 0; i < categories.length; i++) {
             let category = categories[i];
@@ -29,6 +30,7 @@ export default {
                 let item = items[i];
                 if (item.itemCategory === category && searchUtil.filterItem(item, filter)) {
                     nestedTable.items.push(item);
+                    itemsCount++;
                 }
             }
 
@@ -41,7 +43,10 @@ export default {
             }
         }
 
-        return arrayUtil.sortByName(nestedTables);
+        return {
+            tables: arrayUtil.sortByName(nestedTables),
+            itemsCount: itemsCount
+        };
     },
 
     isAuthorized(authorization) {

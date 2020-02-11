@@ -7,6 +7,11 @@
                     <input type="search" v-model="filter" placeholder="Search...">
                 </td>
             </tr>
+            <tr style="text-align: left">
+                <td>
+                    {{"Found: " + itemsCount}}
+                </td>
+            </tr>
             <tr v-for="vehicleClass in itemsListAsTables()" v-if="vehicles">
                 <td>
                     <v-details v-model="vehicleClass.opened">
@@ -110,7 +115,8 @@
 
         data() {
             return {
-                filter: ""
+                filter: "",
+                itemsCount: 0
             }
         },
 
@@ -153,7 +159,7 @@
                                 vehicles.push(item);
                             }
                         }
-                        let childTables = itemViewUtil.itemsListToTables(vehicles, true, this.filter, opened);
+                        let childTables = itemViewUtil.itemsListToTables(vehicles, true, this.filter, opened).tables;
                         let parentTable = {
                             name: !shared.isEmpty(category) ? category : "Other",
                             manufacturers: childTables,
@@ -164,9 +170,13 @@
                             parentTables.push(parentTable);
                         }
                     }
+
+                    this.itemsCount = arrayUtil.countVehicles(parentTables);
                     return arrayUtil.sortByName(parentTables);
                 } else {
-                    return itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
+                    let result = itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
+                    this.itemsCount = result.itemsCount;
+                    return result.tables;
                 }
 
             },

@@ -7,6 +7,11 @@
                     <input type="search" v-model="filter" placeholder="Search...">
                 </td>
             </tr>
+            <tr style="text-align: left">
+                <td>
+                    {{"Found: " + itemsCount}}
+                </td>
+            </tr>
             <tr v-for="table in itemsListAsTables()" v-if="!hideTable(table)">
                 <td>
                     <v-details v-model="table.opened" v-if="isAdmin() || table.name !== 'deleted'">
@@ -93,7 +98,8 @@
 
         data() {
             return {
-                filter: ""
+                filter: "",
+                itemsCount: 0
             }
         },
 
@@ -108,7 +114,9 @@
                     items = itemView.children;
                 }
                 let opened = this.wishListView === true;
-                return itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
+                let result = itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
+                this.itemsCount = result.itemsCount;
+                return result.tables;
             },
 
             removeItem(item) {

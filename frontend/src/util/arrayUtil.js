@@ -20,6 +20,18 @@ export default {
                 || a.buttonText.localeCompare(b.buttonText)
                 || a.secondComment.localeCompare(b.secondComment);
         });
+    },
+
+    countVehicles(vehicleClasses) {
+        let count = 0;
+        for (let i = 0; i < vehicleClasses.length; i++) {
+            for (let j = 0; j < vehicleClasses[i].manufacturers.length; j++) {
+                for (let k = 0; k < vehicleClasses[i].manufacturers[j].items.length; k++) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
 }
