@@ -1,17 +1,8 @@
 <template>
     <div>
+        <SearchForm :items-count="itemsCount" @get-filter="getFilter"/>
         <table id="parts-table">
             <tbody>
-            <tr v-if="searchIsRendered()">
-                <td>
-                    <input type="search" v-model="filter" placeholder="Search...">
-                </td>
-            </tr>
-            <tr style="text-align: left">
-                <td>
-                    {{"Found: " + itemsCount}}
-                </td>
-            </tr>
             <tr v-for="table in itemsListAsTables()" v-if="!hideTable(table)">
                 <td>
                     <v-details v-model="table.opened" v-if="isAdmin() || table.name !== 'deleted'">
@@ -62,11 +53,13 @@
     import ListHeader from "./section/ListHeader";
     import ItemDescription from "./section/ItemDescription";
     import EditableImg from "../EditableImg";
+    import SearchForm from "../form/SearchForm";
 
     export default {
         name: "CountedItemList",
 
         components: {
+            SearchForm,
             EditableImg,
             ItemDescription,
             ListHeader,
@@ -140,6 +133,10 @@
 
             isAdmin() {
                 return itemViewUtil.isAdmin(this.itemView);
+            },
+
+            getFilter(filter) {
+                this.filter = filter;
             }
         }
     }

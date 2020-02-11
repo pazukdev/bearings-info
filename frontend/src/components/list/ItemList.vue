@@ -1,17 +1,8 @@
 <template>
     <div>
+        <SearchForm :items-count="itemsCount" @get-filter="getFilter"/>
         <table id="parts-table">
             <tbody>
-            <tr v-if="searchIsRendered()">
-                <td>
-                    <input type="search" v-model="filter" placeholder="Search...">
-                </td>
-            </tr>
-            <tr style="text-align: left">
-                <td>
-                    {{"Found: " + itemsCount}}
-                </td>
-            </tr>
             <tr v-for="vehicleClass in itemsListAsTables()" v-if="vehicles">
                 <td>
                     <v-details v-model="vehicleClass.opened">
@@ -83,10 +74,12 @@
     import EditableImg from "../EditableImg";
     import shared from "../../util/shared";
     import arrayUtil from "../../util/arrayUtil";
+    import SearchForm from "../form/SearchForm";
 
     export default {
         name: "ItemList",
         components: {
+            SearchForm,
             EditableImg,
             ItemDescription,
             EditPanel,
@@ -197,6 +190,10 @@
 
             searchIsRendered() {
                 return !this.editMode && !this.usageView;
+            },
+
+            getFilter(filter) {
+                this.filter = filter;
             }
         }
     }
