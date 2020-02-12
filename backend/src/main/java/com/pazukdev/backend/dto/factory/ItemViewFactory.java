@@ -1,6 +1,7 @@
 package com.pazukdev.backend.dto.factory;
 
 import com.pazukdev.backend.constant.Status;
+import com.pazukdev.backend.dto.DictionaryData;
 import com.pazukdev.backend.dto.ImgViewData;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
@@ -16,20 +17,22 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 
+import static com.pazukdev.backend.dto.DictionaryData.getDictionaryFromFile;
+import static com.pazukdev.backend.dto.DictionaryData.saveDictionary;
 import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.*;
 import static com.pazukdev.backend.util.CategoryUtil.Category.VEHICLE;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter;
 import static com.pazukdev.backend.util.ChildItemUtil.collectIds;
 import static com.pazukdev.backend.util.ChildItemUtil.createChildrenFromItemView;
 import static com.pazukdev.backend.util.FileUtil.FileName;
-import static com.pazukdev.backend.util.FileUtil.getTxtFileLines;
+import static com.pazukdev.backend.util.FileUtil.getTxtFileTextLines;
 import static com.pazukdev.backend.util.ItemUtil.SpecialItemId.*;
 import static com.pazukdev.backend.util.ItemUtil.*;
 import static com.pazukdev.backend.util.NestedItemUtil.addPossiblePartsAndReplacers;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 import static com.pazukdev.backend.util.TableUtil.createHeader;
 import static com.pazukdev.backend.util.TableUtil.createReplacersTable;
-import static com.pazukdev.backend.util.TranslatorUtil.*;
+import static com.pazukdev.backend.util.TranslatorUtil.translate;
 import static com.pazukdev.backend.util.UserActionUtil.*;
 import static com.pazukdev.backend.util.UserUtil.createLikeListDto;
 import static com.pazukdev.backend.util.UserUtil.getCreatorData;
@@ -41,7 +44,7 @@ import static com.pazukdev.backend.util.UserUtil.getCreatorData;
 public class ItemViewFactory {
 
     private final ItemService itemService;
-    private final Set<String> infoCategories;
+    private final List<String> infoCategories;
 
     public ItemView createHomeView(final String userName, final String userLanguage) {
         return createItemView(MOTORCYCLE_CATALOGUE_VIEW.getItemId(), userName, userLanguage);
@@ -55,11 +58,11 @@ public class ItemViewFactory {
         return createItemView(WISH_LIST_VIEW.getItemId(), userName, userLanguage);
     }
 
-    public ItemView createUserListView(final String userName, final String userLanguage) {
-        return createItemView(USER_LIST_VIEW.getItemId(), userName, userLanguage);
+    public ItemView createUserListView(final String userName, final String userLang) {
+        return createItemView(USER_LIST_VIEW.getItemId(), userName, userLang);
     }
 
-    public ItemView createItemView(final Long itemId, final String userName, final String userLanguage) {
+    public ItemView createItemView(final Long itemId, final String userName, final String userLang) {
         final long businessLogicStartTime = System.nanoTime();
 
         final UserService userService = itemService.getUserService();
@@ -88,9 +91,9 @@ public class ItemViewFactory {
         final double businessLogicEndTime = System.nanoTime();
         final double businessLogicDuration = businessLogicEndTime - businessLogicStartTime;
 
-        if (!userLanguage.equals("en")) {
+        if (!userLang.equals("en")) {
             try {
-                translate("en", userLanguage, view, false);
+                translate("en", userLang, view, false);
             } catch (Exception e) {
                 view.setErrorMessage(e.getMessage());
                 return view;
@@ -119,14 +122,15 @@ public class ItemViewFactory {
     private Item createNewItem(String name,
                                String category,
                                final String userName,
-                               final String userLanguage) {
+                               final String userLang) {
         final UserEntity creator = itemService.getUserService().findFirstByName(userName);
 
-        if (!userLanguage.equals("en")) {
-            final Set<String> dictionary = getDictionary();
-            name = translate(userLanguage, "en", name, true, false, dictionary);
-            category = translate(userLanguage, "en", category, false, true, dictionary);
-            saveDictionary(dictionary);
+        if (!userLang.equals("en")) {
+            final DictionaryData dictionaryData = getDictionaryFromFile(userLang);
+            final List<String> dictionary = dictionaryData.getDictionary();
+            name = translate(userLang, "en", name, true, false, dictionary);
+            category = translate(userLang, "en", category, false, true, dictionary);
+            saveDictionary(dictionaryData);
         }
 
         final Item item = new Item();
@@ -190,7 +194,6 @@ public class ItemViewFactory {
         view.setLikeList(createLikeListDto(currentUser));
         LinkUtil.setLinksToItemView(view, item);
         view.setParents(createParentItemsView(item, userService, allItems));
-
         return view;
     }
 
@@ -251,7 +254,7 @@ public class ItemViewFactory {
 
     private ItemView createItemsManagementView(final ItemView view) {
         final List<Item> items = itemService.findAll();
-        final Set<String> comments = getTxtFileLines(FileName.COMMENTS);
+        final List<String> comments = getTxtFileTextLines(FileName.COMMENTS);
 
         final List<NestedItemDto> dtos = new ArrayList<>();
         items.forEach(item -> dtos.add(createItemForItemsManagement(item, itemService.getUserService(), comments)));
@@ -264,7 +267,7 @@ public class ItemViewFactory {
     private ItemView createParentItemsView(final Item item,
                                            final UserService userService,
                                            final List<Item> allItems) {
-        final Set<String> comments = getTxtFileLines(FileName.COMMENTS);
+        final List<String> comments = getTxtFileTextLines(FileName.COMMENTS);
 
         final ItemView view = new ItemView();
         final List<NestedItemDto> dtos = new ArrayList<>();
@@ -291,14 +294,15 @@ public class ItemViewFactory {
     private ItemView updateItem(final Long itemId,
                                 final ItemView view,
                                 final UserEntity currentUser,
-                                final String userLanguage) {
+                                final String userLang) {
 
         final long businessLogicStartTime = System.nanoTime();
 
         final long translationFromUserLang = System.nanoTime();
-        if (!userLanguage.equals("en")) {
+        if (!userLang.equals("en")) {
+            final DictionaryData dictionaryData = getDictionaryFromFile(userLang);
             try {
-                translate(userLanguage, "en", view, true);
+                translate(userLang, "en", view, true);
             } catch (Exception e) {
                 view.setErrorMessage(e.getMessage());
                 return view;
@@ -334,7 +338,7 @@ public class ItemViewFactory {
 
         itemService.update(oldItem);
 
-        final ItemView newItemView = createItemView(itemId, currentUser.getName(), userLanguage);
+        final ItemView newItemView = createItemView(itemId, currentUser.getName(), userLang);
 
         final double totalTranslationTime = view.getTranslationTime() * 1000000000 + translationFromUserLangDuration;
         setTime(newItemView, (double) (System.nanoTime() - businessLogicStartTime), totalTranslationTime);

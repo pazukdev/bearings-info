@@ -4,7 +4,7 @@ import com.pazukdev.backend.util.TranslatorUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -24,7 +24,7 @@ public class UserActionDto extends AbstractDto {
     private String itemCategory;
     private String date;
 
-    public void translate(final String langTo, final Set<String> dictionary) {
+    public void translate(final String langTo, final List<String> dictionary) {
         boolean name = false;
         boolean addToDictionary = false;
 

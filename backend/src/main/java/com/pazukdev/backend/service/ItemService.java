@@ -30,7 +30,7 @@ import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
 import static com.pazukdev.backend.util.CategoryUtil.isInfo;
 import static com.pazukdev.backend.util.ChildItemUtil.createParts;
 import static com.pazukdev.backend.util.FileUtil.FileName.INFO_CATEGORIES;
-import static com.pazukdev.backend.util.FileUtil.getTxtFileLines;
+import static com.pazukdev.backend.util.FileUtil.getTxtFileTextLines;
 import static com.pazukdev.backend.util.ItemUtil.*;
 import static com.pazukdev.backend.util.ReplacerUtil.createReplacers;
 import static com.pazukdev.backend.util.UserActionUtil.processItemAction;
@@ -116,7 +116,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public Item create(final TransitiveItem transitiveItem, final Set<String> infoCategories) {
+    public Item create(final TransitiveItem transitiveItem, final List<String> infoCategories) {
         final String category = transitiveItem.getCategory();
         final String name = transitiveItem.getName();
 
@@ -226,12 +226,12 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     private ItemViewFactory createNewItemViewFactory() {
-        return new ItemViewFactory(this, getTxtFileLines(INFO_CATEGORIES));
+        return new ItemViewFactory(this, getTxtFileTextLines(INFO_CATEGORIES));
     }
 
     public List<Item> findParents(final Item item,
                                   final List<Item> checkList,
-                                  final Set<String> infoCategories) {
+                                  final List<String> infoCategories) {
         final Long itemId = item.getId();
         final String category = item.getCategory();
         String secondSearchCategory = null;

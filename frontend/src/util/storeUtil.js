@@ -32,5 +32,17 @@ export default {
 
     setErrorMessage(message) {
         store.dispatch("setErrorMessage", message);
+    },
+
+    setAppLang(lang) {
+        store.dispatch("setAppLanguage", lang);
+    },
+
+    setLangs(langs) {
+        store.dispatch("setLangs", langs);
+    },
+
+    setDictionary(dictionary) {
+        store.dispatch("setDictionary", dictionary);
     }
 }

@@ -10,8 +10,8 @@ import com.pazukdev.backend.service.UserService;
 import com.pazukdev.backend.util.ChildItemUtil;
 import com.pazukdev.backend.util.UserUtil;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.pazukdev.backend.util.CategoryUtil.*;
 import static com.pazukdev.backend.util.ItemUtil.*;
@@ -96,7 +96,7 @@ public class NestedItemDtoFactory {
 
     public static NestedItemDto createItemForItemsManagement(final Item item,
                                                              final UserService userService,
-                                                             final Set<String> comments) {
+                                                             final List<String> comments) {
         final NestedItemDto basicSpecialNestedItemDto = createBasicNestedItemDto(item, userService);
         String leftColumnData = getItemsManagementComment(item, comments);
         basicSpecialNestedItemDto.setComment(!isEmpty(leftColumnData) ? leftColumnData : "-");

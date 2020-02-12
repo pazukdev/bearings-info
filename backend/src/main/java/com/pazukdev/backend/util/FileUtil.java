@@ -6,9 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.pazukdev.backend.util.FileUtil.FileFormat.CSV;
 import static com.pazukdev.backend.util.FileUtil.FileFormat.TXT;
@@ -31,16 +29,16 @@ public class FileUtil {
         public static final String DICTIONARY = "dictionary";
     }
 
-    public static Set<String> getTxtFileLines(final String fileName) {
-        return getTxtFileLines(getTxtFilePath(fileName));
+    public static List<String> getTxtFileTextLines(final String fileName) {
+        return getTxtFileTextLines(getTxtFilePath(fileName));
     }
 
-    public static Set<String> getTxtFileLines(final Path path) {
+    public static List<String> getTxtFileTextLines(final Path path) {
         try {
-            return new HashSet<>(Files.readAllLines(path, StandardCharsets.UTF_8));
+            return Files.readAllLines(path, StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
-            return new HashSet<>();
+            return new ArrayList<>();
         }
     }
 
@@ -94,15 +92,11 @@ public class FileUtil {
         return Directory.STATIC_DIRECTORY + fileName + CSV;
     }
 
-//    public static void createDictionaryFileInFileSystem(final String base64Data) throws IOException {
-//        createDictionaryFileInFileSystem(Base64.getDecoder().decode(base64Data.getBytes(StandardCharsets.UTF_8)));
-//    }
-
     public static void createFileInFileSystem(final String fileName, final byte[] text) throws IOException {
         Files.write(getTxtFilePath(fileName), text);
     }
 
-    public static void createFile(final String fileName, final Set<String> textLines) {
+    public static void createFile(final String fileName, final List<String> textLines) {
         try {
             Files.write(getTxtFilePath(fileName), getSortedFileLines(textLines), StandardCharsets.UTF_8);
         } catch (IOException e) {
@@ -110,14 +104,13 @@ public class FileUtil {
         }
     }
 
-//    public static String getDictionaryFilePathString() {
-//        return Directory.BASIC_DIRECTORY + "language/" + DICTIONARY + TXT;
+//    public static List<String> getSortedFileLines(final Set<String> textLines) {
+//        return getSortedFileLines(new ArrayList<>(textLines));
 //    }
 
-    public static List<String> getSortedFileLines(final Set<String> textLines) {
-        final List<String> sortedFileContent = new ArrayList<>(textLines);
-        sortedFileContent.sort(String::compareTo);
-        return sortedFileContent;
+    public static List<String> getSortedFileLines(final List<String> textLines) {
+        textLines.sort(String::compareTo);
+        return textLines;
     }
 
 }

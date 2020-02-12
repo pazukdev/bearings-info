@@ -1,5 +1,4 @@
 import itemViewUtil from "./itemViewUtil";
-import store from "../plugins/store";
 import router from "../plugins/router";
 import storeUtil from "./storeUtil";
 
@@ -31,6 +30,10 @@ export default {
 
     toUser(id, lang) {
         router.push({name: "user", params: {id, lang}});
+    },
+
+    toMenu(lang) {
+        router.push({name: "menu", params: {lang}});
     },
 
     toHome() {
@@ -68,7 +71,7 @@ export default {
     },
 
     setLang(lang) {
-        store.dispatch("setAppLanguage", lang);
+        storeUtil.setAppLang(lang);
         this.changeLanguageInUrl(router, lang);
     },
 

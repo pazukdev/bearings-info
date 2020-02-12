@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -38,7 +38,7 @@ public class NestedItemDto extends AbstractDto {
         this.translatedVehicleClass = vehicleClass;
     }
 
-    public void translate(final String langFrom, final String langTo, final Set<String> dictionary) {
+    public void translate(final String langFrom, final String langTo, final List<String> dictionary) {
         if (SpecificStringUtil.isEmpty(langFrom) || SpecificStringUtil.isEmpty(langTo)) {
             return;
         }
@@ -51,7 +51,7 @@ public class NestedItemDto extends AbstractDto {
         }
     }
 
-    private void translateToLang(final String langTo, final Set<String> dictionary) {
+    private void translateToLang(final String langTo, final List<String> dictionary) {
         final String langFrom = "en";
         final boolean name = false;
         final boolean addToDictionary = false;
@@ -64,7 +64,7 @@ public class NestedItemDto extends AbstractDto {
         translatedVehicleClass = TranslatorUtil.translate(langFrom, langTo, vehicleClass, name, addToDictionary, dictionary);
     }
 
-    private void translateToEnglish(final String langFrom, final Set<String> dictionary) {
+    private void translateToEnglish(final String langFrom, final List<String> dictionary) {
         final String langTo = "en";
 
         if (langFrom.equals(langTo)) {

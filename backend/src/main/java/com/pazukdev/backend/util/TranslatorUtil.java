@@ -1,5 +1,6 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.dto.DictionaryData;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.UserActionDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
@@ -14,11 +15,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+import static com.pazukdev.backend.dto.DictionaryData.getDictionaryFromFile;
 import static com.pazukdev.backend.util.CategoryUtil.Category;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter;
 import static com.pazukdev.backend.util.FileUtil.*;
@@ -30,22 +30,24 @@ import static com.pazukdev.backend.util.SpecificStringUtil.*;
 public class TranslatorUtil {
 
     private static String WORD_SEPARATOR = " ";
-    private static String DICTIONARY_SEPARATOR = "=";
+    public static String DICTIONARY_SEPARATOR = "=";
+    public static String LANGS = "langs";
 
     public static void translate(final String langFrom,
                                  final String langTo,
                                  final ItemView view,
                                  final boolean addToDictionary) throws Exception {
-        final Set<String> dictionary = getDictionary();
-        translate(langFrom, langTo, view, addToDictionary, dictionary);
-        saveDictionary(dictionary);
+        final String lang = !langFrom.equals("en") ? langFrom : langTo;
+        final DictionaryData dictionaryData = getDictionaryFromFile(lang);
+        translate(langFrom, langTo, view, addToDictionary, dictionaryData.getDictionary());
+        DictionaryData.saveDictionary(dictionaryData);
     }
 
     public static void translate(final String langFrom,
                                  final String langTo,
                                  final ItemView view,
                                  final boolean addToDictionary,
-                                 final Set<String> dictionary) throws Exception {
+                                 final List<String> dictionary) throws Exception {
         HeaderTable header = view.getHeader();
         final String category = view.getCategory();
         final String localizedName = view.getLocalizedName();
@@ -91,7 +93,7 @@ public class TranslatorUtil {
                                          final String langTo,
                                          final HeaderTable headerTable,
                                          boolean addToDictionary,
-                                         final Set<String> dictionary) {
+                                         final List<String> dictionary) {
         if (headerTable == null) {
             return null;
         }
@@ -112,7 +114,7 @@ public class TranslatorUtil {
     private static void translate(final String langFrom,
                                   final String langTo,
                                   final ReplacersTable replacersTable,
-                                  final Set<String> dictionary) {
+                                  final List<String> dictionary) {
         if (replacersTable == null) {
             return;
         }
@@ -122,7 +124,7 @@ public class TranslatorUtil {
     public static List<NestedItemDto> translateItemDtoList(final String langFrom,
                                                            final String langTo,
                                                            final List<NestedItemDto> dtos,
-                                                           final Set<String> dictionary) {
+                                                           final List<String> dictionary) {
         for (final NestedItemDto dto : dtos) {
             dto.translate(langFrom, langTo, dictionary);
         }
@@ -133,7 +135,7 @@ public class TranslatorUtil {
                                   final String languageTo,
                                   final List<String> list,
                                   final boolean addToDictionary,
-                                  final Set<String> dictionary) {
+                                  final List<String> dictionary) {
         final List<String> copy = new ArrayList<>(list);
         list.clear();
         for (final String s : copy) {
@@ -147,7 +149,7 @@ public class TranslatorUtil {
                                    String text,
                                    final boolean name,
                                    final boolean addToDictionary,
-                                   final Set<String> dictionary) {
+                                   final List<String> dictionary) {
 
         if (text == null) {
             return null;
@@ -185,7 +187,7 @@ public class TranslatorUtil {
     private static String translateToEnglish(final String langFrom,
                                              String text,
                                              final boolean addToDictionary,
-                                             final Set<String> dictionary) {
+                                             final List<String> dictionary) {
         if (text == null || langFrom == null) {
             return null;
         }
@@ -266,7 +268,7 @@ public class TranslatorUtil {
         return translated != null && !translated.equalsIgnoreCase(original);
     }
 
-    private static String parseAndTranslate(final String languageTo, String text, final Set<String> dictionary) {
+    private static String parseAndTranslate(final String languageTo, String text, final List<String> dictionary) {
         final Map<String, String> map = new HashMap<>();
         int i = 0;
         final String s = "#";
@@ -322,7 +324,7 @@ public class TranslatorUtil {
 
     private static String getValueFromDictionary(String value,
                                                  final String lang,
-                                                 final Set<String> dictionary) {
+                                                 final List<String> dictionary) {
         if (value == null) {
             return null;
         }
@@ -343,10 +345,6 @@ public class TranslatorUtil {
             final String beforeLastChar = removeLastChar(value);
             final String translatedBeforeLastChar = getValueFromDictionary(beforeLastChar, lang, dictionary);
             return value.replaceFirst(beforeLastChar, translatedBeforeLastChar);
-        }
-
-        if (value.equals("G-414")) {
-            int i = 0;
         }
 
         if (isSingleWord(value)) {
@@ -385,7 +383,7 @@ public class TranslatorUtil {
         return translated;
     }
 
-    private static String find(final String value, final String lang, final Set<String> dictionary) {
+    private static String find(final String value, final String lang, final List<String> dictionary) {
         String translated = value;
         for (final String line : dictionary) {
             if (line.split(DICTIONARY_SEPARATOR).length < 3) {
@@ -417,7 +415,7 @@ public class TranslatorUtil {
     private static void addToDictionary(final String value,
                                         final String valueInEnglish,
                                         final String language,
-                                        final Set<String> dictionary) {
+                                        final List<String> dictionary) {
         if (language.equals("en")) {
             return;
         }
@@ -462,20 +460,14 @@ public class TranslatorUtil {
         return jsonArray3.get(0).toString();
     }
 
-    public static Set<String> getDictionary() {
-        return getTxtFileLines(getDictionaryFilePath());
+    public static void addLang(final String lang) {
+        final Set<String> langs = new HashSet<>(getTxtFileTextLines(LANGS));
+        langs.add(lang);
+        FileUtil.createFile(LANGS, new ArrayList<>(langs));
     }
 
-    public static void saveDictionary(final Set<String> dictionary) {
-        try {
-            Files.write(getDictionaryFilePath(), getSortedFileLines(dictionary), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static Path getDictionaryFilePath() {
-        return getTxtFilePath(FileName.DICTIONARY);
+    public static Path getDictionaryFilePath(final String lang) {
+        return getTxtFilePath(FileName.DICTIONARY + "_" + lang);
     }
 
 }

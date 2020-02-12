@@ -22,7 +22,8 @@
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
                 appLanguage: state => state.dictionary.appLanguage,
-                langs: state => state.dictionary.langs
+                langs: state => state.dictionary.langs,
+                itemView: state => state.dictionary.itemView
             })
         },
 
@@ -44,7 +45,9 @@
 
         methods: {
             setLangsList() {
-                axiosUtil.setSupportedLangs(this.basicUrl, this.authorization);
+                if (this.newLanguage !== "en") {
+                    axiosUtil.setLangsAndDictionary();
+                }
             },
 
             onUrlChange() {
@@ -58,6 +61,9 @@
 
             selectLanguage() {
                 routerUtil.setLang(this.newLanguage);
+                if (this.newLanguage !== "en") {
+                    axiosUtil.setLangsAndDictionary();
+                }
             },
         }
     }

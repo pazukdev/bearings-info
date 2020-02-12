@@ -1,6 +1,7 @@
 package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.constant.security.Role;
+import com.pazukdev.backend.dto.DictionaryData;
 import com.pazukdev.backend.dto.Message;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.UserActionRepository;
@@ -19,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import static com.pazukdev.backend.util.FileUtil.*;
+import static com.pazukdev.backend.util.TranslatorUtil.addLang;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -33,8 +35,14 @@ public class FileController {
     private final UserService userService;
     private final UserActionRepository userActionRepository;
 
+    @GetMapping(value = "/dictionary-data/{lang}")
+    @ApiOperation(value = "Get dictionary data: 1. dictionary according to specified language; 2. available languages")
+    public DictionaryData getDictionary(@PathVariable final String lang) {
+        return DictionaryData.getDictionaryFromFile(lang);
+    }
+
     @GetMapping(value = "/{fileName}/download")
-    @ApiOperation(value = "Download dictionary file which contains translations for app texts")
+    @ApiOperation(value = "File download")
     public void download(@PathVariable final String fileName,
                          final HttpServletResponse response) throws IOException {
 
@@ -47,10 +55,10 @@ public class FileController {
     }
 
     @PutMapping(value = "/{fileName}/upload/{username}")
-    @ApiOperation(value = "Upload new translations for the app")
+    @ApiOperation(value = "File upload")
     public String upload(@PathVariable final String fileName,
                          @PathVariable final String username,
-                         @RequestBody final Message message) throws IOException {
+                         @RequestBody final Message message) throws Exception {
 
         if (fileName == null) {
             return "File name is null";
@@ -65,23 +73,40 @@ public class FileController {
         return "New " + fileName + " file accepted";
     }
 
-    private String uploadDictionaryFile(final String username, final Message message) throws IOException {
+    private String uploadDictionaryFile(final String username, final Message message) throws Exception {
         final UserEntity user = userService.findFirstByName(username);
 
         final String text = message.getText();
-        final int dictionarySize = getTxtFileLines(getTxtFilePath(FileName.DICTIONARY)).size();
-        final int newDictionarySize = text.split(System.getProperty("line.separator")).length;
-        final int difference = dictionarySize - newDictionarySize;
-        final int removedLinesLimit = user.getRole() == Role.ADMIN ? 20 : 1;
+        DictionaryData newDictionary;
+        try {
+            newDictionary = DictionaryData.createDictionary(text);
+        } catch (final Exception e) {
+            return e.getMessage();
+        }
+        final String newDictionaryLang = newDictionary.getLang();
+
+        final DictionaryData oldDictionary = DictionaryData.getDictionaryFromFile(newDictionaryLang);
+        final boolean newLang = oldDictionary.getDictionary().size() == 0;
+        if (newLang) {
+            DictionaryData.saveDictionary(newDictionary);
+            addLang(newDictionaryLang);
+            return "New dictionary accepted. New language added: " + newDictionaryLang;
+        }
+
+        final int newDictionarySize = newDictionary.getDictionary().size();
+        final int oldDictionarySize = oldDictionary.getDictionary().size();
+
+        final int difference = oldDictionarySize - newDictionarySize;
+        final int removedLinesLimit = user.getRole() == Role.ADMIN ? 5 : 1;
 
         if (difference > removedLinesLimit) {
             return "New dictionary not accepted. " +
                     "New size is " + newDictionarySize + " lines. "
                     + difference + " lines were removed. " +
-                    "You can't remove more than " + removedLinesLimit + " lines at a time";
+                    "You can't remove more than " + removedLinesLimit + " line at a time";
         }
 
-        createFileInFileSystem(FileName.DICTIONARY, text.getBytes(StandardCharsets.UTF_8));
+        DictionaryData.saveDictionary(newDictionary);
 
         final String plus = -difference > 0 ? "+" : "";
         String changed = ": " + plus + (-difference) + " lines";

@@ -52,6 +52,7 @@ export const i18n = new VueI18n({
             youAreAdmin: "You are admin",
             youAreGuest: "You are guest"
         },
+
         ru: {
             addToWishList: "Добавить в список",
             appData: "Все данные",
@@ -65,7 +66,6 @@ export const i18n = new VueI18n({
             createNewItem: "Добавить новый объект",
             createdBy: "Добавлен пользователем",
             defaultInputTitle: "Длина: 2 - 30 символов: буквы, цифры, - , _ , пробел",
-            downloadDictionary: "Скачать словарь",
             edit: "Редактировать",
             home: "Home",
             incorrectLoginOrPassword: "Неправильный логин или пароль !",

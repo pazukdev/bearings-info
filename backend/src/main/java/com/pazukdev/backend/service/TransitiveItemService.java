@@ -8,7 +8,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import java.util.List;
 
 import static com.pazukdev.backend.util.CategoryUtil.isInfo;
 
@@ -37,7 +37,7 @@ public class TransitiveItemService extends AbstractService<TransitiveItem, Trans
         return transitiveItemRepository.findFirstByCategoryAndName(category, name);
     }
 
-    public boolean isPart(String parameter, final Set<String> infoCategories) {
+    public boolean isPart(String parameter, final List<String> infoCategories) {
         if (isInfo(parameter, infoCategories)) {
             return false;
         }

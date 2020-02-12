@@ -133,7 +133,7 @@ public class ItemUtil {
 
     public static TransitiveItemDescriptionMap createDescriptionMap(final TransitiveItem item,
                                                                     final TransitiveItemService service,
-                                                                    final Set<String> infoCategories) {
+                                                                    final List<String> infoCategories) {
         final Map<String, String> unsortedMap = toMap(item.getDescription());
         final TransitiveItemDescriptionMap itemDescriptionMap = new TransitiveItemDescriptionMap();
         itemDescriptionMap.setParent(item);
@@ -227,7 +227,7 @@ public class ItemUtil {
                                                 final String newCategory,
                                                 final String newName,
                                                 final List<Item> allItems,
-                                                final Set<String> infoCategories,
+                                                final List<String> infoCategories,
                                                 final ItemService service) {
         final String oldName = item.getName();
         final String oldCategory = item.getCategory();
@@ -287,7 +287,7 @@ public class ItemUtil {
         }
 
         if (renameCategory) {
-            final Set<String> textLines = getTxtFileLines(getTxtFilePath(FileName.COMMENTS));
+            final List<String> textLines = getTxtFileTextLines(getTxtFilePath(FileName.COMMENTS));
             for (final String line : new HashSet<>(textLines)) {
                 if (line.split("=")[0].equalsIgnoreCase(oldCategory)) {
                     textLines.remove(line);
@@ -298,7 +298,7 @@ public class ItemUtil {
         }
 
         if (renameCategory && infoItem) {
-            final Set<String> textLines = getTxtFileLines(getTxtFilePath(FileName.INFO_CATEGORIES));
+            final List<String> textLines = getTxtFileTextLines(getTxtFilePath(FileName.INFO_CATEGORIES));
             for (final String line : new HashSet<>(textLines)) {
                 if (line.equalsIgnoreCase(oldCategory)) {
                     textLines.remove(line);

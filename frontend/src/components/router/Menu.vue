@@ -12,8 +12,8 @@
             </tr>
             <tr>
                 <td>
-                    <a :href="getDownloadUrl('dictionary')" class="button" download="dictionary.txt">
-                        {{$t("downloadDictionary")}}
+                    <a :href="getDictionaryDownloadUrl('dictionary')" class="button" download="dictionary.txt">
+                        {{translate("Download dictionary")}}
                     </a>
                 </td>
             </tr>
@@ -86,6 +86,8 @@
     import routerUtil from "../../util/routerUtil";
     import shared from "../../util/shared";
     import DefaultButton from "../element/button/DefaultButton";
+    import dictionaryUtil from "../../util/dictionaryUtil";
+    import axiosUtil from "../../util/axiosUtil";
 
     export default {
         name: "Menu",
@@ -94,7 +96,9 @@
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 userName: state => state.dictionary.userName,
-                itemView: state => state.dictionary.itemView
+                itemView: state => state.dictionary.itemView,
+                appLanguage: state => state.dictionary.appLanguage,
+                langs: state => state.dictionary.langs
             })
         },
 
@@ -115,6 +119,11 @@
 
             openUsersList() {
                 routerUtil.toUserList();
+            },
+
+            getDictionaryDownloadUrl(fileName) {
+                let lang = this.appLanguage.toString() === "en" ? "ru" : this.appLanguage;
+                return this.basicUrl + "/file/" + fileName + "_" + lang + "/download";
             },
 
             getDownloadUrl(fileName) {
@@ -156,13 +165,16 @@
             },
 
             refresh() {
-                routerUtil.refresh();
+                let message = this.uploadMessage;
+                if (!this.isEmpty(message) && message.includes("New language added: ")) {
+                    let newLang = message.split(": ")[1];
+                    routerUtil.setLang(newLang);
+                }
+                axiosUtil.setLangsAndDictionary();
+                this.uploadMessage = "";
             },
 
             isRefreshButtonVisible() {
-                if (this.$i18n.locale === "en") {
-                    return false;
-                }
                 return !this.isEmpty(this.uploadMessage) && !this.uploadMessage.toLowerCase().includes('not accepted');
             },
 
@@ -174,6 +186,10 @@
 
             isEmpty(message) {
                 return shared.isEmpty(message);
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

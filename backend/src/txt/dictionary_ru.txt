@@ -103,6 +103,7 @@ ru=for final drive=для редуктора
 ru=for gearbox=для КПП
 ru=for=для
 ru=fork inner diameter=внутренний диаметр вилки
+ru=found=найдено
 ru=founded=основано
 ru=foundry tin bronzes=бронзы оловянные литейные
 ru=front fork=передняя вилка
@@ -256,3 +257,4 @@ ru=width=ширина
 ru=wire=провод
 ru=wrought aluminium and aluminium alloys=алюминий и сплавы алюминиевые деформируемые
 ru=your wishlist=ваш список желаемого
+ru=download dictionary=скачать словарь

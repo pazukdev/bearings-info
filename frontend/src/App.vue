@@ -17,6 +17,9 @@
 <!--                {{"itemView: " + itemView}}<br>-->
             </div>
             <div>
+                {{langs}}<br>
+                {{appLanguage}}<br>
+                {{dictionary[0]}}
                 <LangMenu/>
                 <NavigationBar/>
                 <MessagesSection/>
@@ -68,6 +71,7 @@
                 userStatus: state => state.dictionary.userStatus,
                 appLanguage: state => state.dictionary.appLanguage,
                 langs: state => state.dictionary.langs,
+                dictionary: state => state.dictionary.dictionary,
                 errorMessage: state => state.dictionary.errorMessage,
                 loginMessage: state => state.dictionary.loginMessage
             })

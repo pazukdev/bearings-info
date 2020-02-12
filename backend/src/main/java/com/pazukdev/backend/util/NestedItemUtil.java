@@ -100,7 +100,7 @@ public class NestedItemUtil {
     public static void addPossiblePartsAndReplacers(final ItemView view,
                                                     final List<Item> allItems,
                                                     final Item parent,
-                                                    final Set<String> infoCategories,
+                                                    final List<String> infoCategories,
                                                     final ItemService itemService) {
         final UserService userService = itemService.getUserService();
 

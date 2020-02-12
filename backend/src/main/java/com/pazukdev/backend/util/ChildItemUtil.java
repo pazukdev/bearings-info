@@ -19,7 +19,7 @@ public class ChildItemUtil {
                                               final Map<String, String> childItemsDescription,
                                               final ItemService itemService,
                                               final TransitiveItemService transitiveItemService,
-                                              final Set<String> infoCategories) {
+                                              final List<String> infoCategories) {
         final List<ChildItem> childItems = new ArrayList<>();
         for (final Map.Entry<String, String> entry : childItemsDescription.entrySet()) {
             final String category = entry.getKey();
@@ -72,7 +72,7 @@ public class ChildItemUtil {
                                          final String category,
                                          final ItemService itemService,
                                          final TransitiveItemService transitiveItemService,
-                                         final Set<String> infoCategories) {
+                                         final List<String> infoCategories) {
         String name;
         String location = "";
         String quantity;

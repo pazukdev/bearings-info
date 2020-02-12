@@ -22,7 +22,7 @@ public class ReplacerUtil {
     public static List<Replacer> createReplacers(final TransitiveItem transitiveItem,
                                                  final ItemService itemService,
                                                  final TransitiveItemService transitiveItemService,
-                                                 final Set<String> infoCategories) {
+                                                 final List<String> infoCategories) {
         final List<Replacer> replacers = new ArrayList<>();
         final String replacersSourceString = transitiveItem.getReplacer();
         if (isEmpty(replacersSourceString)) {

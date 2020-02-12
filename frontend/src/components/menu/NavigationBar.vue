@@ -32,7 +32,7 @@
                     </td>
                     <td>
                         <router-link :to="{name: 'items_management'}" active-class="active">
-                            {{$t('appData')}}
+                            {{translate("App data")}}
                         </router-link>
                     </td>
                     <td>
@@ -51,6 +51,7 @@
     import {mapState} from "vuex";
     import DefaultButton from "../element/button/DefaultButton";
     import routerUtil from "../../util/routerUtil";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "NavigationBar",
@@ -92,6 +93,10 @@
 
             isGuest() {
                 return itemViewUtil.isGuest(this.userName);
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

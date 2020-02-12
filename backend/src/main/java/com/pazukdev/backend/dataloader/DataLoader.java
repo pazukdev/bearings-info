@@ -20,10 +20,9 @@ import org.springframework.stereotype.Component;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.pazukdev.backend.util.FileUtil.FileName;
-import static com.pazukdev.backend.util.FileUtil.getTxtFileLines;
+import static com.pazukdev.backend.util.FileUtil.getTxtFileTextLines;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -52,7 +51,7 @@ public class DataLoader implements ApplicationRunner {
         final long start = System.nanoTime();
         final String startTime = LocalTime.now().toString();
 
-        final Set<String> infoCategories = getTxtFileLines(FileName.INFO_CATEGORIES);
+        final List<String> infoCategories = getTxtFileTextLines(FileName.INFO_CATEGORIES);
 
         createDefaultUsers();
         createTransitiveItems();
@@ -102,7 +101,7 @@ public class DataLoader implements ApplicationRunner {
         createStubReplacers(transitiveItems);
     }
 
-    private void createItems(final Set<String> infoCategories) {
+    private void createItems(final List<String> infoCategories) {
         for (final TransitiveItem transitiveItem : transitiveItemService.findAll()) {
             itemService.create(transitiveItem, infoCategories);
         }

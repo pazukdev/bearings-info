@@ -2,6 +2,7 @@ import axios from "axios";
 import routerUtil from "./routerUtil";
 import store from "../plugins/store";
 import itemViewUtil from "./itemViewUtil";
+import storeUtil from "./storeUtil";
 
 export default {
     loginAsGuest(basicUrl, toHome) {
@@ -50,19 +51,23 @@ export default {
             });
     },
 
-    setSupportedLangs(basicUrl, authorization) {
+    setLangsAndDictionary() {
         axios
-            .get(basicUrl
-                + "/" + "app-settings"
-                + "/" + "langs", {
+            .get(store.getters.basicUrl
+                + "/" + "file"
+                + "/" + "dictionary-data"
+                + "/" + store.getters.appLanguage, {
                 headers: {
-                    Authorization: authorization
+                    Authorization: store.getters.authorization
                 }
             })
             .then(response => {
-                let langs = response.data;
+                let dictionaryData = response.data;
+                let langs = dictionaryData.langs;
+
                 console.log("got langs: " + langs);
-                store.dispatch("setLangs", langs);
+                storeUtil.setLangs(langs);
+                storeUtil.setDictionary(dictionaryData.dictionary);
             });
     },
 

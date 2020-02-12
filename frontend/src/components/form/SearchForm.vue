@@ -4,12 +4,12 @@
             <tbody>
             <tr v-if="!editMode && !usageView">
                 <td>
-                    <input type="search" v-model="filter" @input="onChange" placeholder="Search...">
+                    <input type="search" v-model="filter" @input="onChange" :placeholder="translate('Search') + '...'">
                 </td>
             </tr>
             <tr style="text-align: left">
                 <td>
-                    {{"Found: " + itemsCount}}
+                    {{translate("Found") + ": " + itemsCount}}
                 </td>
             </tr>
             </tbody>
@@ -19,6 +19,7 @@
 
 <script>
     import {mapState} from "vuex";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "SearchForm",
@@ -30,7 +31,8 @@
 
         computed: {
             ...mapState({
-                editMode: state => state.dictionary.editMode
+                editMode: state => state.dictionary.editMode,
+                itemView: state => state.dictionary.itemView
             })
         },
 
@@ -43,6 +45,10 @@
         methods: {
             onChange() {
                 this.$emit('get-filter', this.filter);
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

@@ -10,7 +10,7 @@
                 </td>
                 <td>
                     <button @click="loginAsGuest()">
-                        {{$t('continueAsGuest')}}
+                        {{translate("Continue as guest")}}
                     </button>
                 </td>
             </tr>
@@ -84,6 +84,7 @@
     import {mapState} from 'vuex';
     import AlertMessagesSection from "../AlertMessagesSection";
     import routerUtil from "../../util/routerUtil";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         components: {AlertMessagesSection},
@@ -109,6 +110,10 @@
         },
 
         methods: {
+            translate(text) {
+                return dictionaryUtil.translate(text);
+            },
+
             performLoginPageAction: function (e) {
                 e.preventDefault();
                 if (this.isLogin) {

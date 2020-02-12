@@ -3,8 +3,8 @@ package com.pazukdev.backend.util;
 import com.pazukdev.backend.entity.Item;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.pazukdev.backend.util.AppCollectionUtil.contains;
 import static com.pazukdev.backend.util.CategoryUtil.Category.*;
@@ -13,7 +13,7 @@ import static com.pazukdev.backend.util.CategoryUtil.Parameter.DescriptionIgnore
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.DescriptionIgnored.NAME;
 import static com.pazukdev.backend.util.ClassUtil.getFieldsValues;
 import static com.pazukdev.backend.util.FileUtil.FileName.INFO_CATEGORIES;
-import static com.pazukdev.backend.util.FileUtil.getTxtFileLines;
+import static com.pazukdev.backend.util.FileUtil.getTxtFileTextLines;
 import static com.pazukdev.backend.util.ItemUtil.getValueFromDescription;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 
@@ -107,7 +107,7 @@ public class CategoryUtil {
         put(OUTER_SHIELD_MATERIAL, 28);
     }};
 
-    public static String getItemsManagementComment(final Item item, final Set<String> comments) {
+    public static String getItemsManagementComment(final Item item, final List<String> comments) {
         if (item == null || comments == null) {
             return null;
         }
@@ -172,7 +172,7 @@ public class CategoryUtil {
         return category.equalsIgnoreCase(SEAL) || category.equalsIgnoreCase(SPARK_PLUG);
     }
 
-    public static boolean isInfo(final String category, final Set<String> infoCategories) {
+    public static boolean isInfo(final String category, final List<String> infoCategories) {
         if (category == null || infoCategories == null) {
             return false;
         }
@@ -183,12 +183,12 @@ public class CategoryUtil {
         return contains(getFieldsValues(DescriptionIgnored.class), parameter);
     }
 
-    public static boolean isPart(String category, final Set<String> infoCategories) {
+    public static boolean isPart(String category, final List<String> infoCategories) {
         return !isInfo(category, infoCategories);
     }
 
-    public static Set<String> getInfoCategories() {
-        return getTxtFileLines(INFO_CATEGORIES);
+    public static List<String> getInfoCategories() {
+        return getTxtFileTextLines(INFO_CATEGORIES);
     }
 
     public static String getCategory(final String param) {
