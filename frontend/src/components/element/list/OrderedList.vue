@@ -15,7 +15,7 @@
     import dictionaryUtil from "../../../util/dictionaryUtil";
 
     export default {
-        name: "UnsortedList",
+        name: "OrderedList",
 
         props: {
             name:String,

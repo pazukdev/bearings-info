@@ -1,16 +1,16 @@
 <template>
     <div>
-        <UnsortedList :name="name" :list="list"/>
+        <OrderedList :name="name" :list="list"/>
     </div>
 </template>
 
 <script>
-    import UnsortedList from "../element/list/UnsortedList";
+    import OrderedList from "../element/list/OrderedList";
 
     export default {
         name: "PrivacyPolicy",
 
-        components: {UnsortedList},
+        components: {OrderedList},
 
         data() {
             return {

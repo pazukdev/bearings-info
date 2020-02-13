@@ -60,7 +60,7 @@
             </tr>
             </tbody>
         </table>
-        <hr>
+        <div class="default-margin"><hr></div>
     </div>
 </template>
 

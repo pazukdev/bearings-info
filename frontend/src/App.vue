@@ -147,11 +147,19 @@
     }
 
     #screen::-webkit-scrollbar {
-        /*display: none;*/
+        display: none;
     }
 
     label, #screen {
         color: grey;
+    }
+
+    @media only screen and (max-width: 1640px) {
+        #screen {
+            border-radius: initial;
+            width: 40%;
+            height: 100%;
+        }
     }
 
     @media only screen and (max-width: 1280px) {
