@@ -75,6 +75,7 @@
     import shared from "../../util/shared";
     import arrayUtil from "../../util/arrayUtil";
     import SearchForm from "../form/SearchForm";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "ItemList",
@@ -154,7 +155,7 @@
                         }
                         let childTables = itemViewUtil.itemsListToTables(vehicles, true, this.filter, opened).tables;
                         let parentTable = {
-                            name: !shared.isEmpty(category) ? category : "Other",
+                            name: !shared.isEmpty(category) ? category : this.translate("Not specified"),
                             manufacturers: childTables,
                             opened: vehicleClasses[i] === "Motorcycle"
                         };
@@ -194,6 +195,10 @@
 
             getFilter(filter) {
                 this.filter = filter;
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

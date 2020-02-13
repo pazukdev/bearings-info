@@ -1,38 +1,35 @@
 <template>
     <div>
         <details class="default-margin" style="text-align: center" open>
-            <summary>{{"News"}}</summary>
-
-<!--                        {{itemView.adminMessage}}-->
-
-            <div v-if="!isEmpty(itemView.adminMessage) && !isEmpty(itemView.adminMessage.text)">
-                <p>{{itemView.adminMessage.text}}</p>
+            <summary>{{translate("News")}}</summary>
+            <div v-if="!isEmpty(itemView.adminMessage) && !isEmpty(itemView.adminMessage.localizedText)">
+                <p>{{itemView.adminMessage.localizedText}}</p>
                 <a class="simple-link" v-if="!isEmpty(itemView.adminMessage.link)"
                    :href="itemView.adminMessage.link">{{getLinkText(itemView.adminMessage)}}</a>
             </div>
 
             <details v-if="isAdmin()" class="default-margin">
-                <summary>{{"Publish message"}}</summary>
+                <summary>{{translate('Publish message')}}</summary>
                 <table>
                     <tbody>
                     <tr>
                         <td>
-                            <input v-model="adminMessage.text" type="text" placeholder="Message text"/>
+                            <input v-model="adminMessage.text" type="text" :placeholder="translate('Message text')"/>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input v-model="adminMessage.link" type="text" placeholder="Link"/>
+                            <input v-model="adminMessage.link" type="text" :placeholder="translate('Link')"/>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input v-model="adminMessage.linkText" type="text" placeholder="Link text"/>
+                            <input v-model="adminMessage.linkText" type="text" :placeholder="translate('Link text')"/>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <DefaultButton :text="'Publish'" @on-click="publishMessage()"/>
+                            <DefaultButton :text="translate('Publish')" @on-click="publishMessage()"/>
                         </td>
                     </tr>
                     </tbody>
@@ -52,6 +49,7 @@
     import itemViewUtil from "../util/itemViewUtil";
     import shared from "../util/shared";
     import LastUserActions from "./LastUserActions";
+    import dictionaryUtil from "../util/dictionaryUtil";
 
     export default {
         name: "NewsSection",
@@ -100,6 +98,10 @@
 
             getLinkText(source) {
                 return !this.isEmpty(source.linkText) ? source.linkText : source.link;
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

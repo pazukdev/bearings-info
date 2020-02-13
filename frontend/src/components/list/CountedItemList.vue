@@ -1,20 +1,21 @@
 <template>
     <div>
         <SearchForm :items-count="itemsCount" @get-filter="getFilter"/>
-        <table id="parts-table">
+        <table>
             <tbody>
             <tr v-for="table in itemsListAsTables()" v-if="!hideTable(table)">
                 <td>
                     <v-details v-model="table.opened" v-if="isAdmin() || table.name !== 'deleted'">
                         <summary><b>{{table.name}}</b></summary>
-
                         <table>
                             <tbody>
                             <tr v-for="item in table.items">
-                                <!--                                {{item}}-->
                                 <td class="three-column-table-left-column">
-                                    <p class="three-column-table-left-column-text" v-if="!isEdit()">
+                                    <p class="three-column-table-left-column-text" v-if="!isEdit() && !translateComments">
                                         {{item.comment}}
+                                    </p>
+                                    <p class="three-column-table-left-column-text" v-if="!isEdit() && translateComments">
+                                        {{translate(item.comment)}}
                                     </p>
                                     <input v-if="isEdit()" v-model="item.comment" type="text"/>
                                 </td>
@@ -26,6 +27,7 @@
                                         {{item.secondComment}}
                                     </p>
                                     <input v-if="isEdit()" v-model="item.secondComment" type="text"
+                                           required
                                            pattern="[0-9\\.]*"
                                            title="Allowed: numbers, dot"/>
                                 </td>
@@ -54,6 +56,7 @@
     import ItemDescription from "./section/ItemDescription";
     import EditableImg from "../EditableImg";
     import SearchForm from "../form/SearchForm";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "CountedItemList",
@@ -71,6 +74,7 @@
             item: Boolean,
             editableComments: Boolean,
             userListView: Boolean,
+            translateComments:Boolean,
             summaryView: Boolean,
             wishListView: Boolean,
             itemViewProp: Object,
@@ -137,6 +141,10 @@
 
             getFilter(filter) {
                 this.filter = filter;
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

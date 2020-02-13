@@ -76,13 +76,15 @@ public class ItemViewFactory {
 
         ItemView view;
 
+        boolean userListView = itemId.equals(USER_LIST_VIEW.getItemId());
+
         if (itemId.equals(WISH_LIST_VIEW.getItemId())) {
             view = createWishListView(basicView, wishList, userService);
         } else if (itemId.equals(MOTORCYCLE_CATALOGUE_VIEW.getItemId())) {
             view = createVehicleView(basicView, userService);
         } else if (itemId.equals(ITEMS_MANAGEMENT_VIEW.getItemId())) {
             view = createItemsManagementView(basicView);
-        } else if (itemId.equals(USER_LIST_VIEW.getItemId())) {
+        } else if (userListView) {
             view = createUsersListView(basicView, userService);
         } else {
             view = createOrdinaryItemView(basicView, itemId, currentUser, userService);
@@ -91,7 +93,7 @@ public class ItemViewFactory {
         final double businessLogicEndTime = System.nanoTime();
         final double businessLogicDuration = businessLogicEndTime - businessLogicStartTime;
 
-        if (!userLang.equals("en")) {
+        if (!userLang.equals("en") && !userListView) {
             try {
                 translate("en", userLang, view, false);
             } catch (Exception e) {

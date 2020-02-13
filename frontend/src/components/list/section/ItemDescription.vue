@@ -46,13 +46,15 @@
             </tr>
             <tr v-if="isEdit()">
                 <td>
-                    <input v-model="parameter" type="text"/>
+                    <input v-model="parameter" type="text" pattern="[a-zA-Zа-яА-Я0-9_\\. ,/-]*"
+                           title="Allowed: letters, numbers, - , _ , / , dot, comma, space"/>
                 </td>
                 <td>
-                    <input v-model="value" type="text"/>
+                    <input v-model="value" type="text" pattern="[a-zA-Zа-яА-Я0-9_\\. ;,/-]*"
+                           title="Allowed: letters, numbers, - , _ , / , ; , dot, comma, space"/>
                 </td>
                 <td>
-                    <ButtonAdd @add-item="addHeaderRow"/>
+                    <ButtonAdd v-if="!isEmpty(parameter) && !isEmpty(value)" @add-item="addHeaderRow"/>
                 </td>
             </tr>
             </tbody>

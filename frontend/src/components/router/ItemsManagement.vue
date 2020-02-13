@@ -64,7 +64,7 @@
                         + "/" + "view"
                         + "/" + "items-management"
                         + "/" + this.userName
-                        + "/" + this.$i18n.locale, {
+                        + "/" + this.appLanguage, {
                         headers: {
                             Authorization: this.authorization
                         }

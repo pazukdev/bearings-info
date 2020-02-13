@@ -1,10 +1,5 @@
 <template>
     <div v-if="isViewWithImage()" id="img-container">
-<!--        {{"itemView.defaultImg: " + isEmpty(itemView.defaultImg) + ": "}}-->
-<!--        {{itemView.defaultImg}}<br>-->
-<!--        {{"itemView.img: " + isEmpty(itemView.img) + ": "}}-->
-<!--        {{itemView.img}}-->
-
         <table>
             <tbody>
             <tr v-if="isImgRendered()">
@@ -22,14 +17,14 @@
             <tr v-if="!isEmpty(itemView.img) && !messagesContain('img removed')">
                 <td>
                     <button id="remove-img-button" type="button" @click="removeImg()">
-                        {{"Remove image"}}
+                        {{translate("Remove image")}}
                     </button>
                 </td>
             </tr>
             <tr>
                 <td>
                     <br>
-                    {{"Input new image link"}}
+                    {{translate("Image link")}}
                     <br>
                 </td>
             </tr>
@@ -41,13 +36,13 @@
             <tr v-if="imgFileUploadEnabled()">
                 <td>
                     <br>
-                    {{"or upload file (accepts .png, size limit 2MB)"}}
+                    {{translate("or upload file (accepts .png, size limit 2MB)")}}
                     <br>
                 </td>
             </tr>
             <tr class="alert-message" v-if="imgFileUploadEnabled()">
                 <td>
-                    {{fileUploadMessage}}
+                    {{translate(fileUploadMessage)}}
                 </td>
             </tr>
             <tr v-if="imgFileUploadEnabled()">
@@ -66,6 +61,7 @@
     import {mapState} from "vuex";
     import shared from "../util/shared";
     import routerUtil from "../util/routerUtil";
+    import dictionaryUtil from "../util/dictionaryUtil";
 
     export default {
         name: "EditableImg",
@@ -159,6 +155,10 @@
                     };
                     reader.readAsDataURL(file);
                 }
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

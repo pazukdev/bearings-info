@@ -8,23 +8,23 @@
                 <Header :item="true"/>
 
                 <details v-if="arrayIsRendered(itemView.children)" open>
-                    <summary>{{"Parts"}}</summary>
+                    <summary>{{translate("Units / parts")}}</summary>
                     <PartsSection/>
                 </details>
 
                 <details v-if="arrayIsRendered(itemView.replacersTable.replacers)" open>
-                    <summary>{{"Replacers"}}</summary>
+                    <summary>{{translate("Replacers")}}</summary>
                     <ReplacersSection/>
                 </details>
             </form>
 
             <details v-if="arrayIsRendered(itemView.allChildren)">
-                <summary>{{"All parts"}}</summary>
+                <summary>{{translate("All units / parts")}}</summary>
                 <ItemSummary/>
             </details>
 
             <details v-if="arrayIsRendered(itemView.parents.children)">
-                <summary>{{"Usage"}}</summary>
+                <summary>{{translate("Usage")}}</summary>
                 <Usage/>
             </details>
         </div>
@@ -49,6 +49,7 @@
     import shared from "../../util/shared";
     import storeUtil from "../../util/storeUtil";
     import axiosUtil from "../../util/axiosUtil";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
 
@@ -183,6 +184,10 @@
 
             isLoading() {
                 return shared.isLoading(this.loadingState);
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

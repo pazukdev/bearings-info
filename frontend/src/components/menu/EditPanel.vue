@@ -8,26 +8,25 @@
                             type="button"
                             style="background: darkgreen"
                             @click="cancel()">
-                        {{$t("cancel")}}
+                        {{translate("Cancel")}}
                     </button>
                 </td>
                 <td class="two-column-table-right-column">
                     <button v-if="!editMode"
                             type="button"
                             @click="edit()">
-                        {{$t("edit")}}
+                        {{translate("Edit")}}
                     </button>
                     <button id="save-button" v-if="isSaveButtonRendered() && !userForm && !itemForm"
                             type="button"
                             style="background: red"
                             @click="save()">
-                        {{"123"}}
-<!--                        {{$t("save")}}-->
+                        {{translate('Save')}}
                     </button>
                     <input class="submit" v-if="isSaveButtonRendered() && userForm"
-                           type="submit" form="user-form" :value="$t('save')"/>
+                           type="submit" form="user-form" :value="translate('Save')"/>
                     <input class="submit" v-if="isSaveButtonRendered() && itemForm"
-                           type="submit" form="item-form" :value="$t('save')"/>
+                           type="submit" form="item-form" :value="translate('Save')"/>
                 </td>
                 <td>
                     <ButtonAdd v-if="editMode" style="visibility: hidden"/>
@@ -44,6 +43,7 @@
     import itemViewUtil from "../../util/itemViewUtil";
     import ButtonAdd from "../element/button/ButtonAdd";
     import routerUtil from "../../util/routerUtil";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "EditPanel",
@@ -88,6 +88,10 @@
 
             isGuest() {
                 return itemViewUtil.isGuest(this.userName);
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

@@ -5,7 +5,7 @@
             <tr>
                 <td>
                     <button @click="switchForm()">
-                        {{buttonReverseName()}}
+                        {{translate(buttonReverseName())}}
                     </button>
                 </td>
                 <td>
@@ -19,8 +19,8 @@
 
         <form id="login-form" @submit="performLoginPageAction">
             <div v-if="itemView.userData.message !== null" class="alert-message">
-                {{itemView.userData.message.text}}<br>
-                {{itemView.userData.message.contact}}
+                {{translate(itemView.userData.message.text)}}<br>
+                {{translate(itemView.userData.message.contact)}}
             </div>
             <table>
                 <tbody>
@@ -28,8 +28,8 @@
                     <td>
                         <label>{{"Nickname"}}
                             <input type="text" name="username" v-model="name" required
-                                   pattern="[a-zA-Z0-9_ \\-]{4,14}"
-                                   :title="$t('nameAndPasswordInputLabel')"/>
+                                   pattern="[a-zA-Z0-9_ \\-]{2,26}"
+                                   :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
                         </label>
                     </td>
                 </tr>
@@ -42,30 +42,30 @@
                 </tr>
                 <tr>
                     <td>
-                        <label>{{$t('password')}}
+                        <label>{{translate("Password")}}
                             <input type="password" name="password" v-model="password" required
-                                   pattern="[a-zA-Z0-9_ \\-]{4,14}"
-                                   :title="$t('nameAndPasswordInputLabel')"/>
+                                   pattern="[a-zA-Z0-9_ \\-]{2,26}"
+                                   :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
                         </label>
                     </td>
                 </tr>
                 <tr v-if="!isLogin">
                     <td>
-                        <label>{{$t("repeatPassword")}}
+                        <label>{{translate("Repeat password")}}
                             <input type="password" v-model="repeatedPassword" required
-                                   pattern="[a-zA-Z0-9_ \\-]{4,14}"
-                                   :title="$t('nameAndPasswordInputLabel')"/>
+                                   pattern="[a-zA-Z0-9_ \\-]{2,26}"
+                                   :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
                         </label>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <input id="submit-login-form" type="submit" :value="buttonName()">
+                        <input id="submit-login-form" type="submit" :value="translate(buttonName())">
                     </td>
                 </tr>
                 <tr v-if="incorrectCredentials" class="warning-message">
                     <td class="alert-message">
-                        {{getIncorrectLoginOrPasswordMessage()}}
+                        {{translate("Incorrect login or password!")}}
                     </td>
                 </tr>
                 <tr>
@@ -76,6 +76,12 @@
                 </tbody>
             </table>
         </form>
+
+        <details class="default-margin" style="text-align: center">
+            <summary style="text-align: center">{{translate("Forgot password?")}}</summary>
+            {{translate("Password change via email is temporarily not available")}}<br>
+            {{translate("Contact us by email: pazukdev@gmail.com")}}
+        </details>
     </div>
 </template>
 
@@ -176,11 +182,11 @@
             },
 
             buttonName() {
-                return this.isLogin ? this.$t("loginButton") : this.$t("signUp");
+                return this.isLogin ? "Login" : "Sign up";
             },
 
             buttonReverseName() {
-                return this.isLogin ? this.$t("signUp") : this.$t("loginButton");
+                return this.isLogin ? "Sign up" : "Login";
             },
 
             resetData() {
@@ -198,10 +204,6 @@
 
             setIncorrectCredentials(incorrectCredentials) {
                 this.$store.dispatch("setIncorrectCredentials", incorrectCredentials);
-            },
-
-            getIncorrectLoginOrPasswordMessage() {
-                return this.$t("incorrectLoginOrPassword");
             }
         }
     }

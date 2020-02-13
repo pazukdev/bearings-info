@@ -1,33 +1,17 @@
 <template>
     <div v-if="!isLoginPage()">
-        <table v-if="buttonStyle" style="margin-bottom: 20px" class="equal-columns-table">
-            <tbody>
-                <tr>
-                    <td>
-                        <DefaultButton @on-click="goHome" :text="$t('home')"/>
-                    </td>
-                    <td>
-                        <DefaultButton @on-click="openItemsManagement" :text="$t('appData')"/>
-                    </td>
-                    <td>
-                        <DefaultButton v-if="!isGuest()" @on-click="showCurrentUserProfile()" :text="$t('myProfile')"/>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
         <table v-if="!buttonStyle" style="margin-bottom: 20px" class="equal-columns-table">
             <tbody>
                 <tr>
                     <td>
                         <router-link :to="{name: 'home'}" active-class="active">
-                            {{$t('home')}}
+                            {{translate("Home")}}
                         </router-link>
                     </td>
                     <td>
                         <router-link :to="{name: 'wish_list', params: {lang: appLanguage}}"
                                      active-class="active" v-if="!isGuest()">
-                            {{$t("wishlist") + ": " + itemView.wishListIds.length}}
+                            {{translate("Wishlist") + ": " + itemView.wishListIds.length}}
                         </router-link>
                     </td>
                     <td>
@@ -37,7 +21,7 @@
                     </td>
                     <td>
                         <router-link :to="{name: 'menu'}" active-class="active" v-if="!isGuest()">
-                            {{$t("menu")}}
+                            {{translate("Menu")}}
                         </router-link>
                     </td>
                 </tr>

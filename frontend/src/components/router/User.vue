@@ -8,36 +8,36 @@
             <AlertMessagesSection :messages="validationMessages"/>
             <form id="user-form" @submit="submit">
                 <v-details v-if="editMode" v-model="changePasswordOpened">
-                    <summary class="default-margin">{{"Change password"}}</summary>
+                    <summary class="default-margin">{{translate("Change password")}}</summary>
                     <table class="equal-columns-table">
                         <tbody>
                         <tr>
                             <td colspan="2" style="text-align: center">
-                                {{"To change password input your old password"}}
+                                {{translate("To change password input your old password")}}
                             </td>
                         </tr>
                         <tr>
-                            <td>{{"Old password"}}</td>
+                            <td>{{translate("Old password")}}</td>
                             <td>
                                 <input type="password" v-model="user.oldPassword"
-                                       pattern="[a-zA-Z0-9_ \\-]{4,14}"
-                                       :title="$t('nameAndPasswordInputLabel')"/>
+                                       pattern="[a-zA-Z0-9_ \\-]{2,26}"
+                                       :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
                             </td>
                         </tr>
                         <tr v-if="!isEmpty(user.oldPassword)">
-                            <td>{{"New password"}}</td>
+                            <td>{{translate("New password")}}</td>
                             <td>
                                 <input type="password" v-model="user.newPassword" required
-                                       pattern="[a-zA-Z0-9_ \\-]{4,14}"
-                                       :title="$t('nameAndPasswordInputLabel')"/>
+                                       pattern="[a-zA-Z0-9_ \\-]{2,26}"
+                                       :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
                             </td>
                         </tr>
                         <tr v-if="!isEmpty(user.newPassword)">
-                            <td>{{"Repeat new password"}}</td>
+                            <td>{{translate("Repeat new password")}}</td>
                             <td>
                                 <input type="password" v-model="user.repeatedNewPassword" required
-                                       pattern="[a-zA-Z0-9_ \\-]{4,14}"
-                                       :title="$t('nameAndPasswordInputLabel')"/>
+                                       pattern="[a-zA-Z0-9_ \\-]{2,26}"
+                                       :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
                             </td>
                         </tr>
                         </tbody>
@@ -46,23 +46,23 @@
                 <table class="equal-columns-table">
                     <tbody>
                     <tr>
-                        <td>{{"Nickname"}}</td>
+                        <td>{{translate("Nickname")}}</td>
                         <td>
                             <p v-if="!editMode">{{user.name}}</p>
                             <input v-if="editMode" v-model="user.name" type="text" required
-                                   pattern="[a-zA-Z][a-zA-Z0-9 _-]{1,28}[a-zA-Z0-9_-]"
-                                   :title="$t('nameAndPasswordInputLabel')"/>
+                                   pattern="[a-zA-Z0-9_ \\-]{2,26}"
+                                   :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
                         </td>
                     </tr>
                     <tr>
-                        <td>{{"Email"}}</td>
+                        <td>{{translate("Email")}}</td>
                         <td>
                             <p v-if="!editMode">{{user.email}}</p>
                             <input v-if="editMode" id="email" type="email" v-model="user.email" required/>
                         </td>
                     </tr>
                     <tr>
-                        <td>{{"Role"}}</td>
+                        <td>{{translate("Role")}}</td>
                         <td>
                             <p v-if="!isRoleSelectRendered()">{{user.role}}</p>
                             <select v-if="isRoleSelectRendered()" v-model="user.role">
@@ -73,21 +73,21 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>{{"Country"}}</td>
+                        <td>{{translate("Country")}}</td>
                         <td>
                             <p v-if="!editMode">{{countryName}}</p>
                             <select v-if="editMode" v-model="user.country">
                                 <option v-for="country in countries" :value="country.alpha2Code">
-                                    {{country.name}}
+                                    {{translate(country.name)}}
                                 </option>
                             </select>
                         </td>
                     </tr>
-                    <tr><td>{{"Rating"}}</td><td>{{user.rating}}</td></tr>
+                    <tr><td>{{translate("Rating")}}</td><td>{{user.rating}}</td></tr>
                     <tr v-if="editMode">
                         <td/>
                         <td>
-                            <DefaultButton id="user-delete" :text="'Delete profile'" :color="'red'"
+                            <DefaultButton id="user-delete" :text="translate('Delete profile')" :color="'red'"
                                            @on-click="openUserDeleteDialog('delete')"/>
                         </td>
                     </tr>
@@ -95,7 +95,7 @@
                         <td colspan="2">{{"Admin options"}}</td>
                     </tr>
                     <tr v-if="isAdmin()">
-                        <td>{{"Status"}}</td>
+                        <td>{{translate("Status")}}</td>
                         <td>
                             <p v-if="!editMode">{{user.status}}</p>
                             <select v-if="editMode" v-model="user.status">
@@ -108,7 +108,7 @@
                     <tr v-if="isAdmin() && editMode">
                         <td/>
                         <td>
-                            <DefaultButton id="user-hard-delete" :text="'Hard delete'" :color="'red'"
+                            <DefaultButton id="user-hard-delete" :text="translate('Hard delete')" :color="'red'"
                                            @on-click="openUserDeleteDialog('hard-delete')"/>
                         </td>
                     </tr>
@@ -117,13 +117,15 @@
 
                 <table v-if="!isEmpty(deleteOption)" style="text-align: center">
                     <tbody class="bordered">
-                    <tr><td colspan="2">{{"Confirm deletion"}}</td></tr>
+                    <tr><td colspan="2">{{translate("Confirm deletion")}}</td></tr>
                     <tr>
                         <td>
-                            <DefaultButton id="cancel-user-delete" :text="'Cancel'" @on-click="cancelUserDelete()"/>
+                            <DefaultButton id="cancel-user-delete" :text="translate('Cancel')"
+                                           @on-click="cancelUserDelete()"/>
                         </td>
                         <td>
-                            <DefaultButton id="confirm-user-delete" :text="'Confirm'" @on-click="confirmUserDelete()"/>
+                            <DefaultButton id="confirm-user-delete" :text="translate('Confirm')"
+                                           @on-click="confirmUserDelete()"/>
                         </td>
                     </tr>
                     </tbody>
@@ -147,6 +149,7 @@
     import userUtil from "../../util/userUtil";
     import shared from "../../util/shared";
     import LoadingScreen from "../special/LoadingScreen";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "User",
@@ -359,6 +362,10 @@
 
             isEmpty(value) {
                 return shared.isEmpty(value);
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

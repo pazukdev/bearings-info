@@ -1,8 +1,8 @@
 <template>
     <div v-if="editMode">
-        <p>{{"Add replacer"}}</p>
+        <p>{{translate("Add replacer")}}</p>
         <p v-if="showMessage" class="alert-message">
-            {{message}}
+            {{translate(message)}}
         </p>
         <table v-if="showAddForm">
             <tbody>
@@ -18,7 +18,7 @@
                             </td>
                             <td class="not-symmetrical-right"/>
                             <td>
-                                <ButtonAdd @add-item="addItem"/>
+                                <ButtonAdd v-if="!isEmpty(item)" @add-item="addItem"/>
                             </td>
                         </tr>
                         <tr>
@@ -40,6 +40,7 @@
     import {mapState} from "vuex";
     import shared from "../../util/shared";
     import ButtonAdd from "../element/button/ButtonAdd";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "AddReplacerForm",
@@ -85,7 +86,6 @@
             },
 
             addItem() {
-                // this.item.name = itemViewUtil.getItemName(this.itemView) + this.item.name;
                 this.item.comment = this.itemComment;
 
                 let newItem = this.item;
@@ -97,8 +97,15 @@
 
             itemSelectOnChange(selectedItem) {
                 this.item = selectedItem;
-            }
+            },
 
+            translate(text) {
+                return dictionaryUtil.translate(text);
+            },
+
+            isEmpty(value) {
+                return shared.isEmpty(value);
+            }
         }
     }
 </script>

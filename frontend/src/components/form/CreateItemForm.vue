@@ -1,18 +1,18 @@
 <template>
     <div v-if="!isGuest()" class="default-margin">
         <details>
-            <summary>{{$t("createNewItem")}}</summary>
+            <summary>{{translate("Create new item")}}</summary>
             <form id="create-item-form" @submit="submit">
                 <table>
                     <tbody>
-                    <tr><td colspan="2" class="alert-message">{{categoryMessage}}</td></tr>
-                    <tr><td colspan="2" class="alert-message">{{newItemNameMessage}}</td></tr>
+                    <tr><td colspan="2" class="alert-message">{{translate(categoryMessage)}}</td></tr>
+                    <tr><td colspan="2" class="alert-message">{{translate(newItemNameMessage)}}</td></tr>
                     <tr>
                         <td class="two-columns-table-left-column">
-                            {{$t("category")}}
+                            {{translate("category")}}
                         </td>
                         <td class="two-column-table-right-column">
-                            {{$t("name")}}
+                            {{translate("name")}}
                         </td>
                     </tr>
                     <tr>
@@ -20,8 +20,8 @@
                             <input type="text"
                                    required
                                    list="categories"
-                                   pattern="[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9 _-]{0,28}[a-zA-Zа-яА-Я0-9_-]"
-                                   :title="$t('defaultInputTitle')"
+                                   pattern="[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9 _-]{0,24}[a-zA-Zа-яА-Я0-9_-]"
+                                   :title="translate('Length: 2 - 26 characters: letters, numbers, - , _ , space')"
                                    @change="categorySelectOnChange()"
                                    v-model="newItemCategory"/>
                             <datalist id="categories">
@@ -33,15 +33,15 @@
                         <td>
                             <input type="text"
                                    required
-                                   pattern="[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9 _-]{0,28}[a-zA-Zа-яА-Я0-9_-]"
-                                   :title="$t('defaultInputTitle')"
+                                   pattern="[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9 _-]{0,24}[a-zA-Zа-яА-Я0-9_-]"
+                                   :title="translate('Length: 2 - 26 characters: letters, numbers, - , _ , space')"
                                    @change="newItemNameMessage = ''"
                                    v-model="newItemName"/>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <input type="submit" class="background-grey" :value="$t('create')"/>
+                            <input type="submit" class="background-grey" :value="translate('Create')"/>
                         </td>
                     </tr>
                     </tbody>
@@ -58,6 +58,7 @@
     import itemViewUtil from "../../util/itemViewUtil";
     import routerUtil from "../../util/routerUtil";
     import storeUtil from "../../util/storeUtil";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "CreateItemForm",
@@ -96,7 +97,7 @@
                 } else if (this.newItemName === "") {
                     this.newItemNameMessage = "Item name not specified"
                 } else if (this.sameItemNameExistsInCategory(this.newItemCategory, this.newItemName)) {
-                    this.newItemNameMessage = "Item with this name already exists"
+                    this.newItemNameMessage = "Item with this name already exists in the category"
                 } else {
                     storeUtil.setLoadingState("Creating");
                     let language = this.appLanguage.toString();
@@ -146,6 +147,10 @@
 
             isGuest() {
                 return itemViewUtil.isGuest(this.userName);
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

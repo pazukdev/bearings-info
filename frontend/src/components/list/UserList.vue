@@ -3,7 +3,7 @@
         <LoadingScreen v-if="isLoading()"/>
         <div v-else>
             <Header/>
-            <CountedItemList :user-list-view="true" :sorted="true"/>
+            <CountedItemList :user-list-view="true" :sorted="true" :translate-comments="true"/>
         </div>
     </div>
 </template>

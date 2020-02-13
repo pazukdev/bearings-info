@@ -17,9 +17,9 @@
 <!--                {{"itemView: " + itemView}}<br>-->
             </div>
             <div>
-                {{langs}}<br>
-                {{appLanguage}}<br>
-                {{dictionary[0]}}
+<!--                {{langs}}<br>-->
+<!--                {{appLanguage}}<br>-->
+<!--                {{dictionary[0]}}-->
                 <LangMenu/>
                 <NavigationBar/>
                 <MessagesSection/>

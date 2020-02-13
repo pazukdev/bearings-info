@@ -1,10 +1,10 @@
 <template>
     <div>
         <div v-if="!isEmpty(errorMessage)" class="alert-message" style="text-align: center">
-            {{errorMessage}}
+            {{translate(errorMessage)}}
         </div>
         <div v-else class="default-margin">
-        {{loadingState + "..."}}
+        {{translate(loadingState) + "..."}}
         </div>
     </div>
 </template>
@@ -12,6 +12,7 @@
 <script>
     import {mapState} from "vuex";
     import shared from "../../util/shared";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "LoadingScreen",
@@ -27,6 +28,10 @@
         methods: {
             isEmpty(errorMessage) {
                 return shared.isEmpty(errorMessage);
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

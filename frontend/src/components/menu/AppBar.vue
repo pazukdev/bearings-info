@@ -9,11 +9,11 @@
                             @click="back()"
                             id="back"
                             class="app-bar-button">
-                        {{$t('back')}}
+                        {{translate("Back")}}
                     </button>
                 </td>
                 <td id="appName">
-                    {{"Soviet boxers seals & bearings"}}
+                    {{"Soviet boxers"}}
                 </td>
                 <td class="app-bar-side-column">
                     <button
@@ -21,14 +21,14 @@
                             @click="logout()"
                             id="logout"
                             class="app-bar-button">
-                        {{$t('logout')}}
+                        {{translate("Logout")}}
                     </button>
                     <button
                             v-show="isLoginButtonDisplayed()"
                             @click="openLoginForm()"
                             id="login"
                             class="app-bar-button">
-                        {{$t('loginButton')}}
+                        {{translate("Login")}}
                     </button>
                 </td>
             </tr>
@@ -42,6 +42,7 @@
     import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
     import axiosUtil from "../../util/axiosUtil";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: 'AppBar',
@@ -102,6 +103,10 @@
 
             isHomePage() {
                 return routerUtil.isHome(this.$route);
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

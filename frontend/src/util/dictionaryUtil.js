@@ -28,7 +28,7 @@ export default {
             if (values.length < 3) {
                 continue;
             }
-            if (values[1] === text.toLowerCase()) {
+            if (values[1].trim().toLowerCase() === text.trim().toLowerCase()) {
                 return stringUtil.capitalize(values[2]);
             }
         }

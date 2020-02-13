@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.List;
 
 import static com.pazukdev.backend.util.FileUtil.*;
 import static com.pazukdev.backend.util.TranslatorUtil.addLang;
@@ -54,43 +55,63 @@ public class FileController {
         response.flushBuffer();
     }
 
-    @PutMapping(value = "/{fileName}/upload/{username}")
+    @PutMapping(value = "/{fileName}/upload/{username}/{lang}")
     @ApiOperation(value = "File upload")
-    public String upload(@PathVariable final String fileName,
-                         @PathVariable final String username,
-                         @RequestBody final Message message) throws Exception {
+    public Message upload(@PathVariable final String fileName,
+                          @PathVariable final String username,
+                          @PathVariable final String lang,
+                          @RequestBody final Message request) throws Exception {
+
+        final DictionaryData oldDictionary = DictionaryData.getDictionaryFromFile(lang);
+
+        final Message response = new Message();
 
         if (fileName == null) {
-            return "File name is null";
+            response.setText("File name is null");
+            response.translate(lang, oldDictionary.getDictionary());
+            return response;
         }
 
         if (fileName.equals(FileName.DICTIONARY)) {
-            return uploadDictionaryFile(username, message);
+            return uploadDictionaryFile(username, lang, request, response, oldDictionary);
         }
 
-        createFileInFileSystem(fileName, message.getText().getBytes(StandardCharsets.UTF_8));
+        createFileInFileSystem(fileName, request.getText().getBytes(StandardCharsets.UTF_8));
 
-        return "New " + fileName + " file accepted";
+        response.setText("New " + fileName + " file accepted");
+        response.translate(lang, oldDictionary.getDictionary());
+        return response;
     }
 
-    private String uploadDictionaryFile(final String username, final Message message) throws Exception {
+    private Message uploadDictionaryFile(final String username,
+                                         final String oldDictionaryLang,
+                                         final Message request,
+                                         final Message response,
+                                         final DictionaryData oldDictionary) {
         final UserEntity user = userService.findFirstByName(username);
 
-        final String text = message.getText();
+        final String text = request.getText();
         DictionaryData newDictionary;
         try {
             newDictionary = DictionaryData.createDictionary(text);
         } catch (final Exception e) {
-            return e.getMessage();
+            response.setText(e.getMessage());
+            response.translate(oldDictionaryLang, oldDictionary.getDictionary());
+            return response;
         }
+        final List<String> newDictRows = newDictionary.getDictionary();
         final String newDictionaryLang = newDictionary.getLang();
 
-        final DictionaryData oldDictionary = DictionaryData.getDictionaryFromFile(newDictionaryLang);
-        final boolean newLang = oldDictionary.getDictionary().size() == 0;
-        if (newLang) {
+        final String acceptedMessage = "New dictionary accepted";
+        if (!newDictionaryLang.equals(oldDictionaryLang)) {
             DictionaryData.saveDictionary(newDictionary);
             addLang(newDictionaryLang);
-            return "New dictionary accepted. New language added: " + newDictionaryLang;
+            final String toTranslate = acceptedMessage + ". New language added";
+            response.setText(toTranslate);
+            response.translate(oldDictionaryLang, oldDictionary.getDictionary());
+            response.setText(response.getText() + ": " + newDictionaryLang);
+            response.setLocalizedText(response.getLocalizedText() + ": " + newDictionaryLang);
+            return response;
         }
 
         final int newDictionarySize = newDictionary.getDictionary().size();
@@ -100,10 +121,13 @@ public class FileController {
         final int removedLinesLimit = user.getRole() == Role.ADMIN ? 5 : 1;
 
         if (difference > removedLinesLimit) {
-            return "New dictionary not accepted. " +
-                    "New size is " + newDictionarySize + " lines. "
-                    + difference + " lines were removed. " +
+            final String responseText = "Dictionary is not accepted. " +
+                    "New size is " + newDictionarySize + " lines. " +
+                    difference + " lines were removed. " +
                     "You can't remove more than " + removedLinesLimit + " line at a time";
+            response.setText(responseText);
+            response.translate(oldDictionaryLang, oldDictionary.getDictionary());
+            return response;
         }
 
         DictionaryData.saveDictionary(newDictionary);
@@ -116,7 +140,11 @@ public class FileController {
         if (difference == 0) {
             changed = "";
         }
-        return "New dictionary accepted" + changed;
+
+        response.setText(acceptedMessage + changed);
+        response.translate(newDictionaryLang, newDictRows);
+        return response;
+
     }
 
 }

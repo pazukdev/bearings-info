@@ -4,6 +4,7 @@ import arrayUtil from "./arrayUtil";
 import searchUtil from "./searchUtil";
 import store from "../plugins/store";
 import routerUtil from "./routerUtil";
+import dictionaryUtil from "./dictionaryUtil";
 
 export default {
     itemsListToTables(items, sort, filter, opened) {
@@ -21,7 +22,7 @@ export default {
             let category = categories[i];
 
             let nestedTable = {
-                name: !shared.isEmpty(category) ? category : "Not specified",
+                name: !shared.isEmpty(category) ? category : dictionaryUtil.translate("Not specified"),
                 items: [],
                 opened: opened
             };
@@ -82,7 +83,7 @@ export default {
 
     dispatchResponseError(error) {
         console.error(error);
-        storeUtil.setErrorMessage("Page error. Please, return to previous page");
+        storeUtil.setErrorMessage("Page error. Please return to previous page");
     },
 
     removeItemFromItemList(itemView, item) {

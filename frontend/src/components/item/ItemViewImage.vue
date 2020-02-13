@@ -12,7 +12,7 @@
             <tr v-if="editMode && itemView.defaultImg && !messagesContain('img removed')">
                 <td>
                     <button id="remove-img-button" type="button" @click="removeImg()">
-                        {{"Remove image"}}
+                        {{translate("Remove image")}}
                     </button>
                 </td>
             </tr>
@@ -27,7 +27,7 @@
             </tr>
             <tr v-if="editMode" class="alert-message">
                 <td>
-                    {{fileUploadMessage}}
+                    {{translate(fileUploadMessage)}}
                 </td>
             </tr>
             <tr v-if="editMode">
@@ -46,6 +46,7 @@
 <script>
     import {mapState} from "vuex";
     import shared from "../../util/shared";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "ItemViewImage",
@@ -94,6 +95,10 @@
                     };
                     reader.readAsDataURL(file);
                 }
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

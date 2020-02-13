@@ -1,9 +1,5 @@
 <template>
     <div>
-<!--        {{"wikiLink: " + itemView.wikiLink}}<br>-->
-<!--        {{"websiteLink: " + itemView.websiteLink}}<br>-->
-<!--        {{"websiteLang: " + itemView.websiteLang}}<br>-->
-<!--        {{"validationMessage: " + validationMessage}}-->
         <table class="equal-columns-table">
             <tbody v-if="!editMode">
                 <tr>
@@ -11,10 +7,10 @@
                         <button v-if="isAddToWishListButtonRendered()"
                                 type="button"
                                 @click="addItemToWishList()">
-                            {{$t("addToWishList")}}
+                            {{translate("Add to Wishlist")}}
                         </button>
                         <p v-if="isItemInWishListTextVisible()">
-                            {{$t("itemInWishList")}}
+                            {{translate("Item is in Wishlist")}}
                         </p>
                     </td>
                     <td></td>
@@ -47,13 +43,13 @@
                 </tr>
             </tbody>
             <tbody v-if="editMode" style="text-align: left">
-                <tr style="text-align: center"><td>{{"Links"}}</td></tr>
+                <tr style="text-align: center"><td>{{translate("Links")}}</td></tr>
                 <tr style="text-align: center">
                     <td><p class="alert-message">{{validationMessage}}</p></td>
                 </tr>
                 <tr>
                     <td>
-                        <label>{{"Wiki link"}}
+                        <label>{{translate("Wiki link")}}
                             <input id="wiki-link-input" v-model="itemView.wikiLink"
                                    type="url"
                                    @change="validate()"/>
@@ -62,7 +58,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <label>{{"Buy / website link"}}
+                        <label>{{translate("Store / seller / official website link")}}
                             <input id="seller-link-input" v-model="itemView.websiteLink"
                                    type="url"
                                    @change="validate()"/>
@@ -71,7 +67,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <label>{{"Website link language"}}
+                        <label>{{translate("Seller language")}}
                             <select v-model="itemView.websiteLang">
                                 <option v-for="lang in langs" :key="lang">
                                     {{lang}}
@@ -90,6 +86,7 @@
     import shared from "../../util/shared";
     import itemViewUtil from "../../util/itemViewUtil";
     import axios from "axios";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "ItemMenu",
@@ -199,24 +196,24 @@
                 return shared.isEmpty(value);
             },
 
-            // isInputEnabled() {
-            //     return this.isAdmin() || userUtil.isCurrentUserItemCreator(this.itemView.creatorData.id);
-            // },
-
             isAdmin() {
                 return itemViewUtil.isAdmin(this.itemView);
             },
 
             getButtonText() {
                 if (this.isManufacturer()) {
-                    return "Website";
+                    return this.translate("Website");
                 } else {
-                    return "Buy";
+                    return this.translate("Seller");
                 }
             },
 
             isManufacturer() {
                 return itemViewUtil.isManufacturer(this.itemView);
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

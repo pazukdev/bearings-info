@@ -1,7 +1,7 @@
 <template>
     <div>
         <details style="text-align: left" class="default-margin">
-            <summary>{{"Last 10 new " + itemType}}</summary>
+            <summary>{{translate("Last 10 new " + itemType)}}</summary>
             <ul class="bordered" id="user-actions"
                 v-if="userActions !== undefined && userActions.length > 0">
                 <li v-for="action in userActions">
@@ -16,16 +16,16 @@
                         {{action.itemName}}
                     </router-link>
                     <span v-if="!isEmpty(action.parentId) && !isEmpty(action.parentName)">
-                            {{" " + $t('to') + " "}}
+                            {{" " + translate('to') + " "}}
                             <router-link class="simple-link"
                                          :to="{name: 'item', params: {id: action.parentId, lang: appLanguage}}">
                             {{action.parentName}}
                             </router-link>
-                            {{" " + $t('as') + " " + action.itemType}}
+                            {{" " + translate('as') + " " + action.itemType}}
                         </span>
                 </li>
             </ul>
-            <p v-else class="bordered">{{"No users activity"}}</p>
+            <p v-else class="bordered">{{translate("No users activity")}}</p>
         </details>
     </div>
 </template>
@@ -33,6 +33,7 @@
 <script>
     import shared from "../util/shared";
     import {mapState} from "vuex";
+    import dictionaryUtil from "../util/dictionaryUtil";
 
     export default {
         name: "LastUserActions",
@@ -49,6 +50,10 @@
             isEmpty(value) {
                 return shared.isEmpty(value);
             },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
+            }
         }
     }
 </script>

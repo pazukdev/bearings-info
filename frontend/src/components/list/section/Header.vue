@@ -7,17 +7,17 @@
             <p v-if="!isEmpty(itemView.localizedCategory)"><b>{{itemView.localizedCategory}}</b></p>
             <p v-if="!isEmpty(itemView.localizedName)"><b>{{itemView.localizedName}}</b></p>
             <p v-if="item">
-                {{$t("createdBy")}}
+                {{translate("Created by")}}
                 <router-link class="simple-link"
                              v-if="showCreatorLink()"
                              :to="{name: 'user', params: {id: itemView.creatorData.id, lang: appLanguage}}">
                     {{itemView.creatorData.name}}
                 </router-link>
-                <span v-else>{{"deleted user"}}</span>
+                <span v-else>{{translate("deleted user")}}</span>
             </p>
         </div>
         <details v-if="itemView.header != null" class="default-margin" open>
-            <summary>{{"Specification"}}</summary>
+            <summary>{{translate("Specification")}}</summary>
             <ItemDescription :item="item"/>
             <hr>
         </details>
@@ -32,6 +32,7 @@
     import shared from "../../../util/shared";
     import itemViewUtil from "../../../util/itemViewUtil";
     import axiosUtil from "../../../util/axiosUtil";
+    import dictionaryUtil from "../../../util/dictionaryUtil";
 
     export default {
         name: "Header",
@@ -84,6 +85,10 @@
                 let authorization = this.authorization;
                 axiosUtil.updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization);
             },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
+            }
         }
     }
 </script>

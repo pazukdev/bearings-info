@@ -2,7 +2,7 @@
     <div>
         <select v-model="newLanguage"
                 @change="selectLanguage()">
-            <option v-for="lang in langs" :key="lang" v-if="lang !== 'all'">
+            <option v-for="lang in langs" :key="lang">
                 {{lang}}
             </option>
         </select>
@@ -13,6 +13,7 @@
     import {mapState} from "vuex";
     import axiosUtil from "../../../util/axiosUtil";
     import routerUtil from "../../../util/routerUtil";
+    import storeUtil from "../../../util/storeUtil";
 
     export default {
         name: "LanguageSelect",
@@ -54,9 +55,8 @@
                 let urlLang = this.$route.params.lang;
                 if (urlLang !== this.newLanguage) {
                     this.newLanguage = urlLang;
-                    this.$store.dispatch("setAppLanguage", this.newLanguage);
+                    storeUtil.setAppLang(this.newLanguage);
                 }
-                this.$i18n.locale = this.newLanguage;
             },
 
             selectLanguage() {

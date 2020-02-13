@@ -6,7 +6,7 @@
                 <td>
                     <button type="button"
                             v-on:click="openUsersList()">
-                        {{$t("users")}}
+                        {{translate("Users")}}
                     </button>
                 </td>
             </tr>
@@ -20,20 +20,20 @@
             <tr>
                 <td>
                     <label class="upload-button">
-                        {{$t("uploadDictionary")}}
+                        {{translate("Upload dictionary")}}
                         <input type="file" ref="fileInput" accept="text/plain" @change="uploadDictionary"/>
                     </label>
                 </td>
             </tr>
-            <tr v-if="!isEmpty(uploadMessage)">
-                <td>{{uploadMessage}}</td>
+            <tr v-if="!isEmpty(localizedUploadMessage)">
+                <td>{{translate(localizedUploadMessage)}}</td>
             </tr>
             <tr v-if="isRefreshButtonVisible()">
-                <td>{{"Refresh page to implement changes on current page"}}</td>
+                <td>{{translate("Refresh page to implement changes on current page")}}</td>
             </tr>
             <tr>
                 <td v-if="isRefreshButtonVisible()">
-                    <DefaultButton :text="'Refresh'" @on-click="refresh"/>
+                    <DefaultButton :text="translate('Refresh')" @on-click="refresh"/>
                 </td>
             </tr>
             </tbody>
@@ -104,7 +104,8 @@
 
         data() {
             return {
-                uploadMessage: ""
+                uploadMessage: "",
+                localizedUploadMessage: ""
             }
         },
 
@@ -154,10 +155,15 @@
                             text: e.target.result
                         };
                         axios
-                            .put(this.basicUrl + "/file/" + fileName + "/upload/" + this.userName, message)
+                            .put(this.basicUrl
+                                + "/" + "file"
+                                + "/" + fileName
+                                + "/" + "upload"
+                                + "/" + this.userName
+                                + "/" + this.appLanguage, message)
                             .then(response => {
-                                this.uploadMessage = response.data;
-                                console.log(this.uploadMessage);
+                                this.uploadMessage = response.data.text;
+                                this.localizedUploadMessage = response.data.localizedText;
                                 this.reset();
                             });
                     };
@@ -172,6 +178,7 @@
                 }
                 axiosUtil.setLangsAndDictionary();
                 this.uploadMessage = "";
+                this.localizedUploadMessage = "";
             },
 
             isRefreshButtonVisible() {

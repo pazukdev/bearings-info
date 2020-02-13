@@ -13,10 +13,10 @@
                         </router-link>
                     </td>
                     <td v-if="!isGuest()">
-                        {{$t("rating") + ": " + itemView.userData.rating}}
+                        {{translate("Rating") + ": " + itemView.userData.rating}}
                     </td>
                     <td v-if="isGuest()">
-                        {{$t('youAreGuest')}}
+                        {{translate("You are guest")}}
                     </td>
                     <td style="text-align: right">
                         <LanguageSelect/>
@@ -24,7 +24,7 @@
                 </tr>
                 <tr>
                     <td colspan="4" style="text-align: right">
-                        <div v-if="isAdmin()">{{$t("youAreAdmin")}}</div>
+                        <div v-if="isAdmin()">{{translate("You are admin")}}</div>
                     </td>
                 </tr>
             </tbody>
@@ -36,6 +36,7 @@
     import LanguageSelect from "../element/select/LanguageSelect";
     import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "LangMenu",
@@ -59,6 +60,10 @@
             isAdmin() {
                 return itemViewUtil.isAdmin(this.itemView);
             },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
+            }
         }
     }
 </script>
