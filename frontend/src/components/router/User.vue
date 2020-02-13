@@ -2,7 +2,7 @@
     <div>
         <LoadingScreen v-if="isLoading()"/>
         <div v-else style="text-align: center">
-            <p>{{user.name}}</p>
+            <p><b>{{user.name}}</b></p>
             <EditableImg v-if="isImgRendered()"/>
             <EditPanel v-if="isEditable()" :user-form="true"/>
             <AlertMessagesSection :messages="validationMessages"/>
@@ -92,7 +92,7 @@
                         </td>
                     </tr>
                     <tr v-if="isAdmin()" style="text-align: center">
-                        <td colspan="2">{{"Admin options"}}</td>
+                        <td colspan="2"><b>{{"Admin options"}}</b></td>
                     </tr>
                     <tr v-if="isAdmin()">
                         <td>{{translate("Status")}}</td>

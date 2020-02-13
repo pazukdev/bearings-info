@@ -62,6 +62,7 @@
     import shared from "../util/shared";
     import routerUtil from "../util/routerUtil";
     import dictionaryUtil from "../util/dictionaryUtil";
+    import imgUtil from "../util/imgUtil";
 
     export default {
         name: "EditableImg",
@@ -102,7 +103,7 @@
                         // e.g.: localhost:8090/bearings-info/api/bearing/bearing_18.png
                         imgUrl = this.basicUrl + "/" + img;
                     }
-                    return imgUrl.replace("https://drive.google.com/open?id=", "https://docs.google.com/uc?id=");
+                    return imgUtil.processUrl(imgUrl);
                 }
             },
 

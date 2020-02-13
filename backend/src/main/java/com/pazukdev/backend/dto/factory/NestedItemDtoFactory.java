@@ -41,17 +41,14 @@ public class NestedItemDtoFactory {
     public static NestedItemDto createVehicle(final Item vehicle, final UserService userService) {
         final String description = vehicle.getDescription();
         final Map<String, String> map = toMap(description);
-        final String production = map.get(Parameter.PRODUCTION);
-        final String manufacturer = map.get(Category.MANUFACTURER);
-        final String vehicleClass = map.get(Parameter.CLASS);
 
         final NestedItemDto vehicleDto = createBasicNestedItemDto(vehicle, userService);
-        vehicleDto.setComment(production);
-        vehicleDto.setSecondComment(manufacturer);
-        vehicleDto.setItemCategory(manufacturer);
+        vehicleDto.setComment(map.get(Parameter.PRODUCTION));
+        vehicleDto.setSecondComment(vehicle.getImg());
+        vehicleDto.setItemCategory(map.get(Category.MANUFACTURER));
         vehicleDto.setDeletable(false);
         vehicleDto.setVehicleIcon(vehicle.getImg());
-        vehicleDto.setVehicleClass(vehicleClass);
+        vehicleDto.setVehicleClass(map.get(Parameter.CLASS));
 
         return vehicleDto;
     }

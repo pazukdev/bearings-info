@@ -23,7 +23,8 @@
                                                     <ButtonNavigateToItem :part="item"/>
                                                 </td>
                                                 <td>
-                                                    {{item.secondComment}}
+                                                    <img v-if="!isEmpty(item.secondComment)" class="list-img"
+                                                         :src="processImgUrl(item.secondComment)" alt="Item image">
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -76,6 +77,7 @@
     import arrayUtil from "../../util/arrayUtil";
     import SearchForm from "../form/SearchForm";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import imgUtil from "../../util/imgUtil";
 
     export default {
         name: "ItemList",
@@ -199,11 +201,21 @@
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            processImgUrl(imgUrl) {
+                return imgUtil.processUrl(imgUrl);
+            },
+
+            isEmpty(value) {
+                return shared.isEmpty(value);
             }
         }
     }
 </script>
 
 <style scoped>
-
+    img {
+        /*max-height: 100%;*/
+    }
 </style>

@@ -209,6 +209,10 @@
         max-height: 92px;
     }
 
+    .list-img {
+        height: 52px;
+    }
+
     a.button, label.upload-button {
         display: flex;
         justify-content: center;

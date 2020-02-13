@@ -87,7 +87,7 @@ ru=Your account has been blocked by the administrator=Ваш аккаунт бы
 ru=ZAZ-965=ЗАЗ-965
 ru=ZAZ=ЗАЗ
 ru=about the app=о приложении
-ru=adapter=адаптер
+ru=adapter=переходник
 ru=add comment in the left column=добавляйте комментарий в левой колонке
 ru=add replacer=добавить заменитель
 ru=add to Wishlist=добавить в Wishlist
@@ -151,6 +151,7 @@ ru=edit=редактировать
 ru=engine=двигатель
 ru=fastener=крепежный элемент
 ru=felt seal=фетровое кольцо
+ru=filter adapter=переходник под фильтр
 ru=final drive=редуктор
 ru=for final drive=для редуктора
 ru=for gearbox=для КПП
