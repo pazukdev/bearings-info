@@ -45,6 +45,7 @@
     import axiosUtil from "./util/axiosUtil";
     import MessagesSection from "./components/special/MessagesSection";
     import routerUtil from "./util/routerUtil";
+    import dictionaryUtil from "./util/dictionaryUtil";
 
     export default {
         name: 'app',
@@ -111,6 +112,10 @@
 
             isHome() {
                 return routerUtil.isHome(this.$route);
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }
@@ -223,7 +228,7 @@
         /*border: 10px solid transparent;*/
     }
 
-    hr, .default-margin {
+    .default-margin {
         margin: 10px;
     }
 

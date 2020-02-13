@@ -1,6 +1,6 @@
 <template>
     <div>
-        <details class="default-margin" style="text-align: center" open>
+        <details class="default-margin" style="text-align: center">
             <summary>{{translate("News")}}</summary>
             <div v-if="!isEmpty(itemView.adminMessage) && !isEmpty(itemView.adminMessage.localizedText)">
                 <p>{{itemView.adminMessage.localizedText}}</p>
@@ -42,14 +42,14 @@
 </template>
 
 <script>
-    import axios from "axios";
-    import routerUtil from "../util/routerUtil";
-    import {mapState} from "vuex";
-    import DefaultButton from "./element/button/DefaultButton";
-    import itemViewUtil from "../util/itemViewUtil";
-    import shared from "../util/shared";
+    import DefaultButton from "../element/button/DefaultButton";
     import LastUserActions from "./LastUserActions";
-    import dictionaryUtil from "../util/dictionaryUtil";
+    import axios from "axios";
+    import dictionaryUtil from "../../util/dictionaryUtil";
+    import itemViewUtil from "../../util/itemViewUtil";
+    import routerUtil from "../../util/routerUtil";
+    import shared from "../../util/shared";
+    import {mapState} from "vuex";
 
     export default {
         name: "NewsSection",

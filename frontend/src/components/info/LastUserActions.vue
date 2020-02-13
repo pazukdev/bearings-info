@@ -31,9 +31,9 @@
 </template>
 
 <script>
-    import shared from "../util/shared";
+    import shared from "../../util/shared";
     import {mapState} from "vuex";
-    import dictionaryUtil from "../util/dictionaryUtil";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "LastUserActions",

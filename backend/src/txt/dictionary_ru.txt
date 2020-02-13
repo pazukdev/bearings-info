@@ -1,8 +1,10 @@
 ru=AL=АЛ
+ru=By using this app you agree to the terms below=Используя данное приложение вы соглашаетесь с условиями ниже
 ru=China=Китай
 ru=Contact us by email: pazukdev@gmail.com=Вы можете связаться с нами по email: pazukdev@gmail.com
 ru=Cork. Terms and definitions=кора пробковая. термины и определения
 ru=Delete profile=удалить профиль
+ru=Developer and administration the app are not responsible for information posted by app users=Разработчик и администрация приложения не несут ответственности за информацию размещенную пользователями
 ru=Dictionary is not accepted=Словарь не принят
 ru=Direct current type=Постоянного напряжения
 ru=Dnepr=Днепр
@@ -17,7 +19,10 @@ ru=G-424=Г-424
 ru=GOST=ГОСТ
 ru=IMZ=ИМЗ
 ru=Incorrect login or password!=Неверный логин или пароль!
+ru=Information about seals, bearings and other parts of soviet boxers and some other old or rare vehicles=Информация о сальниках, подшипниках и других деталях советских оппозитов и некоторых других старых или редких транспортных средств
 ru=Irbitskiy Mototsikletniy Zavod=Ирбитский Мотоциклетный Завод
+ru=It's prohibited to post information irrelevant to the app=В приложении запрещено постить информацию не соответствующую тематике приложения
+ru=It's prohibited to post information whose placement violates international and national laws=В приложении запрещено размещать информацию размещение которой нарушает международные или национальные законы
 ru=K-650=К-650
 ru=K-750=К-750
 ru=K-750M=К-750М
@@ -57,9 +62,15 @@ ru=Page error. Please return to previous page=Ошибка страницы. П�
 ru=Password change via email is temporarily not available=Смена пароля через email временно недоступна
 ru=Pneumatic tires for motorcycles, cycle-cars, scooters and mopeds=Шины для мотоциклов. мотоколясок, мотороллеров и мопедов
 ru=Refresh page to implement changes on current page=Для того чтобы изменения вступили в силу обновите страницу
+ru=Responsibility for the information posted lies with the person who posted it=Ответственность за размещенную информацию лежит на лице ее разместившем
 ru=Russia=Россия
 ru=Specification=Характеристики
 ru=Static load rating=Static load рейтинг
+ru=The app do not accept or process any payments=Приложение не принимает и не обрабатывает никакие платежи
+ru=The app do not contain any in-app purchases=В приложении нет встроенных покупок
+ru=The app is free=Приложение является бесплатным
+ru=The app is not a mass media=Приложение не является средствомм массовой информации
+ru=The app is not a web-store=Приложение не является интернет-магазином
 ru=Translation isn't finished because of the error. To remove this message please select English=Перевод не завершен из-за ошибки. Чтобы скрыть это сообщение пожалуйста выберете английский язык
 ru=USA=США
 ru=USSR=СССР
@@ -69,10 +80,13 @@ ru=Ural M-67-36=Урал М-67-36
 ru=Ural M-67=Урал М-67
 ru=Ural=Урал
 ru=Value=Значение
+ru=We do not collect any user information implicitly=Мы не собираем никакой информации о пользователе неявным образом
+ru=We do not transfer account information to third parties unless required by the law=Мы не передаем информацию об аккаунте пользователя третьим лицам, если этого не требует закон
 ru=Wiki link=ссылка на Wiki
 ru=Your account has been blocked by the administrator=Ваш аккаунт был заблокирован админом
 ru=ZAZ-965=ЗАЗ-965
 ru=ZAZ=ЗАЗ
+ru=about the app=о приложении
 ru=adapter=адаптер
 ru=add comment in the left column=добавляйте комментарий в левой колонке
 ru=add replacer=добавить заменитель
@@ -126,6 +140,7 @@ ru=deepgroove bearing=радиальный
 ru=defunct=закрыто
 ru=dictionary contains more then 1 languages=словарь содержит более чем 1 язык
 ru=dimensions=размеры
+ru=disclaimer=дисклеймер
 ru=download dictionary=скачать словарь
 ru=duralumin cage=дюралевый сепаратор
 ru=duralumin=дюраль
@@ -167,11 +182,13 @@ ru=high voltage wires for tractor ignition devices=провода автотра
 ru=high voltage=высокого напряжения
 ru=home=home
 ru=image link=ссылка на изображение
+ru=info=информация
 ru=inner eccentric flat thrust spring retaining rings and grooves=кольца пружинные упорные плоские внутренние эксцентрические и канавки для них
 ru=insulation rubber=резина кабельная изоляционная
 ru=insulation=изоляция
 ru=invalid email=неверный  email
 ru=item is in WishList=объект в Wishlist'e
+ru=item name not specified=не указано имя
 ru=item with this name already exists in the category=в данной категории уже существует объект с таким именем
 ru=kg=кг
 ru=kit, needle=комплект иголок
@@ -249,6 +266,7 @@ ru=polyamide=полиамид
 ru=portuguese cork=португальская пробка
 ru=power=мощность
 ru=primary aluminum=алюминий первичный
+ru=privacy policy=политика конфиденциальности
 ru=production=годы пр-ва
 ru=publish message=опубликовать сообщение
 ru=publish=опубликовать
@@ -310,7 +328,6 @@ ru=summer use=летнее
 ru=synthetic=синтетика
 ru=tapered roller bearing=конический роликовый
 ru=telescopic=телескопическая
-ru=item name not specified=не указано имя
 ru=tension=напряжение
 ru=terms and definitions=термины и определения
 ru=thickness=толщина
@@ -329,6 +346,7 @@ ru=universal joint cross=крестовина
 ru=universal joint=крестовина в сборе
 ru=upload dictionary=загрузить словарь
 ru=usage=использование
+ru=user agreement=пользовательское соглашение
 ru=user with this email already exists=пользователь с таким email'ом уже существует
 ru=user with this name already exists=пользователь с таким именем уже существует
 ru=user=пользователь

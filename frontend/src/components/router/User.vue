@@ -143,7 +143,7 @@
     import EditableImg from "../EditableImg";
     import itemViewUtil from "../../util/itemViewUtil";
     import EditPanel from "../menu/EditPanel";
-    import AlertMessagesSection from "../AlertMessagesSection";
+    import AlertMessagesSection from "../info/AlertMessagesSection";
     import DefaultButton from "../element/button/DefaultButton";
     import axiosUtil from "../../util/axiosUtil";
     import userUtil from "../../util/userUtil";

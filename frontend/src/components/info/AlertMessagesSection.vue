@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import dictionaryUtil from "../util/dictionaryUtil";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "AlertMessagesSection",

@@ -9,6 +9,9 @@ import UserList from "../components/list/UserList";
 import WishList from "../components/list/WishList";
 import storeUtil from "../util/storeUtil";
 import Menu from "../components/router/Menu";
+import PrivacyPolicy from "../components/info/PrivacyPolicy";
+import UserAgreement from "../components/info/UserAgreement";
+import Disclaimer from "../components/info/Disclaimer";
 
 Vue.use(VueRouter);
 
@@ -25,6 +28,9 @@ const router = new VueRouter({
         { path: '/item/id/-4/en', redirect: { path: '/item/id/users/en' }},
         // urls to components binding
         { path: '/login/:lang', name: 'login', component: Login },
+        { path: '/user-agreement/:lang', name: 'user_agreement', component: UserAgreement },
+        { path: '/privacy-policy/:lang', name: 'privacy_policy', component: PrivacyPolicy },
+        { path: '/disclaimer/:lang', name: 'disclaimer', component: Disclaimer },
         { path: '/home/:lang', name: 'home', component: Home, meta: { requiresAuth: true }},
         { path: '/menu/:lang', name: 'menu', component: Menu, meta: { requiresAuth: true } },
         { path: '/item/id/:id/:lang', name: 'item', component: Item, meta: { requiresAuth: true }},

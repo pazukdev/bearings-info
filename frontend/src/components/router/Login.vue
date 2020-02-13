@@ -77,6 +77,10 @@
             </table>
         </form>
 
+        <router-link :to="{name: 'user_agreement'}" class="simple-link">
+            {{translate("User agreement")}}
+        </router-link>
+
         <details class="default-margin" style="text-align: center">
             <summary style="text-align: center">{{translate("Forgot password?")}}</summary>
             {{translate("Password change via email is temporarily not available")}}<br>
@@ -88,7 +92,7 @@
 <script>
     import axios from 'axios';
     import {mapState} from 'vuex';
-    import AlertMessagesSection from "../AlertMessagesSection";
+    import AlertMessagesSection from "../info/AlertMessagesSection";
     import routerUtil from "../../util/routerUtil";
     import dictionaryUtil from "../../util/dictionaryUtil";
 

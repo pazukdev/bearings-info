@@ -86,7 +86,8 @@
                 if (this.editMode) {
                     return false;
                 }
-                return !this.isLoginPage() && !this.isHomePage() && !this.loadingState;
+                return this.$route.name !== "home" && this.$route.name !== "login";
+                // return !(this.isLoginPage() || this.isHomePage() || this.loadingState);
             },
 
             isLogoutButtonDisplayed() {

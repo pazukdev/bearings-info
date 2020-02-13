@@ -9,7 +9,7 @@
                         </router-link>
                     </td>
                     <td>
-                        <router-link :to="{name: 'wish_list', params: {lang: appLanguage}}"
+                        <router-link :to="{name: 'wish_list'}"
                                      active-class="active" v-if="!isGuest()">
                             {{translate("Wishlist") + ": " + itemView.wishListIds.length}}
                         </router-link>

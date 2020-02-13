@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isGuest()">
+    <div class="default-margin">
         <table id="additional-menu" class="half-wide">
             <tbody>
             <tr>
