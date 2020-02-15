@@ -101,9 +101,9 @@
         data() {
             return {
                 isLogin: true,
-                name: "admin",
+                name: "",
                 email: "",
-                password: "admin",
+                password: "",
                 repeatedPassword: "",
                 validationMessages: []
             };

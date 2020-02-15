@@ -1,8 +1,13 @@
 <template>
     <div>
         <div class="default-margin" style="text-align: center"
-             v-if="!isEmpty(itemView.adminMessage) && !isEmpty(itemView.adminMessage.localizedText)">
-            <p>{{itemView.adminMessage.localizedText}}</p>
+             v-if="isAdminMessageRendered(itemView.adminMessage)">
+            <p v-if="!isEmpty(itemView.adminMessage.localizedText)">
+                {{itemView.adminMessage.localizedText}}
+            </p>
+            <p v-else>
+                {{itemView.adminMessage.text}}
+            </p>
             <a class="simple-link" v-if="!isEmpty(itemView.adminMessage.link)"
                :href="itemView.adminMessage.link">{{getLinkText(itemView.adminMessage)}}</a>
         </div>
@@ -115,6 +120,11 @@
 
             isEmpty(value) {
                 return shared.isEmpty(value);
+            },
+
+            isAdminMessageRendered(message) {
+                return !this.isEmpty(message)
+                    && (!this.isEmpty(message.text) || !this.isEmpty(message.localizedText));
             }
         }
     }
