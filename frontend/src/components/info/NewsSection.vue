@@ -2,12 +2,6 @@
     <div>
         <details class="default-margin" style="text-align: center">
             <summary>{{translate("News")}}</summary>
-            <div v-if="!isEmpty(itemView.adminMessage) && !isEmpty(itemView.adminMessage.localizedText)">
-                <p>{{itemView.adminMessage.localizedText}}</p>
-                <a class="simple-link" v-if="!isEmpty(itemView.adminMessage.link)"
-                   :href="itemView.adminMessage.link">{{getLinkText(itemView.adminMessage)}}</a>
-            </div>
-
             <details v-if="isAdmin()" class="default-margin">
                 <summary>{{translate('Publish message')}}</summary>
                 <table>

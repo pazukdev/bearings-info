@@ -1,7 +1,7 @@
 <template>
     <div style="text-align: center">
         <img class="preview" alt="App image"
-             src="https://pazukdev.github.io/sovietboxers/img/app_logo.9a3c3892.png">
+             src="https://pazukdev.github.io/sovietboxers/img/old-vehicles_280x280.5b585050.png">
         <ItemList :vehicles="true"/>
     </div>
 </template>

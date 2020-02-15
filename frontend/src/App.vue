@@ -170,6 +170,12 @@
         }
     }
 
+    @media only screen and (max-width: 640px) {
+        #yandex-donate-form {
+            width: 100%;
+        }
+    }
+
     table, button, select, input, .round-button {
         text-align: center;
     }
