@@ -57,14 +57,8 @@ public class Item extends AbstractEntity {
     )
     private Set<Link> links = new HashSet<>();
 
-    public String getImg() {
-        final Link link = LinkUtil.getLink("img", this);
-        return link != null ? link.getName() : null;
-    }
-
-    public String getWiki() {
-        final Link link = LinkUtil.getLink("wiki", this);
-        return link != null ? link.getName() : null;
+    public String getLink(final String linkType) {
+        return LinkUtil.getLink(linkType, this);
     }
 
     public void setImg(final String img) {
@@ -82,7 +76,7 @@ public class Item extends AbstractEntity {
     }
 
     private Link getImgLink() {
-        return LinkUtil.getLink("img", this);
+        return LinkUtil.getLink("img", this.getLinks());
     }
 
 }

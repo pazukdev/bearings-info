@@ -44,10 +44,9 @@ public class NestedItemDtoFactory {
 
         final NestedItemDto vehicleDto = createBasicNestedItemDto(vehicle, userService);
         vehicleDto.setComment(map.get(Parameter.PRODUCTION));
-        vehicleDto.setSecondComment(vehicle.getImg());
+        vehicleDto.setSecondComment(vehicle.getLink("img"));
         vehicleDto.setItemCategory(map.get(Category.MANUFACTURER));
         vehicleDto.setDeletable(false);
-        vehicleDto.setVehicleIcon(vehicle.getImg());
         vehicleDto.setVehicleClass(map.get(Parameter.CLASS));
 
         return vehicleDto;

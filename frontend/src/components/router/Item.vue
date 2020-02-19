@@ -2,9 +2,9 @@
     <div>
         <LoadingScreen v-if="isLoading()"/>
         <div v-else>
-            <ItemMenu/>
-
             <form id="item-form" @submit="submit">
+                <ItemMenu/>
+
                 <Header :item="true"/>
 
                 <details v-if="arrayIsRendered(itemView.children)" open>

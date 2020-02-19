@@ -41,6 +41,38 @@
                         </button>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="3"/>
+                </tr>
+                <tr>
+                    <td>
+                        <div v-if="!isEmpty(itemView.manualLink)">
+                            <a :href="itemView.manualLink" target="_blank">
+                                <img style="height: 60px" src="../../assets/manual_100x100.png">
+                            </a>
+                            <br>
+                            {{translate("Manual")}}
+                        </div>
+                    </td>
+                    <td>
+                        <div v-if="!isEmpty(itemView.partsCatalogLink)">
+                            <a :href="itemView.partsCatalogLink" target="_blank">
+                                <img style="height: 60px" src="../../assets/parts_catalog_100x100.png">
+                            </a>
+                            <br>
+                            {{translate("Parts catalog")}}
+                        </div>
+                    </td>
+                    <td>
+                        <div v-if="!isEmpty(itemView.drawingsLink)">
+                            <a :href="itemView.drawingsLink" target="_blank">
+                                <img style="height: 60px" src="../../assets/drawings_100x100.png">
+                            </a>
+                            <br>
+                            {{translate("Drawings")}}
+                        </div>
+                    </td>
+                </tr>
             </tbody>
             <tbody v-if="editMode" style="text-align: left">
                 <tr style="text-align: center"><td>{{translate("Links")}}</td></tr>
@@ -49,19 +81,15 @@
                 </tr>
                 <tr>
                     <td>
-                        <label>{{translate("Wiki link")}}
-                            <input id="wiki-link-input" v-model="itemView.wikiLink"
-                                   type="url"
-                                   @change="validate()"/>
+                        <label>{{translate("Wiki")}}
+                            <input v-model="itemView.wikiLink" type="url" :placeholder="translate('Link')"/>
                         </label>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <label>{{translate("Store / seller / official website link")}}
-                            <input id="seller-link-input" v-model="itemView.websiteLink"
-                                   type="url"
-                                   @change="validate()"/>
+                        <label>{{translate("Store / seller / official website")}}
+                            <input v-model="itemView.websiteLink" type="url" :placeholder="translate('Link')"/>
                         </label>
                     </td>
                 </tr>
@@ -73,6 +101,27 @@
                                     {{lang}}
                                 </option>
                             </select>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>{{translate("Manual")}}
+                            <input v-model="itemView.manualLink" type="url" :placeholder="translate('Link')"/>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>{{translate("Parts catalog")}}
+                            <input v-model="itemView.partsCatalogLink" type="url" :placeholder="translate('Link')"/>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>{{translate("Drawings")}}
+                            <input v-model="itemView.drawingsLink" type="url" :placeholder="translate('Link')"/>
                         </label>
                     </td>
                 </tr>

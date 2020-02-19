@@ -25,7 +25,7 @@
                                    @change="categorySelectOnChange()"
                                    v-model="newItemCategory"/>
                             <datalist id="categories">
-                                <option v-for="category in itemView.allCategories" :value="category">
+                                <option v-for="category in sort(itemView.allCategories)" :value="category">
                                     {{category}}
                                 </option>
                             </datalist>
@@ -151,6 +151,10 @@
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            sort(array) {
+                return array.slice().sort();
             }
         }
     }

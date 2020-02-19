@@ -51,12 +51,14 @@ public class ItemView extends AbstractView {
     private String wikiLink;
     private String websiteLink;
     private String websiteLang;
+    private String manualLink;
+    private String partsCatalogLink;
+    private String drawingsLink;
     private double businessLogicTime;
     private double translationTime;
     private double responseTotalTime;
     private AdminMessage adminMessage;
     private List<UserActionDto> lastVehicles = new ArrayList<>();
     private List<UserActionDto> lastReplacers = new ArrayList<>();
-//    private DictionaryData dictionaryData;
 
 }

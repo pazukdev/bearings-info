@@ -17,7 +17,6 @@ import com.pazukdev.backend.repository.UserActionRepository;
 import com.pazukdev.backend.util.DateUtil;
 import com.pazukdev.backend.util.LinkUtil;
 import com.pazukdev.backend.util.RateUtil;
-import com.pazukdev.backend.util.UserActionUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
@@ -33,8 +32,7 @@ import static com.pazukdev.backend.util.FileUtil.FileName.INFO_CATEGORIES;
 import static com.pazukdev.backend.util.FileUtil.getTxtFileTextLines;
 import static com.pazukdev.backend.util.ItemUtil.*;
 import static com.pazukdev.backend.util.ReplacerUtil.createReplacers;
-import static com.pazukdev.backend.util.UserActionUtil.processItemAction;
-import static com.pazukdev.backend.util.UserActionUtil.processReplacerAction;
+import static com.pazukdev.backend.util.UserActionUtil.*;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -138,7 +136,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final Item newItem = new Item();
         newItem.setName(name);
         newItem.setCategory(category);
-        newItem.setStatus(Status.ACTIVE);
+        newItem.setStatus(transitiveItem.getStatus());
         newItem.setDescription(createItemDescription(descriptionMap));
         newItem.getChildItems().addAll(childItems);
         newItem.getReplacers().addAll(replacers);
@@ -150,7 +148,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         itemRepository.save(newItem);
 
         if (category.equals(VEHICLE)) {
-            processItemAction(UserActionUtil.ActionType.CREATE, newItem, getUserService().getAdmin(), this);
+            processItemAction(ActionType.CREATE, newItem, getUserService().getAdmin(), this);
         }
 
         for (final Replacer replacer : replacers) {
@@ -158,7 +156,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                     || (category.equals(SPARK_PLUG) && sparkPlugReplacerCounter++ < 2)
                     || (category.equals(BEARING) && bearingReplacerCounter++ < 2)
                     || (category.equals(OIL_FILTER) && oilFilterReplacerCounter++ < 3)) {
-                processReplacerAction(UserActionUtil.ActionType.ADD, replacer, newItem, getUserService().getAdmin(), this);
+                processReplacerAction(ActionType.ADD, replacer, newItem, getUserService().getAdmin(), this);
             }
         }
 
@@ -215,6 +213,9 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     public Set<String> collectCategories(final List<Item> items) {
         final Set<String> categories = new HashSet<>();
         for (final Item item : items) {
+            if (!item.getStatus().equals(Status.ACTIVE)) {
+                continue;
+            }
             categories.add(item.getCategory());
         }
         return categories;
