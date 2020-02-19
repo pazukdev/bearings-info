@@ -33,6 +33,7 @@ public class UserActionUtil {
         public static final String ITEM = "item";
         public static final String PART = "part";
         public static final String REPLACER = "replacer";
+        public static final String LINK = "link";
     }
 
     private final static Set<String> userRatedActions = new HashSet<>(Arrays
@@ -42,7 +43,8 @@ public class UserActionUtil {
     public enum ValueIncrease {
 
         RATE_ITEM(1),
-        UPLOAD_DICTIONARY(1),
+        UPLOAD_DICTIONARY(2),
+        ADD_OR_UPDATE_LINK(4),
         UPDATE(4),
         ADD_PART(4),
         ADD_REPLACER(6),
@@ -126,6 +128,20 @@ public class UserActionUtil {
             }
         }
         return dto;
+    }
+
+    public static void processLinkAction(final String actionType,
+                                         final String linkType,
+                                         final Item item,
+                                         final UserEntity user,
+                                         final ItemService itemService) {
+        final String itemType = ItemType.LINK;
+
+        updateUserRating(user, actionType, itemType);
+
+        final UserAction action = create(user, actionType, itemType, item);
+        action.setName(action.getName().replace(itemType, linkType + " " + itemType + " for"));
+        itemService.getUserActionRepository().save(action);
     }
 
     public static void processItemAction(final String actionType,
@@ -222,9 +238,16 @@ public class UserActionUtil {
                 case ItemType.REPLACER:
                     increase = ADD_REPLACER.getValue();
                     break;
+                case ItemType.LINK:
+                    increase = ADD_OR_UPDATE_LINK.getValue();
+                    break;
             }
         } else if (actionType.equals(ActionType.UPDATE)) {
-            increase = UPDATE.getValue();
+            if (itemType.equals(ItemType.LINK)) {
+                increase = ADD_OR_UPDATE_LINK.getValue();
+            } else {
+                increase = UPDATE.getValue();
+            }
         } else if (actionType.equals(ActionType.RATE)) {
             increase = RATE_ITEM.getValue();
         } else if (actionType.equals(ActionType.UPLOAD_DICTIONARY)) {

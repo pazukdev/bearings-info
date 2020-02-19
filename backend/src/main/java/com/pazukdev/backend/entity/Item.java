@@ -10,6 +10,8 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.pazukdev.backend.util.LinkUtil.LinkType;
+
 /**
  * @author Siarhei Sviarkaltsau
  */
@@ -69,14 +71,14 @@ public class Item extends AbstractEntity {
         }
         if (imgLink == null) {
             imgLink = new Link();
-            imgLink.setType("img");
+            imgLink.setType(LinkType.IMG);
         }
         imgLink.setName(img);
         links.add(imgLink);
     }
 
     private Link getImgLink() {
-        return LinkUtil.getLink("img", this.getLinks());
+        return LinkUtil.getLink(LinkType.IMG, this.getLinks());
     }
 
 }

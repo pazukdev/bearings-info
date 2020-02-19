@@ -4,73 +4,81 @@ import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.Link;
 import com.pazukdev.backend.entity.TransitiveItem;
+import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.service.ItemService;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import java.util.Set;
 
 import static com.pazukdev.backend.entity.factory.LinkFactory.createLink;
 import static com.pazukdev.backend.entity.factory.LinkFactory.createWebsiteLink;
+import static com.pazukdev.backend.util.UserActionUtil.ActionType;
+import static com.pazukdev.backend.util.UserActionUtil.processLinkAction;
 
 public class LinkUtil {
 
     public static class LinkType {
         public static final String DRAWINGS = "drawings";
+        public static final String IMG = "img";
         public static final String MANUAL = "manual";
         public static final String PARTS_CATALOG = "parts catalog";
         public static final String WEBSITE = "website";
         public static final String WIKI = "wiki";
     }
 
-    public static void updateItemLinks(final Item target, final ItemView source) {
-        final String wikiLink = source.getWikiLink();
-        final Link wiki = getLink("wiki", target.getLinks());
-        if (wiki != null) {
-            if (SpecificStringUtil.isEmpty(wikiLink)) {
-                target.getLinks().remove(wiki);
-            } else {
-                wiki.setName(wikiLink);
-            }
-        } else {
-            if (!SpecificStringUtil.isEmpty(wikiLink)) {
-                final Link newWiki = createLink("wiki", wikiLink);
-                target.getLinks().add(newWiki);
-            }
-        }
-
-        updateLink(source.getManualLink(), LinkType.MANUAL, target);
-        updateLink(source.getPartsCatalogLink(), LinkType.PARTS_CATALOG, target);
-        updateLink(source.getDrawingsLink(), LinkType.DRAWINGS, target);
+    public static void updateItemLinks(final Item target,
+                                       final ItemView source,
+                                       final UserEntity user,
+                                       final ItemService service) {
+        updateLink(source.getWikiLink(), LinkType.WIKI, target, user, service);
+        updateLink(source.getManualLink(), LinkType.MANUAL, target, user, service);
+        updateLink(source.getPartsCatalogLink(), LinkType.PARTS_CATALOG, target, user, service);
+        updateLink(source.getDrawingsLink(), LinkType.DRAWINGS, target, user, service);
 
         final String websiteLink = source.getWebsiteLink();
         String websiteLang = source.getWebsiteLang();
-        final Link website = getLink(LinkType.WEBSITE, target.getLinks());
-        if (website != null) {
+        final Link websiteLinkUrl = getLink(LinkType.WEBSITE, target.getLinks());
+        if (websiteLinkUrl != null) {
             if (SpecificStringUtil.isEmpty(websiteLink)) {
-                target.getLinks().remove(website);
+                target.getLinks().remove(websiteLinkUrl);
+                processLinkAction(ActionType.DELETE, LinkType.WEBSITE, target, user, service);
             } else {
-                website.setName(websiteLink);
-                website.setLang(websiteLang);
+                if (websiteLinkUrl.getName() == null || !websiteLinkUrl.getName().equals(websiteLink)) {
+                    websiteLinkUrl.setName(websiteLink);
+                    processLinkAction(ActionType.UPDATE, LinkType.WEBSITE, target, user, service);
+                }
+                websiteLinkUrl.setLang(websiteLang);
             }
         } else {
             if (!SpecificStringUtil.isEmpty(websiteLink)) {
                 final Link newWebsite = createWebsiteLink(websiteLink, websiteLang);
                 target.getLinks().add(newWebsite);
+                processLinkAction(ActionType.ADD, LinkType.WEBSITE, target, user, service);
             }
         }
     }
 
-    private static void updateLink(final String linkUrl, final String linkType, final Item target) {
+    private static void updateLink(final String linkUrl,
+                                   final String linkType,
+                                   final Item target,
+                                   final UserEntity user,
+                                   final ItemService service) {
         final Link link = getLink(linkType, target.getLinks());
         if (link != null) {
             if (SpecificStringUtil.isEmpty(linkUrl)) {
                 target.getLinks().remove(link);
+                processLinkAction(ActionType.DELETE, linkType, target, user, service);
             } else {
-                link.setName(linkUrl);
+                if (link.getName() == null || !link.getName().equals(linkUrl)) {
+                    link.setName(linkUrl);
+                    processLinkAction(ActionType.UPDATE, linkType, target, user, service);
+                }
             }
         } else {
             if (!SpecificStringUtil.isEmpty(linkUrl)) {
                 final Link newLink = createLink(linkType, linkUrl);
                 target.getLinks().add(newLink);
+                processLinkAction(ActionType.ADD, linkType, target, user, service);
             }
         }
     }
@@ -105,19 +113,19 @@ public class LinkUtil {
 
     public static void addLinksToItem(final Item target, final TransitiveItem source) {
         if (source.getWiki() != null) {
-            target.getLinks().add(createLink("wiki", source.getWiki()));
+            target.getLinks().add(createLink(LinkType.WIKI, source.getWiki()));
         }
         if (source.getWebsite() != null) {
             target.getLinks().add(createWebsiteLink(source.getWebsite(), source.getWebsiteLang()));
         }
         if (source.getManual() != null) {
-            target.getLinks().add(createLink("manual", source.getManual()));
+            target.getLinks().add(createLink(LinkType.MANUAL, source.getManual()));
         }
         if (source.getParts() != null) {
-            target.getLinks().add(createLink("parts catalog", source.getParts()));
+            target.getLinks().add(createLink(LinkType.PARTS_CATALOG, source.getParts()));
         }
         if (source.getDrawings() != null) {
-            target.getLinks().add(createLink("drawings", source.getDrawings()));
+            target.getLinks().add(createLink(LinkType.DRAWINGS, source.getDrawings()));
         }
     }
 

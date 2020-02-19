@@ -302,7 +302,6 @@ public class ItemViewFactory {
 
         final long translationFromUserLang = System.nanoTime();
         if (!userLang.equals("en")) {
-            final DictionaryData dictionaryData = getDictionaryFromFile(userLang);
             try {
                 translate(userLang, "en", view, true);
             } catch (Exception e) {
@@ -336,7 +335,7 @@ public class ItemViewFactory {
         ImgUtil.updateImg(view, oldItem);
         updateChildItems(oldItem, view, itemService, currentUser);
         updateReplacers(oldItem, view, itemService, currentUser);
-        LinkUtil.updateItemLinks(oldItem, view);
+        LinkUtil.updateItemLinks(oldItem, view, currentUser, itemService);
 
         itemService.update(oldItem);
 
