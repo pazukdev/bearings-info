@@ -47,22 +47,25 @@ public class ItemViewFactory {
     private final List<String> infoCategories;
 
     public ItemView createHomeView(final String userName, final String userLanguage) {
-        return createItemView(MOTORCYCLE_CATALOGUE_VIEW.getItemId(), userName, userLanguage);
+        return createItemView(MOTORCYCLE_CATALOGUE_VIEW.getItemId(), Status.ACTIVE, userName, userLanguage);
     }
 
-    public ItemView createItemsManagementView(final String userName, final String userLanguage) {
-        return createItemView(ITEMS_MANAGEMENT_VIEW.getItemId(), userName, userLanguage);
+    public ItemView createItemsListView(final String itemsStatus, final String userName, final String userLanguage) {
+        return createItemView(ITEMS_MANAGEMENT_VIEW.getItemId(), itemsStatus, userName, userLanguage);
     }
 
     public ItemView createWishlistView(final String userName, final String userLanguage) {
-        return createItemView(WISH_LIST_VIEW.getItemId(), userName, userLanguage);
+        return createItemView(WISH_LIST_VIEW.getItemId(), Status.ACTIVE, userName, userLanguage);
     }
 
     public ItemView createUserListView(final String userName, final String userLang) {
-        return createItemView(USER_LIST_VIEW.getItemId(), userName, userLang);
+        return createItemView(USER_LIST_VIEW.getItemId(), Status.ACTIVE, userName, userLang);
     }
 
-    public ItemView createItemView(final Long itemId, final String userName, final String userLang) {
+    public ItemView createItemView(final Long itemId,
+                                   final String status,
+                                   final String userName,
+                                   final String userLang) {
         final long businessLogicStartTime = System.nanoTime();
 
         final UserService userService = itemService.getUserService();
@@ -83,7 +86,7 @@ public class ItemViewFactory {
         } else if (itemId.equals(MOTORCYCLE_CATALOGUE_VIEW.getItemId())) {
             view = createVehicleView(basicView, userService);
         } else if (itemId.equals(ITEMS_MANAGEMENT_VIEW.getItemId())) {
-            view = createItemsManagementView(basicView);
+            view = createItemsListView(basicView, status);
         } else if (userListView) {
             view = createUsersListView(basicView, userService);
         } else {
@@ -114,7 +117,7 @@ public class ItemViewFactory {
         final long businessLogicStartTime = System.nanoTime();
 
         final Item item = createNewItem(name, category, userName, userLanguage);
-        final ItemView view = createItemView(item.getId(), userName, userLanguage);
+        final ItemView view = createItemView(item.getId(), Status.ACTIVE, userName, userLanguage);
         view.setNewItem(true);
 
         setTime (view, (double) (System.nanoTime() - businessLogicStartTime), null);
@@ -182,6 +185,7 @@ public class ItemViewFactory {
         view.setSearchEnabled(true);
         view.setOrdinaryItem(true);
         view.setCategory(category);
+        view.setStatus(item.getStatus());
         view.setLocalizedCategory(category);
         view.setName(name);
         view.setLocalizedName(name);
@@ -254,8 +258,8 @@ public class ItemViewFactory {
         return view;
     }
 
-    private ItemView createItemsManagementView(final ItemView view) {
-        final List<Item> items = itemService.findAll();
+    private ItemView createItemsListView(final ItemView view, final String itemsStatus) {
+        final List<Item> items = itemService.findAll(itemsStatus);
         final List<String> comments = getTxtFileTextLines(FileName.COMMENTS);
 
         final List<NestedItemDto> dtos = new ArrayList<>();
@@ -336,10 +340,11 @@ public class ItemViewFactory {
         updateChildItems(oldItem, view, itemService, currentUser);
         updateReplacers(oldItem, view, itemService, currentUser);
         LinkUtil.updateItemLinks(oldItem, view, currentUser, itemService);
+        oldItem.setStatus(view.getStatus());
 
         itemService.update(oldItem);
 
-        final ItemView newItemView = createItemView(itemId, currentUser.getName(), userLang);
+        final ItemView newItemView = createItemView(itemId, oldItem.getStatus(), currentUser.getName(), userLang);
 
         final double totalTranslationTime = view.getTranslationTime() * 1000000000 + translationFromUserLangDuration;
         setTime(newItemView, (double) (System.nanoTime() - businessLogicStartTime), totalTranslationTime);
@@ -383,7 +388,7 @@ public class ItemViewFactory {
     private ItemView removeItem(final ItemView view,
                                 final UserEntity user,
                                 final UserService userService) {
-        removeItems (view.getIdsToRemove(), user, userService);
+        removeItems(view.getIdsToRemove(), user, userService);
         view.getIdsToRemove().clear();
         view.setWishListIds(collectIds(user.getWishList().getItems()));
         return view;
@@ -401,6 +406,11 @@ public class ItemViewFactory {
     }
 
     private void removeItem(final Item itemToRemove, final UserEntity user) {
+        final String status = itemToRemove.getStatus();
+        if (status.equals(Status.DELETED)) {
+            itemService.hardDelete(itemToRemove.getId());
+            return;
+        }
         itemToRemove.setStatus(Status.DELETED);
         itemToRemove.setUserActionDate(DateUtil.now());
         itemService.update(itemToRemove);

@@ -96,7 +96,7 @@
                 <tr>
                     <td>
                         <label>{{translate("Seller language")}}
-                            <select v-model="itemView.websiteLang">
+                            <select id="website-lang-select" v-model="itemView.websiteLang">
                                 <option v-for="lang in langs" :key="lang">
                                     {{lang}}
                                 </option>
@@ -125,6 +125,26 @@
                         </label>
                     </td>
                 </tr>
+            </tbody>
+        </table>
+
+        <table v-if="editMode && isAdmin()">
+            <tbody>
+                <tr><td colspan="2"><hr></td></tr>
+                <tr><td colspan="2"><b>{{"Admin section"}}</b></td></tr>
+                <tr>
+                    <td style="text-align: left">
+                        {{"Items status"}}
+                    </td>
+                    <td>
+                        <select v-model="itemView.status">
+                            <option v-for="status in ['active', 'deleted']" :value="status">
+                                {{status}}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                <tr><td colspan="2"><hr></td></tr>
             </tbody>
         </table>
     </div>
@@ -269,7 +289,7 @@
 </script>
 
 <style scoped>
-    select {
+    #website-lang-select {
         width: initial;
         height: initial;
     }

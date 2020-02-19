@@ -90,6 +90,13 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
+    public List<Item> findAll(final String status) {
+        final List<Item> items = itemRepository.findAll();
+        items.removeIf(entity -> !entity.getStatus().equals(status));
+        return items;
+    }
+
+    @Transactional
     public List<Item> find(final String... categories) {
         final List<Item> items = new ArrayList<>();
         for (final String category : categories) {
@@ -165,8 +172,8 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public ItemView createItemsManagementView(final String userName, final String language) {
-        return createNewItemViewFactory().createItemsManagementView(userName, language);
+    public ItemView createItemsListView(final String itemsStatus, final String userName, final String language) {
+        return createNewItemViewFactory().createItemsListView(itemsStatus, userName, language);
     }
 
     @Transactional
@@ -176,7 +183,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     @Transactional
     public ItemView createItemView(final Long itemId, final String userName, final String language) {
-        return createNewItemViewFactory().createItemView(itemId, userName, language);
+        return createNewItemViewFactory().createItemView(itemId, Status.ACTIVE, userName, language);
     }
 
     @Transactional

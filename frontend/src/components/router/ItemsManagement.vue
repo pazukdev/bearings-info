@@ -4,6 +4,16 @@
         <div v-else>
             <CreateItemForm/>
             <Header/>
+            <div v-if="isAdmin()" class="default-margin">
+                <label>
+                    {{"Items status"}}
+                    <select v-model="status" @change="changeStatus()">
+                        <option v-for="status in ['active', 'deleted']" :value="status">
+                            {{status}}
+                        </option>
+                    </select>
+                </label>
+            </div>
             <ItemList :items-management-view="true" :sorted="true"/>
             <div style="height: 100px"/>
         </div>
@@ -44,6 +54,12 @@
             })
         },
 
+        data() {
+            return {
+                status: "active"
+            }
+        },
+
         created() {
             this.onUrlChange();
         },
@@ -62,7 +78,8 @@
                     .get(this.basicUrl
                         + "/" + "item"
                         + "/" + "view"
-                        + "/" + "items-management"
+                        + "/" + "items"
+                        + "/" + this.status
                         + "/" + this.userName
                         + "/" + this.appLanguage, {
                         headers: {
@@ -80,6 +97,14 @@
 
             isLoading() {
                 return shared.isLoading(this.loadingState);
+            },
+
+            isAdmin() {
+                return itemViewUtil.isAdmin(this.itemView);
+            },
+
+            changeStatus() {
+                this.onUrlChange();
             }
         }
     }
