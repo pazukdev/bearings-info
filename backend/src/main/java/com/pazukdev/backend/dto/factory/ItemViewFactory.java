@@ -248,7 +248,7 @@ public class ItemViewFactory {
         vehicles.forEach(vehicle -> dtos.add(createVehicle(vehicle, userService)));
 
         view.setChildren(dtos);
-        view.setAdminMessage(itemService.getAdminMessage());
+        view.setAdminMessage(AdminMessage.getMessage(itemService.getAdminMessageRepository()));
         view.setLastVehicles(getLast10NewVehicles(itemService));
         view.setLastReplacers(getLast10NewReplacers(itemService));
         return view;

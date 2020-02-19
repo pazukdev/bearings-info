@@ -56,6 +56,17 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="create_admin_message_table" author="sviarkaltsau">
+        <createTable tableName="admin_message">
+            <column autoIncrement="true" name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="text" type="varchar(1000)"/>
+            <column name="link_text" type="varchar(255)"/>
+            <column name="url" type="varchar(1000)"/>
+        </createTable>
+    </changeSet>
+
     <changeSet id="create_child_item_table" author="sviarkaltsau">
         <createTable tableName="child_item">
             <column autoIncrement="true" name="id" type="bigserial">

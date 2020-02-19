@@ -3,22 +3,17 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.constant.Status;
 import com.pazukdev.backend.converter.ItemConverter;
 import com.pazukdev.backend.converter.ReplacerConverter;
-import com.pazukdev.backend.dto.AdminMessage;
 import com.pazukdev.backend.dto.RateReplacer;
 import com.pazukdev.backend.dto.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.dto.TransitiveItemDto;
 import com.pazukdev.backend.dto.factory.ItemViewFactory;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.*;
-import com.pazukdev.backend.repository.ChildItemRepository;
-import com.pazukdev.backend.repository.ItemRepository;
-import com.pazukdev.backend.repository.ReplacerRepository;
-import com.pazukdev.backend.repository.UserActionRepository;
+import com.pazukdev.backend.repository.*;
 import com.pazukdev.backend.util.DateUtil;
 import com.pazukdev.backend.util.LinkUtil;
 import com.pazukdev.backend.util.RateUtil;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,8 +43,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     private final ReplacerRepository replacerRepository;
     private final ReplacerConverter replacerConverter;
     private final ItemRepository itemRepository;
-    @Setter
-    private AdminMessage adminMessage;
+    private final AdminMessageRepository adminMessageRepository;
 
     private int bearingReplacerCounter = 0;
     private int sealReplacerCounter = 0;
@@ -63,7 +57,8 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                        final UserService userService,
                        final UserActionRepository userActionRepository,
                        final ReplacerRepository replacerRepository,
-                       final ReplacerConverter replacerConverter) {
+                       final ReplacerConverter replacerConverter,
+                       final AdminMessageRepository adminMessageRepository) {
         super(itemRepository, converter);
         this.transitiveItemService = transitiveItemService;
         this.childItemRepository = childItemRepository;
@@ -72,6 +67,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         this.replacerRepository = replacerRepository;
         this.replacerConverter = replacerConverter;
         this.itemRepository = itemRepository;
+        this.adminMessageRepository = adminMessageRepository;
     }
 
     @Transactional

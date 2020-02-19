@@ -13,7 +13,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <input v-model="adminMessage.link" type="text" :placeholder="translate('Link')"/>
+                            <input v-model="adminMessage.url" type="text" :placeholder="translate('Link')"/>
                         </td>
                     </tr>
                     <tr>
@@ -88,10 +88,6 @@
 
             isEmpty(value) {
                 return shared.isEmpty(value);
-            },
-
-            getLinkText(source) {
-                return !this.isEmpty(source.linkText) ? source.linkText : source.link;
             },
 
             translate(text) {

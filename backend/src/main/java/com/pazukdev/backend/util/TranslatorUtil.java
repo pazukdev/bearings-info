@@ -65,9 +65,7 @@ public class TranslatorUtil {
             view.setAllChildren(translateItemDtoList(langFrom, langTo, view.getAllChildren(), dictionary));
             view.setPossibleParts(translateItemDtoList(langFrom, langTo, view.getPossibleParts(), dictionary));
             view.setPossibleReplacers(translateItemDtoList(langFrom, langTo, view.getPossibleReplacers(), dictionary));
-            if (view.getAdminMessage() != null) {
-                view.getAdminMessage().translate(langTo, dictionary);
-            }
+
             for (final UserActionDto userAction : view.getLastVehicles()) {
                 userAction.translate(langTo, dictionary);
             }

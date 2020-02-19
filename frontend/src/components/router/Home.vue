@@ -2,14 +2,11 @@
     <div>
         <div class="default-margin" style="text-align: center"
              v-if="isAdminMessageRendered(itemView.adminMessage)">
-            <p v-if="!isEmpty(itemView.adminMessage.localizedText)">
-                {{itemView.adminMessage.localizedText}}
+            <p v-if="!isEmpty(itemView.adminMessage.text)">
+                {{translate(itemView.adminMessage.text)}}
             </p>
-            <p v-else>
-                {{itemView.adminMessage.text}}
-            </p>
-            <a class="simple-link" v-if="!isEmpty(itemView.adminMessage.link)"
-               :href="itemView.adminMessage.link">{{getLinkText(itemView.adminMessage)}}</a>
+            <a class="simple-link" v-if="!isEmpty(itemView.adminMessage.url)"
+               :href="itemView.adminMessage.url">{{getLinkText(itemView.adminMessage)}}</a>
         </div>
         <details class="default-margin">
             <summary>{{translate("About the app")}}</summary>
@@ -125,9 +122,12 @@
             },
 
             isAdminMessageRendered(message) {
-                return !this.isEmpty(message)
-                    && (!this.isEmpty(message.text) || !this.isEmpty(message.localizedText));
-            }
+                return !this.isEmpty(message) && !this.isEmpty(message.text);
+            },
+
+            getLinkText(source) {
+                return !this.isEmpty(source.linkText) ? this.translate(source.linkText) : source.url;
+            },
         }
     }
 </script>
