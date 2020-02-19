@@ -31,6 +31,7 @@ public class ItemView extends AbstractView {
     private boolean ordinaryItem;
     private Long itemId;
     private String category = "-";
+    private String vehicleClass;
     private String status;
     private String localizedCategory = "-";
     private String localizedName = "-";

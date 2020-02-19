@@ -198,15 +198,18 @@
 
             searchInGoogle() {
                 let itemView = this.itemView;
-                let itemName = itemView.header.name.toLowerCase();
+                let itemName = itemView.name;
                 let textBefore;
                 let category = itemView.category.toLowerCase();
                 if (category === "manufacturer" || category === "standard") {
                     textBefore = "";
                 } else {
-                    textBefore = this.$t("buy") + " ";
+                    textBefore = this.translate("buy") + " ";
                 }
-                let q = textBefore + itemName;
+                if (category === "vehicle" && !this.isEmpty(itemView.vehicleClass)) {
+                    category = itemView.vehicleClass;
+                }
+                let q = textBefore + this.translate(category.toLowerCase()) + " " + this.translate(itemName);
                 window.open('http://google.com/search?q=' + q);
             },
 

@@ -7,6 +7,8 @@
                     <div class="image-preview">
                         <img class="preview" :src="getImgUrl()" alt="Item image">
                     </div>
+                    <br>
+                    {{translate(noImageMessage)}}
                 </td>
             </tr>
             </tbody>
@@ -78,7 +80,8 @@
         data() {
             return {
                 img: "",
-                fileUploadMessage: ""
+                fileUploadMessage: "",
+                noImageMessage: "",
             }
         },
 
@@ -86,12 +89,17 @@
 
         methods: {
             getImgUrl() {
+                this.noImageMessage = "";
                 if (routerUtil.isHome(this.$route)) {
                     return "https://pazukdev.github.io/sovietboxers/img/app_logo.9a3c3892.png";
                 }
                 let defaultImg = "https://drive.google.com/open?id=1wyb_Av3pKeP2gnzLPRfz40FjJaUZkQde";
                 let itemView = this.itemView;
-                let img = !this.isEmpty(itemView.img) ? itemView.img : defaultImg;
+                let img = itemView.img;
+                if (this.isEmpty(img)) {
+                    img = defaultImg;
+                    this.noImageMessage = "No image";
+                }
                 let isBase64ImgData = img.includes(";base64,");
                 if (isBase64ImgData) {
                     return img;

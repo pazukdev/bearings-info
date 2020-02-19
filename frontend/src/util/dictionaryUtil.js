@@ -29,7 +29,10 @@ export default {
                 continue;
             }
             if (values[1].trim().toLowerCase() === text.trim().toLowerCase()) {
-                return stringUtil.capitalize(values[2]);
+                if (stringUtil.isCapitalized(text.trim())) {
+                    return stringUtil.capitalize(values[2]);
+                }
+                return values[2];
             }
         }
         return text;

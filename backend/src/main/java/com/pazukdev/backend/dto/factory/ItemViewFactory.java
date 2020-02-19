@@ -181,17 +181,21 @@ public class ItemViewFactory {
         final String category = item.getCategory();
         final String name = item.getName();
         final ImgViewData imgViewData = ImgUtil.getImg(item);
+        final Map<String, String> description = toMap(item.getDescription());
 
         view.setSearchEnabled(true);
         view.setOrdinaryItem(true);
         view.setCategory(category);
+        if (category.equals(VEHICLE)) {
+            view.setVehicleClass(description.get(Parameter.CLASS));
+        }
         view.setStatus(item.getStatus());
         view.setLocalizedCategory(category);
         view.setName(name);
         view.setLocalizedName(name);
         view.setDefaultImg(imgViewData.getDefaultImg());
         view.setImg(imgViewData.getImg());
-        view.setHeader(createHeader(item, itemService));
+        view.setHeader(createHeader(item, description, itemService));
         view.setChildren(createChildren(item, userService, false));
         view.setAllChildren(createChildren(item, userService, true));
         view.setReplacersTable(createReplacersTable(item, userService));

@@ -58,6 +58,7 @@ ru=MV-750M=МВ-750М
 ru=New dictionary accepted=Новый словарь принят
 ru=New parameter=Новый параметр
 ru=New size is=новый размер
+ru=No image=Нет изображения
 ru=Page error. Please return to previous page=Ошибка страницы. Пожалуйсто вернитесь на предыдущую страницу
 ru=Password change via email is temporarily not available=Смена пароля через email временно недоступна
 ru=Pneumatic tires for motorcycles, cycle-cars, scooters and mopeds=Шины для мотоциклов. мотоколясок, мотороллеров и мопедов
@@ -112,6 +113,7 @@ ru=bearing=подшипник
 ru=bolt=болт
 ru=boxer=оппозит
 ru=bronze=бронза
+ru=buy=купить
 ru=cage=сепаратор
 ru=cancel=отменить
 ru=car=легковой автомобиль
@@ -142,6 +144,7 @@ ru=dictionary contains more then 1 languages=словарь содержит б�
 ru=dimensions=размеры
 ru=disclaimer=дисклеймер
 ru=download dictionary=скачать словарь
+ru=drawings=чертежи
 ru=duralumin cage=дюралевый сепаратор
 ru=duralumin=дюраль
 ru=eccentric inner flat snap rings=эксцентричные внутренние плоские пружинные кольца
@@ -208,6 +211,7 @@ ru=location=расположение
 ru=lock ring=стопорное кольцо
 ru=login=войти
 ru=logout=выйти
+ru=manual=руководство по эксплуатации
 ru=manufacturer=производитель
 ru=material=материал
 ru=max speed=макс. скорость
@@ -248,6 +252,7 @@ ru=outer shield material=оплетка
 ru=paper=бумага
 ru=part=часть
 ru=partnumber=наименование
+ru=parts catalog=каталог узлов и деталей
 ru=parts=детали
 ru=password=пароль
 ru=passwords are different=пароли не совпадают
