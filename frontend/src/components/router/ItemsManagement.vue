@@ -14,7 +14,9 @@
                     </select>
                 </label>
             </div>
-            <ItemList :items-management-view="true" :sorted="true"/>
+            <ItemList :items-management-view="true"
+                      :sorted="true"
+                      :url-filter="$route.params.filter"/>
             <div style="height: 100px"/>
         </div>
     </div>

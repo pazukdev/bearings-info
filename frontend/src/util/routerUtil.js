@@ -1,6 +1,7 @@
 import itemViewUtil from "./itemViewUtil";
 import router from "../plugins/router";
 import storeUtil from "./storeUtil";
+import shared from "./shared";
 
 export default {
 
@@ -68,6 +69,14 @@ export default {
 
     toItemsManagement(router) {
         router.push({name: "items_management"});
+    },
+
+    toItemsSearch(filter) {
+        if (shared.isEmpty(filter)) {
+            this.toItemsManagement(router);
+        } else {
+            router.push({name: "items_management", params: {filter}});
+        }
     },
 
     setLang(lang) {

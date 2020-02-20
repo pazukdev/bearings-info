@@ -38,7 +38,7 @@ const router = new VueRouter({
         { path: '/user_list/:lang', name: 'user_list', component: UserList, meta: { requiresAuth: true }},
         { path: '/wish_list/:lang', name: 'wish_list', component: WishList, meta: { requiresAuth: true }},
         {
-            path: '/items_management/:lang',
+            path: '/items_management/:lang/:filter?',
             name: 'items_management',
             component: ItemsManagement,
             meta: { requiresAuth: true }

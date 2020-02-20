@@ -4,7 +4,8 @@
             <tbody>
             <tr v-if="!editMode && !usageView">
                 <td>
-                    <input type="search" v-model="filter" @input="onChange" :placeholder="translate('Search') + '...'">
+                    <input type="search" v-model="filter" @input="onInput" @change="onChange"
+                           :placeholder="translate('Search') + '...'">
                 </td>
             </tr>
             <tr style="text-align: left">
@@ -20,12 +21,14 @@
 <script>
     import {mapState} from "vuex";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import routerUtil from "../../util/routerUtil";
 
     export default {
         name: "SearchForm",
 
         props: {
             usageView: Boolean,
+            itemsManagementView: Boolean,
             itemsCount: Number
         },
 
@@ -38,17 +41,27 @@
 
         data() {
             return {
-                filter: ""
+                filter: this.getFilter()
             }
         },
 
         methods: {
-            onChange() {
+            onInput() {
                 this.$emit('get-filter', this.filter);
+            },
+
+            onChange() {
+                if (this.itemsManagementView) {
+                    routerUtil.toItemsSearch(this.filter);
+                }
             },
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            getFilter() {
+                return this.$route.params.filter;
             }
         }
     }

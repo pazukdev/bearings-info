@@ -1,6 +1,8 @@
 <template>
     <div>
-        <SearchForm :items-count="itemsCount" @get-filter="getFilter"/>
+        <SearchForm :items-count="itemsCount"
+                    :items-management-view="itemsManagementView"
+                    @get-filter="getFilter"/>
         <table id="parts-table">
             <tbody>
             <tr v-for="vehicleClass in itemsListAsTables()" v-if="vehicles">
@@ -96,7 +98,8 @@
             usageView: Boolean,
             vehicles:Boolean,
             itemViewProp: Object,
-            sorted: Boolean
+            sorted: Boolean,
+            urlFilter: String
         },
 
         computed: {
@@ -111,7 +114,7 @@
 
         data() {
             return {
-                filter: "",
+                filter: this.urlFilter,
                 itemsCount: 0
             }
         },
