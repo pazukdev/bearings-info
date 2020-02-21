@@ -12,6 +12,8 @@
 <script>
     import {mapState} from "vuex";
     import arrayUtil from "../../util/arrayUtil";
+    import dictionaryUtil from "../../util/dictionaryUtil";
+    import itemDtoUtil from "../../util/itemDtoUtil";
 
     export default {
         name: "ItemSelect",
@@ -47,8 +49,10 @@
 
                 let actualPossibleItems = [];
                 for (let i=0; i < possibleItems.length; i++) {
-                    if (!this.isInList(possibleItems[i], items)) {
-                        actualPossibleItems.push(possibleItems[i]);
+                    let item = possibleItems[i];
+                    if (!this.isInList(item, items)) {
+                        item.selectText = itemDtoUtil.createSelectText(item, this.replacer);
+                        actualPossibleItems.push(item);
                     }
                 }
 
@@ -70,6 +74,10 @@
 
             onChange() {
                 this.$emit("on-change", this.selectedItem);
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

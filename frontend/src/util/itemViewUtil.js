@@ -7,7 +7,22 @@ import routerUtil from "./routerUtil";
 import dictionaryUtil from "./dictionaryUtil";
 
 export default {
+
+    translate(text) {
+        return dictionaryUtil.translate(text);
+    },
+
+    translateItem(item) {
+        // item.manufacturer = dictionaryUtil.translate(item.manufacturer);
+        // item.itemCategory = dictionaryUtil.translate(item.itemCategory);
+        item.vehicleClass = dictionaryUtil.translate(item.vehicleClass);
+    },
+
     itemsListToTables(items, sort, filter, opened) {
+        if (!shared.isEmpty(filter) && filter.length > 4) {
+            opened = true;
+        }
+
         let categories = [];
         for (let i = 0; i < items.length; i++) {
             let category = items[i].itemCategory;
@@ -22,7 +37,7 @@ export default {
             let category = categories[i];
 
             let nestedTable = {
-                name: !shared.isEmpty(category) ? category : dictionaryUtil.translate("Not specified"),
+                name: !shared.isEmpty(category) ? category : this.translate("Not specified"),
                 items: [],
                 opened: opened
             };
@@ -30,6 +45,7 @@ export default {
             for (let i = 0; i < items.length; i++) {
                 let item = items[i];
                 if (item.itemCategory === category && searchUtil.filterItem(item, filter)) {
+                    this.translateItem(item);
                     nestedTable.items.push(item);
                     itemsCount++;
                 }

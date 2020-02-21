@@ -89,7 +89,6 @@
 
         methods: {
             getImgUrl() {
-                this.noImageMessage = "";
                 if (routerUtil.isHome(this.$route)) {
                     return "https://pazukdev.github.io/sovietboxers/img/app_logo.9a3c3892.png";
                 }
@@ -99,6 +98,8 @@
                 if (this.isEmpty(img)) {
                     img = defaultImg;
                     this.noImageMessage = "No image";
+                } else {
+                    this.noImageMessage = "";
                 }
                 let isBase64ImgData = img.includes(";base64,");
                 if (isBase64ImgData) {

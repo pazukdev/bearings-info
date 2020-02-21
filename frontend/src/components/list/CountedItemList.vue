@@ -6,7 +6,7 @@
             <tr v-for="table in itemsListAsTables()" v-if="!hideTable(table)">
                 <td>
                     <v-details v-model="table.opened" v-if="isAdmin() || table.name !== 'deleted'">
-                        <summary><b>{{table.name}}</b></summary>
+                        <summary><b>{{translate(table.name)}}</b></summary>
                         <table>
                             <tbody>
                             <tr v-for="item in table.items">
@@ -57,6 +57,7 @@
     import EditableImg from "../EditableImg";
     import SearchForm from "../form/SearchForm";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import shared from "../../util/shared";
 
     export default {
         name: "CountedItemList",
@@ -110,7 +111,7 @@
                 } else {
                     items = itemView.children;
                 }
-                let opened = this.wishListView === true;
+                let opened = this.wishListView;
                 let result = itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
                 this.itemsCount = result.itemsCount;
                 return result.tables;
@@ -122,6 +123,10 @@
 
             isEdit() {
                 return this.editableComments && this.editMode;
+            },
+
+            isEmpty(value) {
+                return shared.isEmpty(value);
             },
 
             hideTable(table) {

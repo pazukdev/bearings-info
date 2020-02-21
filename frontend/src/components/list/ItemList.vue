@@ -13,7 +13,7 @@
                             <tbody>
                             <tr v-for="manufacturer in vehicleClass.manufacturers">
                                 <td>
-                                    <details>
+                                    <v-details v-model="opened">
                                         <summary>{{manufacturer.name}}</summary>
                                         <table class="equal-columns-table">
                                             <tbody>
@@ -31,7 +31,7 @@
                                             </tr>
                                             </tbody>
                                         </table>
-                                    </details>
+                                    </v-details>
                                 </td>
                             </tr>
                             </tbody>
@@ -115,12 +115,14 @@
         data() {
             return {
                 filter: this.urlFilter,
-                itemsCount: 0
+                itemsCount: 0,
+                opened: false
             }
         },
 
         methods: {
             itemsListAsTables() {
+                let motorcycleCategory = this.translate("Motorcycle");
                 let itemView;
                 if (this.usageView && this.itemViewProp != null) {
                     itemView = this.itemViewProp;
@@ -129,40 +131,37 @@
                 }
                 let items = itemView.children;
 
-                // let opened = !this.itemsManagementView && !this.usageView;
                 let opened = false;
 
                 if (this.vehicles) {
                     let vehicleClasses = [];
-                    let translatedVehicleClasses = [];
                     for (let i = 0; i < items.length; i++) {
                         let vehicleClass = items[i].vehicleClass;
-                        let translatedVehicleClass = items[i].translatedVehicleClass;
                         if (!shared.isInArray(vehicleClass, vehicleClasses)) {
                             vehicleClasses.push(vehicleClass);
-                        }
-                        if (!shared.isInArray(translatedVehicleClass, translatedVehicleClasses)) {
-                            translatedVehicleClasses.push(translatedVehicleClass);
                         }
                     }
 
                     let parentTables = [];
 
-                    for (let i = 0; i < translatedVehicleClasses.length; i++) {
-                        let category = translatedVehicleClasses[i];
+                    for (let i = 0; i < vehicleClasses.length; i++) {
+                        let category = vehicleClasses[i];
                         let vehicles = [];
 
                         for (let j = 0; j < items.length; j++) {
                             let item = items[j];
-                            if (item.translatedVehicleClass === category) {
+                            if (item.vehicleClass === category) {
+                                itemViewUtil.translateItem(item);
                                 vehicles.push(item);
                             }
                         }
-                        let childTables = itemViewUtil.itemsListToTables(vehicles, true, this.filter, opened).tables;
+                        let filter = this.filter;
+                        let childTables = itemViewUtil.itemsListToTables(vehicles, true, filter, opened).tables;
+                        this.opened = !this.isEmpty(filter) && filter.length > 2;
                         let parentTable = {
                             name: !shared.isEmpty(category) ? category : this.translate("Not specified"),
                             manufacturers: childTables,
-                            opened: vehicleClasses[i] === "Motorcycle"
+                            opened: category === motorcycleCategory || this.opened
                         };
 
                         if (childTables.length > 0) {

@@ -47,7 +47,7 @@ public class ItemViewFactory {
     private final List<String> infoCategories;
 
     public ItemView createHomeView(final String userName, final String userLanguage) {
-        return createItemView(MOTORCYCLE_CATALOGUE_VIEW.getItemId(), Status.ACTIVE, userName, userLanguage);
+        return createItemView(VEHICLES_VIEW.getItemId(), Status.ACTIVE, userName, userLanguage);
     }
 
     public ItemView createItemsListView(final String itemsStatus, final String userName, final String userLanguage) {
@@ -83,8 +83,8 @@ public class ItemViewFactory {
 
         if (itemId.equals(WISH_LIST_VIEW.getItemId())) {
             view = createWishListView(basicView, wishList, userService);
-        } else if (itemId.equals(MOTORCYCLE_CATALOGUE_VIEW.getItemId())) {
-            view = createVehicleView(basicView, userService);
+        } else if (itemId.equals(VEHICLES_VIEW.getItemId())) {
+            view = createVehiclesView(basicView, userService);
         } else if (itemId.equals(ITEMS_MANAGEMENT_VIEW.getItemId())) {
             view = createItemsListView(basicView, status);
         } else if (userListView) {
@@ -249,7 +249,7 @@ public class ItemViewFactory {
         }
     }
 
-    private ItemView createVehicleView(final ItemView view, final UserService userService) {
+    private ItemView createVehiclesView(final ItemView view, final UserService userService) {
         final List<Item> vehicles = itemService.find(VEHICLE);
 
         final List<NestedItemDto> dtos = new ArrayList<>();

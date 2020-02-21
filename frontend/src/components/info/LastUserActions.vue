@@ -10,7 +10,7 @@
                                  :to="{name: 'user', params: {id: action.userId, lang: appLanguage}}">
                         {{action.userName}}
                     </router-link>
-                    {{" " + action.actionType + " " + action.itemCategory.toLowerCase() + " "}}
+                    {{" " + translate(action.actionType) + " " + translate(action.itemCategory.toLowerCase()) + " "}}
                     <router-link class="simple-link"
                                  :to="{name: 'item', params: {id: action.itemId, lang: appLanguage}}">
                         {{action.itemName}}
@@ -21,7 +21,7 @@
                                          :to="{name: 'item', params: {id: action.parentId, lang: appLanguage}}">
                             {{action.parentName}}
                             </router-link>
-                            {{" " + translate('as') + " " + action.itemType}}
+                            {{" " + translate('as') + " " + translate(action.itemType)}}
                         </span>
                 </li>
             </ul>
