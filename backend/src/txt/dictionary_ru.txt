@@ -142,8 +142,10 @@ ru=deepgroove bearing=радиальный
 ru=defunct=закрыто
 ru=dictionary contains more then 1 languages=словарь содержит более чем 1 язык
 ru=dimensions=размеры
+ru=direction=направление
 ru=disclaimer=дисклеймер
 ru=download dictionary=скачать словарь
+ru=draisine=дрезина
 ru=drawings=чертежи
 ru=duralumin cage=дюралевый сепаратор
 ru=duralumin=дюраль
@@ -343,6 +345,7 @@ ru=thrust bearing=упорный
 ru=tin-free pressure-worked bronzes=бронзы безоловянные, обрабатываемые давлением
 ru=tire=шина
 ru=to change password input your old password=для изменения пароля введите ваш старый пароль
+ru=to=к
 ru=tube=камера
 ru=type=тип
 ru=tyre=шина
