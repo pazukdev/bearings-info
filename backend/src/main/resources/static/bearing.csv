@@ -1,5 +1,16 @@
 Category:,Bearing,,,,,,,,,,,,,,,,
-Name,Type,Rolling element,Enclosure,Rolling row,Cage,"Size, mm","Static load rating, N","Dynamic load rating, N","Limiting speed, 1/min",Standard,Manufacturer,Material,Wiki,Website,Website lang,Replacer,Image
+Name,Type,Rolling element,Enclosure,Rolling rows,Cage,"Size, mm","Static load rating, N","Dynamic load rating, N","Limiting speed, 1/min",Standard,Manufacturer,Material,Wiki,Website,Website lang,Replacer,Image
+7201107,Plain bearing,-,-,-,-,20x26x19.5,-,-,-,-,USSR,БрАЖМЦ 10-3-1.5,-,-,-,-,https://drive.google.com/open?id=152Y36Ad5ZmFM-N8yXvof2QE6Ou-EgSse
+7201404,Plain bearing,-,-,-,-,-,-,-,-,-,USSR,БрАЖМЦ 10-3-1.5; АЛ-5,-,-,-,-,https://drive.google.com/open?id=1W0V27a99ZPQJxwV9br8vvl4a7dYkcUCd
+407-1004058-A,Half-bearing,-,-,-,-,47.975-48.000 (diameter of con rod big end journal),-,-,-,-,USSR,-,-,-,-,-,https://drive.google.com/open?id=1joOXSX3Cr1SVO9nXxIxOc63fu7MSIueu
+7201234-A,Plain bearing,-,-,-,-,21x23.5x25,-,-,-,-,USSR,БрОФ 10,-,-,-,-,https://drive.google.com/open?id=1t0PaB_YLDUiKh7d3Un3-uUZGA8kJMxxw
+904700УС17,Roller bearing,Roller (no data),-,-,-,10x19x9,-,-,-,-,USSR,-,https://aprom.by/cgi-bin/boardauto.pl?&words=904700&mod=1,-,-,-,https://drive.google.com/open?id=1OAYR68x1Wd3zZ5HRC92XQohItwT73ZUv
+Half-bearing 7205238/39,Half-bearing,-,-,-,-,-,-,-,-,-,USSR,Bronze,-,-,-,Roller 3x15.8 45 pcs kit,-
+Roller 2.5x10 120 pcs kit,"Kit, Roller",Roller 2.5x10 (120),-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+Roller 3x15.8 45 pcs kit,"Kit, Roller",Roller 3x15.8 (45),-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+Roller 3x15.8 90 pcs kit,"Kit, Roller",Roller 3x15.8 (90),-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
+3086304Л,Deepgroove bearing,Ball (no data),Open,2 rows,Solid brass cage,20x52x22.22,-,-,-,GOST 520-89,USSR,-,https://aprom.by/cgi-bin/boardauto.pl?&words=3086304&mod=1,-,-,5304; 3304; 3304B TVH; BMW 07119982468,https://drive.google.com/open?id=1WVwp97Bxo-Aj1lNRzxj3P_62-CB_RKkT
+3304-BD-XL-TVH,Deepgroove bearing,Ball (no data),Open,2 rows,Solid polyamide snap cage,20x52x22.22,15900,24600,14700,-,FAG,-,https://medias.schaeffler.com/medias/en!hp.ec.br.pr/33..-BD*3304-BD-XL-TVH?pattern=3304-BD-XL-TVH,-,-,-,https://drive.google.com/open?id=1MHcHOSUhx-jMNCqaRXn4l1PC0dG5EF44
 18,Deepgroove bearing,Ball (7),Open,Single row,Sheet metal cage,8x22x7,-,-,-,GOST 520-89,USSR,-,https://aprom.by/cgi-bin/boardauto.pl?&words=18&mod=1,-,-,608; 608-2RS; 608-ZZ,https://drive.google.com/open?id=1nWmLo4AgkcS6KlSKzQtydc4UaoCudVGI
 110,Deepgroove bearing,Ball (13),Open,Single row,-,50x80x16,-,-,-,GOST 520-89,USSR,-,https://aprom.by/cgi-bin/boardauto.pl?&words=110&mod=1,-,-,6010,https://drive.google.com/open?id=14fsQZkxNf4Ha0hQkpiXjzhN8CZNktMlQ
 200,Deepgroove bearing,Ball (6),Open,Single row,Sheet metal cage,10x30x9,-,-,-,GOST 520-89,USSR,-,https://aprom.by/cgi-bin/boardauto.pl?&words=200&mod=1,-,-,6200; 6200-2RS; 6200-ZZ,https://drive.google.com/open?id=1meYieTypCI4zEMHEZBsDEjbF38Oa-YIj
@@ -23,20 +34,9 @@ Name,Type,Rolling element,Enclosure,Rolling row,Cage,"Size, mm","Static load rat
 874901,Roller bearing,Roller (no data),Open,Single row,-,13x32x20,-,-,-,-,USSR,-,https://aprom.by/cgi-bin/boardauto.pl?&words=874901&mod=1,-,-,-,https://drive.google.com/open?id=1UZ40WRlEvncDU2dnjojH4UubaZdCzSJf
 948066,Thrust bearing,Ball D5.556 (7),Open,Single row,-,6x22.7x5.5,-,-,-,-,USSR,-,https://aprom.by/cgi-bin/boardauto.pl?&words=948066&mod=1,-,-,AXK0619NF (+ 2 washers: AS 0619 h1 and AS 0619 h2.75),https://drive.google.com/open?id=1IuLuOw9Vyj47LePnVhNSEd40sJ3IrfDa
 7000105,Deepgroove bearing,Ball (no data),Open,Single row,-,25x47x8,-,-,-,GOST 520-89,USSR,-,https://aprom.by/cgi-bin/boardauto.pl?&words=7000105&mod=1,-,-,16005,https://drive.google.com/open?id=136N20dv4-NcGH29uL4_KvB8QlRX5_2Wp
-7201107,Plain bearing,-,-,-,-,20x26x19.5,-,-,-,-,USSR,БрАЖМЦ 10-3-1.5,-,-,-,-,https://drive.google.com/open?id=152Y36Ad5ZmFM-N8yXvof2QE6Ou-EgSse
-7201404,Plain bearing,-,-,-,-,-,-,-,-,-,USSR,БрАЖМЦ 10-3-1.5; АЛ-5,-,-,-,-,https://drive.google.com/open?id=1W0V27a99ZPQJxwV9br8vvl4a7dYkcUCd
-3086304Л,Deepgroove bearing,Ball (no data),Open,2 row,Solid brass cage,20x52x22.22,-,-,-,GOST 520-89,USSR,-,https://aprom.by/cgi-bin/boardauto.pl?&words=3086304&mod=1,-,-,5304; 3304; 3304B TVH; BMW 07119982468,https://drive.google.com/open?id=1WVwp97Bxo-Aj1lNRzxj3P_62-CB_RKkT
-3304-BD-XL-TVH,Deepgroove bearing,Ball (no data),Open,2 row,Solid polyamide snap cage,20x52x22.22,15900,24600,14700,-,FAG,-,https://medias.schaeffler.com/medias/en!hp.ec.br.pr/33..-BD*3304-BD-XL-TVH?pattern=3304-BD-XL-TVH,-,-,-,https://drive.google.com/open?id=1MHcHOSUhx-jMNCqaRXn4l1PC0dG5EF44
-407-1004058-A,Half-bearing,-,-,-,-,47.975-48.000 (diameter of con rod big end journal),-,-,-,-,USSR,-,-,-,-,-,https://drive.google.com/open?id=1joOXSX3Cr1SVO9nXxIxOc63fu7MSIueu
 6207M,Deepgroove bearing,Ball (9),Open,Single row,Solid brass cage,35x72x17,-,-,-,-,SLF,-,-,https://www.dswaelzlager.de/Rillenkugellager-6207-M-SLF-Messingkaefig-35x72x17mm-Massivkaefig-aus-Messing-waelzkoerpergefuehrt,-,-,https://drive.google.com/open?id=1OwN20WFP0nHLUmBLa1QkfQn4D0AgfU_i
 6305 TVH C3,Deepgroove bearing,Ball D11.509 (7),Open,Single row,Solid polyamide snap cage,25x62x17,-,-,-,-,SLF,-,-,https://www.dswaelzlager.de/Rillenkugellager-6305TVH-C3-SLF-25x62x17mm-,-,-,https://www.dswaelzlager.de/bilder/produkte/gross/Rillenkugellager-6305TVH-C3-SLF-25x62x17mm-.jpg
-7201234-A,Plain bearing,-,-,-,-,21x23.5x25,-,-,-,-,USSR,БрОФ 10,-,-,-,-,https://drive.google.com/open?id=1t0PaB_YLDUiKh7d3Un3-uUZGA8kJMxxw
 864708 ДМ,Cylindrical roller bearing,6601209 (18),Open,Single row,6601208 (1),40x50x17,-,-,-,GOST 520-89,USSR,-,https://aprom.by/cgi-bin/boardauto.pl?&words=864708&mod=1,-,-,K40x50x17,https://drive.google.com/open?id=1UyHoOg0QadU1YNSKjGqdKEqKvPVFjyzU
-904700УС17,Roller bearing,Roller (no data),-,-,-,10x19x9,-,-,-,-,USSR,-,https://aprom.by/cgi-bin/boardauto.pl?&words=904700&mod=1,-,-,-,https://drive.google.com/open?id=1OAYR68x1Wd3zZ5HRC92XQohItwT73ZUv
 AXK0619NF,Thrust bearing,Roller (no data),Open,Single row,-,-,-,-,-,-,-,-,-,-,-,-,-
-Half-bearing 7205238/39,Half-bearing,-,-,-,-,-,-,-,-,-,USSR,Bronze,-,-,-,Roller 3x15.8 45 pcs kit,-
 K40x50x17,Cylindrical roller bearing,Roller (18),Open,Single row,Cage,40x50x17,30200,39200,11500,DIN 5405-1,INA,-,https://medias.schaeffler.com/medias/en!hp.ec.br.pr/RNAO*RNAO40X50X17-XL?clrsb=1&,-,-,-,https://drive.google.com/open?id=1ysnupNxh7ZxgMHY_q0HRNmWL8_YLUSFl
-Roller 2.5x10 120 pcs kit,"Kit, Roller",Roller 2.5x10 (120),-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
-Roller 3x15.8 45 pcs kit,"Kit, Roller",Roller 3x15.8 (45),-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
-Roller 3x15.8 90 pcs kit,"Kit, Roller",Roller 3x15.8 (90),-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
 SSW055,Tapered roller bearing,Tapered roller (no data),-,Single row,Sheet metal cage,34x51x12.1,-,-,-,-,-,-,-,-,-,-,https://www.mvh-shop.de/media/image/product/26867/lg/steering-head-bearing-ssw-055.jpg

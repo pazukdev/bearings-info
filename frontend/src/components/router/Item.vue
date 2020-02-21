@@ -4,7 +4,6 @@
         <div v-else>
             <form id="item-form" @submit="submit">
                 <ItemMenu/>
-
                 <Header :item="true"/>
 
                 <details v-if="arrayIsRendered(itemView.children)" open>

@@ -22,6 +22,7 @@
 <!--                {{dictionary[0]}}-->
                 <LangMenu/>
                 <NavigationBar/>
+                <CopyUrlButton/>
                 <MessagesSection/>
                 <UserMenu/>
                 <router-view/>
@@ -46,11 +47,13 @@
     import MessagesSection from "./components/special/MessagesSection";
     import routerUtil from "./util/routerUtil";
     import dictionaryUtil from "./util/dictionaryUtil";
+    import CopyUrlButton from "./components/element/button/CopyUrlButton";
 
     export default {
         name: 'app',
 
         components: {
+            CopyUrlButton,
             MessagesSection,
             LangMenu,
             UserMenu,

@@ -39,6 +39,10 @@ export default {
 
     isLoading(loadingState) {
         return !this.isEmpty(loadingState);
+    },
+
+    getCurrentLocation() {
+        return window.location;
     }
 
 }
