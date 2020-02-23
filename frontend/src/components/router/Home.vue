@@ -1,29 +1,11 @@
 <template>
     <div>
-        <div class="default-margin" style="text-align: center"
-             v-if="isAdminMessageRendered(itemView.adminMessage)">
-            <p v-if="!isEmpty(itemView.adminMessage.text)">
-                {{translate(itemView.adminMessage.text)}}
-            </p>
-            <a class="simple-link" v-if="!isEmpty(itemView.adminMessage.url)"
-               :href="itemView.adminMessage.url">{{getLinkText(itemView.adminMessage)}}</a>
-        </div>
-        <details class="default-margin">
-            <summary>{{translate("About the app")}}</summary>
-            <div class="default-margin">
-                {{translate(aboutTheApp())}}
-                <hr>
-            </div>
-        </details>
+        <AdminMessage/>
+        <AboutApp/>
         <Info/>
         <NewsSection/>
-        <details class="default-margin" style="text-align: center">
-            <summary>{{translate("You can help the project")}}</summary>
-            <br>
-            <iframe id="yandex-donate-form" width="423" height="301" allowtransparency="true"
-                    frameborder="0" scrolling="no"
-                    src="https://money.yandex.ru/quickpay/shop-widget?writer=seller&targets=%D0%94%D0%BE%D0%BD%D0%B0%D1%82%20%D0%BD%D0%B0%20%D0%BF%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%BA%D1%83%20%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0&targets-hint=&default-sum=&button-text=12&payment-type-choice=on&comment=on&hint=&successURL=https%3A%2F%2Fpazukdev.github.io%2Fsovietboxers&quickpay=shop&account=4100111880881391"></iframe>
-        </details>
+        <DonationSection/>
+
         <LoadingScreen v-if="isLoading()"/>
         <MotorcycleCatalogue v-else/>
     </div>
@@ -38,13 +20,23 @@
     import DefaultButton from "../element/button/DefaultButton";
     import NewsSection from "../info/NewsSection";
     import shared from "../../util/shared";
-    import dictionaryUtil from "../../util/dictionaryUtil";
     import Info from "../info/Info";
+    import DonationSection from "../DonationSection";
+    import AboutApp from "../AboutApp";
+    import AdminMessage from "../special/AdminMessage";
 
     export default {
         name: "Home",
 
-        components: {Info, NewsSection, DefaultButton, LoadingScreen, MotorcycleCatalogue},
+        components: {
+            AdminMessage,
+            AboutApp,
+            DonationSection,
+            Info,
+            NewsSection,
+            DefaultButton,
+            LoadingScreen,
+            MotorcycleCatalogue},
 
         computed: {
             ...mapState({
@@ -106,28 +98,7 @@
 
             isLoading() {
                 return shared.isLoading(this.loadingState);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
-            },
-
-            aboutTheApp() {
-                return "Information about seals, bearings and other parts of soviet boxers and some other old or "
-                    + "rare vehicles";
-            },
-
-            isEmpty(value) {
-                return shared.isEmpty(value);
-            },
-
-            isAdminMessageRendered(message) {
-                return !this.isEmpty(message) && !this.isEmpty(message.text);
-            },
-
-            getLinkText(source) {
-                return !this.isEmpty(source.linkText) ? this.translate(source.linkText) : source.url;
-            },
+            }
         }
     }
 </script>
