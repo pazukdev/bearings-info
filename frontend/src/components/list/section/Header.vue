@@ -1,7 +1,7 @@
 <template>
     <div>
         <EditableImg/>
-        <EditPanel :item-form="item" @save="save"/>
+        <EditPanel v-if="editable || appLanguage.toString() === 'en'" :item-form="item" @save="save"/>
         <br>
         <div style="text-align: center">
             <p v-if="!isEmpty(itemView.localizedCategory)"><b>{{itemView.localizedCategory}}</b></p>
@@ -40,7 +40,8 @@
 
         props: {
             item: Boolean,
-            simpleHeader: Boolean
+            simpleHeader: Boolean,
+            editable: Boolean
         },
 
         computed: {

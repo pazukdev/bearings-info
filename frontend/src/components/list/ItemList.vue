@@ -56,6 +56,7 @@
                                     <ButtonDelete :item="item" @remove-item="removeItem"/>
                                 </td>
                             </tr>
+                            <tr><td><hr></td></tr>
                             </tbody>
                         </table>
                     </v-details>
@@ -63,7 +64,6 @@
             </tr>
             </tbody>
         </table>
-        <div class="default-margin"><hr></div>
     </div>
 </template>
 

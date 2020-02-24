@@ -12,7 +12,7 @@
                 </ul>
                 <br>
             </div>
-            <Header/>
+            <Header :editable="true"/>
             <CountedItemList :editable-comments="true" :wish-list-view="true"/>
         </div>
     </div>

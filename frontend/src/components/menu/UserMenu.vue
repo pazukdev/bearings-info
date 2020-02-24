@@ -1,27 +1,24 @@
 <template>
     <div v-if="!isLoginPage()">
-        <div v-if="true && isAdmin()">
-            <details class="default-margin" open>
-                <summary>{{"Information for admin"}}</summary>
-                <table class="equal-columns-table" style="text-align: left">
-                    <tbody>
-                        <tr>
-                            <td>{{"Business logic time"}}</td>
-                            <td>{{getTime(itemView.businessLogicTime)}}</td>
-                        </tr>
-                        <tr>
-                            <td>{{"Translation time"}}</td>
-                            <td>{{getTime(itemView.translationTime)}}</td>
-                        </tr>
-                        <tr>
-                            <td>{{"Response total time"}}</td>
-                            <td>{{getTime(itemView.responseTotalTime)}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <hr>
-            </details>
-        </div>
+        <details class="default-margin">
+            <summary>{{"Performance report"}}</summary>
+            <table class="equal-columns-table" style="text-align: left">
+                <tbody>
+                    <tr>
+                        <td>{{"Logic time"}}</td>
+                        <td>{{getTime(itemView.businessLogicTime)}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{"Translation time"}}</td>
+                        <td>{{getTime(itemView.translationTime)}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{"Response total time"}}</td>
+                        <td>{{getTime(itemView.responseTotalTime)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </details>
     </div>
 </template>
 

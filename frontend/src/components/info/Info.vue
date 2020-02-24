@@ -14,7 +14,6 @@
                 <router-link :to="{name: 'disclaimer'}" class="simple-link">
                     {{translate("Disclaimer")}}
                 </router-link>
-                <hr>
             </div>
         </details>
     </div>
