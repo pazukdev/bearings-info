@@ -174,7 +174,7 @@
                 let message = this.uploadMessage;
                 if (!this.isEmpty(message) && message.includes("New language added: ")) {
                     let newLang = message.split(": ")[1];
-                    routerUtil.setLang(newLang);
+                    routerUtil.setLang(newLang, this.$route);
                 }
                 axiosUtil.setLangsAndDictionary();
                 this.uploadMessage = "";

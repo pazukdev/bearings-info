@@ -60,7 +60,8 @@
             },
 
             selectLanguage() {
-                routerUtil.setLang(this.newLanguage);
+                storeUtil.setAppLang(this.newLanguage);
+                routerUtil.setLang(this.newLanguage, this.$route);
                 if (this.newLanguage !== "en") {
                     axiosUtil.setLangsAndDictionary();
                 }

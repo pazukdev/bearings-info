@@ -79,13 +79,8 @@ export default {
         }
     },
 
-    setLang(lang) {
-        storeUtil.setAppLang(lang);
-        this.changeLanguageInUrl(router, lang);
-    },
-
-    changeLanguageInUrl(router, lang) {
-        router.replace({path: router.currentRoute.path.replace(/\/[^/]*$/, "/" + lang)});
+    setLang(lang, route) {
+        router.push({name: route.name, params: {lang}});
     }
 
 }
