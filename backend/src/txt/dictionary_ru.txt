@@ -1,6 +1,6 @@
-ru=2 rows=2-рядный
 ru=#1 Pay Pal donation box=#1 Pay Pal ящик для доната
 ru=#2 Yandex donation box=#2 Яндекс ящик для доната
+ru=2 rows=2-рядный
 ru=AL=АЛ
 ru=By using this app you agree to the terms below=Используя данное приложение вы соглашаетесь с условиями ниже
 ru=China=Китай
