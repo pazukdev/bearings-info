@@ -1,19 +1,19 @@
 <template>
     <div v-if="!isLoginPage()">
         <details class="default-margin">
-            <summary>{{"Performance report"}}</summary>
+            <summary>{{translate("Performance report")}}</summary>
             <table class="equal-columns-table" style="text-align: left">
                 <tbody>
                     <tr>
-                        <td>{{"Logic time"}}</td>
+                        <td>{{translate("Getting data time")}}</td>
                         <td>{{getTime(itemView.businessLogicTime)}}</td>
                     </tr>
                     <tr>
-                        <td>{{"Translation time"}}</td>
+                        <td>{{translate("Translation time")}}</td>
                         <td>{{getTime(itemView.translationTime)}}</td>
                     </tr>
                     <tr>
-                        <td>{{"Response total time"}}</td>
+                        <td>{{translate("Response total time")}}</td>
                         <td>{{getTime(itemView.responseTotalTime)}}</td>
                     </tr>
                 </tbody>
@@ -28,6 +28,7 @@
     import DefaultButton from "../element/button/DefaultButton";
     import routerUtil from "../../util/routerUtil";
     import shared from "../../util/shared";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "UserMenu",
@@ -55,7 +56,11 @@
                 if (this.loadingState || shared.isEmpty(value)) {
                     return "-";
                 }
-                return value.toFixed(2) + " sec";
+                return value.toFixed(2) + " " + this.translate("sec");
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

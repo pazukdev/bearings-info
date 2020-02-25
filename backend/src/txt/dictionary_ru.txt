@@ -65,6 +65,7 @@ ru=New dictionary accepted=Новый словарь принят
 ru=New parameter=Новый параметр
 ru=New size is=новый размер
 ru=No image=Нет изображения
+ru=Old Vehicles=Старая техника
 ru=Page error. Please return to previous page=Ошибка страницы. Пожалуйсто вернитесь на предыдущую страницу
 ru=Password change via email is temporarily not available=Смена пароля через email временно недоступна
 ru=Piston stroke=Высота поршня
@@ -281,6 +282,7 @@ ru=passwords are different=пароли не совпадают
 ru=pcs/vol=кол-во/объем
 ru=pcs=шт
 ru=pendulum type=маятникового типа
+ru=performance report=скорость работы
 ru=piston assembly=поршень в сборе
 ru=piston pin=поршневой палец
 ru=piston rings=поршневые кольца
@@ -295,6 +297,7 @@ ru=portuguese cork=португальская пробка
 ru=power=мощность
 ru=primary aluminum=алюминий первичный
 ru=privacy policy=политика конфиденциальности
+ru=getting data time=время на получение данных
 ru=production=годы пр-ва
 ru=publish message=опубликовать сообщение
 ru=publish=опубликовать
@@ -309,6 +312,7 @@ ru=repeat new password=повторить новый пароль
 ru=repeat password=повторить пароль
 ru=replacer=заменитель
 ru=replacers=заменители
+ru=response total time=суммарное время
 ru=role=роль
 ru=roller bearing=роликовый
 ru=roller, cylindrical=ролик, цилиндрический
@@ -372,6 +376,7 @@ ru=tire=шина
 ru=to change password input your old password=для изменения пароля введите ваш старый пароль
 ru=to=к
 ru=torque=крутящий момент
+ru=translation time=время на перевод
 ru=tube=камера
 ru=type=тип
 ru=tyre=шина

@@ -1,7 +1,12 @@
 <template>
     <div>
         <EditableImg/>
-        <EditPanel v-if="editable || appLanguage.toString() === 'en'" :item-form="item" @save="save"/>
+        <div>
+            <EditPanel v-if="editable || isEnglish(appLanguage)" :item-form="item" @save="save"/>
+            <div v-else class="default-margin">
+                <p class="bordered">{{translate("Items management is available only in English")}}</p>
+            </div>
+        </div>
         <br>
         <div style="text-align: center">
             <p v-if="!isEmpty(itemView.localizedCategory)"><b>{{itemView.localizedCategory}}</b></p>
@@ -89,6 +94,10 @@
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            isEnglish(lang) {
+                return shared.isEnglish(lang);
             }
         }
     }

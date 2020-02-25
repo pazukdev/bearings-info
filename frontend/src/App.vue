@@ -28,7 +28,10 @@
                 <router-view/>
             </div>
             <div id="place-of-creation">
-                <p v-if="isHome()">{{"2017-2020 Minsk"}}</p>
+                <div v-if="isHome()">
+                    <p>{{"© 2017-2020 Old Vehicles: Seals & Bearings"}}</p>
+                    <p>{{"Minsk"}}</p>
+                </div>
             </div>
         </div>
     </div>

@@ -13,7 +13,7 @@
                     </button>
                 </td>
                 <td id="appName">
-                    {{"Old Vehicles"}}
+                    {{translate("Old Vehicles")}}
                 </td>
                 <td class="app-bar-side-column">
                     <button

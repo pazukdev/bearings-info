@@ -43,6 +43,10 @@ export default {
 
     getCurrentLocation() {
         return window.location;
+    },
+
+    isEnglish(lang) {
+        return lang === "en";
     }
 
 }
