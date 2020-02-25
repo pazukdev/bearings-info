@@ -14,6 +14,7 @@ ru=Dnepr=Днепр
 ru=Dynamic load rating, N=Динамическая нагрузка, Н
 ru=Dynamic load rating=Dynamic load рейтинг
 ru=East Germany=ГДР
+ru=Editing is available in English only=Редактирование доступно только на английском языке
 ru=Exhaust=Выхлоп
 ru=For rear journal only=Для rear journal only
 ru=Forgot password?=Забыли пароль?
@@ -198,6 +199,7 @@ ru=gearbox=коробка передач
 ru=general specifications=общие технические условия
 ru=generator=генератор
 ru=germany=германия
+ru=getting data time=время на получение данных
 ru=guest=гость
 ru=half-bearing=вкладыш
 ru=heat range=калильное число
@@ -226,6 +228,7 @@ ru=limiting speed=макс. скорость
 ru=line at a time=строк(у) единовременно
 ru=lines were removed=строк удалено
 ru=lines=строк
+ru=link=ссылка
 ru=links=ссылки
 ru=loading=загружается
 ru=location=расположение
@@ -297,7 +300,6 @@ ru=portuguese cork=португальская пробка
 ru=power=мощность
 ru=primary aluminum=алюминий первичный
 ru=privacy policy=политика конфиденциальности
-ru=getting data time=время на получение данных
 ru=production=годы пр-ва
 ru=publish message=опубликовать сообщение
 ru=publish=опубликовать

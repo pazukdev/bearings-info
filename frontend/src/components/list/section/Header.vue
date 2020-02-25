@@ -4,7 +4,7 @@
         <div>
             <EditPanel v-if="editable || isEnglish(appLanguage)" :item-form="item" @save="save"/>
             <div v-else class="default-margin">
-                <p class="bordered">{{translate("Items management is available only in English")}}</p>
+                <p class="bordered">{{translate("Editing is available in English only")}}</p>
             </div>
         </div>
         <br>
