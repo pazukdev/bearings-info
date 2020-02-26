@@ -1,6 +1,5 @@
 <template>
     <div>
-        <AdminMessage/>
         <AboutApp/>
         <Info/>
         <NewsSection/>
@@ -23,13 +22,11 @@
     import Info from "../info/Info";
     import DonationSection from "../DonationSection";
     import AboutApp from "../AboutApp";
-    import AdminMessage from "../special/AdminMessage";
 
     export default {
         name: "Home",
 
         components: {
-            AdminMessage,
             AboutApp,
             DonationSection,
             Info,

@@ -93,6 +93,7 @@ ru=Ural=Урал
 ru=Value=Значение
 ru=We do not collect any user information implicitly=Мы не собираем никакой информации о пользователе неявным образом
 ru=We do not transfer account information to third parties unless required by the law=Мы не передаем информацию об аккаунте пользователя третьим лицам, если этого не требует закон
+ru=Welcome to app v 2.0 open testing=Открытое тестирование версии 2.0
 ru=Wiki link=ссылка на Wiki
 ru=You can help the project=Вы можете помочь проекту
 ru=Your account has been blocked by the administrator=Ваш аккаунт был заблокирован админом

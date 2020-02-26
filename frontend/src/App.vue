@@ -24,13 +24,13 @@
                 <NavigationBar/>
                 <CopyUrlButton/>
                 <MessagesSection/>
+                <AdminMessage/>
                 <UserMenu/>
                 <router-view/>
             </div>
             <div id="place-of-creation">
                 <div v-if="isHome()">
-                    <p>{{"© 2017-2020 Old Vehicles: Seals & Bearings"}}</p>
-                    <p>{{"Minsk"}}</p>
+                    <p>{{"© 2017-2020 " + translate("Old Vehicles: Seals & Bearings")}}</p>
                 </div>
             </div>
         </div>
@@ -51,11 +51,13 @@
     import routerUtil from "./util/routerUtil";
     import dictionaryUtil from "./util/dictionaryUtil";
     import CopyUrlButton from "./components/element/button/CopyUrlButton";
+    import AdminMessage from "./components/special/AdminMessage";
 
     export default {
         name: 'app',
 
         components: {
+            AdminMessage,
             CopyUrlButton,
             MessagesSection,
             LangMenu,
