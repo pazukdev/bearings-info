@@ -83,6 +83,8 @@ ru=The app is free=Приложение является бесплатным
 ru=The app is not a mass media=Приложение не является средствомм массовой информации
 ru=The app is not a web-store=Приложение не является интернет-магазином
 ru=Translation isn't finished because of the error. To remove this message please select English=Перевод не завершен из-за ошибки. Чтобы скрыть это сообщение пожалуйста выберете английский язык
+ru=U - means strengthened=У - в маркировке означает усиленная
+ru=U.4301-3401485=У.4301-3401485
 ru=USA=США
 ru=USSR=СССР
 ru=Ukraine=Украина
@@ -118,10 +120,12 @@ ru=aluminum=алюминий
 ru=amperage=ток
 ru=app data=все данные
 ru=as=как
+ru=assembly=в сборе
 ru=back=назад
 ru=ball=шарик
 ru=base=база
 ru=bearing=подшипник
+ru=bidirectional=двунаправленный
 ru=bolt=болт
 ru=boxer=оппозит
 ru=bronze=бронза
@@ -131,11 +135,14 @@ ru=cancel=отменить
 ru=car=легковой автомобиль
 ru=carburetor=карбюратор
 ru=cardan shaft groove diameter=диаметр канавки на карданном валу
+ru=casing=картер
 ru=category not specified=не указана категория
 ru=category=категория
 ru=change password=изменить пароль
 ru=chassis=шасси
 ru=class=класс
+ru=clutch release rod=шток сцепления
+ru=clutch shaft=первичный вал
 ru=config=расположение цилиндров
 ru=confirm deletion=подтвердить удаление
 ru=continue as guest=продолжить как гость
@@ -155,6 +162,7 @@ ru=cylinder bore=диаметр цилиндра
 ru=cylinders=цилиндры
 ru=cylindrical roller bearing=роликовый
 ru=deepgroove bearing=радиальный
+ru=default universal joint=стандартная крестовина в сборе
 ru=defunct=закрыто
 ru=dictionary contains more then 1 languages=словарь содержит более чем 1 язык
 ru=dimensions=размеры
@@ -164,6 +172,8 @@ ru=displacement=объем
 ru=download dictionary=скачать словарь
 ru=draisine=дрезина
 ru=drawings=чертежи
+ru=drive pinion=ведущая шестерня
+ru=driven fork=ведомая вилка
 ru=duralumin cage=дюралевый сепаратор
 ru=duralumin=дюраль
 ru=eccentric inner flat snap rings=эксцентричные внутренние плоские пружинные кольца
@@ -197,6 +207,7 @@ ru=gasket=прокладка
 ru=gear oil=трансмиссионное масло
 ru=gear=трансмиссия
 ru=gearbox=коробка передач
+ru=gearshift lever=рычаг переключения передач
 ru=general specifications=общие технические условия
 ru=generator=генератор
 ru=germany=германия
@@ -208,6 +219,7 @@ ru=heat resistant wire insulation=изоляция токопроводящих 
 ru=high voltage wires for tractor ignition devices=провода автотракторные высокого напряжения для приборов зажигания
 ru=high voltage=высокого напряжения
 ru=home=home
+ru=hub=ступица
 ru=image link=ссылка на изображение
 ru=info=информация
 ru=inner eccentric flat thrust spring retaining rings and grooves=кольца пружинные упорные плоские внутренние эксцентрические и канавки для них
@@ -223,6 +235,7 @@ ru=kit=комплект
 ru=km/h=км/ч
 ru=km=км
 ru=kmh=км/ч
+ru=language=язык
 ru=last 10 new replacers=последние 10 новых заменителей
 ru=last 10 new vehicles=последние 10 новых транспортных средств
 ru=limiting speed=макс. скорость
@@ -236,6 +249,9 @@ ru=location=расположение
 ru=lock ring=стопорное кольцо
 ru=login=войти
 ru=logout=выйти
+ru=low quality expected=возможно низкое качество
+ru=low resource expected=возможен низкий ресурс
+ru=main shaft=вторичный вал
 ru=manual=руководство по эксплуатации
 ru=manufacturer=производитель
 ru=material=материал
@@ -270,11 +286,13 @@ ru=no=нет
 ru=non-ferrous metals and alloys=цветные металлы и сплавы
 ru=not specified=не указан
 ru=oil filter=масляный фильтр
+ru=oil-resistant rubber=маслостойкая резина
 ru=oil=масло
 ru=old password=старый пароль
 ru=open=открытый
 ru=or higher=или выше
 ru=outer concentric flat thrust spring retaining rings and grooves=кольца пружинные упорные плоские наружные концентрические и канавки для них
+ru=outer diameter=наружный диаметр
 ru=outer shield material=оплетка
 ru=paper=бумага
 ru=part=часть
@@ -305,6 +323,7 @@ ru=production=годы пр-ва
 ru=publish message=опубликовать сообщение
 ru=publish=опубликовать
 ru=purpose=применение
+ru=quality unknown=неизвестного качества
 ru=quantity shouldn't be zero=кол-во не должно быть 0
 ru=quantity shouldn't contain -=количество не должно содержать -
 ru=rating=рейтинг
@@ -386,6 +405,7 @@ ru=tyre=шина
 ru=units / parts=узлы / детали
 ru=units=агрегаты
 ru=universal joint cross=крестовина
+ru=universal joint unit=узел карданного шарнира
 ru=universal joint=крестовина в сборе
 ru=upload dictionary=загрузить словарь
 ru=usage=использование

@@ -7,20 +7,6 @@
                 <p class="bordered">{{translate("Editing is available in English only")}}</p>
             </div>
         </div>
-        <br>
-        <div style="text-align: center">
-            <p v-if="!isEmpty(itemView.localizedCategory)"><b>{{itemView.localizedCategory}}</b></p>
-            <p v-if="!isEmpty(itemView.localizedName)"><b>{{itemView.localizedName}}</b></p>
-            <p v-if="item">
-                {{translate("Created by")}}
-                <router-link class="simple-link"
-                             v-if="showCreatorLink()"
-                             :to="{name: 'user', params: {id: itemView.creatorData.id, lang: appLanguage}}">
-                    {{itemView.creatorData.name}}
-                </router-link>
-                <span v-else>{{translate("deleted user")}}</span>
-            </p>
-        </div>
         <details v-if="itemView.header != null" class="default-margin" open>
             <summary>{{translate("Specification")}}</summary>
             <ItemDescription :item="item"/>
@@ -35,7 +21,6 @@
     import EditPanel from "../../menu/EditPanel";
     import {mapState} from "vuex";
     import shared from "../../../util/shared";
-    import itemViewUtil from "../../../util/itemViewUtil";
     import axiosUtil from "../../../util/axiosUtil";
     import dictionaryUtil from "../../../util/dictionaryUtil";
 
@@ -61,24 +46,6 @@
         },
 
         methods: {
-            isEmpty(value) {
-                return shared.isEmpty(value);
-            },
-
-            showCreatorLink() {
-                if (this.isEmpty(this.itemView.creatorData)) {
-                    return false;
-                }
-                if (this.itemView.creatorData.status !== 'active') {
-                    return this.isAdmin();
-                }
-                return true;
-            },
-
-            isAdmin() {
-                return itemViewUtil.isAdmin(this.itemView);
-            },
-
             save() {
                 this.update(this.itemView.itemId);
             },

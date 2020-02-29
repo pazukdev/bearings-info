@@ -3,6 +3,7 @@
         <LoadingScreen v-if="isLoading()"/>
         <div v-else>
             <form id="item-form" @submit="submit">
+                <ItemName/>
                 <ItemMenu/>
                 <Header :item="true"/>
 
@@ -49,10 +50,12 @@
     import storeUtil from "../../util/storeUtil";
     import axiosUtil from "../../util/axiosUtil";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import ItemName from "../item/ItemName";
 
     export default {
 
         components: {
+            ItemName,
             Header,
             ItemSummary,
             CountedItemList,

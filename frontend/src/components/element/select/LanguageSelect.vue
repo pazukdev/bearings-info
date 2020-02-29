@@ -5,7 +5,7 @@
         <select v-model="newLanguage"
                 @change="selectLanguage()">
             <option v-for="lang in langs" :key="lang" :value="lang">
-                {{lang}}
+                {{lang.toUpperCase()}}
             </option>
         </select>
     </div>

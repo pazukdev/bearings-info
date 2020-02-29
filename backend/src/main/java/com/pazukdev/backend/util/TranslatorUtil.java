@@ -88,7 +88,7 @@ public class TranslatorUtil {
             return null;
         }
 
-        boolean name = false;
+        boolean name;
 
         for (final HeaderTableRow row : headerTable.getRows()) {
             if (!langTo.equals("en")) {
