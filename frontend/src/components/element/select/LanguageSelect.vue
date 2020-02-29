@@ -1,8 +1,10 @@
 <template>
-    <div>
+    <div class="bordered" style="white-space: nowrap">
+<!--        <flag :iso="newLanguage"/>-->
+        {{translate("Language") + ": "}}
         <select v-model="newLanguage"
                 @change="selectLanguage()">
-            <option v-for="lang in langs" :key="lang">
+            <option v-for="lang in langs" :key="lang" :value="lang">
                 {{lang}}
             </option>
         </select>
@@ -11,9 +13,11 @@
 
 <script>
     import {mapState} from "vuex";
-    import axiosUtil from "../../../util/axiosUtil";
     import routerUtil from "../../../util/routerUtil";
     import storeUtil from "../../../util/storeUtil";
+    import axios from "axios";
+    import store from "../../../plugins/store";
+    import dictionaryUtil from "../../../util/dictionaryUtil";
 
     export default {
         name: "LanguageSelect",
@@ -39,18 +43,10 @@
         },
 
         created() {
-            this.setLangsList();
-            this.newLanguage = this.appLanguage;
             this.onUrlChange();
         },
 
         methods: {
-            setLangsList() {
-                if (this.newLanguage !== "en") {
-                    axiosUtil.setLangsAndDictionary();
-                }
-            },
-
             onUrlChange() {
                 let urlLang = this.$route.params.lang;
                 if (urlLang !== this.newLanguage) {
@@ -63,9 +59,33 @@
                 storeUtil.setAppLang(this.newLanguage);
                 routerUtil.setLang(this.newLanguage, this.$route);
                 if (this.newLanguage !== "en") {
-                    axiosUtil.setLangsAndDictionary();
+                    this.setLangsAndDictionary();
                 }
             },
+
+            setLangsAndDictionary() {
+                axios
+                    .get(store.getters.basicUrl
+                        + "/" + "file"
+                        + "/" + "dictionary-data"
+                        + "/" + store.getters.appLanguage, {
+                        headers: {
+                            Authorization: store.getters.authorization
+                        }
+                    })
+                    .then(response => {
+                        let dictionaryData = response.data;
+                        let langs = dictionaryData.langs;
+
+                        console.log("got langs: " + langs);
+                        storeUtil.setLangs(langs);
+                        storeUtil.setDictionary(dictionaryData.dictionary);
+                    });
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
+            }
         }
     }
 </script>

@@ -3,7 +3,7 @@
         <table>
             <tbody>
                 <tr>
-                    <td style="text-align: left">
+                    <td style="text-align: left; white-space: nowrap">
                         {{"v 2.0"}}
                     </td>
                     <td v-if="!isGuest()">
@@ -18,7 +18,7 @@
                     <td v-if="isGuest()">
                         {{translate("You are guest")}}
                     </td>
-                    <td style="text-align: right">
+                    <td>
                         <LanguageSelect/>
                     </td>
                 </tr>
