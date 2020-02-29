@@ -120,7 +120,7 @@
                     return;
                 }
                 console.log("getItemViewByUrl(): " + id);
-                this.getItemView(id);
+                this.getItemView(id, true);
             },
 
             getItemId() {
@@ -151,7 +151,7 @@
                 this.$router.push({ name: `login` });
             },
 
-            getItemView(itemId) {
+            getItemView(itemId, refreshIfError) {
                 axios
                     .get(this.basicUrl
                         + "/" + "item"
@@ -169,6 +169,7 @@
                         itemViewUtil.dispatchView(itemView);
                     })
                     .catch(error => {
+                        this.getItemView(itemId, false);
                         itemViewUtil.dispatchResponseError(error);
                     });
             },

@@ -23,7 +23,7 @@
                 <LangMenu/>
                 <NavigationBar/>
                 <CopyUrlButton/>
-                <MessagesSection/>
+<!--                <MessagesSection/>-->
                 <AdminMessage/>
                 <UserMenu/>
                 <router-view/>
