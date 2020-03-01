@@ -2,6 +2,7 @@ import axios from "axios";
 import routerUtil from "./routerUtil";
 import store from "../plugins/store";
 import itemViewUtil from "./itemViewUtil";
+import storeUtil from "./storeUtil";
 
 export default {
     loginAsGuest(basicUrl, toHome) {
@@ -47,6 +48,26 @@ export default {
                 let updatedItemView = response.data;
                 itemViewUtil.dispatchView(updatedItemView);
                 console.log("item updated");
+            });
+    },
+
+    setLangsAndDictionary() {
+        axios
+            .get(store.getters.basicUrl
+                + "/" + "file"
+                + "/" + "dictionary-data"
+                + "/" + store.getters.appLanguage, {
+                headers: {
+                    Authorization: store.getters.authorization
+                }
+            })
+            .then(response => {
+                let dictionaryData = response.data;
+                let langs = dictionaryData.langs;
+
+                console.log("got langs: " + langs);
+                storeUtil.setLangs(langs);
+                storeUtil.setDictionary(dictionaryData.dictionary);
             });
     }
 

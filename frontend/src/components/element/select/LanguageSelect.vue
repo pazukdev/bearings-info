@@ -15,9 +15,8 @@
     import {mapState} from "vuex";
     import routerUtil from "../../../util/routerUtil";
     import storeUtil from "../../../util/storeUtil";
-    import axios from "axios";
-    import store from "../../../plugins/store";
     import dictionaryUtil from "../../../util/dictionaryUtil";
+    import axiosUtil from "../../../util/axiosUtil";
 
     export default {
         name: "LanguageSelect",
@@ -59,28 +58,8 @@
                 storeUtil.setAppLang(this.newLanguage);
                 routerUtil.setLang(this.newLanguage, this.$route);
                 if (this.newLanguage !== "en") {
-                    this.setLangsAndDictionary();
+                    axiosUtil.setLangsAndDictionary();
                 }
-            },
-
-            setLangsAndDictionary() {
-                axios
-                    .get(store.getters.basicUrl
-                        + "/" + "file"
-                        + "/" + "dictionary-data"
-                        + "/" + store.getters.appLanguage, {
-                        headers: {
-                            Authorization: store.getters.authorization
-                        }
-                    })
-                    .then(response => {
-                        let dictionaryData = response.data;
-                        let langs = dictionaryData.langs;
-
-                        console.log("got langs: " + langs);
-                        storeUtil.setLangs(langs);
-                        storeUtil.setDictionary(dictionaryData.dictionary);
-                    });
             },
 
             translate(text) {

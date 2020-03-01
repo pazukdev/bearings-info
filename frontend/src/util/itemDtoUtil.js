@@ -7,7 +7,7 @@ export default {
         return dictionaryUtil.translate(text);
     },
     
-    createSelectText(item, replacer) {
+    createSelectText(item) {
         let category = item.itemCategory;
         let addManufacturer = this.isAddManufacturer(item, item.manufacturer, true);
 
@@ -20,7 +20,7 @@ export default {
         } else if (addManufacturer) {
             selectText = manufacturer + " " + name;
         }
-        return replacer ? selectText : this.translate(category) + " " + selectText;
+        return this.translate(category) + " " + selectText;
     },
     
     isAddManufacturer(item, manufacturer, selectText) {

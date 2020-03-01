@@ -51,7 +51,7 @@
                 for (let i=0; i < possibleItems.length; i++) {
                     let item = possibleItems[i];
                     if (!this.isInList(item, items)) {
-                        item.selectText = itemDtoUtil.createSelectText(item, this.replacer);
+                        item.selectText = itemDtoUtil.createSelectText(item);
                         actualPossibleItems.push(item);
                     }
                 }

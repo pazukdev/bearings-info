@@ -73,6 +73,7 @@ ru=Piston stroke=Высота поршня
 ru=Pneumatic tires for motorcycles, cycle-cars, scooters and mopeds=Шины для мотоциклов. мотоколясок, мотороллеров и мопедов
 ru=Refresh page to implement changes on current page=Для того чтобы изменения вступили в силу обновите страницу
 ru=Responsibility for the information posted lies with the person who posted it=Ответственность за размещенную информацию лежит на лице ее разместившем
+ru=Rubber part=РТИ
 ru=Russia=Россия
 ru=Specification=Характеристики
 ru=Static load rating, N=Статическая нагрузка, Н
@@ -384,6 +385,7 @@ ru=store / seller / official website link=ссылка на магазин / п�
 ru=stranded, copper=многопроволочная, медная
 ru=strokes=такты
 ru=summer use=летнее
+ru=swingarm=маятник
 ru=synthetic=синтетика
 ru=tapered roller bearing=конический роликовый
 ru=telescopic=телескопическая

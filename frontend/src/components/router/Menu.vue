@@ -12,7 +12,7 @@
             </tr>
             <tr>
                 <td>
-                    <a :href="getDictionaryDownloadUrl('dictionary')" class="button" download="dictionary.txt">
+                    <a :href="getDictionaryDownloadUrl('dictionary')" class="button">
                         {{translate("Download dictionary")}}
                     </a>
                 </td>
@@ -46,7 +46,7 @@
             </tr>
             <tr v-if="isAdmin()">
                 <td>
-                    <a :href="getDownloadUrl('comments')" class="button" download="dictionary.txt">
+                    <a :href="getDownloadUrl('comments')" class="button">
                         {{"Download comments"}}
                     </a>
                 </td>
@@ -61,7 +61,7 @@
             </tr>
             <tr v-if="isAdmin()">
                 <td>
-                    <a :href="getDownloadUrl('info_categories')" class="button" download="dictionary.txt">
+                    <a :href="getDownloadUrl('info_categories')" class="button">
                         {{"Download info categories"}}
                     </a>
                 </td>
