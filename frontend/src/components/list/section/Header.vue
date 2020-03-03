@@ -2,7 +2,7 @@
     <div>
         <EditableImg/>
         <div>
-            <EditPanel v-if="editable || isEnglish(appLanguage)" :item-form="item" @save="save"/>
+            <EditPanel v-if="editable || isEnglish()" :item-form="item" @save="save"/>
             <div v-else class="default-margin">
                 <p class="bordered">{{translate("Editing is available in English only")}}</p>
             </div>
@@ -36,12 +36,8 @@
 
         computed: {
             ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                userName: state => state.dictionary.userName,
                 itemView: state => state.dictionary.itemView,
-                editMode: state => state.dictionary.editMode,
-                appLanguage: state => state.dictionary.appLanguage
+                editMode: state => state.dictionary.editMode
             })
         },
 
@@ -51,20 +47,15 @@
             },
 
             update(itemId) {
-                let itemView = this.itemView;
-                let basicUrl = this.basicUrl;
-                let userName = this.userName;
-                let appLanguage = this.appLanguage;
-                let authorization = this.authorization;
-                axiosUtil.updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization);
+                axiosUtil.updateItem(itemId, this.itemView, this.$route.params.lang);
             },
 
             translate(text) {
                 return dictionaryUtil.translate(text);
             },
 
-            isEnglish(lang) {
-                return shared.isEnglish(lang);
+            isEnglish() {
+                return shared.isEnglish();
             }
         }
     }

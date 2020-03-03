@@ -52,7 +52,7 @@
 
             onChange() {
                 if (this.itemsManagementView) {
-                    routerUtil.toItemsSearch(this.filter);
+                    routerUtil.toItemsSearch(this.filter, this.$route);
                 }
             },
 

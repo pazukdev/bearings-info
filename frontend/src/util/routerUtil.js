@@ -2,6 +2,7 @@ import itemViewUtil from "./itemViewUtil";
 import router from "../plugins/router";
 import storeUtil from "./storeUtil";
 import shared from "./shared";
+import store from "../plugins/store";
 
 export default {
 
@@ -25,32 +26,30 @@ export default {
         return route.name === "home";
     },
 
+    isMenu(route) {
+        return route.name === "menu";
+    },
+
     toItem(id, lang) {
-        router.push({name: "item", params: {id, lang}});
+        router.push({name: "item", params: {id: id, lang: lang}});
     },
 
     toUser(id, lang) {
-        router.push({name: "user", params: {id, lang}});
+        router.push({name: "user", params: {id: id, lang: lang}});
     },
 
-    toMenu(lang) {
-        router.push({name: "menu", params: {lang}});
+    toHome(lang) {
+        router.push({name: "home", params: {lang: lang}});
     },
 
-    toHome() {
-        router.push({name: "home"});
+    toUserList(lang) {
+        router.push({name: "user_list", params: {lang: lang}})
     },
 
-    toUserList() {
-        router.push({name: "user_list"})
-    },
+    toLogin(lang) {
+        console.log("toLogin(lang)");
+        router.push({name: "login", lang: lang});
 
-    toWishlist() {
-        router.push({name: "wish_list"});
-    },
-
-    toLogin() {
-        router.push({name: "login"});
         let message = {
             text: "Your account has been blocked by the administrator",
             contact: "Contact us by email: pazukdev@gmail.com"
@@ -64,23 +63,46 @@ export default {
                 message: storeUtil.userIsBlocked() ? message : null
             }
         };
-        itemViewUtil.dispatchView(itemViewStub);
+
+        storeUtil.setAuthorization("");
+        itemViewUtil.dispatchView(itemViewStub, lang);
     },
 
-    toItemsManagement(router) {
-        router.push({name: "items_management"});
-    },
-
-    toItemsSearch(filter) {
+    toItemsManagement(filter, lang) {
         if (shared.isEmpty(filter)) {
-            this.toItemsManagement(router);
+            router.push({name: "items_management", params: {lang: lang}});
         } else {
-            router.push({name: "items_management", params: {filter}});
+            router.push({name: "items_management", params: {lang: lang, filter: filter}});
         }
     },
 
-    setLang(lang, route) {
-        router.push({name: route.name, params: {lang}});
+    toItemsSearch(filter, lang) {
+        this.toItemsManagement(filter, lang);
+    },
+
+    selectLanguage(newLang, route) {
+        // if (newLang === store.getters.lang) {
+        //     console.log("newLang: " + newLang);
+        //     console.log("store.getters.lang: " + store.getters.lang);
+        //     return;
+        // }
+        this.setLang(newLang, route);
+        // if (newLang !== "en") {
+        //     console.log("On lang select: set new dictionary");
+        //     axiosUtil.setLangsAndDictionary(newLang);
+        // }
+    },
+
+    setLang(newLang, route) {
+        console.log("setLang(): " + newLang);
+        router.push({name: route.name, params: {lang: newLang}});
+    },
+
+    getLang(route) {
+        if (shared.isEmpty(route)) {
+            return store.getters.lang;
+        }
+        return route.params.lang;
     }
 
 }

@@ -40,10 +40,10 @@
     import LastUserActions from "./LastUserActions";
     import axios from "axios";
     import dictionaryUtil from "../../util/dictionaryUtil";
-    import itemViewUtil from "../../util/itemViewUtil";
     import routerUtil from "../../util/routerUtil";
     import shared from "../../util/shared";
     import {mapState} from "vuex";
+    import userUtil from "../../util/userUtil";
 
     export default {
         name: "NewsSection",
@@ -83,7 +83,7 @@
             },
 
             isAdmin() {
-                return itemViewUtil.isAdmin(this.itemView);
+                return userUtil.isAdmin(this.itemView);
             },
 
             isEmpty(value) {

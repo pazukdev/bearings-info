@@ -1,11 +1,12 @@
 import shared from "./shared";
 import stringUtil from "./stringUtil";
 import store from "../plugins/store";
+import routerUtil from "./routerUtil";
 
 export default {
 
     translate(text) {
-        let lang = store.getters.appLanguage;
+        let lang = routerUtil.getLang(null);
         if (lang === "en") {
             return text;
         }

@@ -8,7 +8,7 @@
                 {{translate("Created by")}}
                 <router-link class="simple-link"
                              v-if="showCreatorLink()"
-                             :to="{name: 'user', params: {id: itemView.creatorData.id, lang: appLanguage}}">
+                             :to="{name: 'user', params: {id: itemView.creatorData.id, lang:  $route.params.lang}}">
                     {{itemView.creatorData.name}}
                 </router-link>
                 <span v-else>{{translate("deleted user")}}</span>
@@ -20,17 +20,17 @@
 
 <script>
     import shared from "../../util/shared";
-    import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import userUtil from "../../util/userUtil";
+    import routerUtil from "../../util/routerUtil";
 
     export default {
         name: "ItemName",
 
         computed: {
             ...mapState({
-                itemView: state => state.dictionary.itemView,
-                appLanguage: state => state.dictionary.appLanguage
+                itemView: state => state.dictionary.itemView
             })
         },
 
@@ -50,11 +50,15 @@
             },
 
             isAdmin() {
-                return itemViewUtil.isAdmin(this.itemView);
+                return userUtil.isAdmin(this.itemView);
             },
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            getLang() {
+                return routerUtil.getLang(this.$route);
             }
         }
     }

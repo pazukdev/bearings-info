@@ -24,11 +24,11 @@
 
 <script>
     import {mapState} from "vuex";
-    import itemViewUtil from "../../util/itemViewUtil";
     import DefaultButton from "../element/button/DefaultButton";
     import routerUtil from "../../util/routerUtil";
     import shared from "../../util/shared";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import userUtil from "../../util/userUtil";
 
     export default {
         name: "UserMenu",
@@ -45,7 +45,7 @@
 
         methods: {
             isAdmin() {
-                return itemViewUtil.isAdmin(this.itemView);
+                return userUtil.isAdmin(this.itemView);
             },
 
             isLoginPage() {

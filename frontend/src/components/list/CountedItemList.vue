@@ -57,6 +57,7 @@
     import SearchForm from "../form/SearchForm";
     import dictionaryUtil from "../../util/dictionaryUtil";
     import shared from "../../util/shared";
+    import userUtil from "../../util/userUtil";
 
     export default {
         name: "CountedItemList",
@@ -129,7 +130,7 @@
             },
 
             hideTable(table) {
-                if (table.name.toLowerCase() === "guest" && !itemViewUtil.isAdmin(this.itemView)) {
+                if (table.name.toLowerCase() === "guest" && !userUtil.isAdmin(this.itemView)) {
                     return true;
                 }
             },
@@ -140,7 +141,7 @@
             },
 
             isAdmin() {
-                return itemViewUtil.isAdmin(this.itemView);
+                return userUtil.isAdmin(this.itemView);
             },
 
             getFilter(filter) {

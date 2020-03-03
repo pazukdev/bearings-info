@@ -79,6 +79,7 @@
     import SearchForm from "../form/SearchForm";
     import dictionaryUtil from "../../util/dictionaryUtil";
     import imgUtil from "../../util/imgUtil";
+    import userUtil from "../../util/userUtil";
 
     export default {
         name: "ItemList",
@@ -187,7 +188,7 @@
             },
 
             hideTable(table) {
-                if (table.name.toLowerCase() === "guest" && !itemViewUtil.isAdmin(this.itemView)) {
+                if (table.name.toLowerCase() === "guest" && !userUtil.isAdmin(this.itemView)) {
                     return true;
                 }
             },

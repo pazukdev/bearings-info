@@ -1,26 +1,32 @@
 <template>
     <div v-if="!isLoginPage()">
-        <table v-if="!buttonStyle" style="margin-bottom: 20px" class="equal-columns-table">
+        <table v-if="!buttonStyle && !isEmpty(itemView)"
+               style="margin-bottom: 20px" class="equal-columns-table">
             <tbody>
                 <tr>
                     <td>
-                        <router-link :to="{name: 'home'}" active-class="active">
+                        <router-link :to="{name: 'home', params: {lang: $route.params.lang}}"
+                                     active-class="active">
                             {{translate("Home")}}
                         </router-link>
                     </td>
                     <td>
-                        <router-link :to="{name: 'wish_list'}"
-                                     active-class="active" v-if="!isGuest()">
+                        <router-link v-if="!isGuest()"
+                                     :to="{name: 'wish_list', params: {lang: $route.params.lang}}"
+                                     active-class="active">
                             {{translate("Wishlist") + ": " + itemView.wishListIds.length}}
                         </router-link>
                     </td>
                     <td>
-                        <router-link :to="{name: 'items_management'}" active-class="active">
+                        <router-link :to="{name: 'items_management', params: {lang: $route.params.lang}}"
+                                     active-class="active">
                             {{translate("App data")}}
                         </router-link>
                     </td>
                     <td>
-                        <router-link :to="{name: 'menu'}" active-class="active" v-if="!isGuest()">
+                        <router-link v-if="!isGuest()"
+                                     :to="{name: 'menu', params: {lang: $route.params.lang}}"
+                                     active-class="active">
                             {{translate("Menu")}}
                         </router-link>
                     </td>
@@ -31,11 +37,12 @@
 </template>
 
 <script>
-    import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
     import DefaultButton from "../element/button/DefaultButton";
     import routerUtil from "../../util/routerUtil";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import userUtil from "../../util/userUtil";
+    import shared from "../../util/shared";
 
     export default {
         name: "NavigationBar",
@@ -43,12 +50,9 @@
 
         computed: {
             ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
-                userName: state => state.dictionary.userName,
                 editMode: state => state.dictionary.editMode,
-                itemView: state => state.dictionary.itemView,
-                appLanguage: state => state.dictionary.appLanguage
+                itemView: state => state.dictionary.itemView
             })
         },
 
@@ -60,15 +64,15 @@
 
         methods: {
             goHome() {
-                routerUtil.toHome();
+                routerUtil.toHome(this.$route.params.lang);
             },
 
             showCurrentUserProfile() {
-                routerUtil.toUser(this.itemView.userData.id, this.appLanguage)
+                routerUtil.toUser(this.itemView.userData.id)
             },
 
             openItemsManagement() {
-                routerUtil.toItemsManagement(this.$router);
+                routerUtil.toItemsManagement(null, this.$route);
             },
 
             isLoginPage() {
@@ -76,11 +80,15 @@
             },
 
             isGuest() {
-                return itemViewUtil.isGuest(this.userName);
+                return userUtil.isGuest();
             },
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            isEmpty(value) {
+                return shared.isEmpty(value);
             }
         }
     }

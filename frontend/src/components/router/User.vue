@@ -160,8 +160,7 @@
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
                 itemView: state => state.dictionary.itemView,
-                editMode: state => state.dictionary.editMode,
-                userName: state => state.dictionary.userName
+                editMode: state => state.dictionary.editMode
             })
         },
 
@@ -210,7 +209,7 @@
                     })
                     .then(response => {
                         this.user = response.data;
-                        this.editedUserIsCurrentUser = this.user.name === this.userName;
+                        this.editedUserIsCurrentUser = this.user.name === this.getUserName();
                         this.getCountryName(this.user.country);
                         let itemView = {
                             img: this.user.img,
@@ -220,7 +219,7 @@
                             wishListIds: this.itemView.wishListIds,
                             errorMessage: this.itemView.errorMessage
                         };
-                        itemViewUtil.dispatchView(itemView);
+                        itemViewUtil.dispatchView(itemView, this.$route.params.lang);
                         console.log("user rendered: name: " + this.user.name);
                         storeUtil.setLoadingStateOff();
                     })
@@ -238,7 +237,7 @@
                 let userView = this.user;
                 userView.img = this.itemView.img;
                 userView.defaultImg = this.itemView.defaultImg;
-                userView.currentUserName = this.userName;
+                userView.currentUserName = this.getUserName();
 
                 // /user/id/update
                 axios
@@ -257,7 +256,7 @@
                             && shared.arrayContainsSubstring("assword", this.validationMessages);
                         if (this.validationMessages.length === 0) {
                             if (this.editedUserIsCurrentUser) {
-                                storeUtil.setUserName(userView.name, this.itemView);
+                                this.itemView.userData.name = userView.name;
                             }
                             storeUtil.setLoadingStateOff();
                             this.getCountryName(this.user.country);
@@ -274,7 +273,7 @@
             },
 
             isAdmin() {
-                return itemViewUtil.isAdmin(this.itemView);
+                return userUtil.isAdmin(this.itemView);
             },
 
             isSeller() {
@@ -289,7 +288,7 @@
             },
 
             isCurrentUserProfile() {
-                return this.user.name === this.userName;
+                return this.user.name === this.getUserName();
             },
 
             isRoleSelectRendered() {
@@ -320,7 +319,7 @@
                         if (response.status === 200) {
                             this.userDeleteDialogOpened = false;
                             if (this.isCurrentUserProfile()) {
-                                axiosUtil.logout(this.basicUrl);
+                                axiosUtil.logout(this.$route.params.lang);
                             } else {
                                 routerUtil.back();
                             }
@@ -366,6 +365,10 @@
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            getUserName() {
+                return userUtil.getUserName();
             }
         }
     }

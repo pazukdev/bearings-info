@@ -1,13 +1,16 @@
 import store from "../plugins/store";
 
 export default {
-    setUserName(userName, itemView) {
-        store.dispatch("setUserName", userName);
-        itemView.userData.name = userName;
+    setView(view) {
+        store.dispatch("setItemView", view);
     },
 
     setUserData(user) {
         store.dispatch("setUserData", user);
+    },
+
+    setAuthorization(authorization) {
+        store.dispatch("setAuthorization", authorization);
     },
 
     userIsBlocked() {
@@ -34,8 +37,8 @@ export default {
         store.dispatch("setErrorMessage", message);
     },
 
-    setAppLang(lang) {
-        store.dispatch("setAppLanguage", lang);
+    setLang(lang) {
+        store.dispatch("setLang", lang);
     },
 
     setLangs(langs) {
@@ -44,5 +47,10 @@ export default {
 
     setDictionary(dictionary) {
         store.dispatch("setDictionary", dictionary);
+    },
+
+    setIncorrectCredentials(incorrectCredentials) {
+        store.dispatch("setIncorrectCredentials", incorrectCredentials);
     }
+
 }

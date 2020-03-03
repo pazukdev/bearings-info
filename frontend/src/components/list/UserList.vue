@@ -16,6 +16,8 @@
     import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
     import shared from "../../util/shared";
+    import routerUtil from "../../util/routerUtil";
+    import userUtil from "../../util/userUtil";
 
     export default {
         name: "UserList",
@@ -25,8 +27,6 @@
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
-                userName: state => state.dictionary.userName,
-                appLanguage: state => state.dictionary.appLanguage,
                 itemView: state => state.dictionary.itemView,
                 loadingState: state => state.dictionary.loadingState
             })
@@ -50,14 +50,14 @@
                     .get(this.basicUrl
                         + "/" + "view"
                         + "/" + "user/list"
-                        + "/" + this.userName
-                        + "/" + this.appLanguage, {
+                        + "/" + userUtil.getUserName()
+                        + "/" + routerUtil.getLang(this.$route), {
                         headers: {
                             Authorization: this.authorization
                         }
                     })
                     .then(response => {
-                        itemViewUtil.dispatchView(response.data);
+                        itemViewUtil.dispatchView(response.data, this.$route.params.lang);
                         console.log("user list rendered");
                     })
                     .catch(error => {

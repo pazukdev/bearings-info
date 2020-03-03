@@ -156,6 +156,8 @@
     import itemViewUtil from "../../util/itemViewUtil";
     import axios from "axios";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import userUtil from "../../util/userUtil";
+    import routerUtil from "../../util/routerUtil";
 
     export default {
         name: "ItemMenu",
@@ -164,10 +166,8 @@
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
-                userName: state => state.dictionary.userName,
                 editMode: state => state.dictionary.editMode,
                 itemView: state => state.dictionary.itemView,
-                appLanguage: state => state.dictionary.appLanguage,
                 langs: state => state.dictionary.langs
             }),
 
@@ -214,12 +214,11 @@
             },
 
             addItemToWishList() {
-                // user/{username}/add-item-to-wishlist/{item-id}
                 let itemId = this.itemView.itemId;
                 axios
                     .put(this.basicUrl
                             + "/" + "user"
-                        + "/" + this.userName
+                        + "/" + userUtil.getUserName()
                         + "/" + "add-item-to-wishlist"
                         + "/" + itemId, {
                             headers: {
@@ -250,7 +249,7 @@
             },
 
             isGuest() {
-                return itemViewUtil.isGuest(this.userName);
+                return userUtil.isGuest();
             },
 
             isSearchEnabled() {
@@ -258,7 +257,7 @@
             },
 
             isWebsiteLinkButtonRendered(link, lang) {
-                if (lang == null || lang === "all" || lang === this.appLanguage) {
+                if (lang == null || lang === "all" || lang === routerUtil.getLang(this.$route)) {
                     return !this.isEmpty(link);
                 }
                 return false;
@@ -269,7 +268,7 @@
             },
 
             isAdmin() {
-                return itemViewUtil.isAdmin(this.itemView);
+                return userUtil.isAdmin(this.itemView);
             },
 
             getButtonText() {

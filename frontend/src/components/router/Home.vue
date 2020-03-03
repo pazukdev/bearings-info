@@ -22,6 +22,9 @@
     import Info from "../info/Info";
     import DonationSection from "../DonationSection";
     import AboutApp from "../AboutApp";
+    import userUtil from "../../util/userUtil";
+    import routerUtil from "../../util/routerUtil";
+    import axiosUtil from "../../util/axiosUtil";
 
     export default {
         name: "Home",
@@ -38,9 +41,6 @@
         computed: {
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                userName: state => state.dictionary.userName,
-                appLanguage: state => state.dictionary.appLanguage,
                 itemView: state => state.dictionary.itemView,
                 loadingState: state => state.dictionary.loadingState
             })
@@ -70,14 +70,14 @@
                     .get(this.basicUrl
                         + "/" + "item/view"
                         + "/" + "home"
-                        + "/" + this.userName
-                        + "/" + this.appLanguage.toString(), {
+                        + "/" + userUtil.getUserName()
+                        + "/" + routerUtil.getLang(this.$route), {
                         headers: {
-                            Authorization: this.authorization
+                            Authorization: axiosUtil.getAuthorization()
                         }
                     })
                     .then(response => {
-                        itemViewUtil.dispatchView(response.data);
+                        itemViewUtil.dispatchView(response.data, this.$route.params.lang);
                         console.log("home displayed");
                     })
                     .catch(error => {
@@ -90,7 +90,7 @@
             },
 
             isAdmin() {
-                return itemViewUtil.isAdmin(this.itemView);
+                return userUtil.isAdmin(this.itemView);
             },
 
             isLoading() {

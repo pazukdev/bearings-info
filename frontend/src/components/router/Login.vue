@@ -18,7 +18,8 @@
         </table>
 
         <form id="login-form" @submit="performLoginPageAction">
-            <div v-if="itemView.userData.message !== null" class="alert-message">
+            <div class="alert-message"
+                 v-if="!isEmpty(itemView.userData) && !isEmpty(itemView.userData.message)">
                 {{translate(itemView.userData.message.text)}}<br>
                 {{translate(itemView.userData.message.contact)}}
             </div>
@@ -93,8 +94,9 @@
     import axios from 'axios';
     import {mapState} from 'vuex';
     import AlertMessagesSection from "../info/AlertMessagesSection";
-    import routerUtil from "../../util/routerUtil";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import shared from "../../util/shared";
+    import axiosUtil from "../../util/axiosUtil";
 
     export default {
         components: {AlertMessagesSection},
@@ -111,9 +113,7 @@
 
         computed: {
             ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
-                appLanguage: state => state.dictionary.appLanguage,
                 loginMessage: state => state.dictionary.loginMessage,
                 itemView: state => state.dictionary.itemView
             })
@@ -127,45 +127,22 @@
             performLoginPageAction: function (e) {
                 e.preventDefault();
                 if (this.isLogin) {
-                    this.login();
+                    axiosUtil.login(this.name, this.password, true, this.$route.params.lang);
                 } else {
                     this.signUp();
                 }
+            },
+
+            loginAsGuest() {
+                axiosUtil.loginAsGuest(true, this.$route.params.lang);
             },
 
             loginIfValid(validationMessages, newUserName) {
                 this.validationMessages = validationMessages;
                 if (this.validationMessages.length === 0) {
                     console.log("a new user created: " + newUserName);
-                    this.login();
+                    axiosUtil.login(this.name, this.password, true, this.$route.params.lang);
                 }
-            },
-
-            loginAsGuest() {
-                this.name = "guest";
-                this.password = "guest";
-                this.login();
-            },
-
-            login() {
-                let credentialsUrl ="username=" + this.name + "&" + "password=" + this.password;
-                axios
-                    .post(this.basicUrl + "/login", credentialsUrl)
-                    .then(response => {
-                        if (response.status === 200) {
-                            this.setIncorrectCredentials(false);
-                            let authorization = response.data.Authorization;
-                            this.$store.dispatch("setAuthorization", authorization);
-                            this.$store.dispatch("setUserName", this.name);
-                            routerUtil.toHome();
-                            console.log("logged in as " + this.name);
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        this.setIncorrectCredentials(true);
-                        console.log("login failed: " + this.getIncorrectLoginOrPasswordMessage());
-                    });
             },
 
             signUp() {
@@ -176,7 +153,7 @@
                     repeatedPassword: this.repeatedPassword
                 };
                 axios
-                    .post(this.basicUrl + "/user/create", newUser)
+                    .post(axiosUtil.getBasicUrl() + "/user/create", newUser)
                     .then(response => {this.loginIfValid(response.data, newUser.name)});
             },
 
@@ -206,8 +183,8 @@
                 this.repeatedPassword = "";
             },
 
-            setIncorrectCredentials(incorrectCredentials) {
-                this.$store.dispatch("setIncorrectCredentials", incorrectCredentials);
+            isEmpty(value) {
+                return shared.isEmpty(value);
             }
         }
     }

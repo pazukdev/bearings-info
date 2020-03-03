@@ -44,6 +44,7 @@
     import ButtonAdd from "../element/button/ButtonAdd";
     import routerUtil from "../../util/routerUtil";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import userUtil from "../../util/userUtil";
 
     export default {
         name: "EditPanel",
@@ -56,7 +57,6 @@
 
         computed: {
             ...mapState({
-                userName: state => state.dictionary.userName,
                 editMode: state => state.dictionary.editMode,
                 itemView: state => state.dictionary.itemView
             })
@@ -87,7 +87,7 @@
             },
 
             isGuest() {
-                return itemViewUtil.isGuest(this.userName);
+                return userUtil.isGuest();
             },
 
             translate(text) {

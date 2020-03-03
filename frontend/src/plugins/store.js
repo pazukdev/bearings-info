@@ -17,16 +17,16 @@ export default new Vuex.Store({
             return state.dictionary.itemView;
         },
 
-        appLanguage: state => {
-            return state.dictionary.appLanguage;
-        },
-
         authorization: state => {
             return state.dictionary.authorization;
         },
 
         basicUrl: state => {
             return state.dictionary.basicUrl;
+        },
+
+        lang: state => {
+            return state.dictionary.lang;
         },
 
         dictionary: state => {

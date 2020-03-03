@@ -3,18 +3,21 @@
         <div id="screen">
             <AppBar/>
             <div style="text-align: left">
-<!--                {{"appLanguage: " + appLanguage}}<br>-->
 <!--                {{"$i18n.locale: " + $i18n.locale}}<br>-->
 <!--                {{"errorMessage: " + errorMessage}}-->
-<!--                {{"langs: " + langs}}-->
+<!--                {{"lang: " + lang}}<br>-->
+<!--                {{"langs: " + langs}}<br>-->
 <!--                {{this.$route.params.item_id}}<br>-->
 <!--                {{this.$route.params.lang}}<br>-->
 <!--                {{"basicUrl: " + basicUrl}}<br>-->
-<!--                {{"userName: " + userName}}<br>-->
+<!--                {{"userId: " + userData.id}}<br>-->
+<!--                {{"userName: " + userData.name}}<br>-->
+<!--                {{dictionary[0]}}-->
 <!--                {{"authorization: " + authorization}}<br>-->
 <!--                {{"loadingState: " + loadingState}}<br>-->
 <!--                {{"editMode: " + editMode}}<br>-->
-<!--                {{"itemView: " + itemView}}<br>-->
+<!--                {{"itemView: " + itemView.userData.name}}<br>-->
+<!--                {{"itemView: " + itemView.userData.id}}<br>-->
             </div>
             <div>
                 <LangMenu/>
@@ -49,6 +52,7 @@
     import dictionaryUtil from "./util/dictionaryUtil";
     import CopyUrlButton from "./components/element/button/CopyUrlButton";
     import AdminMessage from "./components/special/AdminMessage";
+    import userUtil from "./util/userUtil";
 
     export default {
         name: 'app',
@@ -73,13 +77,13 @@
                 editMode: state => state.dictionary.editMode,
                 itemView: state => state.dictionary.itemView,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
-                userName: state => state.dictionary.userName,
                 userStatus: state => state.dictionary.userStatus,
-                appLanguage: state => state.dictionary.appLanguage,
+                lang: state => state.dictionary.lang,
                 langs: state => state.dictionary.langs,
                 dictionary: state => state.dictionary.dictionary,
                 errorMessage: state => state.dictionary.errorMessage,
-                loginMessage: state => state.dictionary.loginMessage
+                loginMessage: state => state.dictionary.loginMessage,
+                userData: state => state.dictionary.userData
             })
         },
 
@@ -103,16 +107,15 @@
             },
 
             isAuthorized() {
-                return itemViewUtil.isAuthorized(this.authorization);
+                return itemViewUtil.isAuthorized(axiosUtil.getAuthorization());
             },
 
             isGuest() {
-                return itemViewUtil.isGuest(this.userName);
+                return userUtil.isGuest();
             },
 
             loginAsGuest() {
-                let toHome = true;
-                axiosUtil.loginAsGuest(this.basicUrl, toHome);
+                axiosUtil.loginAsGuest(false, this.$route.params.lang);
             },
 
             isHome() {
@@ -121,6 +124,10 @@
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            getUserName() {
+                return userUtil.getUserName();
             }
         }
     }

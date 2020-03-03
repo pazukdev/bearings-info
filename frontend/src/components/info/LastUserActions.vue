@@ -7,18 +7,18 @@
                 <li v-for="action in userActions">
                     {{action.date}}<br>
                     <router-link class="simple-link"
-                                 :to="{name: 'user', params: {id: action.userId, lang: appLanguage}}">
+                                 :to="{name: 'user', params: {id: action.userId, lang: $route.params.lang}}">
                         {{action.userName}}
                     </router-link>
                     {{" " + translate(action.actionType) + " " + translate(action.itemCategory.toLowerCase()) + " "}}
                     <router-link class="simple-link"
-                                 :to="{name: 'item', params: {id: action.itemId, lang: appLanguage}}">
+                                 :to="{name: 'item', params: {id: action.itemId, lang: $route.params.lang}}">
                         {{action.itemName}}
                     </router-link>
                     <span v-if="!isEmpty(action.parentId) && !isEmpty(action.parentName)">
                             {{" " + translate('to') + " "}}
                             <router-link class="simple-link"
-                                         :to="{name: 'item', params: {id: action.parentId, lang: appLanguage}}">
+                                         :to="{name: 'item', params: {id: action.parentId, lang: $route.params.lang}}">
                             {{action.parentName}}
                             </router-link>
                             {{" " + translate('as') + " " + translate(action.itemType)}}
@@ -32,19 +32,12 @@
 
 <script>
     import shared from "../../util/shared";
-    import {mapState} from "vuex";
     import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "LastUserActions",
 
         props: {userActions:Array, itemType:String},
-
-        computed: {
-            ...mapState({
-                appLanguage: state => state.dictionary.appLanguage
-            })
-        },
 
         methods: {
             isEmpty(value) {

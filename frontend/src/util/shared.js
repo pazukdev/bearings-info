@@ -1,3 +1,5 @@
+import router from "../plugins/router";
+
 export default {
     isInArray(element, array) {
         for (let i=0; i < array.length; i++) {
@@ -45,7 +47,11 @@ export default {
         return window.location;
     },
 
-    isEnglish(lang) {
+    isEnglish() {
+        let lang = router.currentRoute.params.lang;
+        if (this.isEmpty(lang)) {
+            return false;
+        }
         return lang === "en";
     }
 

@@ -3,62 +3,75 @@ import routerUtil from "./routerUtil";
 import store from "../plugins/store";
 import itemViewUtil from "./itemViewUtil";
 import storeUtil from "./storeUtil";
+import userUtil from "./userUtil";
 
 export default {
-    loginAsGuest(basicUrl, toHome) {
-        let username = "guest";
-        let password = "guest";
-        let credentialsUrl ="username=" + username + "&" + "password=" + password;
+
+    loginAsGuest(toHome, lang) {
+        console.log("loginAsGuest(toHome, lang)");
+        this.login("guest", "guest", toHome, lang);
+    },
+
+    login(userName, password, toHome, lang) {
+        console.log("login(userName, password, toHome, lang)");
+        console.log("toHome: " + toHome);
+        let credentialsUrl ="username=" + userName + "&" + "password=" + password;
         axios
-            .post(basicUrl + "/login", credentialsUrl)
+            .post(this.getBasicUrl() + "/login", credentialsUrl)
             .then(response => {
                 if (response.status === 200) {
-                    let authorization = response.data.Authorization;
-                    store.dispatch("setAuthorization", authorization);
-                    store.dispatch("setUserName", username);
-                    console.log("logged in as " + username);
+                    storeUtil.setIncorrectCredentials(false);
+                    storeUtil.setAuthorization(response.data.Authorization);
+                    let userData = {name: userName};
+                    if (userName === "guest") {
+                        userData.role = "GUEST";
+                    }
+                    storeUtil.setUserData(userData);
+                    console.log("logged in as " + userUtil.getUserName());
                     if (toHome) {
-                        routerUtil.toHome();
+                        routerUtil.toHome(lang);
                     }
                 }
+            })
+            .catch(error => {
+                storeUtil.setIncorrectCredentials(true);
             });
     },
 
-    logout(basicUrl) {
-        routerUtil.toLogin();
+    logout(lang) {
+        routerUtil.toLogin(lang);
         console.log("logout");
-        let toHome = false;
-        this.loginAsGuest(basicUrl, toHome);
+        this.loginAsGuest(false, lang);
     },
 
-    updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization) {
+    updateItem(itemId, itemView, lang) {
         axios
-            .put(basicUrl
+            .put(this.getBasicUrl()
                 + "/" + "item"
                 + "/" + "update"
                 + "/" + itemId
-                + "/" + userName
-                + "/" + appLanguage,
+                + "/" + userUtil.getUserName()
+                + "/" + lang,
                 itemView, {
                     headers: {
-                        Authorization: authorization
+                        Authorization: this.getAuthorization()
                     }
                 })
             .then(response => {
                 let updatedItemView = response.data;
-                itemViewUtil.dispatchView(updatedItemView);
+                itemViewUtil.dispatchView(updatedItemView, lang);
                 console.log("item updated");
             });
     },
 
-    setLangsAndDictionary() {
+    setLangsAndDictionary(lang) {
         axios
-            .get(store.getters.basicUrl
+            .get(this.getBasicUrl()
                 + "/" + "file"
                 + "/" + "dictionary-data"
-                + "/" + store.getters.appLanguage, {
+                + "/" + lang, {
                 headers: {
-                    Authorization: store.getters.authorization
+                    Authorization: this.getAuthorization()
                 }
             })
             .then(response => {
@@ -69,6 +82,14 @@ export default {
                 storeUtil.setLangs(langs);
                 storeUtil.setDictionary(dictionaryData.dictionary);
             });
+    },
+
+    getBasicUrl() {
+        return store.getters.basicUrl;
+    },
+
+    getAuthorization() {
+        return store.getters.authorization;
     }
 
 }

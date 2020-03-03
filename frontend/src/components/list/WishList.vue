@@ -27,6 +27,8 @@
     import {mapState} from "vuex";
     import shared from "../../util/shared";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import userUtil from "../../util/userUtil";
+    import routerUtil from "../../util/routerUtil";
 
     export default {
         name: "WishList",
@@ -36,8 +38,6 @@
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
-                userName: state => state.dictionary.userName,
-                appLanguage: state => state.dictionary.appLanguage,
                 itemView: state => state.dictionary.itemView,
                 loadingState: state => state.dictionary.loadingState,
                 editMode: state => state.dictionary.editMode
@@ -62,14 +62,14 @@
                     .get(this.basicUrl
                         + "/" + "view"
                         + "/" + "wishlist"
-                        + "/" + this.userName
-                        + "/" + this.appLanguage, {
+                        + "/" + userUtil.getUserName()
+                        + "/" + routerUtil.getLang(this.$route), {
                         headers: {
                             Authorization: this.authorization
                         }
                     })
                     .then(response => {
-                        itemViewUtil.dispatchView(response.data);
+                        itemViewUtil.dispatchView(response.data, this.$route.params.lang);
                         console.log("user wishlist rendered");
                     })
                     .catch(error => {

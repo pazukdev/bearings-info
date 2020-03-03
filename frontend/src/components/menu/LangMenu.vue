@@ -1,22 +1,21 @@
 <template>
-    <div>
+    <div v-if="!isEmpty(itemView) && !isEmpty(itemView.userData)">
         <table>
             <tbody>
                 <tr>
                     <td style="text-align: left; white-space: nowrap">
                         {{"v 2.0"}}
                     </td>
-                    <td v-if="!isGuest()">
+                    <td>
                         <router-link class="simple-link"
-                                     :to="{name: 'user', params: {id: itemView.userData.id, lang: appLanguage}}">
+                                     v-if="!isEmpty(itemView) && !isEmpty(itemView.userData.id) && !isGuest()"
+                                     :to="{name: 'user', params: {id: itemView.userData.id, lang: $route.params.lang}}">
                             {{itemView.userData.name}}
                         </router-link>
+                        <p v-else>{{translate("You are guest")}}</p>
                     </td>
-                    <td v-if="!isGuest()">
+                    <td v-if="!isEmpty(itemView) && !isGuest()">
                         {{translate("Rating") + ": " + itemView.userData.rating}}
-                    </td>
-                    <td v-if="isGuest()">
-                        {{translate("You are guest")}}
                     </td>
                     <td>
                         <LanguageSelect/>
@@ -34,9 +33,11 @@
 
 <script>
     import LanguageSelect from "../element/select/LanguageSelect";
-    import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import userUtil from "../../util/userUtil";
+    import shared from "../../util/shared";
+    import routerUtil from "../../util/routerUtil";
 
     export default {
         name: "LangMenu",
@@ -45,25 +46,32 @@
 
         computed: {
             ...mapState({
-                userName: state => state.dictionary.userName,
                 itemView: state => state.dictionary.itemView,
-                loadingState: state => state.dictionary.loadingState,
-                appLanguage: state => state.dictionary.appLanguage
+                loadingState: state => state.dictionary.loadingState
             })
         },
 
         methods: {
             isGuest() {
-                return itemViewUtil.isGuest(this.userName);
+                return userUtil.isGuest();
             },
 
             isAdmin() {
-                return itemViewUtil.isAdmin(this.itemView);
+                return userUtil.isAdmin(this.itemView);
             },
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            isEmpty(value) {
+                return shared.isEmpty(value);
+            },
+
+            getLang() {
+                return routerUtil.getLang(this.$route);
             }
+
         }
     }
 </script>

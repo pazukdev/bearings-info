@@ -51,6 +51,7 @@
     import axiosUtil from "../../util/axiosUtil";
     import dictionaryUtil from "../../util/dictionaryUtil";
     import ItemName from "../item/ItemName";
+    import userUtil from "../../util/userUtil";
 
     export default {
 
@@ -70,12 +71,8 @@
 
         computed: {
             ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                userName: state => state.dictionary.userName,
                 loadingState: state => state.dictionary.loadingState,
                 itemView: state => state.dictionary.itemView,
-                appLanguage: state => state.dictionary.appLanguage,
                 editMode: state => state.dictionary.editMode
             })
         },
@@ -97,12 +94,7 @@
             },
 
             update(itemId) {
-                let itemView = this.itemView;
-                let basicUrl = this.basicUrl.toString();
-                let userName = this.userName.toString();
-                let appLanguage = this.appLanguage.toString();
-                let authorization = this.authorization;
-                axiosUtil.updateItem(itemId, itemView, basicUrl, userName, appLanguage, authorization);
+                axiosUtil.updateItem(itemId, this.itemView, this.$route.params.lang);
             },
 
             arrayIsRendered(array) {
@@ -155,21 +147,22 @@
             },
 
             getItemView(itemId, refreshIfError) {
+                let lang = this.$route.params.lang;
                 axios
-                    .get(this.basicUrl
+                    .get(axiosUtil.getBasicUrl()
                         + "/" + "item"
                         + "/" + "view"
                         + "/" + "item"
                         + "/" + itemId
-                        + "/" + this.userName
-                        + "/" + this.appLanguage, {
+                        + "/" + this.getUserName()
+                        + "/" + lang, {
                         headers: {
-                            Authorization: this.authorization
+                            Authorization: axiosUtil.getAuthorization()
                         }
                     })
                     .then(response => {
                         let itemView = response.data;
-                        itemViewUtil.dispatchView(itemView);
+                        itemViewUtil.dispatchView(itemView, lang);
                     })
                     .catch(error => {
                         this.getItemView(itemId, false);
@@ -178,11 +171,11 @@
             },
 
             isAuthorized() {
-                return itemViewUtil.isAuthorized(this.authorization);
+                return itemViewUtil.isAuthorized(axiosUtil.getAuthorization());
             },
 
             isGuest() {
-                return itemViewUtil.isGuest(this.userName);
+                return userUtil.isGuest();
             },
 
             isLoading() {
@@ -191,6 +184,10 @@
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            getUserName() {
+                return userUtil.getUserName();
             }
         }
     }

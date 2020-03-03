@@ -70,7 +70,6 @@
     import ListHeader from "./ListHeader";
     import ButtonAdd from "../../element/button/ButtonAdd";
     import arrayUtil from "../../../util/arrayUtil";
-    import itemViewUtil from "../../../util/itemViewUtil";
 
     export default {
         name: "ItemDescription",
@@ -196,7 +195,7 @@
 
             isAdmin() {
                 return false;
-                return itemViewUtil.isAdmin(this.itemView);
+                // return userUtil.isAdmin(this.itemView);
             }
         }
     }

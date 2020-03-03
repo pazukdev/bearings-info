@@ -69,8 +69,8 @@
     import {mapState} from "vuex";
     import shared from "../../util/shared";
     import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
-    import itemViewUtil from "../../util/itemViewUtil";
     import ButtonDelete from "../element/button/ButtonDelete";
+    import userUtil from "../../util/userUtil";
 
     export default {
         name: "ReplacerList",
@@ -81,7 +81,6 @@
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
-                userName: state => state.dictionary.userName,
                 editMode: state => state.dictionary.editMode,
                 itemView: state => state.dictionary.itemView
             })
@@ -141,7 +140,7 @@
             },
 
             isGuest() {
-                return itemViewUtil.isGuest(this.userName);
+                return userUtil.isGuest();
             },
 
             rate(action, itemId) {
@@ -154,7 +153,7 @@
                 axios
                     .put(this.basicUrl
                         + "/" + "replacer/rate"
-                        + "/" + this.userName,
+                        + "/" + this.getUserName(),
                         rate, {
                             headers: {
                                 Authorization: this.authorization
@@ -166,7 +165,7 @@
                         this.itemView.replacersTable.replacers = rateReplacer.replacers;
                         this.itemView.userData.rating = rateReplacer.newUserRating;
                         console.log("Replacer rate action performed: "
-                            + "user name: " + this.userName
+                            + "user name: " + this.getUserName()
                             + ", action: " + rate.action
                             + ", item id: " + rate.itemId);
                     });
@@ -175,6 +174,10 @@
             removeItem(item) {
                 shared.removeFromArray(item, this.getReplacers());
                 this.$emit("show-add-form");
+            },
+
+            getUserName() {
+                return userUtil.getUserName();
             }
         }
     }

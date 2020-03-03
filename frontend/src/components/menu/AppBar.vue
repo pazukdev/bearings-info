@@ -43,24 +43,21 @@
     import {mapState} from "vuex";
     import axiosUtil from "../../util/axiosUtil";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import userUtil from "../../util/userUtil";
 
     export default {
         name: 'AppBar',
 
         computed: {
             ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
                 loadingState: state => state.dictionary.loadingState,
-                userName: state => state.dictionary.userName,
-                appLanguage: state => state.dictionary.appLanguage,
                 editMode: state => state.dictionary.editMode
             })
         },
 
         methods: {
             logout() {
-                axiosUtil.logout(this.basicUrl);
+                axiosUtil.logout(this.$route.params.lang);
             },
 
             openLoginForm() {
@@ -75,11 +72,11 @@
             },
 
             isAuthorized() {
-                return itemViewUtil.isAuthorized(this.authorization);
+                return itemViewUtil.isAuthorized(axiosUtil.getAuthorization());
             },
 
             isGuest() {
-                return itemViewUtil.isGuest(this.userName);
+                return userUtil.isGuest();
             },
 
             isBackButtonDisplayed() {

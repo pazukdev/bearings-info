@@ -5,7 +5,6 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
     import DefaultButton from "./DefaultButton";
     import routerUtil from "../../../util/routerUtil";
 
@@ -18,15 +17,9 @@
             user: Boolean
         },
 
-        computed: {
-            ...mapState({
-                appLanguage: state => state.dictionary.appLanguage
-            })
-        },
-
         methods: {
             pushTo(id) {
-                let lang = this.appLanguage.toString();
+                let lang = this.$route.params.lang;
                 if (this.user) {
                     routerUtil.toUser(id, lang);
                 } else {

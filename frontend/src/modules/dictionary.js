@@ -1,13 +1,15 @@
+import shared from "../util/shared";
+
 const state = {
     basicUrl: "backend",
+    lang: "en",
     langs: [],
     dictionary: [],
-    appLanguage: "en",
     editMode: false,
     loadingState: "",
     incorrectCredentials: false,
     authorization: "",
-    userData: "",
+    userData: {id: 1, name: "guest", role: "GUEST", rating: 0, wishListId: 1},
     itemView: "",
     errorMessage: ""
 };
@@ -17,16 +19,16 @@ const actions = {
         commit("setBasicUrl", context);
     },
 
+    setLang: ({commit}, context) => {
+        commit("setLang", context);
+    },
+
     setLangs: ({commit}, context) => {
         commit("setLangs", context);
     },
 
     setDictionary: ({commit}, context) => {
         commit("setDictionary", context);
-    },
-
-    setAppLanguage: ({commit}, context) => {
-        commit("setAppLanguage", context);
     },
 
     setEditMode: ({commit}, context) => {
@@ -39,10 +41,6 @@ const actions = {
 
     setIncorrectCredentials: ({commit}, context) => {
         commit("setIncorrectCredentials", context)
-    },
-
-    setUserName: ({commit}, context) => {
-        commit("setUserName", context);
     },
 
     setUserData: ({commit}, context) => {
@@ -63,16 +61,20 @@ const actions = {
 };
 
 const mutations = {
+
+    setLang(state, lang) {
+        if (shared.isEmpty(lang)) {
+            lang = "en";
+        }
+        state.lang = lang;
+    },
+
     setLangs(state, langs) {
         state.langs = langs;
     },
 
     setDictionary(state, dictionary) {
         state.dictionary = dictionary;
-    },
-
-    setAppLanguage(state, appLanguage) {
-        state.appLanguage = appLanguage;
     },
 
     setBasicUrl(state, basicUrl) {
@@ -93,14 +95,6 @@ const mutations = {
 
     setLoadingState(state, loadingState) {
         state.loadingState = loadingState;
-    },
-
-    setUserName(state, userName) {
-        state.userName = userName;
-    },
-
-    setUserStatus(state, userStatus) {
-        state.userStatus = userStatus;
     },
 
     setUserData(state, userData) {

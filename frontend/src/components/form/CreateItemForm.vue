@@ -59,6 +59,7 @@
     import routerUtil from "../../util/routerUtil";
     import storeUtil from "../../util/storeUtil";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import userUtil from "../../util/userUtil";
 
     export default {
         name: "CreateItemForm",
@@ -67,10 +68,8 @@
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
-                userName: state => state.dictionary.userName,
                 loadingState: state => state.dictionary.loadingState,
-                itemView: state => state.dictionary.itemView,
-                appLanguage: state => state.dictionary.appLanguage
+                itemView: state => state.dictionary.itemView
             })
         },
 
@@ -100,15 +99,14 @@
                     this.newItemNameMessage = "Item with this name already exists in the category"
                 } else {
                     storeUtil.setLoadingState("Creating");
-                    let language = this.appLanguage.toString();
+                    let language = routerUtil.getLang(this.$route);
                     this.clearItemCreationMessages();
-                    // basicUrl/item/create/{category}/{name}/{userName}/{language}
                     axios
                         .post(this.basicUrl.toString()
                             + "/" + "item/create"
                             + "/" + this.newItemCategory
                             + "/" + this.newItemName
-                            + "/" + this.userName.toString()
+                            + "/" + userUtil.getUserName()
                             + "/" + language, {
                             headers: {
                                 Authorization: this.authorization
@@ -116,9 +114,9 @@
                         })
                         .then(response => {
                             let newItemView = response.data;
-                            itemViewUtil.dispatchView(newItemView);
+                            itemViewUtil.dispatchView(newItemView, this.$route.params.lang);
                             this.logEvent("a new item created", newItemView);
-                            routerUtil.toItem(newItemView.itemId, language);
+                            routerUtil.toItem(newItemView.itemId, this.$route.params.lang);
                         });
                 }
             },
@@ -146,7 +144,7 @@
             },
 
             isGuest() {
-                return itemViewUtil.isGuest(this.userName);
+                return userUtil.isGuest();
             },
 
             translate(text) {

@@ -12,7 +12,6 @@
 
 <script>
     import {mapState} from "vuex";
-    import itemViewUtil from "../../../util/itemViewUtil";
     import userUtil from "../../../util/userUtil";
 
     export default {
@@ -26,7 +25,6 @@
         computed: {
             ...mapState({
                 itemView: state => state.dictionary.itemView,
-                userName: state => state.dictionary.userName,
                 editMode: state => state.dictionary.editMode
             })
         },
@@ -36,7 +34,7 @@
                 if (!this.editMode || item.deletable === false) {
                     return false;
                 }
-                return itemViewUtil.isAdmin(this.itemView)
+                return userUtil.isAdmin(this.itemView)
                     || userUtil.isCurrentUserItemCreator(item.creatorId)
                     || this.wishlistView;
             },

@@ -2,7 +2,6 @@ import shared from "./shared";
 import storeUtil from "./storeUtil";
 import arrayUtil from "./arrayUtil";
 import searchUtil from "./searchUtil";
-import store from "../plugins/store";
 import routerUtil from "./routerUtil";
 import dictionaryUtil from "./dictionaryUtil";
 
@@ -70,31 +69,20 @@ export default {
         return authorization !== "";
     },
 
-    isGuest(userName) {
-        return userName.toString() === "guest";
-    },
-
-    isAdmin(itemView) {
-        return itemView.userData.role === "ADMIN";
-    },
-
-    isSeller(itemView) {
-        return itemView.userData.role === "SELLER";
-    },
-
     getItemName(itemView) {
         return itemView.header.rows[0].value;
     },
 
-    dispatchView(itemView) {
-        storeUtil.setErrorMessage(itemView.errorMessage);
-        store.dispatch("setItemView", itemView);
-        storeUtil.setUserData(itemView.userData);
+    dispatchView(view, lang) {
+        storeUtil.setErrorMessage(view.errorMessage);
+        storeUtil.setView(view);
+        storeUtil.setUserData(view.userData);
         storeUtil.setLoadingStateOff();
         if (storeUtil.userIsBlocked()) {
             console.log("Open Login page. Reason: blocked user is logged in");
-            routerUtil.toLogin();
+            routerUtil.toLogin(lang);
         }
+        // routerUtil.selectLanguage(routerUtil.getLang());
     },
 
     dispatchResponseError(error) {

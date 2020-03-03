@@ -12,7 +12,7 @@
             </tr>
             <tr>
                 <td>
-                    <a :href="getDictionaryDownloadUrl('dictionary')" class="button">
+                    <a :href="getDictionaryDownloadUrl('dictionary')" class="button" download>
                         {{translate("Download dictionary")}}
                     </a>
                 </td>
@@ -46,7 +46,7 @@
             </tr>
             <tr v-if="isAdmin()">
                 <td>
-                    <a :href="getDownloadUrl('comments')" class="button">
+                    <a :href="getDownloadUrl('comments')" class="button" download>
                         {{"Download comments"}}
                     </a>
                 </td>
@@ -61,7 +61,7 @@
             </tr>
             <tr v-if="isAdmin()">
                 <td>
-                    <a :href="getDownloadUrl('info_categories')" class="button">
+                    <a :href="getDownloadUrl('info_categories')" class="button" download>
                         {{"Download info categories"}}
                     </a>
                 </td>
@@ -81,13 +81,13 @@
 
 <script>
     import axios from "axios";
-    import itemViewUtil from "../../util/itemViewUtil";
     import {mapState} from "vuex";
     import routerUtil from "../../util/routerUtil";
     import shared from "../../util/shared";
     import DefaultButton from "../element/button/DefaultButton";
     import dictionaryUtil from "../../util/dictionaryUtil";
     import axiosUtil from "../../util/axiosUtil";
+    import userUtil from "../../util/userUtil";
 
     export default {
         name: "Menu",
@@ -95,9 +95,7 @@
         computed: {
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
-                userName: state => state.dictionary.userName,
                 itemView: state => state.dictionary.itemView,
-                appLanguage: state => state.dictionary.appLanguage,
                 langs: state => state.dictionary.langs
             })
         },
@@ -111,19 +109,20 @@
 
         methods: {
             isGuest() {
-                return  itemViewUtil.isGuest(this.userName);
+                return userUtil.isGuest();
             },
 
             isAdmin() {
-                return itemViewUtil.isAdmin(this.itemView);
+                return userUtil.isAdmin(this.itemView);
             },
 
             openUsersList() {
-                routerUtil.toUserList();
+                routerUtil.toUserList(this.$route.params.lang);
             },
 
             getDictionaryDownloadUrl(fileName) {
-                let lang = this.appLanguage.toString() === "en" ? "ru" : this.appLanguage;
+                let langParam = this.getLang();
+                let lang = langParam === "en" ? "ru" : langParam;
                 return this.basicUrl + "/file/" + fileName + "_" + lang + "/download";
             },
 
@@ -159,8 +158,8 @@
                                 + "/" + "file"
                                 + "/" + fileName
                                 + "/" + "upload"
-                                + "/" + this.userName
-                                + "/" + this.appLanguage, message)
+                                + "/" + userUtil.getUserName()
+                                + "/" + this.getLang(), message)
                             .then(response => {
                                 this.uploadMessage = response.data.text;
                                 this.localizedUploadMessage = response.data.localizedText;
@@ -176,7 +175,7 @@
                     let newLang = message.split(": ")[1];
                     routerUtil.setLang(newLang, this.$route);
                 }
-                axiosUtil.setLangsAndDictionary();
+                axiosUtil.setLangsAndDictionary(this.$route.params.lang);
                 this.uploadMessage = "";
                 this.localizedUploadMessage = "";
             },
@@ -197,6 +196,10 @@
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            getLang() {
+                return routerUtil.getLang(this.$route);
             }
         }
     }

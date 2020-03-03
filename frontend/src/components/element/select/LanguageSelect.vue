@@ -14,9 +14,9 @@
 <script>
     import {mapState} from "vuex";
     import routerUtil from "../../../util/routerUtil";
-    import storeUtil from "../../../util/storeUtil";
     import dictionaryUtil from "../../../util/dictionaryUtil";
     import axiosUtil from "../../../util/axiosUtil";
+    import shared from "../../../util/shared";
 
     export default {
         name: "LanguageSelect",
@@ -43,6 +43,11 @@
 
         created() {
             this.onUrlChange();
+            if (this.langs.length === 0 && this.newLanguage === "en") {
+                console.log("On create: set dictionary");
+                let lang = this.$route.params.lang;
+                axiosUtil.setLangsAndDictionary(lang);
+            }
         },
 
         methods: {
@@ -50,20 +55,34 @@
                 let urlLang = this.$route.params.lang;
                 if (urlLang !== this.newLanguage) {
                     this.newLanguage = urlLang;
-                    storeUtil.setAppLang(this.newLanguage);
+                    if (routerUtil.isLogin(this.$route) || routerUtil.isMenu(this.$route)) {
+                        // this.selectLanguage();
+                    }
+                    // storeUtil.setAppLang(this.newLanguage);
+                    // if (this.newLanguage !== "en") {
+                    //     console.log("On url change: set dictionary");
+                    //     axiosUtil.setLangsAndDictionary();
+                    // }
+                    // this.selectLanguage();
                 }
             },
 
             selectLanguage() {
-                storeUtil.setAppLang(this.newLanguage);
-                routerUtil.setLang(this.newLanguage, this.$route);
-                if (this.newLanguage !== "en") {
-                    axiosUtil.setLangsAndDictionary();
-                }
+                // storeUtil.setAppLang(this.newLanguage);
+                // routerUtil.setLang(this.newLanguage, this.$route);
+                // if (this.newLanguage !== "en") {
+                //     console.log("On lang select: set dictionary");
+                //     axiosUtil.setLangsAndDictionary();
+                // }
+                routerUtil.selectLanguage(this.newLanguage, this.$route);
             },
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            isEmpty(value) {
+                return shared.isEmpty(value);
             }
         }
     }
