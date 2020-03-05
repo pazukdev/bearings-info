@@ -88,13 +88,24 @@
         },
 
         created() {
+            console.log("App: created()");
             this.setBasicUrl();
             if (!this.isAuthorized()) {
                 this.loginAsGuest();
             }
+            // this.setLangsAndDictionary();
         },
 
         methods: {
+            setLangsAndDictionary() {
+                console.log("App: setLangsAndDictionary()");
+                if (this.langs.length < 1) {
+                    let urlLang = this.$route.params.lang;
+                    console.log("App: axiosUtil.setLangsAndDictionary(urlLang)");
+                    axiosUtil.setLangsAndDictionary(urlLang);
+                }
+            },
+
             setBasicUrl() {
                 let hostname = window.location.hostname;
                 let basicUrl;

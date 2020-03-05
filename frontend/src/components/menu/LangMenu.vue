@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isEmpty(itemView) && !isEmpty(itemView.userData)">
+    <div>
         <table>
             <tbody>
                 <tr>
@@ -14,7 +14,7 @@
                         </router-link>
                         <p v-else>{{translate("You are guest")}}</p>
                     </td>
-                    <td v-if="!isEmpty(itemView) && !isGuest()">
+                    <td v-if="!isEmpty(itemView) && !isEmpty(itemView.userData) && !isGuest()">
                         {{translate("Rating") + ": " + itemView.userData.rating}}
                     </td>
                     <td>

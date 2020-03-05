@@ -165,8 +165,14 @@
                         itemViewUtil.dispatchView(itemView, lang);
                     })
                     .catch(error => {
-                        this.getItemView(itemId, false);
-                        itemViewUtil.dispatchResponseError(error);
+                        console.log("Error on getItemView(): " + error);
+                        if (refreshIfError) {
+                            console.log("this.getItemView(itemId, false)");
+                            this.getItemView(itemId, false);
+                        } else {
+                            console.log("itemViewUtil.dispatchResponseError(error)");
+                            itemViewUtil.dispatchResponseError(error);
+                        }
                     });
             },
 

@@ -1,6 +1,6 @@
 <template>
     <div v-if="!isLoginPage()">
-        <table v-if="!buttonStyle && !isEmpty(itemView)"
+        <table v-if="!buttonStyle"
                style="margin-bottom: 20px" class="equal-columns-table">
             <tbody>
                 <tr>

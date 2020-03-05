@@ -1,11 +1,15 @@
 <template>
-    <div>
-        <div v-if="!isEmpty(errorMessage)" class="alert-message" style="text-align: center">
-            {{translate(errorMessage)}}
+    <div class="default-margin">
+        <div v-if="!isEmpty(errorMessage)" style="text-align: center">
+            <p>{{translate(errorMessage)}}</p>
+            <p v-if="noServerResponse()">
+                {{translate('If you still see message above')}}
+            </p>
+            <p v-if="noServerResponse()">
+                {{translate('try to refresh the page or check your internet connection')}}
+            </p>
         </div>
-        <div v-else class="default-margin">
-        {{translate(loadingState) + "..."}}
-        </div>
+        <p v-else>{{translate(loadingState) + "..."}}</p>
     </div>
 </template>
 
@@ -32,6 +36,10 @@
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            noServerResponse() {
+                return !this.isEmpty(errorMessage ) && this.errorMessage.toString() === 'No server response';
             }
         }
     }

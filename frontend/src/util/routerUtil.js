@@ -81,16 +81,7 @@ export default {
     },
 
     selectLanguage(newLang, route) {
-        // if (newLang === store.getters.lang) {
-        //     console.log("newLang: " + newLang);
-        //     console.log("store.getters.lang: " + store.getters.lang);
-        //     return;
-        // }
         this.setLang(newLang, route);
-        // if (newLang !== "en") {
-        //     console.log("On lang select: set new dictionary");
-        //     axiosUtil.setLangsAndDictionary(newLang);
-        // }
     },
 
     setLang(newLang, route) {

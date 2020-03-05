@@ -25,9 +25,9 @@
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
-                appLanguage: state => state.dictionary.appLanguage,
                 langs: state => state.dictionary.langs,
-                itemView: state => state.dictionary.itemView
+                itemView: state => state.dictionary.itemView,
+                dictionary: state => state.dictionary.dictionary
             })
         },
 
@@ -42,38 +42,22 @@
         },
 
         created() {
+            console.log("LanguageSelect: created()");
             this.onUrlChange();
-            if (this.langs.length === 0 && this.newLanguage === "en") {
-                console.log("On create: set dictionary");
-                let lang = this.$route.params.lang;
-                axiosUtil.setLangsAndDictionary(lang);
-            }
         },
 
         methods: {
             onUrlChange() {
+                console.log("LanguageSelect: onUrlChange()");
                 let urlLang = this.$route.params.lang;
                 if (urlLang !== this.newLanguage) {
                     this.newLanguage = urlLang;
-                    if (routerUtil.isLogin(this.$route) || routerUtil.isMenu(this.$route)) {
-                        // this.selectLanguage();
-                    }
-                    // storeUtil.setAppLang(this.newLanguage);
-                    // if (this.newLanguage !== "en") {
-                    //     console.log("On url change: set dictionary");
-                    //     axiosUtil.setLangsAndDictionary();
-                    // }
-                    // this.selectLanguage();
+                    console.log("onUrlChange(): axiosUtil.setLangsAndDictionary(urlLang)");
+                    axiosUtil.setLangsAndDictionary(urlLang);
                 }
             },
 
             selectLanguage() {
-                // storeUtil.setAppLang(this.newLanguage);
-                // routerUtil.setLang(this.newLanguage, this.$route);
-                // if (this.newLanguage !== "en") {
-                //     console.log("On lang select: set dictionary");
-                //     axiosUtil.setLangsAndDictionary();
-                // }
                 routerUtil.selectLanguage(this.newLanguage, this.$route);
             },
 

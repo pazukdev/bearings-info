@@ -87,7 +87,8 @@ export default {
 
     dispatchResponseError(error) {
         console.error(error);
-        storeUtil.setErrorMessage("Page error. Please return to previous page");
+        let message = "No server response";
+        storeUtil.setErrorMessage(message);
     },
 
     removeItemFromItemList(itemView, item) {

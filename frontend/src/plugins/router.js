@@ -12,7 +12,6 @@ import Menu from "../components/router/Menu";
 import PrivacyPolicy from "../components/info/PrivacyPolicy";
 import UserAgreement from "../components/info/UserAgreement";
 import Disclaimer from "../components/info/Disclaimer";
-import axiosUtil from "../util/axiosUtil";
 
 Vue.use(VueRouter);
 
@@ -48,16 +47,7 @@ const router = new VueRouter({
 });
 
 router.beforeResolve((to, from, next) => {
-    let newLang = to.params.lang;
-    let oldLang = from.params.lang;
-    if (newLang !== oldLang) {
-        storeUtil.setLang(newLang);
-        console.log("router.beforeResolve: set new lang");
-        if (newLang !== "en") {
-            axiosUtil.setLangsAndDictionary(newLang);
-            console.log("router.beforeResolve: set new dictionary");
-        }
-    }
+    storeUtil.setLang(to.params.lang);
     storeUtil.setLoadingStateDefault();
     storeUtil.setEditMode(false);
     next();

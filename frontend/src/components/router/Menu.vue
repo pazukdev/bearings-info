@@ -12,7 +12,7 @@
             </tr>
             <tr>
                 <td>
-                    <a :href="getDictionaryDownloadUrl('dictionary')" class="button" download>
+                    <a :href="getDictionaryDownloadUrl()" class="button" download>
                         {{translate("Download dictionary")}}
                     </a>
                 </td>
@@ -120,10 +120,11 @@
                 routerUtil.toUserList(this.$route.params.lang);
             },
 
-            getDictionaryDownloadUrl(fileName) {
+            getDictionaryDownloadUrl() {
+                // return this.basicUrl + "/file/dictionary_ru/download";
                 let langParam = this.getLang();
                 let lang = langParam === "en" ? "ru" : langParam;
-                return this.basicUrl + "/file/" + fileName + "_" + lang + "/download";
+                return this.basicUrl + "/file/dictionary_" + lang + "/download";
             },
 
             getDownloadUrl(fileName) {
