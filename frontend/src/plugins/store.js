@@ -29,6 +29,10 @@ export default new Vuex.Store({
             return state.dictionary.lang;
         },
 
+        allowedLangs: state => {
+            return state.dictionary.allowedLangs;
+        },
+
         dictionary: state => {
             return state.dictionary.dictionary;
         }

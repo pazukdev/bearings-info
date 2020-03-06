@@ -12,7 +12,7 @@
             </tr>
             <tr>
                 <td>
-                    <a :href="getDictionaryDownloadUrl()" class="button" download>
+                    <a :href="getDictionaryDownloadUrl()" class="button" download="dictionary">
                         {{translate("Download dictionary")}}
                     </a>
                 </td>
@@ -96,7 +96,8 @@
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 itemView: state => state.dictionary.itemView,
-                langs: state => state.dictionary.langs
+                langs: state => state.dictionary.langs,
+                lang: state => state.dictionary.lang
             })
         },
 
@@ -121,7 +122,6 @@
             },
 
             getDictionaryDownloadUrl() {
-                // return this.basicUrl + "/file/dictionary_ru/download";
                 let langParam = this.getLang();
                 let lang = langParam === "en" ? "ru" : langParam;
                 return this.basicUrl + "/file/dictionary_" + lang + "/download";
@@ -144,6 +144,13 @@
             },
 
             upload(event, fileName) {
+                let lang = this.getLang();
+                if (!routerUtil.validLang(lang)) {
+                    let message = "Invalid language: " + lang;
+                    console.log(message);
+                    this.uploadMessage = message;
+                    return;
+                }
                 console.log("Upload started");
                 let input = event.target;
                 let file = input.files[0];
@@ -160,11 +167,15 @@
                                 + "/" + fileName
                                 + "/" + "upload"
                                 + "/" + userUtil.getUserName()
-                                + "/" + this.getLang(), message)
+                                + "/" + lang, message)
                             .then(response => {
                                 this.uploadMessage = response.data.text;
                                 this.localizedUploadMessage = response.data.localizedText;
                                 this.reset();
+                            })
+                            .catch(error => {
+                                this.uploadMessage = response.data.text;
+                                this.localizedUploadMessage = response.data.localizedText;
                             });
                     };
                 }
@@ -172,6 +183,7 @@
 
             refresh() {
                 let message = this.uploadMessage;
+                console.log(message);
                 if (!this.isEmpty(message) && message.includes("New language added: ")) {
                     let newLang = message.split(": ")[1];
                     routerUtil.setLang(newLang, this.$route);
@@ -182,7 +194,16 @@
             },
 
             isRefreshButtonVisible() {
-                return !this.isEmpty(this.uploadMessage) && !this.uploadMessage.toLowerCase().includes('not accepted');
+                if (this.isEmpty(this.uploadMessage)) {
+                    return false;
+                }
+                let message = this.uploadMessage.toLowerCase();
+                if (message.includes("invalid")
+                    || message.includes('not accepted')
+                    || message.includes("empty")) {
+                    return false;
+                }
+                return true;
             },
 
             reset() {
@@ -200,7 +221,7 @@
             },
 
             getLang() {
-                return routerUtil.getLang(this.$route);
+                return routerUtil.getLang(null);
             }
         }
     }

@@ -50,7 +50,9 @@
             onUrlChange() {
                 console.log("LanguageSelect: onUrlChange()");
                 let urlLang = this.$route.params.lang;
-                if (urlLang !== this.newLanguage) {
+                if (!routerUtil.validLang(urlLang)) {
+                    throw "Invalid lang code: " + urlLang;
+                } else if (urlLang !== this.newLanguage) {
                     this.newLanguage = urlLang;
                     console.log("onUrlChange(): axiosUtil.setLangsAndDictionary(urlLang)");
                     axiosUtil.setLangsAndDictionary(urlLang);

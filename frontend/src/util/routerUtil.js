@@ -94,6 +94,10 @@ export default {
             return store.getters.lang;
         }
         return route.params.lang;
+    },
+
+    validLang(lang) {
+        return shared.isInArray(lang, store.getters.allowedLangs);
     }
 
 }
