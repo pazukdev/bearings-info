@@ -81,7 +81,6 @@ ru=Refresh page to implement changes on current page=Для того чтобы 
 ru=Responsibility for the information posted lies with the person who posted it=Ответственность за размещенную информацию лежит на лице ее разместившем
 ru=Rubber part=РТИ
 ru=Russia=Россия
-ru=invalid language code=неправильный код языка
 ru=Specification=Характеристики
 ru=Static load rating, N=Статическая нагрузка, Н
 ru=Static load rating=Static load рейтинг
@@ -235,6 +234,7 @@ ru=inner eccentric flat thrust spring retaining rings and grooves=кольца �
 ru=insulation rubber=резина кабельная изоляционная
 ru=insulation=изоляция
 ru=invalid email=неверный  email
+ru=invalid language code=неправильный код языка
 ru=item is in WishList=объект в Wishlist'e
 ru=item name not specified=не указано имя
 ru=item with this name already exists in the category=в данной категории уже существует объект с таким именем

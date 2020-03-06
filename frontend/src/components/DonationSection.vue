@@ -19,12 +19,12 @@
                          src="https://www.paypal.com/en_US/i/scr/pixel.gif"/>
                 </form>
             </details>
-            <details class="default-margin">
+            <details class="default-margin" style="text-align: center">
                 <summary>{{translate("#2 Yandex donation box")}}</summary>
                 <br>
                 <iframe id="yandex-donate-form"
                         src="https://money.yandex.ru/quickpay/shop-widget?writer=seller&targets=Donation%20to%20help%20the%20project%20%2F%20%D0%94%D0%BE%D0%BD%D0%B0%D1%82%20%D0%BD%D0%B0%20%D0%BF%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%BA%D1%83%20%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0&targets-hint=&default-sum=&button-text=13&payment-type-choice=on&comment=on&hint=&successURL=&quickpay=shop&account=4100111880881391"
-                        width="423" height="329" frameborder="0" allowtransparency="true" scrolling="no"/>
+                        frameborder="0" allowtransparency="true" scrolling="no"/>
             </details>
         </details>
     </div>
@@ -58,4 +58,5 @@
         border-radius: initial;
         margin: initial;
     }
+
 </style>

@@ -1,39 +1,27 @@
 <template id="app">
     <div id="main-div">
-        <div id="screen">
-            <AppBar/>
-            <div style="text-align: left">
-<!--                {{"$i18n.locale: " + $i18n.locale}}<br>-->
-<!--                {{"errorMessage: " + errorMessage}}-->
-<!--                {{"lang: " + lang}}<br>-->
-<!--                {{"langs: " + langs}}<br>-->
-<!--                {{this.$route.params.item_id}}<br>-->
-<!--                {{this.$route.params.lang}}<br>-->
-<!--                {{"basicUrl: " + basicUrl}}<br>-->
-<!--                {{"userId: " + userData.id}}<br>-->
-<!--                {{"userName: " + userData.name}}<br>-->
-<!--                {{dictionary[0]}}-->
-<!--                {{"authorization: " + authorization}}<br>-->
-<!--                {{"loadingState: " + loadingState}}<br>-->
-<!--                {{"editMode: " + editMode}}<br>-->
-<!--                {{"itemView: " + itemView.userData.name}}<br>-->
-<!--                {{"itemView: " + itemView.userData.id}}<br>-->
-            </div>
-            <div>
-                <LangMenu/>
-                <NavigationBar/>
-                <CopyUrlButton/>
-<!--                <MessagesSection/>-->
-                <AdminMessage/>
-                <UserMenu/>
-                <router-view/>
-            </div>
-            <div id="place-of-creation">
-                <div v-if="isHome()">
-                    <p>{{"© 2017-2020 " + translate("Old Vehicles: Seals & Bearings")}}</p>
+                <div class="iphone-x">
+                    <div class="camera-panel"></div>
+                    <div class="speaker"/>
+                    <div class="camera"/>
+                    <div class="content">
+                        <div id="app-bar-spacer"/>
+                        <AppBar/>
+                        <div>
+                            <LangMenu/>
+                            <NavigationBar/>
+                            <CopyUrlButton/>
+                            <AdminMessage/>
+                            <UserMenu/>
+                            <router-view/>
+                        </div>
+                        <div id="place-of-creation">
+                            <div v-if="isHome()">
+                                <p>{{"© 2017-2020 " + translate("Old Vehicles: Seals & Bearings")}}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -161,32 +149,125 @@
         background: black;
     }
 
-    #screen {
-        overflow: auto;
-        background-color: #212121;
-        width: 480px;
-        height: 800px;
-        border-radius: 10px;
+    .iphone-x {
+        position: relative;
+        width: 410px;
+        height: 840px;
+        border-radius: 40px;
+        box-shadow: 0 0 0 11px #101010, 0 0 0 13px #212121, 0 0 0 20px #101010;
     }
 
-    #screen::-webkit-scrollbar {
+    .camera-panel:before, .camera-panel:after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .camera-panel:before {
+        top: 0;
+        width: 64%;
+        height: 30px;
+        background-color: #101010;
+        border-radius: 0 0 40px 40px;
+    }
+
+    .speaker, .camera {
+        position: absolute;
+        display: block;
+        color: transparent;
+    }
+
+    .speaker {
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, 6px);
+        height: 8px;
+        width: 15%;
+        background-color: #101010;
+        border-radius: 8px;
+        box-shadow: inset 0 -3px 3px 0 rgba(256, 256, 256, 0.2);
+    }
+
+
+    .camera {
+        left: 80px;
+        top: 0;
+        transform: translate(180px, 4px);
+        width: 12px;
+        height: 12px;
+        background-color: #101010;
+        border-radius: 12px;
+        box-shadow: inset 0 -3px 2px 0 rgba(256, 256, 256, 0.2);
+    }
+
+    .camera:after {
+        content: '';
+        position: absolute;
+        background-color: #2d4d76;
+        width: 6px;
+        height: 6px;
+        top: 2px;
+        left: 2px;
+        display: block;
+        border-radius: 4px;
+        box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .content {
+        width: 100%;
+        height: 100%;
+        border-radius: 40px;
+        background: #212121;
+        justify-content: center;
+        align-items: center;
+        overflow: auto;
+    }
+
+    .content::-webkit-scrollbar {
         display: none;
     }
 
-    label, #screen {
+    label, .content {
         color: grey;
     }
 
+    #app-bar-spacer {
+        background: #617D89;
+        height: 20px;
+    }
+
+    #yandex-donate-form {
+        width: 100%;
+        height: 330px;
+    }
+
     @media only screen and (max-width: 1640px) {
-        #screen {
+        .iphone-x {
+            position: initial;
+            width: 100%;
+            height: 100%;
+            border-radius: initial;
+            box-shadow: initial;
+        }
+
+        .content {
             border-radius: initial;
             width: 40%;
             height: 100%;
         }
+
+        .speaker, .camera, .camera-panel, #app-bar-spacer {
+            display: none;
+        }
+
+        #yandex-donate-form {
+            width: 440px;
+        }
     }
 
     @media only screen and (max-width: 1280px) {
-        #screen {
+        .content {
             border-radius: initial;
             width: 100%;
             height: 100%;
@@ -403,4 +484,5 @@
         width: initial;
         background: red
     }
+
 </style>
