@@ -1,5 +1,7 @@
 <template>
     <div>
+<!--        {{itemView.children}}<br>-->
+<!--        {{itemView.idsToRemove}}-->
         <CountedItemList :item="true" :editable-comments="true" :sorted="!editMode"/>
         <AddPartForm :show-form="showForm" @hide-add-form="hideAddForm"/>
     </div>

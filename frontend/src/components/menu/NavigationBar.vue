@@ -5,27 +5,27 @@
             <tbody>
                 <tr>
                     <td>
-                        <router-link :to="{name: 'home', params: {lang: $route.params.lang}}"
+                        <router-link :to="{name: 'home', params: {lang: lang}}"
                                      active-class="active">
-                            {{translate("Home")}}
+                            {{translate("Vehicles")}}
+                        </router-link>
+                    </td>
+                    <td>
+                        <router-link :to="{name: 'items_management', params: {lang: lang}}"
+                                     active-class="active">
+                            {{translate("All")}}
                         </router-link>
                     </td>
                     <td>
                         <router-link v-if="!isGuest()"
-                                     :to="{name: 'wish_list', params: {lang: $route.params.lang}}"
+                                     :to="{name: 'wish_list', params: {lang: lang}}"
                                      active-class="active">
                             {{translate("Wishlist") + ": " + itemView.wishListIds.length}}
                         </router-link>
                     </td>
                     <td>
-                        <router-link :to="{name: 'items_management', params: {lang: $route.params.lang}}"
-                                     active-class="active">
-                            {{translate("App data")}}
-                        </router-link>
-                    </td>
-                    <td>
                         <router-link v-if="!isGuest()"
-                                     :to="{name: 'menu', params: {lang: $route.params.lang}}"
+                                     :to="{name: 'menu', params: {lang: lang}}"
                                      active-class="active">
                             {{translate("Menu")}}
                         </router-link>
@@ -52,7 +52,8 @@
             ...mapState({
                 authorization: state => state.dictionary.authorization,
                 editMode: state => state.dictionary.editMode,
-                itemView: state => state.dictionary.itemView
+                itemView: state => state.dictionary.itemView,
+                lang: state => state.dictionary.lang
             })
         },
 
@@ -64,7 +65,7 @@
 
         methods: {
             goHome() {
-                routerUtil.toHome(this.$route.params.lang);
+                routerUtil.toHome(this.lang);
             },
 
             showCurrentUserProfile() {

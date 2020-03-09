@@ -9,10 +9,10 @@
                     <tr><td colspan="2" class="alert-message">{{translate(newItemNameMessage)}}</td></tr>
                     <tr>
                         <td class="two-columns-table-left-column">
-                            {{translate("category")}}
+                            {{translate("Category")}}
                         </td>
                         <td class="two-column-table-right-column">
-                            {{translate("name")}}
+                            {{translate("Name")}}
                         </td>
                     </tr>
                     <tr>
@@ -20,7 +20,7 @@
                             <input type="text"
                                    required
                                    list="categories"
-                                   pattern="[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9 _-]{0,24}[a-zA-Zа-яА-Я0-9_-]"
+                                   pattern="[a-zA-Zа-яА-Я ][a-zA-Zа-яА-Я0-9 _\\-]{0,24}[a-zA-Zа-яА-Я0-9 ]"
                                    :title="translate('Length: 2 - 26 characters: letters, numbers, - , _ , space')"
                                    @change="categorySelectOnChange()"
                                    v-model="newItemCategory"/>
@@ -33,8 +33,8 @@
                         <td>
                             <input type="text"
                                    required
-                                   pattern="[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9 _-]{0,24}[a-zA-Zа-яА-Я0-9_-]"
-                                   :title="translate('Length: 2 - 26 characters: letters, numbers, - , _ , space')"
+                                   pattern="[a-zA-Zа-яА-Я0-9 ][a-zA-Zа-яА-Я0-9 _\\.\\-]{0,24}[a-zA-Zа-яА-Я0-9 ]"
+                                   :title="translate('Length: 2 - 26 characters: letters, numbers, - , _ , dot, space')"
                                    @change="newItemNameMessage = ''"
                                    v-model="newItemName"/>
                         </td>

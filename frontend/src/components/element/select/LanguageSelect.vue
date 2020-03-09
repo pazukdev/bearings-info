@@ -1,8 +1,9 @@
 <template>
     <div class="bordered" style="white-space: nowrap">
-<!--        <flag :iso="newLanguage"/>-->
+<!--        {{newLang}}-->
+        <!--        <flag :iso="newLanguage"/>-->
         {{translate("Language") + ": "}}
-        <select v-model="newLanguage"
+        <select v-model="newLang"
                 @change="selectLanguage()">
             <option v-for="lang in langs" :key="lang" :value="lang">
                 {{lang.toUpperCase()}}
@@ -25,6 +26,7 @@
             ...mapState({
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
+                lang: state => state.dictionary.lang,
                 langs: state => state.dictionary.langs,
                 itemView: state => state.dictionary.itemView,
                 dictionary: state => state.dictionary.dictionary
@@ -33,7 +35,7 @@
 
         data() {
             return {
-                newLanguage: ""
+                newLang: ""
             }
         },
 
@@ -49,18 +51,23 @@
         methods: {
             onUrlChange() {
                 console.log("LanguageSelect: onUrlChange()");
-                let urlLang = this.$route.params.lang;
-                if (!routerUtil.validLang(urlLang)) {
-                    throw "Invalid lang code: " + urlLang;
-                } else if (urlLang !== this.newLanguage) {
-                    this.newLanguage = urlLang;
-                    console.log("onUrlChange(): axiosUtil.setLangsAndDictionary(urlLang)");
-                    axiosUtil.setLangsAndDictionary(urlLang);
+                let lang = this.$route.params.lang;
+                if (!routerUtil.validLang(lang)) {
+                    throw "Invalid lang code: " + lang;
+                }
+
+                if (this.newLang !== lang) {
+                    this.newLang = lang;
+                    axiosUtil.setLangsAndDictionary(lang);
+                    console.log("onUrlChange(): axiosUtil.setLangsAndDictionary(lang)");
                 }
             },
 
             selectLanguage() {
-                routerUtil.selectLanguage(this.newLanguage, this.$route);
+                let lang = this.newLang;
+                axiosUtil.setLangsAndDictionary(lang);
+                console.log("selectLanguage(): axiosUtil.setLangsAndDictionary(lang)");
+                routerUtil.selectLanguage(lang, this.$route);
             },
 
             translate(text) {

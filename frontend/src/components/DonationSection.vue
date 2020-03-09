@@ -1,7 +1,13 @@
 <template>
     <div class="default-margin">
         <details style="text-align: center">
-            <summary><b>{{translate("You can help the project")}}</b></summary>
+<!--            <summary><b>{{translate("You can help the project")}}</b></summary>-->
+            <summary><b>{{translate("Beer for developer")}}</b></summary>
+<!--            <br>-->
+<!--            <div>-->
+<!--                {{translate("Developer likes beer")}}-->
+<!--            </div>-->
+<!--            <br>-->
             <details open class="default-margin">
                 <summary>{{translate("#1 Pay Pal donation box")}}</summary>
                 <br>

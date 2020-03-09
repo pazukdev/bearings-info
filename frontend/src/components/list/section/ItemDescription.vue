@@ -24,7 +24,7 @@
                         <tr v-for="(id, index) in row.ids">
                             <td>
                                 <router-link class="simple-link" v-if="!isEmpty(id)"
-                                             :to="{name: 'item', params: {id: id, lang: appLanguage}}">
+                                             :to="{name: 'item', params: {id: id, lang: lang}}">
                                     {{row.value.split("; ")[index]}}
                                 </router-link>
                                 <p v-else>{{row.value.split("; ")[index]}}</p>
@@ -54,7 +54,7 @@
                            title="Allowed: letters, numbers, - , _ , / , ; , dot, comma, space"/>
                 </td>
                 <td>
-                    <ButtonAdd v-if="!isEmpty(parameter) && !isEmpty(value)" @add-item="addHeaderRow"/>
+                    <ButtonAdd v-if="!isEmpty(parameter)" @add-item="addHeaderRow"/>
                 </td>
             </tr>
             </tbody>
@@ -89,7 +89,7 @@
             ...mapState({
                 itemView: state => state.dictionary.itemView,
                 editMode: state => state.dictionary.editMode,
-                appLanguage: state => state.dictionary.appLanguage
+                lang: state => state.dictionary.lang
             }),
         },
 

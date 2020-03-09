@@ -4,7 +4,7 @@ const state = {
     basicUrl: "backend",
     lang: "en",
     langs: [],
-    allowedLangs: ["en", "ru", "ua", "pl", "lt", "lv", "be", "ee", "fr", "de", "cz"],
+    allowedLangs: ["en", "ru", "uk", "pl", "lt", "lv", "be", "et", "fr", "de", "cs"],
     dictionary: [],
     editMode: false,
     loadingState: "",

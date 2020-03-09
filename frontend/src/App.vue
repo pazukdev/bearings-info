@@ -7,6 +7,23 @@
                     <div class="content">
                         <div id="app-bar-spacer"/>
                         <AppBar/>
+                        <div style="text-align: left">
+                            <!--                {{"$i18n.locale: " + $i18n.locale}}<br>-->
+                            <!--                {{"errorMessage: " + errorMessage}}-->
+<!--                                            {{"lang: " + lang}}<br>-->
+<!--                                            {{"langs: " + langs}}<br>-->
+<!--                                            {{dictionary[0]}}<br>-->
+                            <!--                {{this.$route.params.item_id}}<br>-->
+                            <!--                {{this.$route.params.lang}}<br>-->
+                            <!--                {{"basicUrl: " + basicUrl}}<br>-->
+                            <!--                {{"userId: " + userData.id}}<br>-->
+                            <!--                {{"userName: " + userData.name}}<br>-->
+                            <!--                {{"authorization: " + authorization}}<br>-->
+                            <!--                {{"loadingState: " + loadingState}}<br>-->
+                            <!--                {{"editMode: " + editMode}}<br>-->
+                            <!--                {{"itemView: " + itemView.userData.name}}<br>-->
+                            <!--                {{"itemView: " + itemView.userData.id}}<br>-->
+                        </div>
                         <div>
                             <LangMenu/>
                             <NavigationBar/>

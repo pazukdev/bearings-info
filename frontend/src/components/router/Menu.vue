@@ -12,7 +12,7 @@
             </tr>
             <tr>
                 <td>
-                    <a :href="getDictionaryDownloadUrl()" class="button" download="dictionary">
+                    <a :href="getDictionaryDownloadUrl()" class="button" download>
                         {{translate("Download dictionary")}}
                     </a>
                 </td>
@@ -39,12 +39,27 @@
             </tbody>
         </table>
 
-        <table class="half-wide">
+        <table class="half-wide" v-if="isAdmin()">
             <tbody>
             <tr>
                 <td>{{"Admin section"}}</td>
             </tr>
-            <tr v-if="isAdmin()">
+            <tr>
+                <td>
+                    <a :href="getDownloadUrl('langs')" class="button" download>
+                        {{"Download languages"}}
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="upload-button">
+                        {{"Upload languages"}}
+                        <input type="file" ref="fileInput" accept="text/plain" @change="uploadLangs"/>
+                    </label>
+                </td>
+            </tr>
+            <tr>
                 <td>
                     <a :href="getDownloadUrl('comments')" class="button" download>
                         {{"Download comments"}}
@@ -59,7 +74,7 @@
                     </label>
                 </td>
             </tr>
-            <tr v-if="isAdmin()">
+            <tr>
                 <td>
                     <a :href="getDownloadUrl('info_categories')" class="button" download>
                         {{"Download info categories"}}
@@ -124,6 +139,7 @@
             getDictionaryDownloadUrl() {
                 let langParam = this.getLang();
                 let lang = langParam === "en" ? "ru" : langParam;
+                console.log(this.basicUrl + "/file/dictionary_" + lang + "/download");
                 return this.basicUrl + "/file/dictionary_" + lang + "/download";
             },
 
@@ -133,6 +149,10 @@
 
             uploadDictionary(event) {
                 this.upload(event, "dictionary");
+            },
+
+            uploadLangs(event) {
+                this.upload(event, "langs");
             },
 
             uploadComments(event) {
