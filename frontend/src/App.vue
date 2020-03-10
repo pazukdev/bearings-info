@@ -33,7 +33,14 @@
                             <router-view/>
                         </div>
                         <div id="place-of-creation">
-                            <div v-if="isHome()">
+                            <div v-if="isHome()" class="default-margin" style="border-top: solid grey 1px">
+                                <br>
+                                <DonationSection/>
+                                <br>
+                                <br>
+<!--                                <div style="border-top: solid grey 1px"/>-->
+<!--                                <br>-->
+<!--                                <br>-->
                                 <p>{{"© 2017-2020 " + translate("Old Vehicles: Seals & Bearings")}}</p>
                             </div>
                         </div>
@@ -58,11 +65,13 @@
     import CopyUrlButton from "./components/element/button/CopyUrlButton";
     import AdminMessage from "./components/special/AdminMessage";
     import userUtil from "./util/userUtil";
+    import DonationSection from "./components/DonationSection";
 
     export default {
         name: 'app',
 
         components: {
+            DonationSection,
             AdminMessage,
             CopyUrlButton,
             MessagesSection,

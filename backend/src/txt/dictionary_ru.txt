@@ -1,4 +1,3 @@
-
 ru=#1 Pay Pal donation box=#1 Pay Pal ящик для доната
 ru=#2 Yandex donation box=#2 Яндекс ящик для доната
 ru=2 rows=2-рядный
@@ -18,7 +17,7 @@ ru=Dynamic load rating=Dynamic load рейтинг
 ru=East Germany=ГДР
 ru=Editing is available in English only=Редактирование доступно только на английском языке
 ru=Exhaust=Выхлоп
-ru=For rear journal only=Для rear journal only
+ru=For rear journal only=Только для задней опоры
 ru=Forgot password?=Забыли пароль?
 ru=Fuel filter=Топливный фильтр
 ru=G-11A=Г-11А
@@ -334,6 +333,7 @@ ru=platinum=платина
 ru=pole shoe screw=винт полюсного башмака
 ru=polyamide=полиамид
 ru=portuguese cork=португальская пробка
+ru=pour a glass=налить
 ru=power=мощность
 ru=primary aluminum=алюминий первичный
 ru=privacy policy=политика конфиденциальности

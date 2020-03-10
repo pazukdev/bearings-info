@@ -3,7 +3,6 @@
         <AboutApp/>
         <Info/>
         <NewsSection/>
-        <DonationSection/>
 
         <LoadingScreen v-if="isLoading()"/>
         <MotorcycleCatalogue v-else/>
@@ -20,7 +19,6 @@
     import NewsSection from "../info/NewsSection";
     import shared from "../../util/shared";
     import Info from "../info/Info";
-    import DonationSection from "../DonationSection";
     import AboutApp from "../AboutApp";
     import userUtil from "../../util/userUtil";
     import routerUtil from "../../util/routerUtil";
@@ -31,7 +29,6 @@
 
         components: {
             AboutApp,
-            DonationSection,
             Info,
             NewsSection,
             DefaultButton,

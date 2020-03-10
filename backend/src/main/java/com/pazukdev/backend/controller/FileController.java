@@ -134,7 +134,7 @@ public class FileController {
         final int oldDictionarySize = oldDictionary.getDictionary().size();
 
         final int difference = oldDictionarySize - newDictionarySize;
-        final int removedLinesLimit = user.getRole() == Role.ADMIN ? 5 : 1;
+        final int removedLinesLimit = user.getRole() == Role.ADMIN ? 10000 : 10;
 
         if (difference > removedLinesLimit) {
             final String responseText = "Dictionary is not accepted. " +
