@@ -7,7 +7,7 @@
                 <p class="bordered">{{translate("Editing is available in English only")}}</p>
             </div>
         </div>
-        <details v-if="itemView.header != null" class="default-margin" open>
+        <details v-if="itemView.header != null" class="default-margin">
             <summary>{{translate("Specification")}}</summary>
             <ItemDescription :item="item"/>
             <hr>

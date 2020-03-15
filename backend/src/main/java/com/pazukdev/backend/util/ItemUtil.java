@@ -151,11 +151,20 @@ public class ItemUtil {
     }
 
     public static String createButtonText(final Item item, final String manufacturer) {
+        String itemName = item.getName();
         if (isAddManufacturer(item, manufacturer, false)) {
-            return manufacturer + " " + item.getName();
-        } else {
-            return item.getName();
+            final String manufacturerText = manufacturer.replaceAll("KMZ; IMZ", "IMZ; KMZ").replaceAll("; ", " / ");
+            if (!itemName.contains(manufacturerText)) {
+                itemName = manufacturerText + " " + itemName;
+            }
         }
+        if (item.getCategory().equals(CategoryUtil.Category.SEAL)) {
+            final String size = ItemUtil.getValueFromDescription(item.getDescription(), "Size, mm");
+            if (size != null && !size.equals(item.getName())) {
+                itemName = size + "=" + itemName;
+            }
+        }
+        return itemName;
     }
 
     public static List<Item> filter(final List<Item> items,

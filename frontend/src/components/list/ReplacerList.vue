@@ -2,6 +2,23 @@
     <div>
         <table id="replacers-table" style="text-align: center">
             <tbody>
+            <tr>
+                <td>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td class="not-symmetrical-left"/>
+                            <td class="not-symmetrical-right">
+                                {{translate("Rating")}}
+                            </td>
+                            <td/>
+                            <td><div style="width: 32px" v-if="!isGuest() && !editMode"/></td>
+                            <td><div style="width: 32px" v-if="!isGuest()"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
             <tr style="text-align: left"
                 v-for="item in sortedReplacers()">
                 <td class="bordered">
@@ -71,6 +88,7 @@
     import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
     import ButtonDelete from "../element/button/ButtonDelete";
     import userUtil from "../../util/userUtil";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "ReplacerList",
@@ -178,6 +196,10 @@
 
             getUserName() {
                 return userUtil.getUserName();
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

@@ -157,23 +157,14 @@ public class CategoryUtil {
         return weight != null ? weight : 0;
     }
 
-    public static boolean isAddManufacturer(final Item item,
-                                            final String manufacturer,
-                                            final boolean selectText) {
-        if (isEmpty(manufacturer) || manufacturer.equalsIgnoreCase("ussr")) {
+    public static boolean isAddManufacturer(final Item item, final String manufacturer, final boolean selectText) {
+        if (isEmpty(manufacturer) || isCountry(manufacturer)) {
             return false;
         }
         if (selectText) {
             return true;
         }
-        final String name = item.getName();
-        if (name.equals(manufacturer + name.replace(manufacturer, ""))
-                || name.equals(name.replace(manufacturer, "") + manufacturer)) {
-            return false;
-        }
-
-        final String category = item.getCategory();
-        return category.equalsIgnoreCase(SEAL) || category.equalsIgnoreCase(SPARK_PLUG);
+        return !item.getCategory().equalsIgnoreCase(VEHICLE);
     }
 
     public static boolean isInfo(final String category, final List<String> infoCategories) {

@@ -6,11 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -27,10 +23,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SwaggerConfig {
 
-    private static final String TITLE = "bearings-info API";
-    private static final String DESCRIPTION = "API for bearings-info server";
+    private static final String TITLE = "Old Vehicles app API";
+    private static final String DESCRIPTION = "API for Old Vehicles app server";
     private static final String CONTACT_NAME = "Siarhei Sviarkaltsau";
-    private static final String CONTACT_WEBSITE_URL ="http://sovietboxers.com/";
+    private static final String CONTACT_WEBSITE_URL ="https://old-vehicles.com";
     private static final String CONTACT_EMAIL = "pazukdev@gmail.com";
 
     @Bean

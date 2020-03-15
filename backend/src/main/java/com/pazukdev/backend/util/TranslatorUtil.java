@@ -298,9 +298,7 @@ public class TranslatorUtil {
         return translated != null && !translated.equalsIgnoreCase(original);
     }
 
-    private static String parseAndTranslate(final String langTo,
-                                            String text,
-                                            final List<String> dictionary) {
+    private static String parseAndTranslate(final String langTo, String text, final List<String> dictionary) {
         final Map<String, String> map = new HashMap<>();
         int i = 0;
         final String s = "#";
@@ -397,8 +395,12 @@ public class TranslatorUtil {
                 }
             }
 
-            if (startsWithNumber(value)) {
-                final String afterNumber = value.replace(getSubstringWithFirstNumber(value), "");
+            if (isNumberWithUnit(value)) {
+                final String number = getSubstringWithFirstNumber(value);
+                if (number == null) {
+                    return value;
+                }
+                final String afterNumber = value.replace(number, "");
                 final String translatedAfterNumber = getValueFromDictionary(afterNumber, lang, dictionary);
                 return value.replaceFirst(afterNumber, translatedAfterNumber);
             }

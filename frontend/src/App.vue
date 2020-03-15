@@ -33,15 +33,14 @@
                             <router-view/>
                         </div>
                         <div id="place-of-creation">
-                            <div v-if="isHome()" class="default-margin" style="border-top: solid grey 1px">
+                            <div v-if="isHome()" class="default-margin">
+                                <p style="height: 40px" class="bottom-border">
+                                    {{"© 2017-2020 " + translate("Old Vehicles: Seals & Bearings")}}
+                                </p>
                                 <br>
                                 <DonationSection/>
                                 <br>
                                 <br>
-<!--                                <div style="border-top: solid grey 1px"/>-->
-<!--                                <br>-->
-<!--                                <br>-->
-                                <p>{{"© 2017-2020 " + translate("Old Vehicles: Seals & Bearings")}}</p>
                             </div>
                         </div>
                     </div>
@@ -248,6 +247,8 @@
         justify-content: center;
         align-items: center;
         overflow: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
 
     .content::-webkit-scrollbar {
@@ -304,6 +305,10 @@
         #yandex-donate-form {
             width: 100%;
         }
+    }
+
+    .bottom-border {
+        border-bottom: 1px solid grey;
     }
 
     table, button, select, input, .round-button {

@@ -45,7 +45,7 @@
         <br>
         <details>
             <summary style="text-align: center">
-                <img src="https://www.sovietboxers.com/img/beer.95fcf001.png"
+                <img style="width: 60px" src="https://www.sovietboxers.com/img/beer.95fcf001.png"
                      alt="beer icon" :title="translate('Pour a glass')">
             </summary>
             <details class="default-margin">
@@ -65,7 +65,8 @@
                          src="https://www.paypal.com/en_US/i/scr/pixel.gif"/>
                 </form>
             </details>
-            <details class="default-margin" style="text-align: center">
+            <details class="default-margin"
+                     style="text-align: center; border-bottom: solid grey 1px; padding-bottom: 10px">
                 <summary>{{translate("#2 Yandex donation box")}}</summary>
                 <br>
                 <iframe id="yandex-donate-form"

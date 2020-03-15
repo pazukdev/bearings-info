@@ -46,10 +46,55 @@ public class SpecificStringUtil {
     public static final List<String> nullKeys = Arrays.asList("?", "-", "null");
     public static final List<String> abbreviation = Arrays
             .asList("imz", "kmz", "gost", "bmw", "ussr", "al", "usa", "fag");
-    public final static List<Character> endChars = Arrays.asList('.', ',', ';', ':', '-', '?', '!');
-    public final static List<String> units = Arrays
+    public static final List<Character> endChars = Arrays.asList('.', ',', ';', ':', '-', '?', '!');
+    public static final List<String> units = Arrays
             .asList("mm", "cm", "m", "g", "kg", "km/h", "kmh", "mph", "s", "min", "n", "nm", "ml", "L", "t", "hp",
                     "rpm", "L/100km", "CC", "cc");
+
+    public static final List<String> countries = Arrays.asList(
+            "Belarus",
+            "Bulgaria",
+            "China",
+            "Czech Republic",
+            "Czechoslovakia",
+            "East Germany",
+            "England",
+            "Estonia",
+            "Finland",
+            "France",
+            "GDR",
+            "German Democratic Republic",
+            "Germany",
+            "Hungary",
+            "India",
+            "Italy",
+            "Latvia",
+            "Lithuania",
+            "Moldova",
+            "Norway",
+            "Poland",
+            "Portugal",
+            "Romania",
+            "Russia",
+            "Russian Empire",
+            "Serbia",
+            "Slovakia",
+            "Soviet Russia",
+            "Spain",
+            "Sweden",
+            "Taiwan",
+            "UK",
+            "US",
+            "USA",
+            "USSR",
+            "Ukraine",
+            "United Kingdom",
+            "Yugoslavia"
+    );
+
+    public static boolean isCountry(final String s) {
+        return AppCollectionUtil.contains(countries, s);
+    }
 
     public static List<String> getList(String source) {
         return Arrays.asList(removeSpaces(source).split(Separator.SEMICOLON.getSeparator()));
