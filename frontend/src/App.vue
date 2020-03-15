@@ -347,7 +347,7 @@
 
     button, a.button, label.upload-button {
         min-height: 52px;
-        max-height: 92px;
+        max-height: 240px;
     }
 
     .list-img {

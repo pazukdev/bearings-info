@@ -1,11 +1,9 @@
 package com.pazukdev.backend.entity.factory;
 
 import com.pazukdev.backend.entity.AbstractEntity;
-import com.pazukdev.backend.service.AbstractService;
 import com.pazukdev.backend.tablemodel.TableModel;
 import com.pazukdev.backend.tablemodel.TableModelFactory;
 import com.pazukdev.backend.tablemodel.TableRow;
-import com.pazukdev.backend.util.CSVFileUtil;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -67,19 +65,6 @@ public abstract class AbstractEntityFactory<Entity extends AbstractEntity> {
 
     protected void applyName(final AbstractEntity entity, final TableRow tableRow) {
         entity.setName(tableRow.getData().get(Parameter.DescriptionIgnored.NAME));
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <T extends AbstractEntity> T getEntity(final String name,
-                                                     final AbstractService service,
-                                                     final AbstractEntityFactory<T> dtoFactory) {
-        final T entity;
-        if (service != null) {
-            entity = (T) service.findFirstByName(name);
-        } else {
-            entity = CSVFileUtil.findByName(name, dtoFactory);
-        }
-        return entity;
     }
 
 }
