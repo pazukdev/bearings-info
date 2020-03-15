@@ -1,20 +1,36 @@
 <template>
     <div>
-        <DefaultButton @on-click="pushTo(part.itemId)" :text="getText(part)"/>
+<!--        <DefaultButton @on-click="pushTo(part.itemId)" :text="getText(part)"/>-->
+        <router-link v-if="user" class="button"
+                     :to="{name: 'user', params: {id: part.itemId, lang: lang}}">
+            {{part.buttonText}}
+        </router-link>
+        <router-link v-else class="button" :to="{name: 'item', params: {id: part.itemId, lang: lang}}">
+            {{part.buttonText.split("=")[0]}}<br>
+            {{part.buttonText.split("=")[1]}}
+        </router-link>
     </div>
 </template>
 
 <script>
     import DefaultButton from "./DefaultButton";
     import routerUtil from "../../../util/routerUtil";
+    import {mapState} from "vuex";
 
     export default {
         name: "ButtonNavigateToItem",
         components: {DefaultButton},
+
         props: {
             part: Object,
             infoButton: Boolean,
             user: Boolean
+        },
+
+        computed: {
+            ...mapState({
+                lang: state => state.dictionary.lang
+            })
         },
 
         methods: {

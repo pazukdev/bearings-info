@@ -1,7 +1,7 @@
 <template>
     <div>
         <button type="button" @click="onClick" :style="myStyle">
-            {{text}}
+            {{text.split("=")[0]}}<br>{{text.split("=")[1]}}
         </button>
     </div>
 </template>
