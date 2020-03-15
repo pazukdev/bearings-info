@@ -27,6 +27,7 @@ import static com.pazukdev.backend.util.FileUtil.FileName.INFO_CATEGORIES;
 import static com.pazukdev.backend.util.FileUtil.getTxtFileTextLines;
 import static com.pazukdev.backend.util.ItemUtil.*;
 import static com.pazukdev.backend.util.ReplacerUtil.createReplacers;
+import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
 import static com.pazukdev.backend.util.UserActionUtil.*;
 
 /**
@@ -129,6 +130,11 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final TransitiveItemDescriptionMap descriptionMap
                 = createDescriptionMap(transitiveItem, transitiveItemService, infoCategories);
         final Map<String, String> items = descriptionMap.getItems();
+        descriptionMap.getItems().clear();
+
+        final String rating = descriptionMap.getParameters().get("Rating");
+        descriptionMap.getParameters().remove("Rating");
+
         final List<ChildItem> childItems = createParts(transitiveItem, items, this, transitiveItemService, infoCategories);
         final List<Replacer> replacers = createReplacers(transitiveItem, this, transitiveItemService, infoCategories);
 
@@ -140,12 +146,15 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         newItem.setName(name);
         newItem.setCategory(category);
         newItem.setStatus(transitiveItem.getStatus());
-        newItem.setDescription(createItemDescription(descriptionMap));
+        newItem.setDescription(toDescription(descriptionMap));
         newItem.getChildItems().addAll(childItems);
         newItem.getReplacers().addAll(replacers);
         newItem.setCreatorId(creatorId);
         newItem.setUserActionDate(DateUtil.now());
         newItem.setImg(transitiveItem.getImage());
+        if (!isEmpty(rating)) {
+            newItem.setRating(Integer.valueOf(rating));
+        }
         LinkUtil.addLinksToItem(newItem, transitiveItem);
 
         itemRepository.save(newItem);
@@ -222,11 +231,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             categories.add(item.getCategory());
         }
         return categories;
-    }
-
-    private String createItemDescription(final TransitiveItemDescriptionMap descriptionMap) {
-        descriptionMap.getItems().clear();
-        return toDescription(descriptionMap);
     }
 
     private ItemViewFactory createNewItemViewFactory() {
