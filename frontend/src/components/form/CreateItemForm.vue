@@ -95,8 +95,6 @@
                     this.categoryMessage = "Category not specified";
                 } else if (this.newItemName === "") {
                     this.newItemNameMessage = "Item name not specified"
-                } else if (this.sameItemNameExistsInCategory(this.newItemCategory, this.newItemName)) {
-                    this.newItemNameMessage = "Item with this name already exists in the category"
                 } else {
                     storeUtil.setLoadingState("Creating");
                     let language = routerUtil.getLang(this.$route);
@@ -130,17 +128,6 @@
             clearItemCreationMessages() {
                 this.categoryMessage = "";
                 this.newItemNameMessage = "";
-            },
-
-            sameItemNameExistsInCategory(category, name) {
-                let array = this.itemView.children;
-                for (let j = 0; j < array.length; j++) {
-                    let item = array[j];
-                    if (item.itemCategory === category && item.itemName === name) {
-                        return true;
-                    }
-                }
-                return false;
             },
 
             isGuest() {

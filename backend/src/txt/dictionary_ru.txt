@@ -243,7 +243,6 @@ ru=invalid email=неверный  email
 ru=invalid language code=неправильный код языка
 ru=item is in WishList=объект в Wishlist'e
 ru=item name not specified=не указано имя
-ru=item with this name already exists in the category=в данной категории уже существует объект с таким именем
 ru=kg=кг
 ru=kit, needle=комплект иголок
 ru=kit=комплект
