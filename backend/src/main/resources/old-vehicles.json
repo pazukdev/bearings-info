@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "old-vehicles",
+  "private_key_id": "d23610cfb5028c63394b85f7c5de085aa360ebbe",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDjKMG1CQuinzZo\n4333CyYbpd9KaDGVekk+edaOmgKe7booDD5YwCPQJkavUKvEAoL2g5VSNtF7dPpO\nj3LnziTjNWjMJTOO0TJh3Ss79FNcohdbMMemhur6YEeac/qvbEYNBKhZp/qBa82E\nmxSmnPXIsh42LcK0FYOWeCDZFr8qfKCdn94km/YGLXyiaP78NJJXiui23VkDpnPS\nezptXLyMQrcuXLYHLcbZ6MadFTRZv0sN9b3O95MhDexjv6SZ4spgjf+XJjdxpJrb\nRmtFLK4G11OLTzRGKkNSKY1RxvcwY1akCUx5Ev58Bi71E97+wsHXaneFxRpvE25x\nGFg5eY7dAgMBAAECggEAGL9eHx7IUuQH4EnMdYdplECFa4yfaPAEyRbVTlLZWel/\nSuaj54pYkdA3Ci7T5Qulqz1ESCErFZ6gYxeosTgETRvf+hb2yiaLV8hpxziD2RyF\nm+HcFmMuIq8uOIBN0s0NHVT2ZvzFw1IfIUUTQmA+PKpUX/BV/RriQO3UckzSmx+l\nI+SvBcRWmMI8gPE503Ajwc0kfim7AUIynd7ZzebjgpcWBJ/3QADxRb+9GXC2cLcJ\nLdac1+h2vtpNkJKXbj1r9mvYfv2S+zxj3mx+0Aak/Fyj6VOTpLDJAgLEAy6sOmrF\na8MugQGFu9c628rHGfXlaX5DHJVaOsrKJ9sT3jNYxwKBgQD7mA+HkxCMTVN6+E8O\nWOGqff+1orfruQpGNqIxc6RcwNvPFUaaf67RDHinTxjEv/81vW+d+ZCb4CPRdQG7\nvGepV4JPcZ4DONnIjM+ELoyTdn6qHN59X4uorGyi7jsmxaRqFRMtSAmmTMJyn3Mc\nmE6SXtmFqN+5GcwbLC6Shwq3rwKBgQDnIyaRgp8yrk9npep87W0AUSwTv4zC8aJX\n/8V4RFDjKaZcRe4IKyfuA9qR3hIlAajUOVbNCxKHAOlHC335R+qYdOYgc25OPFEQ\nxdxxKnkIfJRjA1XXksHAw0demOwBPI7xlTt9984B7AaGFC5wX3lghlosF1vysmA6\ngw9Mct85MwKBgHwr01ZNLfig3Veun43sLgwwPXkOwwky/TAkHK6dbXxdrt6omHz+\nEXCZYB7q+cV5IOMMCL+GAWn9GJBy2BUo6lx4lRbSc3MRpuLFJFIPi0/oRqF8uA5W\njp4D42YSf90l5Hx6xEkv6ZtK/RkHOw/c18KDz4WZEDnR0puClcW5on9/AoGBAL2g\nafkBKCjFNyH6zekWRNH4xmehRBN/eEgn79MegRoNRo33VTTgaw7rnHsFrO8tcFxE\neoEYL2gRCFGgDQbhyIaxiUdgTEPlWkCfg55YURn0Uyz0RI3qugiybTAf16egDkoG\nu9s53YpYIHYJwpuwyHy3XO1FcMspKqd2dKusppRfAoGAZz5o9WJWDBYNQtvB9sV6\nDL9vZciXWt96fOCo9DffyjiALR+4hqbqDnpcqB8WMaLntT+/igYJKbasIfToOJlo\nuJBGUyAcHcvWejFTapYqAw+hRC6+AZ+13YpLr591VCTzWrdz/6RJoeR7YVZHWKkA\nvQi9CNogHUkcS9Vf34Phr5g=\n-----END PRIVATE KEY-----\n",
+  "client_email": "pazuk1985-gmail-com@old-vehicles.iam.gserviceaccount.com",
+  "client_id": "112330551967725480943",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/pazuk1985-gmail-com%40old-vehicles.iam.gserviceaccount.com"
+}
