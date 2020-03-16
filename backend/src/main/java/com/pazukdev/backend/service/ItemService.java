@@ -129,14 +129,12 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
         final TransitiveItemDescriptionMap descriptionMap
                 = createDescriptionMap(transitiveItem, transitiveItemService, infoCategories);
-        final Map<String, String> items = descriptionMap.getItems();
-        descriptionMap.getItems().clear();
+        final Map<String, String> items = new HashMap<>(descriptionMap.getItems());
+        final List<ChildItem> childItems = createParts(transitiveItem, items, this, transitiveItemService, infoCategories);
+        final List<Replacer> replacers = createReplacers(transitiveItem, this, transitiveItemService, infoCategories);
 
         final String rating = descriptionMap.getParameters().get("Rating");
         descriptionMap.getParameters().remove("Rating");
-
-        final List<ChildItem> childItems = createParts(transitiveItem, items, this, transitiveItemService, infoCategories);
-        final List<Replacer> replacers = createReplacers(transitiveItem, this, transitiveItemService, infoCategories);
 
         final Long soyuzRetromechanicId = 5L;
         final Long adminId = userService.getAdmin().getId();
@@ -146,7 +144,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         newItem.setName(name);
         newItem.setCategory(category);
         newItem.setStatus(transitiveItem.getStatus());
-        newItem.setDescription(toDescription(descriptionMap));
+        newItem.setDescription(createItemDescription(descriptionMap));
         newItem.getChildItems().addAll(childItems);
         newItem.getReplacers().addAll(replacers);
         newItem.setCreatorId(creatorId);
@@ -173,6 +171,11 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         }
 
         return newItem;
+    }
+
+    private String createItemDescription(final TransitiveItemDescriptionMap descriptionMap) {
+        descriptionMap.getItems().clear();
+        return toDescription(descriptionMap);
     }
 
     @Transactional
