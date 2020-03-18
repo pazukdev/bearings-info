@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class SpecificStringUtil {
 
+    // FEFF because this is the Unicode char represented by the UTF-8 byte order mark (EF BB BF).
+    public static final String UTF8_BOM = "\uFEFF";
     public static final String WORD_SEPARATOR = " ";
 
     @Getter
@@ -542,6 +544,16 @@ public class SpecificStringUtil {
             return null;
         }
         return d - d.intValue() == 0 ? String.valueOf(d.intValue()) : String.format("%.01f", d);
+    }
+
+    public static String removeUtf8BOM(final String s) {
+        if (s == null) {
+            return null;
+        }
+        if (StringUtils.startsWith(s, UTF8_BOM)) {
+            return s.substring(1);
+        }
+        return s;
     }
 
 }

@@ -6,13 +6,11 @@ import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.pazukdev.backend.util.FileUtil.getGoogleDocDocumentExportUrl;
-import static com.pazukdev.backend.util.FileUtil.readInputStreamFromCSVFile;
+import static com.pazukdev.backend.util.FileUtil.readGoogleDocSpreadsheet;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -29,8 +27,8 @@ public class TableModelFactory {
     public TableModel createTableModel(final String... fileUrls) {
         final List<TableRow> tableRows = new ArrayList<>();
         for (final String fileUrl : fileUrls) {
-            try (final InputStream inputStream = getGoogleDocDocumentExportUrl(fileUrl, "csv").openStream()) {
-                tableRows.addAll(getTableRows(readInputStreamFromCSVFile(inputStream)));
+            try {
+                tableRows.addAll(getTableRows(readGoogleDocSpreadsheet(fileUrl)));
             } catch (final Exception e) {
                 LOGGER.error(e.getMessage(), e);
             }

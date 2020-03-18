@@ -12,7 +12,7 @@
                             <!--                {{"errorMessage: " + errorMessage}}-->
 <!--                                            {{"lang: " + lang}}<br>-->
 <!--                                            {{"langs: " + langs}}<br>-->
-<!--                                            {{dictionary[0]}}<br>-->
+<!--                                            {{dictionary.length}}<br>-->
                             <!--                {{this.$route.params.item_id}}<br>-->
                             <!--                {{this.$route.params.lang}}<br>-->
                             <!--                {{"basicUrl: " + basicUrl}}<br>-->

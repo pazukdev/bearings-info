@@ -12,8 +12,6 @@ import static com.pazukdev.backend.util.CategoryUtil.Parameter.*;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.DescriptionIgnored.CATEGORY;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.DescriptionIgnored.NAME;
 import static com.pazukdev.backend.util.ClassUtil.getFieldsValues;
-import static com.pazukdev.backend.util.FileUtil.FileName.INFO_CATEGORIES;
-import static com.pazukdev.backend.util.FileUtil.getTxtFileTextLines;
 import static com.pazukdev.backend.util.ItemUtil.getValueFromDescription;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 
@@ -180,10 +178,6 @@ public class CategoryUtil {
 
     public static boolean isPart(String category, final List<String> infoCategories) {
         return !isInfo(category, infoCategories);
-    }
-
-    public static List<String> getInfoCategories() {
-        return getTxtFileTextLines(INFO_CATEGORIES);
     }
 
     public static String getCategory(final String param) {

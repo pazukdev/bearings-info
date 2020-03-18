@@ -25,14 +25,6 @@ public abstract class AbstractEntityFactory<Entity extends AbstractEntity> {
 
     protected abstract String[] getCSVFilesPaths();
 
-    public Entity findByName(final String name) {
-        return createEntitiesFromCSVFile()
-                .stream()
-                .filter(entity -> entity.getName().equals(name))
-                .findFirst()
-                .orElse(null);
-    }
-
     protected void applyCharacteristics(final Entity entity, final TableRow tableRow) {
         applyName(entity, tableRow);
     }

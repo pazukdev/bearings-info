@@ -1,22 +1,18 @@
 package com.pazukdev.backend.util;
 
 import com.opencsv.CSVReader;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.pazukdev.backend.util.FileUtil.FileFormat.TXT;
+import java.util.Objects;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -25,51 +21,71 @@ public class FileUtil {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(CSVFileUtil.class);
 
+    public static final String GOOGLE_DOCUMENT_BASIC_URL = "https://docs.google.com/";
+
+    public static class GoogleDocumentTypeUrl {
+        public static final String DOCUMENT = GOOGLE_DOCUMENT_BASIC_URL + "document/d/";
+        public static final String SPREADSHEET = GOOGLE_DOCUMENT_BASIC_URL + "spreadsheets/d/";
+    }
+
     public static class Directory {
         public static String BASIC_DIRECTORY = "backend/src/";
         public static final String STATIC_DIRECTORY = "/static/";
     }
 
     public static class FileFormat {
-        public static final String CSV = ".csv";
-        public static final String TXT = ".txt";
+        public static final String CSV = "csv";
+        public static final String TXT = "txt";
     }
 
     public static class FileName {
-        public static final String COMMENTS = "comments";
-        public static final String INFO_CATEGORIES = "info_categories";
-        public static final String DICTIONARY = "dictionary";
+        public static final String COMMENTS = "1g8YeaINmlH26XS1rqJ0oJRh0BN8mN8MIVRBh2MG4GQE";
+        public static final String INFO_CATEGORIES = "1JM_dDZIKjCRvrkOLRvvNwGtP3Al-Rakgtu-w4dFgB-c";
+        public static final String LANGS = "1XwULMlxG5JM5VYU-3qTmXYguF_kPvKFb2zE2iIFi_o0";
     }
 
-    public static List<String> getTxtFileTextLines(final String fileName) {
-        return getTxtFileTextLines(getTxtFilePath(fileName));
+    public static List<String> getComments() {
+        return readGoogleDocDocument(FileName.COMMENTS);
     }
 
-    public static List<String> getTxtFileTextLines(final Path path) {
-        try {
-            return Files.readAllLines(path, StandardCharsets.UTF_8);
+    public static List<String> getInfoCategories() {
+        return readGoogleDocDocument(FileName.INFO_CATEGORIES);
+    }
+
+    public static List<String> readGoogleDocDocument(final String fileName) {
+        try (final InputStream in = openGoogleDoc(fileName, GoogleDocumentTypeUrl.DOCUMENT, FileFormat.TXT)) {
+            final List<String> fileLines = IOUtils.readLines(Objects.requireNonNull(in), StandardCharsets.UTF_8);
+            fileLines.add(0, SpecificStringUtil.removeUtf8BOM(fileLines.get(0)));
+            return fileLines;
         } catch (IOException e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
     }
 
-    public static Path getTxtFilePath(final String fileName) {
-        return Paths.get(Directory.BASIC_DIRECTORY + "txt/" + fileName + TXT);
-    }
-
-    public static List<List<String>> readInputStreamFromCSVFile(final InputStream in) {
+    public static List<List<String>> readGoogleDocSpreadsheet(final String fileName) {
         List<String[]> lines = null;
-        try (final CSVReader reader = new CSVReader(new InputStreamReader(in))) {
-            lines = reader.readAll();
+        try (final InputStream in = openGoogleDoc(fileName, GoogleDocumentTypeUrl.SPREADSHEET, FileFormat.CSV)) {
+            lines = new CSVReader(new InputStreamReader(Objects.requireNonNull(in))).readAll();
         } catch (IOException e) {
             LOGGER.error("Error collecting data from input stream", e);
         }
-        return AppCollectionUtil.listOfArraysToListOfLists(lines);
+        return AppCollectionUtil.listOfArraysToListOfLists(Objects.requireNonNull(lines));
+    }
+
+    private static InputStream openGoogleDoc(final String fileName,
+                                             final String googleDocumentTypeUrl,
+                                             final String exportFormat) {        try {
+            final URL url = new URL(googleDocumentTypeUrl + fileName + "/export?format=" + exportFormat);
+            return Objects.requireNonNull(url).openStream();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static String[] getGoogleSheetsUrls() {
-        final String[] fileNames = {
+        return new String[] {
                 "1N6Y6uavkv6AVzIF5-NbRlXOZTJekHFBrtF8o4VvtDxc", // manufacturer
                 "12rB_t_ImCGscKiGPazc4WodiG0b9G4zOOfTW1aIbbak", // standard
                 "1R2haf5EqWqC6YJ4GJkcwDyTBB_1ItU_wk3l5zI9CQjQ", // "material"
@@ -105,38 +121,6 @@ public class FileUtil {
                 "1VlxspbLk6Vm4aOQnNaJJE6Z_b7bgs5tKABS8CtXHfZU", // "engine"
                 "1TmLYCnMjXN5HOqRQ5QD32nQrL4XsTbdeYpS3CfLF3lo" // "vehicle"
         };
-        final String basicUrl = "https://docs.google.com/spreadsheets/d/";
-        final List<String> paths = new ArrayList<>();
-        for (final String fileName : fileNames) {
-            paths.add(basicUrl + fileName);
-        }
-        return paths.toArray(new String[0]);
-    }
-
-    public static void createFileInFileSystem(final String fileName, final byte[] text) throws IOException {
-        Files.write(getTxtFilePath(fileName), text);
-    }
-
-    public static void createFile(final String fileName, final List<String> textLines) {
-        try {
-            Files.write(getTxtFilePath(fileName), getSortedFileLines(textLines), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static List<String> getSortedFileLines(final List<String> textLines) {
-        textLines.sort(String::compareTo);
-        return textLines;
-    }
-
-    public static URL getGoogleDocDocumentExportUrl(final String fileUrl, final String exportFormat) {
-        try {
-            return new URL(fileUrl + "/export?format=" + exportFormat);
-        } catch (final MalformedURLException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
 }

@@ -11,6 +11,7 @@ import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.repository.*;
 import com.pazukdev.backend.util.DateUtil;
+import com.pazukdev.backend.util.FileUtil;
 import com.pazukdev.backend.util.LinkUtil;
 import com.pazukdev.backend.util.RateUtil;
 import lombok.Getter;
@@ -23,8 +24,6 @@ import static com.pazukdev.backend.util.CategoryUtil.Category.*;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
 import static com.pazukdev.backend.util.CategoryUtil.isInfo;
 import static com.pazukdev.backend.util.ChildItemUtil.createParts;
-import static com.pazukdev.backend.util.FileUtil.FileName.INFO_CATEGORIES;
-import static com.pazukdev.backend.util.FileUtil.getTxtFileTextLines;
 import static com.pazukdev.backend.util.ItemUtil.*;
 import static com.pazukdev.backend.util.ReplacerUtil.createReplacers;
 import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
@@ -237,7 +236,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     private ItemViewFactory createNewItemViewFactory() {
-        return new ItemViewFactory(this, getTxtFileTextLines(INFO_CATEGORIES));
+        return new ItemViewFactory(this, FileUtil.getInfoCategories());
     }
 
     public List<Item> findParents(final Item item,
