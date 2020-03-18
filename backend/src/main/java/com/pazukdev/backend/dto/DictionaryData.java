@@ -19,6 +19,8 @@ public class DictionaryData implements Serializable {
 
     private final static long serialVersionUID = 12343L;
 
+    public static final String SEPARATOR = "=";
+
     private String lang;
     private List<String> langs;
     private List<String> dictionary;
@@ -38,8 +40,14 @@ public class DictionaryData implements Serializable {
         String filename = null;
         final List<String> langsData = FileUtil.readGoogleDocDocument(FileUtil.FileName.LANGS);
         for (final String langData : langsData) {
-            final String[] data = langData.replaceAll(" ", "").split(":");
+            if (SpecificStringUtil.isEmpty(langData) || !langData.contains(SEPARATOR)) {
+                continue;
+            }
+            final String[] data = langData.replaceAll(" ", "").split(SEPARATOR);
             final String langCode = SpecificStringUtil.removeUtf8BOM(data[0].toLowerCase());
+            if (langCode.length() != 2) {
+                continue;
+            }
             langs.add(langCode);
             if (!lang.equals("en") && lang.equalsIgnoreCase(langCode)) {
                 filename = data[1];
