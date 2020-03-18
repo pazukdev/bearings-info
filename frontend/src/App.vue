@@ -8,21 +8,22 @@
                         <div id="app-bar-spacer"/>
                         <AppBar/>
                         <div style="text-align: left">
-                            <!--                {{"$i18n.locale: " + $i18n.locale}}<br>-->
-                            <!--                {{"errorMessage: " + errorMessage}}-->
+<!--                                            {{"$i18n.locale: " + $i18n.locale}}<br>-->
+<!--                                            {{"errorMessage: " + errorMessage}}-->
 <!--                                            {{"lang: " + lang}}<br>-->
 <!--                                            {{"langs: " + langs}}<br>-->
+<!--                                            {{"dictionaryId: " + dictionaryId}}<br>-->
 <!--                                            {{dictionary.length}}<br>-->
-                            <!--                {{this.$route.params.item_id}}<br>-->
-                            <!--                {{this.$route.params.lang}}<br>-->
-                            <!--                {{"basicUrl: " + basicUrl}}<br>-->
-                            <!--                {{"userId: " + userData.id}}<br>-->
-                            <!--                {{"userName: " + userData.name}}<br>-->
-                            <!--                {{"authorization: " + authorization}}<br>-->
-                            <!--                {{"loadingState: " + loadingState}}<br>-->
-                            <!--                {{"editMode: " + editMode}}<br>-->
-                            <!--                {{"itemView: " + itemView.userData.name}}<br>-->
-                            <!--                {{"itemView: " + itemView.userData.id}}<br>-->
+<!--                                            {{this.$route.params.item_id}}<br>-->
+<!--                                            {{this.$route.params.lang}}<br>-->
+<!--                                            {{"basicUrl: " + basicUrl}}<br>-->
+<!--                                            {{"userId: " + userData.id}}<br>-->
+<!--                                            {{"userName: " + userData.name}}<br>-->
+<!--                                            {{"authorization: " + authorization}}<br>-->
+<!--                                            {{"loadingState: " + loadingState}}<br>-->
+<!--                                            {{"editMode: " + editMode}}<br>-->
+<!--                                            {{"itemView: " + itemView.userData.name}}<br>-->
+<!--                                            {{"itemView: " + itemView.userData.id}}<br>-->
                         </div>
                         <div>
                             <LangMenu/>
@@ -94,6 +95,7 @@
                 lang: state => state.dictionary.lang,
                 langs: state => state.dictionary.langs,
                 dictionary: state => state.dictionary.dictionary,
+                dictionaryId: state => state.dictionary.dictionaryId,
                 errorMessage: state => state.dictionary.errorMessage,
                 loginMessage: state => state.dictionary.loginMessage,
                 userData: state => state.dictionary.userData

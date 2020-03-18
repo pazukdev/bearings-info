@@ -6,6 +6,7 @@ const state = {
     langs: [],
     allowedLangs: ["en", "ru", "uk", "pl", "lt", "lv", "be", "et", "fr", "de", "cs"],
     dictionary: [],
+    dictionaryId: "",
     editMode: false,
     loadingState: "",
     incorrectCredentials: false,
@@ -30,6 +31,10 @@ const actions = {
 
     setDictionary: ({commit}, context) => {
         commit("setDictionary", context);
+    },
+
+    setDictionaryId: ({commit}, context) => {
+        commit("setDictionaryId", context);
     },
 
     setEditMode: ({commit}, context) => {
@@ -76,6 +81,10 @@ const mutations = {
 
     setDictionary(state, dictionary) {
         state.dictionary = dictionary;
+    },
+
+    setDictionaryId(state, dictionaryId) {
+        state.dictionaryId = dictionaryId;
     },
 
     setBasicUrl(state, basicUrl) {

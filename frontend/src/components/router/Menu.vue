@@ -10,30 +10,22 @@
                     </button>
                 </td>
             </tr>
-            <tr>
+            <tr v-if="lang.toString() !== 'en'">
                 <td>
-                    <a :href="getDictionaryDownloadUrl()" class="button" download>
-                        {{translate("Download dictionary")}}
+                    <a :href="getDictionaryUrl()"
+                       target="_blank"
+                       class="button">
+                        {{"EN - " + lang.toUpperCase() + " " + translate("dictionary")}}
                     </a>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label class="upload-button">
-                        {{translate("Upload dictionary")}}
-                        <input type="file" ref="fileInput" accept="text/plain" @change="uploadDictionary"/>
-                    </label>
-                </td>
-            </tr>
-            <tr v-if="!isEmpty(localizedUploadMessage)">
-                <td>{{translate(localizedUploadMessage)}}</td>
-            </tr>
-            <tr v-if="isRefreshButtonVisible()">
-                <td>{{translate("Refresh page to implement changes on current page")}}</td>
-            </tr>
-            <tr>
-                <td v-if="isRefreshButtonVisible()">
-                    <DefaultButton :text="translate('Refresh')" @on-click="refresh"/>
+                    <a href="https://docs.google.com/document/d/1XwULMlxG5JM5VYU-3qTmXYguF_kPvKFb2zE2iIFi_o0"
+                       target="_blank"
+                       class="button">
+                        {{"Languages"}}
+                    </a>
                 </td>
             </tr>
             </tbody>
@@ -41,52 +33,26 @@
 
         <table class="half-wide" v-if="isAdmin()">
             <tbody>
+            <tr><td><hr></td></tr>
             <tr>
                 <td>{{"Admin section"}}</td>
             </tr>
             <tr>
                 <td>
-                    <a :href="getDownloadUrl('langs')" class="button" download>
-                        {{"Download languages"}}
+                    <a href="https://docs.google.com/document/d/1g8YeaINmlH26XS1rqJ0oJRh0BN8mN8MIVRBh2MG4GQE"
+                       target="_blank"
+                       class="simple-link">
+                        {{"Comments"}}
                     </a>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label class="upload-button">
-                        {{"Upload languages"}}
-                        <input type="file" ref="fileInput" accept="text/plain" @change="uploadLangs"/>
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a :href="getDownloadUrl('comments')" class="button" download>
-                        {{"Download comments"}}
+                    <a href="https://docs.google.com/document/d/1JM_dDZIKjCRvrkOLRvvNwGtP3Al-Rakgtu-w4dFgB-c"
+                       target="_blank"
+                       class="simple-link">
+                        {{"Info categories"}}
                     </a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="upload-button">
-                        {{"Upload comments"}}
-                        <input type="file" ref="fileInput" accept="text/plain" @change="uploadComments"/>
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a :href="getDownloadUrl('info_categories')" class="button" download>
-                        {{"Download info categories"}}
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="upload-button">
-                        {{"Upload info categories"}}
-                        <input type="file" ref="fileInput" accept="text/plain" @change="uploadInfoCategories"/>
-                    </label>
                 </td>
             </tr>
             </tbody>
@@ -112,7 +78,8 @@
                 basicUrl: state => state.dictionary.basicUrl,
                 itemView: state => state.dictionary.itemView,
                 langs: state => state.dictionary.langs,
-                lang: state => state.dictionary.lang
+                lang: state => state.dictionary.lang,
+                dictionaryId: state => state.dictionary.dictionaryId
             })
         },
 
@@ -136,11 +103,9 @@
                 routerUtil.toUserList(this.$route.params.lang);
             },
 
-            getDictionaryDownloadUrl() {
-                let langParam = this.getLang();
-                let lang = langParam === "en" ? "ru" : langParam;
-                console.log(this.basicUrl + "/file/dictionary_" + lang + "/download");
-                return this.basicUrl + "/file/dictionary_" + lang + "/download";
+            getDictionaryUrl() {
+                let googleDocUrl = "https://docs.google.com/document/d/";
+                return googleDocUrl + this.dictionaryId
             },
 
             getDownloadUrl(fileName) {

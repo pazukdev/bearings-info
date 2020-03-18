@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 public class FileUtil {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(CSVFileUtil.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(FileUtil.class);
 
     public static final String GOOGLE_DOCUMENT_BASIC_URL = "https://docs.google.com/";
 

@@ -17,17 +17,15 @@
                         </router-link>
                     </td>
                     <td>
-                        <router-link v-if="!isGuest()"
-                                     :to="{name: 'wish_list', params: {lang: lang}}"
-                                     active-class="active">
-                            {{translate("Wishlist") + ": " + itemView.wishListIds.length}}
+                        <router-link :to="{name: 'menu', params: {lang: lang}}" active-class="active">
+                            {{translate("Menu")}}
                         </router-link>
                     </td>
                     <td>
                         <router-link v-if="!isGuest()"
-                                     :to="{name: 'menu', params: {lang: lang}}"
+                                     :to="{name: 'wish_list', params: {lang: lang}}"
                                      active-class="active">
-                            {{translate("Menu")}}
+                            {{translate("Wishlist") + ": " + itemView.wishListIds.length}}
                         </router-link>
                     </td>
                 </tr>

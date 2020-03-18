@@ -77,10 +77,10 @@ export default {
             .then(response => {
                 let dictionaryData = response.data;
                 let langs = dictionaryData.langs;
-
                 console.log("got langs: " + langs);
                 storeUtil.setLangs(langs);
                 storeUtil.setDictionary(dictionaryData.dictionary);
+                storeUtil.setDictionaryId(dictionaryData.dictionaryId);
             });
     },
 

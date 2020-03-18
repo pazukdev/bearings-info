@@ -22,6 +22,7 @@ public class DictionaryData implements Serializable {
     private String lang;
     private List<String> langs;
     private List<String> dictionary;
+    private String dictionaryId;
 
     public static DictionaryData getDictionaryFromFile(String lang) throws Exception {
         if (lang == null) {
@@ -49,6 +50,7 @@ public class DictionaryData implements Serializable {
         dictionaryData.setDictionary(lang.equals("en") ? new ArrayList<>() : FileUtil.readGoogleDocDocument(filename));
         dictionaryData.setLangs(new ArrayList<>(langs));
         dictionaryData.setLang(lang);
+        dictionaryData.setDictionaryId(filename);
         return dictionaryData;
     }
 

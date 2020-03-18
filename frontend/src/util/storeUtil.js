@@ -49,6 +49,10 @@ export default {
         store.dispatch("setDictionary", dictionary);
     },
 
+    setDictionaryId(dictionaryId) {
+        store.dispatch("setDictionaryId", dictionaryId);
+    },
+
     setIncorrectCredentials(incorrectCredentials) {
         store.dispatch("setIncorrectCredentials", incorrectCredentials);
     }
