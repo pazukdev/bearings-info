@@ -9,7 +9,14 @@
                 {{translate('try to refresh the page or check your internet connection')}}
             </p>
         </div>
-        <p v-else>{{translate(loadingState) + "..."}}</p>
+        <div v-else style="text-align: center">
+            <br>
+            <br>
+            <img alt="loading spinner" src="../../assets/ajax-loader.gif">
+            <br>
+            <br>
+            <p>{{translate(loadingState) + "..."}}</p>
+        </div>
     </div>
 </template>
 

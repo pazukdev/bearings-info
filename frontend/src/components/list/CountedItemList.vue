@@ -3,6 +3,24 @@
         <SearchForm :items-count="itemsCount" @get-filter="getFilter"/>
         <table>
             <tbody>
+            <tr>
+                <td>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td class="three-column-table-left-column"/>
+                            <td class="three-column-table-middle-column"/>
+                            <td class="three-column-table-right-column">
+                                {{translate(getCountHeaderValue())}}
+                            </td>
+                            <td class="three-column-table-button-column">
+                                <div style="width: 32px" v-if="editMode"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
             <tr v-for="table in itemsListAsTables()" v-if="!hideTable(table)">
                 <td>
                     <v-details v-model="table.opened" v-if="isAdmin() || table.name !== 'deleted'">
@@ -111,7 +129,7 @@
                 } else {
                     items = itemView.children;
                 }
-                let opened = this.wishListView;
+                let opened = this.wishListView || this.userListView;
                 let result = itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
                 this.itemsCount = result.itemsCount;
                 return result.tables;
@@ -150,6 +168,13 @@
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            getCountHeaderValue() {
+                if (this.userListView) {
+                    return "Rating";
+                }
+                return "Count, pcs or L"
             }
         }
     }

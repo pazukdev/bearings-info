@@ -1,6 +1,5 @@
 <template>
     <div>
-        <AboutApp/>
         <Info/>
         <NewsSection/>
 
@@ -19,7 +18,6 @@
     import NewsSection from "../info/NewsSection";
     import shared from "../../util/shared";
     import Info from "../info/Info";
-    import AboutApp from "../AboutApp";
     import userUtil from "../../util/userUtil";
     import routerUtil from "../../util/routerUtil";
     import axiosUtil from "../../util/axiosUtil";
@@ -28,7 +26,6 @@
         name: "Home",
 
         components: {
-            AboutApp,
             Info,
             NewsSection,
             DefaultButton,

@@ -31,10 +31,12 @@
                             <CopyUrlButton/>
                             <AdminMessage/>
                             <UserMenu/>
+                            <AboutApp/>
+
                             <router-view/>
                         </div>
                         <div id="place-of-creation">
-                            <div v-if="isHome()" class="default-margin">
+                            <div v-if="isHome() && !loadingState" class="default-margin">
                                 <p style="height: 40px" class="bottom-border">
                                     {{"© 2017-2020 " + translate("Old Vehicles: Seals & Bearings")}}
                                 </p>
@@ -66,11 +68,13 @@
     import AdminMessage from "./components/special/AdminMessage";
     import userUtil from "./util/userUtil";
     import DonationSection from "./components/DonationSection";
+    import AboutApp from "./components/AboutApp";
 
     export default {
         name: 'app',
 
         components: {
+            AboutApp,
             DonationSection,
             AdminMessage,
             CopyUrlButton,
