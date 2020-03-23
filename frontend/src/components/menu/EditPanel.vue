@@ -6,7 +6,7 @@
                 <td class="two-columns-table-left-column">
                     <button v-if="editMode"
                             type="button"
-                            style="background: darkgreen"
+                            style="background: #6ab04c"
                             @click="cancel()">
                         {{translate("Cancel")}}
                     </button>

@@ -18,8 +18,8 @@
                 </td>
                 <td class="two-column-table-right-column">
                     <input v-if="isEdit()" v-model="row.value" type="text" required
-                           pattern="[a-zA-Zа-яА-Я0-9 +_\\.;,/-]*"
-                           title="Allowed: letters, numbers, -, _, /, ;, dot, comma, space"/>
+                           pattern="[a-zA-Zа-яА-Я0-9 +№_\\.;,/-]*"
+                           title="Allowed: letters, numbers, -, +, _, /, ;, №, dot, comma, space"/>
                     <table v-else-if="!isEdit() && row.ids.length > 0">
                         <tr v-for="(id, index) in row.ids">
                             <td>
@@ -70,6 +70,7 @@
     import ListHeader from "./ListHeader";
     import ButtonAdd from "../../element/button/ButtonAdd";
     import arrayUtil from "../../../util/arrayUtil";
+    import userUtil from "../../../util/userUtil";
 
     export default {
         name: "ItemDescription",
@@ -179,6 +180,9 @@
             },
 
             rowIsDeletable(row) {
+                if (!this.isAdmin()) {
+                    return false;
+                }
                 if (shared.isInArray(row.name, this.notDeletableRows)) {
                     return false;
                 }
@@ -194,8 +198,8 @@
             },
 
             isAdmin() {
-                return false;
-                // return userUtil.isAdmin(this.itemView);
+                // return false;
+                return userUtil.isAdmin(this.itemView);
             }
         }
     }

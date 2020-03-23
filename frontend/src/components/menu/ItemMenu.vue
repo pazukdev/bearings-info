@@ -173,7 +173,7 @@
 
             buttonStyles() {
                 return {
-                    backgroundColor: this.isManufacturer() ? '' : 'darkgreen',
+                    backgroundColor: this.isManufacturer() ? '' : '#6ab04c',
                 }
             }
         },

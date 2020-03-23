@@ -24,7 +24,7 @@
             </details>
 
             <details v-if="arrayIsRendered(itemView.parents.children)">
-                <summary>{{translate("Usage")}}</summary>
+                <summary>{{translate(getUsageTitle())}}</summary>
                 <Usage/>
             </details>
         </div>
@@ -194,6 +194,13 @@
 
             getUserName() {
                 return userUtil.getUserName();
+            },
+
+            getUsageTitle() {
+                if (itemViewUtil.isManufacturer(this.itemView)) {
+                    return "Products";
+                }
+                return "Usage";
             }
         }
     }

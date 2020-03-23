@@ -20,8 +20,8 @@
                             <input type="text"
                                    required
                                    list="categories"
-                                   pattern="[a-zA-Zа-яА-Я ][a-zA-Zа-яА-Я0-9 _\\-]{0,24}[a-zA-Zа-яА-Я0-9 ]"
-                                   :title="translate('Length: 2 - 26 characters: letters, numbers, - , _ , space')"
+                                   pattern="[a-zA-Zа-яА-Я0-9 +№_\\.;,/-]*"
+                                   title="Allowed: letters, numbers, -, +, _, /, ;, №, dot, comma, space"
                                    @change="categorySelectOnChange()"
                                    v-model="newItemCategory"/>
                             <datalist id="categories">
@@ -33,8 +33,8 @@
                         <td>
                             <input type="text"
                                    required
-                                   pattern="[a-zA-Zа-яА-Я0-9 ][a-zA-Zа-яА-Я0-9 _\\.\\-]{0,24}[a-zA-Zа-яА-Я0-9 ]"
-                                   :title="translate('Length: 2 - 26 characters: letters, numbers, - , _ , dot, space')"
+                                   pattern="[a-zA-Zа-яА-Я0-9 +№_\\.;,/-]*"
+                                   title="Allowed: letters, numbers, -, +, _, /, ;, №, dot, comma, space"
                                    @change="newItemNameMessage = ''"
                                    v-model="newItemName"/>
                         </td>

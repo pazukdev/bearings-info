@@ -12,7 +12,7 @@
                              src="https://s11.flagcounter.com/count2/Vx7O/bg_212121/txt_808080/border_212121/columns_2/maxflags_20/viewers_0/labels_1/pageviews_0/flags_0/percent_0/">
                     </a>
                 </div>
-                <hr>
+                <AppGroupsSection :beer-glass-rendered="false"/>
             </div>
         </details>
     </div>
@@ -20,9 +20,11 @@
 
 <script>
     import dictionaryUtil from "../util/dictionaryUtil";
+    import AppGroupsSection from "./AppGroupsSection";
 
     export default {
         name: "AboutApp",
+        components: {AppGroupsSection},
 
         methods: {
             translate(text) {

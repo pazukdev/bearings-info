@@ -35,17 +35,7 @@
 
                             <router-view/>
                         </div>
-                        <div id="place-of-creation">
-                            <div v-if="isHome() && !loadingState" class="default-margin">
-                                <p style="height: 40px" class="bottom-border">
-                                    {{"© 2017-2020 " + translate("Old Vehicles: Seals & Bearings")}}
-                                </p>
-                                <br>
-                                <DonationSection/>
-                                <br>
-                                <br>
-                            </div>
-                        </div>
+                        <AppGroupsSection v-if="isHome() && !loadingState" :beer-glass-rendered="true"/>
                     </div>
                 </div>
     </div>
@@ -69,11 +59,13 @@
     import userUtil from "./util/userUtil";
     import DonationSection from "./components/DonationSection";
     import AboutApp from "./components/AboutApp";
+    import AppGroupsSection from "./components/AppGroupsSection";
 
     export default {
         name: 'app',
 
         components: {
+            AppGroupsSection,
             AboutApp,
             DonationSection,
             AdminMessage,
@@ -468,12 +460,6 @@
 
     .title {
         text-align: center;
-    }
-
-    #place-of-creation {
-        text-align: center;
-        margin-top: 60px;
-        margin-bottom: 20px;
     }
 
     .not-symmetrical-left {
