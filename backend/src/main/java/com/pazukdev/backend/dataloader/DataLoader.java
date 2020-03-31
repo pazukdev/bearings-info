@@ -51,9 +51,8 @@ public class DataLoader implements ApplicationRunner {
         final List<String> infoCategories = FileUtil.readGoogleDocDocument(FileUtil.FileName.INFO_CATEGORIES);
 
         final List<UserEntity> users = itemService.getUserService().getUsersFromRecoveryFile(true);
-        itemService.getUserService().save(users);
         createTransitiveItems();
-        createItems(infoCategories);
+        createItems(infoCategories, users);
         itemService.getUserService().recoverUserActions(users, itemService);
         itemService.getUserService().save(users);
 
@@ -72,9 +71,10 @@ public class DataLoader implements ApplicationRunner {
         createStubReplacers(transitiveItems);
     }
 
-    private void createItems(final List<String> infoCategories) {
+    private void createItems(final List<String> infoCategories, final List<UserEntity> users) {
+        final UserEntity admin = itemService.getUserService().findAdmin(users);
         for (final TransitiveItem transitiveItem : transitiveItemService.findAll()) {
-            itemService.create(transitiveItem, infoCategories);
+            itemService.create(transitiveItem, infoCategories, users, admin);
         }
     }
 

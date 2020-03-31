@@ -31,6 +31,9 @@ import static com.pazukdev.backend.util.SpecificStringUtil.*;
 @Getter
 public class UserService extends AbstractService<UserEntity, UserDto> {
 
+    private static final String ADMIN_NAME = "admin";
+    private static final Long ADMIN_ID = 2L;
+
     private final PasswordEncoder passwordEncoder;
     private final UserDataValidator userDataValidator;
     private final WishListRepository wishListRepository;
@@ -47,6 +50,10 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         this.userDataValidator = userDataValidator;
         this.wishListRepository = wishListRepository;
         this.childItemRepository = childItemRepository;
+    }
+
+    public UserRepository getRepository() {
+        return (UserRepository) repository;
     }
 
     public void save(final List<UserEntity> users) {
@@ -148,7 +155,11 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     }
 
     public UserEntity getAdmin() {
-        return findOne(2L);
+        return findOne(ADMIN_ID);
+    }
+
+    public UserEntity findAdmin(final List<UserEntity> users) {
+        return findFirstByName(ADMIN_NAME, users);
     }
 
     public boolean isAdmin(final UserEntity user) {
@@ -171,6 +182,7 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
                 user.setWishList(new WishList());
                 user.setLikeList(new LikeList());
             }
+            user.setId(Long.valueOf(getValue("id", header, userData)));
             user.setRole(Role.valueOf(getValue("role", header, userData)));
             user.setName(getValue("name", header, userData));
             user.setRating(Integer.valueOf(getValue("rating", header, userData)));
@@ -253,8 +265,6 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
             user.getWishList().getItems().addAll(wishlistItems.get(userId));
             user.getLikeList().getLikedItems().addAll(likedItems.get(userId));
             user.getLikeList().getDislikedItems().addAll(dislikedItems.get(userId));
-
-//            repository.save(user);
         }
     }
 
