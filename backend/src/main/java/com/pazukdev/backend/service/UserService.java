@@ -5,12 +5,11 @@ import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.dto.view.UserView;
-import com.pazukdev.backend.entity.ChildItem;
-import com.pazukdev.backend.entity.Item;
-import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.repository.ChildItemRepository;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.repository.WishListRepository;
+import com.pazukdev.backend.util.FileUtil;
 import com.pazukdev.backend.util.ImgUtil;
 import com.pazukdev.backend.validator.UserDataValidator;
 import lombok.Getter;
@@ -23,6 +22,7 @@ import java.util.*;
 
 import static com.pazukdev.backend.util.ChildItemUtil.collectIds;
 import static com.pazukdev.backend.util.ChildItemUtil.createNameForWishListItem;
+import static com.pazukdev.backend.util.SpecificStringUtil.*;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -47,6 +47,12 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
         this.userDataValidator = userDataValidator;
         this.wishListRepository = wishListRepository;
         this.childItemRepository = childItemRepository;
+    }
+
+    public void save(final List<UserEntity> users) {
+        for (final UserEntity user : users) {
+            repository.save(user);
+        }
     }
 
     @Transactional
@@ -147,6 +153,109 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
     public boolean isAdmin(final UserEntity user) {
         return user.getRole().equals(Role.ADMIN);
+    }
+
+    public List<UserEntity> getUsersFromRecoveryFile(final boolean recoverUserData) {
+        final List<UserEntity> users = new ArrayList<>();
+        final String usersFileId = "1lQvD9rQYheddn-D1k8JmnUPb7fRJr6TkJVdcwPzdTmo";
+        final List<List<String>> rows = FileUtil.readGoogleDocSpreadsheet(usersFileId);
+        final List<String> header = rows.get(0);
+        rows.remove(0);
+        for (final List<String> userData : rows) {
+            final Long id = Long.valueOf(userData.get(header.indexOf("id")));
+            UserEntity user = repository.findById(id).orElse(null);
+            if (user != null && !recoverUserData) {
+                continue;
+            } else if (user == null) {
+                user = new UserEntity();
+                user.setWishList(new WishList());
+                user.setLikeList(new LikeList());
+            }
+            user.setRole(Role.valueOf(getValue("role", header, userData)));
+            user.setName(getValue("name", header, userData));
+            user.setRating(Integer.valueOf(getValue("rating", header, userData)));
+            user.setStatus(getValue("status", header, userData));
+            user.setEmail(getValue("email", header, userData));
+            user.setPassword(getValue("password", header, userData));
+            user.setCountry(getValue("country", header, userData));
+            user.setImg(getValue("img", header, userData));
+
+            users.add(user);
+        }
+        return users;
+    }
+
+    private String getValue(final String key, final List<String> header, final List<String> userData) {
+        return replaceEmptyWithDash(userData.get(header.indexOf(key)));
+    }
+
+    private List<ChildItem> recoverWishlistItems(final String source, final ItemService itemService) {
+        final List<ChildItem> items = new ArrayList<>();
+        if (isEmpty(source)) {
+            return items;
+        }
+        for (String s : source.split(";")) {
+            s = s.trim();
+            final Long itemId;
+            String location = "";
+            String quantity;
+            if (containsParentheses(s)) {
+                itemId = Long.valueOf(getStringBeforeParentheses(s));
+                String additionalData = getStringBetweenParentheses(s);
+                location = additionalData.contains(" - ") ? additionalData.split(" - ")[0] : "-";
+                quantity = additionalData.contains(" - ") ? additionalData.split(" - ")[1] : additionalData;
+            } else {
+                itemId = Long.valueOf(s);
+                location = "-";
+                quantity = "1";
+            }
+
+            final Item item = itemService.getRepository().findById(itemId).orElse(null);
+            if (item == null) {
+                continue;
+            }
+
+            final ChildItem wishlistItem = new ChildItem();
+            wishlistItem.setName("Wishlist - " + item.getName());
+            wishlistItem.setItem(item);
+            wishlistItem.setLocation(location);
+            wishlistItem.setQuantity(quantity);
+
+            items.add(wishlistItem);
+
+        }
+        return items;
+    }
+
+    public void recoverUserActions(final List<UserEntity> users, final ItemService itemService) {
+        final String usersFileId = "1lQvD9rQYheddn-D1k8JmnUPb7fRJr6TkJVdcwPzdTmo";
+        final List<List<String>> rows = FileUtil.readGoogleDocSpreadsheet(usersFileId);
+        final List<String> header = rows.get(0);
+        rows.remove(0);
+
+        final Map<Long, List<ChildItem>> wishlistItems = new HashMap<>();
+        final Map<Long, List<Item>> likedItems = new HashMap<>();
+        final Map<Long, List<Item>> dislikedItems = new HashMap<>();
+
+        for (final List<String> userData : rows) {
+            final Long id = Long.valueOf(userData.get(header.indexOf("id")));
+            wishlistItems.put(id, recoverWishlistItems(getValue("wishlist items", header, userData), itemService));
+            likedItems.put(id, itemService.getItems(getValue("liked items", header, userData)));
+            dislikedItems.put(id, itemService.getItems(getValue("disliked items", header, userData)));
+        }
+
+        for (final UserEntity user : users) {
+            user.getWishList().getItems().clear();
+            user.getLikeList().getLikedItems().clear();
+            user.getLikeList().getDislikedItems().clear();
+
+            final Long userId = user.getId();
+            user.getWishList().getItems().addAll(wishlistItems.get(userId));
+            user.getLikeList().getLikedItems().addAll(likedItems.get(userId));
+            user.getLikeList().getDislikedItems().addAll(dislikedItems.get(userId));
+
+//            repository.save(user);
+        }
     }
 
 }

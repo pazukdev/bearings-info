@@ -284,4 +284,15 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         return parents;
     }
 
+    public List<Item> getItems(final String idsSource) {
+        final List<Item> items = new ArrayList<>();
+        if (isEmpty(idsSource)) {
+            return items;
+        }
+        for (String s : idsSource.split(";")) {
+            repository.findById(Long.valueOf(s.trim())).ifPresent(items::add);
+        }
+        return items;
+    }
+
 }
