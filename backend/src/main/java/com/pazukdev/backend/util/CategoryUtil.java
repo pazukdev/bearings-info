@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.pazukdev.backend.util.AppCollectionUtil.contains;
 import static com.pazukdev.backend.util.CategoryUtil.Category.*;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.*;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.DescriptionIgnored.CATEGORY;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.DescriptionIgnored.NAME;
 import static com.pazukdev.backend.util.ClassUtil.getFieldsValues;
+import static com.pazukdev.backend.util.CollectionUtil.contains;
 import static com.pazukdev.backend.util.ItemUtil.getValueFromDescription;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 

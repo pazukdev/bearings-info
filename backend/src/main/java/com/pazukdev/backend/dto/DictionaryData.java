@@ -38,7 +38,7 @@ public class DictionaryData implements Serializable {
         final Set<String> langs = new HashSet<>();
         langs.add("en");
         String filename = null;
-        final List<String> langsData = FileUtil.readGoogleDocDocument(FileUtil.FileName.LANGS);
+        final List<String> langsData = FileUtil.readGoogleDocDocument(FileUtil.FileId.LANG);
         for (final String langData : langsData) {
             if (SpecificStringUtil.isEmpty(langData) || !langData.contains(SEPARATOR)) {
                 continue;

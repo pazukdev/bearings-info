@@ -1,22 +1,21 @@
 package com.pazukdev.backend.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import com.pazukdev.backend.entity.AbstractEntity;
+
+import java.util.*;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
-public class AppCollectionUtil {
+public class CollectionUtil {
 
     public static List<String[]> toLowerCase(final List<String[]> list) {
-        Objects.requireNonNull(list).replaceAll(AppCollectionUtil::toLowerCase);
+        Objects.requireNonNull(list).replaceAll(CollectionUtil::toLowerCase);
         return list;
     }
 
     public static List<String[]> removeSpaces(final List<String[]> list) {
-        Objects.requireNonNull(list).replaceAll(AppCollectionUtil::removeSpaces);
+        Objects.requireNonNull(list).replaceAll(CollectionUtil::removeSpaces);
         return list;
     }
 
@@ -44,6 +43,28 @@ public class AppCollectionUtil {
             lists.add(new ArrayList<>(Arrays.asList(array)));
         }
         return lists;
+    }
+
+    public static <T extends AbstractEntity> List<T> findAllById(final List<Long> ids, final List<T> toSearchIn) {
+        final List<T> found = new ArrayList<>();
+        for (final T entity : toSearchIn) {
+            if (ids.contains(entity.getId())) {
+                found.add(entity);
+            }
+        }
+        return found;
+    }
+
+    public static <T extends AbstractEntity> T findFirstByName(final String name, final List<T> entities) {
+        return entities.stream().filter(entity -> entity.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    public static <T extends AbstractEntity> Set<Long> collectIds(final Set<T> entities) {
+        final Set<Long> ids = new HashSet<>();
+        for (final T entity : entities) {
+            ids.add(entity.getId());
+        }
+        return ids;
     }
 
 }

@@ -87,7 +87,9 @@
                     <tr v-if="editMode">
                         <td/>
                         <td>
-                            <DefaultButton id="user-delete" :text="translate('Delete profile')" :color="'red'"
+                            <DefaultButton id="user-delete"
+                                           :text="translate('Delete profile')"
+                                           :my-class="'background-red'"
                                            @on-click="openUserDeleteDialog('delete')"/>
                         </td>
                     </tr>
@@ -108,7 +110,9 @@
                     <tr v-if="isAdmin() && editMode">
                         <td/>
                         <td>
-                            <DefaultButton id="user-hard-delete" :text="translate('Hard delete')" :color="'red'"
+                            <DefaultButton id="user-hard-delete"
+                                           :text="translate('Hard delete')"
+                                           :my-class="'background-red'"
                                            @on-click="openUserDeleteDialog('hard-delete')"/>
                         </td>
                     </tr>
@@ -120,11 +124,13 @@
                     <tr><td colspan="2">{{translate("Confirm deletion")}}</td></tr>
                     <tr>
                         <td>
-                            <DefaultButton id="cancel-user-delete" :text="translate('Cancel')"
+                            <DefaultButton id="cancel-user-delete"
+                                           :text="translate('Cancel')"
                                            @on-click="cancelUserDelete()"/>
                         </td>
                         <td>
-                            <DefaultButton id="confirm-user-delete" :text="translate('Confirm')"
+                            <DefaultButton id="confirm-user-delete"
+                                           :text="translate('Confirm')"
                                            @on-click="confirmUserDelete()"/>
                         </td>
                     </tr>

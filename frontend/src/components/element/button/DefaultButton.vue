@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button type="button" @click="onClick" :style="myStyle">
+        <button type="button" @click="onClick" :class="myClass">
             {{text.split("=")[0]}}<br>{{text.split("=")[1]}}
         </button>
     </div>
@@ -12,29 +12,13 @@
 
         props: {
             text: String,
-            color: String
-        },
-
-        data() {
-            return {
-                myStyle: {
-                    backgroundColor: this.color
-                }
-            }
+            myClass: String
         },
 
         methods: {
             onClick() {
                 this.$emit("on-click");
-            },
-
-            // setColor() {
-            //     console.log(this.color)
-            //     if (this.color !== undefined) {
-            //         console.log(this.color)
-            //         document.getElementsByTagName("button").style.background = this.color;
-            //     }
-            // }
+            }
         }
     }
 </script>

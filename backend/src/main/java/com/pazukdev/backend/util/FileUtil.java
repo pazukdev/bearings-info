@@ -38,18 +38,19 @@ public class FileUtil {
         public static final String TXT = "txt";
     }
 
-    public static class FileName {
-        public static final String COMMENTS = "1g8YeaINmlH26XS1rqJ0oJRh0BN8mN8MIVRBh2MG4GQE";
-        public static final String INFO_CATEGORIES = "1JM_dDZIKjCRvrkOLRvvNwGtP3Al-Rakgtu-w4dFgB-c";
-        public static final String LANGS = "1XwULMlxG5JM5VYU-3qTmXYguF_kPvKFb2zE2iIFi_o0";
+    public static class FileId {
+        public static final String COMMENT = "1g8YeaINmlH26XS1rqJ0oJRh0BN8mN8MIVRBh2MG4GQE";
+        public static final String INFO_CATEGORY = "1JM_dDZIKjCRvrkOLRvvNwGtP3Al-Rakgtu-w4dFgB-c";
+        public static final String LANG = "1XwULMlxG5JM5VYU-3qTmXYguF_kPvKFb2zE2iIFi_o0";
+        public static final String USER = "1lQvD9rQYheddn-D1k8JmnUPb7fRJr6TkJVdcwPzdTmo";
     }
 
     public static List<String> getComments() {
-        return readGoogleDocDocument(FileName.COMMENTS);
+        return readGoogleDocDocument(FileId.COMMENT);
     }
 
     public static List<String> getInfoCategories() {
-        return readGoogleDocDocument(FileName.INFO_CATEGORIES);
+        return readGoogleDocDocument(FileId.INFO_CATEGORY);
     }
 
     public static List<String> readGoogleDocDocument(final String fileName) {
@@ -70,7 +71,7 @@ public class FileUtil {
         } catch (IOException e) {
             LOGGER.error("Error collecting data from input stream", e);
         }
-        return AppCollectionUtil.listOfArraysToListOfLists(Objects.requireNonNull(lines));
+        return CollectionUtil.listOfArraysToListOfLists(Objects.requireNonNull(lines));
     }
 
     private static InputStream openGoogleDoc(final String fileName,

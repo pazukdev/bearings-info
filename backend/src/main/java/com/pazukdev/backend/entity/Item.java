@@ -24,7 +24,6 @@ import static com.pazukdev.backend.util.LinkUtil.LinkType;
 public class Item extends AbstractEntity {
 
     private String category;
-    private Integer rating = 0;
     @Column(name = "creator_id")
     private Long creatorId;
     @Column(name = "user_action_date")
@@ -58,6 +57,26 @@ public class Item extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "link_id")
     )
     private Set<Link> links = new HashSet<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany
+    @JoinTable(
+            name = "item_liked_user",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<UserEntity> likedUsers = new HashSet<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany
+    @JoinTable(
+            name = "item_disliked_user",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<UserEntity> dislikedUsers = new HashSet<>();
 
     public String getLink(final String linkType) {
         return LinkUtil.getLink(linkType, this);

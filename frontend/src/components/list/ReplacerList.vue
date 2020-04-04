@@ -1,69 +1,40 @@
 <template>
-    <div>
+    <div style="text-align: center">
+        <p class="green">{{translate(message)}}</p>
         <table id="replacers-table" style="text-align: center">
             <tbody>
-            <tr>
-                <td>
-                    <table>
-                        <tbody>
-                        <tr>
-                            <td class="not-symmetrical-left"/>
-                            <td class="not-symmetrical-right">
-                                {{translate("Rating")}}
-                            </td>
-                            <td/>
-                            <td><div style="width: 32px" v-if="!isGuest() && !editMode"/></td>
-                            <td><div style="width: 32px" v-if="!isGuest()"/></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            <tr style="text-align: left"
-                v-for="item in sortedReplacers()">
+            <tr style="text-align: left" v-for="item in sortedReplacers()">
                 <td class="bordered">
                     <table>
                         <tbody>
+                        <tr v-if="editMode">
+                            <td colspan="2" style="text-align: right">
+                                <ButtonDelete style="display: inline-block" :item="item" @remove-item="removeItem"/>
+                            </td>
+                        </tr>
                         <tr>
                             <td class="not-symmetrical-left">
                                 <ButtonNavigateToItem :part="item"/>
                             </td>
-                            <td class="not-symmetrical-right">
-                                {{item.rating}}
-                            </td>
-                            <td>
-                                <button v-if="isLikedIndicatorVisible(item)"
-                                        type="button"
+                            <td style="text-align: right">
+                                <button type="button"
                                         class="round-button"
-                                        @click="rate('cancel', item.itemId)">
-                                    {{"&#128077;"}}
+                                        :title="translate(isLiked(item) ? 'Cancel' : 'Like')"
+                                        @click="rate(item, 'like')">
+                                    <i :class="{'fa fa-thumbs-up': true, 'green': isLiked(item)}"/>
                                 </button>
-                                <button v-if="isRateButtonVisible(item)"
-                                        type="button"
+                                <span :class="{'green': isColored(item.likedUserIds.length)}">
+                                    {{item.likedUserIds.length}}
+                                </span>
+                                <button type="button"
                                         class="round-button"
-                                        style="background: none"
-                                        @click="rate('up', item.itemId)">
-                                    {{"&#128077;"}}
+                                        :title="translate(isDisliked(item) ? 'Cancel' : 'Dislike')"
+                                        @click="rate(item, 'dislike')">
+                                    <i :class="{'fa fa-thumbs-down': true, 'red': isDisliked(item)}"/>
                                 </button>
-                            </td>
-                            <td>
-                                <button v-if="isDislikedIndicatorVisible(item)"
-                                        type="button"
-                                        class="round-button"
-                                        @click="rate('cancel', item.itemId)">
-                                    {{"&#128078;"}}
-                                </button>
-                                <button v-if="isRateButtonVisible(item)"
-                                        type="button"
-                                        class="round-button"
-                                        style="background: none"
-                                        @click="rate('down', item.itemId)">
-                                    {{"&#128078;"}}
-                                </button>
-                            </td>
-                            <td>
-                                <div style="width: 32px" v-if="isUnrateButtonVisible(item)"/>
-                                <ButtonDelete :item="item" @remove-item="removeItem"/>
+                                <span :class="{'red': isColored(item.dislikedUserIds.length)}">
+                                    {{0 - item.dislikedUserIds.length}}
+                                </span>
                             </td>
                         </tr>
                         <tr>
@@ -100,13 +71,28 @@
                 basicUrl: state => state.dictionary.basicUrl,
                 authorization: state => state.dictionary.authorization,
                 editMode: state => state.dictionary.editMode,
-                itemView: state => state.dictionary.itemView
+                itemView: state => state.dictionary.itemView,
+                userData: state => state.dictionary.userData
             })
         },
 
+        data() {
+            return {
+                message: ""
+            }
+        },
+
         methods: {
+            isColored(likesCount) {
+                return likesCount > 0;
+            },
+
             sortedReplacers() {
-                return this.getReplacers().slice().sort((a,b) => (a.rating < b.rating) ? 1 : -1);
+                return this.getReplacers().slice().sort((a,b) => {
+                    let aRating = a.likedUserIds.length - a.dislikedUserIds.length;
+                    let bRating = b.likedUserIds.length - b.dislikedUserIds.length;
+                    return aRating < bRating ? 1 : -1
+                });
             },
 
             getReplacers() {
@@ -121,51 +107,37 @@
                 return this.itemView.likeList.dislikedItemsIds;
             },
 
-            isRateButtonVisible(item) {
-                if (this.editMode || this.isGuest()) {
-                    return false;
-                } else {
-                    return !this.isRated(item);
-                }
-            },
-
-            isUnrateButtonVisible(item) {
-                if (this.editMode || this.isGuest()) {
-                    return false;
-                } else {
-                    return this.isRated(item);
-                }
-            },
-
             isRated(item) {
                 return this.isLiked(item) || this.isDisliked(item);
             },
 
-            isLikedIndicatorVisible(item) {
-                return !this.editMode && this.isLiked(item);
-            },
-
-            isDislikedIndicatorVisible(item) {
-                return !this.editMode && this.isDisliked(item);
-            },
-
             isLiked(item) {
-                return shared.isInArray(item.itemId, this.getLikedItemsIds());
+                return shared.isInArray(this.userData.id, item.likedUserIds);
             },
 
             isDisliked(item) {
-                return !this.editMode && shared.isInArray(item.itemId, this.getDislikedItemsIds());
+                return shared.isInArray(this.userData.id, item.dislikedUserIds);
             },
 
             isGuest() {
                 return userUtil.isGuest();
             },
 
-            rate(action, itemId) {
+            rate(item, actionType) {
+                if (this.isGuest()) {
+                    this.message = "To rate the replacer, please log in";
+                    return;
+                }
+
+                let cancel = "cancel";
+                let action = this.isLiked(item) ? cancel : "up";
+                if (!shared.isEmpty(actionType) && actionType.toLowerCase() === "dislike") {
+                    action = this.isDisliked(item) ? cancel : "down";
+                }
+
                 let rate = {
                     action: action,
-                    itemId: itemId,
-                    likeList: this.itemView.likeList,
+                    itemId: item.itemId,
                     replacers: this.getReplacers()
                 };
                 axios
@@ -179,7 +151,6 @@
                         })
                     .then(response => {
                         let rateReplacer = response.data;
-                        this.itemView.likeList = rateReplacer.likeList;
                         this.itemView.replacersTable.replacers = rateReplacer.replacers;
                         this.itemView.userData.rating = rateReplacer.newUserRating;
                         console.log("Replacer rate action performed: "
@@ -209,4 +180,13 @@
     td {
         padding: initial;
     }
+
+    .round-button {
+        background: none;
+        margin-left: 2px;
+        margin-right: 2px;
+        font-size: x-large;
+        color: grey;
+    }
+
 </style>

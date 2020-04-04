@@ -111,7 +111,12 @@ public class NestedItemDtoFactory {
         dto.setItemId(item.getId());
         dto.setItemName(item.getName());
         dto.setItemCategory(item.getCategory());
-        dto.setRating(item.getRating());
+        for (final UserEntity user : item.getLikedUsers()) {
+            dto.getLikedUserIds().add(user.getId());
+        }
+        for (final UserEntity user : item.getDislikedUsers()) {
+            dto.getDislikedUserIds().add(user.getId());
+        }
         dto.setButtonText(createButtonText(item, manufacturer));
         if (item.getCategory().equals(Category.SEAL)) {
             dto.setSize(descriptionMap.get(Parameter.SIZE));

@@ -6,7 +6,7 @@
                 <td class="two-columns-table-left-column">
                     <button v-if="editMode"
                             type="button"
-                            style="background: #6ab04c"
+                            class="background-green"
                             @click="cancel()">
                         {{translate("Cancel")}}
                     </button>
@@ -19,13 +19,13 @@
                     </button>
                     <button id="save-button" v-if="isSaveButtonRendered() && !userForm && !itemForm"
                             type="button"
-                            style="background: red"
+                            class="background-red"
                             @click="save()">
                         {{translate('Save')}}
                     </button>
-                    <input class="submit" v-if="isSaveButtonRendered() && userForm"
+                    <input class="background-red" v-if="isSaveButtonRendered() && userForm"
                            type="submit" form="user-form" :value="translate('Save')"/>
-                    <input class="submit" v-if="isSaveButtonRendered() && itemForm"
+                    <input class="background-red" v-if="isSaveButtonRendered() && itemForm"
                            type="submit" form="item-form" :value="translate('Save')"/>
                 </td>
                 <td>
@@ -98,7 +98,4 @@
 </script>
 
 <style scoped>
-    .submit, #save-button {
-        background: red;
-    }
 </style>

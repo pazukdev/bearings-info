@@ -3,12 +3,18 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.constant.Status;
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
+import com.pazukdev.backend.dto.UserItemItemReport;
+import com.pazukdev.backend.dto.UserItemReport;
 import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.dto.view.UserView;
-import com.pazukdev.backend.entity.*;
+import com.pazukdev.backend.entity.ChildItem;
+import com.pazukdev.backend.entity.Item;
+import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.WishList;
 import com.pazukdev.backend.repository.ChildItemRepository;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.repository.WishListRepository;
+import com.pazukdev.backend.util.CollectionUtil;
 import com.pazukdev.backend.util.FileUtil;
 import com.pazukdev.backend.util.ImgUtil;
 import com.pazukdev.backend.validator.UserDataValidator;
@@ -20,9 +26,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+import static com.pazukdev.backend.util.CSVUtil.getValue;
 import static com.pazukdev.backend.util.ChildItemUtil.collectIds;
 import static com.pazukdev.backend.util.ChildItemUtil.createNameForWishListItem;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
+import static com.pazukdev.backend.util.UserUtil.UserParam;
+import static com.pazukdev.backend.util.UserUtil.isAdmin;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -159,17 +168,13 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     }
 
     public UserEntity findAdmin(final List<UserEntity> users) {
-        return findFirstByName(ADMIN_NAME, users);
+        return CollectionUtil.findFirstByName(ADMIN_NAME, users);
     }
 
-    public boolean isAdmin(final UserEntity user) {
-        return user.getRole().equals(Role.ADMIN);
-    }
-
+    @Transactional
     public List<UserEntity> getUsersFromRecoveryFile(final boolean recoverUserData) {
         final List<UserEntity> users = new ArrayList<>();
-        final String usersFileId = "1lQvD9rQYheddn-D1k8JmnUPb7fRJr6TkJVdcwPzdTmo";
-        final List<List<String>> rows = FileUtil.readGoogleDocSpreadsheet(usersFileId);
+        final List<List<String>> rows = FileUtil.readGoogleDocSpreadsheet(FileUtil.FileId.USER);
         final List<String> header = rows.get(0);
         rows.remove(0);
         for (final List<String> userData : rows) {
@@ -180,7 +185,6 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
             } else if (user == null) {
                 user = new UserEntity();
                 user.setWishList(new WishList());
-                user.setLikeList(new LikeList());
             }
             user.setId(Long.valueOf(getValue("id", header, userData)));
             user.setRole(Role.valueOf(getValue("role", header, userData)));
@@ -192,37 +196,65 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
             user.setCountry(getValue("country", header, userData));
             user.setImg(getValue("img", header, userData));
 
+            repository.save(user);
             users.add(user);
         }
         return users;
     }
 
-    private String getValue(final String key, final List<String> header, final List<String> userData) {
-        return replaceEmptyWithDash(userData.get(header.indexOf(key)));
+    @Transactional
+    public void recoverUserActions(final List<UserEntity> users, final ItemService itemService) {
+        final List<List<String>> rows = FileUtil.readGoogleDocSpreadsheet(FileUtil.FileId.USER);
+        final List<String> header = rows.get(0);
+        rows.remove(0);
+
+        final Map<Long, List<ChildItem>> wishlistItems = new HashMap<>();
+        final Map<Long, UserItemReport<Item>> reports = new HashMap<>();
+
+        for (final List<String> userData : rows) {
+            final Long id = Long.valueOf(userData.get(header.indexOf(UserParam.ID)));
+            wishlistItems.put(id, getWishlistItems(getValue(UserParam.WISHLIST_ITEMS, header, userData), itemService));
+            reports.put(id, UserItemItemReport.create(header, userData, itemService));
+        }
+
+        for (final UserEntity user : users) {
+            user.getWishList().getItems().clear();
+            user.getWishList().getItems().addAll(wishlistItems.get(user.getId()));
+
+            final UserItemReport<Item> report = reports.get(user.getId());
+
+            for (final Item item : report.getCreatedItems()) {
+                item.setCreatorId(user.getId());
+                itemService.getRepository().save(item);
+            }
+
+            for (final Item item : report.getLikedItems()) {
+                item.getLikedUsers().add(user);
+                itemService.getRepository().save(item);
+            }
+
+            for (final Item item : report.getDislikedItems()) {
+                item.getDislikedUsers().add(user);
+                itemService.getRepository().save(item);
+            }
+
+        }
     }
 
-    private List<ChildItem> recoverWishlistItems(final String source, final ItemService itemService) {
+    private List<ChildItem> getWishlistItems(final String source, final ItemService itemService) {
         final List<ChildItem> items = new ArrayList<>();
         if (isEmpty(source)) {
             return items;
         }
         for (String s : source.split(";")) {
             s = s.trim();
-            final Long itemId;
-            String location = "";
-            String quantity;
-            if (containsParentheses(s)) {
-                itemId = Long.valueOf(getStringBeforeParentheses(s));
-                String additionalData = getStringBetweenParentheses(s);
-                location = additionalData.contains(" - ") ? additionalData.split(" - ")[0] : "-";
-                quantity = additionalData.contains(" - ") ? additionalData.split(" - ")[1] : additionalData;
-            } else {
-                itemId = Long.valueOf(s);
-                location = "-";
-                quantity = "1";
-            }
+            final String name = getStringBeforeParentheses(s);
+            final String additionalData = getStringBetweenParentheses(s);
+            final String category = additionalData.split("!")[0].trim();
+            final String location = additionalData.split("!")[1].trim();
+            final String quantity = additionalData.split("!")[2].trim();
 
-            final Item item = itemService.getRepository().findById(itemId).orElse(null);
+            final Item item = itemService.findFirstByCategoryAndName(category, name);
             if (item == null) {
                 continue;
             }
@@ -237,35 +269,6 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
         }
         return items;
-    }
-
-    public void recoverUserActions(final List<UserEntity> users, final ItemService itemService) {
-        final String usersFileId = "1lQvD9rQYheddn-D1k8JmnUPb7fRJr6TkJVdcwPzdTmo";
-        final List<List<String>> rows = FileUtil.readGoogleDocSpreadsheet(usersFileId);
-        final List<String> header = rows.get(0);
-        rows.remove(0);
-
-        final Map<Long, List<ChildItem>> wishlistItems = new HashMap<>();
-        final Map<Long, List<Item>> likedItems = new HashMap<>();
-        final Map<Long, List<Item>> dislikedItems = new HashMap<>();
-
-        for (final List<String> userData : rows) {
-            final Long id = Long.valueOf(userData.get(header.indexOf("id")));
-            wishlistItems.put(id, recoverWishlistItems(getValue("wishlist items", header, userData), itemService));
-            likedItems.put(id, itemService.getItems(getValue("liked items", header, userData)));
-            dislikedItems.put(id, itemService.getItems(getValue("disliked items", header, userData)));
-        }
-
-        for (final UserEntity user : users) {
-            user.getWishList().getItems().clear();
-            user.getLikeList().getLikedItems().clear();
-            user.getLikeList().getDislikedItems().clear();
-
-            final Long userId = user.getId();
-            user.getWishList().getItems().addAll(wishlistItems.get(userId));
-            user.getLikeList().getLikedItems().addAll(likedItems.get(userId));
-            user.getLikeList().getDislikedItems().addAll(dislikedItems.get(userId));
-        }
     }
 
 }

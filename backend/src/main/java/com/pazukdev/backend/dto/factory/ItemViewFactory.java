@@ -30,7 +30,6 @@ import static com.pazukdev.backend.util.TableUtil.createReplacersTable;
 import static com.pazukdev.backend.util.TranslatorUtil.isValid;
 import static com.pazukdev.backend.util.TranslatorUtil.translate;
 import static com.pazukdev.backend.util.UserActionUtil.*;
-import static com.pazukdev.backend.util.UserUtil.createLikeListDto;
 import static com.pazukdev.backend.util.UserUtil.getCreatorData;
 
 /**
@@ -205,7 +204,6 @@ public class ItemViewFactory {
         view.setReplacersTable(createReplacersTable(item, userService));
         addPossiblePartsAndReplacers(view, allItems, item, infoCategories, itemService);
         view.setCreatorData(getCreatorData(item, itemService.getUserService()));
-        view.setLikeList(createLikeListDto(currentUser));
         LinkUtil.setLinksToItemView(view, item);
         view.setParents(createParentItemsView(item, userService, allItems));
         return view;

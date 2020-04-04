@@ -1,6 +1,5 @@
 package com.pazukdev.backend.dto.view;
 
-import com.pazukdev.backend.dto.LikeListDto;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.UserActionDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
@@ -48,7 +47,6 @@ public class ItemView extends AbstractView {
     private Set<Long> wishListIds = new HashSet<>();
     private Set<String> adminMessages = new HashSet<>();
     private String errorMessage = "-";
-    private LikeListDto likeList;
     private ItemView parents;
     private String wikiLink;
     private String websiteLink;

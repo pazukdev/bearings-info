@@ -32,7 +32,6 @@
             </column>
             <column name="name" type="varchar(255)"/>
             <column name="category" type="varchar(255)"/>
-            <column name="rating" type="int"/>
             <column name="status" type="varchar(255)"/>
             <column name="creator_id" type="bigserial"/>
             <column name="user_action_date" type="varchar(255)"/>
@@ -213,6 +212,28 @@
             </column>
             <column name="link_id" type="bigserial">
                 <constraints foreignKeyName="fk_item_link_link_id" references="link (id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_item_liked_user_table" author="sviarkaltsau">
+        <createTable tableName="item_liked_user">
+            <column name="item_id" type="bigserial">
+                <constraints foreignKeyName="fk_item_liked_user_item_id" references="item (id)"/>
+            </column>
+            <column name="user_id" type="bigserial">
+                <constraints foreignKeyName="fk_item_liked_user_user_id" references="user_table (id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_item_disliked_user_table" author="sviarkaltsau">
+        <createTable tableName="item_disliked_user">
+            <column name="item_id" type="bigserial">
+                <constraints foreignKeyName="fk_item_disliked_user_item_id" references="item (id)"/>
+            </column>
+            <column name="user_id" type="bigserial">
+                <constraints foreignKeyName="fk_item_disliked_user_user_id" references="user_table (id)"/>
             </column>
         </createTable>
     </changeSet>

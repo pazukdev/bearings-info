@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.pazukdev.backend.util.CategoryUtil.Category;
@@ -190,23 +189,6 @@ public class UserActionUtil {
         final UserAction action = createRateAction(itemToRate, actionType, user);
         itemService.getUserActionRepository().save(action);
         return newUserRating;
-    }
-
-    public static void processUploadDictionaryAction(final String actionType,
-                                                     final String changed,
-                                                     final UserEntity user,
-                                                     final UserActionRepository repository) {
-        updateUserRating(user, actionType, null);
-
-        final UserAction userAction = new UserAction();
-
-        userAction.setName(actionType + changed);
-        userAction.setActionType(actionType);
-        userAction.setActionDate(LocalDateTime.now().toString());
-        userAction.setUserId(user.getId());
-        userAction.setItemId(0L);
-
-        repository.save(userAction);
     }
 
     private static int updateUserRating(final UserEntity user, final String actionType, final String itemType) {

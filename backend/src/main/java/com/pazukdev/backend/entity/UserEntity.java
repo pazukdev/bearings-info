@@ -28,8 +28,8 @@ public class UserEntity extends AbstractEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "wishlist_id")
     private WishList wishList = new WishList();
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "likelist_id")
-    private LikeList likeList = new LikeList();
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "likelist_id")
+//    private LikeList likeList = new LikeList();
 
 }

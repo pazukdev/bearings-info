@@ -6,6 +6,8 @@ import com.pazukdev.backend.dto.AbstractDto;
 import com.pazukdev.backend.entity.AbstractEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,8 @@ import static com.pazukdev.backend.util.SpecificStringUtil.replaceEmptyWithDash;
  */
 @RequiredArgsConstructor
 public abstract class AbstractService<Entity extends AbstractEntity, Dto extends AbstractDto> {
+
+    protected final static Logger LOGGER = LoggerFactory.getLogger(AbstractService.class);
 
     @Getter
     protected final JpaRepository<Entity, Long> repository;
@@ -62,10 +66,6 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
     @Transactional
     public Entity update(final Entity entity) {
         return repository.save(entity);
-    }
-
-    public Entity findFirstByName(final String name, final List<Entity> entities) {
-        return entities.stream().filter(entity -> entity.getName().equals(name)).findFirst().orElse(null);
     }
 
     @Transactional

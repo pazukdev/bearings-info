@@ -70,7 +70,7 @@ public class UserController {
     @GetMapping(value = "users/download/csv")
     @ApiOperation(value = "Download all users data as csv file")
     public void downloadUsersCsv(final HttpServletResponse response) throws IOException {
-        IOUtils.copy(UserUtil.toCSVInputStream(userService), response.getOutputStream());
+        IOUtils.copy(UserUtil.toCSVInputStream(itemService), response.getOutputStream());
         response.setContentType("text/plain");
         response.setHeader("Content-Disposition", "attachment;filename=users");
         response.flushBuffer();

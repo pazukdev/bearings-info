@@ -128,42 +128,21 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             return alreadyExistingItem;
         }
 
-        final TransitiveItemDescriptionMap descriptionMap
-                = createDescriptionMap(transitiveItem, transitiveItemService, infoCategories);
-        final Map<String, String> items = new HashMap<>(descriptionMap.getItems());
-        final List<ChildItem> childItems
-                = createParts(transitiveItem, items, this, transitiveItemService, infoCategories, users, admin);
-        final List<Replacer> replacers
-                = createReplacers(transitiveItem, this, transitiveItemService, infoCategories, users, admin);
-
-        final String rating = descriptionMap.getParameters().get("Rating");
-        descriptionMap.getParameters().remove("Rating");
-
-        final String creatorName = descriptionMap.getParameters().get("Creator");
-        descriptionMap.getParameters().remove("Creator");
-
-        Long creatorId = admin.getId();
-
-        if (!isEmpty(creatorName)) {
-            final UserEntity customCreator = userService.findFirstByName(creatorName, users);
-            if (customCreator != null) {
-                creatorId = customCreator.getId();
-            }
-        }
+        final TransitiveItemDescriptionMap map = createDescriptionMap(transitiveItem, transitiveItemService, infoCategories);
+        final Map<String, String> items = new HashMap<>(map.getItems());
+        final List<ChildItem> childItems = createParts(transitiveItem, items, this, transitiveItemService, infoCategories, users, admin);
+        final List<Replacer> replacers = createReplacers(transitiveItem, this, transitiveItemService, infoCategories, users, admin);
 
         final Item newItem = new Item();
         newItem.setName(name);
         newItem.setCategory(category);
         newItem.setStatus(transitiveItem.getStatus());
-        newItem.setDescription(createItemDescription(descriptionMap));
+        newItem.setDescription(createItemDescription(map));
         newItem.getChildItems().addAll(childItems);
         newItem.getReplacers().addAll(replacers);
-        newItem.setCreatorId(creatorId);
+        newItem.setCreatorId(admin.getId());
         newItem.setUserActionDate(DateUtil.now());
         newItem.setImg(transitiveItem.getImage());
-        if (!isEmpty(rating)) {
-            newItem.setRating(Integer.valueOf(rating));
-        }
         LinkUtil.addLinksToItem(newItem, transitiveItem);
 
         itemRepository.save(newItem);
@@ -287,7 +266,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         if (isEmpty(idsSource)) {
             return items;
         }
-        for (String s : idsSource.split(";")) {
+        for (final String s : idsSource.split(";")) {
             repository.findById(Long.valueOf(s.trim())).ifPresent(items::add);
         }
         return items;

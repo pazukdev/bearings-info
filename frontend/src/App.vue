@@ -408,20 +408,20 @@
     }
 
     input:not([type="submit"]):not([type="button"]):invalid {
-        border: 2px solid red;
+        border: 2px solid #FF5722;
     }
 
     input:not([type="submit"]):not([type="button"]):valid {
         /*border: 1px solid green;*/
     }
 
-    .round-button, .round-delete-button {
+    .round-button {
         text-align: center;
-        height: 32px;
-        width: 32px;
+        height: 38px;
+        width: 38px;
         min-height: initial;
         max-height: initial;
-        border-radius: 16px;
+        border-radius: 50%;
     }
 
     .bordered {
@@ -438,24 +438,28 @@
         table-layout: fixed;
     }
 
-    .alert-message {
-        color: red;
+    .alert-message, .red {
+        color: #FF5722;
     }
 
-    .selected {
+    .background-red {
+        background: #FF5722;
+    }
+
+    .green {
+        color: #6ab04c;
+    }
+
+    .background-green {
+        background: #6ab04c;
+    }
+
+    .blue {
+        color: #617D89;
+    }
+
+    .background-blue {
         background: #617D89;
-    }
-
-    .background-grey {
-        background: grey;
-    }
-
-    .background-darkgreen {
-        background: darkgreen;
-    }
-
-    .red-background {
-        background: red;
     }
 
     .title {
@@ -463,11 +467,11 @@
     }
 
     .not-symmetrical-left {
-        width: 80%;
+        width: 60%;
     }
 
     .not-symmetrical-right {
-        width: 20%;
+        width: 10%;
     }
 
     .half-wide, .two-columns-table-left-column {
@@ -493,10 +497,6 @@
     .three-column-table-button-column {
     }
 
-    .round-delete-button {
-        background: red;
-    }
-
     #menu-summary {
         text-align: center;
         font-weight: bold;
@@ -505,7 +505,7 @@
 
     #remove-img-button {
         width: initial;
-        background: red
+        background: #FF5722;
     }
 
 </style>

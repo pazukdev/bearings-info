@@ -377,14 +377,6 @@ public class ItemUtil {
         }
     }
 
-    public static Set<Long> collectIds(final Set<Item> items) {
-        final Set<Long> ids = new HashSet<>();
-        for (final Item item : items) {
-            ids.add(item.getId());
-        }
-        return ids;
-    }
-
 }
 
 

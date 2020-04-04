@@ -48,7 +48,7 @@ public class DataLoader implements ApplicationRunner {
         }
         final long start = System.nanoTime();
 
-        final List<String> infoCategories = FileUtil.readGoogleDocDocument(FileUtil.FileName.INFO_CATEGORIES);
+        final List<String> infoCategories = FileUtil.readGoogleDocDocument(FileUtil.FileId.INFO_CATEGORY);
 
         final List<UserEntity> users = itemService.getUserService().getUsersFromRecoveryFile(true);
         createTransitiveItems();

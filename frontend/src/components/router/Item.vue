@@ -2,6 +2,7 @@
     <div>
         <LoadingScreen v-if="isLoading()"/>
         <div v-else>
+<!--            {{itemView.replacersTable.replacers}}-->
             <form id="item-form" @submit="submit">
                 <ItemName/>
                 <ItemMenu/>
