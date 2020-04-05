@@ -1,6 +1,21 @@
 <template>
     <div style="text-align: center">
+        <table v-if="itemView.deleted.length > 0">
+            <tbody>
+            <tr v-for="item in itemView.deleted">
+                <td style="text-align: right">{{item.buttonText}}</td>
+                <td>{{translate("deleted")}}</td>
+                <td>
+                    <button type="button" @click="restore(item)">
+                        {{"Restore"}}
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
         <p class="green">{{translate(message)}}</p>
+
         <table id="replacers-table" style="text-align: center">
             <tbody>
             <tr style="text-align: left" v-for="item in sortedReplacers()">
@@ -155,8 +170,14 @@
             },
 
             removeItem(item) {
+                this.itemView.deleted.push(item);
                 shared.removeFromArray(item, this.getReplacers());
                 this.$emit("show-add-form");
+            },
+
+            restore(item) {
+                this.getReplacers().push(item);
+                shared.removeFromArray(item, this.itemView.deleted);
             }
         }
     }

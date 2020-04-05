@@ -10,10 +10,10 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
     import arrayUtil from "../../util/arrayUtil";
-    import dictionaryUtil from "../../util/dictionaryUtil";
     import itemDtoUtil from "../../util/itemDtoUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: "ItemSelect",
@@ -22,11 +22,7 @@
             replacer: Boolean
         },
 
-        computed: {
-            ...mapState({
-                itemView: state => state.dictionary.itemView
-            })
-        },
+        mixins: [basicComponent, view],
 
         data() {
             return {
@@ -41,7 +37,12 @@
                 let items;
                 if (this.replacer) {
                     possibleItems =  this.itemView.possibleReplacers;
-                    items = this.itemView.replacersTable.replacers;
+                    items = this.itemView.replacersTable.replacers.slice();
+                    console.log(items.length);
+                    if (!this.isEmpty(this.itemView.deleted) && this.itemView.deleted.length > 0) {
+                        items = items.concat(this.itemView.deleted);
+                        console.log(items.length);
+                    }
                 } else {
                     possibleItems = this.itemView.possibleParts;
                     items = this.itemView.children;
@@ -74,10 +75,6 @@
 
             onChange() {
                 this.$emit("on-change", this.selectedItem);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
             }
         }
     }
