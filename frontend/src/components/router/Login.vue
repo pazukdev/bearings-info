@@ -94,9 +94,9 @@
     import axios from 'axios';
     import {mapState} from 'vuex';
     import AlertMessagesSection from "../info/AlertMessagesSection";
-    import dictionaryUtil from "../../util/dictionaryUtil";
-    import shared from "../../util/shared";
     import axiosUtil from "../../util/axiosUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         components: {AlertMessagesSection},
@@ -111,19 +111,16 @@
             };
         },
 
+        mixins: [basicComponent, view],
+
         computed: {
             ...mapState({
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
-                loginMessage: state => state.dictionary.loginMessage,
-                itemView: state => state.dictionary.itemView
+                loginMessage: state => state.dictionary.loginMessage
             })
         },
 
         methods: {
-            translate(text) {
-                return dictionaryUtil.translate(text);
-            },
-
             performLoginPageAction: function (e) {
                 e.preventDefault();
                 if (this.isLogin) {
@@ -181,10 +178,6 @@
                 this.email = "";
                 this.password = "";
                 this.repeatedPassword = "";
-            },
-
-            isEmpty(value) {
-                return shared.isEmpty(value);
             }
         }
     }

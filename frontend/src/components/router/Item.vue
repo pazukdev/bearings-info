@@ -2,7 +2,6 @@
     <div>
         <LoadingScreen v-if="isLoading()"/>
         <div v-else>
-<!--            {{itemView.replacersTable.replacers}}-->
             <form id="item-form" @submit="submit">
                 <ItemName/>
                 <ItemMenu/>
@@ -34,7 +33,6 @@
 
 <script>
     import axios from 'axios';
-    import {mapState} from 'vuex';
     import ItemMenu from "../menu/ItemMenu";
     import ItemDescription from "../list/section/ItemDescription";
     import EditPanel from "../menu/EditPanel";
@@ -47,12 +45,11 @@
     import CountedItemList from "../list/CountedItemList";
     import ItemSummary from "../item/ItemSummary";
     import Header from "../list/section/Header";
-    import shared from "../../util/shared";
     import storeUtil from "../../util/storeUtil";
     import axiosUtil from "../../util/axiosUtil";
-    import dictionaryUtil from "../../util/dictionaryUtil";
     import ItemName from "../item/ItemName";
-    import userUtil from "../../util/userUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
 
@@ -70,13 +67,7 @@
             ReplacersSection
         },
 
-        computed: {
-            ...mapState({
-                loadingState: state => state.dictionary.loadingState,
-                itemView: state => state.dictionary.itemView,
-                editMode: state => state.dictionary.editMode
-            })
-        },
+        mixins: [basicComponent, view],
 
         created() {
             this.onUrlChange();
@@ -175,26 +166,6 @@
                             itemViewUtil.dispatchResponseError(error);
                         }
                     });
-            },
-
-            isAuthorized() {
-                return itemViewUtil.isAuthorized(axiosUtil.getAuthorization());
-            },
-
-            isGuest() {
-                return userUtil.isGuest();
-            },
-
-            isLoading() {
-                return shared.isLoading(this.loadingState);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
-            },
-
-            getUserName() {
-                return userUtil.getUserName();
             },
 
             getUsageTitle() {

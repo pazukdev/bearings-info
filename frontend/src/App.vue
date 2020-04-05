@@ -18,7 +18,7 @@
 <!--                                            {{this.$route.params.lang}}<br>-->
 <!--                                            {{"basicUrl: " + basicUrl}}<br>-->
 <!--                                            {{"userId: " + userData.id}}<br>-->
-<!--                                            {{"userName: " + userData.name}}<br>-->
+<!--                                            {{"userName: " + userData.role}}<br>-->
 <!--                                            {{"authorization: " + authorization}}<br>-->
 <!--                                            {{"loadingState: " + loadingState}}<br>-->
 <!--                                            {{"editMode: " + editMode}}<br>-->
@@ -49,17 +49,16 @@
     import NavigationBar from "./components/menu/NavigationBar";
     import UserMenu from "./components/menu/UserMenu";
     import LangMenu from "./components/menu/LangMenu";
-    import itemViewUtil from "./util/itemViewUtil";
     import axiosUtil from "./util/axiosUtil";
     import MessagesSection from "./components/special/MessagesSection";
     import routerUtil from "./util/routerUtil";
-    import dictionaryUtil from "./util/dictionaryUtil";
     import CopyUrlButton from "./components/element/button/CopyUrlButton";
     import AdminMessage from "./components/special/AdminMessage";
-    import userUtil from "./util/userUtil";
     import DonationSection from "./components/DonationSection";
     import AboutApp from "./components/AboutApp";
     import AppGroupsSection from "./components/AppGroupsSection";
+    import basicComponent from "./mixin/basicComponent";
+    import view from "./mixin/view";
 
     export default {
         name: 'app',
@@ -79,22 +78,16 @@
             Home
         },
 
+        mixins: [basicComponent, view],
+
         computed: {
             ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                loadingState: state => state.dictionary.loadingState,
-                editMode: state => state.dictionary.editMode,
-                itemView: state => state.dictionary.itemView,
                 incorrectCredentials: state => state.dictionary.incorrectCredentials,
                 userStatus: state => state.dictionary.userStatus,
-                lang: state => state.dictionary.lang,
-                langs: state => state.dictionary.langs,
                 dictionary: state => state.dictionary.dictionary,
                 dictionaryId: state => state.dictionary.dictionaryId,
                 errorMessage: state => state.dictionary.errorMessage,
-                loginMessage: state => state.dictionary.loginMessage,
-                userData: state => state.dictionary.userData
+                loginMessage: state => state.dictionary.loginMessage
             })
         },
 
@@ -128,28 +121,12 @@
                 this.$store.dispatch("setBasicUrl", basicUrl);
             },
 
-            isAuthorized() {
-                return itemViewUtil.isAuthorized(axiosUtil.getAuthorization());
-            },
-
-            isGuest() {
-                return userUtil.isGuest();
-            },
-
             loginAsGuest() {
                 axiosUtil.loginAsGuest(false, this.$route.params.lang);
             },
 
             isHome() {
                 return routerUtil.isHome(this.$route);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
-            },
-
-            getUserName() {
-                return userUtil.getUserName();
             }
         }
     }
@@ -416,12 +393,15 @@
     }
 
     .round-button {
-        text-align: center;
-        height: 38px;
-        width: 38px;
+        height: initial;
+        width: initial;
         min-height: initial;
         max-height: initial;
-        border-radius: 50%;
+        border-radius: initial;
+        /*border: 2px solid grey;*/
+        font-size: x-large;
+        font-weight: bold;
+        background: none;
     }
 
     .bordered {

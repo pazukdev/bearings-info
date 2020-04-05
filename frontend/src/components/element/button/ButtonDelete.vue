@@ -11,23 +11,18 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
     import userUtil from "../../../util/userUtil";
-    import dictionaryUtil from "../../../util/dictionaryUtil";
+    import basicComponent from "../../../mixin/basicComponent";
+    import view from "../../../mixin/view";
 
     export default {
         name: "ButtonDelete",
 
+        mixins: [basicComponent, view],
+
         props: {
             item: Object,
             wishlistView: Boolean
-        },
-
-        computed: {
-            ...mapState({
-                itemView: state => state.dictionary.itemView,
-                editMode: state => state.dictionary.editMode
-            })
         },
 
         methods: {
@@ -35,32 +30,19 @@
                 if (!this.editMode || item.deletable === false) {
                     return false;
                 }
-                return userUtil.isAdmin(this.itemView)
+                return this.isAdmin(this.itemView)
+                    || this.isEditor()
                     || userUtil.isCurrentUserItemCreator(item.creatorId)
                     || this.wishlistView;
             },
 
             removeItem(item) {
                 this.$emit("remove-item", item);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
             }
         }
     }
 </script>
 
 <style scoped>
-    .round-button {
-        height: initial;
-        width: initial;
-        min-height: initial;
-        max-height: initial;
-        border-radius: initial;
-        /*border: 2px solid grey;*/
-        font-size: x-large;
-        font-weight: bold;
-        background: none;
-    }
+
 </style>

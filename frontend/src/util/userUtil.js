@@ -14,8 +14,12 @@ export default {
         return this.isUser("admin", itemView.userData);
     },
 
-    isSeller(userRole) {
-        return this.isUserRole("seller", userRole);
+    isEditor() {
+        return this.isUser("editor", this.getUserData());
+    },
+
+    isSeller() {
+        return this.isUser("seller", this.getUserData());
     },
 
     isUser(expectedRole, actualUserData) {

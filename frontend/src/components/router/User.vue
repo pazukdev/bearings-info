@@ -66,7 +66,7 @@
                         <td>
                             <p v-if="!isRoleSelectRendered()">{{user.role}}</p>
                             <select v-if="isRoleSelectRendered()" v-model="user.role">
-                                <option v-for="role in ['admin', 'seller', 'user']" :key="role">
+                                <option v-for="role in ['admin', 'editor', 'seller', 'user']" :key="role">
                                     {{role}}
                                 </option>
                             </select>
@@ -143,7 +143,6 @@
 
 <script>
     import axios from "axios";
-    import {mapState} from "vuex";
     import storeUtil from "../../util/storeUtil";
     import routerUtil from "../../util/routerUtil";
     import EditableImg from "../EditableImg";
@@ -155,20 +154,14 @@
     import userUtil from "../../util/userUtil";
     import shared from "../../util/shared";
     import LoadingScreen from "../special/LoadingScreen";
-    import dictionaryUtil from "../../util/dictionaryUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: "User",
         components: {LoadingScreen, DefaultButton, AlertMessagesSection, EditPanel, EditableImg},
 
-        computed: {
-            ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                itemView: state => state.dictionary.itemView,
-                editMode: state => state.dictionary.editMode
-            })
-        },
+        mixins: [basicComponent, view],
 
         data() {
             return {
@@ -182,12 +175,6 @@
                 editedUserIsCurrentUser: false
             }
         },
-
-        // mounted() {
-        //     let script = document.createElement('script');
-        //     script.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key=&libraries=places');
-        //     document.head.appendChild(script);
-        // },
 
         created() {
             this.onUrlChange();
@@ -278,10 +265,6 @@
                 return true;
             },
 
-            isAdmin() {
-                return userUtil.isAdmin(this.itemView);
-            },
-
             isSeller() {
                 userUtil.isSeller(this.user.role);
             },
@@ -363,18 +346,6 @@
 
             isLoading() {
                 return shared.isLoading(this.loadingState);
-            },
-
-            isEmpty(value) {
-                return shared.isEmpty(value);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
-            },
-
-            getUserName() {
-                return userUtil.getUserName();
             }
         }
     }

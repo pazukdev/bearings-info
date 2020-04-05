@@ -9,12 +9,13 @@ export default {
 
     loginAsGuest(toHome, lang) {
         console.log("loginAsGuest(toHome, lang)");
-        this.login("guest", "guest", toHome, lang);
+        this.login("guest", "password-stub", toHome, lang);
     },
 
     login(userName, password, toHome, lang) {
         console.log("login(userName, password, toHome, lang)");
         console.log("toHome: " + toHome);
+
         let credentialsUrl ="username=" + userName + "&" + "password=" + password;
         axios
             .post(this.getBasicUrl() + "/login", credentialsUrl)

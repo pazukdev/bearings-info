@@ -58,20 +58,18 @@
     import shared from "../../util/shared";
     import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
     import ButtonDelete from "../element/button/ButtonDelete";
-    import userUtil from "../../util/userUtil";
-    import dictionaryUtil from "../../util/dictionaryUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: "ReplacerList",
 
         components: {ButtonDelete, ButtonNavigateToItem},
 
+        mixins: [basicComponent, view],
+
         computed: {
             ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                editMode: state => state.dictionary.editMode,
-                itemView: state => state.dictionary.itemView,
                 userData: state => state.dictionary.userData
             })
         },
@@ -119,10 +117,6 @@
                 return shared.isInArray(this.userData.id, item.dislikedUserIds);
             },
 
-            isGuest() {
-                return userUtil.isGuest();
-            },
-
             rate(item, actionType) {
                 if (this.isGuest()) {
                     this.message = "To rate the replacer, please log in";
@@ -163,14 +157,6 @@
             removeItem(item) {
                 shared.removeFromArray(item, this.getReplacers());
                 this.$emit("show-add-form");
-            },
-
-            getUserName() {
-                return userUtil.getUserName();
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
             }
         }
     }

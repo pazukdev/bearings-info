@@ -63,14 +63,14 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
     import shared from "../../../util/shared";
     import ButtonNavigateToItem from "../../element/button/ButtonNavigateToItem";
     import ButtonDelete from "../../element/button/ButtonDelete";
     import ListHeader from "./ListHeader";
     import ButtonAdd from "../../element/button/ButtonAdd";
     import arrayUtil from "../../../util/arrayUtil";
-    import userUtil from "../../../util/userUtil";
+    import basicComponent from "../../../mixin/basicComponent";
+    import view from "../../../mixin/view";
 
     export default {
         name: "ItemDescription",
@@ -86,13 +86,7 @@
             item: Boolean
         },
         
-        computed: {
-            ...mapState({
-                itemView: state => state.dictionary.itemView,
-                editMode: state => state.dictionary.editMode,
-                lang: state => state.dictionary.lang
-            }),
-        },
+        mixins: [basicComponent, view],
 
         data() {
             return {
@@ -173,14 +167,15 @@
                 if (!this.rowIsDeletable(row)) {
                     return false;
                 }
-                if (!this.isAdmin() && shared.isInArray(row.name, this.notEditableParams)) {
+                if ((!this.isAdmin() && !this.isEditor())
+                    && shared.isInArray(row.name, this.notEditableParams)) {
                     return false;
                 }
                 return this.isEdit();
             },
 
             rowIsDeletable(row) {
-                if (!this.isAdmin()) {
+                if (!this.isAdmin() && !this.isEditor()) {
                     return false;
                 }
                 if (shared.isInArray(row.name, this.notDeletableRows)) {
@@ -191,15 +186,6 @@
 
             isEdit() {
                 return this.item && this.editMode;
-            },
-
-            isEmpty(value) {
-                return shared.isEmpty(value);
-            },
-
-            isAdmin() {
-                // return false;
-                return userUtil.isAdmin(this.itemView);
             }
         }
     }

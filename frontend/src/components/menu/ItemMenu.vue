@@ -4,17 +4,17 @@
             <tbody v-if="!editMode">
                 <tr>
                     <td>
-                        <button v-if="isAddToWishListButtonRendered()"
-                                type="button"
-                                @click="addItemToWishList()">
-                            {{translate("Add to Wishlist")}}
-                        </button>
-                        <p v-if="isItemInWishListTextVisible()">
+                        <DefaultButton id="user-hard-delete"
+                                       v-if="isAddToWishListButtonRendered()"
+                                       :text="translate('Add to Wishlist')"
+                                       :my-class="'background-blue'"
+                                       @on-click="addItemToWishList()"/>
+                        <p v-if="isItemInWishListTextVisible()" class="green">
                             {{translate("Item is in Wishlist")}}
                         </p>
                     </td>
-                    <td></td>
-                    <td></td>
+                    <td/>
+                    <td/>
                 </tr>
                 <tr>
                     <td>
@@ -151,29 +151,25 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
     import shared from "../../util/shared";
-    import itemViewUtil from "../../util/itemViewUtil";
     import axios from "axios";
-    import dictionaryUtil from "../../util/dictionaryUtil";
     import userUtil from "../../util/userUtil";
     import routerUtil from "../../util/routerUtil";
+    import DefaultButton from "../element/button/DefaultButton";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: "ItemMenu",
 
-        computed: {
-            ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                editMode: state => state.dictionary.editMode,
-                itemView: state => state.dictionary.itemView,
-                langs: state => state.dictionary.langs
-            }),
+        components: {DefaultButton},
 
+        mixins: [basicComponent, view],
+
+        computed: {
             buttonStyles() {
                 return {
-                    backgroundColor: this.isManufacturer() ? '' : '#6ab04c',
+                    background: this.isManufacturer() ? '' : '#6ab04c',
                 }
             }
         },
@@ -248,10 +244,6 @@
                 return shared.isInArray(itemId, this.itemView.wishListIds);
             },
 
-            isGuest() {
-                return userUtil.isGuest();
-            },
-
             isSearchEnabled() {
                 return this.itemView.searchEnabled;
             },
@@ -263,28 +255,12 @@
                 return false;
             },
 
-            isEmpty(value) {
-                return shared.isEmpty(value);
-            },
-
-            isAdmin() {
-                return userUtil.isAdmin(this.itemView);
-            },
-
             getButtonText() {
                 if (this.isManufacturer()) {
                     return this.translate("Website");
                 } else {
                     return this.translate("Seller");
                 }
-            },
-
-            isManufacturer() {
-                return itemViewUtil.isManufacturer(this.itemView);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
             }
         }
     }

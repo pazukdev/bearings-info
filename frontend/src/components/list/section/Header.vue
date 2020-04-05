@@ -19,26 +19,22 @@
     import EditableImg from "../../EditableImg";
     import ItemDescription from "./ItemDescription";
     import EditPanel from "../../menu/EditPanel";
-    import {mapState} from "vuex";
     import shared from "../../../util/shared";
     import axiosUtil from "../../../util/axiosUtil";
-    import dictionaryUtil from "../../../util/dictionaryUtil";
+    import basicComponent from "../../../mixin/basicComponent";
+    import view from "../../../mixin/view";
 
     export default {
         name: "Header",
+
         components: {EditPanel, ItemDescription, EditableImg},
+
+        mixins: [basicComponent, view],
 
         props: {
             item: Boolean,
             simpleHeader: Boolean,
             editable: Boolean
-        },
-
-        computed: {
-            ...mapState({
-                itemView: state => state.dictionary.itemView,
-                editMode: state => state.dictionary.editMode
-            })
         },
 
         methods: {
@@ -48,10 +44,6 @@
 
             update(itemId) {
                 axiosUtil.updateItem(itemId, this.itemView, this.$route.params.lang);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
             },
 
             isEnglish() {

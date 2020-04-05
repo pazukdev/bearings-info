@@ -50,7 +50,8 @@
                                            title="Allowed: numbers, dot"/>
                                 </td>
                                 <td class="three-column-table-button-column">
-                                    <ButtonDelete :item="item" @remove-item="removeItem"/>
+                                    <ButtonDelete :item="item" @remove-item="removeItem"
+                                                  :wishlist-view="wishListView"/>
                                 </td>
                             </tr>
                             </tbody>
@@ -66,16 +67,15 @@
 <script>
     import itemViewUtil from "../../util/itemViewUtil";
     import ButtonDelete from "../element/button/ButtonDelete";
-    import {mapState} from "vuex";
     import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
     import EditPanel from "../menu/EditPanel";
     import ListHeader from "./section/ListHeader";
     import ItemDescription from "./section/ItemDescription";
     import EditableImg from "../EditableImg";
     import SearchForm from "../form/SearchForm";
-    import dictionaryUtil from "../../util/dictionaryUtil";
-    import shared from "../../util/shared";
     import userUtil from "../../util/userUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: "CountedItemList",
@@ -101,16 +101,7 @@
             items: Array
         },
 
-        computed: {
-            ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                userName: state => state.dictionary.userName,
-                itemView: state => state.dictionary.itemView,
-                editMode: state => state.dictionary.editMode,
-                appLanguage: state => state.dictionary.appLanguage
-            })
-        },
+        mixins: [basicComponent, view],
 
         data() {
             return {
@@ -143,10 +134,6 @@
                 return this.editableComments && this.editMode;
             },
 
-            isEmpty(value) {
-                return shared.isEmpty(value);
-            },
-
             hideTable(table) {
                 if (table.name.toLowerCase() === "guest" && !userUtil.isAdmin(this.itemView)) {
                     return true;
@@ -158,16 +145,8 @@
                 // return !this.item && !this.userListView;
             },
 
-            isAdmin() {
-                return userUtil.isAdmin(this.itemView);
-            },
-
             getFilter(filter) {
                 this.filter = filter;
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
             },
 
             getCountHeaderValue() {

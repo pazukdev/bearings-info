@@ -39,21 +39,14 @@
 
 <script>
     import routerUtil from "../../util/routerUtil";
-    import itemViewUtil from "../../util/itemViewUtil";
-    import {mapState} from "vuex";
     import axiosUtil from "../../util/axiosUtil";
-    import dictionaryUtil from "../../util/dictionaryUtil";
-    import userUtil from "../../util/userUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: 'AppBar',
 
-        computed: {
-            ...mapState({
-                loadingState: state => state.dictionary.loadingState,
-                editMode: state => state.dictionary.editMode
-            })
-        },
+        mixins: [basicComponent, view],
 
         methods: {
             logout() {
@@ -69,14 +62,6 @@
             back() {
                 console.log("back button taped");
                 routerUtil.back();
-            },
-
-            isAuthorized() {
-                return itemViewUtil.isAuthorized(axiosUtil.getAuthorization());
-            },
-
-            isGuest() {
-                return userUtil.isGuest();
             },
 
             isBackButtonDisplayed() {
@@ -101,11 +86,8 @@
 
             isHomePage() {
                 return routerUtil.isHome(this.$route);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
             }
+
         }
     }
 </script>

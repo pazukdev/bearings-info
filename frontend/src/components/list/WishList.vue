@@ -24,25 +24,17 @@
     import LoadingScreen from "../special/LoadingScreen";
     import axios from "axios";
     import itemViewUtil from "../../util/itemViewUtil";
-    import {mapState} from "vuex";
-    import shared from "../../util/shared";
-    import dictionaryUtil from "../../util/dictionaryUtil";
     import userUtil from "../../util/userUtil";
     import routerUtil from "../../util/routerUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: "WishList",
+
         components: {CountedItemList, Header, LoadingScreen},
 
-        computed: {
-            ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                itemView: state => state.dictionary.itemView,
-                loadingState: state => state.dictionary.loadingState,
-                editMode: state => state.dictionary.editMode
-            })
-        },
+        mixins: [basicComponent, view],
 
         created() {
             this.onUrlChange();
@@ -79,15 +71,8 @@
 
             save() {
                 itemViewUtil.update(this.itemView);
-            },
-
-            isLoading() {
-                return shared.isLoading(this.loadingState);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
             }
+
         }
     }
 </script>

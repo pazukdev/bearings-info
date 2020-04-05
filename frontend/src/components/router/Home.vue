@@ -10,17 +10,17 @@
 
 <script>
     import axios from "axios";
-    import {mapState} from "vuex";
     import MotorcycleCatalogue from "../list/MotorcycleCatalogue";
     import LoadingScreen from "../special/LoadingScreen";
     import itemViewUtil from "../../util/itemViewUtil";
     import DefaultButton from "../element/button/DefaultButton";
     import NewsSection from "../info/NewsSection";
-    import shared from "../../util/shared";
     import Info from "../info/Info";
     import userUtil from "../../util/userUtil";
     import routerUtil from "../../util/routerUtil";
     import axiosUtil from "../../util/axiosUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: "Home",
@@ -32,13 +32,7 @@
             LoadingScreen,
             MotorcycleCatalogue},
 
-        computed: {
-            ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                itemView: state => state.dictionary.itemView,
-                loadingState: state => state.dictionary.loadingState
-            })
-        },
+        mixins: [basicComponent, view],
 
         data() {
             return {
@@ -81,15 +75,8 @@
 
             logEvent(event, itemId, name) {
                 console.log(event + ": " + "id=" + itemId + "; name=" + name);
-            },
-
-            isAdmin() {
-                return userUtil.isAdmin(this.itemView);
-            },
-
-            isLoading() {
-                return shared.isLoading(this.loadingState);
             }
+
         }
     }
 </script>

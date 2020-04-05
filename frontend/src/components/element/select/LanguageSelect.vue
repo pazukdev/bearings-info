@@ -1,7 +1,5 @@
 <template>
     <div class="bordered" style="white-space: nowrap">
-<!--        {{newLang}}-->
-        <!--        <flag :iso="newLanguage"/>-->
         {{translate("Language") + ": "}}
         <select v-model="newLang"
                 @change="selectLanguage()">
@@ -15,20 +13,17 @@
 <script>
     import {mapState} from "vuex";
     import routerUtil from "../../../util/routerUtil";
-    import dictionaryUtil from "../../../util/dictionaryUtil";
     import axiosUtil from "../../../util/axiosUtil";
-    import shared from "../../../util/shared";
+    import basicComponent from "../../../mixin/basicComponent";
+    import view from "../../../mixin/view";
 
     export default {
         name: "LanguageSelect",
 
+        mixins: [basicComponent, view],
+
         computed: {
             ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                lang: state => state.dictionary.lang,
-                langs: state => state.dictionary.langs,
-                itemView: state => state.dictionary.itemView,
                 dictionary: state => state.dictionary.dictionary
             })
         },
@@ -68,14 +63,6 @@
                 axiosUtil.setLangsAndDictionary(lang);
                 console.log("selectLanguage(): axiosUtil.setLangsAndDictionary(lang)");
                 routerUtil.selectLanguage(lang, this.$route);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
-            },
-
-            isEmpty(value) {
-                return shared.isEmpty(value);
             }
         }
     }

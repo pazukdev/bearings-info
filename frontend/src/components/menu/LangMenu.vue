@@ -33,45 +33,21 @@
 
 <script>
     import LanguageSelect from "../element/select/LanguageSelect";
-    import {mapState} from "vuex";
-    import dictionaryUtil from "../../util/dictionaryUtil";
-    import userUtil from "../../util/userUtil";
-    import shared from "../../util/shared";
     import routerUtil from "../../util/routerUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: "LangMenu",
 
         components: {LanguageSelect},
 
-        computed: {
-            ...mapState({
-                itemView: state => state.dictionary.itemView,
-                loadingState: state => state.dictionary.loadingState
-            })
-        },
+        mixins: [basicComponent, view],
 
         methods: {
-            isGuest() {
-                return userUtil.isGuest();
-            },
-
-            isAdmin() {
-                return userUtil.isAdmin(this.itemView);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
-            },
-
-            isEmpty(value) {
-                return shared.isEmpty(value);
-            },
-
             getLang() {
                 return routerUtil.getLang(this.$route);
             }
-
         }
     }
 </script>

@@ -19,20 +19,14 @@
 </template>
 
 <script>
-    import shared from "../../util/shared";
-    import {mapState} from "vuex";
-    import dictionaryUtil from "../../util/dictionaryUtil";
-    import userUtil from "../../util/userUtil";
     import routerUtil from "../../util/routerUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: "ItemName",
 
-        computed: {
-            ...mapState({
-                itemView: state => state.dictionary.itemView
-            })
-        },
+        mixins: [basicComponent, view],
 
         methods: {
             showCreatorLink() {
@@ -43,18 +37,6 @@
                     return this.isAdmin();
                 }
                 return true;
-            },
-
-            isEmpty(value) {
-                return shared.isEmpty(value);
-            },
-
-            isAdmin() {
-                return userUtil.isAdmin(this.itemView);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
             },
 
             getLang() {
