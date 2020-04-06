@@ -2,9 +2,15 @@
     <div>
         <EditableImg/>
         <div>
-            <EditPanel v-if="editable || isEnglish()" :item-form="item" @save="save"/>
-            <div v-else class="default-margin">
+            <EditPanel v-if="editable && isEnglish()" :item-form="item" @save="save"/>
+            <div v-if="editable && !isEnglish()" class="default-margin">
                 <p class="bordered">{{translate("Editing is available in English only")}}</p>
+            </div>
+            <div v-if="editMode && itemsManagement" class="default-margin" style="text-align: center">
+                <br>
+                {{translate("You can delete items here")}}<br>
+                {{translate("You can only delete items you crated")}}<br>
+                <br>
             </div>
         </div>
         <details v-if="itemView.header != null" class="default-margin" open>
@@ -33,6 +39,7 @@
 
         props: {
             item: Boolean,
+            itemsManagement: Boolean,
             simpleHeader: Boolean,
             editable: Boolean
         },

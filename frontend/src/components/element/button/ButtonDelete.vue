@@ -22,6 +22,7 @@
 
         props: {
             item: Object,
+            itemsManagementView: Boolean,
             wishlistView: Boolean
         },
 
@@ -30,10 +31,14 @@
                 if (!this.editMode || item.deletable === false) {
                     return false;
                 }
-                return this.isAdmin(this.itemView)
-                    || this.isEditor()
-                    || userUtil.isCurrentUserItemCreator(item.creatorId)
-                    || this.wishlistView;
+                if (this.isAdmin(this.itemView) || this.wishlistView) {
+                    return true;
+                }
+                if (this.itemsManagementView) {
+                    return userUtil.isCurrentUserItemCreator(item.creatorId);
+                }
+                return this.isEditor();
+
             },
 
             removeItem(item) {

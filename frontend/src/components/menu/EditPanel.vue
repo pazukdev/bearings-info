@@ -28,9 +28,6 @@
                     <input class="background-red" v-if="isSaveButtonRendered() && itemForm"
                            type="submit" form="item-form" :value="translate('Save')"/>
                 </td>
-                <td>
-                    <ButtonAdd v-if="editMode" style="visibility: hidden"/>
-                </td>
             </tr>
             </tbody>
         </table>

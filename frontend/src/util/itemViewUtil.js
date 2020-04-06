@@ -74,6 +74,8 @@ export default {
     },
 
     dispatchView(view, lang) {
+        view.deletedChildren = [];
+        view.deletedReplacers = [];
         storeUtil.setErrorMessage(view.errorMessage);
         storeUtil.setView(view);
         storeUtil.setUserData(view.userData);
@@ -89,11 +91,6 @@ export default {
         console.error(error);
         let message = "No server response";
         storeUtil.setErrorMessage(message);
-    },
-
-    removeItemFromItemList(itemView, item) {
-        shared.removeFromArray(item, itemView.children);
-        itemView.idsToRemove.push(item.itemId);
     },
 
     isMotorcycleCatalogueView(itemView) {

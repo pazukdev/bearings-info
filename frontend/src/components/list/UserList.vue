@@ -2,7 +2,7 @@
     <div>
         <LoadingScreen v-if="isLoading()"/>
         <div v-else>
-            <Header/>
+            <Header :editable="isAdmin()"/>
             <CountedItemList :user-list-view="true" :sorted="true" :translate-comments="true"/>
         </div>
     </div>
@@ -17,13 +17,14 @@
     import routerUtil from "../../util/routerUtil";
     import userUtil from "../../util/userUtil";
     import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: "UserList",
 
         components: {CountedItemList, Header, LoadingScreen},
 
-        mixins: [basicComponent],
+        mixins: [basicComponent, view],
 
         created() {
             this.onUrlChange();

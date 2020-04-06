@@ -442,6 +442,14 @@
         background: #617D89;
     }
 
+    .grey {
+        color: grey;
+    }
+
+    .background-grey {
+        background: grey;
+    }
+
     .title {
         text-align: center;
     }

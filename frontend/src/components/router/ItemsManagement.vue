@@ -3,7 +3,7 @@
         <LoadingScreen v-if="isLoading()"/>
         <div v-else>
             <CreateItemForm/>
-            <Header/>
+            <Header :editable="true" :items-management="true"/>
             <div v-if="isAdmin()" class="default-margin">
                 <label>
                     {{"Items status"}}

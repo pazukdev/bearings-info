@@ -16,13 +16,12 @@
                                             @hide-add-form="hideAddForm"
                                             @on-change="itemSelectOnChange"/>
                             </td>
-                            <td class="not-symmetrical-right"/>
-                            <td>
+                            <td style="text-align: right">
                                 <ButtonAdd v-if="!isEmpty(item)" @add-item="addItem"/>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3">
+                            <td colspan="2">
                                 <textarea v-model="itemComment"/>
                             </td>
                         </tr>

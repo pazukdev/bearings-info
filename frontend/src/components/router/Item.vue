@@ -1,11 +1,13 @@
 <template>
     <div>
+<!--        {{itemView.deletedReplacers}}<br>-->
+<!--        {{itemView.deletedChildren}}<br>-->
         <LoadingScreen v-if="isLoading()"/>
         <div v-else>
             <form id="item-form" @submit="submit">
                 <ItemName/>
                 <ItemMenu/>
-                <Header :item="true"/>
+                <Header :item="true" :editable="true"/>
 
                 <details v-if="arrayIsRendered(itemView.children)" open>
                     <summary>{{translate("Units / parts")}}</summary>

@@ -1,14 +1,11 @@
 <template>
     <div>
-<!--        {{itemView.children}}<br>-->
-<!--        {{itemView.idsToRemove}}-->
         <CountedItemList :item="true" :editable-comments="true" :sorted="!editMode"/>
         <AddPartForm :show-form="showForm" @hide-add-form="hideAddForm"/>
     </div>
 </template>
 
 <script>
-    import {mapState} from "vuex";
     import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
     import shared from "../../util/shared";
     import AddPartForm from "../form/AddPartForm";
@@ -18,6 +15,8 @@
     import ListHeader from "./section/ListHeader";
     import Header from "./section/Header";
     import CountedItemList from "./CountedItemList";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: "PartList",
@@ -36,12 +35,9 @@
             showForm: Boolean
         },
 
-        computed: {
-            ...mapState({
-                itemView: state => state.dictionary.itemView,
-                editMode: state => state.dictionary.editMode
-            }),
+        mixins: [basicComponent, view],
 
+        computed: {
             itemsListAsTables() {
                 return itemViewUtil.itemsListToTables(this.itemView.children);
             }
@@ -61,12 +57,6 @@
 
             hideAddForm() {
                 this.$emit("hide-add-form");
-            },
-
-            removeItem(item) {
-                itemViewUtil.removeItemFromItemList(this.itemView, item);
-                // shared.removeFromArray(item, this.itemView.children);
-                this.$emit("show-add-form");
             }
         }
     }

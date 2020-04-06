@@ -3,6 +3,7 @@
         <SearchForm :items-count="itemsCount"
                     :items-management-view="itemsManagementView"
                     @get-filter="getFilter"/>
+        <DeletedItemsList :array="getDeletedItems()" @restore="restore"/>
         <table id="parts-table">
             <tbody>
             <tr v-for="vehicleClass in itemsListAsTables()" v-if="vehicles">
@@ -53,7 +54,9 @@
                                     <ButtonNavigateToItem :part="item"/>
                                 </td>
                                 <td>
-                                    <ButtonDelete :item="item" @remove-item="removeItem"/>
+                                    <ButtonDelete :item="item"
+                                                  :items-management-view="itemsManagementView"
+                                                  @remove-item="removeItem"/>
                                 </td>
                             </tr>
                             </tbody>
@@ -69,7 +72,6 @@
 <script>
     import itemViewUtil from "../../util/itemViewUtil";
     import ButtonDelete from "../element/button/ButtonDelete";
-    import {mapState} from "vuex";
     import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
     import EditPanel from "../menu/EditPanel";
     import ItemDescription from "./section/ItemDescription";
@@ -77,13 +79,17 @@
     import shared from "../../util/shared";
     import arrayUtil from "../../util/arrayUtil";
     import SearchForm from "../form/SearchForm";
-    import dictionaryUtil from "../../util/dictionaryUtil";
     import imgUtil from "../../util/imgUtil";
     import userUtil from "../../util/userUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
+    import DeletedItemsList from "../element/DeletedItemsList";
+    import itemsList from "../../mixin/itemsList";
 
     export default {
         name: "ItemList",
         components: {
+            DeletedItemsList,
             SearchForm,
             EditableImg,
             ItemDescription,
@@ -92,25 +98,13 @@
             ButtonDelete},
 
         props: {
-            item: Boolean,
-            editableComments: Boolean,
             itemsManagementView: Boolean,
             usageView: Boolean,
             vehicles:Boolean,
-            itemViewProp: Object,
-            sorted: Boolean,
             urlFilter: String
         },
 
-        computed: {
-            ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                itemView: state => state.dictionary.itemView,
-                editMode: state => state.dictionary.editMode,
-                appLanguage: state => state.dictionary.appLanguage
-            })
-        },
+        mixins: [basicComponent, view, itemsList],
 
         data() {
             return {
@@ -179,14 +173,6 @@
 
             },
 
-            removeItem(item) {
-                itemViewUtil.removeItemFromItemList(this.itemView, item);
-            },
-
-            isEdit() {
-                return this.editableComments && this.editMode;
-            },
-
             hideTable(table) {
                 if (table.name.toLowerCase() === "guest" && !userUtil.isAdmin(this.itemView)) {
                     return true;
@@ -201,16 +187,8 @@
                 this.filter = filter;
             },
 
-            translate(text) {
-                return dictionaryUtil.translate(text);
-            },
-
             processImgUrl(imgUrl) {
                 return imgUtil.processUrl(imgUrl);
-            },
-
-            isEmpty(value) {
-                return shared.isEmpty(value);
             }
         }
     }

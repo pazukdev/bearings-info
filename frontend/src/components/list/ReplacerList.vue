@@ -1,18 +1,6 @@
 <template>
     <div style="text-align: center">
-        <table v-if="itemView.deleted.length > 0">
-            <tbody>
-            <tr v-for="item in itemView.deleted">
-                <td style="text-align: right">{{item.buttonText}}</td>
-                <td>{{translate("deleted")}}</td>
-                <td>
-                    <button type="button" @click="restore(item)">
-                        {{"Restore"}}
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <DeletedItemsList :array="getDeletedItems()" @restore="restore"/>
 
         <p class="green">{{translate(message)}}</p>
 
@@ -24,7 +12,10 @@
                         <tbody>
                         <tr v-if="editMode">
                             <td colspan="2" style="text-align: right">
-                                <ButtonDelete style="display: inline-block" :item="item" @remove-item="removeItem"/>
+                                <ButtonDelete style="display: inline-block"
+                                              :item="item"
+                                              :item-view-prop="true"
+                                              @remove-item="removeItem"/>
                             </td>
                         </tr>
                         <tr>
@@ -75,11 +66,12 @@
     import ButtonDelete from "../element/button/ButtonDelete";
     import basicComponent from "../../mixin/basicComponent";
     import view from "../../mixin/view";
+    import DeletedItemsList from "../element/DeletedItemsList";
 
     export default {
         name: "ReplacerList",
 
-        components: {ButtonDelete, ButtonNavigateToItem},
+        components: {DeletedItemsList, ButtonDelete, ButtonNavigateToItem},
 
         mixins: [basicComponent, view],
 
@@ -101,15 +93,19 @@
             },
 
             sortedReplacers() {
-                return this.getReplacers().slice().sort((a,b) => {
+                return this.getItems().slice().sort((a,b) => {
                     let aRating = a.likedUserIds.length - a.dislikedUserIds.length;
                     let bRating = b.likedUserIds.length - b.dislikedUserIds.length;
                     return aRating < bRating ? 1 : -1
                 });
             },
 
-            getReplacers() {
+            getItems() {
                 return this.itemView.replacersTable.replacers;
+            },
+
+            getDeletedItems() {
+                return this.itemView.deletedReplacers;
             },
 
             getLikedItemsIds() {
@@ -147,7 +143,7 @@
                 let rate = {
                     action: action,
                     itemId: item.itemId,
-                    replacers: this.getReplacers()
+                    replacers: this.getItems()
                 };
                 axios
                     .put(this.basicUrl
@@ -170,14 +166,14 @@
             },
 
             removeItem(item) {
-                this.itemView.deleted.push(item);
-                shared.removeFromArray(item, this.getReplacers());
+                this.getDeletedItems().push(item);
+                shared.removeFromArray(item, this.getItems());
                 this.$emit("show-add-form");
             },
 
             restore(item) {
-                this.getReplacers().push(item);
-                shared.removeFromArray(item, this.itemView.deleted);
+                this.getItems().push(item);
+                shared.removeFromArray(item, this.getDeletedItems());
             }
         }
     }

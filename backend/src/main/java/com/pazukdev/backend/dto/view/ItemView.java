@@ -60,6 +60,5 @@ public class ItemView extends AbstractView {
     private AdminMessage adminMessage;
     private List<UserActionDto> lastVehicles = new ArrayList<>();
     private List<UserActionDto> lastReplacers = new ArrayList<>();
-    private List<Object> deleted = new ArrayList<>();
 
 }

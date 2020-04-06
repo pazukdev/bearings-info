@@ -34,18 +34,21 @@
         methods: {
             getActualPossibleItemsList() {
                 let possibleItems;
+                let deletedItems;
                 let items;
+
                 if (this.replacer) {
                     possibleItems =  this.itemView.possibleReplacers;
+                    deletedItems = this.itemView.deletedReplacers;
                     items = this.itemView.replacersTable.replacers.slice();
-                    console.log(items.length);
-                    if (!this.isEmpty(this.itemView.deleted) && this.itemView.deleted.length > 0) {
-                        items = items.concat(this.itemView.deleted);
-                        console.log(items.length);
-                    }
                 } else {
                     possibleItems = this.itemView.possibleParts;
-                    items = this.itemView.children;
+                    deletedItems = this.itemView.deletedChildren;
+                    items = this.itemView.children.slice();
+                }
+
+                if (!this.isEmpty(deletedItems) && deletedItems.length > 0) {
+                    items = items.concat(deletedItems);
                 }
 
                 let actualPossibleItems = [];

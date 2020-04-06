@@ -1,6 +1,7 @@
 <template>
     <div>
         <SearchForm :items-count="itemsCount" @get-filter="getFilter"/>
+        <DeletedItemsList :array="getDeletedItems()" @restore="restore"/>
         <table>
             <tbody>
             <tr>
@@ -50,8 +51,10 @@
                                            title="Allowed: numbers, dot"/>
                                 </td>
                                 <td class="three-column-table-button-column">
-                                    <ButtonDelete :item="item" @remove-item="removeItem"
-                                                  :wishlist-view="wishListView"/>
+                                    <ButtonDelete :item="item"
+                                                  v-if="!(userListView && table.name === 'deleted')"
+                                                  :wishlist-view="wishListView"
+                                                  @remove-item="removeItem"/>
                                 </td>
                             </tr>
                             </tbody>
@@ -76,11 +79,14 @@
     import userUtil from "../../util/userUtil";
     import basicComponent from "../../mixin/basicComponent";
     import view from "../../mixin/view";
+    import DeletedItemsList from "../element/DeletedItemsList";
+    import itemsList from "../../mixin/itemsList";
 
     export default {
         name: "CountedItemList",
 
         components: {
+            DeletedItemsList,
             SearchForm,
             EditableImg,
             ItemDescription,
@@ -90,18 +96,14 @@
             ButtonDelete},
 
         props: {
-            item: Boolean,
-            editableComments: Boolean,
             userListView: Boolean,
             translateComments:Boolean,
             summaryView: Boolean,
             wishListView: Boolean,
-            itemViewProp: Object,
-            sorted: Boolean,
             items: Array
         },
 
-        mixins: [basicComponent, view],
+        mixins: [basicComponent, view, itemsList],
 
         data() {
             return {
@@ -118,20 +120,12 @@
                 if (this.summaryView) {
                     items = itemView.allChildren;
                 } else {
-                    items = itemView.children;
+                    items = this.getItems();
                 }
                 let opened = this.wishListView || this.userListView;
                 let result = itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
                 this.itemsCount = result.itemsCount;
                 return result.tables;
-            },
-
-            removeItem(item) {
-                itemViewUtil.removeItemFromItemList(this.itemView, item);
-            },
-
-            isEdit() {
-                return this.editableComments && this.editMode;
             },
 
             hideTable(table) {
