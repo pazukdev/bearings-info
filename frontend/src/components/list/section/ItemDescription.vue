@@ -1,8 +1,9 @@
 <template>
     <div v-if="item">
+        <DeletedItemsList :array="getDeletedRows()" :row="true" @restore="restore"/>
         <table id="item-description">
             <tbody>
-            <tr v-for="row in sortByWeight(itemView.header.rows)">
+            <tr v-for="row in sortByWeight(getRows())">
                 <td class="two-columns-table-left-column">
                     <table style="border-spacing: 0px" v-if="!rowParamIsEditable(row) && row.ids.length > 0">
                         <tr v-for="(id, index) in row.ids">
@@ -36,7 +37,7 @@
                     </div>
                 </td>
                 <td>
-                    <ButtonDelete v-if="rowIsDeletable(row)" :item="row" @remove-item="removeItem"/>
+                    <ButtonDelete v-if="rowIsDeletable(row)" :item="row" @remove-item="remove"/>
                 </td>
             </tr>
             <tr>
@@ -71,11 +72,13 @@
     import arrayUtil from "../../../util/arrayUtil";
     import basicComponent from "../../../mixin/basicComponent";
     import view from "../../../mixin/view";
+    import DeletedItemsList from "../../element/DeletedItemsList";
 
     export default {
         name: "ItemDescription",
 
         components: {
+            DeletedItemsList,
             ButtonAdd,
             ListHeader,
             ButtonDelete,
@@ -109,7 +112,8 @@
                     "Weight, g",
                     "Fuel capacity, L",
                     "Max speed, kmh"
-                ]
+                ],
+                deletedRows: []
             }
         },
 
@@ -136,7 +140,7 @@
                         message: ""
                     };
 
-                    this.itemView.header.rows.push(newHeaderRow);
+                    this.getRows().push(newHeaderRow);
 
                     this.parameter = "";
                     this.value = "";
@@ -148,7 +152,7 @@
             },
 
             rowIsInList(parameter) {
-                return shared.isInArray(parameter, this.itemView.header.rows);
+                return shared.isInArray(parameter, this.getRows());
             },
 
             isShowInfoButton(itemId) {
@@ -159,8 +163,22 @@
                 return this.editMode && deletable;
             },
 
-            removeItem(row) {
-                shared.removeFromArray(row, this.itemView.header.rows);
+            remove(row) {
+                shared.removeFromArray(row, this.getRows());
+                this.getDeletedRows().push(row);
+            },
+
+            restore(row) {
+                shared.removeFromArray(row, this.getDeletedRows());
+                this.getRows().push(row);
+            },
+
+            getRows() {
+                return this.itemView.header.rows;
+            },
+
+            getDeletedRows() {
+                return this.deletedRows;
             },
 
             rowParamIsEditable(row) {

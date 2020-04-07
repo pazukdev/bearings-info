@@ -4,7 +4,7 @@
             <tbody>
             <tr v-for="(item, index) in array">
                 <td>{{index + 1}}</td>
-                <td>{{item.buttonText}}</td>
+                <td>{{getText(item)}}</td>
                 <td>{{translate("deleted")}}</td>
                 <td>
                     <button type="button" @click="$emit('restore', item)">
@@ -25,7 +25,19 @@
 
         mixins: [basicComponent],
 
-        props: {array : Array}
+        props: {
+            array : Array,
+            row: Boolean
+        },
+
+        methods: {
+            getText(item) {
+                if (this.row) {
+                    return item.parameter + " " + this.translate("param");
+                }
+                return item.buttonText;
+            }
+        }
     }
 </script>
 
