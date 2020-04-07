@@ -59,6 +59,7 @@
     import AppGroupsSection from "./components/AppGroupsSection";
     import basicComponent from "./mixin/basicComponent";
     import view from "./mixin/view";
+    import axios from "axios";
 
     export default {
         name: 'app',
@@ -97,19 +98,10 @@
             if (!this.isAuthorized()) {
                 this.loginAsGuest();
             }
-            // this.setLangsAndDictionary();
+            this.getCountries();
         },
 
         methods: {
-            setLangsAndDictionary() {
-                console.log("App: setLangsAndDictionary()");
-                if (this.langs.length < 1) {
-                    let urlLang = this.$route.params.lang;
-                    console.log("App: axiosUtil.setLangsAndDictionary(urlLang)");
-                    axiosUtil.setLangsAndDictionary(urlLang);
-                }
-            },
-
             setBasicUrl() {
                 let hostname = window.location.hostname;
                 let basicUrl;
@@ -119,6 +111,15 @@
                     basicUrl = "https://bearings-info.herokuapp.com";
                 }
                 this.$store.dispatch("setBasicUrl", basicUrl);
+            },
+
+            getCountries() {
+                console.log("get countries list");
+                axios
+                    .get("https://restcountries.eu/rest/v2/all")
+                    .then(response => {
+                        this.$store.dispatch("setCountries", response.data)
+                    })
             },
 
             loginAsGuest() {

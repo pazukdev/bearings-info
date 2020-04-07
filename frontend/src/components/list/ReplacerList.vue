@@ -25,21 +25,21 @@
                             <td style="text-align: right">
                                 <button type="button"
                                         class="round-button"
-                                        :title="translate(isLiked(item) ? 'Cancel' : 'Like')"
+                                        :title="getLikeTitle(item, true)"
                                         @click="rate(item, 'like')">
                                     <i :class="{'fa fa-thumbs-up': true, 'green': isLiked(item)}"/>
                                 </button>
-                                <span :class="{'green': isColored(item.likedUserIds.length)}">
-                                    {{item.likedUserIds.length}}
+                                <span :class="{'green': isColored(getLikedUsers(item).length)}">
+                                    {{getLikedUsers(item).length}}
                                 </span>
                                 <button type="button"
                                         class="round-button"
-                                        :title="translate(isDisliked(item) ? 'Cancel' : 'Dislike')"
+                                        :title="getLikeTitle(item, false)"
                                         @click="rate(item, 'dislike')">
                                     <i :class="{'fa fa-thumbs-down': true, 'red': isDisliked(item)}"/>
                                 </button>
-                                <span :class="{'red': isColored(item.dislikedUserIds.length)}">
-                                    {{0 - item.dislikedUserIds.length}}
+                                <span :class="{'red': isColored(getDislikedUsers(item).length)}">
+                                    {{0 - getDislikedUsers(item).length}}
                                 </span>
                             </td>
                         </tr>
@@ -67,6 +67,7 @@
     import basicComponent from "../../mixin/basicComponent";
     import view from "../../mixin/view";
     import DeletedItemsList from "../element/DeletedItemsList";
+    import itemDtoUtil from "../../util/itemDtoUtil";
 
     export default {
         name: "ReplacerList",
@@ -77,7 +78,8 @@
 
         computed: {
             ...mapState({
-                userData: state => state.dictionary.userData
+                userData: state => state.dictionary.userData,
+                countries: state => state.dictionary.countries
             })
         },
 
@@ -88,14 +90,48 @@
         },
 
         methods: {
+            getLikeTitle(item, like) {
+                let header = this.isDisliked(item) ? 'Cancel' : 'Dislike';
+                if (like) {
+                    header = this.isLiked(item) ? 'Cancel' : 'Like';
+                }
+                header = this.translate(header);
+                let users = "";
+                let array = like ? this.getLikedUsers(item) : this.getDislikedUsers(item);
+                if (array.length === 0) {
+                    return header;
+                }
+                for (let i = 0; i < array.length; i++) {
+                    let countryAlpha2Code = array[i].comment;
+                    let countryName = this.getCountryName(countryAlpha2Code);
+                    let userCountryInfo = this.isEmpty(countryName)
+                        ? ""
+                        : " " + this.translate("from") + " " + this.translate(countryName);
+                    users += array[i].itemName + userCountryInfo + "\n";
+                }
+                return header + "\n- - - - -\n" + users;
+            },
+
+            getCountryName(alpha2Code) {
+                return shared.getCountryName(alpha2Code);
+            },
+
+            getLikedUsers(item) {
+                return item.likedUsers;
+            },
+
+            getDislikedUsers(item) {
+                return item.dislikedUsers;
+            },
+
             isColored(likesCount) {
                 return likesCount > 0;
             },
 
             sortedReplacers() {
                 return this.getItems().slice().sort((a,b) => {
-                    let aRating = a.likedUserIds.length - a.dislikedUserIds.length;
-                    let bRating = b.likedUserIds.length - b.dislikedUserIds.length;
+                    let aRating = this.getLikedUsers(a).length - this.getDislikedUsers(a).length;
+                    let bRating = this.getLikedUsers(b).length - this.getDislikedUsers(b).length;
                     return aRating < bRating ? 1 : -1
                 });
             },
@@ -108,24 +144,16 @@
                 return this.itemView.deletedReplacers;
             },
 
-            getLikedItemsIds() {
-                return this.itemView.likeList.likedItemsIds;
-            },
-
-            getDislikedItemsIds() {
-                return this.itemView.likeList.dislikedItemsIds;
-            },
-
             isRated(item) {
                 return this.isLiked(item) || this.isDisliked(item);
             },
 
             isLiked(item) {
-                return shared.isInArray(this.userData.id, item.likedUserIds);
+                return itemDtoUtil.isInArrayById(this.userData.id, this.getLikedUsers(item));
             },
 
             isDisliked(item) {
-                return shared.isInArray(this.userData.id, item.dislikedUserIds);
+                return itemDtoUtil.isInArrayById(this.userData.id, this.getDislikedUsers(item));
             },
 
             rate(item, actionType) {

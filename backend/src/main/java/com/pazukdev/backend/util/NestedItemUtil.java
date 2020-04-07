@@ -3,10 +3,13 @@ package com.pazukdev.backend.util;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.Item;
+import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.createBasicNestedItemDto;
 import static com.pazukdev.backend.util.CategoryUtil.Category;
@@ -47,6 +50,18 @@ public class NestedItemUtil {
                 view.getPossibleReplacers().add(dto);
             }
         }
+    }
+
+    public static Set<NestedItemDto> getLikedUserDtos(final Set<UserEntity> users) {
+        final Set<NestedItemDto> userDtos = new HashSet<>();
+        for (final UserEntity user : users) {
+            final NestedItemDto userDto = new NestedItemDto();
+            userDto.setItemId(user.getId());
+            userDto.setItemName(user.getName());
+            userDto.setComment(user.getCountry());
+            userDtos.add(userDto);
+        }
+        return userDtos;
     }
 
 }

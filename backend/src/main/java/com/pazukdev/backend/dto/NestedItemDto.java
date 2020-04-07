@@ -26,8 +26,8 @@ public class NestedItemDto extends AbstractDto {
     private Long creatorId;
     private Integer rating = 0;
 
-    private Set<Long> likedUserIds = new HashSet<>();
-    private Set<Long> dislikedUserIds = new HashSet<>();
+    private Set<NestedItemDto> likedUsers = new HashSet<>();
+    private Set<NestedItemDto> dislikedUsers = new HashSet<>();
 
     private String buttonText = "-";
 

@@ -13,7 +13,8 @@ const state = {
     authorization: "",
     userData: {id: 1, name: "guest", role: "GUEST", rating: 0, wishListId: 1},
     itemView: "",
-    errorMessage: ""
+    errorMessage: "",
+    countries: []
 };
 
 const actions = {
@@ -63,6 +64,10 @@ const actions = {
 
     setErrorMessage: ({commit}, context) => {
         commit("setErrorMessage", context);
+    },
+
+    setCountries: ({commit}, context) => {
+        commit("setCountries", context);
     }
 };
 
@@ -117,6 +122,10 @@ const mutations = {
 
     setErrorMessage(state, message) {
         state.errorMessage = message;
+    },
+
+    setCountries(state, countries) {
+        state.countries = countries;
     }
 };
 

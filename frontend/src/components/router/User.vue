@@ -156,6 +156,7 @@
     import LoadingScreen from "../special/LoadingScreen";
     import basicComponent from "../../mixin/basicComponent";
     import view from "../../mixin/view";
+    import {mapState} from "vuex";
 
     export default {
         name: "User",
@@ -163,12 +164,17 @@
 
         mixins: [basicComponent, view],
 
+        computed: {
+            ...mapState({
+                countries: state => state.dictionary.countries
+            })
+        },
+
         data() {
             return {
                 user: "",
                 validationMessages: [],
                 deleteOption: "",
-                countries: [],
                 countryName: "",
                 changePasswordOpened: false,
                 statuses: ["active", "blocked", "deleted"],
@@ -178,7 +184,6 @@
 
         created() {
             this.onUrlChange();
-            this.getCountries();
         },
 
         watch: {
@@ -320,28 +325,8 @@
                     });
             },
 
-            getCountries() {
-                console.log("get countries list");
-                axios
-                    .get("https://restcountries.eu/rest/v2/all")
-                    .then(response => {
-                        this.countries = response.data;
-                    })
-            },
-
             getCountryName(alpha2Code) {
-                console.log("get country name for: " + alpha2Code);
-                if (alpha2Code === null) {
-                    this.countryName = "-";
-                    return;
-                }
-                axios
-                    .get("https://restcountries.eu/rest/v2/alpha/" + alpha2Code)
-                    .then(response => {
-                        let country = response.data;
-                        console.log("country name: " + country.name);
-                        this.countryName = country.name;
-                    })
+                this.countryName = shared.getCountryName(alpha2Code);
             },
 
             isLoading() {

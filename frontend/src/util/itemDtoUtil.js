@@ -38,5 +38,14 @@ export default {
 
         let category = item.itemCategory;
         return category.toLowerCase() === 'seal' || category.toLowerCase() === 'spark plug';
+    },
+
+    isInArrayById(itemId, items) {
+        for (let i=0; i < items.length; i++) {
+            if (items[i].itemId === itemId) {
+                return true;
+            }
+        }
+        return false;
     }
 }

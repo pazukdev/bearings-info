@@ -9,7 +9,6 @@ import lombok.Getter;
 
 import java.util.Objects;
 
-import static com.pazukdev.backend.util.CollectionUtil.collectIds;
 import static com.pazukdev.backend.util.UserActionUtil.ActionType;
 import static com.pazukdev.backend.util.UserActionUtil.processRateItemAction;
 
@@ -51,8 +50,8 @@ public class RateUtil {
 
         for (final NestedItemDto replacer : rate.getReplacers()) {
             if (Objects.equals(replacer.getItemId(), item.getId())) {
-                replacer.setLikedUserIds(collectIds(item.getLikedUsers()));
-                replacer.setDislikedUserIds(collectIds(item.getDislikedUsers()));
+                replacer.setLikedUsers(NestedItemUtil.getLikedUserDtos(item.getLikedUsers()));
+                replacer.setDislikedUsers(NestedItemUtil.getLikedUserDtos(item.getDislikedUsers()));
             }
         }
 

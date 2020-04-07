@@ -8,6 +8,7 @@ import com.pazukdev.backend.entity.Replacer;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.UserService;
 import com.pazukdev.backend.util.ChildItemUtil;
+import com.pazukdev.backend.util.NestedItemUtil;
 import com.pazukdev.backend.util.UserUtil;
 
 import java.util.List;
@@ -111,12 +112,8 @@ public class NestedItemDtoFactory {
         dto.setItemId(item.getId());
         dto.setItemName(item.getName());
         dto.setItemCategory(item.getCategory());
-        for (final UserEntity user : item.getLikedUsers()) {
-            dto.getLikedUserIds().add(user.getId());
-        }
-        for (final UserEntity user : item.getDislikedUsers()) {
-            dto.getDislikedUserIds().add(user.getId());
-        }
+        dto.setLikedUsers(NestedItemUtil.getLikedUserDtos(item.getLikedUsers()));
+        dto.setDislikedUsers(NestedItemUtil.getLikedUserDtos(item.getDislikedUsers()));
         dto.setButtonText(createButtonText(item, manufacturer));
         if (item.getCategory().equals(Category.SEAL)) {
             dto.setSize(descriptionMap.get(Parameter.SIZE));
