@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/file")
 @RequiredArgsConstructor
-@Api(tags = "File Controller", value = "API methods for files")
+@Api(tags = "API methods for files")
 @CrossOrigin
 public class FileController {
 

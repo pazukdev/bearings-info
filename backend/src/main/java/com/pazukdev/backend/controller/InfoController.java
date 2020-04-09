@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/info")
 @RequiredArgsConstructor
-@Api(tags = "Info Controller", value = "Information for users")
+@Api(tags = "Information for users")
 @CrossOrigin
 public class InfoController {
 

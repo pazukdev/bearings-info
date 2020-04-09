@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/item")
 @RequiredArgsConstructor
-@Api(tags = "Item Controller", value = "API methods for items")
+@Api(tags = "API methods for items")
 @CrossOrigin
 public class ItemController {
 
