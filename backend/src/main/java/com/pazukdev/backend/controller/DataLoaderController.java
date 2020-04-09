@@ -6,6 +6,7 @@ import com.pazukdev.backend.service.UserService;
 import com.pazukdev.backend.util.UserUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
@@ -27,10 +28,12 @@ public class DataLoaderController {
 
     private final DataLoader dataLoader;
 
-    @PutMapping("/update/{initial-db-population}")
+    @PutMapping("/update/{initialDBPopulation}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update all items using Google Sheets")
-    public void updateAll(@PathVariable(name = "initial-db-population") final boolean initialDBPopulation) {
+    public void updateAll(
+            @ApiParam(defaultValue = "false", required = true)
+            @PathVariable final boolean initialDBPopulation) {
         dataLoader.populate(initialDBPopulation);
     }
 
