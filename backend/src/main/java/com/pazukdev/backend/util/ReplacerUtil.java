@@ -8,20 +8,20 @@ import com.pazukdev.backend.entity.Replacer;
 import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.ItemService;
-import com.pazukdev.backend.service.TransitiveItemService;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.pazukdev.backend.service.TransitiveItemUtil.findFirstByCategoryAndName;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 
 public class ReplacerUtil {
 
     public static List<Replacer> createReplacers(final TransitiveItem transitiveItem,
                                                  final ItemService itemService,
-                                                 final TransitiveItemService transitiveItemService,
+                                                 final List<TransitiveItem> transitiveItems,
                                                  final List<String> infoCategories,
                                                  final List<UserEntity> users,
                                                  final UserEntity admin) {
@@ -43,12 +43,12 @@ public class ReplacerUtil {
                 replacerName = replacerData;
             }
             String category = transitiveItem.getCategory();
-            TransitiveItem transitiveReplacerItem = transitiveItemService.find(category, replacerName);
+            TransitiveItem transitiveReplacerItem = findFirstByCategoryAndName(category, replacerName, transitiveItems);
             if (transitiveReplacerItem == null && category.equals("Rubber part")) {
                 category = "Bearing";
-                transitiveReplacerItem = transitiveItemService.find(category, replacerName);
+                transitiveReplacerItem = findFirstByCategoryAndName(category, replacerName, transitiveItems);
             }
-            final Item replacerItem = itemService.create(transitiveReplacerItem, infoCategories, users, admin);
+            final Item replacerItem = itemService.convertTransitiveItemToItem(transitiveReplacerItem, transitiveItems, infoCategories, users, admin, true);
 
             final Replacer replacer = new Replacer();
             replacer.setName(NestedItemUtil.createName(transitiveItem.getName(), replacerName));

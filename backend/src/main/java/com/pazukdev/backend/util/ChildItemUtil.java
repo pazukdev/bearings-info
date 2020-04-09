@@ -7,7 +7,7 @@ import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.ItemService;
-import com.pazukdev.backend.service.TransitiveItemService;
+import com.pazukdev.backend.service.TransitiveItemUtil;
 
 import java.util.*;
 
@@ -18,7 +18,7 @@ public class ChildItemUtil {
     public static List<ChildItem> createParts(final TransitiveItem parent,
                                               final Map<String, String> childItemsDescription,
                                               final ItemService itemService,
-                                              final TransitiveItemService transitiveItemService,
+                                              final List<TransitiveItem> transitiveItems,
                                               final List<String> infoCategories,
                                               final List<UserEntity> users,
                                               final UserEntity admin) {
@@ -29,7 +29,7 @@ public class ChildItemUtil {
                 final String[] names = entry.getValue().split("; ");
                 for (final String name : names) {
                     final ChildItem child
-                            = createChild(parent, name, category, itemService, transitiveItemService, infoCategories, users, admin);
+                            = createChild(parent, name, category, itemService, transitiveItems, infoCategories, users, admin);
                     if (child != null) {
                         childItems.add(child);
                     }
@@ -37,7 +37,7 @@ public class ChildItemUtil {
             } else {
                 final String name = entry.getValue();
                 final ChildItem child
-                        = createChild(parent, name, category, itemService, transitiveItemService, infoCategories, users, admin);
+                        = createChild(parent, name, category, itemService, transitiveItems, infoCategories, users, admin);
                 if (child != null) {
                     childItems.add(child);
                 }
@@ -48,7 +48,6 @@ public class ChildItemUtil {
     }
 
     public static Set<ChildItem> createChildrenFromItemView(final ItemView view, final ItemService itemService) {
-//        final List<NestedItemDto> preparedItems = prepareNestedItemDtosToConverting(view.getChildren());
         final List<NestedItemDto> preparedItems = view.getChildren();
         final String parentName = getParentName(view, itemService);
 
@@ -74,7 +73,7 @@ public class ChildItemUtil {
                                          final String value,
                                          final String category,
                                          final ItemService itemService,
-                                         final TransitiveItemService transitiveItemService,
+                                         final List<TransitiveItem> transitiveItems,
                                          final List<String> infoCategories,
                                          final List<UserEntity> users,
                                          final UserEntity admin) {
@@ -92,9 +91,9 @@ public class ChildItemUtil {
             quantity = category.equals(CategoryUtil.Category.SPARK_PLUG) ? "2" : "1";
         }
 
-        final TransitiveItem oldChild = transitiveItemService.find(category, name);
+        final TransitiveItem oldChild = TransitiveItemUtil.findFirstByCategoryAndName(category, name, transitiveItems);
         if (oldChild != null) {
-            final Item child = itemService.create(oldChild, infoCategories, users, admin);
+            final Item child = itemService.convertTransitiveItemToItem(oldChild, transitiveItems, infoCategories, users, admin, true);
 
             final ChildItem childItem = new ChildItem();
             childItem.setName(getName(parent.getName(), name));

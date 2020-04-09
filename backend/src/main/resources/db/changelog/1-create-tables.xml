@@ -5,26 +5,6 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="create_transitive_item_table" author="sviarkaltsau">
-        <createTable tableName="transitive_item">
-            <column name="id" type="bigserial" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="name" type="varchar(255)"/>
-            <column name="category" type="varchar(255)"/>
-            <column name="image" type="varchar(255)"/>
-            <column name="status" type="varchar(255)"/>
-            <column name="description" type="varchar(1000)"/>
-            <column name="replacer" type="varchar(1000)"/>
-            <column name="wiki" type="varchar(1000)"/>
-            <column name="website" type="varchar(1000)"/>
-            <column name="manual" type="varchar(1000)"/>
-            <column name="parts" type="varchar(1000)"/>
-            <column name="drawings" type="varchar(1000)"/>
-            <column name="website_lang" type="varchar(2)"/>
-        </createTable>
-    </changeSet>
-
     <changeSet id="create_item_table" author="sviarkaltsau">
         <createTable tableName="item">
             <column name="id" type="bigserial" autoIncrement="true">

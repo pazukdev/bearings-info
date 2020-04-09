@@ -35,7 +35,6 @@ import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
 @Service
 public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
-    private final TransitiveItemService transitiveItemService;
     private final UserService userService;
     private final ChildItemRepository childItemRepository;
     private final UserActionRepository userActionRepository;
@@ -51,7 +50,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     public ItemService(final ItemRepository itemRepository,
                        final ItemConverter converter,
-                       final TransitiveItemService transitiveItemService,
                        final ChildItemRepository childItemRepository,
                        final UserService userService,
                        final UserActionRepository userActionRepository,
@@ -59,7 +57,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                        final ReplacerConverter replacerConverter,
                        final AdminMessageRepository adminMessageRepository) {
         super(itemRepository, converter);
-        this.transitiveItemService = transitiveItemService;
         this.childItemRepository = childItemRepository;
         this.userService = userService;
         this.userActionRepository = userActionRepository;
@@ -116,37 +113,41 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public Item create(final TransitiveItem transitiveItem,
-                       final List<String> infoCategories,
-                       final List<UserEntity> users,
-                       final UserEntity admin) {
+    public Item convertTransitiveItemToItem(final TransitiveItem transitiveItem,
+                                            final List<TransitiveItem> transitiveItems,
+                                            final List<String> infoCategories,
+                                            final List<UserEntity> users,
+                                            final UserEntity admin,
+                                            final boolean initialDBPopulation) {
         final String category = transitiveItem.getCategory();
         final String name = transitiveItem.getName();
 
-        final Item alreadyExistingItem = findFirstByCategoryAndName(category, name);
-        if (alreadyExistingItem != null) {
-            return alreadyExistingItem;
+        Item item = findFirstByCategoryAndName(category, name);
+        if (item != null && initialDBPopulation) {
+            return item;
+        }
+        if (item == null) {
+            item = new Item();
         }
 
-        final TransitiveItemDescriptionMap map = createDescriptionMap(transitiveItem, transitiveItemService, infoCategories);
+        final TransitiveItemDescriptionMap map = createDescriptionMap(transitiveItem, transitiveItems, infoCategories);
         final Map<String, String> items = new HashMap<>(map.getItems());
-        final List<ChildItem> childItems = createParts(transitiveItem, items, this, transitiveItemService, infoCategories, users, admin);
-        final List<Replacer> replacers = createReplacers(transitiveItem, this, transitiveItemService, infoCategories, users, admin);
+        final List<ChildItem> childItems = createParts(transitiveItem, items, this, transitiveItems, infoCategories, users, admin);
+        final List<Replacer> replacers = createReplacers(transitiveItem, this, transitiveItems, infoCategories, users, admin);
 
-        final Item newItem = new Item();
-        newItem.setName(name);
-        newItem.setCategory(category);
-        newItem.setStatus(transitiveItem.getStatus());
-        newItem.setDescription(createItemDescription(map));
-        newItem.getChildItems().addAll(childItems);
-        newItem.getReplacers().addAll(replacers);
-        newItem.setCreatorId(admin.getId());
-        newItem.setUserActionDate(DateUtil.now());
-        newItem.setImg(transitiveItem.getImage());
-        LinkUtil.addLinksToItem(newItem, transitiveItem);
+        item.setName(name);
+        item.setCategory(category);
+        item.setStatus(transitiveItem.getStatus());
+        item.setDescription(createItemDescription(map));
+        item.getChildItems().addAll(childItems);
+        item.getReplacers().addAll(replacers);
+        item.setCreatorId(admin.getId());
+        item.setUserActionDate(DateUtil.now());
+        item.setImg(transitiveItem.getImage());
+        LinkUtil.addLinksToItem(item, transitiveItem);
 
-        itemRepository.save(newItem);
-        return newItem;
+        itemRepository.save(item);
+        return item;
     }
 
     private String createItemDescription(final TransitiveItemDescriptionMap descriptionMap) {

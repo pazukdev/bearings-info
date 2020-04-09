@@ -1,5 +1,6 @@
 package com.pazukdev.backend.controller;
 
+import com.pazukdev.backend.dataloader.DataLoader;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.service.ItemService;
 import io.swagger.annotations.Api;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class ItemController {
 
     private final ItemService service;
+    private final DataLoader dataLoader;
 
     @GetMapping("/view/item/{id}/{userName}/{language}")
     @ResponseStatus(HttpStatus.OK)

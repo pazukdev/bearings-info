@@ -8,7 +8,7 @@ import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.service.ItemService;
-import com.pazukdev.backend.service.TransitiveItemService;
+import com.pazukdev.backend.service.TransitiveItemUtil;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -102,7 +102,7 @@ public class ItemUtil {
     }
 
     public static TransitiveItemDescriptionMap createDescriptionMap(final TransitiveItem item,
-                                                                    final TransitiveItemService service,
+                                                                    final List<TransitiveItem> transitiveItems,
                                                                     final List<String> infoCategories) {
         final Map<String, String> unsortedMap = toMap(item.getDescription());
         final TransitiveItemDescriptionMap itemDescriptionMap = new TransitiveItemDescriptionMap();
@@ -112,7 +112,7 @@ public class ItemUtil {
             final String value = StringUtils.trim(entry.getValue());
             if (isInfo(parameter, infoCategories)) {
                 itemDescriptionMap.getParameters().put(parameter, value);
-            } else if (service.isPart(parameter, infoCategories)) {
+            } else if (TransitiveItemUtil.isPart(parameter, transitiveItems, infoCategories)) {
                 itemDescriptionMap.getItems().put(parameter, value);
             } else {
                 itemDescriptionMap.getParameters().put(parameter, value);

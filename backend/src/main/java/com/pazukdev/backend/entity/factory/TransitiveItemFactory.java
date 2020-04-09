@@ -2,7 +2,6 @@ package com.pazukdev.backend.entity.factory;
 
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.entity.TransitiveItem;
-import com.pazukdev.backend.service.TransitiveItemService;
 import com.pazukdev.backend.tablemodel.TableRow;
 import com.pazukdev.backend.util.FileUtil;
 import lombok.Data;
@@ -24,8 +23,6 @@ import static com.pazukdev.backend.util.CategoryUtil.isDescriptionIgnored;
 @ToString(callSuper = true)
 @Component
 public class TransitiveItemFactory extends AbstractEntityFactory<TransitiveItem> {
-
-    private final TransitiveItemService service;
 
     @Override
     protected String[] getCSVFilesPaths() {
