@@ -69,6 +69,29 @@ public class DataLoader implements ApplicationRunner {
         LOG.info("DB created in " + (int) time + " seconds");
     }
 
+    public void updateItem(final String category, final String name) {
+        final String itemInfo = "item category=" + category + " name=" + name;
+        final List<String> infoCategories = FileUtil.readGoogleDocDocument(FileUtil.FileId.INFO_CATEGORY);
+        final List<UserEntity> users = itemService.getUserService().findAll();
+        final List<TransitiveItem> transitiveItems = createStubReplacers(transitiveItemFactory.createEntitiesFromCSVFile());
+        final UserEntity admin = itemService.getUserService().findAdmin(users);
+        for (final TransitiveItem transitiveItem : transitiveItems) {
+            if (transitiveItem.getCategory().equalsIgnoreCase(category)
+                    && transitiveItem.getName().equalsIgnoreCase(name)) {
+                itemService.convertTransitiveItemToItem(
+                        transitiveItem,
+                        transitiveItems,
+                        infoCategories,
+                        users,
+                        admin,
+                        false);
+                LOG.info("Updated successfully: " + itemInfo);
+                return;
+            }
+        }
+        LOG.warn("Not updated: " + itemInfo + " not found");
+    }
+
     private List<TransitiveItem> createStubReplacers(final List<TransitiveItem> items) {
         final List<TransitiveItem> stubReplacers = new ArrayList<>();
         for (final TransitiveItem item : items) {

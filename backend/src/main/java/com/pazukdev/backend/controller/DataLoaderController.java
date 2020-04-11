@@ -28,7 +28,15 @@ public class DataLoaderController {
 
     private final DataLoader dataLoader;
 
-    @PutMapping("/update/{initialDBPopulation}")
+    @PutMapping("/update/{itemCategory}/{itemName}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update item using data from Google Sheets table")
+    public void update(@PathVariable final String itemCategory,
+                       @PathVariable final String itemName) {
+        dataLoader.updateItem(itemCategory, itemName);
+    }
+
+    @PutMapping("/update-all/{initialDBPopulation}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update all items using Google Sheets")
     public void updateAll(

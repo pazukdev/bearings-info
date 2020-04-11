@@ -2,12 +2,13 @@ package com.pazukdev.backend.converter;
 
 import com.pazukdev.backend.dto.LinkDto;
 import com.pazukdev.backend.entity.Link;
-import com.pazukdev.backend.util.LinkUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static com.pazukdev.backend.entity.factory.LinkFactory.LinkType;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -27,7 +28,7 @@ public class LinkConverter {
         link.setId(dto.getId());
         link.setUrl(dto.getUrl());
         link.setCountryCode(dto.getCountryCode());
-        link.setType(LinkUtil.LinkType.BUY);
+        link.setType(LinkType.BUY);
         return link;
     }
 

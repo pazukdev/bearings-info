@@ -11,22 +11,13 @@ import org.apache.commons.validator.routines.UrlValidator;
 import java.util.Set;
 
 import static com.pazukdev.backend.converter.LinkConverter.convert;
+import static com.pazukdev.backend.entity.factory.LinkFactory.LinkType;
 import static com.pazukdev.backend.entity.factory.LinkFactory.createLink;
 import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
 import static com.pazukdev.backend.util.UserActionUtil.ActionType;
 import static com.pazukdev.backend.util.UserActionUtil.processLinkAction;
 
 public class LinkUtil {
-
-    public static class LinkType {
-        public static final String BUY = "buy";
-        public static final String DRAWINGS = "drawings";
-        public static final String IMG = "img";
-        public static final String MANUAL = "manual";
-        public static final String PARTS_CATALOG = "parts catalog";
-        public static final String WEBSITE = "website";
-        public static final String WIKI = "wiki";
-    }
 
     public static void updateItemLinks(final Item target,
                                        final ItemView source,
@@ -96,7 +87,7 @@ public class LinkUtil {
             }
         } else {
             if (!isEmpty(linkUrl)) {
-                final Link newLink = createLink(linkType, linkUrl);
+                final Link newLink = createLink(linkType, linkUrl, "-");
                 target.getLinks().add(newLink);
                 if (user != null) {
                     processLinkAction(ActionType.ADD, linkType, target, user, service);
@@ -146,36 +137,8 @@ public class LinkUtil {
         return null;
     }
 
-    public static Link getLink(final String linkType,
-                               final String countryCode,
-                               final Set<Link> itemLinks) {
-        if (isEmpty(countryCode)) {
-            return null;
-        }
-        for (final Link link : itemLinks) {
-            if (link == null) {
-                continue;
-            }
-            final String type = link.getType();
-            final String code = link.getCountryCode();
-            if (isEmpty(code) || isEmpty(type)) {
-                continue;
-            }
-            if (type.equalsIgnoreCase(linkType) && code.equalsIgnoreCase(countryCode)) {
-                return link;
-            }
-        }
-        return null;
-    }
-
     public static boolean isUrl(final String s) {
         return UrlValidator.getInstance().isValid(s);
     }
-
-//    public static void addSetToSet(final Set<Link> toAdd, final Set<Link> addTo) {
-//        for (final Link link : toAdd) {
-//            link.addTo(addTo, true);
-//        }
-//    }
 
 }

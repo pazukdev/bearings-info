@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.pazukdev.backend.util.LinkUtil.LinkType;
+import static com.pazukdev.backend.entity.factory.LinkFactory.LinkType;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -107,6 +107,7 @@ public class Item extends AbstractEntity {
         if (imgLink == null) {
             imgLink = new Link();
             imgLink.setType(LinkType.IMG);
+            imgLink.setCountryCode("-");
         }
         imgLink.setUrl(img);
         links.add(imgLink);

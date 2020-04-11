@@ -20,12 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+import static com.pazukdev.backend.entity.factory.LinkFactory.LinkType;
 import static com.pazukdev.backend.util.CategoryUtil.Category.MATERIAL;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
 import static com.pazukdev.backend.util.CategoryUtil.isInfo;
 import static com.pazukdev.backend.util.ChildItemUtil.createParts;
 import static com.pazukdev.backend.util.ItemUtil.*;
-import static com.pazukdev.backend.util.LinkUtil.LinkType;
 import static com.pazukdev.backend.util.LinkUtil.updateLink;
 import static com.pazukdev.backend.util.ReplacerUtil.createReplacers;
 import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
