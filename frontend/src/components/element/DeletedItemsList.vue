@@ -19,6 +19,7 @@
 
 <script>
     import basicComponent from "../../mixin/basicComponent";
+    import shared from "../../util/shared";
 
     export default {
         name: "DeletedItemsList",
@@ -27,15 +28,23 @@
 
         props: {
             array : Array,
-            row: Boolean
+            row: Boolean,
+            buyLink: Boolean
         },
 
         methods: {
             getText(item) {
+                if (this.buyLink) {
+                    return this.translate(this.getCountryName(item.countryCode));
+                }
                 if (this.row) {
                     return item.parameter + " " + this.translate("param");
                 }
                 return item.buttonText;
+            },
+
+            getCountryName(alpha2Code) {
+                return shared.getCountryName(alpha2Code);
             }
         }
     }

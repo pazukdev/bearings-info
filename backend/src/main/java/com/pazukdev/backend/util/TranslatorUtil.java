@@ -21,6 +21,7 @@ import java.util.*;
 
 import static com.pazukdev.backend.dto.DictionaryData.getDictionaryFromFile;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
+import static com.pazukdev.backend.validator.CodeValidator.isLangCodeValid;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -37,7 +38,7 @@ public class TranslatorUtil {
                                  final String langTo,
                                  final ItemView view,
                                  final boolean addToDictionary) throws Exception {
-        if (!isValid(langFrom) || !isValid(langTo)) {
+        if (!isLangCodeValid(langFrom) || !isLangCodeValid(langTo)) {
             return;
         }
         final String lang = !langFrom.equals("en") ? langFrom : langTo;
@@ -490,25 +491,6 @@ public class TranslatorUtil {
         final JSONArray jsonArray2 = (JSONArray) jsonArray.get(0);
         final JSONArray jsonArray3 = (JSONArray) jsonArray2.get(0);
         return jsonArray3.get(0).toString();
-    }
-
-    public static void validate(final String lang) throws Exception {
-        if (lang == null
-                || lang.length() != 2
-                || !Arrays.asList(Locale.getISOLanguages()).contains(lang.toLowerCase())) {
-            final String message = "Invalid language code: " + lang;
-            LOG.info(message);
-            throw new Exception(message);
-        }
-    }
-
-    public static boolean isValid(final String lang) {
-        try {
-            validate(lang);
-            return true;
-        } catch (final Exception e) {
-            return false;
-        }
     }
 
 }

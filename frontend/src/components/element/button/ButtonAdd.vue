@@ -3,7 +3,7 @@
         <button type="button"
                 class="round-button green"
                 :title="translate('Add')"
-                @click="addItem()">
+                @click="$emit('add-item')">
             {{"+"}}
         </button>
     </div>
@@ -15,13 +15,7 @@
     export default {
         name: "ButtonAdd",
 
-        mixins: [basicComponent],
-
-        methods: {
-            addItem() {
-                this.$emit("add-item");
-            }
-        }
+        mixins: [basicComponent]
     }
 </script>
 

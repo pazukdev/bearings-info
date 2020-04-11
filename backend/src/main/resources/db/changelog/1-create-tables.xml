@@ -76,10 +76,11 @@
             <column autoIncrement="true" name="id" type="bigserial">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="name" type="varchar(1000)"/>
+            <column name="name" type="varchar(255)"/>
             <column name="status" type="varchar(255)"/>
             <column name="type" type="varchar(255)"/>
-            <column name="lang" type="varchar(255)"/>
+            <column name="url" type="varchar(1000)"/>
+            <column name="country_code" type="varchar(255)"/>
         </createTable>
     </changeSet>
 
@@ -192,6 +193,17 @@
             </column>
             <column name="link_id" type="bigserial">
                 <constraints foreignKeyName="fk_item_link_link_id" references="link (id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_item_buy_link_table" author="sviarkaltsau">
+        <createTable tableName="item_buy_link">
+            <column name="item_id" type="bigserial">
+                <constraints foreignKeyName="fk_item_buy_link_item_id" references="item (id)"/>
+            </column>
+            <column name="link_id" type="bigserial">
+                <constraints foreignKeyName="fk_item_buy_link_link_id" references="link (id)"/>
             </column>
         </createTable>
     </changeSet>

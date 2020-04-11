@@ -2,6 +2,7 @@ package com.pazukdev.backend.service;
 
 import com.pazukdev.backend.constant.Status;
 import com.pazukdev.backend.converter.ItemConverter;
+import com.pazukdev.backend.converter.LinkConverter;
 import com.pazukdev.backend.converter.ReplacerConverter;
 import com.pazukdev.backend.dto.RateReplacer;
 import com.pazukdev.backend.dto.TransitiveItemDescriptionMap;
@@ -12,7 +13,6 @@ import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.repository.*;
 import com.pazukdev.backend.util.DateUtil;
 import com.pazukdev.backend.util.FileUtil;
-import com.pazukdev.backend.util.LinkUtil;
 import com.pazukdev.backend.util.RateUtil;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -25,6 +25,8 @@ import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
 import static com.pazukdev.backend.util.CategoryUtil.isInfo;
 import static com.pazukdev.backend.util.ChildItemUtil.createParts;
 import static com.pazukdev.backend.util.ItemUtil.*;
+import static com.pazukdev.backend.util.LinkUtil.LinkType;
+import static com.pazukdev.backend.util.LinkUtil.updateLink;
 import static com.pazukdev.backend.util.ReplacerUtil.createReplacers;
 import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
 
@@ -42,6 +44,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     private final ReplacerConverter replacerConverter;
     private final ItemRepository itemRepository;
     private final AdminMessageRepository adminMessageRepository;
+    private final LinkRepository linkRepository;
 
     private int bearingReplacerCounter = 0;
     private int sealReplacerCounter = 0;
@@ -55,7 +58,8 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                        final UserActionRepository userActionRepository,
                        final ReplacerRepository replacerRepository,
                        final ReplacerConverter replacerConverter,
-                       final AdminMessageRepository adminMessageRepository) {
+                       final AdminMessageRepository adminMessageRepository,
+                       final LinkRepository linkRepository) {
         super(itemRepository, converter);
         this.childItemRepository = childItemRepository;
         this.userService = userService;
@@ -64,6 +68,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         this.replacerConverter = replacerConverter;
         this.itemRepository = itemRepository;
         this.adminMessageRepository = adminMessageRepository;
+        this.linkRepository = linkRepository;
     }
 
     @Transactional
@@ -135,6 +140,9 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         final List<ChildItem> childItems = createParts(transitiveItem, items, this, transitiveItems, infoCategories, users, admin);
         final List<Replacer> replacers = createReplacers(transitiveItem, this, transitiveItems, infoCategories, users, admin);
 
+        item.getChildItems().clear();
+        item.getReplacers().clear();
+
         item.setName(name);
         item.setCategory(category);
         item.setStatus(transitiveItem.getStatus());
@@ -144,10 +152,30 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         item.setCreatorId(admin.getId());
         item.setUserActionDate(DateUtil.now());
         item.setImg(transitiveItem.getImage());
-        LinkUtil.addLinksToItem(item, transitiveItem);
+        addLinksToItem(item, transitiveItem);
 
         itemRepository.save(item);
         return item;
+    }
+
+    public void addLinksToItem(final Item target, final TransitiveItem source) {
+        if (source.getWiki() != null) {
+            updateLink(source.getWiki(), LinkType.WIKI, target, null, this);
+        }
+        if (source.getWebsite() != null) {
+            updateLink(source.getWebsite(), LinkType.WEBSITE, target, null, this);
+        }
+        if (source.getManual() != null) {
+            updateLink(source.getManual(), LinkType.MANUAL, target, null, this);
+        }
+        if (source.getParts() != null) {
+            updateLink(source.getParts(), LinkType.PARTS_CATALOG, target, null, this);
+        }
+        if (source.getDrawings() != null) {
+            updateLink(source.getDrawings(), LinkType.DRAWINGS, target, null, this);
+        }
+        target.getBuyLinks().clear();
+        target.getBuyLinks().addAll(LinkConverter.convert(new ArrayList<>(source.getBuyLinksDto())));
     }
 
     private String createItemDescription(final TransitiveItemDescriptionMap descriptionMap) {

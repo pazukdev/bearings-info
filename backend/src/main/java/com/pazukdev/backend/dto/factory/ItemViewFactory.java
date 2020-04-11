@@ -27,10 +27,10 @@ import static com.pazukdev.backend.util.NestedItemUtil.addPossiblePartsAndReplac
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 import static com.pazukdev.backend.util.TableUtil.createHeader;
 import static com.pazukdev.backend.util.TableUtil.createReplacersTable;
-import static com.pazukdev.backend.util.TranslatorUtil.isValid;
 import static com.pazukdev.backend.util.TranslatorUtil.translate;
 import static com.pazukdev.backend.util.UserActionUtil.*;
 import static com.pazukdev.backend.util.UserUtil.getCreatorData;
+import static com.pazukdev.backend.validator.CodeValidator.isLangCodeValid;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -94,7 +94,7 @@ public class ItemViewFactory {
         final double businessLogicEndTime = System.nanoTime();
         final double businessLogicDuration = businessLogicEndTime - businessLogicStartTime;
 
-        if (!userLang.equals("en") && !userListView && isValid(userLang)) {
+        if (!userLang.equals("en") && !userListView && isLangCodeValid(userLang)) {
             try {
                 translate("en", userLang, view, false);
             } catch (Exception e) {
@@ -133,7 +133,7 @@ public class ItemViewFactory {
                                final String userLang) throws Exception {
         final UserEntity creator = itemService.getUserService().findFirstByName(userName);
 
-        if (!userLang.equals("en") && isValid(userLang)) {
+        if (!userLang.equals("en") && isLangCodeValid(userLang)) {
             final DictionaryData dictionaryData = getDictionaryFromFile(userLang);
             final List<String> dictionary = dictionaryData.getDictionary();
             name = translate(userLang, "en", name, true, false, dictionary);
@@ -311,7 +311,7 @@ public class ItemViewFactory {
         final long businessLogicStartTime = System.nanoTime();
 
         final long translationFromUserLang = System.nanoTime();
-        if (!userLang.equals("en") && isValid(userLang)) {
+        if (!userLang.equals("en") && isLangCodeValid(userLang)) {
             try {
                 translate(userLang, "en", view, true);
             } catch (Exception e) {

@@ -67,7 +67,6 @@ public class CategoryUtil {
             public static final String REPLACER = "Replacer";
             public static final String STATUS = "Status";
             public static final String WEBSITE = "Website";
-            public static final String WEBSITE_LANG = "Website lang";
             public static final String WIKI = "Wiki";
         }
 
@@ -172,8 +171,8 @@ public class CategoryUtil {
         return infoCategories.contains(category);
     }
 
-    public static boolean isDescriptionIgnored(final String parameter) {
-        return contains(getFieldsValues(DescriptionIgnored.class), parameter);
+    public static boolean isDescriptionIgnored(final String param) {
+        return param.length() < 3 || contains(getFieldsValues(DescriptionIgnored.class), param);
     }
 
     public static boolean isPart(String category, final List<String> infoCategories) {

@@ -4,7 +4,7 @@
                 type="button"
                 class="round-button red"
                 :title="translate('Delete')"
-                @click="removeItem(item)">
+                @click="$emit('remove-item', item)">
             {{"&times;"}}
         </button>
     </div>
@@ -23,11 +23,15 @@
         props: {
             item: Object,
             itemsManagementView: Boolean,
-            wishlistView: Boolean
+            wishlistView: Boolean,
+            forceRender: Boolean
         },
 
         methods: {
             isRendered(item) {
+                if (this.forceRender) {
+                    return true;
+                }
                 if (!this.editMode || item.deletable === false) {
                     return false;
                 }
@@ -39,10 +43,6 @@
                 }
                 return this.isEditor();
 
-            },
-
-            removeItem(item) {
-                this.$emit("remove-item", item);
             }
         }
     }

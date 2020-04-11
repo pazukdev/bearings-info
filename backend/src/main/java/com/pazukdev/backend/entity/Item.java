@@ -24,12 +24,16 @@ import static com.pazukdev.backend.util.LinkUtil.LinkType;
 public class Item extends AbstractEntity {
 
     private String category;
+
     @Column(name = "creator_id")
     private Long creatorId;
+
     @Column(name = "user_action_date")
     private String userActionDate;
+
     @Column(name = "description", table = "item_description")
     private String description;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -39,6 +43,7 @@ public class Item extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "child_item_id")
     )
     private Set<ChildItem> childItems = new HashSet<>();
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -48,6 +53,7 @@ public class Item extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "replacer_item_id")
     )
     private Set<Replacer> replacers = new HashSet<>();
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -57,6 +63,16 @@ public class Item extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "link_id")
     )
     private Set<Link> links = new HashSet<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(
+            name = "item_buy_link",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "link_id")
+    )
+    private Set<Link> buyLinks = new HashSet<>();
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -92,7 +108,7 @@ public class Item extends AbstractEntity {
             imgLink = new Link();
             imgLink.setType(LinkType.IMG);
         }
-        imgLink.setName(img);
+        imgLink.setUrl(img);
         links.add(imgLink);
     }
 

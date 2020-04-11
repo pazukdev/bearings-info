@@ -1,5 +1,6 @@
 package com.pazukdev.backend.dto.view;
 
+import com.pazukdev.backend.dto.LinkDto;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.UserActionDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
@@ -48,9 +49,9 @@ public class ItemView extends AbstractView {
     private Set<String> adminMessages = new HashSet<>();
     private String errorMessage = "-";
     private ItemView parents;
+    private List<LinkDto> buyLinks = new ArrayList<>();
     private String wikiLink;
     private String websiteLink;
-    private String websiteLang;
     private String manualLink;
     private String partsCatalogLink;
     private String drawingsLink;

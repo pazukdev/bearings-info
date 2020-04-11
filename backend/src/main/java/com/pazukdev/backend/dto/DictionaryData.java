@@ -2,7 +2,7 @@ package com.pazukdev.backend.dto;
 
 import com.pazukdev.backend.util.FileUtil;
 import com.pazukdev.backend.util.SpecificStringUtil;
-import com.pazukdev.backend.util.TranslatorUtil;
+import com.pazukdev.backend.validator.CodeValidator;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -33,7 +33,7 @@ public class DictionaryData implements Serializable {
             lang = SpecificStringUtil.removeUtf8BOM(lang.toLowerCase());
         }
 
-        TranslatorUtil.validate(lang);
+        CodeValidator.validateLangCode(lang);
 
         final Set<String> langs = new HashSet<>();
         langs.add("en");

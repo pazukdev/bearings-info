@@ -1,8 +1,12 @@
 package com.pazukdev.backend.entity;
 
+import com.pazukdev.backend.dto.LinkDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -21,6 +25,6 @@ public class TransitiveItem extends AbstractEntity {
     private String manual;
     private String parts;
     private String drawings;
-    private String websiteLang;
+    private Set<LinkDto> buyLinksDto = new HashSet<>();
 
 }
