@@ -36,6 +36,7 @@
                             <router-view/>
                         </div>
                         <AppGroupsSection v-if="isHome() && !loadingState" :beer-glass-rendered="true"/>
+                        <div style="height: 200px"/>
                     </div>
                 </div>
     </div>
@@ -417,6 +418,10 @@
 
     .equal-columns-table {
         table-layout: fixed;
+    }
+
+    .bold {
+        font-weight: bold;
     }
 
     .alert-message, .red {

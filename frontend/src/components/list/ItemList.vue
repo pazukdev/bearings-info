@@ -15,7 +15,7 @@
                             <tr v-for="manufacturer in vehicleClass.manufacturers">
                                 <td>
                                     <v-details v-model="opened">
-                                        <summary>{{manufacturer.name}}</summary>
+                                        <summary>{{getTextPlusCount(manufacturer.name, manufacturer.items.length)}}</summary>
                                         <table class="equal-columns-table">
                                             <tbody>
                                             <tr v-for="item in manufacturer.items">
@@ -43,7 +43,7 @@
             <tr v-for="table in itemsListAsTables()" v-if="!vehicles && !hideTable(table)">
                 <td>
                     <v-details v-model="table.opened">
-                        <summary><b>{{table.name}}</b></summary>
+                        <summary><b>{{getTextPlusCount(table.name, table.items.length)}}</b></summary>
                         <table>
                             <tbody>
                             <tr v-for="item in table.items">

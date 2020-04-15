@@ -77,6 +77,13 @@ public class FileUtil {
         return CollectionUtil.listOfArraysToListOfLists(Objects.requireNonNull(lines));
     }
 
+//    public static void main(String[] args) throws IOException {
+//        final URL url = new URL("https://www.autodoc.by/price/1307/62032RS");
+//        final InputStream in = Objects.requireNonNull(url).openStream();
+//        final List<String> fileLines = IOUtils.readLines(Objects.requireNonNull(in), StandardCharsets.UTF_8);
+//        fileLines.forEach(System.out::println);
+//    }
+
     private static InputStream openGoogleDoc(final String documentId,
                                              final String googleDocumentTypeUrl,
                                              final String exportFormat) {        try {
@@ -104,15 +111,15 @@ public class FileUtil {
                 "1R2haf5EqWqC6YJ4GJkcwDyTBB_1ItU_wk3l5zI9CQjQ", // "material"
 //                "1Kc6IIZNozbgpjwAzYbiLSnPqihOTKxzZ3lwQXO0QZa0", // "cylinder"
                 "1SJcfsoOmpMA5auCEWprmfu5_5hyL_LQTPrT95fuKyvk", // "wire"
-//                "1qtV8j8nHb8u3gyJtrByI6diDPlVHsYl7X0j4HqgOSik", // "gasket"
-//                "1LzrET_v01fg-BdtMV8No7nnhBDZxZSAtUMfLwvX2bCA", // "washer"
-//                "1upjGjUKjtr1tk3RxQ5kR8TKAPbJhhZ-yNwuKwm5Sow4", // "fastener"
-//                "1Epb-XZlBRUG3lVya_Ps8tz7sLQFxLcO_ezM_Yxsg4tA", // "oil"
-//                "1SoU8eSo74SGvdbSnx95eOdGST-_Yq8FlzDcXqcr7AB4", // "tube"
-//                "1hDzM8xIDnqW8GwV1smFTwwzVzlUz_QZcYFx_AFBjSqg", // "tire"
-//                "1JJrNlsIyT1fCpEu9SKDpYF_CwYgljCqtET3k9i2sGIY", // "seal"
+                "1qtV8j8nHb8u3gyJtrByI6diDPlVHsYl7X0j4HqgOSik", // "gasket"
+                "1LzrET_v01fg-BdtMV8No7nnhBDZxZSAtUMfLwvX2bCA", // "washer"
+                "1upjGjUKjtr1tk3RxQ5kR8TKAPbJhhZ-yNwuKwm5Sow4", // "fastener"
+                "1Epb-XZlBRUG3lVya_Ps8tz7sLQFxLcO_ezM_Yxsg4tA", // "oil"
+                "1SoU8eSo74SGvdbSnx95eOdGST-_Yq8FlzDcXqcr7AB4", // "tube"
+                "1hDzM8xIDnqW8GwV1smFTwwzVzlUz_QZcYFx_AFBjSqg", // "tire"
+                "1JJrNlsIyT1fCpEu9SKDpYF_CwYgljCqtET3k9i2sGIY", // "seal"
 //                "1cGNnAl-nkH-pRsnGpeUhfbV7mBe6mTHQq0fg-dhZGvk", // "spark_plug"
-//                "1OQydFcMrVbis1acHjgoUZ6Q7dbSbj7e2GnImrWL7Bf0", // "lock_ring"
+                "1OQydFcMrVbis1acHjgoUZ6Q7dbSbj7e2GnImrWL7Bf0", // "lock_ring"
                 "1t2GRH9l6PeE31NV44Po2jheeO6pokGyv-1wzrOyL0bs", // "adapter"
                 "1-wjosk677Z3iBk-gXA7WgryffXdpsD0pcPk8ld6U3Uo", // "oil_filter"
 //                "1Gt2zBapfxHsK9ckkRl05IrVr6gl8ud3VmhAvzg71xI8", // "piston_rings"

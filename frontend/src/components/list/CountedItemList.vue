@@ -25,7 +25,7 @@
             <tr v-for="table in itemsListAsTables()" v-if="!hideTable(table)">
                 <td>
                     <v-details v-model="table.opened" v-if="isAdmin() || table.name !== 'deleted'">
-                        <summary><b>{{translate(table.name)}}</b></summary>
+                        <summary><b>{{getTextPlusCount(translate(table.name), table.items.length)}}</b></summary>
                         <table>
                             <tbody>
                             <tr v-for="item in table.items">

@@ -13,10 +13,9 @@
                 <br>
             </div>
         </div>
-        <details v-if="itemView.header != null" class="default-margin" open>
-            <summary>{{translate("Specification")}}</summary>
+        <details v-if="itemView.header != null" class="default-margin">
+            <summary class="bold">{{translate("Specification")}}</summary>
             <ItemDescription :item="item"/>
-            <hr>
         </details>
     </div>
 </template>

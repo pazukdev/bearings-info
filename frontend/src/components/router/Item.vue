@@ -8,25 +8,22 @@
                 <ItemName/>
                 <ItemMenu/>
                 <Header :item="true" :editable="true"/>
-
-                <details v-if="arrayIsRendered(itemView.children)" open>
-                    <summary>{{translate("Units / parts")}}</summary>
-                    <PartsSection/>
-                </details>
-
-                <details v-if="arrayIsRendered(itemView.replacersTable.replacers)" open>
-                    <summary>{{translate("Replacers")}}</summary>
+                <WhereToBuy/>
+                <details v-if="arrayIsRendered(itemView.replacersTable.replacers)">
+                    <summary class="bold">{{getTextPlusCount("Replacers", itemView.replacersTable.replacers.length)}}</summary>
                     <ReplacersSection/>
                 </details>
+                <details v-if="arrayIsRendered(itemView.children)">
+                    <summary class="bold">{{getTextPlusCount("Units / parts", itemView.children.length)}}</summary>
+                    <PartsSection/>
+                </details>
             </form>
-
             <details v-if="arrayIsRendered(itemView.allChildren)">
-                <summary>{{translate("All units / parts")}}</summary>
+                <summary class="bold">{{getTextPlusCount("All units / parts", itemView.allChildren.length)}}</summary>
                 <ItemSummary/>
             </details>
-
             <details v-if="arrayIsRendered(itemView.parents.children)">
-                <summary>{{translate(getUsageTitle())}}</summary>
+                <summary class="bold">{{getTextPlusCount(getUsageTitle(), itemView.parents.children.length)}}</summary>
                 <Usage/>
             </details>
         </div>
@@ -52,10 +49,12 @@
     import ItemName from "../item/ItemName";
     import basicComponent from "../../mixin/basicComponent";
     import view from "../../mixin/view";
+    import WhereToBuy from "../item/WhereToBuy";
 
     export default {
 
         components: {
+            WhereToBuy,
             ItemName,
             Header,
             ItemSummary,

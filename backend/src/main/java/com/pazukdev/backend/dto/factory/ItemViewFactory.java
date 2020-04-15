@@ -17,6 +17,7 @@ import java.util.*;
 
 import static com.pazukdev.backend.dto.DictionaryData.getDictionaryFromFile;
 import static com.pazukdev.backend.dto.factory.NestedItemDtoFactory.*;
+import static com.pazukdev.backend.util.CategoryUtil.Category;
 import static com.pazukdev.backend.util.CategoryUtil.Category.VEHICLE;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter;
 import static com.pazukdev.backend.util.ChildItemUtil.collectIds;
@@ -189,6 +190,7 @@ public class ItemViewFactory {
         view.setSearchEnabled(true);
         view.setOrdinaryItem(true);
         view.setCategory(category);
+        view.setManufacturer(description.get(Category.MANUFACTURER));
         if (category.equals(VEHICLE)) {
             view.setVehicleClass(description.get(Parameter.CLASS));
         }

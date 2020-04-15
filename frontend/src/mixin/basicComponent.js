@@ -25,6 +25,10 @@ export default {
 
         isLoading() {
             return shared.isLoading(this.loadingState);
+        },
+
+        getTextPlusCount(text, count) {
+            return this.translate(text) + " (" + count + ")";
         }
     }
 }

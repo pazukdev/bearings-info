@@ -57,7 +57,7 @@ export default {
     },
 
     getCountryName(alpha2Code) {
-        console.log("get country name for: " + alpha2Code);
+        // console.log("get country name for: " + alpha2Code);
         let notFoundValue = "-";
         if (this.isEmpty(alpha2Code)) {
             return notFoundValue;
@@ -65,7 +65,16 @@ export default {
         let countries = store.getters.countries;
         for (let i = 0; i < countries.length; i++) {
             if (countries[i].alpha2Code === alpha2Code) {
-                return countries[i].name;
+                // console.log(countries[i]);
+                let name = countries[i].name;
+                if (name.includes("United Kingdom")) {
+                    return "UK";
+                } else if (name.includes("Russian")) {
+                    return "Russia";
+                } else if (name.includes("United States")) {
+                    return "USA";
+                }
+                return name;
             }
         }
         return notFoundValue;
