@@ -135,6 +135,8 @@
 
             getSortedBuyLinks() {
                 let links = this.getBuyLinks().slice();
+                let manufacturer = this.itemView.manufacturer;
+                let itemName = this.itemView.name;
 
                 if (this.isCountryInArray("BY", links)) {
                     let autodocBy = ".autodoc.by";
@@ -147,17 +149,17 @@
                     }
                 }
 
-                let famousCompany = this.itemView.manufacturer === "Corteco"
-                    || this.itemView.manufacturer === "Payen"
-                    || this.itemView.manufacturer === "Victor Reinz"
-                    || this.itemView.manufacturer === "Ajusa"
-                    || this.itemView.manufacturer === "SWAG"
-                    || this.itemView.manufacturer === "Jp Group";
+                let famousCompany = manufacturer === "Corteco"
+                    || manufacturer === "Payen"
+                    || manufacturer === "Victor Reinz"
+                    || manufacturer === "Ajusa"
+                    || manufacturer === "SWAG"
+                    || manufacturer === "Jp Group";
 
                 if (this.isCountryInArray("DE", links) || famousCompany) {
                     let deUrl;
                     if (famousCompany) {
-                        deUrl = "https://www.autodoc.de/search?keyword=" + this.itemView.name;
+                        deUrl = "https://www.autodoc.de/search?keyword=" + itemName;
                     } else {
                         for (let i = 0; i < links.length; i++) {
                             if (links[i].countryCode === "DE"
@@ -197,10 +199,32 @@
                         }
                     }
                 }
+
+                if (manufacturer === "USSR") {
+                    for (let i = 0; i < links.length; i++) {
+                        let link = links[i];
+                        if (link.countryCode === "EE" && link.url === "http://auto-link") {
+                            link.url = this.getEastHighWayLinkUrl(itemName);
+                        }
+                    }
+                }
+
                 return this.sortBuyLinksByTranslatedCountryName(links);
             },
 
+            // removeMarkedLinks(links) {
+            //     let processedLinks = [];
+            //     for (let i = 0; i < links.length; i++) {
+            //         let link = links[i];
+            //         if (link.url !== "http://delete") {
+            //             processedLinks.push(link);
+            //         }
+            //     }
+            //     return processedLinks;
+            // },
+
             sortBuyLinksByTranslatedCountryName(links) {
+                // links = this.removeMarkedLinks(links);
                 for (let j = 0; j < links.length; j++) {
                     let link = links[j];
                     link.translatedName = this.translate(this.getCountryName(link.countryCode));
@@ -208,6 +232,23 @@
                 return links.sort((a,b) => {
                     return b.translatedName < a.translatedName ? 1 : -1
                 });
+            },
+
+            getEastHighWayLinkUrl(itemName) {
+                let lang = "eng/home";
+                if (this.lang.toString() === "ru") {
+                    lang = "rus/glavnaja";
+                } else if (this.lang.toString() === "de") {
+                    lang = "ger/start";
+                } else if (this.lang.toString() === "et") {
+                    lang = "est/avaleht";
+                } else if (this.lang.toString() === "fi") {
+                    lang = "fin/kotisivu";
+                }
+                return "https://easthighway.com/"
+                    + lang
+                    + "/0/0/action/search/searchResults?search="
+                    + itemName;
             },
 
             add(buyLink) {

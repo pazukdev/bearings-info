@@ -146,7 +146,9 @@ public class ItemUtil {
         return data;
     }
 
-    public static String createButtonText(final Item item, final String manufacturer) {
+    public static String createButtonText(final Item item,
+                                          final String manufacturer,
+                                          final String partNumber) {
         String itemName = item.getName();
         if (isAddManufacturer(item, manufacturer, false)) {
             final String manufacturerText = manufacturer.replaceAll("KMZ; IMZ", "IMZ; KMZ").replaceAll("; ", " / ");
@@ -160,6 +162,9 @@ public class ItemUtil {
             if (size != null && !size.equals(item.getName())) {
                 itemName = size + "=" + itemName;
             }
+        }
+        if (!isEmpty(partNumber) && !partNumber.equals(item.getName())) {
+            itemName = itemName + " " + partNumber;
         }
         return itemName;
     }

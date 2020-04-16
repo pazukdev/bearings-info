@@ -104,6 +104,7 @@ public class NestedItemDtoFactory {
     public static NestedItemDto createBasicNestedItemDto(final Item item, final UserService userService) {
         final Map<String, String> descriptionMap = toMap(item.getDescription());
         final String manufacturer = descriptionMap.get(Category.MANUFACTURER);
+        final String partNumber = descriptionMap.get("Part number");
         final UserDto creator = UserUtil.getCreatorData(item, userService);
         final String creatorName = creator != null ? creator.getName() : "deleted user";
 
@@ -114,7 +115,7 @@ public class NestedItemDtoFactory {
         dto.setItemCategory(item.getCategory());
         dto.setLikedUsers(NestedItemUtil.getLikedUserDtos(item.getLikedUsers()));
         dto.setDislikedUsers(NestedItemUtil.getLikedUserDtos(item.getDislikedUsers()));
-        dto.setButtonText(createButtonText(item, manufacturer));
+        dto.setButtonText(createButtonText(item, manufacturer, partNumber));
         if (item.getCategory().equals(Category.SEAL)) {
             dto.setSize(descriptionMap.get(Parameter.SIZE));
         }

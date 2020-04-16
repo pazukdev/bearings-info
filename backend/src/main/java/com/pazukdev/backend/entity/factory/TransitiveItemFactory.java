@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.pazukdev.backend.util.CategoryUtil.Category;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.DescriptionIgnored.*;
 import static com.pazukdev.backend.util.CategoryUtil.isDescriptionIgnored;
 import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
@@ -42,13 +41,13 @@ public class TransitiveItemFactory extends AbstractEntityFactory<TransitiveItem>
         super.applyCharacteristics(item, tableRow);
 
         applyCategory(item, tableRow);
-        final boolean vehicle = item.getCategory().equals(Category.VEHICLE);
+//        final boolean vehicle = item.getCategory().equals(Category.VEHICLE);
 
         applyStatus(item, tableRow);
         applyImage(item, tableRow);
         applyDescription(item, tableRow);
         applyReplacers(item, tableRow);
-        applyLinks(item, tableRow, vehicle);
+        applyLinks(item, tableRow);
     }
 
     private void applyCategory(final TransitiveItem item, final TableRow tableRow) {
@@ -82,13 +81,10 @@ public class TransitiveItemFactory extends AbstractEntityFactory<TransitiveItem>
         item.setReplacer(replacer != null ? replacer : "-");
     }
 
-    private void applyLinks(final TransitiveItem item, final TableRow tableRow, final boolean vehicle) {
-        if (vehicle) {
-            item.setManual(tableRow.getData().get(MANUAL));
-            item.setParts(tableRow.getData().get(PARTS_CATALOG));
-            item.setDrawings(tableRow.getData().get(DRAWINGS));
-        }
-
+    private void applyLinks(final TransitiveItem item, final TableRow tableRow) {
+        item.setManual(tableRow.getData().get(MANUAL));
+        item.setParts(tableRow.getData().get(PARTS_CATALOG));
+        item.setDrawings(tableRow.getData().get(DRAWINGS));
         item.setWiki(tableRow.getData().get(WIKI));
         item.setWebsite(tableRow.getData().get(WEBSITE));
 
