@@ -1,12 +1,7 @@
 package com.pazukdev.backend.filter;
 
 import com.pazukdev.backend.constant.security.SecurityConstants;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -33,15 +28,15 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
+    public JwtAuthorizationFilter(final AuthenticationManager authenticationManager) {
         super(authenticationManager);
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws IOException, ServletException {
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
+    protected void doFilterInternal(final HttpServletRequest request,
+                                    final HttpServletResponse response,
+                                    final FilterChain filterChain) throws IOException, ServletException {
+        final UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
         if (authentication == null) {
             filterChain.doFilter(request, response);
             return;
@@ -51,8 +46,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         filterChain.doFilter(request, response);
     }
 
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
+    private UsernamePasswordAuthenticationToken getAuthentication(final HttpServletRequest request) {
+        final String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
         if (StringUtils.isNotEmpty(token) && token.startsWith(SecurityConstants.TOKEN_PREFIX)) {
             try {
                 byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();

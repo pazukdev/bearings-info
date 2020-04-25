@@ -1,11 +1,13 @@
 package com.pazukdev.backend.entity;
 
+import com.pazukdev.backend.listener.AuditListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 
 /**
@@ -15,6 +17,7 @@ import javax.persistence.Table;
 @Data
 @ToString(callSuper = true)
 @Entity
+@EntityListeners(AuditListener.class)
 @Table(name = "link")
 public class Link extends AbstractEntity {
 
@@ -22,58 +25,5 @@ public class Link extends AbstractEntity {
     private String url;
     @Column(name = "country_code")
     private String countryCode;
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        final Link link = (Link) o;
-//        if (this.getId() != null && link.getId() != null) {
-//            return this.getId().equals(link.getId());
-//        }
-//        return Objects.equals(type, link.type)
-//                && Objects.equals(countryCode, link.countryCode);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(super.hashCode(), type, countryCode);
-//    }
-//
-//    public void addTo(final Set<Link> set) {
-//        addTo(set, false);
-//    }
-//
-//    public void addTo(final Set<Link> set, final boolean consideringUrl) {
-//        if (this.getId() != null) {
-//            set.add(this);
-//            return;
-//        }
-//        Link toRemove = null;
-//        Link toAdd = null;
-//        for (final Link link : set) {
-//            final Long id = link.getId();
-//            link.setId(null);
-//            if (this.getUrl().equals("1")) {
-//                int i = 0;
-//            }
-//            boolean a = link.getUrl().equals(this.getUrl());
-//            boolean b = !consideringUrl || link.getUrl().equals(this.getUrl());
-//            if (link.equals(this) && (!consideringUrl || link.getUrl().equals(this.getUrl()))) {
-//                link.setId(id);
-//                this.setId(id);
-//                toRemove = link;
-//                toAdd = this;
-//                break;
-//            }
-//            link.setId(id);
-//        }
-//        if (toRemove != null) {
-//            set.remove(toRemove);
-//            set.add(toAdd);
-//        } else {
-//            set.add(this);
-//        }
-//    }
 
 }

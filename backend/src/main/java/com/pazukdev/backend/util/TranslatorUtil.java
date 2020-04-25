@@ -191,7 +191,7 @@ public class TranslatorUtil {
         }
 
         if (langFrom.equals("en")) {
-            name = false;
+//            name = false;
 
             String translated = getValueFromDictionary(text, langTo, dictionary);
             if (!isTranslated(translated, text)) {
@@ -211,86 +211,6 @@ public class TranslatorUtil {
 //            return translateToEnglish(langFrom, text, addToDictionary, dictionary);
             return parseAndTranslate(langTo, text, dictionary);
         }
-    }
-
-    private static String translateToEnglish(final String langFrom,
-                                             String text,
-                                             final boolean addToDictionary,
-                                             final List<String> dictionary) {
-        if (text == null || langFrom == null) {
-            return null;
-        }
-        if (langFrom.equals("ru") && !containsCyrillic(text)) {
-            return text;
-        }
-
-        text = text.trim();
-
-        if (isEmpty(text)) {
-            return text;
-        }
-
-        if (isNumber(text) || containsOnlyDigitsAndDash(text)) {
-            return text;
-        }
-
-        final boolean startsWithUppercase = startsWithUppercase(text);
-
-        if (isSingleWord(text)) {
-            if (endChars.contains(getLastChar(text)) && text.length() > 1) {
-                final String beforeLastChar = removeLastChar(text);
-                final String translatedBeforeLastChar
-                        = translateToEnglish(langFrom, beforeLastChar, addToDictionary, dictionary);
-                return text.replaceFirst(beforeLastChar, translatedBeforeLastChar);
-            }
-
-            if (isName(text)) {
-                return text;
-            }
-
-            if (startsWithNumber(text)) {
-                final String afterNumber = text.replace(getSubstringWithFirstNumber(text), "");
-                final String translatedAfterNumber
-                        = translateToEnglish(langFrom, afterNumber, addToDictionary, dictionary);
-                return text.replaceFirst(afterNumber, translatedAfterNumber);
-            }
-
-            if (isBetweenParenthesises(text)) {
-                final String stringBetweenParentheses = getStringBetweenParentheses(text);
-                return "(" + translateToEnglish(langFrom, stringBetweenParentheses, addToDictionary, dictionary) + ")";
-            }
-        }
-
-        final String comma = ", ";
-        if (text.contains(comma)) {
-            final String firstPart = text.split(comma)[0];
-            final String secondPart = text.split(comma)[1];
-            final String translatedFirstPart = translateToEnglish(langFrom, firstPart, addToDictionary, dictionary);
-            final String translatedSecondPart = translateToEnglish(langFrom, secondPart, addToDictionary, dictionary);
-            return translatedFirstPart + comma + translatedSecondPart;
-        }
-
-        String translated = getValueFromDictionary(text, "en", dictionary);
-        if (isTranslated(translated, text)) {
-            return translated;
-        }
-
-        try {
-            translated = translateToEnglishWithGoogle(langFrom, text).trim();
-            if (!isTranslated(translated, text)) {
-                return text;
-            }
-            if (addToDictionary) {
-                addToDictionary(text, translated, langFrom, dictionary);
-            }
-        } catch (final IOException e) {
-            e.printStackTrace();
-            return text;
-        }
-        if (startsWithUppercase) {
-            translated = capitalize(translated);
-        }
-        return translated;
     }
 
     public static boolean isTranslated(final String translated, final String original) {

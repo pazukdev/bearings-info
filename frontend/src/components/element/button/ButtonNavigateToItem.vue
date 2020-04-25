@@ -6,7 +6,7 @@
             {{part.buttonText}}
         </router-link>
         <router-link v-else class="button" :to="{name: 'item', params: {id: part.itemId, lang: lang}}">
-            {{part.buttonText.split("=")[0]}}<br>
+            {{part.buttonText.split("=")[0].trim()}}<br>
             {{part.buttonText.split("=")[1]}}
         </router-link>
     </div>
@@ -16,9 +16,11 @@
     import DefaultButton from "./DefaultButton";
     import routerUtil from "../../../util/routerUtil";
     import {mapState} from "vuex";
+    import dictionaryUtil from "../../../util/dictionaryUtil";
 
     export default {
         name: "ButtonNavigateToItem",
+
         components: {DefaultButton},
 
         props: {
@@ -49,6 +51,10 @@
                 } else {
                     return item.buttonText;
                 }
+            },
+
+            translate(text) {
+                return dictionaryUtil.translate(text);
             }
         }
     }

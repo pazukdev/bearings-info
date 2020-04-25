@@ -1,11 +1,10 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.dto.LinkDto;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.Link;
 import com.pazukdev.backend.entity.UserEntity;
-import com.pazukdev.backend.service.ItemService;
+import com.pazukdev.backend.repository.UserActionRepository;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import java.util.Set;
@@ -22,43 +21,12 @@ public class LinkUtil {
     public static void updateItemLinks(final Item target,
                                        final ItemView source,
                                        final UserEntity user,
-                                       final ItemService service) {
-        updateLink(source.getWikiLink(), LinkType.WIKI, target, user, service);
-        updateLink(source.getManualLink(), LinkType.MANUAL, target, user, service);
-        updateLink(source.getPartsCatalogLink(), LinkType.PARTS_CATALOG, target, user, service);
-        updateLink(source.getDrawingsLink(), LinkType.DRAWINGS, target, user, service);
-        updateLink(source.getWebsiteLink(), LinkType.WEBSITE, target, user, service);
-
-        for (final LinkDto buyLinkDto : source.getBuyLinks()) {
-
-//            final String websiteLink = source.getWebsiteLink();
-//            String websiteLang = source.getWebsiteLang();
-//            Link websiteLinkUrl = null;
-//            if (linkDto.getId() != null) {
-//                websiteLinkUrl = service.getLinkRepository().findById(linkDto.getId()).orElse(null);
-//            }
-//            if (websiteLinkUrl == null) {
-//                websiteLinkUrl = getLink(LinkType.WEBSITE, linkDto.getCountryCode(), target.getLinks());
-//            }
-//            if (websiteLinkUrl != null) {
-//                if (isEmpty(websiteLink)) {
-//                    target.getLinks().remove(websiteLinkUrl);
-//                    processLinkAction(ActionType.DELETE, LinkType.WEBSITE, target, user, service);
-//                } else {
-//                    if (websiteLinkUrl.getName() == null || !websiteLinkUrl.getName().equals(websiteLink)) {
-//                        websiteLinkUrl.setName(websiteLink);
-//                        processLinkAction(ActionType.UPDATE, LinkType.WEBSITE, target, user, service);
-//                    }
-//                    websiteLinkUrl.setLang(websiteLang);
-//                }
-//            } else {
-//                if (!isEmpty(websiteLink)) {
-//                    final Link newWebsite = createWebsiteLink(websiteLink, websiteLang);
-//                    target.getLinks().add(newWebsite);
-//                    processLinkAction(ActionType.ADD, LinkType.WEBSITE, target, user, service);
-//                }
-//            }
-        }
+                                       final UserActionRepository repository) {
+        updateLink(source.getWikiLink(), LinkType.WIKI, target, user, repository);
+        updateLink(source.getManualLink(), LinkType.MANUAL, target, user, repository);
+        updateLink(source.getPartsCatalogLink(), LinkType.PARTS_CATALOG, target, user, repository);
+        updateLink(source.getDrawingsLink(), LinkType.DRAWINGS, target, user, repository);
+        updateLink(source.getWebsiteLink(), LinkType.WEBSITE, target, user, repository);
 
         target.getBuyLinks().clear();
         target.getBuyLinks().addAll(convert(source.getBuyLinks()));
@@ -66,22 +34,24 @@ public class LinkUtil {
     }
 
     public static void updateLink(final String linkUrl,
-                                   final String linkType,
-                                   final Item target,
-                                   final UserEntity user,
-                                   final ItemService service) {
+                                  final String linkType,
+                                  final Item target,
+                                  final UserEntity user,
+                                  final UserActionRepository repository) {
+
         final Link link = getLink(linkType, target.getLinks());
+
         if (link != null) {
             if (isEmpty(linkUrl)) {
                 target.getLinks().remove(link);
                 if (user != null) {
-                    processLinkAction(ActionType.DELETE, linkType, target, user, service);
+                    processLinkAction(ActionType.DELETE, link, target, user, repository);
                 }
             } else {
                 if (link.getUrl() == null || !link.getUrl().equals(linkUrl)) {
                     link.setUrl(linkUrl);
                     if (user != null) {
-                        processLinkAction(ActionType.UPDATE, linkType, target, user, service);
+                        processLinkAction(ActionType.UPDATE, link, target, user, repository);
                     }
                 }
             }
@@ -90,7 +60,7 @@ public class LinkUtil {
                 final Link newLink = createLink(linkType, linkUrl, "-");
                 target.getLinks().add(newLink);
                 if (user != null) {
-                    processLinkAction(ActionType.ADD, linkType, target, user, service);
+                    processLinkAction(ActionType.ADD, newLink, target, user, repository);
                 }
             }
         }

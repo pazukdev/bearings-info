@@ -9,6 +9,8 @@ import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,6 +37,15 @@ public class UserUtil {
         public static final String LIKED_ITEMS = "liked items";
         public static final String DISLIKED_ITEMS = "disliked items";
         public static final String IMG = "img";
+    }
+
+    public static String getCurrentUserName() {
+        final Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            return ((UserDetails) principal).getUsername();
+        } else {
+            return principal.toString();
+        }
     }
 
     public static boolean isAdmin(final UserEntity user) {

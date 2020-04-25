@@ -32,6 +32,9 @@
                 if (this.forceRender) {
                     return true;
                 }
+                if (this.isEditable(item) && !this.itemsManagementView) {
+                    return true;
+                }
                 if (!this.editMode || item.deletable === false) {
                     return false;
                 }

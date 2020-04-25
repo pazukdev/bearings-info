@@ -15,6 +15,8 @@ import com.pazukdev.backend.util.DateUtil;
 import com.pazukdev.backend.util.FileUtil;
 import com.pazukdev.backend.util.RateUtil;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,8 @@ import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
 @Getter
 @Service
 public class ItemService extends AbstractService<Item, TransitiveItemDto> {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ItemService.class);
 
     private final UserService userService;
     private final ChildItemRepository childItemRepository;
@@ -159,20 +163,21 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     public void addLinksToItem(final Item target, final TransitiveItem source) {
+        final UserActionRepository repository = this.getUserActionRepository();
         if (source.getWiki() != null) {
-            updateLink(source.getWiki(), LinkType.WIKI, target, null, this);
+            updateLink(source.getWiki(), LinkType.WIKI, target, null, repository);
         }
         if (source.getWebsite() != null) {
-            updateLink(source.getWebsite(), LinkType.WEBSITE, target, null, this);
+            updateLink(source.getWebsite(), LinkType.WEBSITE, target, null, repository);
         }
         if (source.getManual() != null) {
-            updateLink(source.getManual(), LinkType.MANUAL, target, null, this);
+            updateLink(source.getManual(), LinkType.MANUAL, target, null, repository);
         }
         if (source.getParts() != null) {
-            updateLink(source.getParts(), LinkType.PARTS_CATALOG, target, null, this);
+            updateLink(source.getParts(), LinkType.PARTS_CATALOG, target, null, repository);
         }
         if (source.getDrawings() != null) {
-            updateLink(source.getDrawings(), LinkType.DRAWINGS, target, null, this);
+            updateLink(source.getDrawings(), LinkType.DRAWINGS, target, null, repository);
         }
         target.getBuyLinks().clear();
         target.getBuyLinks().addAll(LinkConverter.convert(new ArrayList<>(source.getBuyLinksDto())));

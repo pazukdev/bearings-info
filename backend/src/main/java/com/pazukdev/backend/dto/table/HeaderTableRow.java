@@ -38,7 +38,10 @@ public class HeaderTableRow extends AbstractDto {
             }
         }
 
+        final Long stubId = 0L;
+
         final HeaderTableRow row = new HeaderTableRow();
+        row.setId(stubId);
         row.setName(param);
         row.setParameter(param);
         row.setValue(value);

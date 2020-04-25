@@ -18,7 +18,7 @@
                     <PartsSection/>
                 </details>
             </form>
-            <details v-if="arrayIsRendered(itemView.allChildren)">
+            <details v-if="itemView.allChildren.length > itemView.children.length && arrayIsRendered(itemView.allChildren)">
                 <summary class="bold">{{getTextPlusCount("All units / parts", itemView.allChildren.length)}}</summary>
                 <ItemSummary/>
             </details>

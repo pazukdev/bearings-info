@@ -1,5 +1,5 @@
 <template>
-    <div class="default-margin">
+    <div class="default-margin" v-if="isOrdinaryItem(itemView)">
         <details>
             <summary class="bold">{{getTitle()}}</summary>
             <div v-if="!editMode && sortedBuyLinks.length === 0"
@@ -7,18 +7,40 @@
                 {{translate("No stores added yet")}}
             </div>
 
-            <table v-if="!editMode && sortedBuyLinks.length > 0">
+            <table v-if="!editMode">
                 <tbody>
-                <tr v-for="link in sortedBuyLinks" style="text-align: left">
+                <tr v-for="link in sortedBuyLinks" v-if="sortedBuyLinks.length > 0">
+                    <td><flag :iso="link.countryCode"/></td>
                     <td>
-                        <div class="country-seller">
-                            <flag :iso="link.countryCode"/>
-                            {{" "}}
-                            <a class="simple-link country-seller"
+                        <div>
+                            <a class="button"
                                :href="link.url" target="_blank">
                                 {{link.translatedName}}
                             </a>
                         </div>
+                    </td>
+                    <td>
+                        <img :src="getWebsiteFavicon(link.url)" alt="website favicon">
+                    </td>
+                    <td style="text-align: left">
+                        {{getWebsiteAddress(link.url)}}
+                    </td>
+                </tr>
+                <tr v-if="!editMode && sortedBuyLinks.length > 0"><td colspan="4"><hr/></td></tr>
+                <tr>
+                    <td/>
+                    <td>
+                        <div>
+                            <a class="button" :href="getGoogleQueryUrl()" target="_blank">
+                                {{translate("Google it")}}
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <img :src="getWebsiteFavicon('https://www.google.com')" alt="website favicon">
+                    </td>
+                    <td style="text-align: left">
+                        {{getWebsiteAddress('https://www.google.com')}}
                     </td>
                 </tr>
                 </tbody>
@@ -29,45 +51,73 @@
                               :buy-link="true"
                               @restore="restore"/>
 
-            <table v-if="editMode && (isAdmin() || isEditor())">
+            <table v-if="editMode">
                 <tbody>
-                <tr v-for="link in getBuyLinks()" style="text-align: left">
-                    <td style="width: 70%">
-                        <input v-model="link.url"
-                               type="url"
-                               :placeholder="translate('Link')"/>
-                    </td>
+                <tr v-for="link in getBuyLinks()">
                     <td>
-                        <div>
-                            <select v-model="link.countryCode">
-                                <option v-for="country in getCountries(link.countryCode)"
-                                        :value="country.alpha2Code">
-                                    {{translate(country.name)}}
-                                </option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <ButtonDelete :force-render="true" @remove-item="remove(link)"/>
+                        <table class="bordered">
+                            <tr>
+                                <td class="not-symmetrical-left" style="text-align: left"/>
+                                <td style="text-align: right">
+                                    <ButtonDelete :item="link" @remove-item="remove(link)"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="not-symmetrical-left">
+                                    <select v-if="isEditable(link)" v-model="link.countryCode">
+                                        <option v-for="country in getCountries(link.countryCode)"
+                                                :value="country.alpha2Code">
+                                            {{translate(country.name)}}
+                                        </option>
+                                    </select>
+                                    <div v-else style="text-align: left">
+                                        {{translate(getCountryName(link.countryCode))}}
+                                    </div>
+                                </td>
+                                <td/>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <input v-model="link.url"
+                                           type="url"
+                                           :placeholder="translate('Link')"/>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <input v-model="newBuyLink.url"
-                               type="url"
-                               :placeholder="translate('Link')"/>
-                    </td>
-                    <td>
-                        <select v-model="newBuyLink.countryCode">
-                            <option v-if="isCountryDisplayed(country.alpha2Code)"
-                                    v-for="country in countries"
-                                    :value="country.alpha2Code">
-                                {{translate(country.name)}}
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <ButtonAdd @add-item="add(newBuyLink)"/>
+                        <table class="bordered">
+                            <tr>
+                                <td class="not-symmetrical-left" style="text-align: left">
+                                    {{translate("Add link")}}
+                                </td>
+                                <td style="text-align: right">
+                                    <ButtonAdd v-if="!isEmpty(newBuyLink.url) && !isEmpty(newBuyLink.countryCode)"
+                                               @add-item="add(newBuyLink)"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="not-symmetrical-left">
+                                    <select v-model="newBuyLink.countryCode">
+                                        <option v-if="isCountryDisplayed(country.alpha2Code)"
+                                                v-for="country in countries"
+                                                :value="country.alpha2Code">
+                                            {{translate(country.name)}}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td/>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <input v-model="newBuyLink.url"
+                                           type="url"
+                                           :placeholder="translate('Add new link here')"/>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
                 </tbody>
@@ -84,6 +134,7 @@
     import shared from "../../util/shared";
     import ButtonAdd from "../element/button/ButtonAdd";
     import ButtonDelete from "../element/button/ButtonDelete";
+    import itemViewUtil from "../../util/itemViewUtil";
 
     export default {
         name: "WhereToBuy",
@@ -112,6 +163,20 @@
         },
 
         methods: {
+            getGoogleQueryUrl() {
+                // let textBefore = this.translate("buy") + " ";
+                return itemViewUtil.getGoogleQueryUrl(this.itemView, "");
+            },
+
+            getWebsiteAddress(url) {
+                return (new URL(url)).hostname;
+            },
+
+            getWebsiteFavicon(url) {
+                let googleUrl = "https://s2.googleusercontent.com/s2/favicons?domain=";
+                return googleUrl + this.getWebsiteAddress(url);
+            },
+
             getTitle() {
                 // let inXCountries = this.translate("in countries");
                 return this.translate("Where to buy")
@@ -138,22 +203,14 @@
                 let manufacturer = this.itemView.manufacturer;
                 let itemName = this.itemView.name;
 
-                if (this.isCountryInArray("BY", links)) {
-                    let autodocBy = ".autodoc.by";
-                    for (let i = 0; i < links.length; i++) {
-                        let linkUrl = links[i].url;
-                        if (linkUrl.includes(autodocBy)) {
-                            let url = linkUrl.replace(autodocBy, ".autodoc.ru");
-                            links.push({id: "", url: url, countryCode: "RU"});
-                        }
-                    }
-                }
+                this.addAutodocRuLink(links);
 
                 let famousCompany = manufacturer === "Corteco"
                     || manufacturer === "Payen"
                     || manufacturer === "Victor Reinz"
                     || manufacturer === "Ajusa"
                     || manufacturer === "SWAG"
+                    || manufacturer === "Bosch"
                     || manufacturer === "Jp Group";
 
                 if (this.isCountryInArray("DE", links) || famousCompany) {
@@ -222,6 +279,19 @@
             //     }
             //     return processedLinks;
             // },
+
+            addAutodocRuLink(links) {
+                if (this.isCountryInArray("BY", links) && !this.isCountryInArray("RU", links)) {
+                    let autodocBy = ".autodoc.by";
+                    for (let i = 0; i < links.length; i++) {
+                        let linkUrl = links[i].url;
+                        if (linkUrl.includes(autodocBy)) {
+                            let url = linkUrl.replace(autodocBy, ".autodoc.ru");
+                            links.push({id: "", url: url, countryCode: "RU"});
+                        }
+                    }
+                }
+            },
 
             sortBuyLinksByTranslatedCountryName(links) {
                 // links = this.removeMarkedLinks(links);

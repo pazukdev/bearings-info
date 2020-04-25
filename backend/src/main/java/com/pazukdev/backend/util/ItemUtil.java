@@ -162,6 +162,11 @@ public class ItemUtil {
             if (size != null && !size.equals(item.getName())) {
                 itemName = size + "=" + itemName;
             }
+        } else if (category.equals(Category.ROLLING_ELEMENT)) {
+            final String type = ItemUtil.getValueFromDescription(item.getDescription(), "Type");
+            if (type != null && !type.equals(item.getName()) && !item.getName().contains(type)) {
+                itemName = type + " = " + itemName.replaceAll("Roller ", "");
+            }
         }
         if (!isEmpty(partNumber) && !partNumber.equals(item.getName())) {
             itemName = itemName + " " + partNumber;

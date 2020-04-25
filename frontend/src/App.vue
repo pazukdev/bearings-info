@@ -460,6 +460,10 @@
         text-align: center;
     }
 
+    .extra-wide {
+        width: 80%;
+    }
+
     .not-symmetrical-left {
         width: 60%;
     }

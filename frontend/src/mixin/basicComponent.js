@@ -30,5 +30,6 @@ export default {
         getTextPlusCount(text, count) {
             return this.translate(text) + " (" + count + ")";
         }
+
     }
 }

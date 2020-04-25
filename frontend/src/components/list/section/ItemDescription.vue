@@ -19,7 +19,7 @@
                 </td>
                 <td class="two-column-table-right-column">
                     <input v-if="isEdit()" v-model="row.value" type="text" required
-                           pattern="[a-zA-Zа-яА-Я0-9 +№_\\.;,/-]*"
+                           pattern='[a-zA-Zа-яА-Я0-9 +№_\\.;",/-]*'
                            title="Allowed: letters, numbers, -, +, _, /, ;, №, dot, comma, space"/>
                     <table v-else-if="!isEdit() && row.ids.length > 0">
                         <tr v-for="(id, index) in row.ids">
@@ -46,16 +46,28 @@
                 </td>
             </tr>
             <tr v-if="isEdit()">
+                <td colspan="3">
+                    <div style="margin: 10px 0; border-top: solid 1px grey">
+                        <div style="margin: 8px 0">
+                            {{translate("Add new parameter")}}
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr v-if="isEdit()">
                 <td>
                     <input v-model="parameter" type="text" pattern="[a-zA-Zа-яА-Я0-9_\\. ,/-]*"
+                           :placeholder="translate('New parameter')"
                            title="Allowed: letters, numbers, - , _ , / , dot, comma, space"/>
                 </td>
                 <td>
                     <input v-model="value" type="text" pattern="[a-zA-Zа-яА-Я0-9_\\. ;,/-]*"
+                           :placeholder="translate('New value')"
                            title="Allowed: letters, numbers, - , _ , / , ; , dot, comma, space"/>
                 </td>
                 <td>
-                    <ButtonAdd v-if="!isEmpty(parameter)" @add-item="addHeaderRow"/>
+                    <ButtonAdd v-if="!isEmpty(parameter)"
+                               @add-item="addHeaderRow"/>
                 </td>
             </tr>
             </tbody>
@@ -124,20 +136,19 @@
 
             addHeaderRow() {
                 this.newHeaderRowMessage = "";
-                if (this.newLineIsEmpty(this.parameter, this.value)) {
-                    this.newHeaderRowMessage = "Parameter and value fields shouldn't be empty"
-                } else if (this.rowIsInList(this.parameter)) {
+                if (this.rowIsInList(this.parameter)) {
                     this.newHeaderRowMessage = "Parameter already exists"
                 } else {
                     let newHeaderRow = {
                         id: "",
-                        name: "",
-                        localizedName: "",
+                        name: this.parameter,
+                        localizedName: this.parameter,
                         status: "added",
                         parameter: this.parameter,
                         value: this.value,
                         itemId: "",
-                        message: ""
+                        message: "",
+                        ids: [null]
                     };
 
                     this.getRows().push(newHeaderRow);
@@ -151,8 +162,14 @@
                 return parameter === "" || value === "";
             },
 
-            rowIsInList(parameter) {
-                return shared.isInArray(parameter, this.getRows());
+            rowIsInList(param) {
+                let array = this.getRows();
+                for (let i=0; i < array.length; i++) {
+                    if (array[i].parameter === param) {
+                        return true;
+                    }
+                }
+                return false;
             },
 
             isShowInfoButton(itemId) {
@@ -193,11 +210,11 @@
             },
 
             rowIsDeletable(row) {
-                if (!this.isAdmin() && !this.isEditor()) {
-                    return false;
-                }
                 if (shared.isInArray(row.name, this.notDeletableRows)) {
                     return false;
+                }
+                if (this.isEditable(row)) {
+                    return true;
                 }
                 return this.isEdit();
             },

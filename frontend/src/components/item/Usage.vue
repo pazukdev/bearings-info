@@ -10,7 +10,9 @@
 
     export default {
         name: "Usage",
+
         components: {ItemList},
+
         computed: {
             ...mapState({
                 itemView: state => state.dictionary.itemView

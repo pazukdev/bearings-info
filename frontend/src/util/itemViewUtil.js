@@ -99,5 +99,17 @@ export default {
 
     isManufacturer(itemView) {
         return itemView.category.toLowerCase() === "manufacturer"
+    },
+
+    getGoogleQueryUrl(itemView, textBefore) {
+        let itemName = itemView.name;
+        let category = itemView.category.toLowerCase();
+        if (category === "vehicle" && !this.isEmpty(itemView.vehicleClass)) {
+            category = itemView.vehicleClass;
+        }
+        let textAfter = " " + this.translate(category.toLowerCase());
+        let q = textBefore + this.translate(itemName) + textAfter;
+        return 'http://google.com/search?q=' + q;
     }
+
 }

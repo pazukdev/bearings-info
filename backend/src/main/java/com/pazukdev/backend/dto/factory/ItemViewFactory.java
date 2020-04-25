@@ -347,7 +347,7 @@ public class ItemViewFactory {
         ImgUtil.updateImg(view, oldItem);
         updateChildItems(oldItem, view, itemService, currentUser);
         updateReplacers(oldItem, view, itemService, currentUser);
-        LinkUtil.updateItemLinks(oldItem, view, currentUser, itemService);
+        LinkUtil.updateItemLinks(oldItem, view, currentUser, itemService.getUserActionRepository());
         oldItem.setStatus(view.getStatus());
 
         itemService.update(oldItem);

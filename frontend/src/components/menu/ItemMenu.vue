@@ -24,22 +24,21 @@
                                 type="button"
                                 :style="buttonStyles"
                                 @click="open(itemView.websiteLink)">
-                            {{getButtonText()}}
+                            {{translate("Website")}}
                         </button>
                     </td>
                     <td>
                         <button v-if="!isEmpty(itemView.wikiLink)"
                                 type="button"
                                 @click="open(itemView.wikiLink)">
-                            {{"Wiki"}}
+                            {{translate("Info")}}
                         </button>
                     </td>
                     <td>
-                        <button v-if="isSearchEnabled()"
-                                type="button"
-                                @click="searchInGoogle()">
-                            {{"Google"}}
-                        </button>
+                        <a class="button" target="_blank"
+                           v-if="isSearchEnabled()" :href="getGoogleQueryUrl()">
+                            {{translate("Google")}}
+                        </a>
                     </td>
                 </tr>
                 <tr>
@@ -82,15 +81,15 @@
                 </tr>
                 <tr>
                     <td>
-                        <label>{{translate("Wiki")}}
-                            <input v-model="itemView.wikiLink" type="url" :placeholder="translate('Link')"/>
+                        <label>{{translate("Website")}}
+                            <input v-model="itemView.websiteLink" type="url" :placeholder="translate('Link')"/>
                         </label>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <label>{{translate("Official website")}}
-                            <input v-model="itemView.websiteLink" type="url" :placeholder="translate('Link')"/>
+                        <label>{{translate("Info")}}
+                            <input v-model="itemView.wikiLink" type="url" :placeholder="translate('Link')"/>
                         </label>
                     </td>
                 </tr>
@@ -150,6 +149,7 @@
     import ButtonDelete from "../element/button/ButtonDelete";
     import DeletedItemsList from "../element/DeletedItemsList";
     import ButtonAdd from "../element/button/ButtonAdd";
+    import itemViewUtil from "../../util/itemViewUtil";
 
     export default {
         name: "ItemMenu",
@@ -161,7 +161,7 @@
         computed: {
             buttonStyles() {
                 return {
-                    background: this.isManufacturer() ? '' : '#6ab04c',
+                    background: '',
                 }
             }
         },
@@ -184,21 +184,8 @@
                 window.open(link);
             },
 
-            searchInGoogle() {
-                let itemView = this.itemView;
-                let itemName = itemView.name;
-                let textBefore;
-                let category = itemView.category.toLowerCase();
-                if (category === "manufacturer" || category === "standard") {
-                    textBefore = "";
-                } else {
-                    textBefore = this.translate("buy") + " ";
-                }
-                if (category === "vehicle" && !this.isEmpty(itemView.vehicleClass)) {
-                    category = itemView.vehicleClass;
-                }
-                let q = textBefore + this.translate(category.toLowerCase()) + " " + this.translate(itemName);
-                window.open('http://google.com/search?q=' + q);
+            getGoogleQueryUrl() {
+                return itemViewUtil.getGoogleQueryUrl(this.itemView, "");
             },
 
             addItemToWishList() {
@@ -238,15 +225,8 @@
 
             isSearchEnabled() {
                 return this.itemView.searchEnabled;
-            },
-
-            getButtonText() {
-                if (this.isManufacturer()) {
-                    return this.translate("Website");
-                } else {
-                    return this.translate("Seller");
-                }
             }
+
         }
     }
 </script>

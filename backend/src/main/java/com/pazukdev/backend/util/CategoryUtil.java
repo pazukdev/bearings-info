@@ -133,8 +133,12 @@ public class CategoryUtil {
         for (final String s : commentLine.split("=")[1].split(";")) {
             if (containsParentheses(s)) {
                 final String paramValue = getValueFromDescription(description, getStringBeforeParentheses(s));
-                final String unit = getStringBetweenParentheses(s);
-                value +=  replaceEmptyWithEmpty(paramValue) + " " + replaceEmptyWithEmpty(unit);
+                if (isEmpty(paramValue)) {
+                    value += replaceEmptyWithEmpty(paramValue);
+                } else {
+                    final String unit = getStringBetweenParentheses(s);
+                    value += replaceEmptyWithEmpty(paramValue) + " " + replaceEmptyWithEmpty(unit);
+                }
             } else {
                 final String paramValue = getValueFromDescription(description, s);
                 value += replaceEmptyWithEmpty(paramValue);

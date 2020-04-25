@@ -101,7 +101,8 @@
             itemsManagementView: Boolean,
             usageView: Boolean,
             vehicles:Boolean,
-            urlFilter: String
+            urlFilter: String,
+            itemViewProp: Object
         },
 
         mixins: [basicComponent, view, itemsList],

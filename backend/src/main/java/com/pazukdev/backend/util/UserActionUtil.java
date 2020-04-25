@@ -131,17 +131,36 @@ public class UserActionUtil {
     }
 
     public static void processLinkAction(final String actionType,
-                                         final String linkType,
+                                         final Link link,
                                          final Item item,
                                          final UserEntity user,
-                                         final ItemService itemService) {
-        final String itemType = ItemType.LINK;
+                                         final UserActionRepository repository) {
+        updateUserRating(user, actionType, ItemType.LINK);
 
-        updateUserRating(user, actionType, itemType);
+        final UserAction action = create(user, actionType, ItemType.LINK, item);
+        action.setName(link.getUrl());
+        action.setItemCategory(link.getType() + ", " + link.getCountryCode());
+        action.setItemId(link.getId() != null ? link.getId() : 0L);
 
-        final UserAction action = create(user, actionType, itemType, item);
-        action.setName(action.getName().replace(itemType, linkType + " " + itemType + " for"));
-        itemService.getUserActionRepository().save(action);
+        repository.save(action);
+    }
+
+    public static void processLinkAction(final String actionType,
+                                         final Link link,
+                                         final UserEntity user,
+                                         final UserActionRepository repository) {
+        updateUserRating(user, actionType, ItemType.LINK);
+
+        final UserAction action = new UserAction();
+        action.setName(link.getUrl());
+        action.setActionType(actionType);
+        action.setActionDate(DateTimeUtil.now());
+        action.setUserId(user.getId());
+        action.setItemId(link.getId());
+        action.setItemCategory(link.getType() + ", " + link.getCountryCode());
+        action.setItemType(ItemType.LINK);
+
+        repository.save(action);
     }
 
     public static void processItemAction(final String actionType,

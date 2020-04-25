@@ -1,6 +1,5 @@
 <template>
     <div v-if="editMode">
-        <p>{{translate("Add replacer")}}</p>
         <p v-if="showMessage" class="alert-message">
             {{translate(message)}}
         </p>
@@ -11,14 +10,20 @@
                     <table class="bordered">
                         <tbody>
                         <tr>
-                            <td class="not-symmetrical-left">
-                                <ItemSelect :replacer="true"
-                                            @hide-add-form="hideAddForm"
-                                            @on-change="itemSelectOnChange"/>
+                            <td style="text-align: left" class="not-symmetrical-left">
+                                {{translate("Add replacer")}}
                             </td>
                             <td style="text-align: right">
                                 <ButtonAdd v-if="!isEmpty(item)" @add-item="addItem"/>
                             </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <ItemSelect :replacer="true"
+                                            @hide-add-form="hideAddForm"
+                                            @on-change="itemSelectOnChange"/>
+                            </td>
+                            <td/>
                         </tr>
                         <tr>
                             <td colspan="2">
