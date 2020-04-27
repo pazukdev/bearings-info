@@ -21,6 +21,9 @@ import java.util.List;
 
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 
+/**
+ * @author Siarhei Sviarkaltsau
+ */
 public class UserUtil {
 
     public static class UserParam {

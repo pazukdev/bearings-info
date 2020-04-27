@@ -7,6 +7,7 @@ import com.pazukdev.backend.dto.view.UserView;
 import com.pazukdev.backend.entity.AbstractEntity;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.factory.LinkFactory;
 
 import javax.imageio.ImageIO;
 import javax.xml.bind.DatatypeConverter;
@@ -16,7 +17,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
+import java.util.Objects;
 
+import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
+
+/**
+ * @author Siarhei Sviarkaltsau
+ */
 public class ImgUtil {
 
     public static final String IMG_DIRECTORY_PATH = "backend/src/img/";
@@ -89,10 +97,19 @@ public class ImgUtil {
         ImageIO.write(img, PNG_EXTENSION, file);
     }
 
-    public static void updateImg(final ItemView view, final Item item) {
-        final String imgName = getNewImg(view, item);
-        if (imgName != null) {
-            item.setImg(imgName);
+    public static void updateImg(final ItemView view,
+                                 final Item item,
+                                 final List<String> messages) {
+        final String newImgUrl = getNewImg(view, item);
+        final String oldImgUrl = LinkUtil.getLink(LinkFactory.LinkType.IMG, item);
+
+        if (isEmpty(newImgUrl) && isEmpty(oldImgUrl)) {
+            return;
+        }
+        if (!Objects.equals(newImgUrl, oldImgUrl)) {
+            item.setImg(newImgUrl);
+            final String message = "img changed from " + oldImgUrl + " to " + newImgUrl;
+            MessageUtil.addMessage(message, messages, item.getId(), item.getName());
         }
     }
 
@@ -112,9 +129,6 @@ public class ImgUtil {
         if (imgData == null) {
             return "-";
         }
-//        if (LinkUtil.isUrl(imgData) && (imgData.contains("https:") || imgData.contains("http:"))) {
-//            return imgData;
-//        }
         if (LinkUtil.isUrl(imgData)) {
             return imgData;
         }

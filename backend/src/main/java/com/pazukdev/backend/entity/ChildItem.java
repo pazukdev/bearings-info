@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "child_item")
-public class ChildItem extends AbstractEntity {
+public class ChildItem extends AbstractEntity implements Childable {
 
     @OneToOne
     @JoinColumn(name = "item_id")
@@ -25,4 +25,13 @@ public class ChildItem extends AbstractEntity {
     private String location = "-";
     private String quantity = "1";
 
+    @Override
+    public String getType() {
+        return "part";
+    }
+
+    @Override
+    public String getDetails() {
+        return "location=" + location + ", quantity=" + quantity;
+    }
 }

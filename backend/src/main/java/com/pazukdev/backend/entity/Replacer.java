@@ -17,11 +17,21 @@ import javax.persistence.Table;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "replacer")
-public class Replacer extends AbstractEntity {
+public class Replacer extends AbstractEntity implements Childable {
 
     @OneToOne
     @JoinColumn(name = "item_id")
     private Item item;
     private String comment = "-";
+
+    @Override
+    public String getType() {
+        return "replacer";
+    }
+
+    @Override
+    public String getDetails() {
+        return "comment=" + comment;
+    }
 
 }

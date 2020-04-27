@@ -7,6 +7,7 @@ import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.UserActionRepository;
 import org.apache.commons.validator.routines.UrlValidator;
 
+import java.util.List;
 import java.util.Set;
 
 import static com.pazukdev.backend.converter.LinkConverter.convert;
@@ -16,17 +17,21 @@ import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
 import static com.pazukdev.backend.util.UserActionUtil.ActionType;
 import static com.pazukdev.backend.util.UserActionUtil.processLinkAction;
 
+/**
+ * @author Siarhei Sviarkaltsau
+ */
 public class LinkUtil {
 
     public static void updateItemLinks(final Item target,
                                        final ItemView source,
                                        final UserEntity user,
+                                       final List<String> messages,
                                        final UserActionRepository repository) {
-        updateLink(source.getWikiLink(), LinkType.WIKI, target, user, repository);
-        updateLink(source.getManualLink(), LinkType.MANUAL, target, user, repository);
-        updateLink(source.getPartsCatalogLink(), LinkType.PARTS_CATALOG, target, user, repository);
-        updateLink(source.getDrawingsLink(), LinkType.DRAWINGS, target, user, repository);
-        updateLink(source.getWebsiteLink(), LinkType.WEBSITE, target, user, repository);
+        updateLink(source.getWikiLink(), LinkType.WIKI, target, user, messages, repository);
+        updateLink(source.getManualLink(), LinkType.MANUAL, target, user, messages, repository);
+        updateLink(source.getPartsCatalogLink(), LinkType.PARTS_CATALOG, target, user, messages, repository);
+        updateLink(source.getDrawingsLink(), LinkType.DRAWINGS, target, user, messages, repository);
+        updateLink(source.getWebsiteLink(), LinkType.WEBSITE, target, user, messages, repository);
 
         target.getBuyLinks().clear();
         target.getBuyLinks().addAll(convert(source.getBuyLinks()));
@@ -37,21 +42,23 @@ public class LinkUtil {
                                   final String linkType,
                                   final Item target,
                                   final UserEntity user,
-                                  final UserActionRepository repository) {
+                                  final List<String> messages,
+                                  final UserActionRepository repo) {
 
         final Link link = getLink(linkType, target.getLinks());
+        final boolean processLinkAction = user != null && messages != null;
 
         if (link != null) {
             if (isEmpty(linkUrl)) {
                 target.getLinks().remove(link);
-                if (user != null) {
-                    processLinkAction(ActionType.DELETE, link, target, user, repository);
+                if (processLinkAction) {
+                    processLinkAction(ActionType.DELETE, link, target, user, messages, repo);
                 }
             } else {
                 if (link.getUrl() == null || !link.getUrl().equals(linkUrl)) {
                     link.setUrl(linkUrl);
-                    if (user != null) {
-                        processLinkAction(ActionType.UPDATE, link, target, user, repository);
+                    if (processLinkAction) {
+                        processLinkAction(ActionType.UPDATE, link, target, user, messages, repo);
                     }
                 }
             }
@@ -59,8 +66,8 @@ public class LinkUtil {
             if (!isEmpty(linkUrl)) {
                 final Link newLink = createLink(linkType, linkUrl, "-");
                 target.getLinks().add(newLink);
-                if (user != null) {
-                    processLinkAction(ActionType.ADD, newLink, target, user, repository);
+                if (processLinkAction) {
+                    processLinkAction(ActionType.ADD, newLink, target, user, messages, repo);
                 }
             }
         }

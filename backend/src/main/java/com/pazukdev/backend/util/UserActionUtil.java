@@ -134,6 +134,7 @@ public class UserActionUtil {
                                          final Link link,
                                          final Item item,
                                          final UserEntity user,
+                                         final List<String> messages,
                                          final UserActionRepository repository) {
         updateUserRating(user, actionType, ItemType.LINK);
 
@@ -141,6 +142,9 @@ public class UserActionUtil {
         action.setName(link.getUrl());
         action.setItemCategory(link.getType() + ", " + link.getCountryCode());
         action.setItemId(link.getId() != null ? link.getId() : 0L);
+
+        final String message = link.getType() + " link " + actionType.toLowerCase() + "d";
+        MessageUtil.addMessage(message, messages, item.getId(), item.getName());
 
         repository.save(action);
     }
@@ -176,28 +180,19 @@ public class UserActionUtil {
         itemService.getUserActionRepository().save(action);
     }
 
-    public static void processPartAction(final String actionType,
-                                         final ChildItem part,
-                                         final Item parent,
-                                         final UserEntity user,
-                                         final ItemService itemService) {
-        updateUserRating(user, actionType, ItemType.PART);
-
-        final UserAction action = createChildItemAction(user, actionType, parent, part);
+    public static void processChildItemAction(final String actionType,
+                                              final Childable childable,
+                                              final Item parent,
+                                              final UserEntity user,
+                                              final List<String> messages,
+                                              final ItemService itemService) {
+        final UserAction action = createChildItemAction(user, actionType, parent, childable);
+        updateUserRating(user, actionType, childable.getType());
         itemService.getUserActionRepository().save(action);
+        if (messages != null) {
+            MessageUtil.addChildItemMessage(childable, parent, actionType, messages);
+        }
     }
-
-    public static void processReplacerAction(final String actionType,
-                                             final Replacer replacer,
-                                             final Item parent,
-                                             final UserEntity user,
-                                             final ItemService itemService) {
-        updateUserRating(user, actionType, ItemType.REPLACER);
-
-        final UserAction action = createReplacerAction(user, actionType, parent, replacer);
-        itemService.getUserActionRepository().save(action);
-    }
-
 
     public static int processRateItemAction(final Item itemToRate,
                                              final String actionType,
@@ -266,32 +261,18 @@ public class UserActionUtil {
     }
 
     private static UserAction createChildItemAction(final UserEntity user,
-                                                   final String actionType,
-                                                   final Item item,
-                                                   final ChildItem childItem) {
-        final String itemType = "part";
+                                                    final String actionType,
+                                                    final Item parent,
+                                                    final Childable childable) {
+        final String itemType = childable.getType();
+        final Item child = childable.getItem();
 
-        final UserAction userAction = create(user, actionType, itemType, item);
-        userAction.setItemId(childItem.getItem().getId());
-        userAction.setName(createChildName(actionType, childItem.getItem(), item, itemType));
-        userAction.setParentItemId(item.getId());
+        final UserAction userAction = create(user, actionType, itemType, parent);
+        userAction.setItemId(child.getId());
+        userAction.setName(createChildName(actionType, child, parent, itemType));
+        userAction.setParentItemId(parent.getId());
         userAction.setItemType(itemType);
-        userAction.setItemCategory(childItem.getItem().getCategory());
-
-        return userAction;
-    }
-
-    private static UserAction createReplacerAction(final UserEntity user,
-                                                  final String actionType,
-                                                  final Item item,
-                                                  final Replacer replacer) {
-        final String itemType = "replacer";
-
-        final UserAction userAction = create(user, actionType, itemType, item);
-        userAction.setItemId(replacer.getItem().getId());
-        userAction.setName(createChildName(actionType, replacer.getItem(), item, itemType));
-        userAction.setParentItemId(item.getId());
-        userAction.setItemType(itemType);
+        userAction.setItemCategory(child.getCategory());
 
         return userAction;
     }

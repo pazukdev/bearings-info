@@ -163,21 +163,24 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     public void addLinksToItem(final Item target, final TransitiveItem source) {
-        final UserActionRepository repository = this.getUserActionRepository();
+        final UserActionRepository repo = this.getUserActionRepository();
+        final UserEntity user = null;
+        final List<String> messages = null;
+
         if (source.getWiki() != null) {
-            updateLink(source.getWiki(), LinkType.WIKI, target, null, repository);
+            updateLink(source.getWiki(), LinkType.WIKI, target, user, messages, repo);
         }
         if (source.getWebsite() != null) {
-            updateLink(source.getWebsite(), LinkType.WEBSITE, target, null, repository);
+            updateLink(source.getWebsite(), LinkType.WEBSITE, target, user, messages, repo);
         }
         if (source.getManual() != null) {
-            updateLink(source.getManual(), LinkType.MANUAL, target, null, repository);
+            updateLink(source.getManual(), LinkType.MANUAL, target, user, messages, repo);
         }
         if (source.getParts() != null) {
-            updateLink(source.getParts(), LinkType.PARTS_CATALOG, target, null, repository);
+            updateLink(source.getParts(), LinkType.PARTS_CATALOG, target, user, messages, repo);
         }
         if (source.getDrawings() != null) {
-            updateLink(source.getDrawings(), LinkType.DRAWINGS, target, null, repository);
+            updateLink(source.getDrawings(), LinkType.DRAWINGS, target, user, messages, repo);
         }
         target.getBuyLinks().clear();
         target.getBuyLinks().addAll(LinkConverter.convert(new ArrayList<>(source.getBuyLinksDto())));

@@ -145,7 +145,7 @@
             },
 
             removeImg() {
-                this.itemView.img = null;
+                this.itemView.img = "";
             },
 
             previewImage(event) {

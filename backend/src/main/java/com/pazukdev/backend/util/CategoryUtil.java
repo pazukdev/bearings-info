@@ -15,6 +15,9 @@ import static com.pazukdev.backend.util.CollectionUtil.contains;
 import static com.pazukdev.backend.util.ItemUtil.getValueFromDescription;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 
+/**
+ * @author Siarhei Sviarkaltsau
+ */
 public class CategoryUtil {
 
     public static class Category {

@@ -13,6 +13,9 @@ import java.util.*;
 
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 
+/**
+ * @author Siarhei Sviarkaltsau
+ */
 public class ChildItemUtil {
 
     public static List<ChildItem> createParts(final TransitiveItem parent,

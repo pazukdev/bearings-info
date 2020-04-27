@@ -5,9 +5,8 @@ import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.factory.LinkFactory;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.util.BeanUtil;
+import com.pazukdev.backend.util.LoggerUtil;
 import com.pazukdev.backend.util.UserUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.persistence.PostRemove;
 
@@ -18,8 +17,6 @@ import static com.pazukdev.backend.util.UserActionUtil.processLinkAction;
  * @author Siarhei Sviarkaltsau
  */
 public class AuditListener {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(AuditListener.class);
 
     @PostRemove
     public void postRemove(final Object o) {
@@ -43,7 +40,7 @@ public class AuditListener {
                     + " url=" + link.getUrl()
                     + " " + actionType.toLowerCase()
                     + "d by user " + userName;
-            LOGGER.info(logMessage);
+            LoggerUtil.info(logMessage);
         }
     }
 

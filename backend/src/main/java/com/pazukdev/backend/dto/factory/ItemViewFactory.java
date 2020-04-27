@@ -8,6 +8,7 @@ import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.*;
+import com.pazukdev.backend.repository.UserActionRepository;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
 import com.pazukdev.backend.util.*;
@@ -312,6 +313,8 @@ public class ItemViewFactory {
 
         final long businessLogicStartTime = System.nanoTime();
 
+        final UserActionRepository userActionRepository = itemService.getUserActionRepository();
+
         final long translationFromUserLang = System.nanoTime();
         if (!userLang.equals("en") && isLangCodeValid(userLang)) {
             try {
@@ -326,15 +329,19 @@ public class ItemViewFactory {
         final HeaderTable header = view.getHeader();
         final String newName = header.getValue(Parameter.DescriptionIgnored.NAME);
         final String newCategory = header.getValue(Parameter.DescriptionIgnored.CATEGORY);
+
+        final Item oldItem = itemService.findOne(itemId);
+        final List<Item> allItems = itemService.findAll();
+        allItems.remove(oldItem);
+
+        final List<String> messages = new ArrayList<>();
+        MessageUtil.addItemDescriptionMessage(newName, header, oldItem, messages);
+
         header.removeRow(Parameter.DescriptionIgnored.NAME);
         header.removeRow(Parameter.DescriptionIgnored.CATEGORY);
 
         final Map<String, String> newDescriptionMap = TableUtil.createHeaderMap(header);
         final String newDescription = toDescription(newDescriptionMap);
-
-        final Item oldItem = itemService.findOne(itemId);
-        final List<Item> allItems = itemService.findAll();
-        allItems.remove(oldItem);
 
         boolean moveItemToAnotherCategory = updateNameAndCategory(oldItem, newCategory, newName, allItems, infoCategories, itemService);
 
@@ -344,15 +351,25 @@ public class ItemViewFactory {
             oldItem.setDescription(newDescription);
             applyNewDescriptionToCategory(newCategory, header, newDescriptionMap, allItems, itemService);
         }
-        ImgUtil.updateImg(view, oldItem);
-        updateChildItems(oldItem, view, itemService, currentUser);
-        updateReplacers(oldItem, view, itemService, currentUser);
-        LinkUtil.updateItemLinks(oldItem, view, currentUser, itemService.getUserActionRepository());
+        ImgUtil.updateImg(view, oldItem, messages);
+        updateChildItems(oldItem, view, currentUser, messages, itemService);
+        updateReplacers(oldItem, view, currentUser, messages, itemService);
+        LinkUtil.updateItemLinks(oldItem, view, currentUser, messages, userActionRepository);
+
+        if (!oldItem.getStatus().equals(view.getStatus())) {
+            final String oldStatus = oldItem.getStatus();
+            final String newStatus = view.getStatus();
+            oldItem.setStatus(newStatus);
+            final String message = "status changed from " + oldStatus + " to " + newStatus;
+            MessageUtil.addMessage(message, messages, itemId, newName);
+        }
         oldItem.setStatus(view.getStatus());
 
         itemService.update(oldItem);
 
         final ItemView newItemView = createItemView(itemId, oldItem.getStatus(), currentUser.getName(), userLang);
+
+        LoggerUtil.info(messages);
 
         final double totalTranslationTime = view.getTranslationTime() * 1000000000 + translationFromUserLangDuration;
         setTime(newItemView, (double) (System.nanoTime() - businessLogicStartTime), totalTranslationTime);
@@ -438,18 +455,16 @@ public class ItemViewFactory {
             for (final Replacer replacer : new ArrayList<>(item.getReplacers())) {
                 final Item nestedItem = replacer.getItem();
                 if (nestedItem.getId().equals(idToRemove)) {
-//                    replacer.setStatus("deleted");
                     item.getReplacers().remove(replacer);
-                    processReplacerAction(ActionType.DELETE, replacer, item, user, itemService);
+                    processChildItemAction(ActionType.DELETE, replacer, item, user, null, itemService);
                 }
             }
 
             for (final ChildItem part : new ArrayList<>(item.getChildItems())) {
                 final Item nestedItem = part.getItem();
                 if (nestedItem.getId().equals(idToRemove)) {
-//                    part.setStatus("deleted");
                     item.getChildItems().remove(part);
-                    processPartAction(ActionType.DELETE, part, item, user, itemService);
+                    processChildItemAction(ActionType.DELETE, part, item, user, null, itemService);
                 }
             }
 

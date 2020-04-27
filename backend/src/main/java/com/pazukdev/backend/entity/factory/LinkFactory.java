@@ -2,6 +2,9 @@ package com.pazukdev.backend.entity.factory;
 
 import com.pazukdev.backend.entity.Link;
 
+/**
+ * @author Siarhei Sviarkaltsau
+ */
 public class LinkFactory {
 
     public static class LinkType {

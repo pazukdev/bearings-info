@@ -18,8 +18,7 @@ import java.util.stream.Collectors;
 import static com.pazukdev.backend.util.CategoryUtil.*;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
 import static com.pazukdev.backend.util.UserActionUtil.ActionType.*;
-import static com.pazukdev.backend.util.UserActionUtil.processPartAction;
-import static com.pazukdev.backend.util.UserActionUtil.processReplacerAction;
+import static com.pazukdev.backend.util.UserActionUtil.processChildItemAction;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -276,8 +275,9 @@ public class ItemUtil {
 
     public static void updateChildItems(final Item item,
                                         final ItemView itemView,
-                                        final ItemService itemService,
-                                        final UserEntity user) {
+                                        final UserEntity user,
+                                        final List<String> messages,
+                                        final ItemService itemService) {
         final Set<ChildItem> oldChildItems = new HashSet<>(item.getChildItems());
         final Set<ChildItem> newChildItems
                 = new HashSet<>(ChildItemUtil.createChildrenFromItemView(itemView, itemService));
@@ -286,7 +286,7 @@ public class ItemUtil {
 
         for (final ChildItem child : newChildItems) {
             if (child.getId() == null) {
-                processPartAction(ADD, child, item, user, itemService);
+                processChildItemAction(ADD, child, item, user, messages, itemService);
             }
         }
 
@@ -297,7 +297,7 @@ public class ItemUtil {
                     toSave.add(oldChild);
                     if (!newChild.getLocation().equals(oldChild.getLocation())
                             || !newChild.getQuantity().equals(oldChild.getQuantity())) {
-                        processPartAction(UPDATE, oldChild, item, user, itemService);
+                        processChildItemAction(UPDATE, newChild, item, user, messages, itemService);
                     }
                 }
             }
@@ -307,14 +307,15 @@ public class ItemUtil {
 
         for (final ChildItem orphan : oldChildItems) {
             itemService.getChildItemRepository().deleteById(orphan.getId());
-            processPartAction(DELETE, orphan, item, user, itemService);
+            processChildItemAction(DELETE, orphan, item, user, messages, itemService);
         }
     }
 
     public static void updateReplacers(final Item item,
                                        final ItemView itemView,
-                                       final ItemService itemService,
-                                       final UserEntity user) {
+                                       final UserEntity user,
+                                       final List<String> messages,
+                                       final ItemService itemService) {
         final Set<Replacer> oldReplacers = new HashSet<>(item.getReplacers());
         final Set<Replacer> newReplacers =
                 new HashSet<>(ReplacerUtil.createReplacersFromItemView(itemView, itemService));
@@ -323,7 +324,7 @@ public class ItemUtil {
 
         for (final Replacer replacer : newReplacers) {
             if (replacer.getId() == null) {
-                processReplacerAction(ADD, replacer, item, user, itemService);
+                processChildItemAction(ADD, replacer, item, user, messages, itemService);
             }
         }
 
@@ -333,7 +334,7 @@ public class ItemUtil {
                 if (newReplacer.getName().equals(oldReplacer.getName())) {
                     toSave.add(oldReplacer);
                     if (!newReplacer.getComment().equals(oldReplacer.getComment())) {
-                        processReplacerAction(UPDATE, oldReplacer, item, user, itemService);
+                        processChildItemAction(UPDATE, newReplacer, item, user, messages, itemService);
                     }
                 }
             }
@@ -343,7 +344,7 @@ public class ItemUtil {
 
         for (final Replacer orphan : oldReplacers) {
             itemService.getReplacerRepository().deleteById(orphan.getId());
-            processReplacerAction(DELETE, orphan, item, user, itemService);
+            processChildItemAction(DELETE, orphan, item, user, messages, itemService);
         }
     }
 
