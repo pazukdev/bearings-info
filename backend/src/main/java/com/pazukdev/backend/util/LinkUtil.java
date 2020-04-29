@@ -7,7 +7,9 @@ import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.UserActionRepository;
 import org.apache.commons.validator.routines.UrlValidator;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.pazukdev.backend.converter.LinkConverter.convert;
@@ -26,19 +28,65 @@ public class LinkUtil {
                                        final ItemView source,
                                        final UserEntity user,
                                        final List<String> messages,
-                                       final UserActionRepository repository) {
-        updateLink(source.getWikiLink(), LinkType.WIKI, target, user, messages, repository);
-        updateLink(source.getManualLink(), LinkType.MANUAL, target, user, messages, repository);
-        updateLink(source.getPartsCatalogLink(), LinkType.PARTS_CATALOG, target, user, messages, repository);
-        updateLink(source.getDrawingsLink(), LinkType.DRAWINGS, target, user, messages, repository);
-        updateLink(source.getWebsiteLink(), LinkType.WEBSITE, target, user, messages, repository);
+                                       final UserActionRepository repo) {
+        updateLink(source.getWikiLink(), LinkType.WIKI, target, user, messages, repo);
+        updateLink(source.getManualLink(), LinkType.MANUAL, target, user, messages, repo);
+        updateLink(source.getPartsCatalogLink(), LinkType.PARTS_CATALOG, target, user, messages, repo);
+        updateLink(source.getDrawingsLink(), LinkType.DRAWINGS, target, user, messages, repo);
+        updateLink(source.getWebsiteLink(), LinkType.WEBSITE, target, user, messages, repo);
+
+        final Set<Link> links = convert(source.getBuyLinks());
+        for (final Link link : links) {
+            String actionDetails = "";
+            if (link.getId() == null) {
+                processLinkAction(ActionType.ADD, link, actionDetails, target, user, messages, repo);
+            } else {
+                for (final Link oldLink : target.getBuyLinks()) {
+                    if (link.getId().equals(oldLink.getId())) {
+                        final String newUrl = link.getUrl();
+                        final String oldUrl = oldLink.getUrl();
+                        final String newCountryCode = link.getCountryCode();
+                        final String oldCountryCode = oldLink.getCountryCode();
+                        final boolean urlChanged = !Objects.equals(newUrl, oldUrl);
+                        final boolean countryChanged = !Objects.equals(newCountryCode, oldCountryCode);
+                        if (urlChanged) {
+                            actionDetails += "url changed: " + oldUrl + " -> " + newUrl;
+                        }
+                        if (countryChanged) {
+                            actionDetails += ", country changed: " + oldCountryCode + " -> " + newCountryCode;
+                        }
+                        if (urlChanged || countryChanged) {
+                            processLinkAction(ActionType.UPDATE, link, actionDetails, target, user, messages, repo);
+                        }
+                    }
+                }
+            }
+        }
+
+        final List<Link> linksToDelete = new ArrayList<>();
+
+        for (final Link oldLink : target.getBuyLinks()) {
+            boolean delete = true;
+            for (final Link newLink : links) {
+                if (oldLink.getId().equals(newLink.getId())) {
+                    delete = false;
+                }
+            }
+            if (delete) {
+                linksToDelete.add(oldLink);
+            }
+        }
+
 
         target.getBuyLinks().clear();
-        target.getBuyLinks().addAll(convert(source.getBuyLinks()));
+        target.getBuyLinks().addAll(links);
 
+        for (final Link link : linksToDelete) {
+            processLinkAction(ActionType.DELETE, link, "", target, user, messages, repo);
+        }
     }
 
-    public static void updateLink(final String linkUrl,
+    public static void updateLink(final String newUrl,
                                   final String linkType,
                                   final Item target,
                                   final UserEntity user,
@@ -48,26 +96,29 @@ public class LinkUtil {
         final Link link = getLink(linkType, target.getLinks());
         final boolean processLinkAction = user != null && messages != null;
 
+        String actionDetails = "";
+
         if (link != null) {
-            if (isEmpty(linkUrl)) {
+            if (isEmpty(newUrl)) {
                 target.getLinks().remove(link);
                 if (processLinkAction) {
-                    processLinkAction(ActionType.DELETE, link, target, user, messages, repo);
+                    processLinkAction(ActionType.DELETE, link, actionDetails, target, user, messages, repo);
                 }
             } else {
-                if (link.getUrl() == null || !link.getUrl().equals(linkUrl)) {
-                    link.setUrl(linkUrl);
-                    if (processLinkAction) {
-                        processLinkAction(ActionType.UPDATE, link, target, user, messages, repo);
-                    }
+                final String oldUrl = link.getUrl();
+                final boolean urlChanged = !Objects.equals(newUrl, oldUrl);
+                if (urlChanged) {
+                    actionDetails += "url changed: " + oldUrl + " -> " + newUrl;
+                    link.setUrl(newUrl);
+                    processLinkAction(ActionType.UPDATE, link, actionDetails, target, user, messages, repo);
                 }
             }
         } else {
-            if (!isEmpty(linkUrl)) {
-                final Link newLink = createLink(linkType, linkUrl, "-");
+            if (!isEmpty(newUrl)) {
+                final Link newLink = createLink(linkType, newUrl, "-");
                 target.getLinks().add(newLink);
                 if (processLinkAction) {
-                    processLinkAction(ActionType.ADD, newLink, target, user, messages, repo);
+                    processLinkAction(ActionType.ADD, newLink, actionDetails, target, user, messages, repo);
                 }
             }
         }

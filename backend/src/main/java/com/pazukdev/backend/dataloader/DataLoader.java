@@ -5,14 +5,9 @@ import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.factory.TransitiveItemFactory;
 import com.pazukdev.backend.service.ItemService;
-import com.pazukdev.backend.service.TransitiveItemUtil;
-import com.pazukdev.backend.util.BearingUtil;
-import com.pazukdev.backend.util.FileUtil;
-import com.pazukdev.backend.util.ItemUtil;
+import com.pazukdev.backend.util.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -30,8 +25,6 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class DataLoader implements ApplicationRunner {
-
-    private static final Logger LOG = LoggerFactory.getLogger("DataLoader");
 
     private final TransitiveItemFactory transitiveItemFactory;
     @Getter
@@ -66,7 +59,7 @@ public class DataLoader implements ApplicationRunner {
 
         final long stop = System.nanoTime();
         final double time = (stop - start) * 0.000000001;
-        LOG.info("DB created in " + (int) time + " seconds");
+        LoggerUtil.info("DB created in " + (int) time + " seconds");
     }
 
     public void updateItem(final String category, final String name) {
@@ -85,11 +78,11 @@ public class DataLoader implements ApplicationRunner {
                         users,
                         admin,
                         false);
-                LOG.info("Updated successfully: " + itemInfo);
+                LoggerUtil.info("Updated successfully: " + itemInfo);
                 return;
             }
         }
-        LOG.warn("Not updated: " + itemInfo + " not found");
+        LoggerUtil.warn("Not updated: " + itemInfo + " not found");
     }
 
     private List<TransitiveItem> createStubReplacers(final List<TransitiveItem> items) {

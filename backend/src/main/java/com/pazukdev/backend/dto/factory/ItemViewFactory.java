@@ -9,6 +9,7 @@ import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.repository.UserActionRepository;
+import com.pazukdev.backend.service.EmailSenderService;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
 import com.pazukdev.backend.util.*;
@@ -42,6 +43,7 @@ public class ItemViewFactory {
 
     private final ItemService itemService;
     private final List<String> infoCategories;
+    private final EmailSenderService emailSenderService;
 
     public ItemView createHomeView(final String userName, final String userLanguage) {
         return createItemView(VEHICLES_VIEW.getItemId(), Status.ACTIVE, userName, userLanguage);
@@ -334,8 +336,8 @@ public class ItemViewFactory {
         final List<Item> allItems = itemService.findAll();
         allItems.remove(oldItem);
 
-        final List<String> messages = new ArrayList<>();
-        MessageUtil.addItemDescriptionMessage(newName, header, oldItem, messages);
+        final List<String> messages = itemService.getMessages();
+        MessageUtil.addItemDescriptionMessage(header, oldItem, messages);
 
         header.removeRow(Parameter.DescriptionIgnored.NAME);
         header.removeRow(Parameter.DescriptionIgnored.CATEGORY);
@@ -361,7 +363,7 @@ public class ItemViewFactory {
             final String newStatus = view.getStatus();
             oldItem.setStatus(newStatus);
             final String message = "status changed from " + oldStatus + " to " + newStatus;
-            MessageUtil.addMessage(message, messages, itemId, newName);
+            MessageUtil.addMessage(message, messages);
         }
         oldItem.setStatus(view.getStatus());
 
@@ -369,7 +371,7 @@ public class ItemViewFactory {
 
         final ItemView newItemView = createItemView(itemId, oldItem.getStatus(), currentUser.getName(), userLang);
 
-        LoggerUtil.info(messages);
+        LoggerUtil.warn(messages, oldItem, currentUser, emailSenderService);
 
         final double totalTranslationTime = view.getTranslationTime() * 1000000000 + translationFromUserLangDuration;
         setTime(newItemView, (double) (System.nanoTime() - businessLogicStartTime), totalTranslationTime);

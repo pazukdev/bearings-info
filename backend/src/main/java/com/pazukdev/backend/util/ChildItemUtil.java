@@ -7,7 +7,6 @@ import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.ItemService;
-import com.pazukdev.backend.service.TransitiveItemUtil;
 
 import java.util.*;
 

@@ -8,7 +8,6 @@ import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.repository.ItemRepository;
 import com.pazukdev.backend.service.ItemService;
-import com.pazukdev.backend.service.TransitiveItemUtil;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 

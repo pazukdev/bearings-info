@@ -15,8 +15,6 @@ import com.pazukdev.backend.util.DateUtil;
 import com.pazukdev.backend.util.FileUtil;
 import com.pazukdev.backend.util.RateUtil;
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +37,6 @@ import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
 @Service
 public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ItemService.class);
-
     private final UserService userService;
     private final ChildItemRepository childItemRepository;
     private final UserActionRepository userActionRepository;
@@ -49,11 +45,14 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     private final ItemRepository itemRepository;
     private final AdminMessageRepository adminMessageRepository;
     private final LinkRepository linkRepository;
+    private final EmailSenderService emailSenderService;
 
-    private int bearingReplacerCounter = 0;
-    private int sealReplacerCounter = 0;
-    private int oilFilterReplacerCounter = 0;
-    private int sparkPlugReplacerCounter = 0;
+//    private int bearingReplacerCounter = 0;
+//    private int sealReplacerCounter = 0;
+//    private int oilFilterReplacerCounter = 0;
+//    private int sparkPlugReplacerCounter = 0;
+
+    private final List<String> messages = new ArrayList<>();
 
     public ItemService(final ItemRepository itemRepository,
                        final ItemConverter converter,
@@ -63,7 +62,8 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
                        final ReplacerRepository replacerRepository,
                        final ReplacerConverter replacerConverter,
                        final AdminMessageRepository adminMessageRepository,
-                       final LinkRepository linkRepository) {
+                       final LinkRepository linkRepository,
+                       final EmailSenderService emailSenderService) {
         super(itemRepository, converter);
         this.childItemRepository = childItemRepository;
         this.userService = userService;
@@ -73,6 +73,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
         this.itemRepository = itemRepository;
         this.adminMessageRepository = adminMessageRepository;
         this.linkRepository = linkRepository;
+        this.emailSenderService = emailSenderService;
     }
 
     @Transactional
@@ -250,7 +251,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     private ItemViewFactory createNewItemViewFactory() {
-        return new ItemViewFactory(this, FileUtil.getInfoCategories());
+        return new ItemViewFactory(this, FileUtil.getInfoCategories(), emailSenderService);
     }
 
     public List<Item> findParents(final Item item,

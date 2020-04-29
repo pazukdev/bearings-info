@@ -109,7 +109,7 @@ public class ImgUtil {
         if (!Objects.equals(newImgUrl, oldImgUrl)) {
             item.setImg(newImgUrl);
             final String message = "img changed from " + oldImgUrl + " to " + newImgUrl;
-            MessageUtil.addMessage(message, messages, item.getId(), item.getName());
+            MessageUtil.addMessage(message, messages);
         }
     }
 

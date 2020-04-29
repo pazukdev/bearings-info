@@ -17,7 +17,6 @@ import static com.pazukdev.backend.entity.factory.LinkFactory.LinkType;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 @Entity
 @Table(name = "item")
 @SecondaryTable(name = "item_description")
@@ -115,6 +114,11 @@ public class Item extends AbstractEntity {
 
     private Link getImgLink() {
         return LinkUtil.getLink(LinkType.IMG, this.getLinks());
+    }
+
+    @Override
+    public String toString() {
+        return "item " + super.toString() + " category=" + category;
     }
 
 }

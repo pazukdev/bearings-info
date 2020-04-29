@@ -1,6 +1,5 @@
 package com.pazukdev.backend.util;
 
-import com.google.common.collect.Lists;
 import com.pazukdev.backend.entity.AbstractEntity;
 
 import java.util.*;
@@ -66,13 +65,6 @@ public class CollectionUtil {
             ids.add(entity.getId());
         }
         return ids;
-    }
-
-    public static void main(String[] args) {
-        List<String> list = Lists.newArrayList("a", null, "c");
-        System.out.println(list);
-        removeAllEmpty(list);
-        System.out.println(list);
     }
 
     public static void removeAllEmpty(final List<String> list) {

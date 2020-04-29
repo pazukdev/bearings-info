@@ -14,8 +14,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.pazukdev.backend.service.TransitiveItemUtil.findFirstByCategoryAndName;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
+import static com.pazukdev.backend.util.TransitiveItemUtil.findFirstByCategoryAndName;
 
 public class ReplacerUtil {
 

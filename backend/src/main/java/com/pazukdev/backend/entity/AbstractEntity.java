@@ -16,11 +16,16 @@ public abstract class AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    protected Long id;
 
     @Column(name = "name")
-    private String name = "-";
+    protected String name = "-";
 
-    private String status = "active";
+    protected String status = "active";
+
+    @Override
+    public String toString() {
+        return "id=" + id + " name=" + name;
+    }
 
 }

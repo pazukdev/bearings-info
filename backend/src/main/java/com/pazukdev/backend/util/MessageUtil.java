@@ -13,38 +13,34 @@ import java.util.Map;
  */
 public class MessageUtil {
 
-    public static String getItemInfo(final Long itemId, final String itemName) {
-        return "item id=" + itemId + " name=" + itemName + ": ";
-    }
+//    public static void addMessage(final String message,
+//                                  final List<String> messages,
+//                                  final Long itemId,
+//                                  final String itemName) {
+//        messages.add(getItemInfo(itemId, itemName) + message);
+//    }
 
-    public static void addMessage(final String message,
-                                  final List<String> messages,
-                                  final Long itemId,
-                                  final String itemName) {
-        messages.add(getItemInfo(itemId, itemName) + message);
+    public static void addMessage(final String message, final List<String> messages) {
+        messages.add(message);
     }
 
     public static void addChildItemMessage(final Childable childable,
-                                           final Item parent,
                                            final String actionType,
                                            final List<String> messages) {
-        final Long childId = childable.getItem().getId();
-        final String childName = childable.getItem().getName();
-        final String message = getItemInfo(childId, childName)
-                + actionType
+        final String message = childable.getItem()
+                + actionType + "(e)d"
                 + " as " + childable.getType() + " (" + childable.getDetails() + ")";
-        addMessage(message, messages, parent.getId(), parent.getName());
+        addMessage(message, messages);
     }
 
-    public static void addItemDescriptionMessage(final String newName,
-                                                 final HeaderTable header,
+    public static void addItemDescriptionMessage(final HeaderTable header,
                                                  final Item oldItem,
                                                  final List<String> messages) {
         final Map<String, String> map = ItemUtil.toMap(oldItem.getDescription());
         map.put("Name", oldItem.getName());
         map.put("Category", oldItem.getCategory());
 
-        final String itemInfo = getItemInfo(oldItem.getId(), newName);
+        final String itemInfo = oldItem + ": ";
 
         for (final HeaderTableRow row : header.getRows()) {
             final String param = row.getParameter();

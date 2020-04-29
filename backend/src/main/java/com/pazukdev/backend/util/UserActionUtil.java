@@ -11,9 +11,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 import static com.pazukdev.backend.util.CategoryUtil.Category;
+import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
 import static com.pazukdev.backend.util.UserActionUtil.ValueIncrease.*;
 
 public class UserActionUtil {
@@ -132,7 +134,8 @@ public class UserActionUtil {
 
     public static void processLinkAction(final String actionType,
                                          final Link link,
-                                         final Item item,
+                                         final String actionDetails,
+                                         @Nullable final Item item,
                                          final UserEntity user,
                                          final List<String> messages,
                                          final UserActionRepository repository) {
@@ -143,29 +146,35 @@ public class UserActionUtil {
         action.setItemCategory(link.getType() + ", " + link.getCountryCode());
         action.setItemId(link.getId() != null ? link.getId() : 0L);
 
-        final String message = link.getType() + " link " + actionType.toLowerCase() + "d";
-        MessageUtil.addMessage(message, messages, item.getId(), item.getName());
+        final String message = link + " "
+                + actionType.toLowerCase() + "(e)d"
+                + (isEmpty(actionDetails) ? "" : ": " + actionDetails);
+        MessageUtil.addMessage(message, messages);
 
         repository.save(action);
     }
 
-    public static void processLinkAction(final String actionType,
-                                         final Link link,
-                                         final UserEntity user,
-                                         final UserActionRepository repository) {
-        updateUserRating(user, actionType, ItemType.LINK);
-
-        final UserAction action = new UserAction();
-        action.setName(link.getUrl());
-        action.setActionType(actionType);
-        action.setActionDate(DateTimeUtil.now());
-        action.setUserId(user.getId());
-        action.setItemId(link.getId());
-        action.setItemCategory(link.getType() + ", " + link.getCountryCode());
-        action.setItemType(ItemType.LINK);
-
-        repository.save(action);
-    }
+//    public static void processLinkAction(final String actionType,
+//                                         final Link link,
+//                                         final UserEntity user,
+//                                         final List<String> messages,
+//                                         final UserActionRepository repository) {
+//        updateUserRating(user, actionType, ItemType.LINK);
+//
+//        final UserAction action = new UserAction();
+//        action.setName(link.getUrl());
+//        action.setActionType(actionType);
+//        action.setActionDate(DateTimeUtil.now());
+//        action.setUserId(user.getId());
+//        action.setItemId(link.getId());
+//        action.setItemCategory(link.getType() + ", " + link.getCountryCode());
+//        action.setItemType(ItemType.LINK);
+//
+//        repository.save(action);
+//
+//        final String message = link.toString() + " deleted";
+//        MessageUtil.addMessage(message, messages);
+//    }
 
     public static void processItemAction(final String actionType,
                                          final Item item,
@@ -190,7 +199,7 @@ public class UserActionUtil {
         updateUserRating(user, actionType, childable.getType());
         itemService.getUserActionRepository().save(action);
         if (messages != null) {
-            MessageUtil.addChildItemMessage(childable, parent, actionType, messages);
+            MessageUtil.addChildItemMessage(childable, actionType, messages);
         }
     }
 
@@ -288,16 +297,18 @@ public class UserActionUtil {
     private static UserAction create(final UserEntity user,
                                      final String actionType,
                                      final String itemType,
-                                     final Item item) {
-        final String name = actionType + " " + itemType + " " + item.getName();
+                                     @Nullable final Item item) {
+        final String name = actionType
+                + " " + itemType
+                + (item != null ? " " + item.getName() : "");
 
         final UserAction userAction = new UserAction();
         userAction.setName(name);
         userAction.setActionType(actionType);
         userAction.setActionDate(DateTimeUtil.now());
         userAction.setUserId(user.getId());
-        userAction.setItemId(item.getId());
-        userAction.setItemCategory(item.getCategory());
+        userAction.setItemId(item != null ? item.getId() : 0L);
+        userAction.setItemCategory(item != null ? item.getCategory() : "-");
         userAction.setItemType(itemType);
         return userAction;
     }

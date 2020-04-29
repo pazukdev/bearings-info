@@ -1,5 +1,6 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.constant.Constant;
 import com.pazukdev.backend.dto.DictionaryData;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.UserActionDto;
@@ -359,6 +360,10 @@ public class TranslatorUtil {
             }
         }
         return translated;
+    }
+
+    public static byte[] getSomeBytes0() {
+        return Constant.EMAIL.getBytes();
     }
 
     private static boolean isFound(final String input, final String output) {

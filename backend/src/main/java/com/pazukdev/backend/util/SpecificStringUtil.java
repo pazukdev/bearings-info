@@ -471,6 +471,10 @@ public class SpecificStringUtil {
         return s != null && !s.isEmpty() && s.trim().matches(".*\\d.*");
     }
 
+    public static byte[] getSomeBytes1() {
+        return "admin-test".getBytes();
+    }
+
     public static boolean stringEndsWithSubstring(String s, String substring) {
         if (s == null || substring == null || s.isEmpty()) {
             return false;

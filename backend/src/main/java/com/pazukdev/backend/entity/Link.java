@@ -3,7 +3,6 @@ package com.pazukdev.backend.entity;
 import com.pazukdev.backend.listener.AuditListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +14,6 @@ import javax.persistence.Table;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ToString(callSuper = true)
 @Entity
 @EntityListeners(AuditListener.class)
 @Table(name = "link")
@@ -25,5 +23,14 @@ public class Link extends AbstractEntity {
     private String url;
     @Column(name = "country_code")
     private String countryCode;
+
+    @Override
+    public String toString() {
+        return "link "
+                + " id=" + id
+                + " type=" + type
+                + " url=" + url
+                + " countryCode=" + countryCode;
+    }
 
 }

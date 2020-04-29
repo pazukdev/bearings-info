@@ -6,6 +6,7 @@ import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.dto.view.UserView;
 import com.pazukdev.backend.entity.Item;
+import com.pazukdev.backend.service.EmailSenderService;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.util.FileUtil;
 import io.swagger.annotations.Api;
@@ -29,6 +30,7 @@ public class UserController {
 
     private final ItemService itemService;
     private final UserConverter userConverter;
+    private final EmailSenderService emailSenderService;
 
     @GetMapping("/view/user/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -41,7 +43,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get users list view")
     public ItemView getUserListView(@PathVariable final String userName, @PathVariable final String language) {
-        final ItemViewFactory factory = new ItemViewFactory(itemService, FileUtil.getInfoCategories());
+        final ItemViewFactory factory = new ItemViewFactory(itemService, FileUtil.getInfoCategories(), emailSenderService);
         return factory.createUserListView(userName, language);
     }
 

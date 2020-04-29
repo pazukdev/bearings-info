@@ -1,4 +1,4 @@
-package com.pazukdev.backend.service;
+package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.entity.TransitiveItem;
 
