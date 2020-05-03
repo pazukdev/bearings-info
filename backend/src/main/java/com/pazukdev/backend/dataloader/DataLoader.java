@@ -72,10 +72,9 @@ public class DataLoader implements ApplicationRunner {
         final String category = CategoryUtil.Category.VEHICLE;
         for (final Item item : itemService.getItemRepository().findFirst10ByCategory(category, p)) {
             final UserEntity creator = itemService.getUserService().findFirst(item.getCreatorId());
-            actions.add(createAction(ActionType.CREATE, "", null, item, creator));
+            actions.add(createAction(ActionType.CREATE, "", null, item, creator, false));
         }
 
-        final String type = NestedItem.Type.REPLACER.name().toLowerCase();
         final List<NestedItem> replacers = itemService.getNestedItemRepo().findAll();
         Collections.reverse(itemService.getNestedItemRepo().findAll());
 
@@ -116,7 +115,8 @@ public class DataLoader implements ApplicationRunner {
                         "",
                         parent,
                         replacer,
-                        creator));
+                        creator,
+                        false));
             }
         }
 

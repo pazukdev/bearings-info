@@ -130,24 +130,21 @@ public class UserActionUtil {
                                           final String actionDetails,
                                           @Nullable final Item parent,
                                           @Nonnull final AbstractEntity entity,
-                                          final UserEntity user) {
+                                          final UserEntity user,
+                                          final boolean specifyParentInMessage) {
 
         if (user == null) {
             return null;
         }
 
-        String valuationType = ValuationType.ITEM;
         String message =  entity.toString();
         if (entity instanceof NestedItem) {
             message += " item=(" + ((NestedItem) entity).getItem() + ")";
         }
         if (!actionType.equals(ActionType.UPDATE)) {
             message += ": " + actionType.toLowerCase() + "(e)d";
-            if (parent != null) {
+            if (actionType.equals(ActionType.DELETE) && specifyParentInMessage && parent != null) {
                 String preposition = "from";
-                if (actionType.equals(ActionType.ADD)) {
-                    preposition = "to";
-                }
                 message += " " + preposition + " " + parent;
             }
         }
@@ -159,8 +156,11 @@ public class UserActionUtil {
             }
         }
 
+        final String valuationType;
         if (entity instanceof Typeable) {
             valuationType = ((Typeable) entity).getValuationType();
+        } else {
+            valuationType = ValuationType.ITEM;
         }
 
         Long parentId = null;
@@ -204,7 +204,7 @@ public class UserActionUtil {
 
         for (final NestedItem child : newChildren) {
             if (child.getId() == null) {
-                actions.add(createAction(ActionType.ADD, "", parent, child, user));
+                actions.add(createAction(ActionType.ADD, "", parent, child, user, false));
             }
         }
 
@@ -227,7 +227,7 @@ public class UserActionUtil {
                         actionDetails += "new quantity: " + newQuantity;
                     }
                     if (commentChanged || quantityChanged) {
-                        actions.add(createAction(ActionType.UPDATE, actionDetails, parent, oldChild, user));
+                        actions.add(createAction(ActionType.UPDATE, actionDetails, parent, oldChild, user, false));
                     }
                 }
             }
@@ -237,7 +237,7 @@ public class UserActionUtil {
 
         for (final NestedItem orphan : oldChildren) {
             service.getNestedItemRepo().deleteById(orphan.getId());
-            actions.add(createAction(ActionType.DELETE, "", parent, orphan, user));
+            actions.add(createAction(ActionType.DELETE, "", parent, orphan, user, false));
         }
 
         return actions;
@@ -263,19 +263,19 @@ public class UserActionUtil {
             final boolean newRow = row.getId() == null;
             if (newRow) {
                 final String actionDetails = "new param=" + param + " value=" + value + " added";
-                actions.add(createAction(ActionType.ADD, actionDetails, null, oldItem, user));
+                actions.add(createAction(ActionType.ADD, actionDetails, null, oldItem, user, false));
             } else {
                 String actionDetails = null;
                 final String oldValue = map.get(param);
                 if (oldValue == null) {
                     actionDetails = "param param=" + param + " value=" + value
-                            + ": new param " + param;
+                            + ": new param=" + param;
                 } else if (!oldValue.equals(value)) {
                     actionDetails = "param param=" + param + " value=" + oldValue
-                            + ": new value " + value;
+                            + ": new value=" + value;
                 }
                 if (actionDetails != null) {
-                    actions.add(createAction(ActionType.UPDATE, actionDetails, null, oldItem, user));
+                    actions.add(createAction(ActionType.UPDATE, actionDetails, null, oldItem, user, false));
                 }
             }
         }
@@ -290,13 +290,13 @@ public class UserActionUtil {
             }
             if (deleted) {
                 final String actionDetails = "param " + entry.getKey() + " removed";
-                actions.add(createAction(ActionType.DELETE, actionDetails, null, oldItem, user));
+                actions.add(createAction(ActionType.DELETE, actionDetails, null, oldItem, user, false));
             }
         }
     }
 
     public static void updateUserRating(final UserEntity user,
-                                       final String actionType,
+                                        final String actionType,
                                         final String valuationType) {
         if (!userRatedActions.contains(actionType)) {
             return;

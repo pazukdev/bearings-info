@@ -1,6 +1,7 @@
 package com.pazukdev.backend.entity;
 
 import com.pazukdev.backend.entity.abstraction.AbstractEntity;
+import com.pazukdev.backend.entity.abstraction.Typeable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "child_item")
-public class NestedItem extends AbstractEntity {
+public class NestedItem extends AbstractEntity implements Typeable {
 
     public enum Type {
         PART, REPLACER
@@ -28,10 +29,10 @@ public class NestedItem extends AbstractEntity {
     @Column(name = "creator_id")
     private Long creatorId;
 
-//    @Override
-//    public String getValuationType() {
-//        return UserActionUtil.ValuationType.PART;
-//    }
+    @Override
+    public String getValuationType() {
+        return type;
+    }
 
     @Override
     public String toString() {

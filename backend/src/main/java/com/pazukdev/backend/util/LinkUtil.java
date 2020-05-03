@@ -39,7 +39,7 @@ public class LinkUtil {
         for (final Link link : links) {
             String actionDetails = "";
             if (link.getId() == null) {
-                actions.add(createAction(ActionType.ADD, actionDetails, target, link, user));
+                actions.add(createAction(ActionType.ADD, actionDetails, target, link, user, false));
             } else {
                 for (final Link oldLink : target.getBuyLinks()) {
                     if (link.getId().equals(oldLink.getId())) {
@@ -56,7 +56,7 @@ public class LinkUtil {
                             actionDetails += "new countryCode=" + newCountryCode;
                         }
                         if (urlChanged || countryChanged) {
-                            actions.add(createAction(ActionType.UPDATE, actionDetails, target, oldLink, user));
+                            actions.add(createAction(ActionType.UPDATE, actionDetails, target, oldLink, user, false));
                         }
                     }
                 }
@@ -82,7 +82,7 @@ public class LinkUtil {
         target.getBuyLinks().addAll(links);
 
         for (final Link link : linksToDelete) {
-            actions.add(createAction(ActionType.DELETE, "", target, link, user));
+            actions.add(createAction(ActionType.DELETE, "", target, link, user, false));
         }
     }
 
@@ -122,7 +122,7 @@ public class LinkUtil {
             if (isEmpty(newUrl)) {
                 target.getLinks().remove(link);
                 if (addAction) {
-                    actions.add(createAction(ActionType.DELETE, actionDetails, target, link, user));
+                    actions.add(createAction(ActionType.DELETE, actionDetails, target, link, user, false));
                 }
             } else {
                 final String oldUrl = link.getUrl();
@@ -130,7 +130,7 @@ public class LinkUtil {
                 if (urlChanged) {
                     actionDetails += "new url: " + newUrl;
                     if (addAction) {
-                        actions.add(createAction(ActionType.UPDATE, actionDetails, target, link, user));
+                        actions.add(createAction(ActionType.UPDATE, actionDetails, target, link, user, false));
                     }
                     link.setUrl(newUrl);
                 }
@@ -140,7 +140,7 @@ public class LinkUtil {
                 final Link newLink = createLink(linkType, newUrl, "-");
                 target.getLinks().add(newLink);
                 if (addAction) {
-                    actions.add(createAction(ActionType.ADD, actionDetails, target, newLink, user));
+                    actions.add(createAction(ActionType.ADD, actionDetails, target, newLink, user, false));
                 }
             }
         }

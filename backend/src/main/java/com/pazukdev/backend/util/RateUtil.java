@@ -56,7 +56,7 @@ public class RateUtil {
 
         final String actionType = rateAction == RateAction.CANCEL ? ActionType.CANCEL_RATE : ActionType.RATE;
         LoggerUtil.warn(
-                UserActionUtil.createAction(actionType, "", null, item, user),
+                UserActionUtil.createAction(actionType, "", null, item, user, false),
                 service.getUserActionRepo(),
                 item,
                 user,

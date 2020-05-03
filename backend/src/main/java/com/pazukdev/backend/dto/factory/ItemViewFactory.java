@@ -129,7 +129,7 @@ public class ItemViewFactory {
         final Item item = createNewItem(name.trim(), category.trim(), creator, userLanguage);
 
         LoggerUtil.warn(
-                UserActionUtil.createAction(ActionType.CREATE, "", null, item, creator),
+                UserActionUtil.createAction(ActionType.CREATE, "", null, item, creator, false),
                 itemService.getUserActionRepo(),
                 item,
                 creator,
@@ -163,7 +163,7 @@ public class ItemViewFactory {
         item.setUserActionDate(DateUtil.now());
         item.setDescription(createEmptyDescription(category, itemService.getItemRepository()));
         itemService.update(item);
-        UserActionUtil.createAction(ActionType.CREATE, "", null, item, creator);
+        UserActionUtil.createAction(ActionType.CREATE, "", null, item, creator, false);
         return item;
     }
 
@@ -342,12 +342,18 @@ public class ItemViewFactory {
         final String newCategory = header.getValue(Parameter.DescriptionIgnored.CATEGORY);
         final String newStatus = view.getStatus();
 
-        final Item oldItem = itemService.findOne(itemId);
+        final Item item = itemService.findOne(itemId);
+
+        final Item oldItemCopy = new Item();
+        oldItemCopy.setId(item.getId());
+        oldItemCopy.setName(item.getName());
+        oldItemCopy.setCategory(item.getCategory());
+
         final List<Item> allItems = itemService.findAllActive();
-        allItems.remove(oldItem);
+        allItems.remove(item);
 
         final List<UserAction> actions = new ArrayList<>();
-        createActions(header, oldItem, newStatus, actions, currentUser);
+        createActions(header, item, newStatus, actions, currentUser);
 
         header.removeRow(Parameter.DescriptionIgnored.NAME);
         header.removeRow(Parameter.DescriptionIgnored.CATEGORY);
@@ -355,24 +361,25 @@ public class ItemViewFactory {
         final Map<String, String> newDescriptionMap = TableUtil.createHeaderMap(header);
         final String newDescription = toDescription(newDescriptionMap);
 
-        boolean moveItemToAnotherCategory = updateNameAndCategory(oldItem, newCategory, newName, allItems, infoCategories, itemService);
+        boolean moveItemToAnotherCategory = updateNameAndCategory(item, newCategory, newName, allItems, infoCategories, itemService);
 
         if (moveItemToAnotherCategory) {
-            moveItemToAnotherCategory(oldItem, newCategory, newDescriptionMap, itemService);
-        } else if (!oldItem.getDescription().equals(newDescription)) {
-            oldItem.setDescription(newDescription);
+            moveItemToAnotherCategory(item, newCategory, newDescriptionMap, itemService);
+        } else if (!item.getDescription().equals(newDescription)) {
+            item.setDescription(newDescription);
             applyNewDescriptionToCategory(newCategory, header, newDescriptionMap, allItems, itemService);
         }
 
-        updateNestedItems(oldItem, view, currentUser, itemService, actions);
-        updateLinks(oldItem, view, currentUser, actions);
-        oldItem.setStatus(newStatus);
+        updateNestedItems(item, view, currentUser, itemService, actions);
+        updateLinks(item, view, currentUser, actions);
+        item.setStatus(newStatus);
 
-        itemService.update(oldItem);
+        itemService.update(item);
 
-        final ItemView newItemView = createItemView(itemId, oldItem.getStatus(), currentUser.getName(), userLang);
+        final ItemView newItemView = createItemView(itemId, item.getStatus(), currentUser.getName(), userLang);
 
-        LoggerUtil.warn(actions, userActionRepo, oldItem, currentUser, emailSenderService);
+
+        LoggerUtil.warn(actions, userActionRepo, oldItemCopy, currentUser, emailSenderService);
 
         final double totalTranslationTime = view.getTranslationTime() * 1000000000 + translationFromUserLangDuration;
         setTime(newItemView, (double) (System.nanoTime() - businessLogicStartTime), totalTranslationTime);
@@ -452,7 +459,7 @@ public class ItemViewFactory {
         itemToRemove.setStatus(Status.DELETED);
         itemToRemove.setUserActionDate(DateUtil.now());
         itemService.update(itemToRemove);
-        actions.add(createAction(ActionType.DELETE, "", null, itemToRemove, user));
+        actions.add(createAction(ActionType.DELETE, "", null, itemToRemove, user, false));
     }
 
     private void removeItemFromAllWishLists(final Item itemToRemove, final UserService userService) {
@@ -467,19 +474,18 @@ public class ItemViewFactory {
                                               final UserEntity user,
                                               final List<UserAction> actions) {
         for (final Item item : itemService.findAllActive()) {
-            for (final NestedItem replacer : new ArrayList<>(item.getReplacers())) {
-                final Item nestedItem = replacer.getItem();
-                if (nestedItem.getId().equals(idToRemove)) {
-                    item.getReplacers().remove(replacer);
-                    actions.add(createAction(ActionType.DELETE, "", item, replacer, user));
-                }
-            }
+            final List<NestedItem> nestedItems = new ArrayList<>(item.getReplacers());
+            nestedItems.addAll(new ArrayList<>(item.getParts()));
 
-            for (final NestedItem part : new ArrayList<>(item.getParts())) {
-                final Item nestedItem = part.getItem();
-                if (nestedItem.getId().equals(idToRemove)) {
-                    item.getParts().remove(part);
-                    actions.add(createAction(ActionType.DELETE, "", item, part, user));
+            for (final NestedItem nestedItem : nestedItems) {
+                final Item child = nestedItem.getItem();
+                if (child.getId().equals(idToRemove)) {
+                    if (nestedItem.getType().equals(NestedItem.Type.REPLACER.toString().toLowerCase())) {
+                        item.getReplacers().remove(nestedItem);
+                    } else {
+                        item.getParts().remove(nestedItem);
+                    }
+                    actions.add(createAction(ActionType.DELETE, "", item, nestedItem, user, true));
                 }
             }
 
