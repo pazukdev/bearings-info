@@ -87,6 +87,7 @@
                 if (this.message !== "") {
                     return;
                 }
+                this.item.type = "part";
                 this.item.comment = this.itemLocation;
                 this.item.secondComment = this.itemQuantity;
 

@@ -1,6 +1,9 @@
 package com.pazukdev.backend.entity;
 
+import com.pazukdev.backend.entity.abstraction.AbstractEntity;
+import com.pazukdev.backend.entity.abstraction.Typeable;
 import com.pazukdev.backend.listener.AuditListener;
+import com.pazukdev.backend.util.UserActionUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,7 +20,7 @@ import javax.persistence.Table;
 @Entity
 @EntityListeners(AuditListener.class)
 @Table(name = "link")
-public class Link extends AbstractEntity {
+public class Link extends AbstractEntity implements Typeable {
 
     private String type;
     private String url;
@@ -33,4 +36,8 @@ public class Link extends AbstractEntity {
                 + " countryCode=" + countryCode;
     }
 
+    @Override
+    public String getValuationType() {
+        return UserActionUtil.ValuationType.LINK;
+    }
 }

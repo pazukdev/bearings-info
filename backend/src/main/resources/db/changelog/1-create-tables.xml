@@ -23,15 +23,16 @@
             <column name="id" type="bigserial" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="name" type="varchar(255)"/>
             <column name="user_id" type="bigserial"/>
             <column name="action_date" type="varchar(255)"/>
             <column name="action_type" type="varchar(255)"/>
-            <column name="parent_item_id" type="bigserial"/>
+            <column name="parent_id" type="bigserial"/>
             <column name="item_id" type="bigserial"/>
-            <column name="item_type" type="varchar(255)"/>
-            <column name="item_category" type="varchar(255)"/>
-            <column name="status" type="varchar(255)"/>
+            <column name="note" type="varchar(255)"/>
+            <column name="message" type="varchar(1000)"/>
+<!--            <column name="item_type" type="varchar(255)"/>-->
+<!--            <column name="item_category" type="varchar(255)"/>-->
+<!--            <column name="status" type="varchar(255)"/>-->
         </createTable>
     </changeSet>
 
@@ -54,22 +55,24 @@
             <column name="name" type="varchar(255)"/>
             <column name="status" type="varchar(255)"/>
             <column name="item_id" type="bigserial"/>
-            <column name="location" type="varchar(255)"/>
+            <column name="comment" type="varchar(255)"/>
             <column name="quantity" type="varchar(255)"/>
+            <column name="type" type="varchar(255)"/>
+            <column name="creator_id" type="bigserial"/>
         </createTable>
     </changeSet>
 
-    <changeSet id="create_replacer_table" author="sviarkaltsau">
-        <createTable tableName="replacer">
-            <column autoIncrement="true" name="id" type="bigserial">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="name" type="varchar(255)"/>
-            <column name="status" type="varchar(255)"/>
-            <column name="item_id" type="bigserial"/>
-            <column name="comment" type="varchar(255)"/>
-        </createTable>
-    </changeSet>
+<!--    <changeSet id="create_replacer_table" author="sviarkaltsau">-->
+<!--        <createTable tableName="replacer">-->
+<!--            <column autoIncrement="true" name="id" type="bigserial">-->
+<!--                <constraints primaryKey="true"/>-->
+<!--            </column>-->
+<!--            <column name="name" type="varchar(255)"/>-->
+<!--            <column name="status" type="varchar(255)"/>-->
+<!--            <column name="item_id" type="bigserial"/>-->
+<!--            <column name="comment" type="varchar(255)"/>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
 
     <changeSet id="create_link_table" author="sviarkaltsau">
         <createTable tableName="link">
@@ -110,7 +113,7 @@
                 <constraints foreignKeyName="fk_item_replacer_original_item_id" references="item (id)"/>
             </column>
             <column name="replacer_item_id" type="bigserial">
-                <constraints foreignKeyName="fk_item_replacer_replacer_item_id" references="replacer (id)"/>
+                <constraints foreignKeyName="fk_item_replacer_replacer_item_id" references="child_item (id)"/>
             </column>
         </createTable>
     </changeSet>

@@ -15,7 +15,9 @@ export default {
     },
 
     isEditor() {
-        return this.isUser("editor", this.getUserData());
+        return this.isUser("editor", this.getUserData())
+            || this.isUser("user", this.getUserData())
+            || this.isUser("seller", this.getUserData());
     },
 
     isSeller() {

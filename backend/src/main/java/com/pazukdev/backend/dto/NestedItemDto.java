@@ -25,6 +25,7 @@ public class NestedItemDto extends AbstractDto {
     private String creatorName;
     private Long creatorId;
     private Integer rating = 0;
+    private String type;
 
     private Set<NestedItemDto> likedUsers = new HashSet<>();
     private Set<NestedItemDto> dislikedUsers = new HashSet<>();

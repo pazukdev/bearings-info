@@ -1,5 +1,6 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.ReplacerData;
 import com.pazukdev.backend.dto.TransitiveItemDescriptionMap;
 import com.pazukdev.backend.dto.table.HeaderTable;
@@ -14,10 +15,10 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.pazukdev.backend.converter.NestedItemConverter.convert;
 import static com.pazukdev.backend.util.CategoryUtil.*;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
-import static com.pazukdev.backend.util.UserActionUtil.ActionType.*;
-import static com.pazukdev.backend.util.UserActionUtil.processChildItemAction;
+import static com.pazukdev.backend.util.UserActionUtil.createActions;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -243,7 +244,6 @@ public class ItemUtil {
                     textLines.add(newCategory + "=" + line.split("=")[1]);
                 }
             }
-//            createFile(FileName.COMMENTS, textLines);
         }
 
         if (renameCategory && infoItem) {
@@ -254,7 +254,6 @@ public class ItemUtil {
                     textLines.add(newCategory);
                 }
             }
-//            createFile(FileName.INFO_CATEGORIES, textLines);
         }
 
         return moveItemToAnotherCategory;
@@ -272,79 +271,31 @@ public class ItemUtil {
         return ItemUtil.toDescription(descriptionMap);
     }
 
-    public static void updateChildItems(final Item item,
-                                        final ItemView itemView,
-                                        final UserEntity user,
-                                        final List<String> messages,
-                                        final ItemService itemService) {
-        final Set<ChildItem> oldChildItems = new HashSet<>(item.getChildItems());
-        final Set<ChildItem> newChildItems
-                = new HashSet<>(ChildItemUtil.createChildrenFromItemView(itemView, itemService));
-        item.getChildItems().clear();
-        item.getChildItems().addAll(newChildItems);
+    public static void updateNestedItems(final Item parent,
+                                         final ItemView view,
+                                         final UserEntity user,
+                                         final ItemService service,
+                                         final List<UserAction> actions) {
 
-        for (final ChildItem child : newChildItems) {
-            if (child.getId() == null) {
-                processChildItemAction(ADD, child, item, user, messages, itemService);
-            }
-        }
+        final Long parentId = parent.getId();
 
-        final List<ChildItem> toSave = new ArrayList<>();
-        for (final ChildItem oldChild : oldChildItems) {
-            for (final ChildItem newChild : newChildItems) {
-                if (newChild.getName().equals(oldChild.getName())) {
-                    toSave.add(oldChild);
-                    if (!newChild.getLocation().equals(oldChild.getLocation())
-                            || !newChild.getQuantity().equals(oldChild.getQuantity())) {
-                        processChildItemAction(UPDATE, newChild, item, user, messages, itemService);
-                    }
-                }
-            }
-        }
+        final Set<NestedItem> oldParts = new HashSet<>(parent.getParts());
+        final Set<NestedItem> oldReplacers = new HashSet<>(parent.getReplacers());
 
-        oldChildItems.removeAll(toSave);
+        List<NestedItemDto> partDtos = view.getChildren();
+        List<NestedItemDto> replacerDtos = view.getReplacersTable().getReplacers();
 
-        for (final ChildItem orphan : oldChildItems) {
-            itemService.getChildItemRepository().deleteById(orphan.getId());
-            processChildItemAction(DELETE, orphan, item, user, messages, itemService);
-        }
-    }
+        Set<NestedItem> newParts = new HashSet<>(convert(partDtos, parentId, service, user));
+        Set<NestedItem> newReplacers = new HashSet<>(convert(replacerDtos, parentId, service, user));
 
-    public static void updateReplacers(final Item item,
-                                       final ItemView itemView,
-                                       final UserEntity user,
-                                       final List<String> messages,
-                                       final ItemService itemService) {
-        final Set<Replacer> oldReplacers = new HashSet<>(item.getReplacers());
-        final Set<Replacer> newReplacers =
-                new HashSet<>(ReplacerUtil.createReplacersFromItemView(itemView, itemService));
-        item.getReplacers().clear();
-        item.getReplacers().addAll(newReplacers);
+        parent.getParts().clear();
+        parent.getReplacers().clear();
 
-        for (final Replacer replacer : newReplacers) {
-            if (replacer.getId() == null) {
-                processChildItemAction(ADD, replacer, item, user, messages, itemService);
-            }
-        }
+        parent.getParts().addAll(newParts);
+        parent.getReplacers().addAll(newReplacers);
 
-        final List<Replacer> toSave = new ArrayList<>();
-        for (final Replacer oldReplacer : oldReplacers) {
-            for (final Replacer newReplacer : newReplacers) {
-                if (newReplacer.getName().equals(oldReplacer.getName())) {
-                    toSave.add(oldReplacer);
-                    if (!newReplacer.getComment().equals(oldReplacer.getComment())) {
-                        processChildItemAction(UPDATE, newReplacer, item, user, messages, itemService);
-                    }
-                }
-            }
-        }
-
-        oldReplacers.removeAll(toSave);
-
-        for (final Replacer orphan : oldReplacers) {
-            itemService.getReplacerRepository().deleteById(orphan.getId());
-            processChildItemAction(DELETE, orphan, item, user, messages, itemService);
-        }
+        actions.addAll(createActions(parent, oldParts, newParts, user, service));
+        actions.addAll(createActions(parent, oldReplacers, newReplacers, user, service));
     }
 
     public static void moveItemToAnotherCategory(final Item item,

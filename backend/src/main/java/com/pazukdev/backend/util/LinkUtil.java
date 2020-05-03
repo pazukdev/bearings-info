@@ -1,45 +1,45 @@
 package com.pazukdev.backend.util;
 
+import com.pazukdev.backend.converter.LinkConverter;
 import com.pazukdev.backend.dto.view.ItemView;
-import com.pazukdev.backend.entity.Item;
-import com.pazukdev.backend.entity.Link;
-import com.pazukdev.backend.entity.UserEntity;
-import com.pazukdev.backend.repository.UserActionRepository;
+import com.pazukdev.backend.entity.*;
 import org.apache.commons.validator.routines.UrlValidator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import javax.annotation.Nullable;
+import java.util.*;
 
 import static com.pazukdev.backend.converter.LinkConverter.convert;
 import static com.pazukdev.backend.entity.factory.LinkFactory.LinkType;
 import static com.pazukdev.backend.entity.factory.LinkFactory.createLink;
 import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
 import static com.pazukdev.backend.util.UserActionUtil.ActionType;
-import static com.pazukdev.backend.util.UserActionUtil.processLinkAction;
+import static com.pazukdev.backend.util.UserActionUtil.createAction;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
 public class LinkUtil {
 
-    public static void updateItemLinks(final Item target,
-                                       final ItemView source,
-                                       final UserEntity user,
-                                       final List<String> messages,
-                                       final UserActionRepository repo) {
-        updateLink(source.getWikiLink(), LinkType.WIKI, target, user, messages, repo);
-        updateLink(source.getManualLink(), LinkType.MANUAL, target, user, messages, repo);
-        updateLink(source.getPartsCatalogLink(), LinkType.PARTS_CATALOG, target, user, messages, repo);
-        updateLink(source.getDrawingsLink(), LinkType.DRAWINGS, target, user, messages, repo);
-        updateLink(source.getWebsiteLink(), LinkType.WEBSITE, target, user, messages, repo);
+    public static void updateLinks(final Item target,
+                                   final ItemView source,
+                                   final UserEntity user,
+                                   final List<UserAction> actions) {
+
+        final Map<String, String> linksData = new HashMap<>();
+        linksData.put(LinkType.WIKI, source.getWikiLink());
+        linksData.put(LinkType.MANUAL, source.getManualLink());
+        linksData.put(LinkType.PARTS_CATALOG, source.getPartsCatalogLink());
+        linksData.put(LinkType.DRAWINGS, source.getDrawingsLink());
+        linksData.put(LinkType.WEBSITE, source.getWebsiteLink());
+        linksData.put(LinkType.IMG, source.getImg());
+
+        linksData.forEach((key, value) -> updateLink(key, value, target, user, actions));
 
         final Set<Link> links = convert(source.getBuyLinks());
         for (final Link link : links) {
             String actionDetails = "";
             if (link.getId() == null) {
-                processLinkAction(ActionType.ADD, link, actionDetails, target, user, messages, repo);
+                actions.add(createAction(ActionType.ADD, actionDetails, target, link, user));
             } else {
                 for (final Link oldLink : target.getBuyLinks()) {
                     if (link.getId().equals(oldLink.getId())) {
@@ -50,13 +50,13 @@ public class LinkUtil {
                         final boolean urlChanged = !Objects.equals(newUrl, oldUrl);
                         final boolean countryChanged = !Objects.equals(newCountryCode, oldCountryCode);
                         if (urlChanged) {
-                            actionDetails += "url changed: " + oldUrl + " -> " + newUrl;
+                            actionDetails += "new url=" + newUrl;
                         }
                         if (countryChanged) {
-                            actionDetails += ", country changed: " + oldCountryCode + " -> " + newCountryCode;
+                            actionDetails += "new countryCode=" + newCountryCode;
                         }
                         if (urlChanged || countryChanged) {
-                            processLinkAction(ActionType.UPDATE, link, actionDetails, target, user, messages, repo);
+                            actions.add(createAction(ActionType.UPDATE, actionDetails, target, oldLink, user));
                         }
                     }
                 }
@@ -82,46 +82,69 @@ public class LinkUtil {
         target.getBuyLinks().addAll(links);
 
         for (final Link link : linksToDelete) {
-            processLinkAction(ActionType.DELETE, link, "", target, user, messages, repo);
+            actions.add(createAction(ActionType.DELETE, "", target, link, user));
         }
     }
 
-    public static void updateLink(final String newUrl,
-                                  final String linkType,
+    public static void addLinksToItem(final Item target,
+                                      final TransitiveItem source,
+                                      final List<UserAction> actions) {
+        final UserEntity user = null;
+
+        final Map<String, String> linksData = new HashMap<>();
+        linksData.put(LinkType.WIKI, source.getWiki());
+        linksData.put(LinkType.MANUAL, source.getManual());
+        linksData.put(LinkType.PARTS_CATALOG, source.getParts());
+        linksData.put(LinkType.DRAWINGS, source.getDrawings());
+        linksData.put(LinkType.WEBSITE, source.getWebsite());
+
+        linksData.forEach((key, value) -> {
+            if (value != null) {
+                updateLink(key, value, target, user, actions);
+            }
+        });
+
+        target.getBuyLinks().clear();
+        target.getBuyLinks().addAll(LinkConverter.convert(new ArrayList<>(source.getBuyLinksDto())));
+    }
+
+    public static void updateLink(final String linkType,
+                                  final String newUrl,
                                   final Item target,
-                                  final UserEntity user,
-                                  final List<String> messages,
-                                  final UserActionRepository repo) {
+                                  @Nullable final UserEntity user,
+                                  @Nullable final List<UserAction> actions) {
 
         final Link link = getLink(linkType, target.getLinks());
-        final boolean processLinkAction = user != null && messages != null;
-
+        final boolean addAction = actions != null;
         String actionDetails = "";
 
         if (link != null) {
             if (isEmpty(newUrl)) {
                 target.getLinks().remove(link);
-                if (processLinkAction) {
-                    processLinkAction(ActionType.DELETE, link, actionDetails, target, user, messages, repo);
+                if (addAction) {
+                    actions.add(createAction(ActionType.DELETE, actionDetails, target, link, user));
                 }
             } else {
                 final String oldUrl = link.getUrl();
                 final boolean urlChanged = !Objects.equals(newUrl, oldUrl);
                 if (urlChanged) {
-                    actionDetails += "url changed: " + oldUrl + " -> " + newUrl;
+                    actionDetails += "new url: " + newUrl;
+                    if (addAction) {
+                        actions.add(createAction(ActionType.UPDATE, actionDetails, target, link, user));
+                    }
                     link.setUrl(newUrl);
-                    processLinkAction(ActionType.UPDATE, link, actionDetails, target, user, messages, repo);
                 }
             }
         } else {
             if (!isEmpty(newUrl)) {
                 final Link newLink = createLink(linkType, newUrl, "-");
                 target.getLinks().add(newLink);
-                if (processLinkAction) {
-                    processLinkAction(ActionType.ADD, newLink, actionDetails, target, user, messages, repo);
+                if (addAction) {
+                    actions.add(createAction(ActionType.ADD, actionDetails, target, newLink, user));
                 }
             }
         }
+
     }
 
     public static void setLinksToItemView(final ItemView target, final Item source) {

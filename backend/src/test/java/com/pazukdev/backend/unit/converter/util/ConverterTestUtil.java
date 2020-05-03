@@ -1,7 +1,7 @@
 package com.pazukdev.backend.unit.converter.util;
 
 import com.pazukdev.backend.dto.AbstractDto;
-import com.pazukdev.backend.entity.AbstractEntity;
+import com.pazukdev.backend.entity.abstraction.AbstractEntity;
 
 import static org.junit.Assert.assertEquals;
 

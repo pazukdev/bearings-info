@@ -1,6 +1,6 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.entity.AbstractEntity;
+import com.pazukdev.backend.entity.abstraction.AbstractEntity;
 
 import java.util.*;
 

@@ -90,9 +90,11 @@
             },
 
             addItem() {
+                this.item.type = "replacer";
                 this.item.comment = this.itemComment;
 
                 let newItem = this.item;
+                newItem.quantity = "-";
                 this.itemView.replacersTable.replacers.push(newItem);
 
                 this.item = "";

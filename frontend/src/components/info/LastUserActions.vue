@@ -1,7 +1,7 @@
 <template>
     <div>
         <details style="text-align: left" class="default-margin">
-            <summary>{{translate("Last 10 new " + itemType)}}</summary>
+            <summary>{{translate("Last 10 new " + note)}}</summary>
             <ul class="bordered" id="user-actions"
                 v-if="userActions !== undefined && userActions.length > 0">
                 <li v-for="action in userActions">
@@ -21,7 +21,7 @@
                                          :to="{name: 'item', params: {id: action.parentId, lang: $route.params.lang}}">
                             {{action.parentName}}
                             </router-link>
-                            {{" " + translate('as') + " " + translate(action.itemType)}}
+                            {{" " + translate('as') + " " + translate(action.note)}}
                         </span>
                 </li>
             </ul>
@@ -37,7 +37,7 @@
     export default {
         name: "LastUserActions",
 
-        props: {userActions:Array, itemType:String},
+        props: {userActions:Array, note:String},
 
         methods: {
             isEmpty(value) {

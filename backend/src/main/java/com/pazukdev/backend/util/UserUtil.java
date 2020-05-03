@@ -4,8 +4,8 @@ import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.dto.UserItemReport;
 import com.pazukdev.backend.dto.UserItemStringReport;
 import com.pazukdev.backend.dto.user.UserDto;
-import com.pazukdev.backend.entity.ChildItem;
 import com.pazukdev.backend.entity.Item;
+import com.pazukdev.backend.entity.NestedItem;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
@@ -51,7 +51,17 @@ public class UserUtil {
         }
     }
 
+    public static boolean isSuperAdmin(final UserEntity user) {
+        if (user == null) {
+            return false;
+        }
+        return user.getId().equals(2L);
+    }
+
     public static boolean isAdmin(final UserEntity user) {
+        if (user == null) {
+            return false;
+        }
         return user.getRole().equals(Role.ADMIN);
     }
 
@@ -88,14 +98,14 @@ public class UserUtil {
 
         for (final UserEntity user : service.getUserService().findAll()) {
             String wishlistItems = "";
-            for (final ChildItem childItem : user.getWishList().getItems()) {
-                final Long id = childItem.getItem().getId();
-                final String comment = isEmpty(childItem.getLocation()) ? "" : childItem.getLocation() + " - ";
-                wishlistItems += id + " " + "(" + comment + childItem.getQuantity() + ")" + "; ";
+            for (final NestedItem nestedItem : user.getWishList().getItems()) {
+                final Long id = nestedItem.getItem().getId();
+                final String comment = isEmpty(nestedItem.getComment()) ? "" : nestedItem.getComment() + " - ";
+                wishlistItems += id + " " + "(" + comment + nestedItem.getQuantity() + ")" + "; ";
             }
             wishlistItems = removeLastChar(wishlistItems.trim());
 
-            final UserItemReport<String> userItemReport = UserItemStringReport.create(user, service.findAll());
+            final UserItemReport<String> userItemReport = UserItemStringReport.create(user, service.findAllActive());
 
             final String line = user.getId() + comma
                     + user.getName() + comma

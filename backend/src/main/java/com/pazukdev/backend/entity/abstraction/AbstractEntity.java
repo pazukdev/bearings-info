@@ -1,4 +1,4 @@
-package com.pazukdev.backend.entity;
+package com.pazukdev.backend.entity.abstraction;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

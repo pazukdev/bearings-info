@@ -1,6 +1,7 @@
 package com.pazukdev.backend.entity;
 
 import com.pazukdev.backend.dto.LinkDto;
+import com.pazukdev.backend.entity.abstraction.AbstractEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

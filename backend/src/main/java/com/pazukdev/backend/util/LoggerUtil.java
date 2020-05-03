@@ -1,12 +1,19 @@
 package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.entity.Item;
+import com.pazukdev.backend.entity.UserAction;
 import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.repository.UserActionRepository;
 import com.pazukdev.backend.service.EmailSenderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -27,29 +34,67 @@ public class LoggerUtil {
         LOGGER.error(message);
     }
 
-    public static void warn(final String subject, final List<String> messages) {
-        boolean printStartAndEnd = messages.size() > 0;
+    public static void warn(@Nonnull final UserAction action,
+                            @Nonnull final UserActionRepository repo,
+                            @Nullable final Item item,
+                            @Nullable final UserEntity user,
+                            @Nullable final EmailSenderService service) {
+        warn(new ArrayList<>(Collections.singletonList(action)), repo, item, user, service);
+
+    }
+
+    public static void warn(@Nonnull final List<UserAction> actions,
+                            @Nonnull final UserActionRepository repo,
+                            @Nullable final Item item,
+                            @Nullable final UserEntity user,
+                            @Nullable final EmailSenderService service) {
+
+        actions.removeIf(Objects::isNull);
+
+        final String subject;
+        if (item != null && user != null) {
+            final String whatHappened;
+            if (actions.size() == 1) {
+                whatHappened = actions.get(0).getActionType() + "d";
+            } else {
+                whatHappened = "changed";
+            }
+            subject = item + " " + whatHappened + " by " + user.getName();
+        } else {
+            subject = "items management";
+        }
+        boolean printStartAndEnd = actions.size() > 0;
+
         if (printStartAndEnd) {
             warn("--- report start ---");
         }
         warn(subject);
-        messages.forEach(LoggerUtil::warn);
-        messages.clear();
+        actions.forEach(action -> {
+            if (action == null) {
+                warn(null);
+            } else {
+                warn(action.getMessage());
+            }
+        });
         if (printStartAndEnd) {
             warn("--- report end ---");
         }
-    }
 
-    public static void warn(final List<String> messages,
-                            final Item item,
-                            final UserEntity user,
-                            final EmailSenderService service) {
-        final String subject = item + " changed by " + user.getName();
-        if (service != null) {
-            final String text = MessageUtil.toString(messages);
+        for (final UserAction action : actions) {
+            repo.save(action);
+        }
+        if (service != null && !UserUtil.isSuperAdmin(user)) {
+            final String text = toString(actions);
             service.emailToYourself(subject, text);
         }
-        warn(subject, messages);
+    }
+
+    private static String toString(final List<UserAction> actions) {
+        String result = "";
+        for (final UserAction action : actions) {
+            result += action.getMessage() + "\n";
+        }
+        return result;
     }
 
 }

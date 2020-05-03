@@ -29,8 +29,8 @@
                     </tbody>
                 </table>
             </details>
-            <LastUserActions :user-actions="itemView.lastVehicles" :item-type="'vehicles'"/>
-            <LastUserActions :user-actions="itemView.lastReplacers" :item-type="'replacers'"/>
+            <LastUserActions :user-actions="itemView.lastVehicles" :note="'vehicles'"/>
+            <LastUserActions :user-actions="itemView.lastReplacers" :note="'replacers'"/>
         </details>
     </div>
 </template>

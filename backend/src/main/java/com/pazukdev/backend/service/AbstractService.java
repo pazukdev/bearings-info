@@ -3,7 +3,7 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.constant.Status;
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.AbstractDto;
-import com.pazukdev.backend.entity.AbstractEntity;
+import com.pazukdev.backend.entity.abstraction.AbstractEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -35,6 +35,11 @@ public abstract class AbstractService<Entity extends AbstractEntity, Dto extends
 
     @Transactional
     public Entity findOne(final Long id) throws EntityExistsException {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    public Entity findFirst(final Long id) throws EntityExistsException {
         return repository.findById(id).orElse(null);
     }
 

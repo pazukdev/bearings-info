@@ -104,7 +104,7 @@ export default {
     getGoogleQueryUrl(itemView, textBefore) {
         let itemName = itemView.name;
         let category = itemView.category.toLowerCase();
-        if (category === "vehicle" && !this.isEmpty(itemView.vehicleClass)) {
+        if (category === "vehicle" && !shared.isEmpty(itemView.vehicleClass)) {
             category = itemView.vehicleClass;
         }
         let textAfter = " " + this.translate(category.toLowerCase());

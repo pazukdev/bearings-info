@@ -1,7 +1,10 @@
 package com.pazukdev.backend.entity;
 
+import com.pazukdev.backend.entity.abstraction.AbstractEntity;
+import com.pazukdev.backend.entity.abstraction.Typeable;
 import com.pazukdev.backend.util.LinkUtil;
 import com.pazukdev.backend.util.SpecificStringUtil;
+import com.pazukdev.backend.util.UserActionUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,7 +23,7 @@ import static com.pazukdev.backend.entity.factory.LinkFactory.LinkType;
 @Entity
 @Table(name = "item")
 @SecondaryTable(name = "item_description")
-public class Item extends AbstractEntity {
+public class Item extends AbstractEntity implements Typeable {
 
     private String category;
 
@@ -41,7 +44,7 @@ public class Item extends AbstractEntity {
             joinColumns = @JoinColumn(name = "parent_item_id"),
             inverseJoinColumns = @JoinColumn(name = "child_item_id")
     )
-    private Set<ChildItem> childItems = new HashSet<>();
+    private Set<NestedItem> parts = new HashSet<>();
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -51,7 +54,7 @@ public class Item extends AbstractEntity {
             joinColumns = @JoinColumn(name = "original_item_id"),
             inverseJoinColumns = @JoinColumn(name = "replacer_item_id")
     )
-    private Set<Replacer> replacers = new HashSet<>();
+    private Set<NestedItem> replacers = new HashSet<>();
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -121,4 +124,8 @@ public class Item extends AbstractEntity {
         return "item " + super.toString() + " category=" + category;
     }
 
+    @Override
+    public String getValuationType() {
+        return UserActionUtil.ValuationType.ITEM;
+    }
 }

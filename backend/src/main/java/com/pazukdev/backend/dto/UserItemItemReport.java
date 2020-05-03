@@ -2,6 +2,7 @@ package com.pazukdev.backend.dto;
 
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.service.ItemService;
+import com.pazukdev.backend.util.LoggerUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -36,7 +37,7 @@ public class UserItemItemReport extends UserItemReport<Item> {
             final String category = getStringBetweenParentheses(s);
             final Item item = itemService.findFirstByCategoryAndName(category, name);
             if (item == null) {
-                LOGGER.error("Item name=" + name + " category=" + category + " not found");
+                LoggerUtil.error("Item name=" + name + " category=" + category + " not found");
                 continue;
             }
             items.add(item);

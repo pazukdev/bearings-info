@@ -24,7 +24,7 @@ public class InfoController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new message from admin")
     public void setAdminMessage(@RequestBody final AdminMessage adminMessage) {
-        AdminMessage.save(adminMessage, itemService.getAdminMessageRepository());
+        AdminMessage.save(adminMessage, itemService.getAdminMessageRepo());
     }
 
 }

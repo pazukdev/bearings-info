@@ -1,8 +1,7 @@
 package com.pazukdev.backend.dataloader;
 
 import com.pazukdev.backend.dto.ReplacerData;
-import com.pazukdev.backend.entity.TransitiveItem;
-import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.entity.factory.TransitiveItemFactory;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.util.*;
@@ -10,12 +9,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.pazukdev.backend.util.UserActionUtil.ActionType;
+import static com.pazukdev.backend.util.UserActionUtil.createAction;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -51,15 +52,90 @@ public class DataLoader implements ApplicationRunner {
         }
         final List<TransitiveItem> transitiveItems = createStubReplacers(transitiveItemFactory.createEntitiesFromCSVFile());
         final UserEntity admin = itemService.getUserService().findAdmin(users);
+
+        final Map<Item, List<NestedItem>> itemsReplacers = new HashMap<>();
         for (final TransitiveItem transitiveItem : transitiveItems) {
-            itemService.convertTransitiveItemToItem(transitiveItem, transitiveItems, infoCategories, users, admin, initialDBPopulation);
+            itemService.convertTransitiveItemToItem(
+                    transitiveItem,
+                    transitiveItems,
+                    infoCategories,
+                    admin,
+                    initialDBPopulation,
+                    itemsReplacers);
         }
         itemService.getUserService().recoverUserActions(users, itemService);
         itemService.getUserService().save(users);
 
+        final List<UserAction> actions = new ArrayList<>();
+        Pageable p = RepositoryUtil.getPageRequest(RepositoryUtil.LAST_TEN);
+
+        final String category = CategoryUtil.Category.VEHICLE;
+        for (final Item item : itemService.getItemRepository().findFirst10ByCategory(category, p)) {
+            final UserEntity creator = itemService.getUserService().findFirst(item.getCreatorId());
+            actions.add(createAction(ActionType.CREATE, "", null, item, creator));
+        }
+
+        final String type = NestedItem.Type.REPLACER.name().toLowerCase();
+        final List<NestedItem> replacers = itemService.getNestedItemRepo().findAll();
+        Collections.reverse(itemService.getNestedItemRepo().findAll());
+
+        int oilFilter = 0;
+        int seal = 0;
+        int bearing = 0;
+        for (final NestedItem replacer : replacers) {
+            final UserEntity creator = itemService.getUserService().findFirst(replacer.getCreatorId());
+            if (replacer.getType().equals(NestedItem.Type.PART.name().toLowerCase())) {
+                continue;
+            }
+            final String itemCategory = replacer.getItem().getCategory();
+            boolean add = false;
+            if (itemCategory.equals("Oil filter") && oilFilter < 3) {
+                add = true;
+                oilFilter++;
+
+            } else if (itemCategory.equals("Bearing") && bearing < 3) {
+                add = true;
+                bearing++;
+
+            } else if (itemCategory.equals("Seal") && seal < 4) {
+                add = true;
+                seal++;
+            }
+            if (add) {
+                Item parent = null;
+                for (final Map.Entry<Item, List<NestedItem>> entry : itemsReplacers.entrySet()) {
+                    for (final NestedItem r : entry.getValue()) {
+                        if (r.getId().equals(replacer.getId())) {
+                            parent = entry.getKey();
+                            break;
+                        }
+                    }
+                }
+                actions.add(createAction(
+                        ActionType.ADD,
+                        "",
+                        parent,
+                        replacer,
+                        creator));
+            }
+        }
+
+        LoggerUtil.warn(actions, itemService.getUserActionRepo(), null, null, null);
+
         final long stop = System.nanoTime();
         final double time = (stop - start) * 0.000000001;
         LoggerUtil.info("DB created in " + (int) time + " seconds");
+    }
+
+    public Item findParentForReplacer(final NestedItem replacer, final List<Item> checkList) {
+        for (final Item parent : checkList) {
+            for (final NestedItem r : parent.getReplacers()) {
+                if (r.getId().equals(replacer.getId())) {
+                    return parent;
+                }
+            }
+        }
+        return null;
     }
 
     public void updateItem(final String category, final String name) {
@@ -75,9 +151,9 @@ public class DataLoader implements ApplicationRunner {
                         transitiveItem,
                         transitiveItems,
                         infoCategories,
-                        users,
                         admin,
-                        false);
+                        false,
+                        new HashMap<>());
                 LoggerUtil.info("Updated successfully: " + itemInfo);
                 return;
             }

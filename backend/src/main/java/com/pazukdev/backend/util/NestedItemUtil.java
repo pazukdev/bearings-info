@@ -3,6 +3,7 @@ package com.pazukdev.backend.util;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.Item;
+import com.pazukdev.backend.entity.NestedItem;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.service.UserService;
@@ -41,11 +42,13 @@ public class NestedItemUtil {
             NestedItemDto dto = null;
             if (addPart) {
                 dto = createBasicNestedItemDto(item, userService);
+                dto.setType(NestedItem.Type.PART.name().toLowerCase());
                 view.getPossibleParts().add(dto);
             }
             if (addReplacer) {
                 if (dto == null) {
                     dto = createBasicNestedItemDto(item, userService);
+                    dto.setType(NestedItem.Type.REPLACER.name().toLowerCase());
                 }
                 view.getPossibleReplacers().add(dto);
             }

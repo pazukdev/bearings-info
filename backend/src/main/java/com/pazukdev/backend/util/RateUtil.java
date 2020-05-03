@@ -10,7 +10,6 @@ import lombok.Getter;
 import java.util.Objects;
 
 import static com.pazukdev.backend.util.UserActionUtil.ActionType;
-import static com.pazukdev.backend.util.UserActionUtil.processRateItemAction;
 
 public class RateUtil {
 
@@ -29,24 +28,24 @@ public class RateUtil {
     }
 
     public static RateReplacer rateReplacer(final RateReplacer rate,
-                                            final UserEntity currentUser,
-                                            final ItemService itemService) {
+                                            final UserEntity user,
+                                            final ItemService service) {
 
-        final Item item = itemService.findOne(rate.getItemId());
+        final Item item = service.findOne(rate.getItemId());
         final RateAction rateAction = RateAction.valueOf(rate.getAction().toUpperCase());
 
         if (rateAction == RateAction.UP) {
-            item.getLikedUsers().add(currentUser);
-            item.getDislikedUsers().remove(currentUser);
+            item.getLikedUsers().add(user);
+            item.getDislikedUsers().remove(user);
         } else if (rateAction == RateAction.DOWN) {
-            item.getDislikedUsers().add(currentUser);
-            item.getLikedUsers().remove(currentUser);
+            item.getDislikedUsers().add(user);
+            item.getLikedUsers().remove(user);
         } else {
-            item.getLikedUsers().remove(currentUser);
-            item.getDislikedUsers().remove(currentUser);
+            item.getLikedUsers().remove(user);
+            item.getDislikedUsers().remove(user);
         }
 
-        itemService.getRepository().save(item);
+        service.getRepository().save(item);
 
         for (final NestedItemDto replacer : rate.getReplacers()) {
             if (Objects.equals(replacer.getItemId(), item.getId())) {
@@ -56,9 +55,14 @@ public class RateUtil {
         }
 
         final String actionType = rateAction == RateAction.CANCEL ? ActionType.CANCEL_RATE : ActionType.RATE;
-        final int newUserRating = processRateItemAction(item, actionType, currentUser, itemService);
+        LoggerUtil.warn(
+                UserActionUtil.createAction(actionType, "", null, item, user),
+                service.getUserActionRepo(),
+                item,
+                user,
+                service.getEmailSenderService());
 
-        rate.setNewUserRating(newUserRating);
+        rate.setNewUserRating(user.getRating());
         return rate;
     }
 
