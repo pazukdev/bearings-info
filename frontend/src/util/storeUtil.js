@@ -5,7 +5,7 @@ export default {
         store.dispatch("setItemView", view);
     },
 
-    setUserData(user) {
+    setUser(user) {
         store.dispatch("setUserData", user);
     },
 
@@ -23,6 +23,15 @@ export default {
 
     setLoadingState(loadingState) {
         store.dispatch("setLoadingState", loadingState);
+        let millisecondsToWait = 10000;
+        console.log("loading state: " + loadingState);
+        setTimeout(function() {
+            if (store.getters.loadingState !== "") {
+                store.dispatch("setLoadingState", "");
+                console.log("loading state turned off automatically");
+            }
+        }, millisecondsToWait);
+
     },
 
     setLoadingStateDefault() {
@@ -31,6 +40,7 @@ export default {
 
     setLoadingStateOff() {
         this.setLoadingState("");
+        console.log("loading state turned off");
     },
 
     setErrorMessage(message) {

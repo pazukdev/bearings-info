@@ -1,11 +1,13 @@
 package com.pazukdev.backend.controller;
 
+import com.pazukdev.backend.constant.Status;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.factory.ItemViewFactory;
 import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.dto.view.UserView;
 import com.pazukdev.backend.entity.Item;
+import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.service.EmailSenderService;
 import com.pazukdev.backend.service.ItemService;
 import com.pazukdev.backend.util.FileUtil;
@@ -54,11 +56,25 @@ public class UserController {
         return itemService.createWishlistView(userName, language);
     }
 
-    @PostMapping("/user/create")
+    @PostMapping("/user/create/{lang}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create new User")
-    public List<String> create(@RequestBody final UserDto dto) throws EntityExistsException, JSONException {
-        return itemService.getUserService().createUser(dto);
+    public List<String> create(@PathVariable final String lang, @RequestBody final UserDto dto) throws EntityExistsException, JSONException {
+        return itemService.getUserService().createUser(dto, lang);
+    }
+
+    @PostMapping("/user/id/{id}/activate")
+    @ApiOperation(value = "Create new User")
+    public String activate(@PathVariable final Long id) throws Exception {
+        final UserEntity user = itemService.getUserService().findFirst(id);
+        if (user != null) {
+            final String newStatus = Status.ACTIVE;
+            user.setStatus(newStatus);
+            itemService.getUserService().getRepository().save(user);
+            return newStatus;
+        } else {
+            throw new Exception("user id=" + id + " not activated");
+        }
     }
 
     @PutMapping("/user/{id}/update")

@@ -23,5 +23,6 @@ public class UserDto extends AbstractDto {
     private String role = "USER";
     private Long wishListId;
     private Integer rating = 0;
+    private String activationUrl;
 
 }

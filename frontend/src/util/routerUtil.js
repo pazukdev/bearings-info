@@ -42,6 +42,10 @@ export default {
         router.push({name: "home", params: {lang: lang}});
     },
 
+    toAccountActivation(lang, userId) {
+        router.push({name: "account_activation", params: {lang: lang, id: userId}});
+    },
+
     toUserList(lang) {
         router.push({name: "user_list", params: {lang: lang}})
     },

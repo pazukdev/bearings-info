@@ -10,8 +10,8 @@ export default {
         return this.isUser("guest", this.getUserData());
     },
 
-    isAdmin(itemView) {
-        return this.isUser("admin", itemView.userData);
+    isAdmin() {
+        return this.isUser("admin", this.getUserData());
     },
 
     isEditor() {

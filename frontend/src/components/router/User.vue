@@ -177,7 +177,7 @@
                 deleteOption: "",
                 countryName: "",
                 changePasswordOpened: false,
-                statuses: ["active", "blocked", "deleted"],
+                statuses: ["active", "blocked", "deleted", "pending"],
                 editedUserIsCurrentUser: false
             }
         },
@@ -213,7 +213,6 @@
                             img: this.user.img,
                             defaultImg: this.user.defaultImg,
                             messages: [],
-                            userData: this.itemView.userData,
                             wishListIds: this.itemView.wishListIds,
                             errorMessage: this.itemView.errorMessage
                         };
@@ -251,10 +250,10 @@
                     .then(response => {
                         this.validationMessages = response.data;
                         this.changePasswordOpened = this.validationMessages.length > 0
-                            && shared.arrayContainsSubstring("assword", this.validationMessages);
+                            && shared.arrayContainsSubstring("asswo", this.validationMessages);
                         if (this.validationMessages.length === 0) {
                             if (this.editedUserIsCurrentUser) {
-                                this.itemView.userData.name = userView.name;
+                                this.userData.name = userView.name;
                             }
                             storeUtil.setLoadingStateOff();
                             this.getCountryName(this.user.country);

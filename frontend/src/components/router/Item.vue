@@ -1,7 +1,5 @@
 <template>
     <div>
-<!--        {{itemView.deletedReplacers}}<br>-->
-<!--        {{itemView.deletedChildren}}<br>-->
         <LoadingScreen v-if="isLoading()"/>
         <div v-else>
             <form id="item-form" @submit="submit">

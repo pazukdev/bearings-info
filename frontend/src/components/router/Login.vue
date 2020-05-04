@@ -1,92 +1,95 @@
 <template>
     <div id="login-page">
-        <table class="equal-columns-table">
-            <tbody>
-            <tr>
-                <td>
-                    <button @click="switchForm()">
-                        {{translate(buttonReverseName())}}
-                    </button>
-                </td>
-                <td>
-                    <button @click="loginAsGuest()">
-                        {{translate("Continue as guest")}}
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <form id="login-form" @submit="performLoginPageAction">
-            <div class="alert-message"
-                 v-if="!isEmpty(itemView.userData) && !isEmpty(itemView.userData.message)">
-                {{translate(itemView.userData.message.text)}}<br>
-                {{translate(itemView.userData.message.contact)}}
-            </div>
-            <table>
+        <LoadingScreen v-if="isLoading()"/>
+        <div v-else>
+            <table class="equal-columns-table">
                 <tbody>
                 <tr>
                     <td>
-                        <label>{{"Nickname"}}
-                            <input type="text" name="username" v-model="name" required
-                                   pattern="[a-zA-Z0-9_ \\-]{2,26}"
-                                   :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
-                        </label>
+                        <button @click="switchForm()">
+                            {{translate(buttonReverseName())}}
+                        </button>
                     </td>
-                </tr>
-                <tr v-if="!isLogin">
                     <td>
-                        <label>{{"E-mail"}}
-                            <input type="email" name="username" v-model="email" required/>
-                        </label>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>{{translate("Password")}}
-                            <input type="password" name="password" v-model="password" required
-                                   pattern="[a-zA-Z0-9_ \\-]{2,26}"
-                                   :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
-                        </label>
-                    </td>
-                </tr>
-                <tr v-if="!isLogin">
-                    <td>
-                        <label>{{translate("Repeat password")}}
-                            <input type="password" v-model="repeatedPassword" required
-                                   pattern="[a-zA-Z0-9_ \\-]{2,26}"
-                                   :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
-                        </label>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input id="submit-login-form" type="submit" :value="translate(buttonName())">
-                    </td>
-                </tr>
-                <tr v-if="incorrectCredentials" class="warning-message">
-                    <td class="alert-message">
-                        {{translate("Incorrect login or password!")}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <AlertMessagesSection :messages="validationMessages"/>
+                        <button @click="loginAsGuest()">
+                            {{translate("Continue as guest")}}
+                        </button>
                     </td>
                 </tr>
                 </tbody>
             </table>
-        </form>
 
-        <router-link :to="{name: 'user_agreement'}" class="simple-link">
-            {{translate("User agreement")}}
-        </router-link>
+            <form id="login-form" @submit="performLoginPageAction">
+                <div class="alert-message"
+                     v-if="!isEmpty(itemView.userData) && !isEmpty(itemView.userData.message)">
+                    {{translate(itemView.userData.message.text)}}<br>
+                    {{translate(itemView.userData.message.contact)}}
+                </div>
+                <table>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <label>{{"Nickname"}}
+                                <input type="text" name="username" v-model="name" required
+                                       pattern="[a-zA-Z0-9_ \\-]{2,26}"
+                                       :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr v-if="!isLogin">
+                        <td>
+                            <label>{{"E-mail"}}
+                                <input type="email" name="username" v-model="email" required/>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>{{translate("Password")}}
+                                <input type="password" name="password" v-model="password" required
+                                       pattern="[a-zA-Z0-9_ \\-]{2,26}"
+                                       :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr v-if="!isLogin">
+                        <td>
+                            <label>{{translate("Repeat password")}}
+                                <input type="password" v-model="repeatedPassword" required
+                                       pattern="[a-zA-Z0-9_ \\-]{2,26}"
+                                       :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="submit-login-form" type="submit" :value="translate(buttonName())">
+                        </td>
+                    </tr>
+                    <tr v-if="incorrectCredentials" class="warning-message">
+                        <td class="alert-message">
+                            {{translate("Incorrect login or password!")}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <AlertMessagesSection :messages="validationMessages"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
 
-        <details class="default-margin" style="text-align: center">
-            <summary style="text-align: center">{{translate("Forgot password?")}}</summary>
-            {{translate("Password change via email is temporarily not available")}}<br>
-            {{translate("Contact us by email: pazukdev@gmail.com")}}
-        </details>
+            <router-link :to="{name: 'user_agreement'}" class="simple-link">
+                {{translate("User agreement")}}
+            </router-link>
+
+            <details class="default-margin" style="text-align: center">
+                <summary style="text-align: center">{{translate("Forgot password?")}}</summary>
+                {{translate("Password change via email is temporarily not available")}}<br>
+                {{translate("Contact us by email: pazukdev@gmail.com")}}
+            </details>
+        </div>
     </div>
 </template>
 
@@ -97,9 +100,12 @@
     import axiosUtil from "../../util/axiosUtil";
     import basicComponent from "../../mixin/basicComponent";
     import view from "../../mixin/view";
+    import shared from "../../util/shared";
+    import storeUtil from "../../util/storeUtil";
+    import LoadingScreen from "../special/LoadingScreen";
 
     export default {
-        components: {AlertMessagesSection},
+        components: {LoadingScreen, AlertMessagesSection},
         data() {
             return {
                 isLogin: true,
@@ -120,38 +126,69 @@
             })
         },
 
+        created() {
+            this.onUrlChange();
+        },
+
+        watch: {
+            '$route': 'onUrlChange'
+        },
+
         methods: {
+            onUrlChange() {
+                storeUtil.setLoadingStateOff();
+            },
+
             performLoginPageAction: function (e) {
                 e.preventDefault();
                 if (this.isLogin) {
-                    axiosUtil.login(this.name, this.password, true, this.$route.params.lang);
+                    let user = {
+                        name: this.name,
+                        password: this.password
+                    }
+                    axiosUtil.login(user, true, this.lang);
                 } else {
                     this.signUp();
                 }
             },
 
             loginAsGuest() {
-                axiosUtil.loginAsGuest(true, this.$route.params.lang);
-            },
-
-            loginIfValid(validationMessages, newUserName) {
-                this.validationMessages = validationMessages;
-                if (this.validationMessages.length === 0) {
-                    console.log("a new user created: " + newUserName);
-                    axiosUtil.login(this.name, this.password, true, this.$route.params.lang);
-                }
+                axiosUtil.loginAsGuest(true, this.lang);
             },
 
             signUp() {
+                storeUtil.setLoadingState("Creating");
+
+                let basicUrl = axiosUtil.getBasicUrl();
+
                 let newUser = {
                     name: this.name,
                     email: this.email,
                     password: this.password,
-                    repeatedPassword: this.repeatedPassword
+                    repeatedPassword: this.repeatedPassword,
+                    status: "pending",
+                    role: "USER",
+                    activationUrl: shared.getCurrentLocation().origin + "/#/account_activation/" + this.lang + "/user/id/"
                 };
                 axios
-                    .post(axiosUtil.getBasicUrl() + "/user/create", newUser)
-                    .then(response => {this.loginIfValid(response.data, newUser.name)});
+                    .post(axiosUtil.getBasicUrl() + "/user/create/" + this.lang, newUser)
+                    .then(response => {
+                        newUser.repeatedPassword = "-";
+                        this.loginIfValid(response.data, newUser)
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        storeUtil.setLoadingStateOff();
+                    });
+            },
+
+            loginIfValid(validationMessages, newUser) {
+                this.validationMessages = validationMessages;
+                if (this.validationMessages.length === 0) {
+                    console.log("a new user created: " + newUser.name);
+                    axiosUtil.login(newUser, true, this.lang);
+                }
+                storeUtil.setLoadingStateOff();
             },
 
             switchForm() {

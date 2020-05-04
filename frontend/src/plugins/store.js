@@ -39,6 +39,10 @@ export default new Vuex.Store({
 
         countries: state => {
             return state.dictionary.countries;
+        },
+
+        loadingState: state => {
+            return state.dictionary.loadingState;
         }
     }
 });

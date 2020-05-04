@@ -3,20 +3,17 @@ package com.pazukdev.backend.service;
 import com.pazukdev.backend.constant.Status;
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.UserConverter;
+import com.pazukdev.backend.dto.DictionaryData;
 import com.pazukdev.backend.dto.UserItemItemReport;
 import com.pazukdev.backend.dto.UserItemReport;
 import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.dto.view.UserView;
-import com.pazukdev.backend.entity.Item;
-import com.pazukdev.backend.entity.NestedItem;
-import com.pazukdev.backend.entity.UserEntity;
-import com.pazukdev.backend.entity.WishList;
+import com.pazukdev.backend.entity.*;
 import com.pazukdev.backend.repository.NestedItemRepository;
+import com.pazukdev.backend.repository.UserActionRepository;
 import com.pazukdev.backend.repository.UserRepository;
 import com.pazukdev.backend.repository.WishListRepository;
-import com.pazukdev.backend.util.CollectionUtil;
-import com.pazukdev.backend.util.FileUtil;
-import com.pazukdev.backend.util.ImgUtil;
+import com.pazukdev.backend.util.*;
 import com.pazukdev.backend.validator.UserDataValidator;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +27,8 @@ import static com.pazukdev.backend.util.CSVUtil.getValue;
 import static com.pazukdev.backend.util.ChildItemUtil.collectIds;
 import static com.pazukdev.backend.util.ChildItemUtil.createNameForWishListItem;
 import static com.pazukdev.backend.util.SpecificStringUtil.*;
+import static com.pazukdev.backend.util.UserActionUtil.ActionType;
+import static com.pazukdev.backend.util.UserActionUtil.createAction;
 import static com.pazukdev.backend.util.UserUtil.UserParam;
 import static com.pazukdev.backend.util.UserUtil.isAdmin;
 
@@ -45,20 +44,26 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
 
     private final PasswordEncoder passwordEncoder;
     private final UserDataValidator userDataValidator;
-    private final WishListRepository wishListRepository;
-    private final NestedItemRepository childItemRepository;
+    private final WishListRepository wishListRepo;
+    private final NestedItemRepository childItemRepo;
+    private final UserActionRepository userActionRepo;
+    private final EmailSenderService emailSenderService;
 
     public UserService(final UserRepository repository,
                        final UserConverter converter,
                        final PasswordEncoder passwordEncoder,
                        final UserDataValidator userDataValidator,
-                       final WishListRepository wishListRepository,
-                       final NestedItemRepository childItemRepository) {
+                       final WishListRepository wishListRepo,
+                       final NestedItemRepository childItemRepo,
+                       final UserActionRepository userActionRepo,
+                       final EmailSenderService emailSenderService) {
         super(repository, converter);
         this.passwordEncoder = passwordEncoder;
         this.userDataValidator = userDataValidator;
-        this.wishListRepository = wishListRepository;
-        this.childItemRepository = childItemRepository;
+        this.wishListRepo = wishListRepo;
+        this.childItemRepo = childItemRepo;
+        this.userActionRepo = userActionRepo;
+        this.emailSenderService = emailSenderService;
     }
 
     public UserRepository getRepository() {
@@ -83,15 +88,41 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     }
 
     @Transactional
-    public List<String> createUser(final UserDto dto) {
+    public List<String> createUser(final UserDto dto, final String lang) {
         final List<String> validationMessages = userDataValidator.validateSignUpData(dto, this);
         if (validationMessages.isEmpty()) {
-            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
             final UserEntity user = new UserEntity();
-            user.setPassword(dto.getPassword());
             user.setEmail(dto.getEmail());
             user.setName(dto.getName());
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+            user.setStatus(Status.PENDING);
             repository.save(user);
+
+            final UserAction action = createAction(ActionType.CREATE, "", null, user, user, false);
+            LoggerUtil.warn(action, userActionRepo, user, user, emailSenderService);
+
+            final List<String> dictionary = new ArrayList<>();
+            try {
+                dictionary.addAll(DictionaryData.getDictionaryFromFile(lang).getDictionary());
+            } catch (final Exception e) {
+                e.printStackTrace();
+            }
+            final String subject = "Verify your email";
+            final String message = "To activate your account follow the link";
+            final String translatedSubject = TranslatorUtil.translate("en", lang, subject, false, false, dictionary);
+            final String translatedMessage = TranslatorUtil.translate("en", lang, message, false, false, dictionary);
+            final String url = dto.getActivationUrl() + findFirstByName(user.getName()).getId();
+//            final String link = "<a href=\"" + url + "\">{{\"Activate\"}}</a>";
+            final String link = url;
+            final String emailOrContactMe = "If link activation didn't work, email me or contact me";
+            final String text = translatedMessage + ": " + "\n"
+                    + link  + "\n"  + "\n"
+                    + TranslatorUtil.translate("en", lang, emailOrContactMe, false, false, dictionary) + ":\n"
+                    + TranslatorUtil.translate("en", lang, "Facebook group", false, false, dictionary)  + ": "
+                    + "https://www.facebook.com/groups/app.old.vehicles"  + "\n"
+                    + TranslatorUtil.translate("en", lang, "vk community", false, false, dictionary)  + ": "
+                    + "https://vk.com/old.vehicles";
+            emailSenderService.emailTo(user.getEmail(), translatedSubject, text, true);
         }
         return validationMessages;
     }

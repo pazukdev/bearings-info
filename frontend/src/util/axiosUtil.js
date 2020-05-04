@@ -9,33 +9,45 @@ export default {
 
     loginAsGuest(toHome, lang) {
         console.log("loginAsGuest(toHome, lang)");
-        this.login("guest", "password-stub", toHome, lang);
+        let guest = {
+            id: "",
+            name: "guest",
+            password: "password-stub",
+            role: "GUEST",
+            status: "active",
+            email: ""
+        }
+        this.login(guest, toHome, lang);
     },
 
-    login(userName, password, toHome, lang) {
+    login(user, toHome, lang) {
+        storeUtil.setLoadingState("Logging in");
         console.log("login(userName, password, toHome, lang)");
         console.log("toHome: " + toHome);
 
-        let credentialsUrl ="username=" + userName + "&" + "password=" + password;
+        let credentialsUrl ="username=" + user.name + "&" + "password=" + user.password;
+        user.password = "-";
         axios
             .post(this.getBasicUrl() + "/login", credentialsUrl)
             .then(response => {
                 if (response.status === 200) {
                     storeUtil.setIncorrectCredentials(false);
                     storeUtil.setAuthorization(response.data.Authorization);
-                    let userData = {name: userName};
-                    if (userName === "guest") {
-                        userData.role = "GUEST";
-                    }
-                    storeUtil.setUserData(userData);
+                    storeUtil.setUser(user);
                     console.log("logged in as " + userUtil.getUserName());
                     if (toHome) {
-                        routerUtil.toHome(lang);
+                        if (user.status === "pending") {
+                            routerUtil.toAccountActivation(lang, null);
+                        } else {
+                            routerUtil.toHome(lang);
+                        }
                     }
                 }
+                storeUtil.setLoadingStateOff();
             })
             .catch(error => {
                 storeUtil.setIncorrectCredentials(true);
+                storeUtil.setLoadingStateOff();
             });
     },
 

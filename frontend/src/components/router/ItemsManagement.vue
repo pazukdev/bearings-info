@@ -102,7 +102,7 @@
             },
 
             isAdmin() {
-                return userUtil.isAdmin(this.itemView);
+                return userUtil.isAdmin();
             },
 
             changeStatus() {

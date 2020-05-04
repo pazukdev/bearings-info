@@ -22,13 +22,13 @@ public class ItemController {
     private final ItemService service;
     private final DataLoader dataLoader;
 
-    @GetMapping("/view/item/{id}/{userName}/{language}")
+    @GetMapping("/view/item/{id}/{userName}/{lang}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get item")
     public ItemView get(@PathVariable final Long id,
                         @PathVariable final String userName,
-                        @PathVariable final String language)  {
-        return service.createItemView(id, userName, language);
+                        @PathVariable final String lang)  {
+        return service.createItemView(id, userName, lang);
     }
 
     @GetMapping("/view/items/{status}/{userName}/{language}")

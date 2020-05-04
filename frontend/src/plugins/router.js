@@ -12,6 +12,7 @@ import Menu from "../components/router/Menu";
 import PrivacyPolicy from "../components/info/PrivacyPolicy";
 import UserAgreement from "../components/info/UserAgreement";
 import Disclaimer from "../components/info/Disclaimer";
+import AccountActivation from "../components/router/AccountActivation";
 
 Vue.use(VueRouter);
 
@@ -37,6 +38,7 @@ const router = new VueRouter({
         { path: '/user/id/:id/:lang', name: 'user', component: User, meta: { requiresAuth: true }},
         { path: '/user_list/:lang', name: 'user_list', component: UserList, meta: { requiresAuth: true }},
         { path: '/wish_list/:lang', name: 'wish_list', component: WishList, meta: { requiresAuth: true }},
+        { path: '/account_activation/:lang/user/id/:id?', name: 'account_activation', component: AccountActivation, meta: { requiresAuth: true }},
         {
             path: '/items_management/:lang/:filter?',
             name: 'items_management',

@@ -17,8 +17,7 @@
 <!--                                            {{this.$route.params.item_id}}<br>-->
 <!--                                            {{this.$route.params.lang}}<br>-->
 <!--                                            {{"basicUrl: " + basicUrl}}<br>-->
-<!--                                            {{"userId: " + userData.id}}<br>-->
-<!--                                            {{"userName: " + userData.role}}<br>-->
+<!--                                            {{userData}}<br>-->
 <!--                                            {{"authorization: " + authorization}}<br>-->
 <!--                                            {{"loadingState: " + loadingState}}<br>-->
 <!--                                            {{"editMode: " + editMode}}<br>-->

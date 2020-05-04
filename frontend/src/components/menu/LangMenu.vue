@@ -8,14 +8,14 @@
                     </td>
                     <td>
                         <router-link class="simple-link"
-                                     v-if="!isEmpty(itemView) && !isEmpty(itemView.userData.id) && !isGuest()"
-                                     :to="{name: 'user', params: {id: itemView.userData.id, lang: $route.params.lang}}">
-                            {{itemView.userData.name}}
+                                     v-if="!isEmpty(userData) &&!isEmpty(userData.id) && !isGuest()"
+                                     :to="{name: 'user', params: {id: userData.id, lang: lang}}">
+                            {{userData.name}}
                         </router-link>
                         <p v-else>{{translate("You are guest")}}</p>
                     </td>
-                    <td v-if="!isEmpty(itemView) && !isEmpty(itemView.userData) && !isGuest()">
-                        {{translate("Rating") + ": " + itemView.userData.rating}}
+                    <td v-if="!isEmpty(userData) && !isGuest()">
+                        {{translate("Rating") + ": " + userData.rating}}
                     </td>
                     <td>
                         <LanguageSelect/>

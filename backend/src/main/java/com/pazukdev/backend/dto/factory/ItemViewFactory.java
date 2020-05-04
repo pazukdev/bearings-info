@@ -79,7 +79,7 @@ public class ItemViewFactory {
         final ItemView basicView = new ItemView();
         basicView.setItemId(itemId);
         basicView.setWishListIds(collectIds(wishList.getItems()));
-        basicView.setUserData(UserDtoFactory.createItemViewUserData(currentUser));
+//        basicView.setUserData(UserDtoFactory.createItemViewUserData(currentUser));
 
         ItemView view;
 

@@ -36,7 +36,7 @@ public class ItemView extends AbstractView {
     private String status;
     private String localizedCategory = "-";
     private String localizedName = "-";
-    private UserDto userData;
+//    private UserDto userData;
     private UserDto creatorData;
     private HeaderTable header;
     private List<NestedItemDto> children = new ArrayList<>();

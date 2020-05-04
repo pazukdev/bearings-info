@@ -1,8 +1,8 @@
 package com.pazukdev.backend.util;
 
-import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.UserAction;
 import com.pazukdev.backend.entity.UserEntity;
+import com.pazukdev.backend.entity.abstraction.AbstractEntity;
 import com.pazukdev.backend.repository.UserActionRepository;
 import com.pazukdev.backend.service.EmailSenderService;
 import org.slf4j.Logger;
@@ -36,30 +36,30 @@ public class LoggerUtil {
 
     public static void warn(@Nonnull final UserAction action,
                             @Nonnull final UserActionRepository repo,
-                            @Nullable final Item item,
+                            @Nullable final AbstractEntity entity,
                             @Nullable final UserEntity user,
                             @Nullable final EmailSenderService service) {
-        warn(new ArrayList<>(Collections.singletonList(action)), repo, item, user, service);
+        warn(new ArrayList<>(Collections.singletonList(action)), repo, entity, user, service);
 
     }
 
     public static void warn(@Nonnull final List<UserAction> actions,
                             @Nonnull final UserActionRepository repo,
-                            @Nullable final Item item,
+                            @Nullable final AbstractEntity entity,
                             @Nullable final UserEntity user,
                             @Nullable final EmailSenderService service) {
 
         actions.removeIf(Objects::isNull);
 
         final String subject;
-        if (item != null && user != null) {
+        if (entity != null && user != null) {
             final String whatHappened;
             if (actions.size() == 1) {
                 whatHappened = actions.get(0).getActionType() + "d";
             } else {
                 whatHappened = "changed";
             }
-            subject = item + " " + whatHappened + " by " + user.getName();
+            subject = entity + " " + whatHappened + " by " + user.getName();
         } else {
             subject = "items management";
         }
