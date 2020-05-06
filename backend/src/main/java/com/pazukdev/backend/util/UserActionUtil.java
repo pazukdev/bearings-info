@@ -189,7 +189,9 @@ public class UserActionUtil {
         action.setMessage(message);
         action.setNote(note);
 
-        updateUserRating(user, actionType, valuationType);
+        if (!(entity instanceof UserEntity)) {
+            updateUserRating(user, actionType, valuationType);
+        }
 
         return action;
     }

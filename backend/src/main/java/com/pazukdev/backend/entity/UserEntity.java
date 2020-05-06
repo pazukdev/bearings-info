@@ -19,7 +19,7 @@ public class UserEntity extends AbstractEntity {
     private Integer rating = 0;
     private String email;
     private String password;
-    private String img;
+    private String img = "-";
     private String country = "-";
     @Column(name = "role")
     @Enumerated(EnumType.STRING)

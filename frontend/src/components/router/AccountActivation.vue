@@ -6,7 +6,7 @@
         <br>
         <br>
         <div v-if="activated" style="text-align: center" class="default-margin">
-            {{translate("Email verification completed")}}<br>
+            <p class="green">{{translate("Email verification completed")}}</p>
             {{translate("Your account activated")}}<br>
             <br>
             <router-link :to="{name: 'home', params: {lang: lang}}" class="button">

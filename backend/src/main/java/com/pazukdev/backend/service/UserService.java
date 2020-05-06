@@ -88,14 +88,11 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
     }
 
     @Transactional
-    public List<String> createUser(final UserDto dto, final String lang) {
-        final List<String> validationMessages = userDataValidator.validateSignUpData(dto, this);
+    public List<String> createUser(final UserDto userDto, final String lang) {
+        final List<String> validationMessages = userDataValidator.validateSignUpData(userDto, this);
         if (validationMessages.isEmpty()) {
-            final UserEntity user = new UserEntity();
-            user.setEmail(dto.getEmail());
-            user.setName(dto.getName());
-            user.setPassword(passwordEncoder.encode(dto.getPassword()));
-            user.setStatus(Status.PENDING);
+            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            final UserEntity user = UserConverter.convert(userDto, wishListRepo);
             repository.save(user);
 
             final UserAction action = createAction(ActionType.CREATE, "", null, user, user, false);
@@ -111,7 +108,7 @@ public class UserService extends AbstractService<UserEntity, UserDto> {
             final String message = "To activate your account follow the link";
             final String translatedSubject = TranslatorUtil.translate("en", lang, subject, false, false, dictionary);
             final String translatedMessage = TranslatorUtil.translate("en", lang, message, false, false, dictionary);
-            final String url = dto.getActivationUrl() + findFirstByName(user.getName()).getId();
+            final String url = userDto.getActivationUrl() + findFirstByName(user.getName()).getId();
 //            final String link = "<a href=\"" + url + "\">{{\"Activate\"}}</a>";
             final String link = url;
             final String emailOrContactMe = "If link activation didn't work, email me or contact me";

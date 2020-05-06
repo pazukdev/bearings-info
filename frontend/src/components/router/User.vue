@@ -213,6 +213,7 @@
                             img: this.user.img,
                             defaultImg: this.user.defaultImg,
                             messages: [],
+                            userData: this.itemView.userData,
                             wishListIds: this.itemView.wishListIds,
                             errorMessage: this.itemView.errorMessage
                         };
@@ -253,7 +254,7 @@
                             && shared.arrayContainsSubstring("asswo", this.validationMessages);
                         if (this.validationMessages.length === 0) {
                             if (this.editedUserIsCurrentUser) {
-                                this.userData.name = userView.name;
+                                this.itemView.userData.name = userView.name;
                             }
                             storeUtil.setLoadingStateOff();
                             this.getCountryName(this.user.country);

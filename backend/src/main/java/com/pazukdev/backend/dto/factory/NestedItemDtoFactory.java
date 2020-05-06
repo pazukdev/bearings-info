@@ -95,7 +95,7 @@ public class NestedItemDtoFactory {
         final Map<String, String> descriptionMap = toMap(item.getDescription());
         final String manufacturer = descriptionMap.get(Category.MANUFACTURER);
         final String partNumber = descriptionMap.get("Part number");
-        final UserDto creator = UserUtil.getCreatorData(item, userService);
+        final UserDto creator = UserUtil.getCreator(item, userService);
         final String creatorName = creator != null ? creator.getName() : "deleted user";
 
         final NestedItemDto dto = new NestedItemDto();

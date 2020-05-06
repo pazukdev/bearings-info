@@ -27,7 +27,7 @@ export default {
         },
 
         isAdmin() {
-            return userUtil.isAdmin();
+            return userUtil.isAdmin(this.itemView);
         },
 
         isManufacturer() {

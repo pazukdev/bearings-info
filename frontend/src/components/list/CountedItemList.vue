@@ -129,7 +129,7 @@
             },
 
             hideTable(table) {
-                if (table.name.toLowerCase() === "guest" && !userUtil.isAdmin()) {
+                if (table.name.toLowerCase() === "guest" && !userUtil.isAdmin(this.itemView)) {
                     return true;
                 }
             },

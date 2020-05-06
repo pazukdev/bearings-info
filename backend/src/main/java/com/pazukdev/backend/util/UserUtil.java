@@ -65,7 +65,7 @@ public class UserUtil {
         return user.getRole().equals(Role.ADMIN);
     }
 
-    public static UserDto getCreatorData(final Item item, final UserService service) {
+    public static UserDto getCreator(final Item item, final UserService service) {
         final UserEntity user = service.findOne(item.getCreatorId());
         if (user != null) {
             final UserDto creatorData = new UserDto();

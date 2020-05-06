@@ -1,21 +1,23 @@
 <template>
     <div class="default-margin">
-        <div v-if="!isEmpty(errorMessage)" style="text-align: center">
-            <p>{{translate(errorMessage)}}</p>
-            <p v-if="noServerResponse()">
-                {{translate('If you still see message above')}}
-            </p>
-            <p v-if="noServerResponse()">
-                {{translate('try to refresh the page or check your internet connection')}}
-            </p>
-        </div>
-        <div v-else style="text-align: center">
+        <div style="text-align: center">
             <br>
             <br>
             <img alt="loading spinner" src="../../assets/ajax-loader.gif">
             <br>
             <br>
             <p>{{translate(loadingState) + "..."}}</p>
+        </div>
+        <div v-if="!isEmpty(errorMessage)" style="text-align: center">
+            <br>
+            <br>
+            <p>{{translate(errorMessage)}}</p>
+            <p v-if="noServerResponse(errorMessage)">
+                {{translate('If you still see message above')}}
+            </p>
+            <p v-if="noServerResponse(errorMessage)">
+                {{translate('try to refresh the page or check your internet connection')}}
+            </p>
         </div>
     </div>
 </template>
@@ -24,13 +26,15 @@
     import {mapState} from "vuex";
     import shared from "../../util/shared";
     import dictionaryUtil from "../../util/dictionaryUtil";
+    import view from "../../mixin/view";
 
     export default {
         name: "LoadingScreen",
 
+        mixins: [view],
+
         computed: {
             ...mapState({
-                itemView: state => state.dictionary.itemView,
                 loadingState: state => state.dictionary.loadingState,
                 errorMessage: state => state.dictionary.errorMessage
             })
@@ -45,7 +49,7 @@
                 return dictionaryUtil.translate(text);
             },
 
-            noServerResponse() {
+            noServerResponse(errorMessage) {
                 return !this.isEmpty(errorMessage ) && this.errorMessage.toString() === 'No server response';
             }
         }

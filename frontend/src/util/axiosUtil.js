@@ -20,23 +20,23 @@ export default {
         this.login(guest, toHome, lang);
     },
 
-    login(user, toHome, lang) {
+    login(userData, toHome, lang) {
         storeUtil.setLoadingState("Logging in");
         console.log("login(userName, password, toHome, lang)");
         console.log("toHome: " + toHome);
 
-        let credentialsUrl ="username=" + user.name + "&" + "password=" + user.password;
-        user.password = "-";
+        let credentialsUrl ="username=" + userData.name + "&" + "password=" + userData.password;
+        userData.password = "-";
         axios
             .post(this.getBasicUrl() + "/login", credentialsUrl)
             .then(response => {
                 if (response.status === 200) {
                     storeUtil.setIncorrectCredentials(false);
                     storeUtil.setAuthorization(response.data.Authorization);
-                    storeUtil.setUser(user);
+                    storeUtil.setUserData(userData);
                     console.log("logged in as " + userUtil.getUserName());
                     if (toHome) {
-                        if (user.status === "pending") {
+                        if (userData.status === "pending") {
                             routerUtil.toAccountActivation(lang, null);
                         } else {
                             routerUtil.toHome(lang);

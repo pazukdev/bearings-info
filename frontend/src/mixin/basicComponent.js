@@ -19,8 +19,16 @@ export default {
             return dictionaryUtil.translate(text);
         },
 
+        isEnglish() {
+            return shared.isEnglish();
+        },
+
         isEmpty(value) {
             return shared.isEmpty(value);
+        },
+
+        replaceEmpty(value) {
+            return this.isEmpty(value) ? "-" : value;
         },
 
         isLoading() {

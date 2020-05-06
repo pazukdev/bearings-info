@@ -126,6 +126,14 @@
                 }
                 let items = itemView.children;
 
+                if (shared.isEmpty(items)) {
+                    let millisecondsToWait = 1000;
+                    setTimeout(function() {
+                        throw "still waiting for itemView";
+                    }, millisecondsToWait);
+                    return [];
+                }
+
                 let opened = false;
 
                 if (this.vehicles) {
@@ -175,7 +183,7 @@
             },
 
             hideTable(table) {
-                if (table.name.toLowerCase() === "guest" && !userUtil.isAdmin()) {
+                if (table.name.toLowerCase() === "guest" && !userUtil.isAdmin(this.itemView)) {
                     return true;
                 }
             },

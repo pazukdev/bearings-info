@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isGuest()" class="default-margin">
+    <div v-if="isEnglish() && !isGuest()" class="default-margin">
         <details>
             <summary>{{translate("Create new item")}}</summary>
             <form id="create-item-form" @submit="submit">
@@ -54,24 +54,17 @@
 
 <script>
     import axios from "axios";
-    import {mapState} from "vuex";
     import itemViewUtil from "../../util/itemViewUtil";
     import routerUtil from "../../util/routerUtil";
     import storeUtil from "../../util/storeUtil";
-    import dictionaryUtil from "../../util/dictionaryUtil";
     import userUtil from "../../util/userUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: "CreateItemForm",
 
-        computed: {
-            ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                loadingState: state => state.dictionary.loadingState,
-                itemView: state => state.dictionary.itemView
-            })
-        },
+        mixins: [basicComponent, view],
 
         data() {
             return {
@@ -128,14 +121,6 @@
             clearItemCreationMessages() {
                 this.categoryMessage = "";
                 this.newItemNameMessage = "";
-            },
-
-            isGuest() {
-                return userUtil.isGuest();
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
             },
 
             sort(array) {

@@ -78,7 +78,7 @@ export default {
         view.deletedReplacers = [];
         storeUtil.setErrorMessage(view.errorMessage);
         storeUtil.setView(view);
-        // storeUtil.setUserData(view.userData);
+        storeUtil.setUserData(view.userData);
         storeUtil.setLoadingStateOff();
         if (storeUtil.userIsBlocked()) {
             console.log("Open Login page. Reason: blocked user is logged in");

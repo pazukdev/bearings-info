@@ -4,57 +4,60 @@
 
         <p class="green">{{translate(message)}}</p>
 
-        <table id="replacers-table" style="text-align: center">
-            <tbody>
-            <tr style="text-align: left" v-for="item in sortedReplacers()">
-                <td class="bordered">
-                    <table>
-                        <tbody>
-                        <tr v-if="editMode">
-                            <td colspan="2" style="text-align: right">
-                                <ButtonDelete style="display: inline-block"
-                                              :item="item"
-                                              :item-view-prop="true"
-                                              @remove-item="removeItem"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="not-symmetrical-left">
-                                <ButtonNavigateToItem :part="item"/>
-                            </td>
-                            <td style="text-align: right">
-                                <button type="button"
-                                        class="round-button"
-                                        :title="getLikeTitle(item, true)"
-                                        @click="rate(item, 'like')">
-                                    <i :class="{'fa fa-thumbs-up': true, 'green': isLiked(item)}"/>
-                                </button>
-                                <span :class="{'green': isColored(getLikedUsers(item).length)}">
+        <LoadingScreen v-if="loading"/>
+        <div v-else>
+            <table id="replacers-table" style="text-align: center">
+                <tbody>
+                <tr style="text-align: left" v-for="item in sortedReplacers()">
+                    <td class="bordered">
+                        <table>
+                            <tbody>
+                            <tr v-if="editMode">
+                                <td colspan="2" style="text-align: right">
+                                    <ButtonDelete style="display: inline-block"
+                                                  :item="item"
+                                                  :item-view-prop="true"
+                                                  @remove-item="removeItem"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="not-symmetrical-left">
+                                    <ButtonNavigateToItem :part="item"/>
+                                </td>
+                                <td style="text-align: right">
+                                    <button type="button"
+                                            class="round-button"
+                                            :title="getLikeTitle(item, true)"
+                                            @click="rate(item, 'like')">
+                                        <i :class="{'fa fa-thumbs-up': true, 'green': isLiked(item)}"/>
+                                    </button>
+                                    <span :class="{'green': isColored(getLikedUsers(item).length)}">
                                     {{getLikedUsers(item).length}}
                                 </span>
-                                <button type="button"
-                                        class="round-button"
-                                        :title="getLikeTitle(item, false)"
-                                        @click="rate(item, 'dislike')">
-                                    <i :class="{'fa fa-thumbs-down': true, 'red': isDisliked(item)}"/>
-                                </button>
-                                <span :class="{'red': isColored(getDislikedUsers(item).length)}">
+                                    <button type="button"
+                                            class="round-button"
+                                            :title="getLikeTitle(item, false)"
+                                            @click="rate(item, 'dislike')">
+                                        <i :class="{'fa fa-thumbs-down': true, 'red': isDisliked(item)}"/>
+                                    </button>
+                                    <span :class="{'red': isColored(getDislikedUsers(item).length)}">
                                     {{0 - getDislikedUsers(item).length}}
                                 </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="4">
-                                <p style="text-align: left" v-if="!editMode">{{item.comment}}</p>
-                                <textarea v-if="editMode" v-model="item.comment"/>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <p style="text-align: left" v-if="!editMode">{{item.comment}}</p>
+                                    <textarea v-if="editMode" v-model="item.comment"/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
@@ -68,28 +71,37 @@
     import view from "../../mixin/view";
     import DeletedItemsList from "../element/DeletedItemsList";
     import itemDtoUtil from "../../util/itemDtoUtil";
+    import LoadingScreen from "../special/LoadingScreen";
 
     export default {
         name: "ReplacerList",
 
-        components: {DeletedItemsList, ButtonDelete, ButtonNavigateToItem},
+        components: {LoadingScreen, DeletedItemsList, ButtonDelete, ButtonNavigateToItem},
 
         mixins: [basicComponent, view],
 
         computed: {
             ...mapState({
-                userData: state => state.dictionary.userData,
                 countries: state => state.dictionary.countries
             })
         },
 
         data() {
             return {
-                message: ""
+                message: "",
+                loading: false
             }
         },
 
+        watch: {
+            '$route': 'onUrlChange'
+        },
+
         methods: {
+            onUrlChange() {
+                this.loading = false;
+            },
+
             getLikeTitle(item, like) {
                 let header = this.isDisliked(item) ? 'Cancel' : 'Dislike';
                 if (like) {
@@ -162,6 +174,7 @@
                     return;
                 }
 
+                this.loading = true;
                 let cancel = "cancel";
                 let action = this.isLiked(item) ? cancel : "up";
                 if (!shared.isEmpty(actionType) && actionType.toLowerCase() === "dislike") {
@@ -185,11 +198,12 @@
                     .then(response => {
                         let rateReplacer = response.data;
                         this.itemView.replacersTable.replacers = rateReplacer.replacers;
-                        this.itemView.userData.rating = rateReplacer.newUserRating;
+                        this.userData.rating = rateReplacer.newUserRating;
                         console.log("Replacer rate action performed: "
                             + "user name: " + this.getUserName()
                             + ", action: " + rate.action
                             + ", item id: " + rate.itemId);
+                        this.loading = false;
                     });
             },
 

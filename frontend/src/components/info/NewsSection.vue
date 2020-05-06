@@ -83,7 +83,7 @@
             },
 
             isAdmin() {
-                return userUtil.isAdmin();
+                return userUtil.isAdmin(this.itemView);
             },
 
             isEmpty(value) {

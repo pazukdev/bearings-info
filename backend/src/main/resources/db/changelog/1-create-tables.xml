@@ -150,7 +150,6 @@
             <column name="password" type="varchar(255)"/>
             <column name="role" type="varchar(255)"/>
             <column name="wishlist_id" type="bigserial"/>
-            <column name="likelist_id" type="bigserial"/>
             <column name="img" type="varchar(255)"/>
             <column name="country" type="varchar(2)"/>
         </createTable>

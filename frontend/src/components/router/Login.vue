@@ -146,18 +146,18 @@
                         name: this.name,
                         password: this.password
                     }
-                    axiosUtil.login(user, true, this.lang);
+                    axiosUtil.login(user, true, this.$route.params.lang);
                 } else {
                     this.signUp();
                 }
             },
 
             loginAsGuest() {
-                axiosUtil.loginAsGuest(true, this.lang);
+                axiosUtil.loginAsGuest(true, this.$route.params.lang);
             },
 
             signUp() {
-                storeUtil.setLoadingState("Creating");
+                storeUtil.setLoadingStateCreating();
 
                 let basicUrl = axiosUtil.getBasicUrl();
 
@@ -168,10 +168,10 @@
                     repeatedPassword: this.repeatedPassword,
                     status: "pending",
                     role: "USER",
-                    activationUrl: shared.getCurrentLocation().origin + "/#/account_activation/" + this.lang + "/user/id/"
+                    activationUrl: shared.getCurrentLocation().origin + "/#/account_activation/" + this.$route.params.lang + "/user/id/"
                 };
                 axios
-                    .post(axiosUtil.getBasicUrl() + "/user/create/" + this.lang, newUser)
+                    .post(axiosUtil.getBasicUrl() + "/user/create/" + this.$route.params.lang, newUser)
                     .then(response => {
                         newUser.repeatedPassword = "-";
                         this.loginIfValid(response.data, newUser)
@@ -186,7 +186,7 @@
                 this.validationMessages = validationMessages;
                 if (this.validationMessages.length === 0) {
                     console.log("a new user created: " + newUser.name);
-                    axiosUtil.login(newUser, true, this.lang);
+                    axiosUtil.login(newUser, true, this.$route.params.lang);
                 }
                 storeUtil.setLoadingStateOff();
             },

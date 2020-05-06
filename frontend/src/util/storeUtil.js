@@ -5,8 +5,8 @@ export default {
         store.dispatch("setItemView", view);
     },
 
-    setUser(user) {
-        store.dispatch("setUserData", user);
+    setUserData(userData) {
+        store.dispatch("setUserData", userData);
     },
 
     setAuthorization(authorization) {
@@ -24,7 +24,7 @@ export default {
     setLoadingState(loadingState) {
         store.dispatch("setLoadingState", loadingState);
         let millisecondsToWait = 10000;
-        console.log("loading state: " + loadingState);
+        console.log(loadingState);
         setTimeout(function() {
             if (store.getters.loadingState !== "") {
                 store.dispatch("setLoadingState", "");
@@ -32,6 +32,14 @@ export default {
             }
         }, millisecondsToWait);
 
+    },
+
+    setLoadingStateLoading() {
+        this.setLoadingState("Loading");
+    },
+
+    setLoadingStateCreating() {
+        this.setLoadingState("Creating");
     },
 
     setLoadingStateDefault() {

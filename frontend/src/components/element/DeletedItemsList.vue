@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table v-if="array.length > 0" style="text-align: left">
+        <table v-if="!isEmpty(array) && array.length > 0" style="text-align: left">
             <tbody>
             <tr v-for="(item, index) in array">
                 <td>{{index + 1}}</td>

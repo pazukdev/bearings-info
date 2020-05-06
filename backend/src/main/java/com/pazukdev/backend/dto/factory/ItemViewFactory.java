@@ -2,6 +2,7 @@ package com.pazukdev.backend.dto.factory;
 
 import com.pazukdev.backend.constant.Status;
 import com.pazukdev.backend.constant.security.Role;
+import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.DictionaryData;
 import com.pazukdev.backend.dto.ImgViewData;
 import com.pazukdev.backend.dto.NestedItemDto;
@@ -34,7 +35,6 @@ import static com.pazukdev.backend.util.TableUtil.createHeader;
 import static com.pazukdev.backend.util.TableUtil.createReplacersTable;
 import static com.pazukdev.backend.util.TranslatorUtil.translate;
 import static com.pazukdev.backend.util.UserActionUtil.*;
-import static com.pazukdev.backend.util.UserUtil.getCreatorData;
 import static com.pazukdev.backend.validator.CodeValidator.isLangCodeValid;
 
 /**
@@ -79,7 +79,7 @@ public class ItemViewFactory {
         final ItemView basicView = new ItemView();
         basicView.setItemId(itemId);
         basicView.setWishListIds(collectIds(wishList.getItems()));
-//        basicView.setUserData(UserDtoFactory.createItemViewUserData(currentUser));
+        basicView.setUserData(UserConverter.convert(currentUser));
 
         ItemView view;
 
@@ -217,7 +217,7 @@ public class ItemViewFactory {
         view.setAllChildren(createChildren(item, userService, true));
         view.setReplacersTable(createReplacersTable(item, userService));
         addPossiblePartsAndReplacers(view, allItems, item, infoCategories, itemService);
-        view.setCreatorData(getCreatorData(item, itemService.getUserService()));
+        view.setCreatorData(UserUtil.getCreator(item, itemService.getUserService()));
         setLinksToItemView(view, item);
         view.setParents(createParentItemsView(item, userService, allItems));
         return view;
