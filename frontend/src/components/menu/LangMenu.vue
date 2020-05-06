@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{userData}}
         <table>
             <tbody>
                 <tr>

@@ -396,13 +396,21 @@
     .round-button {
         height: initial;
         width: initial;
+        border-radius: initial;
+        border-radius: 20px;
+        height: 40px;
+        width: 40px;
         min-height: initial;
         max-height: initial;
-        border-radius: initial;
         /*border: 2px solid grey;*/
         font-size: x-large;
         font-weight: bold;
         background: none;
+    }
+
+    .round-button:hover {
+        background-color: #101010;
+        /*opacity: 0.5;*/
     }
 
     .bordered {
