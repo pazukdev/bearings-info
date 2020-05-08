@@ -1,14 +1,13 @@
 <template>
     <div id="app_bar">
-        <table>
+        <table class="dark">
             <tbody>
             <tr>
                 <td class="app-bar-side-column">
-                    <button
-                            v-show="isBackButtonDisplayed()"
+                    <button v-show="isBackButtonDisplayed()"
                             @click="back()"
                             id="back"
-                            class="app-bar-button">
+                            class="dark background-blue app-bar-button">
                         {{translate("Back")}}
                     </button>
                 </td>
@@ -16,18 +15,16 @@
                     {{translate("Old Vehicles")}}
                 </td>
                 <td class="app-bar-side-column">
-                    <button
-                            v-show="isLogoutButtonDisplayed()"
+                    <button v-show="isLogoutButtonDisplayed()"
                             @click="logout()"
                             id="logout"
-                            class="app-bar-button">
+                            class="dark background-blue app-bar-button">
                         {{translate("Logout")}}
                     </button>
-                    <button
-                            v-show="isLoginButtonDisplayed()"
+                    <button v-show="isLoginButtonDisplayed()"
                             @click="openLoginForm()"
                             id="login"
-                            class="app-bar-button">
+                            class="dark background-blue app-bar-button">
                         {{translate("Login")}}
                     </button>
                 </td>
@@ -94,7 +91,6 @@
 
 <style scoped>
     table, .app-bar-button {
-        color: #212121;
         font-weight: bold;
         text-align: center;
     }
@@ -106,7 +102,12 @@
     .app-bar-button {
         width: 100%;
         height: 100%;
-        background: none;
+        border-radius: 26px;
+    }
+
+    .app-bar-button:hover {
+        background: #404040;
+        color: black;
     }
 
     #app_bar {

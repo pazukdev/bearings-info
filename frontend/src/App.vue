@@ -408,9 +408,18 @@
         background: none;
     }
 
+    .simple-link:hover {
+        color: grey;
+    }
+
+    input:hover, button:hover, .button:hover, select:hover {
+        opacity: 0.8;
+        cursor: pointer;
+    }
+
     .round-button:hover {
-        background-color: #101010;
-        /*opacity: 0.5;*/
+        opacity: initial;
+        background: #151515;
     }
 
     .bordered {
@@ -463,9 +472,17 @@
         background: grey;
     }
 
+    .dark {
+        color: #212121;
+    }
+
     .background-dark {
         background: #212121;
     }
+
+    /*.background-grey:hover, .background-green:hover, .background-red:hover, .background-blue:hover {*/
+    /*    opacity: 0.8;*/
+    /*}*/
 
     .title {
         text-align: center;
