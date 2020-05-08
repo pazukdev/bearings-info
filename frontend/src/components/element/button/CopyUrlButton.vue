@@ -1,14 +1,12 @@
 <template>
     <div class="default-margin">
-        <table>
-            <tbody>
-            <tr>
-                <td><button @click="copyURL()">{{translate("Share")}}</button></td>
-                <td><input type="text" id="current-location-input"></td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
+        <button @click="copyURL()">{{translate("Get shareable link to the page")}}</button>
+        <input type="text" id="current-location-input"
+               :class="{'background-dark': !urlCopied}">
+        <br><br>
+        <p v-if="urlCopied" style="text-align: center" class="green">
+            {{translate("Url copied to clipboard")}}
+        </p>
         <br>
     </div>
 </template>
@@ -22,7 +20,7 @@
 
         data() {
             return {
-                inputDisplayed: false
+                urlCopied: false
             }
         },
 
@@ -32,12 +30,13 @@
 
         methods: {
             onUrlChange() {
+                this.urlCopied = false;
                 let currentLocationInput = document.getElementById("current-location-input");
                 currentLocationInput.value = "";
             },
 
             copyURL() {
-                this.inputDisplayed = true;
+                this.urlCopied = true;
                 let currentLocationInput = document.getElementById("current-location-input");
                 currentLocationInput.value = this.getCurrentLocation();
                 currentLocationInput.select();

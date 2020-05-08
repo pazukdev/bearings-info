@@ -463,6 +463,10 @@
         background: grey;
     }
 
+    .background-dark {
+        background: #212121;
+    }
+
     .title {
         text-align: center;
     }
