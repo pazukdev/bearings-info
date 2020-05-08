@@ -5,7 +5,10 @@
             <tr v-if="isImgRendered()">
                 <td>
                     <div class="image-preview">
-                        <img class="preview" :src="getImgUrl()" alt="Item image">
+                        <a :href="getImgUrl()" target="_blank"
+                           :title="translate('Tap to open image')">
+                            <img class="preview" :src="getImgUrl()" alt="Item image">
+                        </a>
                     </div>
                     <br>
                     {{translate(noImageMessage)}}

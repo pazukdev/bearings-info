@@ -26,8 +26,13 @@
                                                     <ButtonNavigateToItem :part="item"/>
                                                 </td>
                                                 <td>
-                                                    <img v-if="!isEmpty(item.secondComment)" class="list-img"
-                                                         :src="processImgUrl(item.secondComment)" alt="Item image">
+                                                    <a v-if="!isEmpty(item.secondComment)"
+                                                       :href="processImgUrl(item.secondComment)"
+                                                       target="_blank"
+                                                       :title="translate('Tap to open image')">
+                                                        <img class="list-img"
+                                                             :src="processImgUrl(item.secondComment)" alt="Item image">
+                                                    </a>
                                                 </td>
                                             </tr>
                                             </tbody>
