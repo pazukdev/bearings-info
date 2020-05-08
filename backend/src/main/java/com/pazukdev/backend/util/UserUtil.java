@@ -1,9 +1,9 @@
 package com.pazukdev.backend.util;
 
 import com.pazukdev.backend.constant.security.Role;
+import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.UserItemReport;
 import com.pazukdev.backend.dto.UserItemStringReport;
-import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.entity.Item;
 import com.pazukdev.backend.entity.NestedItem;
 import com.pazukdev.backend.entity.UserEntity;
@@ -99,9 +99,14 @@ public class UserUtil {
         for (final UserEntity user : service.getUserService().findAll()) {
             String wishlistItems = "";
             for (final NestedItem nestedItem : user.getWishList().getItems()) {
-                final Long id = nestedItem.getItem().getId();
-                final String comment = isEmpty(nestedItem.getComment()) ? "" : nestedItem.getComment() + " - ";
-                wishlistItems += id + " " + "(" + comment + nestedItem.getQuantity() + ")" + "; ";
+                wishlistItems += nestedItem.getItem().getName()
+                        + " ("
+                        + nestedItem.getItem().getCategory()
+                        + "!"
+                        + nestedItem.getComment()
+                        + "!"
+                        + nestedItem.getQuantity()
+                        + "); ";
             }
             wishlistItems = removeLastChar(wishlistItems.trim());
 

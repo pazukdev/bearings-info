@@ -3,7 +3,7 @@ package com.pazukdev.backend.converter;
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.abstraction.EntityDtoConverter;
 import com.pazukdev.backend.dto.ImgViewData;
-import com.pazukdev.backend.dto.user.UserDto;
+import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.view.UserView;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.repository.WishListRepository;

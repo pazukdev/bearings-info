@@ -2,8 +2,8 @@ package com.pazukdev.backend.controller;
 
 import com.pazukdev.backend.constant.Status;
 import com.pazukdev.backend.converter.UserConverter;
+import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.factory.ItemViewFactory;
-import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.dto.view.UserView;
 import com.pazukdev.backend.entity.Item;

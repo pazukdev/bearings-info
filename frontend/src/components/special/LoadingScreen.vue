@@ -11,9 +11,9 @@
         <div v-if="!isEmpty(errorMessage)" style="text-align: center">
             <br>
             <br>
-            <p>{{translate(errorMessage)}}</p>
+            <p class="red">{{translate(errorMessage)}}</p>
             <p v-if="noServerResponse(errorMessage)">
-                {{translate('If you still see message above')}}
+                {{translate('If you see message above')}}
             </p>
             <p v-if="noServerResponse(errorMessage)">
                 {{translate('try to refresh the page or check your internet connection')}}

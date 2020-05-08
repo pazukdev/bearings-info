@@ -1,6 +1,5 @@
-package com.pazukdev.backend.dto.user;
+package com.pazukdev.backend.dto;
 
-import com.pazukdev.backend.dto.AbstractDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

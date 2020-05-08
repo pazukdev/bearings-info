@@ -1,8 +1,8 @@
 package com.pazukdev.backend.unit.converter;
 
 import com.pazukdev.backend.MockData;
+import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.WishListDto;
-import com.pazukdev.backend.dto.user.UserDto;
 import com.pazukdev.backend.entity.UserEntity;
 import com.pazukdev.backend.entity.WishList;
 import org.junit.Test;

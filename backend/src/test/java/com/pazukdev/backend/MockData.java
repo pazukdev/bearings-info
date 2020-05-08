@@ -1,6 +1,6 @@
 package com.pazukdev.backend;
 
-import com.pazukdev.backend.dto.user.UserDto;
+import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.entity.TransitiveItem;
 import com.pazukdev.backend.entity.UserEntity;
 import lombok.Getter;

@@ -24,7 +24,6 @@ import static com.pazukdev.backend.util.CategoryUtil.Category.MATERIAL;
 import static com.pazukdev.backend.util.CategoryUtil.Parameter.INSULATION;
 import static com.pazukdev.backend.util.CategoryUtil.isInfo;
 import static com.pazukdev.backend.util.ItemUtil.*;
-import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -254,29 +253,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
             }
         }
         return parents;
-    }
-
-    public List<Item> findUsageAsReplacer(final Item item, final List<Item> checkList) {
-        final List<Item> parents = new ArrayList<>();
-        for (final Item parent : checkList) {
-            for (final NestedItem replacer : parent.getReplacers()) {
-                if (replacer.getItem().getId().equals(item.getId())) {
-                    parents.add(parent);
-                }
-            }
-        }
-        return parents;
-    }
-
-    public List<Item> getItems(final String idsSource) {
-        final List<Item> items = new ArrayList<>();
-        if (isEmpty(idsSource)) {
-            return items;
-        }
-        for (final String s : idsSource.split(";")) {
-            repository.findById(Long.valueOf(s.trim())).ifPresent(items::add);
-        }
-        return items;
     }
 
 }
