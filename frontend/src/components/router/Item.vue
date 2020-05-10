@@ -1,7 +1,7 @@
 <template>
     <div>
         <LoadingScreen v-if="isLoading()"/>
-        <div v-else>
+        <div v-else-if="!isEmpty(itemView)">
             <form id="item-form" @submit="submit">
                 <ItemName/>
                 <ItemMenu/>
