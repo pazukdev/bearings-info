@@ -23,7 +23,7 @@ export default {
 
     setLoadingState(loadingState) {
         store.dispatch("setLoadingState", loadingState);
-        let millisecondsToWait = 20000;
+        let millisecondsToWait = 60000;
         console.log(loadingState);
         setTimeout(function() {
             if (store.getters.loadingState !== "") {

@@ -76,6 +76,18 @@
             '$route': 'onUrlChange'
         },
 
+        metaInfo() {
+            return {
+                title: this.itemView.localizedCategory + " " + this.itemView.localizedName,
+                meta: [
+                    {name: this.itemView.localizedCategory + " " + this.itemView.localizedName,},
+                    {property: 'og:title', content: this.itemView.localizedCategory + " " + this.itemView.localizedName,},
+                    {property: 'og:image', content: this.itemView.img},
+                    {property: 'vk:image', content: this.itemView.img}
+                ]
+            }
+        },
+
         methods: {
             submit: function (e) {
                 e.preventDefault();
