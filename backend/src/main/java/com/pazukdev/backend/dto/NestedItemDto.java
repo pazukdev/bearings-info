@@ -119,17 +119,19 @@ public class NestedItemDto extends AbstractDto {
         dto.setItemId(child.getId());
         dto.setItemName(child.getName());
         dto.setItemCategory(child.getCategory());
-        dto.setLikedUsers(NestedItemUtil.getLikedUserDtos(child.getLikedUsers()));
-        dto.setDislikedUsers(NestedItemUtil.getLikedUserDtos(child.getDislikedUsers()));
         dto.setButtonText(createButtonText(child, manufacturer, partNumber));
-        if (child.getCategory().equals(CategoryUtil.Category.SEAL)) {
-            dto.setSize(descriptionMap.get(CategoryUtil.Parameter.SIZE));
-        }
         dto.setManufacturer(manufacturer);
         dto.setStatus(child.getStatus());
         dto.setCreatorName(creatorName);
         dto.setCreatorId(child.getCreatorId());
         dto.setType(type.name().toLowerCase());
+        if (child.getCategory().equals(CategoryUtil.Category.SEAL)) {
+            dto.setSize(descriptionMap.get(CategoryUtil.Parameter.SIZE));
+        }
+        if (type == NestedItem.Type.REPLACER) {
+            dto.setLikedUsers(NestedItemUtil.getLikedUserDtos(child.getLikedUsers()));
+            dto.setDislikedUsers(NestedItemUtil.getLikedUserDtos(child.getDislikedUsers()));
+        }
 
         return dto;
     }

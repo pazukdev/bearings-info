@@ -223,10 +223,11 @@ public class ItemViewFactory {
     }
 
     private static List<NestedItemDto> createChildren(final Item item,
-                                                      final UserService userService,
+                                                      final UserService service,
                                                       final boolean all) {
         final List<NestedItemDto> dtos = new ArrayList<>();
-        addParts(item.getParts(), dtos, userService, all, null);
+        final Set<NestedItem> parts = item.getParts();
+        addParts(parts, dtos, service, all, null);
         return dtos;
     }
 

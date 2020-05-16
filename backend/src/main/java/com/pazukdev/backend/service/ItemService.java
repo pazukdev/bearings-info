@@ -70,18 +70,6 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public List<Item> findAllActive() {
-        return findAll(Status.ACTIVE);
-    }
-
-    @Transactional
-    public List<Item> findAll(final String status) {
-        final List<Item> items = itemRepository.findAll();
-        items.removeIf(entity -> !entity.getStatus().equals(status));
-        return items;
-    }
-
-    @Transactional
     public List<Item> find(final String... categories) {
         final List<Item> items = new ArrayList<>();
         for (final String category : categories) {
