@@ -25,9 +25,12 @@
                                    @change="categorySelectOnChange()"
                                    v-model="newItemCategory"/>
                             <datalist id="categories">
-                                <option v-for="category in sort(itemView.allCategories)" :value="category">
-                                    {{category}}
-                                </option>
+                                <select>
+                                    <option v-for="category in sort(itemView.allCategories)"
+                                            :value="category">
+                                        {{category}}
+                                    </option>
+                                </select>
                             </datalist>
                         </td>
                         <td>

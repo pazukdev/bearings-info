@@ -17,6 +17,7 @@ import static com.pazukdev.backend.util.CategoryUtil.getItemsManagementComment;
 import static com.pazukdev.backend.util.ItemUtil.createButtonText;
 import static com.pazukdev.backend.util.ItemUtil.toMap;
 import static com.pazukdev.backend.util.SpecificStringUtil.isEmpty;
+import static com.pazukdev.backend.util.SpecificStringUtil.replaceEmptyWithDash;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -80,8 +81,8 @@ public class NestedItemDto extends AbstractDto {
                                                    final UserService service) {
         final NestedItemDto dto = createPart(child, service);
         dto.setName(ChildItemUtil.createNameForWishListItem(child.getName()));
-        dto.setComment(comment);
-        dto.setSecondComment(quantity);
+        dto.setComment(replaceEmptyWithDash(comment));
+        dto.setSecondComment(isEmpty(quantity) ? "1" : quantity);
         dto.setType(NestedItem.Type.WISHLIST_ITEM.name().toLowerCase());
         dto.setCreatorId(userId);
         return dto;

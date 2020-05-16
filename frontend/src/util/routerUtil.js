@@ -7,7 +7,7 @@ import store from "../plugins/store";
 export default {
 
     refresh() {
-        router.go();
+        router.go(0);
     },
 
     back() {

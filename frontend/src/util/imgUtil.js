@@ -1,5 +1,9 @@
 export default {
+
     processUrl(imgUrl) {
-        return imgUrl.replace("https://drive.google.com/open?id=", "https://docs.google.com/uc?id=");
+        let badGoogleDriveBasicUrl = "https://drive.google.com/open?id=";
+        let goodGoogleDriveBasicUrl = "https://docs.google.com/uc?id=";
+        return imgUrl.replace(badGoogleDriveBasicUrl, goodGoogleDriveBasicUrl);
     }
+
 }

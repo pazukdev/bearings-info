@@ -15,7 +15,7 @@
                 name: "Disclaimer",
                 list: [
                     "The app is not a mass media",
-                    "Developer and administration the app are not responsible for information posted by app users"
+                    "The app developer isn't responsible for information posted by app users"
                 ]
             }
         }
