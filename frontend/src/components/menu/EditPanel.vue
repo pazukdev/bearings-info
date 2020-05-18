@@ -35,6 +35,7 @@
 </template>
 
 <script>
+    import axios from "axios";
     import storeUtil from "../../util/storeUtil";
     import {mapState} from "vuex";
     import itemViewUtil from "../../util/itemViewUtil";
@@ -42,6 +43,7 @@
     import routerUtil from "../../util/routerUtil";
     import dictionaryUtil from "../../util/dictionaryUtil";
     import userUtil from "../../util/userUtil";
+    import basicComponent from "../../mixin/basicComponent";
 
     export default {
         name: "EditPanel",
@@ -52,9 +54,10 @@
             itemForm: Boolean
         },
 
+        mixins: [basicComponent],
+
         computed: {
             ...mapState({
-                editMode: state => state.dictionary.editMode,
                 itemView: state => state.dictionary.itemView
             })
         },
@@ -66,7 +69,21 @@
             },
 
             edit() {
-                storeUtil.setEditMode(true);
+                storeUtil.setLoadingStateLoading();
+                axios
+                    .get(this.basicUrl
+                        + "/" + "item"
+                        + "/" + "edit-data"
+                        + "/" + routerUtil.getId(this.$route), {
+                        headers: {
+                            Authorization: this.authorization
+                        }
+                    })
+                    .then(response => {
+                        this.itemView.possibleParts = response.data.parts;
+                        this.itemView.possibleReplacers = response.data.replacers;
+                        storeUtil.setEditMode(true);
+                    }).finally(() => storeUtil.setLoadingStateOff());
             },
 
             save() {

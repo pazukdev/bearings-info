@@ -33,7 +33,7 @@
                         </tr>
                     </table>
                     <div v-else>
-                        {{row.value}}
+                        {{translate(row.value)}}
                     </div>
                 </td>
                 <td>

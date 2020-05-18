@@ -6,6 +6,8 @@
             {{part.buttonText}}
         </router-link>
         <router-link v-else class="button" :to="{name: 'item', params: {id: part.itemId, lang: lang}}">
+<!--            {{translate(part.buttonText.split("=")[0].trim())}}<br>-->
+<!--            {{translate(part.buttonText.split("=")[1])}}-->
             {{part.buttonText.split("=")[0].trim()}}<br>
             {{part.buttonText.split("=")[1]}}
         </router-link>
