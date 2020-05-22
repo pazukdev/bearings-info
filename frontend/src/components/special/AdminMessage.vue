@@ -1,5 +1,5 @@
 <template>
-    <div class="default-margin" style="text-align: center"
+    <div class="default-margin bordered" style="text-align: center; border-color: #6ab04c"
          v-if="isAdminMessageRendered(itemView.adminMessage)">
         <p v-if="!isEmpty(itemView.adminMessage.text)">
             <b>{{translate(itemView.adminMessage.text)}}</b>

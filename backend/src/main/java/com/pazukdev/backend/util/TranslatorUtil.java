@@ -9,7 +9,6 @@ import com.pazukdev.backend.dto.table.HeaderTableRow;
 import com.pazukdev.backend.dto.table.ReplacersTable;
 import com.pazukdev.backend.dto.view.ItemView;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.pazukdev.backend.dto.DictionaryData.getDictionaryFromFile;
@@ -42,47 +41,24 @@ public class TranslatorUtil {
                                  final boolean addToDictionary,
                                  final List<String> dictionary) throws Exception {
 
-        LoggerUtil.warn("start -----------------------------" + LocalDateTime.now());
-
         HeaderTable header = view.getHeader();
         final String category = view.getCategory();
         final String localizedName = view.getLocalizedName();
         final ReplacersTable replacersTable = view.getReplacersTable();
         final List<String> categories = view.getAllCategories();
 
-        final List<NestedItemDto> translatedChildren = new ArrayList<>();
-        final List<NestedItemDto> translatedAllChildren = new ArrayList<>();
-
-
-        final Set<Thread> threads = new HashSet<>();
         try {
-            threads.add(new Thread(() -> {
-                translatedAllChildren.addAll(translateItemDtoList(langFrom, langTo, view.getAllChildren(), dictionary));
-                LoggerUtil.error("allChildren");
-            }));
 
-            threads.add(new Thread(() -> {
-                translatedChildren.addAll(translateItemDtoList(langFrom, langTo, view.getChildren(), dictionary));
-                LoggerUtil.error("children");
-            }));
-
-            threads.add(new Thread(() -> {
-                translate(langFrom, langTo, replacersTable, dictionary);
-                LoggerUtil.error("replacersTable");
-            }));
-
-            threads.forEach(Thread::start);
-
-//            translate(langFrom, langTo, replacersTable, dictionary);
+            header = translate(langFrom, langTo, header, addToDictionary, dictionary);
+            translate(langFrom, langTo, replacersTable, dictionary);
             translate(langFrom, langTo, categories, addToDictionary, dictionary);
 
             boolean name = langTo.equals("en");
 
             view.setLocalizedCategory(translate(langFrom, langTo, category, false, addToDictionary, dictionary));
-            LoggerUtil.error("view.setLocalizedCategory");
             view.setLocalizedName(translate(langFrom, langTo, localizedName, name, false, dictionary));
-//            view.setChildren(translateItemDtoList(langFrom, langTo, view.getChildren(), dictionary));
-//            view.setAllChildren(translateItemDtoList(langFrom, langTo, view.getAllChildren(), dictionary));
+            view.setChildren(translateItemDtoList(langFrom, langTo, view.getChildren(), dictionary));
+            view.setAllChildren(translateItemDtoList(langFrom, langTo, view.getAllChildren(), dictionary));
 //            view.setPossibleParts(translateItemDtoList(langFrom, langTo, view.getPossibleParts(), dictionary));
 //            view.setPossibleReplacers(translateItemDtoList(langFrom, langTo, view.getPossibleReplacers(), dictionary));
 
@@ -106,16 +82,6 @@ public class TranslatorUtil {
 
         view.setHeader(header);
         view.setAllCategories(categories);
-
-        for (final Thread thread : threads) {
-            thread.join();
-        }
-
-        view.setChildren(translatedChildren);
-        view.setAllChildren(translatedAllChildren);
-        view.setReplacersTable(replacersTable);
-
-        LoggerUtil.warn("end -----------------------------" + LocalDateTime.now());
     }
 
     private static HeaderTable translate(final String langFrom,
@@ -173,8 +139,10 @@ public class TranslatorUtil {
                                                            final List<NestedItemDto> dtos,
                                                            final List<String> dictionary) {
         if (langFrom.equals("en")) {
-            for (final NestedItemDto dto : dtos) {
-                dto.translateToLang(langTo, dictionary);
+            if (dtos.size() > Constant.COLLECTION_SIZE_TO_PARALLELIZE) {
+                dtos.parallelStream().forEach(dto -> dto.translateToLang(langTo, dictionary));
+            } else {
+                dtos.forEach(dto -> dto.translateToLang(langTo, dictionary));
             }
         }
         return dtos;
