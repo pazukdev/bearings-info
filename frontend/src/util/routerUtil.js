@@ -30,6 +30,10 @@ export default {
         return route.name === "menu";
     },
 
+    isItem(route) {
+        return route.name === "item";
+    },
+
     toItem(id, lang) {
         router.push({name: "item", params: {id: id, lang: lang}});
     },

@@ -422,6 +422,10 @@
         background: #151515;
     }
 
+    .small-img {
+        width: 200px;
+    }
+
     .bordered {
         border: 1px solid;
         border-radius: 6px;

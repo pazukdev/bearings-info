@@ -2,28 +2,58 @@
     <div>
         <LoadingScreen v-if="isLoading()"/>
         <div v-else-if="!isEmpty(itemView)">
-            <form id="item-form" @submit="submit">
-                <ItemName/>
-                <ItemMenu/>
-                <Header :item="true" :editable="true"/>
-                <WhereToBuy/>
-                <details v-if="arrayIsRendered(itemView.replacersTable.replacers)">
-                    <summary class="bold">{{getTextPlusCount("Replacers", itemView.replacersTable.replacers.length)}}</summary>
-                    <ReplacersSection/>
+
+            <ItemName/>
+
+            <div v-if="isAllItemsReport()">
+                <EditableImg :small="true"/>
+                <div style="text-align: center">
+                    {{getAllItemsReportText()}}
+                </div>
+                <details v-if="itemView.allChildren.length > 0" open>
+                    <summary class="bold">
+                        {{getTextPlusCount("All units / parts", itemView.allChildren.length)}}
+                    </summary>
+                    <ItemSummary/>
                 </details>
-                <details v-if="arrayIsRendered(itemView.children)">
-                    <summary class="bold">{{getTextPlusCount("Units / parts", itemView.children.length)}}</summary>
-                    <PartsSection/>
+                <div v-else style="text-align: center">
+                    <br>
+                    {{translate("Nothing found")}}
+                </div>
+            </div>
+
+            <div v-else>
+                <form id="item-form" @submit="submit">
+                    <ItemMenu/>
+                    <Header :item="true" :editable="true"/>
+                    <WhereToBuy/>
+                    <details v-if="arrayIsRendered(itemView.replacersTable.replacers)">
+                        <summary class="bold">
+                            {{getTextPlusCount("Replacers", itemView.replacersTable.replacers.length)}}
+                        </summary>
+                        <ReplacersSection/>
+                    </details>
+                    <details v-if="arrayIsRendered(itemView.children)" open>
+                        <div v-if="!editMode"
+                             class="default-margin" style="text-align: right">
+                            <router-link class="simple-link"
+                                         :to="{name: 'item', params: {id: itemView.itemId, lang: lang, report_type: getAllItemsReportUrl()}}">
+                                {{getAllItemsReportText()}}
+                            </router-link>
+                        </div>
+                        <summary class="bold">
+                            {{getTextPlusCount("Units / parts", itemView.children.length)}}
+                        </summary>
+                        <PartsSection/>
+                    </details>
+                </form>
+                <details v-if="arrayIsRendered(itemView.parents.children)">
+                    <summary class="bold">
+                        {{getTextPlusCount(getUsageTitle(), itemView.parents.children.length)}}
+                    </summary>
+                    <Usage/>
                 </details>
-            </form>
-            <details v-if="itemView.allChildren.length > itemView.children.length && arrayIsRendered(itemView.allChildren)">
-                <summary class="bold">{{getTextPlusCount("All units / parts", itemView.allChildren.length)}}</summary>
-                <ItemSummary/>
-            </details>
-            <details v-if="arrayIsRendered(itemView.parents.children)">
-                <summary class="bold">{{getTextPlusCount(getUsageTitle(), itemView.parents.children.length)}}</summary>
-                <Usage/>
-            </details>
+            </div>
         </div>
     </div>
 </template>
@@ -48,10 +78,12 @@
     import basicComponent from "../../mixin/basicComponent";
     import view from "../../mixin/view";
     import WhereToBuy from "../item/WhereToBuy";
+    import EditableImg from "../EditableImg";
 
     export default {
 
         components: {
+            EditableImg,
             WhereToBuy,
             ItemName,
             Header,
@@ -89,6 +121,22 @@
         },
 
         methods: {
+            getAllItemsReportText() {
+                return this.translate("All units and parts list");
+            },
+
+            getAllItemsReportUrl() {
+                return "all_parts_report";
+            },
+
+            getReportType() {
+                return this.$route.params.report_type;
+            },
+
+            isAllItemsReport() {
+                return this.getReportType() === this.getAllItemsReportUrl();
+            },
+
             submit: function (e) {
                 e.preventDefault();
                 storeUtil.setLoadingStateDefault();
@@ -117,7 +165,7 @@
                     this.pushToLoginForm();
                     return;
                 }
-                console.log("getItemViewByUrl(): " + id);
+                console.log("getItemView(): " + id);
                 this.getItemView(id, true);
             },
 
@@ -158,7 +206,8 @@
                         + "/" + "item"
                         + "/" + itemId
                         + "/" + this.getUserName()
-                        + "/" + lang, {
+                        + "/" + lang
+                        + "/" + this.getReportType(), {
                         headers: {
                             Authorization: axiosUtil.getAuthorization()
                         }

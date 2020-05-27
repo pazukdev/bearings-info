@@ -34,7 +34,7 @@ const router = new VueRouter({
         { path: '/disclaimer/:lang', name: 'disclaimer', component: Disclaimer },
         { path: '/home/:lang', name: 'home', component: Home, meta: { requiresAuth: true }},
         { path: '/menu/:lang', name: 'menu', component: Menu, meta: { requiresAuth: true } },
-        { path: '/item/id/:id/:lang', name: 'item', component: Item, meta: { requiresAuth: true }},
+        { path: '/item/id/:id/:lang/:report_type?', name: 'item', component: Item, meta: { requiresAuth: true }},
         { path: '/user/id/:id/:lang', name: 'user', component: User, meta: { requiresAuth: true }},
         { path: '/user_list/:lang', name: 'user_list', component: UserList, meta: { requiresAuth: true }},
         { path: '/wish_list/:lang', name: 'wish_list', component: WishList, meta: { requiresAuth: true }},

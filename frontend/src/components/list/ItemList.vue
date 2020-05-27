@@ -59,7 +59,8 @@
                                     <ButtonNavigateToItem :part="item"/>
                                 </td>
                                 <td>
-                                    <ButtonDelete :item="item"
+                                    <ButtonDelete v-if="!usageView"
+                                                  :item="item"
                                                   :items-management-view="itemsManagementView"
                                                   @remove-item="removeItem"/>
                                 </td>

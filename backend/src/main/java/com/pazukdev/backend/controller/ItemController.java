@@ -1,6 +1,5 @@
 package com.pazukdev.backend.controller;
 
-import com.pazukdev.backend.dataloader.DataLoader;
 import com.pazukdev.backend.dto.PossibleNestedItemsDto;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.service.ItemService;
@@ -21,15 +20,15 @@ import org.springframework.web.bind.annotation.*;
 public class ItemController {
 
     private final ItemService service;
-    private final DataLoader dataLoader;
 
-    @GetMapping("/view/item/{id}/{userName}/{lang}")
+    @GetMapping("/view/item/{id}/{userName}/{lang}/{option}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get item")
     public ItemView get(@PathVariable final Long id,
                         @PathVariable final String userName,
-                        @PathVariable final String lang)  {
-        return service.createItemView(id, userName, lang);
+                        @PathVariable final String lang,
+                        @PathVariable final String option)  {
+        return service.createItemView(id, userName, lang, option);
     }
 
     @GetMapping("/view/items/{status}/{userName}/{language}")

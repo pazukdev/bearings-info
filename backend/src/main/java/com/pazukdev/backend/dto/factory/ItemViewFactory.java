@@ -1,5 +1,6 @@
 package com.pazukdev.backend.dto.factory;
 
+import com.pazukdev.backend.constant.Constant;
 import com.pazukdev.backend.constant.Status;
 import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.NestedItemConverter;
@@ -66,6 +67,14 @@ public class ItemViewFactory {
                                    final String status,
                                    String userName,
                                    final String userLang) {
+        return createItemView(itemId, status, userName, userLang, null);
+    }
+
+    public ItemView createItemView(final Long itemId,
+                                   final String status,
+                                   String userName,
+                                   final String userLang,
+                                   final String option) {
         final long businessLogicStartTime = System.nanoTime();
 
         final UserService userService = itemService.getUserService();
@@ -93,7 +102,7 @@ public class ItemViewFactory {
         } else if (userListView) {
             view = createUsersListView(basicView, userService);
         } else {
-            view = createOrdinaryItemView(basicView, itemId, userService);
+            view = createOrdinaryItemView(basicView, itemId, option, userService);
         }
 
         final double businessLogicEndTime = System.nanoTime();
@@ -188,7 +197,11 @@ public class ItemViewFactory {
 
     private ItemView createOrdinaryItemView(final ItemView view,
                                             final Long itemId,
+                                            final String option,
                                             final UserService userService) {
+
+        boolean allItemsReport = option != null && option.equals(Constant.ReportType.ALL_PARTS);
+
         final Item item = itemService.findOne(itemId);
         final List<Item> allItems = itemService.findAllActive();
         allItems.remove(item);
@@ -210,13 +223,16 @@ public class ItemViewFactory {
         view.setLocalizedName(name);
         view.setDefaultImg(imgViewData.getDefaultImg());
         view.setImg(imgViewData.getImg());
-        view.setHeader(createHeader(item, description, itemService));
-        view.setChildren(createChildren(item, userService, false));
-        view.setAllChildren(createChildren(item, userService, true));
-        view.setReplacersTable(createReplacersTable(item, userService));
         view.setCreatorData(UserUtil.getCreator(item, itemService.getUserService()));
-        setLinksToItemView(view, item);
-        view.setParents(createParentItemsView(item, userService, allItems));
+        if (!allItemsReport) {
+            view.setHeader(createHeader(item, description, itemService));
+            view.setChildren(createChildren(item, userService, false));
+            view.setReplacersTable(createReplacersTable(item, userService));
+            setLinksToItemView(view, item);
+            view.setParents(createParentItemsView(item, userService, allItems));
+        } else {
+            view.setAllChildren(createChildren(item, userService, true));
+        }
         return view;
     }
 

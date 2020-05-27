@@ -4,10 +4,10 @@
             <tbody>
             <tr v-if="isImgRendered()">
                 <td>
-                    <div class="image-preview">
+                    <div>
                         <a :href="getImgUrl()" target="_blank"
                            :title="translate('Tap to open image')">
-                            <img class="preview" :src="getImgUrl()" alt="Item image">
+                            <img :class="{'small-img':small}" :src="getImgUrl()" alt="Item image">
                         </a>
                     </div>
                     <br>
@@ -71,6 +71,10 @@
 
     export default {
         name: "EditableImg",
+
+        props: {
+            small:Boolean
+        },
 
         computed: {
             ...mapState({

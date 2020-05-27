@@ -69,21 +69,25 @@
             },
 
             edit() {
-                storeUtil.setLoadingStateLoading();
-                axios
-                    .get(this.basicUrl
-                        + "/" + "item"
-                        + "/" + "edit-data"
-                        + "/" + routerUtil.getId(this.$route), {
-                        headers: {
-                            Authorization: this.authorization
-                        }
-                    })
-                    .then(response => {
-                        this.itemView.possibleParts = response.data.parts;
-                        this.itemView.possibleReplacers = response.data.replacers;
-                        storeUtil.setEditMode(true);
-                    }).finally(() => storeUtil.setLoadingStateOff());
+                if (routerUtil.isItem(this.$route)) {
+                    storeUtil.setLoadingStateLoading();
+                    axios
+                        .get(this.basicUrl
+                            + "/" + "item"
+                            + "/" + "edit-data"
+                            + "/" + routerUtil.getId(this.$route), {
+                            headers: {
+                                Authorization: this.authorization
+                            }
+                        })
+                        .then(response => {
+                            this.itemView.possibleParts = response.data.parts;
+                            this.itemView.possibleReplacers = response.data.replacers;
+                            storeUtil.setEditMode(true);
+                        }).finally(() => storeUtil.setLoadingStateOff());
+                } else {
+                    storeUtil.setEditMode(true);
+                }
             },
 
             save() {
