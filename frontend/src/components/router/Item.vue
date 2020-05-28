@@ -37,7 +37,7 @@
                         <div v-if="!editMode"
                              class="default-margin" style="text-align: right">
                             <router-link class="simple-link"
-                                         :to="{name: 'item', params: {id: itemView.itemId, lang: lang, report_type: getAllItemsReportUrl()}}">
+                                         :to="{name: 'item', params: {category: itemView.category, name: itemView.name, lang: lang, report_type: getAllItemsReportUrl()}}">
                                 {{getAllItemsReportText()}}
                             </router-link>
                         </div>
@@ -67,7 +67,6 @@
     import ReplacersSection from "../item/ReplacersSection";
     import itemViewUtil from "../../util/itemViewUtil";
     import LoadingScreen from "../special/LoadingScreen";
-    import routerUtil from "../../util/routerUtil";
     import Usage from "../item/Usage";
     import CountedItemList from "../list/CountedItemList";
     import ItemSummary from "../item/ItemSummary";
@@ -79,6 +78,7 @@
     import view from "../../mixin/view";
     import WhereToBuy from "../item/WhereToBuy";
     import EditableImg from "../EditableImg";
+    import routerUtil from "../../util/routerUtil";
 
     export default {
 
@@ -156,48 +156,20 @@
                 this.getView();
             },
 
-            getView() {
-                let id = this.processItemId(this.getItemId());
-                if (id === "redirect to login") {
-                    console.log("/" + this.getItemId()
-                        + " url is forbidden for user with role " + this.getUserRole());
-                    console.log("redirected to login");
-                    this.pushToLoginForm();
-                    return;
-                }
-                console.log("getItemView(): " + id);
-                this.getItemView(id, true);
-            },
-
-            getItemId() {
-                return routerUtil.getId(this.$route);
-            },
-
             getUserRole() {
                 return this.itemView.userData.comment;
-            },
-
-            processItemId(itemId) {
-                if (itemId === "wishlist") {
-                    if (!this.isAuthorized() || this.isGuest()) {
-                        return "redirect to login";
-                    }
-                    return this.wishlistId.toString();
-                }
-                if (itemId === "users") {
-                    if (!this.isAuthorized() || this.isGuest()) {
-                        return "redirect to login";
-                    }
-                    return  this.userlistId.toString();
-                }
-                return itemId;
             },
 
             pushToLoginForm() {
                 this.$router.push({ name: `login` });
             },
 
+            getView() {
+                this.getItemView(routerUtil.getId(this.$route), true);
+            },
+
             getItemView(itemId, refreshIfError) {
+                console.log("getItemView(): " + itemId);
                 let lang = this.$route.params.lang;
                 axios
                     .get(axiosUtil.getBasicUrl()
@@ -214,7 +186,14 @@
                     })
                     .then(response => {
                         let itemView = response.data;
-                        itemViewUtil.dispatchView(itemView, lang);
+                        if (itemView.nameToRedirect === "home") {
+                            let message = this.translate("Item") + " "
+                                + "id=" + itemId + " "
+                                + this.translate("not found");
+                            routerUtil.toHome(lang, message);
+                        } else {
+                            itemViewUtil.dispatchView(itemView, lang);
+                        }
                     })
                     .catch(error => {
                         console.log("Error on getItemView(): " + error);

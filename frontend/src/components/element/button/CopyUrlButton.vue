@@ -14,6 +14,8 @@
 <script>
     import shared from "../../../util/shared";
     import dictionaryUtil from "../../../util/dictionaryUtil";
+    import {mapState} from "vuex";
+    import routerUtil from "../../../util/routerUtil";
 
     export default {
         name: "CopyUrlButton",
@@ -22,6 +24,12 @@
             return {
                 urlCopied: false
             }
+        },
+
+        computed: {
+            ...mapState({
+                itemView: state => state.dictionary.itemView
+            })
         },
 
         watch: {
@@ -46,7 +54,12 @@
             },
 
             getCurrentLocation() {
-                return shared.getCurrentLocation();
+                let url = shared.getCurrentLocation();
+                if (routerUtil.isItem(this.$route)) {
+                    let id = this.itemView.category + "&" + this.itemView.name;
+                    url = url.toString().replace(this.$route.params.id, id);
+                }
+                return url;
             },
 
             translate(text) {

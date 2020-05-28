@@ -21,7 +21,7 @@
 <!--                                            {{"authorization: " + authorization}}<br>-->
 <!--                                            {{"loadingState: " + loadingState}}<br>-->
 <!--                                            {{"editMode: " + editMode}}<br>-->
-<!--                                            {{"itemView: " + itemView.userData.name}}<br>-->
+                                            {{"itemView: " + itemView.itemId}}<br>
 <!--                                            {{"itemView: " + itemView.userData.id}}<br>-->
                         </div>
                         <div>

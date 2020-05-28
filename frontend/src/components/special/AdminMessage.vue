@@ -1,10 +1,10 @@
 <template>
     <div class="default-margin bordered" style="text-align: center; border-color: #6ab04c"
-         v-if="isAdminMessageRendered(itemView.adminMessage)">
-        <p v-if="!isEmpty(itemView.adminMessage.text)">
-            <b>{{translate(itemView.adminMessage.text)}}</b>
+         v-if="isAdminMessageRendered()">
+        <p>
+            <b>{{translate(getMessage())}}</b>
         </p>
-        <a class="simple-link" v-if="!isEmpty(itemView.adminMessage.url)"
+        <a class="simple-link" v-if="!isEmpty(itemView.adminMessage) && !isEmpty(itemView.adminMessage.url)"
            :href="itemView.adminMessage.url">{{getLinkText(itemView.adminMessage)}}</a>
     </div>
 </template>
@@ -24,8 +24,18 @@
         },
 
         methods: {
-            isAdminMessageRendered(message) {
-                return !this.isEmpty(message) && !this.isEmpty(message.text);
+            isAdminMessageRendered() {
+                return !this.isEmpty(this.getMessage());
+            },
+
+            getMessage() {
+                if (!this.isEmpty(this.$route.params.message)) {
+                    return this.$route.params.message;
+                }
+                if (!this.isEmpty(this.itemView.adminMessage)) {
+                    return this.itemView.adminMessage.text;
+                }
+                return "";
             },
 
             getLinkText(source) {

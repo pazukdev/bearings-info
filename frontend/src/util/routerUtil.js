@@ -34,6 +34,10 @@ export default {
         return route.name === "item";
     },
 
+    isWishlist(route) {
+        return route.name === "wish_list";
+    },
+
     toItem(id, lang) {
         router.push({name: "item", params: {id: id, lang: lang}});
     },
@@ -42,8 +46,8 @@ export default {
         router.push({name: "user", params: {id: id, lang: lang}});
     },
 
-    toHome(lang) {
-        router.push({name: "home", params: {lang: lang}});
+    toHome(lang, message) {
+        router.push({name: "home", params: {lang: lang, message: message}});
     },
 
     toAccountActivation(lang, userId) {

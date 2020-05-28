@@ -71,10 +71,6 @@
                     .catch(error => {
                         itemViewUtil.dispatchResponseError(error);
                     });
-            },
-
-            logEvent(event, itemId, name) {
-                console.log(event + ": " + "id=" + itemId + "; name=" + name);
             }
 
         }

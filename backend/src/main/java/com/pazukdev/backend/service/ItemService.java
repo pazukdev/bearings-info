@@ -153,7 +153,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public ItemView createItemView(final Long itemId, final String userName, final String lang, final String option) {
+    public ItemView createItemView(final String itemId, final String userName, final String lang, final String option) {
         return createNewItemViewFactory().createItemView(itemId, Status.ACTIVE, userName, lang, option);
     }
 
@@ -171,7 +171,7 @@ public class ItemService extends AbstractService<Item, TransitiveItemDto> {
     }
 
     @Transactional
-    public ItemView updateItemView(final Long itemId,
+    public ItemView updateItemView(final String itemId,
                                    final String userName,
                                    final String language,
                                    final ItemView itemView) {

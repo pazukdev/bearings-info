@@ -65,7 +65,7 @@
             },
 
             goHome() {
-                routerUtil.toHome(this.lang);
+                routerUtil.toHome(this.lang, "");
             },
 
             showCurrentUserProfile() {

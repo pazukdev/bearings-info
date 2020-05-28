@@ -75,7 +75,7 @@
                         .get(this.basicUrl
                             + "/" + "item"
                             + "/" + "edit-data"
-                            + "/" + routerUtil.getId(this.$route), {
+                            + "/" + this.itemView.itemId, {
                             headers: {
                                 Authorization: this.authorization
                             }

@@ -39,7 +39,7 @@ export default {
                         if (userData.status === "pending") {
                             routerUtil.toAccountActivation(lang, null);
                         } else {
-                            routerUtil.toHome(lang);
+                            routerUtil.toHome(lang, "");
                         }
                     }
                 }
