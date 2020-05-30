@@ -26,6 +26,12 @@
                 <form id="item-form" @submit="submit">
                     <ItemMenu/>
                     <Header :item="true" :editable="true"/>
+                    <details v-if="arrayIsRendered(itemView.parents.children)">
+                        <summary class="bold">
+                            {{getTextPlusCount(getUsageTitle(), itemView.parents.children.length)}}
+                        </summary>
+                        <Usage/>
+                    </details>
                     <WhereToBuy/>
                     <details v-if="arrayIsRendered(itemView.replacersTable.replacers)">
                         <summary class="bold">
@@ -47,12 +53,6 @@
                         <PartsSection/>
                     </details>
                 </form>
-                <details v-if="arrayIsRendered(itemView.parents.children)">
-                    <summary class="bold">
-                        {{getTextPlusCount(getUsageTitle(), itemView.parents.children.length)}}
-                    </summary>
-                    <Usage/>
-                </details>
             </div>
         </div>
     </div>
@@ -110,7 +110,7 @@
 
         metaInfo() {
             return {
-                title: this.itemView.localizedCategory + " " + this.itemView.localizedName,
+                title: this.getTitle(this.itemView),
                 meta: [
                     {name: this.itemView.localizedCategory + " " + this.itemView.localizedName,},
                     {property: 'og:title', content: this.itemView.localizedCategory + " " + this.itemView.localizedName,},
@@ -121,6 +121,22 @@
         },
 
         methods: {
+            getTitle(itemView) {
+                let firstPart = itemView.localizedCategory;
+                if (itemView.category === "Vehicle") {
+                    for (let i = 0; i <= itemView.header.rows.length; i++) {
+                        let row = itemView.header.rows[i];
+                        if (row.name === "Class") {
+                            if (!this.isEmpty(row.value)) {
+                                firstPart = row.value;
+                            }
+                            break;
+                        }
+                    }
+                }
+                return firstPart + " " + itemView.localizedName
+            },
+
             getAllItemsReportText() {
                 return this.translate("All units and parts list");
             },
@@ -187,9 +203,14 @@
                     .then(response => {
                         let itemView = response.data;
                         if (itemView.nameToRedirect === "home") {
-                            let message = this.translate("Item") + " "
-                                + "id=" + itemId + " "
-                                + this.translate("not found");
+                            let idData;
+                            if (itemId.includes("&")) {
+                                idData = this.translate(itemId.split("&")[0]) + " "
+                                    + this.translate(itemId.split("&")[1]);
+                            } else {
+                                idData = this.translate("Item") + " id=" + itemId
+                            }
+                            let message = idData + " " + this.translate("not found");
                             routerUtil.toHome(lang, message);
                         } else {
                             itemViewUtil.dispatchView(itemView, lang);

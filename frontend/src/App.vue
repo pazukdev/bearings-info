@@ -21,7 +21,7 @@
 <!--                                            {{"authorization: " + authorization}}<br>-->
 <!--                                            {{"loadingState: " + loadingState}}<br>-->
 <!--                                            {{"editMode: " + editMode}}<br>-->
-                                            {{"itemView: " + itemView.itemId}}<br>
+<!--                                            {{"itemView: " + itemView.img}}<br>-->
 <!--                                            {{"itemView: " + itemView.userData.id}}<br>-->
                         </div>
                         <div>
@@ -77,6 +77,12 @@
             LoadingScreen,
             AppBar,
             Home
+        },
+
+        metaInfo() {
+            return {
+                title: this.translate("Old Vehicles")
+            }
         },
 
         mixins: [basicComponent, view],

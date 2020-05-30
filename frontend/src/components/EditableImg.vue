@@ -7,7 +7,8 @@
                     <div>
                         <a :href="getImgUrl()" target="_blank"
                            :title="translate('Tap to open image')">
-                            <img :class="{'small-img':small}" :src="getImgUrl()" alt="Item image">
+                            <img :class="{'small-img':small, 'extra-small-img':extraSmall}"
+                                 :src="getImgUrl()" alt="Item image">
                         </a>
                     </div>
                     <br>
@@ -73,7 +74,8 @@
         name: "EditableImg",
 
         props: {
-            small:Boolean
+            small:Boolean,
+            extraSmall:Boolean
         },
 
         computed: {
@@ -96,16 +98,14 @@
 
         methods: {
             getImgUrl() {
-                if (routerUtil.isHome(this.$route)) {
-                    return "https://pazukdev.github.io/sovietboxers/img/app_logo.9a3c3892.png";
-                }
-                let defaultImg = "https://drive.google.com/open?id=1wyb_Av3pKeP2gnzLPRfz40FjJaUZkQde";
                 let itemView = this.itemView;
                 let img = itemView.img;
                 if (this.isEmpty(img)) {
-                    img = defaultImg;
+                    this.extraSmall = true;
                     this.noImageMessage = "No image";
+                    return require("../assets/default_image.png");
                 } else {
+                    this.extraSmall = false;
                     this.noImageMessage = "";
                 }
                 let isBase64ImgData = img.includes(";base64,");
@@ -184,5 +184,9 @@
 <style scoped>
     #img-container {
         padding: 20px 0;
+    }
+
+    .extra-small-img {
+        width: 100px;
     }
 </style>
