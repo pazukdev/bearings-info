@@ -80,7 +80,7 @@ export default {
     setLangsAndDictionary(lang) {
         axios
             .get(this.getBasicUrl()
-                + "/" + "file"
+                + "/" + "download"
                 + "/" + "dictionary-data"
                 + "/" + lang, {
                 headers: {

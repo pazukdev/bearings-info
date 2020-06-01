@@ -69,20 +69,20 @@
     import routerUtil from "../util/routerUtil";
     import dictionaryUtil from "../util/dictionaryUtil";
     import imgUtil from "../util/imgUtil";
+    import basicComponent from "../mixin/basicComponent";
 
     export default {
         name: "EditableImg",
 
         props: {
-            small:Boolean,
-            extraSmall:Boolean
+            small:Boolean
         },
+
+        mixins: [basicComponent],
 
         computed: {
             ...mapState({
-                editMode: state => state.dictionary.editMode,
-                itemView: state => state.dictionary.itemView,
-                basicUrl: state => state.dictionary.basicUrl
+                itemView: state => state.dictionary.itemView
             })
         },
 
@@ -91,6 +91,7 @@
                 img: "",
                 fileUploadMessage: "",
                 noImageMessage: "",
+                extraSmall: false
             }
         },
 
@@ -138,13 +139,6 @@
                 }
                 let view = this.itemView;
                 return !this.isEmpty(view.img) || !this.isEmpty(view.defaultImg);
-            },
-
-            isEmpty(value) {
-                if (shared.isEmpty(value)) {
-                    return true;
-                }
-                return value.includes("/-");
             },
 
             messagesContain(message) {

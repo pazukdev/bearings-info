@@ -2,8 +2,9 @@
     <div>
         <EditableImg/>
         <div>
-            <EditPanel v-if="editable && isEnglish()" :item-form="item" @save="save"/>
-            <div v-if="editable && !isEnglish()" class="default-margin">
+            <EditPanel v-if="isWishlist() || (editable && isEnglish())"
+                       :item-form="item" @save="save"/>
+            <div v-else class="default-margin">
                 <p class="bordered">{{translate("Editing is available in English only")}}</p>
             </div>
             <div v-if="editMode && itemsManagement" class="default-margin" style="text-align: center">
@@ -28,6 +29,7 @@
     import axiosUtil from "../../../util/axiosUtil";
     import basicComponent from "../../../mixin/basicComponent";
     import view from "../../../mixin/view";
+    import routerUtil from "../../../util/routerUtil";
 
     export default {
         name: "Header",
@@ -54,6 +56,10 @@
 
             isEnglish() {
                 return shared.isEnglish();
+            },
+
+            isWishlist() {
+                return routerUtil.isWishlist(this.$route);
             }
         }
     }
