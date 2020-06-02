@@ -1,13 +1,33 @@
 <template>
     <div>
         <br>
-        <p style="text-align: center; font-weight: bold">{{translate(name)}}</p>
+        <p v-if="translateText" style="text-align: center; font-weight: bold">
+            {{translate(name)}}
+        </p>
+        <p v-else style="text-align: center; font-weight: bold">
+            {{name}}
+        </p>
         <br>
-        <ol>
+        <ol v-if="ordered && translateText">
             <li v-for="element in list">
                 {{translate(element)}}
             </li>
         </ol>
+        <ol v-if="ordered && !translateText">
+            <li v-for="element in list">
+                {{element}}
+            </li>
+        </ol>
+        <ul v-if="!ordered && translateText">
+            <li v-for="element in list">
+                {{translate(element)}}
+            </li>
+        </ul>
+        <ul v-if="!ordered && !translateText">
+            <li v-for="element in list">
+                {{element}}
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -19,7 +39,9 @@
 
         props: {
             name:String,
-            list:Array
+            list:Array,
+            translateText:Boolean,
+            ordered:Boolean
         },
 
         methods: {

@@ -13,6 +13,7 @@ import PrivacyPolicy from "../components/info/PrivacyPolicy";
 import UserAgreement from "../components/info/UserAgreement";
 import Disclaimer from "../components/info/Disclaimer";
 import AccountActivation from "../components/router/AccountActivation";
+import WhatsNew from "../components/info/WhatsNew";
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,7 @@ const router = new VueRouter({
         { path: '/user-agreement/:lang', name: 'user_agreement', component: UserAgreement },
         { path: '/privacy-policy/:lang', name: 'privacy_policy', component: PrivacyPolicy },
         { path: '/disclaimer/:lang', name: 'disclaimer', component: Disclaimer },
+        { path: '/whats_new/:lang', name: 'whats_new', component: WhatsNew },
         { path: '/home/:lang/:message?', name: 'home', component: Home, meta: { requiresAuth: true }},
         { path: '/menu/:lang', name: 'menu', component: Menu, meta: { requiresAuth: true } },
         { path: '/item/id/:id/:lang/:report_type?', name: 'item', component: Item, meta: { requiresAuth: true }},

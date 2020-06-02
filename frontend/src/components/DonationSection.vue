@@ -7,6 +7,11 @@
                 <img style="width: 60px" src="https://www.sovietboxers.com/img/beer.95fcf001.png"
                      alt="beer icon" :title="translate('Pour a glass')">
             </summary>
+            <br>
+            <p>
+                {{translate("The project takes a lot of time. I will be glad of any support")}}
+            </p>
+            <br>
             <details class="default-margin">
                 <summary>{{translate("#1 Pay Pal donation box")}}</summary>
                 <br>

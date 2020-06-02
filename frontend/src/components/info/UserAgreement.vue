@@ -1,6 +1,6 @@
 <template>
     <div>
-        <OrderedList :name="name" :list="list"/>
+        <OrderedList :ordered="true" :translate-text="true" :name="name" :list="list"/>
     </div>
 </template>
 <script>
