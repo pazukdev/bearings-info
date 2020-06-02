@@ -57,7 +57,7 @@
                 let url = shared.getCurrentLocation();
                 if (routerUtil.isItem(this.$route)) {
                     let id = this.itemView.category + "&" + this.itemView.name;
-                    url = url.toString().replace(this.$route.params.id, id);
+                    url = url.toString().replace(this.$route.params.id, id.replace(/\s+/g, '_'));
                 }
                 return url;
             },
