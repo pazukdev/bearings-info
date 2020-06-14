@@ -3,7 +3,7 @@
         <LoadingScreen v-if="isLoading()"/>
         <div v-else style="text-align: center">
             <p><b>{{user.name}}</b></p>
-            <EditableImg v-if="isImgRendered()"/>
+            <EditableImg/>
             <EditPanel v-if="isEditable()" :user-form="true"/>
             <AlertMessagesSection :messages="validationMessages"/>
             <form id="user-form" @submit="submit">
@@ -264,10 +264,6 @@
                             storeUtil.setEditMode(true);
                         }
                     });
-            },
-
-            isImgRendered() {
-                return true;
             },
 
             isSeller() {

@@ -2,7 +2,7 @@
     <div v-if="isViewWithImage()" id="img-container">
         <table>
             <tbody>
-            <tr v-if="isImgRendered()">
+            <tr>
                 <td>
                     <div>
                         <a :href="getImgUrl()" target="_blank"
@@ -124,21 +124,12 @@
                 }
             },
 
-            isImgRendered() {
-                // return !messagesContain('img removed');
-                return true;
-            },
-
             imgFileUploadEnabled() {
                 return false;
             },
 
             isViewWithImage() {
-                if (routerUtil.isHome(this.$route)) {
-                    return true;
-                }
-                let view = this.itemView;
-                return !this.isEmpty(view.img) || !this.isEmpty(view.defaultImg);
+                return routerUtil.isItem(this.$route) || routerUtil.isUser(this.$route);
             },
 
             messagesContain(message) {

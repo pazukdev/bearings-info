@@ -6,7 +6,6 @@ import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.NestedItemConverter;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.DictionaryData;
-import com.pazukdev.backend.dto.ImgViewData;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.view.ItemView;
@@ -220,7 +219,6 @@ public class ItemViewFactory {
 
         final String category = item.getCategory();
         final String name = item.getName();
-        final ImgViewData imgViewData = ImgUtil.getImg(item);
         final Map<String, String> description = toMap(item.getDescription());
 
         view.setItemId(item.getId().toString());
@@ -235,8 +233,7 @@ public class ItemViewFactory {
         view.setLocalizedCategory(category);
         view.setName(name);
         view.setLocalizedName(name);
-        view.setDefaultImg(imgViewData.getDefaultImg());
-        view.setImg(imgViewData.getImg());
+        view.setImg(item.getImg());
         view.setCreatorData(UserUtil.getCreator(item, itemService.getUserService()));
         if (!allItemsReport) {
             view.setHeader(createHeader(item, description, itemService));

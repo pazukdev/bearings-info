@@ -34,6 +34,10 @@ export default {
         return route.name === "item";
     },
 
+    isUser(route) {
+        return route.name === "user";
+    },
+
     isWishlist(route) {
         return route.name === "wish_list";
     },
@@ -47,6 +51,9 @@ export default {
     },
 
     toHome(lang, message) {
+        if (shared.isEmpty(message)) {
+            message = null;
+        }
         router.push({name: "home", params: {lang: lang, message: message}});
     },
 
