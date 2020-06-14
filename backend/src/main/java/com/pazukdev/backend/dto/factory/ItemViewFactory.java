@@ -236,7 +236,7 @@ public class ItemViewFactory {
         view.setImg(item.getImg());
         view.setCreatorData(UserUtil.getCreator(item, itemService.getUserService()));
         if (!allItemsReport) {
-            view.setHeader(createHeader(item, description, itemService));
+            view.setHeader(createHeader(item, description, infoCategories, itemService));
             view.setChildren(createChildren(item, userService, false));
             view.setReplacersTable(createReplacersTable(item, userService));
             setLinksToItemView(view, item);
