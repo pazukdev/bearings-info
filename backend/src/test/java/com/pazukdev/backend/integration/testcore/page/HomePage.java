@@ -1,5 +1,6 @@
 package com.pazukdev.backend.integration.testcore.page;
 
+import com.pazukdev.backend.integration.testcore.constant.Constant;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.openqa.selenium.WebElement;
@@ -10,21 +11,20 @@ import org.openqa.selenium.support.FindBy;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class GooglePage extends AbstractPage {
+public class HomePage extends AbstractPage {
 
-    private final static String URL = "https://www.google.com";
+    @FindBy(id = Constant.ElementId.VEHICLES_LIST)
+    private WebElement vehiclesList;
 
-    @FindBy(id = "hplogo")
-    private WebElement googleLogo;
 
     @Override
     public String getUrl() {
-        return URL;
+        return getURL("home");
     }
 
     @Override
     public WebElement getControlElement() {
-        return googleLogo;
+        return vehiclesList;
     }
 
 }

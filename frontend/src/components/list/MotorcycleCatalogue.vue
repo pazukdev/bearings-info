@@ -1,5 +1,5 @@
 <template>
-    <div style="text-align: center">
+    <div id="vehicles-list" style="text-align: center">
         <img class="preview" alt="App image" :src="getImg()">
         <br><br>
         <p style="font-weight: bold">

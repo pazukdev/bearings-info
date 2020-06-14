@@ -1,8 +1,6 @@
 package com.pazukdev.backend.integration.cucumber.step;
 
-import com.pazukdev.backend.integration.testcore.action.GetPageAction;
 import com.pazukdev.backend.integration.testcore.core.TestContext;
-import com.pazukdev.backend.integration.testcore.page.MainPage;
 import cucumber.api.java.en.Given;
 import lombok.Data;
 
@@ -16,8 +14,8 @@ public class GeneralCucumberStep {
 
     @Given("app main page is opened")
     public void openMainPage() {
-        final MainPage mainPage = new GetPageAction<>(context, MainPage.class).perform();
-        context.put("mainPage", mainPage);
+//        final HomePage homePage = new GetPageAction<>(context, HomePage.class).perform();
+//        context.put("mainPage", homePage);
     }
 
 }

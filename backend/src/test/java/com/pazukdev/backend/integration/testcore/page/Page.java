@@ -8,10 +8,10 @@ import org.openqa.selenium.WebElement;
  */
 public interface Page {
 
-    String getURL();
+    String getUrl();
 
     WebElement getControlElement();
 
-    void initElements(TestContext context);
+    Page initElements(final TestContext context);
 
 }

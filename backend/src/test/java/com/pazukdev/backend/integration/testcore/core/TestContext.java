@@ -5,11 +5,15 @@ import com.pazukdev.backend.integration.testcore.core.config.waiting.Waiting;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Siarhei Sviarkaltsau
  */
 public interface TestContext {
+
+    public final static Logger LOGGER = LoggerFactory.getLogger(TestContext.class);
 
     Config getConfig();
 

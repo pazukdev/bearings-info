@@ -2,8 +2,14 @@
     <div>
         <br>
         <div style="text-align: center">
-            <p v-if="!isEmpty(itemView.localizedCategory)"><b>{{itemView.localizedCategory}}</b></p>
-            <p v-if="!isEmpty(itemView.localizedName)"><b>{{itemView.localizedName}}</b></p>
+            <p id="item-localized-category"
+               v-if="!isEmpty(itemView.localizedCategory)">
+                {{itemView.localizedCategory}}
+            </p>
+            <p id="item-localized-name"
+               v-if="!isEmpty(itemView.localizedName)">
+                {{itemView.localizedName}}
+            </p>
             <p>
                 {{translate("Created by")}}
                 <router-link class="simple-link"

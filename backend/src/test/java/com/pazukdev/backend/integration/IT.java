@@ -1,17 +1,19 @@
 package com.pazukdev.backend.integration;
 
 import com.pazukdev.backend.integration.testcore.core.TestContext;
+import com.pazukdev.backend.integration.testcore.core.TestContextImpl;
 import com.pazukdev.backend.integration.testcore.page.GooglePage;
-import com.pazukdev.backend.integration.testcore.page.MainPage;
-import com.pazukdev.backend.integration.testcore.route.Route;
-import com.pazukdev.backend.integration.testcore.route.RouteNode;
-import com.pazukdev.backend.integration.testcore.scenario.GetPageScenario;
-import com.pazukdev.backend.integration.testcore.util.TestContextUtil;
+import com.pazukdev.backend.integration.testcore.page.HomePage;
+import com.pazukdev.backend.integration.testcore.page.ItemPage;
+import com.pazukdev.backend.integration.testcore.page.MenuPage;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static com.pazukdev.backend.integration.testcore.constant.Constant.TestData.*;
+import static com.pazukdev.backend.integration.testcore.util.ActionUtil.getPage;
+import static com.pazukdev.backend.integration.testcore.util.AsserterUtil.*;
 
 /**
  * @author Siarhei Sviarkaltsau
@@ -23,40 +25,70 @@ public class IT {
 
     @Before
     public void createContext() {
-        this.context = TestContextUtil.createTestContext();
+        this.context = new TestContextImpl();
     }
 
-    @Ignore
     @Test
     public void basicWebdriverAndBrowserTest() {
-        new GetPageScenario<>(context, GooglePage.class).perform();
+        assertPageLoaded(context, getPage(context, new GooglePage()));
     }
 
-    @Ignore
     @Test
-    public void getMainPageTest() {
-        new GetPageScenario<>(context, MainPage.class).perform();
+    public void getHomePageTest() {
+        assertPageLoaded(context, getPage(context, new HomePage()));
     }
 
-    @Ignore
     @Test
-    public void getMotorcyclePageTest() {
-        final RouteNode<MainPage> mainPage = new RouteNode<>(MainPage.class, "motorcyclesButton");
-        new GetPageScenario<>(context, new Route<>(mainPage)).perform();
+    public void backButtonTest() {
+        final HomePage homePage = getPage(context, new HomePage());
+        homePage.getMenuNavigationLink().click();
+        assertPageLoaded(context, new MenuPage());
+        homePage.getButtonBack().click();
+        assertPageLoaded(context, homePage);
     }
 
-    @Ignore
     @Test
-    public void getBearingPageTest() {
-        final RouteNode<MainPage> mainPage = new RouteNode<>(MainPage.class, "bearingsButton");
-        new GetPageScenario<>(context, new Route<>(mainPage)).perform();
+    public void getLinkTest() {
+        final HomePage homePage = getPage(context, new HomePage());
+        homePage.getCopyUrlButton().click();
+        assertValue(homePage.getCurrentLocationInput(), homePage.getUrl());
+        assertText(homePage.getUrlCopiedText(), "Url copied to clipboard");
     }
 
-    @Ignore
     @Test
-    public void getSealPageTest() {
-        final RouteNode<MainPage> mainPage = new RouteNode<>(MainPage.class, "sealsButton");
-        new GetPageScenario<>(context, new Route<>(mainPage)).perform();
+    public void openItemViaButtonTest() {
+        final HomePage homePage = getPage(context, new HomePage());
+        homePage.getDetailsByText(ITEM_MANUFACTURER, context).click();
+        homePage.getElementByText(ITEM_NAME, context).click();
+        assertPageLoaded(context, new ItemPage(), null, ITEM_NAME);
+    }
+
+    @Test
+    public void openItemByCategoryAndNameInUrlTest() {
+        final ItemPage itemPage = getPage(context, new ItemPage(ITEM_CATEGORY + "&" + ITEM_NAME));
+        assertPageLoaded(context, itemPage, null, ITEM_NAME);
+    }
+
+    @Test
+    public void loginTest() {
+        final HomePage homePage = getPage(context, new HomePage());
+        homePage.getLoginButton(context).click();
+
+//        loginPage.getNicknameInput().sendKeys("user");
+    }
+
+    @Test
+    public void continueAsGuestTest() {
+        final HomePage homePage = getPage(context, new HomePage());
+//        homePage.getLoginButton(context).click();
+//        final LoginPage loginPage = new LoginPage();
+//        loginPage.initElements(context);
+//        sleep(2000);
+        homePage.initElements(context);
+        homePage.getCopyUrlButton().click();
+//        loginPage.getSwitchLoginFormButton().click();
+//        assertPageLoaded(context, new LoginPage());
+//        loginPage.getNicknameInput().sendKeys("user");
     }
 
 }

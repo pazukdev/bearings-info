@@ -5,24 +5,28 @@
             <tbody>
                 <tr>
                     <td>
-                        <router-link :to="{name: 'home', params: {lang: lang}}"
+                        <router-link id="home-link"
+                                     :to="{name: 'home', params: {lang: lang}}"
                                      active-class="active">
                             {{translate("Vehicles")}}
                         </router-link>
                     </td>
                     <td>
-                        <router-link :to="{name: 'items_management', params: {lang: lang}}"
+                        <router-link id="items-management-link"
+                                     :to="{name: 'items_management', params: {lang: lang}}"
                                      active-class="active">
                             {{translate("All")}}
                         </router-link>
                     </td>
                     <td>
-                        <router-link :to="{name: 'menu', params: {lang: lang}}" active-class="active">
+                        <router-link id="menu-link"
+                                     :to="{name: 'menu', params: {lang: lang}}" active-class="active">
                             {{translate("Menu")}}
                         </router-link>
                     </td>
                     <td>
                         <router-link v-if="!isGuest()"
+                                     id="wishlist-link"
                                      :style="getWishlistStyle()"
                                      :to="{name: 'wish_list', params: {lang: lang}}"
                                      active-class="active">

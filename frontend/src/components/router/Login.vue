@@ -6,12 +6,12 @@
                 <tbody>
                 <tr>
                     <td>
-                        <button @click="switchForm()">
+                        <button id="switch-login-form-button" @click="switchForm()">
                             {{translate(buttonReverseName())}}
                         </button>
                     </td>
                     <td>
-                        <button @click="loginAsGuest()">
+                        <button id="continue-as-guest-button" @click="loginAsGuest()">
                             {{translate("Continue as guest")}}
                         </button>
                     </td>
@@ -30,7 +30,8 @@
                     <tr>
                         <td>
                             <label>{{"Nickname"}}
-                                <input type="text" name="username" v-model="name" required
+                                <input id="nickname-input" type="text" name="username"
+                                       v-model="name" required
                                        pattern="[a-zA-Z0-9_ \\-]{2,26}"
                                        :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
                             </label>
@@ -39,14 +40,16 @@
                     <tr v-if="!isLogin">
                         <td>
                             <label>{{"E-mail"}}
-                                <input type="email" name="username" v-model="email" required/>
+                                <input id="email-input" type="email" name="username"
+                                       v-model="email" required/>
                             </label>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <label>{{translate("Password")}}
-                                <input type="password" name="password" v-model="password" required
+                                <input id="password-input" type="password" name="password"
+                                       v-model="password" required
                                        pattern="[a-zA-Z0-9_ \\-]{2,26}"
                                        :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
                             </label>
@@ -55,7 +58,8 @@
                     <tr v-if="!isLogin">
                         <td>
                             <label>{{translate("Repeat password")}}
-                                <input type="password" v-model="repeatedPassword" required
+                                <input id="repeat-password-input" type="password"
+                                       v-model="repeatedPassword" required
                                        pattern="[a-zA-Z0-9_ \\-]{2,26}"
                                        :title="translate('Length: 2 - 26 characters: english letters, numbers, - , _ , space')"/>
                             </label>

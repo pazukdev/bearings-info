@@ -1,10 +1,12 @@
 <template>
     <div class="default-margin">
-        <button @click="copyURL()">{{translate("Get shareable link to the page")}}</button>
-        <input type="text" id="current-location-input"
+        <button id="copy-url-button" @click="copyURL()">
+            {{translate("Get shareable link to the page")}}
+        </button>
+        <input id="current-location-input" type="text"
                :class="{'background-dark': !urlCopied}">
         <br><br>
-        <p v-if="urlCopied" style="text-align: center" class="green">
+        <p id="url-copied-text" v-if="urlCopied" style="text-align: center" class="green">
             {{translate("Url copied to clipboard")}}
         </p>
         <br>
