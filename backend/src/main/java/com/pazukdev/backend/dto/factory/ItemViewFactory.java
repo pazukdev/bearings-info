@@ -7,6 +7,7 @@ import com.pazukdev.backend.converter.NestedItemConverter;
 import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.DictionaryData;
 import com.pazukdev.backend.dto.NestedItemDto;
+import com.pazukdev.backend.dto.UserDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
 import com.pazukdev.backend.dto.view.ItemView;
 import com.pazukdev.backend.entity.*;
@@ -118,6 +119,52 @@ public class ItemViewFactory {
         double translationDuration = System.nanoTime() - businessLogicEndTime;
 
         setTime(view, businessLogicDuration, translationDuration);
+        return view;
+    }
+
+    public ItemView createItemViewForCache(final Item item,
+                                           final List<Item> allItems,
+                                           final List<String> comments,
+                                           final UserDto userDto,
+                                           final Set<Long> wishListIds,
+                                           final String lang,
+                                           final UserService userService) {
+
+        final String category = item.getCategory();
+        final String name = item.getName();
+        final Map<String, String> description = toMap(item.getDescription());
+
+        final ItemView view = new ItemView();
+        view.setLang(lang);
+        view.setWishListIds(wishListIds);
+        view.setUserData(userDto);
+        view.setItemId(item.getId().toString());
+        view.setSearchEnabled(true);
+        view.setOrdinaryItem(true);
+        view.setCategory(category);
+        view.setManufacturer(description.get(Category.MANUFACTURER));
+        if (category.equals(VEHICLE)) {
+            view.setVehicleClass(description.get(Parameter.CLASS));
+        }
+        view.setStatus(item.getStatus());
+        view.setLocalizedCategory(category);
+        view.setName(name);
+        view.setLocalizedName(name);
+        view.setImg(item.getImg());
+        view.setCreatorData(UserUtil.getCreator(item, itemService.getUserService()));
+        view.setHeader(createHeader(item, description, infoCategories, itemService));
+        view.setChildren(createChildren(item, userService, false));
+        view.setReplacersTable(createReplacersTable(item, userService));
+        setLinksToItemView(view, item);
+        view.setParents(createParentItemsView(item, userService, comments, allItems));
+        if (!lang.equals("en") && isLangCodeValid(lang)) {
+            try {
+                translate("en", lang, view, false);
+            } catch (Exception e) {
+                view.setErrorMessage(e.getMessage());
+                return view;
+            }
+        }
         return view;
     }
 
@@ -317,9 +364,15 @@ public class ItemViewFactory {
 
     private ItemView createParentItemsView(final Item item,
                                            final UserService userService) {
-        final List<String> comments = FileUtil.getComments();
         final List<Item> allItems = itemService.findAllActive();
         allItems.remove(item);
+        return createParentItemsView(item, userService, FileUtil.getComments(), allItems);
+    }
+
+    private ItemView createParentItemsView(final Item item,
+                                           final UserService userService,
+                                           final List<String> comments,
+                                           final List<Item> allItems) {
 
         final ItemView view = new ItemView();
         final List<NestedItemDto> dtos = new ArrayList<>();

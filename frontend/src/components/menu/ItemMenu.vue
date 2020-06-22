@@ -1,6 +1,5 @@
 <template>
     <div>
-<!--        {{itemView}}-->
         <table class="equal-columns-table">
             <tbody v-if="!editMode">
                 <tr>

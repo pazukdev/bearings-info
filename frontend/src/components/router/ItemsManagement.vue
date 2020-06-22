@@ -24,7 +24,6 @@
 
 <script>
     import axios from "axios";
-    import {mapState} from "vuex";
     import ItemList from "../list/ItemList";
     import LoadingScreen from "../special/LoadingScreen";
     import itemViewUtil from "../../util/itemViewUtil";
@@ -34,6 +33,8 @@
     import shared from "../../util/shared";
     import userUtil from "../../util/userUtil";
     import routerUtil from "../../util/routerUtil";
+    import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
 
     export default {
         name: "ItemsManagement",
@@ -46,15 +47,7 @@
             ItemList
         },
 
-        computed: {
-            ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
-                authorization: state => state.dictionary.authorization,
-                itemView: state => state.dictionary.itemView,
-                loadingState: state => state.dictionary.loadingState,
-                editMode: state => state.dictionary.editMode
-            })
-        },
+        mixins: [basicComponent, view],
 
         data() {
             return {
@@ -76,6 +69,17 @@
             },
 
             getView() {
+                let itemId = "ITEMS_MANAGEMENT_VIEW";
+                console.log("get " + itemId);
+                let lang = this.getLang();
+                if (this.cache) {
+                    let cachedView = this.findViewInCache(itemId, lang, "-");
+                    if (!shared.isEmpty(cachedView)) {
+                        this.dispatchCachedView(cachedView, lang);
+                        return cachedView;
+                    }
+                }
+
                 axios
                     .get(this.basicUrl
                         + "/" + "item"
@@ -90,6 +94,10 @@
                     })
                     .then(response => {
                         itemViewUtil.dispatchView(response.data, this.$route.params.lang);
+                        if (this.cache) {
+                            response.data.reportType = "-";
+                            this.cachedViews.push(response.data);
+                        }
                         console.log("items management displayed");
                     })
                     .catch(error => {

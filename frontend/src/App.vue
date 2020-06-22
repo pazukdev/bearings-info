@@ -8,21 +8,8 @@
                         <div id="app-bar-spacer"/>
                         <AppBar/>
                         <div style="text-align: left">
-<!--                                            {{"$i18n.locale: " + $i18n.locale}}<br>-->
-<!--                                            {{"errorMessage: " + errorMessage}}-->
-<!--                                            {{"lang: " + lang}}<br>-->
-<!--                                            {{"langs: " + langs}}<br>-->
-<!--                                            {{"dictionaryId: " + dictionaryId}}<br>-->
-<!--                                            {{dictionary.length}}<br>-->
-<!--                                            {{this.$route.params.item_id}}<br>-->
-<!--                                            {{this.$route.params.lang}}<br>-->
-<!--                                            {{"basicUrl: " + basicUrl}}<br>-->
-<!--                                            {{userData}}<br>-->
-<!--                                            {{"authorization: " + authorization}}<br>-->
-<!--                                            {{"loadingState: " + loadingState}}<br>-->
-<!--                                            {{"editMode: " + editMode}}<br>-->
-<!--                                            {{"itemView: " + itemView.img}}<br>-->
-<!--                                            {{"itemView: " + itemView.userData.id}}<br>-->
+<!--                            {{"Cached pages: " + cachedViews.length}}<br>-->
+<!--                            {{roughSizeOfObject(cachedViews)}}<br>-->
                         </div>
                         <div>
                             <LangMenu/>
@@ -31,7 +18,9 @@
                             <AdminMessage/>
                             <UserMenu/>
                             <AboutApp/>
-
+                            <Info/>
+                            <NewsSection/>
+                            <AppSettings/>
                             <router-view/>
                         </div>
                         <AppGroupsSection v-if="isHome() && !loadingState" :beer-glass-rendered="true"/>
@@ -60,11 +49,19 @@
     import basicComponent from "./mixin/basicComponent";
     import view from "./mixin/view";
     import axios from "axios";
+    import NewsSection from "./components/info/NewsSection";
+    import Info from "./components/info/Info";
+    import SwitchElement from "./components/element/SwitchElement";
+    import AppSettings from "./components/menu/AppSettings";
 
     export default {
         name: 'app',
 
         components: {
+            AppSettings,
+            SwitchElement,
+            Info,
+            NewsSection,
             AppGroupsSection,
             AboutApp,
             DonationSection,
@@ -94,7 +91,8 @@
                 dictionary: state => state.dictionary.dictionary,
                 dictionaryId: state => state.dictionary.dictionaryId,
                 errorMessage: state => state.dictionary.errorMessage,
-                loginMessage: state => state.dictionary.loginMessage
+                loginMessage: state => state.dictionary.loginMessage,
+                cachedViews: state => state.dictionary.cachedViews
             })
         },
 

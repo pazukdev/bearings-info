@@ -51,7 +51,7 @@
             },
 
             update(itemId) {
-                axiosUtil.updateItem(itemId, this.itemView, this.$route.params.lang);
+                axiosUtil.updateItem(itemId, this.itemView, this.getLang(), false, null);
             },
 
             isEnglish() {

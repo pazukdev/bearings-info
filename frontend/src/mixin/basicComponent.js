@@ -10,7 +10,8 @@ export default {
             editMode: state => state.dictionary.editMode,
             langs: state => state.dictionary.langs,
             lang: state => state.dictionary.lang,
-            loadingState: state => state.dictionary.loadingState
+            loadingState: state => state.dictionary.loadingState,
+            cache: state => state.dictionary.cache
         })
     },
 
@@ -37,6 +38,10 @@ export default {
 
         getTextPlusCount(text, count) {
             return this.translate(text) + " (" + count + ")";
+        },
+
+        getLang() {
+            return this.lang;
         }
 
     }

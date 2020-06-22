@@ -5,6 +5,10 @@ export default {
         store.dispatch("setItemView", view);
     },
 
+    setCachedViews(cachedViews) {
+        store.dispatch("setCachedViews", cachedViews);
+    },
+
     setUserData(userData) {
         store.dispatch("setUserData", userData);
     },
@@ -19,6 +23,10 @@ export default {
 
     setEditMode(editMode) {
         store.dispatch("setEditMode", editMode);
+    },
+
+    setCache(cache) {
+        store.dispatch("setCache", cache);
     },
 
     setLoadingState(loadingState) {

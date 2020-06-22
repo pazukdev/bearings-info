@@ -1,6 +1,6 @@
 <template>
     <div id="vehicles-list" style="text-align: center">
-        <img class="preview" alt="App image" :src="getImg()">
+        <img id="app-img" class="preview" alt="App image" :src="getImg()">
         <br><br>
         <p style="font-weight: bold">
             {{translate("Boxer owners of the world, unite!")}}
@@ -13,13 +13,18 @@
 <script>
     import ItemList from "./ItemList";
     import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
+    import shared from "../../util/shared";
 
     export default {
         name: "MotorcycleCatalogue",
         components: {ItemList},
-        mixins: [basicComponent],
+        mixins: [basicComponent, view],
         methods: {
             getImg() {
+                if (!shared.isEmpty(this.itemView.cachedImg)) {
+                    return this.itemView.cachedImg;
+                }
                 return "https://pazukdev.github.io/sovietboxers/img/old-vehicles_280x280.5b585050.png";
             }
         }

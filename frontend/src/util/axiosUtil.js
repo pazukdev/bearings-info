@@ -4,6 +4,7 @@ import store from "../plugins/store";
 import itemViewUtil from "./itemViewUtil";
 import storeUtil from "./storeUtil";
 import userUtil from "./userUtil";
+import cacheUtil from "./cacheUtil";
 
 export default {
 
@@ -57,7 +58,7 @@ export default {
         this.loginAsGuest(false, lang);
     },
 
-    updateItem(itemId, itemView, lang) {
+    updateItem(itemId, itemView, lang, addToCache, cachedViews) {
         axios
             .put(this.getBasicUrl()
                 + "/" + "item"
@@ -72,7 +73,14 @@ export default {
                 })
             .then(response => {
                 let updatedItemView = response.data;
+                if (cachedViews != null) {
+                    cacheUtil.removeCachedViews(itemId, cachedViews);
+                }
                 itemViewUtil.dispatchView(updatedItemView, lang);
+                if (addToCache) {
+                    cachedViews.push(updatedItemView);
+                    console.log("pushed: " + lang);
+                }
                 console.log("item updated");
             });
     },

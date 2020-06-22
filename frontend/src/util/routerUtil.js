@@ -34,6 +34,10 @@ export default {
         return route.name === "item";
     },
 
+    isItems(route) {
+        return route.name === "items_management";
+    },
+
     isUser(route) {
         return route.name === "user";
     },

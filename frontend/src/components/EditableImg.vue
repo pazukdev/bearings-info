@@ -7,7 +7,8 @@
                     <div>
                         <a :href="getImgUrl()" target="_blank"
                            :title="translate('Tap to open image')">
-                            <img :class="{'small-img':small, 'extra-small-img':extraSmall}"
+                            <img id="item-img"
+                                 :class="{'small-img':small, 'extra-small-img':extraSmall}"
                                  :src="getImgUrl()" alt="Item image">
                         </a>
                     </div>

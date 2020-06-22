@@ -8,11 +8,13 @@ const state = {
     dictionary: [],
     dictionaryId: "",
     editMode: false,
-    loadingState: "",
+    cache: false,
     incorrectCredentials: false,
+    loadingState: "",
     authorization: "",
     userData: {id: 1, name: "guest", role: "GUEST", rating: 0, wishListId: 1},
     itemView: "",
+    cachedViews: [],
     errorMessage: "",
     countries: []
 };
@@ -42,6 +44,10 @@ const actions = {
         commit("setEditMode", context);
     },
 
+    setCache: ({commit}, context) => {
+        commit("setCache", context);
+    },
+
     setAuthorization: ({commit}, context) => {
         commit("setAuthorization", context);
     },
@@ -60,6 +66,10 @@ const actions = {
 
     setItemView: ({commit}, context) => {
         commit("setItemView", context);
+    },
+
+    setCachedViews: ({commit}, context) => {
+        commit("setCachedViews", context);
     },
 
     setErrorMessage: ({commit}, context) => {
@@ -100,6 +110,10 @@ const mutations = {
         state.editMode = editMode === true;
     },
 
+    setCache(state, cache) {
+        state.cache = cache === true;
+    },
+
     setAuthorization(state, authorization) {
         state.authorization = authorization;
     },
@@ -118,6 +132,10 @@ const mutations = {
 
     setItemView(state, itemView) {
         state.itemView = itemView;
+    },
+
+    setCachedViews(state, cachedViews) {
+        state.cachedViews = cachedViews;
     },
 
     setErrorMessage(state, message) {

@@ -79,6 +79,7 @@
     import WhereToBuy from "../item/WhereToBuy";
     import EditableImg from "../EditableImg";
     import routerUtil from "../../util/routerUtil";
+    import shared from "../../util/shared";
 
     export default {
 
@@ -157,11 +158,9 @@
                 e.preventDefault();
                 storeUtil.setLoadingStateDefault();
                 storeUtil.setEditMode(false);
-                this.update(this.itemView.itemId);
-            },
-
-            update(itemId) {
-                axiosUtil.updateItem(itemId, this.itemView, this.$route.params.lang);
+                let itemId = this.itemView.itemId;
+                let lang = this.getLang();
+                axiosUtil.updateItem(itemId, this.itemView, lang, this.cache, this.cachedViews);
             },
 
             arrayIsRendered(array) {
@@ -186,7 +185,16 @@
 
             getItemView(itemId, refreshIfError) {
                 console.log("getItemView(): " + itemId);
-                let lang = this.$route.params.lang;
+                let reportType = this.getReportType();
+                let lang = this.getLang();
+                if (this.cache) {
+                    let cachedView = this.findViewInCache(itemId, lang, reportType);
+                    if (!shared.isEmpty(cachedView)) {
+                        this.dispatchCachedView(cachedView, lang);
+                        return cachedView;
+                    }
+                }
+
                 axios
                     .get(axiosUtil.getBasicUrl()
                         + "/" + "item"
@@ -195,7 +203,7 @@
                         + "/" + itemId
                         + "/" + this.getUserName()
                         + "/" + lang
-                        + "/" + this.getReportType(), {
+                        + "/" + reportType, {
                         headers: {
                             Authorization: axiosUtil.getAuthorization()
                         }
@@ -214,6 +222,10 @@
                             routerUtil.toHome(lang, message);
                         } else {
                             itemViewUtil.dispatchView(itemView, lang);
+                            if (this.cache) {
+                                itemView.reportType = reportType;
+                                this.cachedViews.push(itemView);
+                            }
                         }
                     })
                     .catch(error => {

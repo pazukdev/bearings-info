@@ -37,13 +37,14 @@
 <script>
     import axios from "axios";
     import storeUtil from "../../util/storeUtil";
-    import {mapState} from "vuex";
     import itemViewUtil from "../../util/itemViewUtil";
     import ButtonAdd from "../element/button/ButtonAdd";
     import routerUtil from "../../util/routerUtil";
     import dictionaryUtil from "../../util/dictionaryUtil";
     import userUtil from "../../util/userUtil";
     import basicComponent from "../../mixin/basicComponent";
+    import view from "../../mixin/view";
+    import cacheUtil from "../../util/cacheUtil";
 
     export default {
         name: "EditPanel",
@@ -54,17 +55,12 @@
             itemForm: Boolean
         },
 
-        mixins: [basicComponent],
-
-        computed: {
-            ...mapState({
-                itemView: state => state.dictionary.itemView
-            })
-        },
+        mixins: [view, basicComponent],
 
         methods: {
             cancel() {
                 storeUtil.setEditMode(false);
+                cacheUtil.removeCachedViews(this.itemView.itemId, this.cachedViews);
                 routerUtil.refresh();
             },
 

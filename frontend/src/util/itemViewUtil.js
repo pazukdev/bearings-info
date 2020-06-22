@@ -76,6 +76,7 @@ export default {
     dispatchView(view, lang) {
         view.deletedChildren = [];
         view.deletedReplacers = [];
+        view.lang = lang;
         storeUtil.setErrorMessage(view.errorMessage);
         storeUtil.setView(view);
         storeUtil.setUserData(view.userData);
