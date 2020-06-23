@@ -17,7 +17,7 @@
                 <br>
                 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                     <input type="hidden" name="cmd" value="_donations" />
-                    <input type="hidden" name="business" value="volha1588@gmail.com" />
+                    <input type="hidden" name="business" value="old.vehicles.app@gmail.com" />
                     <input type="hidden" name="item_name" value="Donation to help the project" />
                     <input type="hidden" name="currency_code" value="USD" />
                     <input type="image"

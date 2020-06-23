@@ -63,8 +63,15 @@
                 <tr v-if="isUpdatePageVisible()">
                     <td/>
                     <td style="text-align: center">
-                        <button @click="updatePage()">
-                            {{translate("Update page")}}
+                        <button id="update-page-button"
+                                class="background-green"
+                                @click="updatePage()">
+                            <span style="font-size: xx-large">
+                                {{"&#8635;"}}
+                            </span>
+                            <span>
+                                {{translate("Update page")}}
+                            </span>
                         </button>
                         <p style="margin-top: 10px">
                             {{translate("Get actual data from server")}}
@@ -85,10 +92,6 @@
                 </tr>
             </tbody>
         </table>
-<!--        <div v-if="!isEmpty(cachedViews[0])">-->
-<!--            {{cachedViews[0]}}<br><br>-->
-<!--            {{cachedViews[11]}}-->
-<!--        </div>-->
     </div>
 </template>
 
@@ -202,5 +205,16 @@
 <style scoped>
     table {
         text-align: left;
+    }
+
+    span {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    #update-page-button {
+        width: initial;
+        padding: 0 14px;
+        border-radius: 26px;
     }
 </style>
