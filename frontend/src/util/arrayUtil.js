@@ -22,6 +22,12 @@ export default {
         });
     },
 
+    sortBySecondComment(array) {
+        return array.slice().sort(function (a, b) {
+            return b.secondComment - a.secondComment;
+        });
+    },
+
     countVehicles(vehicleClasses) {
         let count = 0;
         for (let i = 0; i < vehicleClasses.length; i++) {

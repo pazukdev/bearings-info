@@ -81,6 +81,7 @@
     import view from "../../mixin/view";
     import DeletedItemsList from "../element/DeletedItemsList";
     import itemsList from "../../mixin/itemsList";
+    import arrayUtil from "../../util/arrayUtil";
 
     export default {
         name: "CountedItemList",
@@ -96,6 +97,7 @@
             ButtonDelete},
 
         props: {
+            sorted: Boolean,
             userListView: Boolean,
             translateComments:Boolean,
             summaryView: Boolean,
@@ -125,6 +127,11 @@
                 let opened = this.wishListView || this.userListView;
                 let result = itemViewUtil.itemsListToTables(items, this.sorted, this.filter, opened);
                 this.itemsCount = result.itemsCount;
+                if (this.userListView && !this.editMode) {
+                    for (let i = 0; i < result.tables.length; i++) {
+                        result.tables[i].items = arrayUtil.sortBySecondComment(result.tables[i].items);
+                    }
+                }
                 return result.tables;
             },
 
