@@ -4,7 +4,8 @@
             <tbody>
             <tr>
                 <td>
-                    <div>
+                    <div style="position: relative">
+<!--                        <div class="vl"></div>-->
                         <a :href="getImgUrl()" target="_blank"
                            :title="translate('Tap to open image')">
                             <img id="item-img"
@@ -175,4 +176,13 @@
     .extra-small-img {
         width: 100px;
     }
+
+    /*.vl {*/
+    /*    border: 3px solid grey;*/
+    /*    height: 20%;*/
+    /*    position: absolute;*/
+    /*    top: 50%;*/
+    /*    left: 50%;*/
+    /*    transform: translate(-50%, -50%);*/
+    /*}*/
 </style>
