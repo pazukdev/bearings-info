@@ -15,7 +15,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {{translate("Cashed pages")}}
+                            {{translate("Cached pages")}}
                         </td>
                         <td style="text-align: right">
                             {{cachedViews.length}}
@@ -31,7 +31,7 @@
                     </tr>
                     <tr v-if="isClearCacheVisible()">
                         <td>
-                            {{translate("Remove all cashed pages")}}
+                            {{translate("Remove all cached pages")}}
                         </td>
                         <td>
                             <button @click="clearCache()">
@@ -56,11 +56,10 @@
                 </tbody>
             </table>
         </details>
-        <table class="equal-columns-table">
+        <table style="text-align: right">
             <tbody>
                 <tr v-if="isUpdatePageVisible()">
-                    <td/>
-                    <td style="text-align: center">
+                    <td style="text-align: right">
                         <button id="update-page-button"
                                 class="background-green"
                                 @click="updatePage()">
@@ -75,11 +74,10 @@
                     </td>
                 </tr>
                 <tr v-else class="green">
-                    <td/>
-                    <td style="text-align: center">{{translate("Page is updated")}}</td>
+                    <td style="text-align: right">{{translate("Page is updated")}}</td>
                 </tr>
                 <tr v-if="seconds > 0" style="text-align: center">
-                    <td colspan="2">
+                    <td>
                         <br><br>
                         {{seconds + " seconds passed"}}</td>
                 </tr>
