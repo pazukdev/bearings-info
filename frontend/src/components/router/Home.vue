@@ -64,6 +64,16 @@
                         this.dispatchCachedView(cachedView, lang);
                         return cachedView;
                     }
+                    // if (!shared.isEmpty(cachedView)) {
+                    //     console.log(cachedView.userData.name);
+                    //     console.log(this.userData.name);
+                    //     let userChanged = cachedView.userData.name !== this.userData.name;
+                    //     console.log(userChanged);
+                    //     if (!userChanged) {
+                    //         this.dispatchCachedView(cachedView, lang);
+                    //         return cachedView;
+                    //     }
+                    // }
                 }
 
                 axios

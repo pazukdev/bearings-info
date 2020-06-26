@@ -5,11 +5,10 @@
         </button>
         <input id="current-location-input" type="text"
                :class="{'background-dark': !urlCopied}">
-        <br><br>
+        <br>
         <p id="url-copied-text" v-if="urlCopied" style="text-align: center" class="green">
             {{translate("Url copied to clipboard")}}
         </p>
-        <br>
     </div>
 </template>
 
@@ -80,10 +79,8 @@
     input, button {
         border-radius: initial;
         height: initial;
-        /*margin: initial;*/
         padding: initial;
         max-height: initial;
         min-height: initial;
-        /*background: initial;*/
     }
 </style>

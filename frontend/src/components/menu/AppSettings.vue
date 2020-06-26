@@ -1,6 +1,6 @@
 <template>
     <div>
-        <details class="default-margin" open>
+        <details class="default-margin">
             <summary>{{translate("App settings")}}</summary>
             <table class="default-margin equal-columns-table">
                 <tbody>
@@ -56,8 +56,6 @@
                 </tbody>
             </table>
         </details>
-        <br>
-        <br>
         <table class="equal-columns-table">
             <tbody>
                 <tr v-if="isUpdatePageVisible()">
@@ -73,22 +71,17 @@
                                 {{translate("Update page")}}
                             </span>
                         </button>
-                        <p style="margin-top: 10px">
-                            {{translate("Get actual data from server")}}
-                        </p>
+                        <p style="margin-top: 10px">{{translate("Get actual data from server")}}</p>
                     </td>
                 </tr>
                 <tr v-else class="green">
                     <td/>
-                    <td style="text-align: center">
-                        {{translate("Page is updated")}}
-                    </td>
+                    <td style="text-align: center">{{translate("Page is updated")}}</td>
                 </tr>
                 <tr v-if="seconds > 0" style="text-align: center">
                     <td colspan="2">
                         <br><br>
-                        {{seconds + " seconds passed"}}
-                    </td>
+                        {{seconds + " seconds passed"}}</td>
                 </tr>
             </tbody>
         </table>

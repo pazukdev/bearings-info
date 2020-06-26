@@ -32,6 +32,7 @@ export default {
             .post(this.getBasicUrl() + "/login", credentialsUrl)
             .then(response => {
                 if (response.status === 200) {
+                    storeUtil.setCachedViews([]);
                     storeUtil.setIncorrectCredentials(false);
                     storeUtil.setAuthorization(response.data.Authorization);
                     storeUtil.setUserData(userData);

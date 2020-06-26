@@ -7,20 +7,19 @@
                     <div class="content">
                         <div id="app-bar-spacer"/>
                         <AppBar/>
-                        <div style="text-align: left">
-<!--                            {{"Cached pages: " + cachedViews.length}}<br>-->
-<!--                            {{roughSizeOfObject(cachedViews)}}<br>-->
-                        </div>
                         <div>
+<!--                            <p v-if="!isEmpty(userData)">{{userData.name}}</p>-->
+<!--                            <p v-if="!isEmpty(itemView)">{{itemView.userData.name}}</p>-->
                             <LangMenu/>
                             <NavigationBar/>
                             <CopyUrlButton/>
                             <AdminMessage/>
                             <UserMenu/>
                             <AboutApp/>
-                            <Info/>
-                            <NewsSection/>
+                            <Info v-if="isHome() || isMenu()"/>
+                            <NewsSection v-if="isHome()"/>
                             <AppSettings/>
+
                             <router-view/>
                         </div>
                         <AppGroupsSection v-if="isHome() && !loadingState" :beer-glass-rendered="true"/>
@@ -132,6 +131,10 @@
 
             isHome() {
                 return routerUtil.isHome(this.$route);
+            },
+
+            isMenu() {
+                return routerUtil.isMenu(this.$route);
             }
         }
     }
