@@ -101,6 +101,9 @@
                 if (alpha2Code === "BY") {
                     return "Беларуская"
                 }
+                if (alpha2Code === "PL") {
+                    return "Polski"
+                }
                 return this.getCountry(alpha2Code).languages[0].nativeName;
             },
 

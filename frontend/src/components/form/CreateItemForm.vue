@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isEnglish() && !isGuest()" class="default-margin">
+    <div v-if="isEnglish() && !isGuest()" class="default-margin bordered">
         <details>
             <summary>{{translate("Create new item")}}</summary>
             <form id="create-item-form" @submit="submit">
@@ -49,7 +49,6 @@
                     </tr>
                     </tbody>
                 </table>
-                <hr>
             </form>
         </details>
     </div>

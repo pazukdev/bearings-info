@@ -11,8 +11,9 @@
             </div>
             <div class="default-margin">
                 {{translate(aboutTheApp())}}
+                <GooglePlayLink/>
                 <WhatsNew/>
-                <AppGroupsSection :beer-glass-rendered="false"/>
+                <AppGroupsSection :beer-glass-rendered="true"/>
             </div>
         </details>
     </div>
@@ -23,11 +24,12 @@
     import AppGroupsSection from "./AppGroupsSection";
     import OrderedList from "./element/list/OrderedList";
     import WhatsNew from "./info/WhatsNew";
+    import GooglePlayLink from "./element/GooglePlayLink";
 
     export default {
         name: "AboutApp",
 
-        components: {WhatsNew, OrderedList, AppGroupsSection},
+        components: {GooglePlayLink, WhatsNew, OrderedList, AppGroupsSection},
 
         methods: {
             translate(text) {
