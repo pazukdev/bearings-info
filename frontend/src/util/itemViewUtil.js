@@ -81,11 +81,16 @@ export default {
         storeUtil.setView(view);
         storeUtil.setUserData(view.userData);
         storeUtil.setLoadingStateOff();
-        if (storeUtil.userIsBlocked()) {
-            console.log("Open Login page. Reason: blocked user is logged in");
+        if (storeUtil.userIsBlocked() || storeUtil.userIsNotActivated()) {
+            let reason = "";
+            if (storeUtil.userIsBlocked()) {
+                reason = "blocked";
+            } else if (storeUtil.userIsNotActivated()) {
+                reason = "not activated";
+            }
+            console.log("Open Login page. Reason: " + reason + " user is logged in");
             routerUtil.toLogin(lang);
         }
-        // routerUtil.selectLanguage(routerUtil.getLang());
     },
 
     dispatchResponseError(error) {

@@ -39,7 +39,7 @@ export default {
                     console.log("logged in as " + userUtil.getUserName());
                     if (toHome) {
                         if (userData.status === "pending") {
-                            routerUtil.toAccountActivation(lang, null);
+                            // routerUtil.toAccountActivation(lang, null);
                         } else {
                             routerUtil.toHome(lang, "");
                         }

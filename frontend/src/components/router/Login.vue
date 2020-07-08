@@ -107,6 +107,7 @@
     import shared from "../../util/shared";
     import storeUtil from "../../util/storeUtil";
     import LoadingScreen from "../special/LoadingScreen";
+    import routerUtil from "../../util/routerUtil";
 
     export default {
         components: {LoadingScreen, AlertMessagesSection},
@@ -145,6 +146,10 @@
 
             performLoginPageAction: function (e) {
                 e.preventDefault();
+                if(!this.isEmpty(this.itemView.userData)
+                    && !this.isEmpty(this.itemView.userData.message)) {
+                    this.itemView.userData.message = null;
+                }
                 if (this.isLogin) {
                     let user = {
                         name: this.name,
@@ -163,8 +168,6 @@
             signUp() {
                 storeUtil.setLoadingStateCreating();
 
-                let basicUrl = axiosUtil.getBasicUrl();
-
                 let newUser = {
                     name: this.name,
                     email: this.email,
@@ -178,7 +181,16 @@
                     .post(axiosUtil.getBasicUrl() + "/user/create/" + this.$route.params.lang, newUser)
                     .then(response => {
                         newUser.repeatedPassword = "-";
-                        this.loginIfValid(response.data, newUser)
+
+                        this.validationMessages = response.data;
+                        if (this.validationMessages.length === 0) {
+                            console.log("a new user created: " + newUser.name);
+                            routerUtil.toAccountActivation(this.getLang(), null);
+                            // axiosUtil.login(newUser, true, this.$route.params.lang);
+                        }
+                        storeUtil.setLoadingStateOff();
+
+                        // this.loginIfValid(response.data, newUser);
                     })
                     .catch(error => {
                         console.log(error);
@@ -186,14 +198,14 @@
                     });
             },
 
-            loginIfValid(validationMessages, newUser) {
-                this.validationMessages = validationMessages;
-                if (this.validationMessages.length === 0) {
-                    console.log("a new user created: " + newUser.name);
-                    axiosUtil.login(newUser, true, this.$route.params.lang);
-                }
-                storeUtil.setLoadingStateOff();
-            },
+            // loginIfValid(validationMessages, newUser) {
+            //     this.validationMessages = validationMessages;
+            //     if (this.validationMessages.length === 0) {
+            //         console.log("a new user created: " + newUser.name);
+            //         axiosUtil.login(newUser, true, this.$route.params.lang);
+            //     }
+            //     storeUtil.setLoadingStateOff();
+            // },
 
             switchForm() {
                 this.isLogin = !this.isLogin;

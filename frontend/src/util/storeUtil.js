@@ -21,6 +21,10 @@ export default {
         return store.getters.userData.status === "blocked";
     },
 
+    userIsNotActivated() {
+        return store.getters.userData.status === "pending";
+    },
+
     setEditMode(editMode) {
         store.dispatch("setEditMode", editMode);
     },

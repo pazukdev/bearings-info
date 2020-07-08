@@ -51,7 +51,7 @@
             },
 
             openLoginForm() {
-                routerUtil.toLogin();
+                routerUtil.toLogin(this.getLang());
                 console.log("logout");
                 console.log("login form opened");
             },

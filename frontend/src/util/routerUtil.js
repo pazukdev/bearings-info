@@ -73,17 +73,25 @@ export default {
         console.log("toLogin(lang)");
         router.push({name: "login", lang: lang});
 
-        let message = {
-            text: "Your account has been blocked by the administrator",
-            contact: "Contact us by email: pazukdev@gmail.com"
-        };
+        let message = null;
+        if (storeUtil.userIsBlocked()) {
+            message = {
+                text: "Your account has been blocked by the administrator",
+                contact: "Contact us by email: pazukdev@gmail.com"
+            };
+        } else if (storeUtil.userIsNotActivated()) {
+            message = {
+                text: "Your account is not activated. Please, check your email",
+                contact: "-"
+            };
+        }
 
         let itemViewStub = {
             wishListIds: [],
             userData: {
                 itemName: "",
                 rating: "",
-                message: storeUtil.userIsBlocked() ? message : null
+                message: message
             }
         };
 
