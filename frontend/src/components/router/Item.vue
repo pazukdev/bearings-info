@@ -2,11 +2,10 @@
     <div>
         <LoadingScreen v-if="isLoading()"/>
         <div v-else-if="!isEmpty(itemView)">
-
-            <ItemName/>
-
+<!--            <ItemName/>-->
             <div v-if="isAllItemsReport()">
                 <EditableImg :small="true"/>
+                <ItemName/>
                 <div style="text-align: center">
                     {{getAllItemsReportText()}}
                 </div>
@@ -21,7 +20,6 @@
                     {{translate("Nothing found")}}
                 </div>
             </div>
-
             <div v-else>
                 <form id="item-form" @submit="submit">
                     <ItemMenu/>
@@ -80,6 +78,15 @@
     import EditableImg from "../EditableImg";
     import routerUtil from "../../util/routerUtil";
     import shared from "../../util/shared";
+
+    // const ItemDescription = () => import('../list/section/ItemDescription');
+    // const PartsSection = () => import('../item/PartsSection');
+    // const ReplacersSection = () => import('../item/ReplacersSection');
+    // const CountedItemList = () => import('../list/CountedItemList');
+    // const ItemSummary = () => import('../item/ItemSummary');
+    // const Header = () => import('../list/section/Header');
+    // const WhereToBuy = () => import('../item/WhereToBuy');
+    // const EditableImg = () => import('../EditableImg');
 
     export default {
 

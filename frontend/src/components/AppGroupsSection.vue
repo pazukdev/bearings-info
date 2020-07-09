@@ -1,6 +1,8 @@
 <template>
     <div id="place-of-creation">
         <div class="default-margin">
+            {{translate('App groups on FB and VK')}}<br>
+            {{translate("There is lots of interesting here")}}
             <div id="communities-links-section">
                                     <span>
                                         <a target="_blank"

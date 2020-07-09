@@ -14,6 +14,7 @@
                 <br>
             </div>
         </div>
+        <ItemName/>
         <details v-if="itemView.header != null" class="default-margin">
             <summary class="bold">{{translate("Specification")}}</summary>
             <ItemDescription :item="item"/>
@@ -30,11 +31,12 @@
     import basicComponent from "../../../mixin/basicComponent";
     import view from "../../../mixin/view";
     import routerUtil from "../../../util/routerUtil";
+    import ItemName from "../../item/ItemName";
 
     export default {
         name: "Header",
 
-        components: {EditPanel, ItemDescription, EditableImg},
+        components: {ItemName, EditPanel, ItemDescription, EditableImg},
 
         mixins: [basicComponent, view],
 
