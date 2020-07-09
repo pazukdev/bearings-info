@@ -8,7 +8,7 @@ const state = {
     dictionary: [],
     dictionaryId: "",
     editMode: false,
-    cache: true,
+    cache: false,
     incorrectCredentials: false,
     loadingState: "",
     authorization: "",

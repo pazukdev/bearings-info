@@ -5,12 +5,19 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "capacitor-copy": "vue-cli-service capacitor-copy",
+    "capacitor-init": "vue-cli-service capacitor-init",
+    "capacitor-open": "vue-cli-service capacitor-open",
+    "capacitor-update": "vue-cli-service capacitor-update"
   },
   "dependencies": {
+    "@capacitor/cli": "^1.0.0-alpha.38",
+    "@capacitor/core": "^1.0.0-alpha.38",
     "@growthbunker/vueflags": "0.0.7",
     "axios": "^0.19.0",
     "js-cookie": "^2.2.1",
+    "register-service-worker": "^1.7.1",
     "vue": "^2.6.6",
     "vue-cookies": "^1.5.13",
     "vue-country-flag": "^1.3.1",
@@ -28,10 +35,12 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",
     "@vue/cli-plugin-eslint": "^3.5.0",
+    "@vue/cli-plugin-pwa": "^4.4.6",
     "@vue/cli-service": "^3.8.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
+    "vue-cli-plugin-pwa": "^1.0.0-alpha.1",
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
