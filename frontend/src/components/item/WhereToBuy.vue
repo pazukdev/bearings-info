@@ -1,5 +1,5 @@
 <template>
-    <div class="default-margin" v-if="isOrdinaryItem(itemView)">
+    <div class="default-margin" v-if="isOrdinaryItem(itemView) && itemView.category.toLowerCase() !== 'vehicle'">
         <details>
             <summary class="bold">{{getTitle()}}</summary>
             <div v-if="!editMode && sortedBuyLinks.length === 0"

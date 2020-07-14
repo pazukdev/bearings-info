@@ -104,6 +104,9 @@
                 if (alpha2Code === "PL") {
                     return "Polski"
                 }
+                if (alpha2Code === "LT") {
+                    return "Lietuvių"
+                }
                 return this.getCountry(alpha2Code).languages[0].nativeName;
             },
 

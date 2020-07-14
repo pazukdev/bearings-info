@@ -13,7 +13,6 @@
                                  :src="getImgUrl()" alt="Item image">
                         </a>
                     </div>
-                    <br>
                     {{translate(noImageMessage)}}
                 </td>
             </tr>
@@ -170,7 +169,7 @@
 
 <style scoped>
     #img-container {
-        padding: 20px 0;
+        /*padding: 2px 0;*/
     }
 
     .extra-small-img {

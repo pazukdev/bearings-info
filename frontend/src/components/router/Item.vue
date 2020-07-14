@@ -38,6 +38,10 @@
                         <ReplacersSection/>
                     </details>
                     <details v-if="arrayIsRendered(itemView.children)" open>
+                        <summary class="bold">
+                            {{getTextPlusCount("Units / parts", itemView.children.length)}}
+                        </summary>
+                        <PartsSection/>
                         <div v-if="!editMode"
                              class="default-margin" style="text-align: right">
                             <router-link class="simple-link"
@@ -45,10 +49,6 @@
                                 {{getAllItemsReportText()}}
                             </router-link>
                         </div>
-                        <summary class="bold">
-                            {{getTextPlusCount("Units / parts", itemView.children.length)}}
-                        </summary>
-                        <PartsSection/>
                     </details>
                 </form>
             </div>
@@ -131,7 +131,7 @@
         methods: {
             getTitle(itemView) {
                 let firstPart = itemView.localizedCategory;
-                if (itemView.category === "Vehicle") {
+                if (itemView.category === "Vehicle" && !this.isEmpty(itemView.header)) {
                     for (let i = 0; i <= itemView.header.rows.length; i++) {
                         let row = itemView.header.rows[i];
                         if (row.name === "Class") {

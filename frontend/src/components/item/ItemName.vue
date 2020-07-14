@@ -1,6 +1,5 @@
 <template>
     <div>
-        <br>
         <div style="text-align: center">
             <p id="item-localized-category"
                v-if="!isEmpty(itemView.localizedCategory)">
@@ -10,7 +9,7 @@
                v-if="!isEmpty(itemView.localizedName)">
                 {{itemView.localizedName}}
             </p>
-            <p>
+            <p v-if="item">
                 {{translate("Created by")}}
                 <router-link class="simple-link"
                              v-if="showCreatorLink()"
@@ -20,7 +19,6 @@
                 <span v-else>{{translate("deleted user")}}</span>
             </p>
         </div>
-        <br>
     </div>
 </template>
 
@@ -33,6 +31,10 @@
         name: "ItemName",
 
         mixins: [basicComponent, view],
+
+        props: {
+            item: Boolean
+        },
 
         methods: {
             showCreatorLink() {

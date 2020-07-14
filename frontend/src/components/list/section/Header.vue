@@ -1,11 +1,13 @@
 <template>
     <div>
         <EditableImg/>
-        <div>
-            <EditPanel v-if="isWishlist() || (editable && isEnglish())"
+        <details class="default-margin bordered"
+                 v-if="isWishlist() || isEditable()" :open="editMode">
+            <summary>{{translate("Edit")}}</summary>
+            <EditPanel v-if="isWishlist() || (isEditable() && isEnglish())"
                        :item-form="item" @save="save"/>
             <div v-else class="default-margin">
-                <p class="bordered">{{translate("Editing is available in English only")}}</p>
+                <p>{{translate("Editing is available in English only")}}</p>
             </div>
             <div v-if="editMode && itemsManagement" class="default-margin" style="text-align: center">
                 <br>
@@ -13,8 +15,8 @@
                 {{translate("You can only delete items you crated")}}<br>
                 <br>
             </div>
-        </div>
-        <ItemName/>
+        </details>
+        <ItemName :item="item"/>
         <details v-if="itemView.header != null" class="default-margin">
             <summary class="bold">{{translate("Specification")}}</summary>
             <ItemDescription :item="item"/>
@@ -62,6 +64,10 @@
 
             isWishlist() {
                 return routerUtil.isWishlist(this.$route);
+            },
+
+            isEditable() {
+                return this.editable && !this.isGuest();
             }
         }
     }
