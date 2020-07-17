@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        <div class="default-margin">
+        <div class="default-margin" style="text-align: left">
             {{translate("If the app is helpful to you, please, don't forget to rate the app and leave a review.")}}
             {{translate("It's very important for the project")}}
         </div>

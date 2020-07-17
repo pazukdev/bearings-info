@@ -1,5 +1,5 @@
 <template>
-    <div v-if="itemsCount > 20">
+    <div>
         <table>
             <tbody>
             <tr v-if="!editMode && !usageView">

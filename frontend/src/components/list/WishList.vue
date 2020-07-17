@@ -10,7 +10,6 @@
                     <li>{{translate("Add comment in the left column")}}</li>
                     <li>{{translate("Edit quantity in the right column")}}</li>
                 </ul>
-                <br>
             </div>
             <Header :editable="true"/>
             <CountedItemList :editable-comments="true" :wish-list-view="true"/>

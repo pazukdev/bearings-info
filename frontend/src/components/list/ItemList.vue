@@ -1,6 +1,7 @@
 <template>
     <div>
-        <SearchForm :items-count="itemsCount"
+        <SearchForm v-if="searchIsRendered()"
+                    :items-count="itemsCount"
                     :items-management-view="itemsManagementView"
                     @get-filter="getFilter"/>
         <DeletedItemsList :array="getDeletedItems()" @restore="restore"/>

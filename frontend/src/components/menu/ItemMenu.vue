@@ -43,7 +43,7 @@
                 <tr>
                     <td colspan="3"/>
                 </tr>
-                <tr>
+                <tr style="vertical-align: text-top">
                     <td>
                         <div v-if="!isEmpty(itemView.manualLink)">
                             <a :href="itemView.manualLink" target="_blank">

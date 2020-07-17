@@ -37,8 +37,9 @@
             },
 
             aboutTheApp() {
-                return "Information about seals, bearings and other parts of soviet boxers and some other old or "
-                    + "rare vehicles";
+                return "E-catalog focused on standard parts and their modern high quality analogs"
+                    + " for soviet sidecar motorcycles manufactured by IMZ and KMZ:"
+                    + " Ural (Cossack), Dnepr (Neval), MV-750, K-750, K-650, M-72";
             }
         }
     }

@@ -1,6 +1,8 @@
 <template>
     <div>
-        <SearchForm :items-count="itemsCount" @get-filter="getFilter"/>
+        <SearchForm v-if="searchIsRendered()"
+                    :items-count="itemsCount"
+                    @get-filter="getFilter"/>
         <DeletedItemsList :array="getDeletedItems()" @restore="restore"/>
         <table>
             <tbody>
@@ -82,6 +84,7 @@
     import DeletedItemsList from "../element/DeletedItemsList";
     import itemsList from "../../mixin/itemsList";
     import arrayUtil from "../../util/arrayUtil";
+    import dictionaryUtil from "../../util/dictionaryUtil";
 
     export default {
         name: "CountedItemList",
@@ -143,18 +146,23 @@
 
             searchIsRendered() {
                 return !this.editMode && !this.item;
-                // return !this.item && !this.userListView;
             },
 
             getFilter(filter) {
                 this.filter = filter;
             },
 
+            translate(text) {
+                return dictionaryUtil.translate(text);
+            },
+
             getCountHeaderValue() {
                 if (this.userListView) {
-                    return "Rating";
+                    return this.translate("Rating");
                 }
-                return "Count, pcs or L"
+                return this.translate("pcs")
+                    + " " + this.translate("or")
+                    + " " + this.translate("l");
             }
         }
     }
