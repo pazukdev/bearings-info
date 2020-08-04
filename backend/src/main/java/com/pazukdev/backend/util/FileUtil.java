@@ -109,6 +109,8 @@ public class FileUtil {
                 "1N6Y6uavkv6AVzIF5-NbRlXOZTJekHFBrtF8o4VvtDxc", // manufacturer
                 "12rB_t_ImCGscKiGPazc4WodiG0b9G4zOOfTW1aIbbak", // standard
                 "1R2haf5EqWqC6YJ4GJkcwDyTBB_1ItU_wk3l5zI9CQjQ", // "material"
+                "1xMlGApVOsvW3m5eX-0iG98xmKrF3i9-Z6WIlPTPuYr8", // coil
+                "1VjpHenQrkv9bxRU377m5c93UCKP1Hk5ZOpZhSkNeOBg", // brush
 //                "1Kc6IIZNozbgpjwAzYbiLSnPqihOTKxzZ3lwQXO0QZa0", // "cylinder"
                 "1SJcfsoOmpMA5auCEWprmfu5_5hyL_LQTPrT95fuKyvk", // "wire"
                 "1qtV8j8nHb8u3gyJtrByI6diDPlVHsYl7X0j4HqgOSik", // "gasket"

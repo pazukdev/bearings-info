@@ -104,7 +104,7 @@ public class DataLoader implements ApplicationRunner {
                 Item parent = null;
                 for (final Map.Entry<Item, List<NestedItem>> entry : itemsReplacers.entrySet()) {
                     for (final NestedItem r : entry.getValue()) {
-                        if (r.getId().equals(replacer.getId())) {
+                        if (r.getId() != null && r.getId().equals(replacer.getId())) {
                             parent = entry.getKey();
                             break;
                         }
