@@ -9,7 +9,7 @@ import FlagIcon from 'vue-flag-icon';
 // import VueFlags from "@growthbunker/vueflags";
 import CountryFlag from 'vue-country-flag';
 import VueMeta from 'vue-meta';
-// import './registerServiceWorker'
+import './registerServiceWorker'
 
 Vue.use(vueCountryRegionSelect);
 Vue.use(FlagIcon);

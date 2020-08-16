@@ -9,16 +9,22 @@
                         <AppBar/>
                         <div>
 <!--                            <p v-if="!isEmpty(userData)">{{userData.name}}</p>-->
-<!--                            <p v-if="!isEmpty(itemView)">{{itemView.userData.name}}</p>-->
+<!--                            <p v-if="!isEmpty(itemView)">{{itemView.cachedViews}}</p>-->
+<!--                          <p v-if="!isEmpty(itemView)">{{itemView.lang}}</p>-->
                             <LangMenu/>
                             <NavigationBar/>
-                            <CopyUrlButton/>
+                            <CopyUrlButton v-if="false"/>
                             <AdminMessage/>
                             <UserMenu/>
+                          <div v-if="isHome() || isMenu()">
                             <AboutApp/>
-                            <Info v-if="isHome() || isMenu()"/>
-                            <NewsSection v-if="isHome()"/>
+                            <Info/>
+                            <NewsSection/>
                             <AppSettings/>
+                          </div>
+<!--                            <Info v-if="isHome() || isMenu()"/>-->
+<!--                            <NewsSection v-if="isHome()"/>-->
+<!--                            <AppSettings/>-->
 
                             <router-view/>
                         </div>
@@ -30,30 +36,30 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex';
-    import AppBar from "./components/menu/AppBar";
-    import Home from "./components/router/Home";
-    import LoadingScreen from "./components/special/LoadingScreen";
-    import NavigationBar from "./components/menu/NavigationBar";
-    import UserMenu from "./components/menu/UserMenu";
-    import LangMenu from "./components/menu/LangMenu";
-    import axiosUtil from "./util/axiosUtil";
-    import MessagesSection from "./components/special/MessagesSection";
-    import routerUtil from "./util/routerUtil";
-    import CopyUrlButton from "./components/element/button/CopyUrlButton";
-    import AdminMessage from "./components/special/AdminMessage";
-    import DonationSection from "./components/DonationSection";
-    import AboutApp from "./components/AboutApp";
-    import AppGroupsSection from "./components/AppGroupsSection";
-    import basicComponent from "./mixin/basicComponent";
-    import view from "./mixin/view";
-    import axios from "axios";
-    import NewsSection from "./components/info/NewsSection";
-    import Info from "./components/info/Info";
-    import SwitchElement from "./components/element/SwitchElement";
-    import AppSettings from "./components/menu/AppSettings";
+import {mapState} from 'vuex';
+import AppBar from "./components/menu/AppBar";
+import Home from "./components/router/Home";
+import LoadingScreen from "./components/special/LoadingScreen";
+import NavigationBar from "./components/menu/NavigationBar";
+import UserMenu from "./components/menu/UserMenu";
+import LangMenu from "./components/menu/LangMenu";
+import axiosUtil from "./util/axiosUtil";
+import MessagesSection from "./components/special/MessagesSection";
+import routerUtil from "./util/routerUtil";
+import CopyUrlButton from "./components/element/button/CopyUrlButton";
+import AdminMessage from "./components/special/AdminMessage";
+import DonationSection from "./components/DonationSection";
+import AboutApp from "./components/AboutApp";
+import AppGroupsSection from "./components/AppGroupsSection";
+import basicComponent from "./mixin/basicComponent";
+import view from "./mixin/view";
+import axios from "axios";
+import NewsSection from "./components/info/NewsSection";
+import Info from "./components/info/Info";
+import SwitchElement from "./components/element/SwitchElement";
+import AppSettings from "./components/menu/AppSettings";
 
-    export default {
+export default {
         name: 'app',
 
         components: {
