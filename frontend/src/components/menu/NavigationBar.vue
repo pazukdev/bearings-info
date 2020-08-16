@@ -1,7 +1,6 @@
 <template>
     <div v-if="!isLoginPage()">
-        <table v-if="!buttonStyle"
-               style="margin-bottom: 20px" class="equal-columns-table">
+        <table v-if="!buttonStyle" class="equal-columns-table">
             <tbody>
                 <tr>
                     <td>
@@ -40,13 +39,13 @@
 </template>
 
 <script>
-    import DefaultButton from "../element/button/DefaultButton";
-    import routerUtil from "../../util/routerUtil";
-    import colorUtil from "../../util/colorUtil";
-    import basicComponent from "../../mixin/basicComponent";
-    import view from "../../mixin/view";
+import DefaultButton from "../element/button/DefaultButton";
+import routerUtil from "../../util/routerUtil";
+import colorUtil from "../../util/colorUtil";
+import basicComponent from "../../mixin/basicComponent";
+import view from "../../mixin/view";
 
-    export default {
+export default {
         name: "NavigationBar",
 
         components: {DefaultButton},

@@ -4,12 +4,12 @@
             <tbody>
             <tr>
                 <td>
-                    <div style="position: relative">
+                    <div>
 <!--                        <div class="vl"></div>-->
                         <a :href="getImgUrl()" target="_blank"
                            :title="translate('Tap to open image')">
                             <img id="item-img"
-                                 :class="{'small-img':small, 'extra-small-img':extraSmall}"
+                                 :class="{'small-img':small}"
                                  :src="getImgUrl()" alt="Item image">
                         </a>
                     </div>
@@ -65,14 +65,14 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
-    import shared from "../util/shared";
-    import routerUtil from "../util/routerUtil";
-    import dictionaryUtil from "../util/dictionaryUtil";
-    import imgUtil from "../util/imgUtil";
-    import basicComponent from "../mixin/basicComponent";
+import {mapState} from "vuex";
+import shared from "../util/shared";
+import routerUtil from "../util/routerUtil";
+import dictionaryUtil from "../util/dictionaryUtil";
+import imgUtil from "../util/imgUtil";
+import basicComponent from "../mixin/basicComponent";
 
-    export default {
+export default {
         name: "EditableImg",
 
         props: {
@@ -172,9 +172,9 @@
         /*padding: 2px 0;*/
     }
 
-    .extra-small-img {
-        width: 100px;
-    }
+    /*.extra-small-img {*/
+    /*    width: 100px;*/
+    /*}*/
 
     /*.vl {*/
     /*    border: 3px solid grey;*/
