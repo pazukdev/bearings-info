@@ -1,5 +1,8 @@
 <template>
     <div v-if="!isLoginPage()">
+      <p v-if="!isEmpty(itemView) && !isEmpty(itemView.cachedViews)">
+        {{"Cached views: " + itemView.cachedViews}}
+      </p>
         <details class="default-margin">
             <summary>{{translate("Performance report")}}</summary>
             <table class="equal-columns-table" style="text-align: left">
@@ -23,14 +26,14 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
-    import DefaultButton from "../element/button/DefaultButton";
-    import routerUtil from "../../util/routerUtil";
-    import shared from "../../util/shared";
-    import dictionaryUtil from "../../util/dictionaryUtil";
-    import userUtil from "../../util/userUtil";
+import {mapState} from "vuex";
+import DefaultButton from "../element/button/DefaultButton";
+import routerUtil from "../../util/routerUtil";
+import shared from "../../util/shared";
+import dictionaryUtil from "../../util/dictionaryUtil";
+import userUtil from "../../util/userUtil";
 
-    export default {
+export default {
         name: "UserMenu",
 
         components: {DefaultButton},
@@ -61,7 +64,12 @@
 
             translate(text) {
                 return dictionaryUtil.translate(text);
+            },
+
+            isEmpty(value) {
+              return shared.isEmpty(value);
             }
+
         }
     }
 </script>

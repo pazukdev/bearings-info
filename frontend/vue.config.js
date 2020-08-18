@@ -6,7 +6,9 @@ module.exports = {
             name: "Old Vehicles",
             display: "standalone",
             scope: "/",
-            start_url: "/"
+            start_url: "/",
+            theme_color: "#617D89",
+            background_color: "#212121"
         },
         // workboxPluginMode: 'GenerateSW',
         workboxOptions: {

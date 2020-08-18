@@ -20,12 +20,7 @@
                             <AboutApp/>
                             <Info/>
                             <NewsSection/>
-                            <AppSettings/>
                           </div>
-<!--                            <Info v-if="isHome() || isMenu()"/>-->
-<!--                            <NewsSection v-if="isHome()"/>-->
-<!--                            <AppSettings/>-->
-
                             <router-view/>
                         </div>
                         <AppGroupsSection v-if="isHome() && !loadingState" :beer-glass-rendered="true"/>
@@ -57,13 +52,11 @@ import axios from "axios";
 import NewsSection from "./components/info/NewsSection";
 import Info from "./components/info/Info";
 import SwitchElement from "./components/element/SwitchElement";
-import AppSettings from "./components/menu/AppSettings";
 
 export default {
         name: 'app',
 
         components: {
-            AppSettings,
             SwitchElement,
             Info,
             NewsSection,
