@@ -57,36 +57,41 @@
 </template>
 
 <script>
-    import axios from 'axios';
-    import ItemMenu from "../menu/ItemMenu";
-    import ItemDescription from "../list/section/ItemDescription";
-    import EditPanel from "../menu/EditPanel";
-    import PartsSection from "../item/PartsSection";
-    import ReplacersSection from "../item/ReplacersSection";
-    import itemViewUtil from "../../util/itemViewUtil";
-    import LoadingScreen from "../special/LoadingScreen";
-    import Usage from "../item/Usage";
-    import CountedItemList from "../list/CountedItemList";
-    import ItemSummary from "../item/ItemSummary";
-    import Header from "../list/section/Header";
-    import storeUtil from "../../util/storeUtil";
-    import axiosUtil from "../../util/axiosUtil";
-    import ItemName from "../item/ItemName";
-    import basicComponent from "../../mixin/basicComponent";
-    import view from "../../mixin/view";
-    import WhereToBuy from "../item/WhereToBuy";
-    import EditableImg from "../EditableImg";
-    import routerUtil from "../../util/routerUtil";
-    import shared from "../../util/shared";
+import axios from 'axios';
+import storeUtil from "../../util/storeUtil";
+import axiosUtil from "../../util/axiosUtil";
+import basicComponent from "../../mixin/basicComponent";
+import view from "../../mixin/view";
+import itemViewUtil from "../../util/itemViewUtil";
+import routerUtil from "../../util/routerUtil";
+import shared from "../../util/shared";
+// import ItemMenu from "../menu/ItemMenu";
+    // import ItemDescription from "../list/section/ItemDescription";
+    // import EditPanel from "../menu/EditPanel";
+    // import PartsSection from "../item/PartsSection";
+    // import ReplacersSection from "../item/ReplacersSection";
+    // import LoadingScreen from "../special/LoadingScreen";
+    // import Usage from "../item/Usage";
+    // import CountedItemList from "../list/CountedItemList";
+    // import ItemSummary from "../item/ItemSummary";
+    // import Header from "../list/section/Header";
+    // import ItemName from "../item/ItemName";
+    // import WhereToBuy from "../item/WhereToBuy";
+    // import EditableImg from "../EditableImg";
 
-    // const ItemDescription = () => import('../list/section/ItemDescription');
-    // const PartsSection = () => import('../item/PartsSection');
-    // const ReplacersSection = () => import('../item/ReplacersSection');
-    // const CountedItemList = () => import('../list/CountedItemList');
-    // const ItemSummary = () => import('../item/ItemSummary');
-    // const Header = () => import('../list/section/Header');
-    // const WhereToBuy = () => import('../item/WhereToBuy');
-    // const EditableImg = () => import('../EditableImg');
+    const ItemDescription = () => import('../list/section/ItemDescription');
+    const PartsSection = () => import('../item/PartsSection');
+    const ReplacersSection = () => import('../item/ReplacersSection');
+    const CountedItemList = () => import('../list/CountedItemList');
+    const ItemSummary = () => import('../item/ItemSummary');
+    const Header = () => import('../list/section/Header');
+    const WhereToBuy = () => import('../item/WhereToBuy');
+    const EditableImg = () => import('../EditableImg');
+    const Usage = () => import('../item/Usage');
+    const LoadingScreen = () => import('../special/LoadingScreen');
+    const EditPanel = () => import('../menu/EditPanel');
+    const ItemMenu = () => import("../menu/ItemMenu");
+    const ItemName = () => import('../item/ItemName');
 
     export default {
 
