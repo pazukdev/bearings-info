@@ -4,6 +4,7 @@ const state = {
     basicUrl: "backend",
     lang: "en",
     langs: [],
+    appName: "Motorcycles IMZ KMZ",
     allowedLangs: ["en", "ru", "uk", "pl", "lt", "lv", "be", "et", "fr", "de", "cs"],
     dictionary: [],
     dictionaryId: "",

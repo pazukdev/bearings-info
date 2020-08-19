@@ -2,15 +2,12 @@ module.exports = {
     publicPath: '/',
     pwa: {
         name: 'Old Vehicles',
+        appleMobileWebAppCapable: "yes",
+        themeColor: "#617D89",
         manifestOptions: {
-            name: "Old Vehicles",
             display: "standalone",
-            scope: "/",
-            start_url: "/",
-            theme_color: "#617D89",
             background_color: "#212121"
         },
-        // workboxPluginMode: 'GenerateSW',
         workboxOptions: {
             navigateFallback: '/index.html',
             runtimeCaching: [{
