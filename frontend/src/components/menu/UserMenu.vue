@@ -1,8 +1,5 @@
 <template>
     <div v-if="!isLoginPage()">
-      <p v-if="!isEmpty(itemView) && !isEmpty(itemView.cachedViews)">
-        {{"Cached views: " + itemView.cachedViews}}
-      </p>
         <details class="default-margin">
             <summary>{{translate("Performance report")}}</summary>
             <table class="equal-columns-table" style="text-align: left">

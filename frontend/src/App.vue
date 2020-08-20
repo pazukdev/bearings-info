@@ -17,10 +17,11 @@
                             <AdminMessage/>
                             <UserMenu/>
                           <div v-if="isHome() || isMenu()">
-                            <AboutApp/>
-                            <Info/>
-                            <NewsSection/>
+                              <AboutApp/>
+                              <Info/>
+                              <NewsSection/>
                           </div>
+                            <AppSettings v-if="isAdmin()"/>
                             <router-view/>
                         </div>
                         <AppGroupsSection v-if="isHome() && !loadingState" :beer-glass-rendered="true"/>
@@ -31,32 +32,35 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
-import AppBar from "./components/menu/AppBar";
-import Home from "./components/router/Home";
-import LoadingScreen from "./components/special/LoadingScreen";
-import NavigationBar from "./components/menu/NavigationBar";
-import UserMenu from "./components/menu/UserMenu";
-import LangMenu from "./components/menu/LangMenu";
-import axiosUtil from "./util/axiosUtil";
-import MessagesSection from "./components/special/MessagesSection";
-import routerUtil from "./util/routerUtil";
-import CopyUrlButton from "./components/element/button/CopyUrlButton";
-import AdminMessage from "./components/special/AdminMessage";
-import DonationSection from "./components/DonationSection";
-import AboutApp from "./components/AboutApp";
-import AppGroupsSection from "./components/AppGroupsSection";
-import basicComponent from "./mixin/basicComponent";
-import view from "./mixin/view";
 import axios from "axios";
-import NewsSection from "./components/info/NewsSection";
-import Info from "./components/info/Info";
-import SwitchElement from "./components/element/SwitchElement";
+import {mapState} from 'vuex';
+import view from "./mixin/view";
+import basicComponent from "./mixin/basicComponent";
+import routerUtil from "./util/routerUtil";
+import axiosUtil from "./util/axiosUtil";
+
+const AppBar = () => import("./components/menu/AppBar");
+const Home = () => import("./components/router/Home");
+const LoadingScreen = () => import("./components/special/LoadingScreen");
+const NavigationBar = () => import("./components/menu/NavigationBar");
+const UserMenu = () => import("./components/menu/UserMenu");
+const LangMenu = () => import("./components/menu/LangMenu");
+const MessagesSection = () => import("./components/special/MessagesSection");
+const CopyUrlButton = () => import("./components/element/button/CopyUrlButton");
+const AdminMessage = () => import("./components/special/AdminMessage");
+const DonationSection = () => import("./components/DonationSection");
+const AboutApp = () => import("./components/AboutApp");
+const AppGroupsSection = () => import("./components/AppGroupsSection");
+const NewsSection = () => import("./components/info/NewsSection");
+const Info = () => import("./components/info/Info");
+const SwitchElement = () => import("./components/element/SwitchElement");
+const AppSettings = () => import("@/components/menu/AppSettings");
 
 export default {
         name: 'app',
 
         components: {
+            AppSettings,
             SwitchElement,
             Info,
             NewsSection,
