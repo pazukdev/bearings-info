@@ -16,13 +16,13 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
-    import routerUtil from "../../../util/routerUtil";
-    import axiosUtil from "../../../util/axiosUtil";
-    import basicComponent from "../../../mixin/basicComponent";
-    import view from "../../../mixin/view";
+import {mapState} from "vuex";
+import routerUtil from "../../../util/routerUtil";
+import axiosUtil from "../../../util/axiosUtil";
+import basicComponent from "../../../mixin/basicComponent";
+import view from "../../../mixin/view";
 
-    export default {
+export default {
         name: "LanguageSelect",
 
         mixins: [basicComponent, view],
@@ -37,7 +37,8 @@
         data() {
             return {
                 newLang: "",
-                newCountryCode: ""
+                newCountryCode: "",
+                browserLangs: ['en', 'ru', 'uk', 'be', 'pl', 'lt']
             }
         },
 
@@ -47,6 +48,14 @@
 
         created() {
             console.log("LanguageSelect: created()");
+            let lang = this.$route.params.lang;
+            let browserLang = navigator.language.split('-')[0];
+            console.log("url lang: " + lang);
+            console.log("browser lang: " + browserLang);
+            if (browserLang !== lang && this.browserLangs.includes(browserLang)) {
+              routerUtil.setLang(browserLang, this.$route);
+              console.log("new url lang: " + this.$route.params.lang);
+            }
             this.onUrlChange();
         },
 
