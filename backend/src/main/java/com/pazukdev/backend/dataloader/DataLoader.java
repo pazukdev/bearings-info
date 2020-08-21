@@ -47,8 +47,7 @@ public class DataLoader implements ApplicationRunner {
     }
 
     public static void createDefaultCache(final List<Item> items, final ItemService service) {
-        final List<String> langs = Arrays.asList("en", "ru", "pl", "uk", "lt");
-//        final List<String> langs = Arrays.asList("en", "ru");
+        final List<String> langs = Arrays.asList("en", "ru", "pl", "uk", "be", "lt");
         final ItemViewFactory factory = service.createNewItemViewFactory();
         langs.parallelStream().forEach(lang -> {
             service.putCachedView(service.createItemsListView("active", "guest", null, lang, factory), lang);

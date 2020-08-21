@@ -34,7 +34,7 @@ import static com.pazukdev.backend.util.ItemUtil.*;
 public class ItemService extends AbstractService<Item, TransitiveItemDto> {
 
     private final List<String> categoriesToCache = Arrays.asList(
-            "Vehicle", "Engine", "Gearbox", "Final drive", "Reduction drive", "Generator");
+            "Vehicle", "Engine", "Gearbox", "Final drive", "Reduction drive", "Generator", "Chassis");
 
     private final UserService userService;
     private final NestedItemRepository nestedItemRepo;

@@ -100,7 +100,7 @@ public class ItemController {
     }
 
     @PutMapping("/create-default-cache")
-    @ApiOperation(value = "Reset cache")
+    @ApiOperation(value = "Create default cache")
     public int createDefaultCache() {
         resetCache();
         DataLoader.createDefaultCache(service.findAllActive(), service);
