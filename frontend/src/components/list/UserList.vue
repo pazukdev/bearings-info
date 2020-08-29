@@ -1,25 +1,27 @@
 <template>
     <div>
         <LoadingScreen v-if="isLoading()"/>
-        <div v-else>
-            <Header :editable="isAdmin()"/>
-            <CountedItemList :user-list-view="true" :sorted="true" :translate-comments="true"/>
-        </div>
+        <transition name="slide-fade">
+            <div v-if="!isLoading()">
+                <Header :editable="isAdmin()"/>
+                <CountedItemList :user-list-view="true" :sorted="true" :translate-comments="true"/>
+            </div>
+        </transition>
     </div>
 </template>
 
 <script>
-    import CountedItemList from "./CountedItemList";
-    import Header from "./section/Header";
-    import LoadingScreen from "../special/LoadingScreen";
-    import axios from "axios";
-    import itemViewUtil from "../../util/itemViewUtil";
-    import routerUtil from "../../util/routerUtil";
-    import userUtil from "../../util/userUtil";
-    import basicComponent from "../../mixin/basicComponent";
-    import view from "../../mixin/view";
+import CountedItemList from "./CountedItemList";
+import Header from "./section/Header";
+import LoadingScreen from "../special/LoadingScreen";
+import axios from "axios";
+import itemViewUtil from "../../util/itemViewUtil";
+import routerUtil from "../../util/routerUtil";
+import userUtil from "../../util/userUtil";
+import basicComponent from "../../mixin/basicComponent";
+import view from "../../mixin/view";
 
-    export default {
+export default {
         name: "UserList",
 
         components: {CountedItemList, Header, LoadingScreen},

@@ -1,86 +1,90 @@
 <template>
     <div class="default-margin">
-        <table id="additional-menu" class="half-wide">
-            <tbody>
-            <tr>
-                <td>
-                    <button type="button"
-                            v-on:click="openUsersList()">
-                        {{translate("Users")}}
-                    </button>
-                </td>
-            </tr>
-            <tr v-if="lang.toString() !== 'en'">
-                <td>
-                    <a :href="getDictionaryUrl()"
-                       target="_blank"
-                       class="button">
-                        {{"EN - " + lang.toUpperCase() + " " + translate("dictionary")}}
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href="https://docs.google.com/document/d/1XwULMlxG5JM5VYU-3qTmXYguF_kPvKFb2zE2iIFi_o0"
-                       target="_blank"
-                       class="button">
-                        {{"Languages"}}
-                    </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <transition name="slide-fade">
+            <table id="additional-menu" class="half-wide" v-if="!isLoading()">
+                <tbody>
+                <tr>
+                    <td>
+                        <button type="button"
+                                v-on:click="openUsersList()">
+                            {{translate("Users")}}
+                        </button>
+                    </td>
+                </tr>
+                <tr v-if="lang.toString() !== 'en'">
+                    <td>
+                        <a :href="getDictionaryUrl()"
+                           target="_blank"
+                           class="button">
+                            {{"EN - " + lang.toUpperCase() + " " + translate("dictionary")}}
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://docs.google.com/document/d/1XwULMlxG5JM5VYU-3qTmXYguF_kPvKFb2zE2iIFi_o0"
+                           target="_blank"
+                           class="button">
+                            {{"Languages"}}
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
-        <table class="half-wide" v-if="isAdmin()">
-            <tbody>
-            <tr><td><hr></td></tr>
-            <tr>
-                <td>{{"Admin section"}}</td>
-            </tr>
-            <tr>
-                <td>
-                    <a href="https://docs.google.com/document/d/1g8YeaINmlH26XS1rqJ0oJRh0BN8mN8MIVRBh2MG4GQE"
-                       target="_blank"
-                       class="simple-link">
-                        {{"Comments"}}
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href="https://docs.google.com/document/d/1JM_dDZIKjCRvrkOLRvvNwGtP3Al-Rakgtu-w4dFgB-c"
-                       target="_blank"
-                       class="simple-link">
-                        {{"Info categories"}}
-                    </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+            <table class="half-wide" v-if="isAdmin()">
+                <tbody>
+                <tr><td><hr></td></tr>
+                <tr>
+                    <td>{{"Admin section"}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://docs.google.com/document/d/1g8YeaINmlH26XS1rqJ0oJRh0BN8mN8MIVRBh2MG4GQE"
+                           target="_blank"
+                           class="simple-link">
+                            {{"Comments"}}
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://docs.google.com/document/d/1JM_dDZIKjCRvrkOLRvvNwGtP3Al-Rakgtu-w4dFgB-c"
+                           target="_blank"
+                           class="simple-link">
+                            {{"Info categories"}}
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </transition>
     </div>
 </template>
 
 <script>
-    import axios from "axios";
-    import {mapState} from "vuex";
-    import routerUtil from "../../util/routerUtil";
-    import shared from "../../util/shared";
-    import DefaultButton from "../element/button/DefaultButton";
-    import dictionaryUtil from "../../util/dictionaryUtil";
-    import axiosUtil from "../../util/axiosUtil";
-    import userUtil from "../../util/userUtil";
+import axios from "axios";
+import {mapState} from "vuex";
+import routerUtil from "../../util/routerUtil";
+import DefaultButton from "../element/button/DefaultButton";
+import axiosUtil from "../../util/axiosUtil";
+import userUtil from "../../util/userUtil";
+import basicComponent from "@/mixin/basicComponent";
+import storeUtil from "@/util/storeUtil";
 
-    export default {
+export default {
         name: "Menu",
         components: {DefaultButton},
+        mixins: [basicComponent],
         computed: {
             ...mapState({
-                basicUrl: state => state.dictionary.basicUrl,
                 itemView: state => state.dictionary.itemView,
-                langs: state => state.dictionary.langs,
-                lang: state => state.dictionary.lang,
                 dictionaryId: state => state.dictionary.dictionaryId
             })
+        },
+
+        mounted() {
+            storeUtil.setLoadingStateOff();
         },
 
         data() {
@@ -108,20 +112,8 @@
                 return googleDocUrl + this.dictionaryId
             },
 
-            getDownloadUrl(fileName) {
-                return this.basicUrl + "/file/" + fileName + "/download";
-            },
-
-            uploadDictionary(event) {
-                this.upload(event, "dictionary");
-            },
-
             uploadLangs(event) {
                 this.upload(event, "langs");
-            },
-
-            uploadComments(event) {
-                this.upload(event, "comments");
             },
 
             uploadInfoCategories(event) {
@@ -178,35 +170,10 @@
                 this.localizedUploadMessage = "";
             },
 
-            isRefreshButtonVisible() {
-                if (this.isEmpty(this.uploadMessage)) {
-                    return false;
-                }
-                let message = this.uploadMessage.toLowerCase();
-                if (message.includes("invalid")
-                    || message.includes('not accepted')
-                    || message.includes("empty")) {
-                    return false;
-                }
-                return true;
-            },
-
             reset() {
                 const input = this.$refs.fileInput;
                 input.type = 'text/plain';
                 input.type = 'file';
-            },
-
-            isEmpty(message) {
-                return shared.isEmpty(message);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
-            },
-
-            getLang() {
-                return routerUtil.getLang(null);
             }
         }
     }

@@ -1,25 +1,27 @@
 <template>
     <div>
         <LoadingScreen v-if="isLoading()"/>
-        <MotorcycleCatalogue v-else/>
+        <transition name="slide-fade">
+            <MotorcycleCatalogue v-if="!isLoading()"/>
+        </transition>
     </div>
 </template>
 
 <script>
-    import axios from "axios";
-    import MotorcycleCatalogue from "../list/MotorcycleCatalogue";
-    import LoadingScreen from "../special/LoadingScreen";
-    import itemViewUtil from "../../util/itemViewUtil";
-    import DefaultButton from "../element/button/DefaultButton";
-    import NewsSection from "../info/NewsSection";
-    import Info from "../info/Info";
-    import userUtil from "../../util/userUtil";
-    import axiosUtil from "../../util/axiosUtil";
-    import basicComponent from "../../mixin/basicComponent";
-    import view from "../../mixin/view";
-    import shared from "../../util/shared";
+import axios from "axios";
+import MotorcycleCatalogue from "../list/MotorcycleCatalogue";
+import LoadingScreen from "../special/LoadingScreen";
+import itemViewUtil from "../../util/itemViewUtil";
+import DefaultButton from "../element/button/DefaultButton";
+import NewsSection from "../info/NewsSection";
+import Info from "../info/Info";
+import userUtil from "../../util/userUtil";
+import axiosUtil from "../../util/axiosUtil";
+import basicComponent from "../../mixin/basicComponent";
+import view from "../../mixin/view";
+import shared from "../../util/shared";
 
-    export default {
+export default {
         name: "Home",
 
         components: {
@@ -47,10 +49,6 @@
         },
 
         methods: {
-            // clearCache() {
-            //     storeUtil.setCachedViews([]);
-            // },
-
             onUrlChange() {
                 this.getView();
             },
@@ -64,18 +62,7 @@
                         this.dispatchCachedView(cachedView, lang);
                         return cachedView;
                     }
-                    // if (!shared.isEmpty(cachedView)) {
-                    //     console.log(cachedView.userData.name);
-                    //     console.log(this.userData.name);
-                    //     let userChanged = cachedView.userData.name !== this.userData.name;
-                    //     console.log(userChanged);
-                    //     if (!userChanged) {
-                    //         this.dispatchCachedView(cachedView, lang);
-                    //         return cachedView;
-                    //     }
-                    // }
                 }
-
                 axios
                     .get(this.basicUrl
                         + "/" + "item/view"
@@ -98,27 +85,10 @@
                     .catch(error => {
                         itemViewUtil.dispatchResponseError(error);
                     });
-            },
-
-            setCachedImg() {
-                console.log("setCachedImg");
-                if (shared.isEmpty(this.viewCopy.cachedImg)) {
-                    let c = document.createElement('canvas');
-                    let img = document.getElementById('app-img');
-                    console.log(img);
-                    c.height = img.naturalHeight;
-                    c.width = img.naturalWidth;
-                    let ctx = c.getContext('2d');
-                    ctx.drawImage(img, 0, 0, c.width, c.height);
-                    this.viewCopy.cachedImg = c.toDataURL();
-                    this.cachedViews.push(this.viewCopy);
-                }
             }
-
         }
     }
 </script>
 
 <style scoped>
-
 </style>
