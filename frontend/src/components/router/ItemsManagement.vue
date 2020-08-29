@@ -1,42 +1,44 @@
 <template>
     <div>
         <LoadingScreen v-if="isLoading()"/>
-        <div v-else>
-            <CreateItemForm/>
-            <Header :editable="true" :items-management="true"/>
-            <div v-if="isAdmin()" class="default-margin">
-                <label>
-                    {{"Items status"}}
-                    <select v-model="status" @change="changeStatus()">
-                        <option v-for="status in ['active', 'deleted']" :value="status">
-                            {{status}}
-                        </option>
-                    </select>
-                </label>
+        <transition name="slide-fade">
+            <div v-if="!isLoading()">
+                <CreateItemForm/>
+                <Header :editable="true" :items-management="true"/>
+                <div v-if="isAdmin()" class="default-margin">
+                    <label>
+                        {{"Items status"}}
+                        <select v-model="status" @change="changeStatus()">
+                            <option v-for="status in ['active', 'deleted']" :value="status">
+                                {{status}}
+                            </option>
+                        </select>
+                    </label>
+                </div>
+                <ItemList :items-management-view="true"
+                          :sorted="true"
+                          :url-filter="$route.params.filter"/>
+                <div style="height: 100px"/>
             </div>
-            <ItemList :items-management-view="true"
-                      :sorted="true"
-                      :url-filter="$route.params.filter"/>
-            <div style="height: 100px"/>
-        </div>
+        </transition>
     </div>
 </template>
 
 <script>
-    import axios from "axios";
-    import ItemList from "../list/ItemList";
-    import LoadingScreen from "../special/LoadingScreen";
-    import itemViewUtil from "../../util/itemViewUtil";
-    import CreateItemForm from "../form/CreateItemForm";
-    import NestedItemsTableTitle from "../list/section/NestedItemsTableTitle";
-    import Header from "../list/section/Header";
-    import shared from "../../util/shared";
-    import userUtil from "../../util/userUtil";
-    import routerUtil from "../../util/routerUtil";
-    import basicComponent from "../../mixin/basicComponent";
-    import view from "../../mixin/view";
+import axios from "axios";
+import ItemList from "../list/ItemList";
+import LoadingScreen from "../special/LoadingScreen";
+import itemViewUtil from "../../util/itemViewUtil";
+import CreateItemForm from "../form/CreateItemForm";
+import NestedItemsTableTitle from "../list/section/NestedItemsTableTitle";
+import Header from "../list/section/Header";
+import shared from "../../util/shared";
+import userUtil from "../../util/userUtil";
+import routerUtil from "../../util/routerUtil";
+import basicComponent from "../../mixin/basicComponent";
+import view from "../../mixin/view";
 
-    export default {
+export default {
         name: "ItemsManagement",
 
         components: {

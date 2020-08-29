@@ -293,6 +293,17 @@ export default {
         }
     }
 
+    .slide-fade-enter-active {
+        transition: all .3s ease;
+    }
+    .slide-fade-leave-active {
+        transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-fade-enter, .slide-fade-leave-to {
+        transform: translateX(200px);
+        opacity: 0;
+    }
+
     .bottom-border {
         border-bottom: 1px solid grey;
     }
@@ -349,6 +360,17 @@ export default {
 
     label.upload-button {
         cursor: pointer;
+    }
+
+    .button:active {
+        background-color: #617D89;
+        /*box-shadow: 0 5px gray;*/
+        transform: translateY(4px);
+    }
+
+    button:active {
+        background-color: #617D89;
+        transform: translateY(4px);
     }
 
     .simple-link {

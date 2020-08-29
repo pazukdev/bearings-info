@@ -57,7 +57,6 @@ export default {
     },
 
     getCountryName(alpha2Code) {
-        // console.log("get country name for: " + alpha2Code);
         let notFoundValue = "-";
         if (this.isEmpty(alpha2Code)) {
             return notFoundValue;
@@ -65,7 +64,6 @@ export default {
         let countries = store.getters.countries;
         for (let i = 0; i < countries.length; i++) {
             if (countries[i].alpha2Code === alpha2Code) {
-                // console.log(countries[i]);
                 let name = countries[i].name;
                 if (name.includes("United Kingdom")) {
                     return "UK";
@@ -78,33 +76,6 @@ export default {
             }
         }
         return notFoundValue;
-    },
-
-    roughSizeOfObject(object) {
-        return JSON.stringify(object).length / 1000000
-        // let objectList = [];
-        // let stack = [ object ];
-        // let bytes = 0;
-        //
-        // while ( stack.length ) {
-        //     let value = stack.pop();
-        //     if (typeof value === 'boolean') {
-        //         bytes += 4;
-        //     }
-        //     else if (typeof value === 'string') {
-        //         bytes += value.length * 2;
-        //     }
-        //     else if (typeof value === 'number') {
-        //         bytes += 8;
-        //     }
-        //     else if (typeof value === 'object' && objectList.indexOf(value) === -1) {
-        //         objectList.push( value );
-        //         for(let i in value) {
-        //             stack.push(value[i]);
-        //         }
-        //     }
-        // }
-        // return bytes / 1000000;
     }
 
 }

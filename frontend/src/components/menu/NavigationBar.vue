@@ -19,7 +19,8 @@
                     </td>
                     <td>
                         <router-link id="menu-link"
-                                     :to="{name: 'menu', params: {lang: lang}}" active-class="active">
+                                     :to="{name: 'menu', params: {lang: lang}}"
+                                     active-class="active">
                             {{translate("Menu")}}
                         </router-link>
                     </td>

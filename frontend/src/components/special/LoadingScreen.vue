@@ -23,32 +23,19 @@
 </template>
 
 <script>
-    import {mapState} from "vuex";
-    import shared from "../../util/shared";
-    import dictionaryUtil from "../../util/dictionaryUtil";
-    import view from "../../mixin/view";
+import {mapState} from "vuex";
+import view from "../../mixin/view";
+import basicComponent from "@/mixin/basicComponent";
 
-    export default {
+export default {
         name: "LoadingScreen",
-
-        mixins: [view],
-
+        mixins: [basicComponent, view],
         computed: {
             ...mapState({
-                loadingState: state => state.dictionary.loadingState,
                 errorMessage: state => state.dictionary.errorMessage
             })
         },
-
         methods: {
-            isEmpty(errorMessage) {
-                return shared.isEmpty(errorMessage);
-            },
-
-            translate(text) {
-                return dictionaryUtil.translate(text);
-            },
-
             noServerResponse(errorMessage) {
                 return !this.isEmpty(errorMessage ) && this.errorMessage.toString() === 'No server response';
             }
@@ -56,6 +43,4 @@
     }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

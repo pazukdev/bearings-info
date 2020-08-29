@@ -1,58 +1,59 @@
 <template>
     <div>
+        <transition name="slide-fade">
+            <div v-if="!isLoading() && !isEmpty(itemView)">
+                <div v-if="isAllItemsReport()">
+                    <EditableImg :small="true"/>
+                    <ItemName/>
+                    <div style="text-align: center">
+                        {{getAllItemsReportText()}}
+                    </div>
+                    <details v-if="itemView.allChildren.length > 0" open>
+                        <summary class="bold">
+                            {{getTextPlusCount("All units / parts", itemView.allChildren.length)}}
+                        </summary>
+                        <ItemSummary/>
+                    </details>
+                    <div v-else style="text-align: center">
+                        <br>
+                        {{translate("Nothing found")}}
+                    </div>
+                </div>
+                <div v-else>
+                    <form id="item-form" @submit="submit">
+                        <ItemMenu/>
+                        <Header :item="true" :editable="true"/>
+                        <details v-if="arrayIsRendered(itemView.parents.children)">
+                            <summary class="bold">
+                                {{getTextPlusCount(getUsageTitle(), itemView.parents.children.length)}}
+                            </summary>
+                            <Usage/>
+                        </details>
+                        <WhereToBuy/>
+                        <details v-if="arrayIsRendered(itemView.replacersTable.replacers)">
+                            <summary class="bold">
+                                {{getTextPlusCount("Replacers", itemView.replacersTable.replacers.length)}}
+                            </summary>
+                            <ReplacersSection/>
+                        </details>
+                        <details v-if="arrayIsRendered(itemView.children)" open>
+                            <summary class="bold">
+                                {{getTextPlusCount("Units / parts", itemView.children.length)}}
+                            </summary>
+                            <PartsSection/>
+                            <div v-if="!editMode"
+                                 class="default-margin" style="text-align: right">
+                                <router-link class="simple-link"
+                                             :to="{name: 'item', params: {category: itemView.category, name: itemView.name, lang: lang, report_type: getAllItemsReportUrl()}}">
+                                    {{getAllItemsReportText()}}
+                                </router-link>
+                            </div>
+                        </details>
+                    </form>
+                </div>
+            </div>
+        </transition>
         <LoadingScreen v-if="isLoading()"/>
-        <div v-else-if="!isEmpty(itemView)">
-<!--            <ItemName/>-->
-            <div v-if="isAllItemsReport()">
-                <EditableImg :small="true"/>
-                <ItemName/>
-                <div style="text-align: center">
-                    {{getAllItemsReportText()}}
-                </div>
-                <details v-if="itemView.allChildren.length > 0" open>
-                    <summary class="bold">
-                        {{getTextPlusCount("All units / parts", itemView.allChildren.length)}}
-                    </summary>
-                    <ItemSummary/>
-                </details>
-                <div v-else style="text-align: center">
-                    <br>
-                    {{translate("Nothing found")}}
-                </div>
-            </div>
-            <div v-else>
-                <form id="item-form" @submit="submit">
-                    <ItemMenu/>
-                    <Header :item="true" :editable="true"/>
-                    <details v-if="arrayIsRendered(itemView.parents.children)">
-                        <summary class="bold">
-                            {{getTextPlusCount(getUsageTitle(), itemView.parents.children.length)}}
-                        </summary>
-                        <Usage/>
-                    </details>
-                    <WhereToBuy/>
-                    <details v-if="arrayIsRendered(itemView.replacersTable.replacers)">
-                        <summary class="bold">
-                            {{getTextPlusCount("Replacers", itemView.replacersTable.replacers.length)}}
-                        </summary>
-                        <ReplacersSection/>
-                    </details>
-                    <details v-if="arrayIsRendered(itemView.children)" open>
-                        <summary class="bold">
-                            {{getTextPlusCount("Units / parts", itemView.children.length)}}
-                        </summary>
-                        <PartsSection/>
-                        <div v-if="!editMode"
-                             class="default-margin" style="text-align: right">
-                            <router-link class="simple-link"
-                                         :to="{name: 'item', params: {category: itemView.category, name: itemView.name, lang: lang, report_type: getAllItemsReportUrl()}}">
-                                {{getAllItemsReportText()}}
-                            </router-link>
-                        </div>
-                    </details>
-                </form>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -266,4 +267,15 @@ import shared from "../../util/shared";
     details {
         margin: 10px;
     }
+
+    /*.slide-fade-enter-active {*/
+    /*    transition: all .3s ease;*/
+    /*}*/
+    /*.slide-fade-leave-active {*/
+    /*    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);*/
+    /*}*/
+    /*.slide-fade-enter, .slide-fade-leave-to {*/
+    /*    transform: translateX(10px);*/
+    /*    opacity: 0;*/
+    /*}*/
 </style>
