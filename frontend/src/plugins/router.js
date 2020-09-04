@@ -14,6 +14,7 @@ import UserAgreement from "../components/info/UserAgreement";
 import Disclaimer from "../components/info/Disclaimer";
 import AccountActivation from "../components/router/AccountActivation";
 import WhatsNew from "../components/info/WhatsNew";
+import InfoForSupporters from "@/components/router/InfoForSupporters";
 
 Vue.use(VueRouter);
 
@@ -36,6 +37,7 @@ const router = new VueRouter({
         { path: '/user_list/:lang', name: 'user_list', component: UserList, meta: { requiresAuth: true }},
         { path: '/wish_list/:lang', name: 'wish_list', component: WishList, meta: { requiresAuth: true }},
         { path: '/account_activation/:lang/user/id/:id?', name: 'account_activation', component: AccountActivation, meta: { requiresAuth: true }},
+        { path: '/for_supporters/:lang', name: 'for_supporters', component: InfoForSupporters },
         {
             path: '/items_management/:lang/:filter?',
             name: 'items_management',

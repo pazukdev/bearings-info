@@ -1,6 +1,6 @@
 import {register} from 'register-service-worker'
 
-if (true) {
+if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     register(`${process.env.BASE_URL}service-worker.js`, {
         ready () {
             console.log(

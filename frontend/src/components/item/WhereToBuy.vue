@@ -127,16 +127,16 @@
 </template>
 
 <script>
-    import DeletedItemsList from "../element/DeletedItemsList";
-    import basicComponent from "../../mixin/basicComponent";
-    import view from "../../mixin/view";
-    import {mapState} from "vuex";
-    import shared from "../../util/shared";
-    import ButtonAdd from "../element/button/ButtonAdd";
-    import ButtonDelete from "../element/button/ButtonDelete";
-    import itemViewUtil from "../../util/itemViewUtil";
+import DeletedItemsList from "../element/DeletedItemsList";
+import basicComponent from "../../mixin/basicComponent";
+import view from "../../mixin/view";
+import {mapState} from "vuex";
+import shared from "../../util/shared";
+import ButtonAdd from "../element/button/ButtonAdd";
+import ButtonDelete from "../element/button/ButtonDelete";
+import itemViewUtil from "../../util/itemViewUtil";
 
-    export default {
+export default {
         name: "WhereToBuy",
 
         components: {ButtonDelete, ButtonAdd, DeletedItemsList},
@@ -169,7 +169,7 @@
             },
 
             getWebsiteAddress(url) {
-                return (new URL(url)).hostname;
+                return shared.getWebsiteAddress(url);
             },
 
             getWebsiteFavicon(url) {

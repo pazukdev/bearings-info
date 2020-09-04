@@ -51,6 +51,7 @@
                         </details>
                     </form>
                 </div>
+                <br>
             </div>
         </transition>
         <LoadingScreen v-if="isLoading()"/>

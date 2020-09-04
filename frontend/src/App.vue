@@ -22,7 +22,9 @@
                               <NewsSection/>
                           </div>
                             <AppSettings v-if="isAdmin()"/>
+                            <PartnerGroup v-if="$route.name !== 'item'" condition="top"/>
                             <router-view/>
+                            <PartnerGroup v-if="$route.name === 'item'" condition="bottom"/>
                         </div>
                         <AppGroupsSection v-if="isHome() && !loadingState" :beer-glass-rendered="true"/>
                         <div style="height: 200px"/>
@@ -38,6 +40,8 @@ import view from "./mixin/view";
 import basicComponent from "./mixin/basicComponent";
 import routerUtil from "./util/routerUtil";
 import axiosUtil from "./util/axiosUtil";
+import AdminMessage from "@/components/special/AdminMessage";
+import PartnerGroup from "@/components/special/PartnerGroup";
 
 const AppBar = () => import("./components/menu/AppBar");
 const Home = () => import("./components/router/Home");
@@ -47,7 +51,6 @@ const UserMenu = () => import("./components/menu/UserMenu");
 const LangMenu = () => import("./components/menu/LangMenu");
 const MessagesSection = () => import("./components/special/MessagesSection");
 const CopyUrlButton = () => import("./components/element/button/CopyUrlButton");
-const AdminMessage = () => import("./components/special/AdminMessage");
 const DonationSection = () => import("./components/DonationSection");
 const AboutApp = () => import("./components/AboutApp");
 const AppGroupsSection = () => import("./components/AppGroupsSection");
@@ -60,6 +63,8 @@ export default {
         name: 'app',
 
         components: {
+            PartnerGroup,
+            AdminMessage,
             AppSettings,
             SwitchElement,
             Info,
@@ -67,7 +72,6 @@ export default {
             AppGroupsSection,
             AboutApp,
             DonationSection,
-            AdminMessage,
             CopyUrlButton,
             MessagesSection,
             LangMenu,

@@ -76,6 +76,10 @@ export default {
             }
         }
         return notFoundValue;
+    },
+
+    getWebsiteAddress(url) {
+        return (new URL(url)).hostname.replace("www.", "");
     }
 
 }
