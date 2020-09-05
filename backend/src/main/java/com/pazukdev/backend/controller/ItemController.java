@@ -35,17 +35,11 @@ public class ItemController {
                         @PathVariable final String userName,
                         @PathVariable final String lang,
                         @PathVariable final String option)  {
+        if (option.equals("all_parts_report")) {
+            return service.createItemView(id, userName, null, lang, option, null);
+        }
         return getView(id, userName, lang, option, Status.ACTIVE);
-//        return service.createItemView(id, userName, lang, option);
     }
-
-//    @GetMapping("/view/all-item-views/{number}/{userName}/{lang}")
-//    @ApiOperation(value = "Get all items views")
-//    public List<ItemView> getAllViews(@PathVariable final Integer number,
-//                                      @PathVariable String userName,
-//                                      @PathVariable String lang)  {
-//        return service.getAllViews(number, userName, lang);
-//    }
 
     @GetMapping("/view/items/{status}/{userName}/{lang}")
     @ApiOperation(value = "Get items items list view")
