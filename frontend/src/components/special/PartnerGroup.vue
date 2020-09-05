@@ -1,15 +1,19 @@
 <template>
-    <div style="text-align: center" class="default-margin">
+    <div style="text-align: center" class="default-margin"
+         v-if="isConditionPresented(logos, condition)">
+        <div v-if="condition !== 'top'" style="border-top: solid gray 2px"/>
         <p style="text-align: left; margin-top: 10px; margin-bottom: 4px">
-            {{translate("Thanks to these guys")}}
+            {{translate(title)}}
         </p>
         <div style="display: inline-block" v-for="logo in logos">
-            <PartnerLogo v-if="!isEmpty(logo.toString().split(';')[0]) && condition === logo.toString().split(';')[3]"
+            <PartnerLogo class="logo-margin"
+                         v-if="!isEmpty(logo.toString().split(';')[0]) && condition === getCondition(logo)"
                          :img-url="logo.toString().split(';')[0]"
                          :url="logo.toString().split(';')[1]"
-                         :text="translate(logo.toString().split(';')[2])" style="margin: 6px"/>
+                         :text="translate(logo.toString().split(';')[2])"/>
         </div>
-        <div style="display: inline-block; width: 110px; margin: 6px">
+        <div style="display: inline-block" class="logo-margin, logo-width"
+             v-if="condition !== 'special'">
             <div class="bordered">
                 <router-link class="simple-link"
                              :to="{name: 'for_supporters', params: {lang: lang}}">
@@ -33,7 +37,8 @@ export default {
     name: "PartnerGroup",
     components: {PartnerLogo},
     props: {
-        condition: String
+        condition: String,
+        title: String
     },
     computed: {
         ...mapState({
@@ -59,6 +64,23 @@ export default {
             return shared.isEmpty(value);
         },
 
+        getCondition(logo) {
+            return this.getParam(logo, 3);
+        },
+
+        isConditionPresented(logos, condition) {
+            for (let logo of logos) {
+                if (this.getCondition(logo) === condition) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        getParam(logo, paramIndex) {
+            return logo.toString().split(';')[paramIndex];
+        },
+
         getPartnersData() {
             let googleDocId = "1EzWgY_aflqa61zXESE6Uu1tUYZB1ARh16p0NPuxIXzU";
             // /google-doc/get/text/{id}
@@ -72,6 +94,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+.logo-max-size {
+    max-width: 100px;
+    max-height: 60px;
+}
 
+.logo-width {
+    width: 100px;
+}
+
+.logo-margin {
+    margin: 6px;
+}
 </style>

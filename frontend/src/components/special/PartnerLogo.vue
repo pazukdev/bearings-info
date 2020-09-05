@@ -1,14 +1,11 @@
 <template>
     <div style="text-align: center">
         <a target="_blank" :href="url">
-            <img :src="imgUrl" alt="logo" style="max-width: 110px; max-height: 60px"/>
+            <img :src="imgUrl" alt="logo" class="logo-max-size"/>
         </a>
         <br>
-<!--        <a target="_blank" :href="url" class="simple-link">-->
-<!--            {{getWebsiteAddress(url)}}-->
-<!--        </a>-->
         <p>{{getWebsiteAddress(url)}}</p>
-        <p>{{text}}</p>
+        <p class="logo-width">{{text}}</p>
     </div>
 
 </template>

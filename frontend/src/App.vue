@@ -22,9 +22,16 @@
                               <NewsSection/>
                           </div>
                             <AppSettings v-if="isAdmin()"/>
-                            <PartnerGroup v-if="$route.name !== 'item'" condition="top"/>
+                            <PartnerGroup v-if="$route.name !== 'item'"
+                                          condition="top"
+                                          title="Thanks to these guys"/>
                             <router-view/>
-                            <PartnerGroup v-if="$route.name === 'item'" condition="bottom"/>
+                            <PartnerGroup v-if="$route.name !== 'item'"
+                                          condition="special"
+                                          title="Affiliate program. By following these links you help the project"/>
+                            <PartnerGroup v-if="$route.name === 'item'"
+                                          condition="bottom"
+                                          title="Thanks to these guys"/>
                         </div>
                         <AppGroupsSection v-if="isHome() && !loadingState" :beer-glass-rendered="true"/>
                         <div style="height: 200px"/>
