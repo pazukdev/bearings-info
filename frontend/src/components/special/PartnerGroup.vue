@@ -10,7 +10,8 @@
                          v-if="!isEmpty(logo.toString().split(';')[0]) && condition === getCondition(logo)"
                          :img-url="logo.toString().split(';')[0]"
                          :url="logo.toString().split(';')[1]"
-                         :text="translate(logo.toString().split(';')[2])"/>
+                         :website-name="logo.toString().split(';')[2]"
+                         :text="translate(logo.toString().split(';')[3])"/>
         </div>
         <div style="display: inline-block" class="logo-margin, logo-width"
              v-if="condition !== 'special'">
@@ -65,7 +66,7 @@ export default {
         },
 
         getCondition(logo) {
-            return this.getParam(logo, 3);
+            return this.getParam(logo, 4);
         },
 
         isConditionPresented(logos, condition) {
@@ -96,12 +97,12 @@ export default {
 
 <style>
 .logo-max-size {
-    max-width: 100px;
+    max-width: 110px;
     max-height: 60px;
 }
 
 .logo-width {
-    width: 100px;
+    width: 110px;
 }
 
 .logo-margin {

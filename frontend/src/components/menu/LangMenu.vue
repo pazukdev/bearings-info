@@ -5,7 +5,7 @@
             <tbody>
                 <tr>
                     <td style="text-align: left; white-space: nowrap">
-                        {{"v 2.0"}}
+                        {{"v 2.03"}}
                     </td>
                     <td>
                         <router-link class="simple-link"
@@ -33,11 +33,11 @@
 </template>
 
 <script>
-    import LanguageSelect from "../element/select/LanguageSelect";
-    import basicComponent from "../../mixin/basicComponent";
-    import view from "../../mixin/view";
+import LanguageSelect from "../element/select/LanguageSelect";
+import basicComponent from "../../mixin/basicComponent";
+import view from "../../mixin/view";
 
-    export default {
+export default {
         name: "LangMenu",
         components: {LanguageSelect},
         mixins: [basicComponent, view]

@@ -4,7 +4,8 @@
             <img :src="imgUrl" alt="logo" class="logo-max-size"/>
         </a>
         <br>
-        <p>{{getWebsiteAddress(url)}}</p>
+        <p v-if="!isEmpty(websiteName)">{{websiteName}}</p>
+        <p v-else>{{getWebsiteAddress(url)}}</p>
         <p class="logo-width">{{text}}</p>
     </div>
 
@@ -18,15 +19,20 @@ export default {
     props: {
         imgUrl: String,
         url: String,
+        websiteName: String,
         text: String
     },
     methods: {
         getWebsiteAddress(url) {
-            if (!shared.isEmpty(url)) {
+            if (!this.isEmpty(url)) {
                 return shared.getWebsiteAddress(url);
             }
             return url;
             // return shared.getWebsiteAddress(url);
+        },
+
+        isEmpty(text) {
+            return shared.isEmpty(text);
         }
     }
 }
