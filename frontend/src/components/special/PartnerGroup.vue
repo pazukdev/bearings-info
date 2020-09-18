@@ -1,28 +1,32 @@
 <template>
-    <div style="text-align: center" class="default-margin"
-         v-if="isConditionPresented(logos, condition)">
-        <div v-if="condition !== 'top'" style="border-top: solid gray 2px"/>
-        <p style="text-align: left; margin-top: 10px; margin-bottom: 4px">
-            {{translate(title)}}
-        </p>
-        <div style="display: inline-block" v-for="logo in logos">
-            <PartnerLogo class="logo-margin"
-                         v-if="!isEmpty(logo.toString().split(';')[0]) && condition === getCondition(logo)"
-                         :img-url="logo.toString().split(';')[0]"
-                         :url="logo.toString().split(';')[1]"
-                         :website-name="logo.toString().split(';')[2]"
-                         :text="translate(logo.toString().split(';')[3])"/>
-        </div>
-        <div style="display: inline-block" class="logo-margin, logo-width"
-             v-if="condition !== 'special'">
-            <div class="bordered">
-                <router-link class="simple-link"
-                             :to="{name: 'for_supporters', params: {lang: lang}}">
-                    {{translate("Place your logo")}}
-                </router-link>
+    <div>
+        <transition name="slide-fade">
+            <div style="text-align: center" class="default-margin"
+                 v-if="isConditionPresented(logos, condition)">
+                <div v-if="condition !== 'top'" style="border-top: solid gray 2px"/>
+                <p style="text-align: left; margin-top: 10px; margin-bottom: 4px">
+                    {{translate(title)}}
+                </p>
+                <div style="display: inline-block" v-for="logo in logos">
+                    <PartnerLogo class="logo-margin"
+                                 v-if="!isEmpty(logo.toString().split(';')[0]) && condition === getCondition(logo)"
+                                 :img-url="logo.toString().split(';')[0]"
+                                 :url="logo.toString().split(';')[1]"
+                                 :website-name="logo.toString().split(';')[2]"
+                                 :text="translate(logo.toString().split(';')[3])"/>
+                </div>
+                <div style="display: inline-block" class="logo-margin, logo-width"
+                     v-if="condition !== 'special'">
+                    <div class="bordered">
+                        <router-link class="simple-link"
+                                     :to="{name: 'for_supporters', params: {lang: lang}}">
+                            {{translate("Place your logo")}}
+                        </router-link>
+                    </div>
+                    <p>{{translate("Support us")}}</p>
+                </div>
             </div>
-            <p>{{translate("Support us")}}</p>
-        </div>
+        </transition>
     </div>
 </template>
 

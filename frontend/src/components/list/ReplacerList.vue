@@ -62,18 +62,18 @@
 </template>
 
 <script>
-    import axios from "axios";
-    import {mapState} from "vuex";
-    import shared from "../../util/shared";
-    import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
-    import ButtonDelete from "../element/button/ButtonDelete";
-    import basicComponent from "../../mixin/basicComponent";
-    import view from "../../mixin/view";
-    import DeletedItemsList from "../element/DeletedItemsList";
-    import itemDtoUtil from "../../util/itemDtoUtil";
-    import LoadingScreen from "../special/LoadingScreen";
+import axios from "axios";
+import {mapState} from "vuex";
+import shared from "../../util/shared";
+import ButtonNavigateToItem from "../element/button/ButtonNavigateToItem";
+import ButtonDelete from "../element/button/ButtonDelete";
+import basicComponent from "../../mixin/basicComponent";
+import view from "../../mixin/view";
+import DeletedItemsList from "../element/DeletedItemsList";
+import itemDtoUtil from "../../util/itemDtoUtil";
+import LoadingScreen from "../special/LoadingScreen";
 
-    export default {
+export default {
         name: "ReplacerList",
 
         components: {LoadingScreen, DeletedItemsList, ButtonDelete, ButtonNavigateToItem},
@@ -198,6 +198,7 @@
                     .then(response => {
                         let rateReplacer = response.data;
                         this.itemView.replacersTable.replacers = rateReplacer.replacers;
+                        this.itemView.cachedViews = rateReplacer.cachedViews;
                         this.userData.rating = rateReplacer.newUserRating;
                         console.log("Replacer rate action performed: "
                             + "user name: " + this.getUserName()

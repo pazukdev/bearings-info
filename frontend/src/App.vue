@@ -28,7 +28,7 @@
                             <router-view/>
                             <PartnerGroup v-if="$route.name !== 'item'"
                                           condition="special"
-                                          title="Affiliate program. By following these links you help the project"/>
+                                          title="Our affiliates"/>
                             <PartnerGroup v-if="$route.name === 'item'"
                                           condition="bottom"
                                           title="Thanks to these guys"/>
