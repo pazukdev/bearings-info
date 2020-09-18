@@ -50,12 +50,12 @@ public class DataLoader implements ApplicationRunner {
         final List<String> langs = Arrays.asList("en", "ru", "pl", "uk", "be", "lt");
         final ItemViewFactory factory = service.createNewItemViewFactory();
         langs.parallelStream().forEach(lang -> {
-//            service.putCachedView(service.createItemsListView("active", "guest", null, lang, factory), lang);
-//            service.putCachedView(service.createHomeView("guest", null, lang, factory), lang);
+            service.putCachedView(service.createItemsListView("active", "guest", null, lang, factory), lang);
+            service.putCachedView(service.createHomeView("guest", null, lang, factory), lang);
         });
         items.parallelStream().forEach(item -> {
             if (service.getCategoriesToCache().contains(item.getCategory())) {
-//                service.putCachedView(service.createItemView(item.getId().toString(), "guest", null, "en", null, factory), "en");
+                service.putCachedView(service.createItemView(item.getId().toString(), "guest", null, "en", null, factory), "en");
             }
         });
     }

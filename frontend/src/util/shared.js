@@ -79,6 +79,9 @@ export default {
     },
 
     getWebsiteAddress(url) {
+        if (url.includes("alitems.com")) {
+            url = "https://aliexpress.com";
+        }
         return (new URL(url)).hostname.replace("www.", "");
     }
 

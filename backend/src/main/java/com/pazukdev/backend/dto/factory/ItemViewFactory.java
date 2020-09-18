@@ -2,9 +2,7 @@ package com.pazukdev.backend.dto.factory;
 
 import com.pazukdev.backend.constant.Constant;
 import com.pazukdev.backend.constant.Status;
-import com.pazukdev.backend.constant.security.Role;
 import com.pazukdev.backend.converter.NestedItemConverter;
-import com.pazukdev.backend.converter.UserConverter;
 import com.pazukdev.backend.dto.DictionaryData;
 import com.pazukdev.backend.dto.NestedItemDto;
 import com.pazukdev.backend.dto.table.HeaderTable;
@@ -117,42 +115,6 @@ public class ItemViewFactory {
         double translationDuration = System.nanoTime() - businessLogicEndTime;
 
         itemService.setTime(view, businessLogicDuration, translationDuration);
-        return view;
-    }
-
-    public ItemView createItemViewForCache(final Item item,
-                                           final List<Item> allItems,
-                                           final List<String> comments,
-                                           final UserService userService) {
-
-        final String category = item.getCategory();
-        final String name = item.getName();
-        final Map<String, String> description = toMap(item.getDescription());
-        final UserEntity guest = userService.findFirstByName(Role.GUEST.name().toLowerCase());
-
-        final ItemView view = new ItemView();
-        view.setLang("en");
-        view.setWishListIds(new HashSet<>());
-        view.setUserData(UserConverter.convert(guest));
-        view.setItemId(item.getId().toString());
-        view.setSearchEnabled(true);
-        view.setOrdinaryItem(true);
-        view.setCategory(category);
-        view.setManufacturer(description.get(Category.MANUFACTURER));
-        if (category.equals(VEHICLE)) {
-            view.setVehicleClass(description.get(Parameter.CLASS));
-        }
-        view.setStatus(item.getStatus());
-        view.setLocalizedCategory(category);
-        view.setName(name);
-        view.setLocalizedName(name);
-        view.setImg(item.getImg());
-        view.setCreatorData(UserUtil.getCreator(item, itemService.getUserService()));
-        view.setHeader(createHeader(item, description, infoCategories, itemService));
-        view.setChildren(createChildren(item, userService, false));
-        view.setReplacersTable(createReplacersTable(item, userService));
-        setLinksToItemView(view, item);
-        view.setParents(createParentItemsView(item, userService, comments, allItems));
         return view;
     }
 
