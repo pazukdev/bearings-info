@@ -81,6 +81,10 @@ export default {
     getWebsiteAddress(url) {
         if (url.includes("alitems.com")) {
             url = "https://aliexpress.com";
+        } else if (url.includes("ad.admitad.com")) {
+            if (url.includes("ebay.com")) {
+                url = "https://www.ebay.com";
+            }
         }
         return (new URL(url)).hostname.replace("www.", "");
     }
