@@ -85,6 +85,9 @@ export default {
             if (url.includes("ebay.com")) {
                 url = "https://www.ebay.com";
             }
+            if (url.includes("dok.ua") || url.includes("dok.dbroker.com.ua")) {
+                url = "https://dok.ua";
+            }
         }
         return (new URL(url)).hostname.replace("www.", "");
     }

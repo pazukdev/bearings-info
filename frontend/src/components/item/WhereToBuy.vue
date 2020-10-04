@@ -269,17 +269,6 @@ export default {
                 return this.sortBuyLinksByTranslatedCountryName(links);
             },
 
-            // removeMarkedLinks(links) {
-            //     let processedLinks = [];
-            //     for (let i = 0; i < links.length; i++) {
-            //         let link = links[i];
-            //         if (link.url !== "http://delete") {
-            //             processedLinks.push(link);
-            //         }
-            //     }
-            //     return processedLinks;
-            // },
-
             addAutodocRuLink(links) {
                 if (this.isCountryInArray("BY", links) && !this.isCountryInArray("RU", links)) {
                     let autodocBy = ".autodoc.by";

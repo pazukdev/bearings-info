@@ -13,7 +13,7 @@
 <!--                          <p v-if="!isEmpty(itemView)">{{itemView.lang}}</p>-->
                             <LangMenu/>
                             <NavigationBar/>
-                            <CopyUrlButton v-if="false"/>
+                            <CopyUrlButton v-if="isAdmin()"/>
                             <AdminMessage/>
                             <UserMenu/>
                           <div v-if="isHome() || isMenu()">
